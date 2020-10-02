@@ -1,0 +1,66 @@
+---
+title: Jogos online ao lado do cliente
+description: This is a post on My Blog about agile frameworks.
+date: 2020-10-02T15:00:00
+tags:
+layout: layouts/post.njk
+---
+
+<p>
+  Como que o servidor consegue saber quantos pontos eu fiz? Nós só controlamos o
+  <code>player</code> ou enviamos também o score?
+</p>
+
+{% loadImage page.url + "02-proxy.jpg", "Interceptando as requisições com o Burp
+Suite" %}
+
+<p>
+  Uma coisa é certa: se eu não jogar, meu placar não altera. Sabendo disso, eu
+  irei usar um <a href="https://portswigger.net/burp">proxy</a> que intercepta
+  as requisições feitas na minha rede e que consegue alterá-las.
+</p>
+
+{% loadImage page.url + "03-update-payload.jpg", "Alterando o score" %}
+
+<p>
+  Agora é só alterar o <code>score</code> que é mandado para o servidor, não é
+  :) ?
+</p>
+
+<img
+  src="04-invalid-request.jpg"
+  alt="A alteração não é aceita pelo servidor"
+/>
+
+<p>
+  Negativo ;P. Provavelmente a desenvolvedora do game já está ciente disso, e
+  várias pessoas devem tentar alterar isso diariamente.
+</p>
+
+<p>
+  Mas se o server soubesse o score, por que o client mandaria denovo para ele?
+  Esses jogos são simples. Geralmente são aqueles que compartilhamos no
+  <i>Facebook</i>. Esses jogos não precisam de validação tão grande. Mas mesmo
+  assim, existe.
+</p>
+
+{% loadImage page.url + "05-score.jpg", "O score permanece inalterado" %}
+
+<p>
+  Você já ouviu falar no <a href="https://jwt.io/">JSON Web Token</a>? Pois a
+  maneira que o game envia os dados ao servidor é parecida com a idéia do JWT.
+</p>
+
+<p>
+  Ocorre que, no JWT, é enviado informações sobre <b>o algoritmo usado</b>,
+  <b>os dados</b> <b>e a assinatura</b>. O que seria essa assinatura? Podemos
+  resumir em: <code>hash(algoritmo + dados + chave secreta)</code>. Ou seja, o
+  JWT não tem como objetivo proteger os dados trafegados, mas sim validar quem
+  realmente os criou.
+</p>
+
+<p>
+  O <i>header</i> e os dados trafegam sem criptografia,
+  <b>mas a assinatura é gerada a partir de uma chave secreta</b>. Quem tiver
+  acesso a essa chave secreta pode fazer quantos payloads válidos quiser.
+</p>

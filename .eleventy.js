@@ -3,6 +3,7 @@ const fs = require("fs");
 const pluginRss = require("@11ty/eleventy-plugin-rss");
 const pluginSyntaxHighlight = require("@11ty/eleventy-plugin-syntaxhighlight");
 const pluginNavigation = require("@11ty/eleventy-navigation");
+const Image = require("@11ty/eleventy-img");
 const markdownIt = require("markdown-it");
 const markdownItAnchor = require("markdown-it-anchor");
 
@@ -89,6 +90,23 @@ module.exports = function (eleventyConfig) {
     },
     ui: false,
     ghostMode: false,
+  });
+
+  eleventyConfig.addNunjucksAsyncShortcode("loadImage", async function (
+    src,
+    alt,
+    outputFormat = "jpeg"
+  ) {
+    if (alt === undefined)
+      throw new Error(`Missing \`alt\` on loadImage from: ${src}`);
+    const stats = await Image(src, {
+      widths: [640],
+      formats: [outputFormat],
+      urlPath: "/assets/images/",
+      outputDir: "./_site/assets/images/",
+    });
+    const props = stats[outputFormat].pop();
+    return `<img src="${props.url}" width="${props.width}" height="${props.height}" alt="${alt}">`;
   });
 
   return {

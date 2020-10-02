@@ -1,7 +1,7 @@
 ---
 title: Meu primeiro post
 description: This is a post on My Blog about agile frameworks.
-date: 2020-10-02
+date: 2020-10-02T14:00:00
 tags:
 layout: layouts/post.njk
 ---

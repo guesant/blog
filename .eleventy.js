@@ -97,9 +97,10 @@ module.exports = function (eleventyConfig) {
     alt,
     outputFormat = "jpeg"
   ) {
+    const targetSrc = "./" + src;
     if (alt === undefined)
-      throw new Error(`Missing \`alt\` on loadImage from: ${src}`);
-    const stats = await Image(src, {
+      throw new Error(`Missing \`alt\` on loadImage from: ${targetSrc}`);
+    const stats = await Image(targetSrc, {
       widths: [640],
       formats: [outputFormat],
       urlPath: "/assets/images/",

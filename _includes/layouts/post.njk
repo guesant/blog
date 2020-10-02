@@ -12,4 +12,7 @@ templateClass: tmpl-post
   {%- if nextPost %}<li>Next: <a href="{{ nextPost.url | url }}">{{ nextPost.data.title }}</a></li>{% endif %}
   {%- set previousPost = collections.posts | getPreviousCollectionItem(page) %}
   {%- if previousPost %}<li>Previous: <a href="{{ previousPost.url | url }}">{{ previousPost.data.title }}</a></li>{% endif %}
+  {%- for i in metadata.author.externalLinks %}
+  <li>{{i.description}}: <a href="{{i.url}}" {%- if i.newTab %} target="_blank" rel="noopener noreferrer" {% endif %}>{{ i.url }}</a></li>
+  {%- endfor %}
 </ul>

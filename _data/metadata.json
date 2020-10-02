@@ -1,20 +1,27 @@
 {
-  "title": "Your Blog Name",
-  "url": "https://example.com/",
+  "title": "gabriel0x01",
+  "url": "https://guesant.github.io/",
   "description": "I am writing about my experiences as a naval navel-gazer.",
   "feed": {
     "subtitle": "I am writing about my experiences as a naval navel-gazer.",
     "filename": "feed.xml",
     "path": "/feed/feed.xml",
-    "id": "https://example.com/"
+    "id": "https://guesant.github.io/"
   },
   "jsonfeed": {
     "path": "/feed/feed.json",
-    "url": "https://example.com/feed/feed.json"
+    "url": "https://guesant.github.io/feed/feed.json"
   },
   "author": {
-    "name": "Your Name Here",
-    "email": "youremailaddress@example.com",
-    "url": "https://example.com/about-me/"
+    "name": "Gabriel Rodrigues",
+    "email": "gabrodbr@pm.me",
+    "url": "https://guesant.github.io/about-me/",
+    "externalLinks": [
+      {
+        "newTab": true,
+        "description": "Telegram",
+        "url": "https://t.me/gabriel0x01"
+      }
+    ]
   }
 }

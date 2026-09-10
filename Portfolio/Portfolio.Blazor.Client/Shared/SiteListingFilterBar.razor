@@ -1,0 +1,50 @@
+<SiteFilterCard Action="@Action"
+    Class="mb-4 site-toolbar-row"
+    DataLayoutRegion="filters"
+    OnApply="@OnApply">
+    @PrimaryFields
+    @if (AdvancedFields is not null)
+    {
+        <SiteDisclosure Class="filter-bar-details" Open="@AdvancedOpen" Summary="@AdvancedSummary">
+            @AdvancedFields
+        </SiteDisclosure>
+    }
+    <SiteInline Align="SiteAlign.End" Gap="SiteSpace.Md" Wrap="true" Class="site-search-action-row">
+        @SearchField
+        <SiteFormActions Fill="true">
+            <SiteLink Variant="SiteButtonVariant.Outline"
+                Href="@ClearHref"><SiteIcon Name="filter-x"
+                    Size="14"
+                    Class="icon" /><SiteText Variant="SiteTextVariant.Meta">@ClearLabel</SiteText>
+                    </SiteLink>
+            <SiteButton Variant="SiteButtonVariant.Default"
+                Type="SiteButtonType.Submit"><SiteIcon Name="check"
+                    Size="14"
+                    Class="icon" /><SiteText Variant="SiteTextVariant.Meta">@ApplyLabel</SiteText>
+                    </SiteButton>
+        </SiteFormActions>
+    </SiteInline>
+</SiteFilterCard>
+
+@code {
+    [Parameter, EditorRequired]
+    public string Action { get; set; } = string.Empty;
+    [Parameter, EditorRequired]
+    public RenderFragment PrimaryFields { get; set; } = default!;
+    [Parameter]
+    public RenderFragment? SearchField { get; set; }
+    [Parameter]
+    public RenderFragment? AdvancedFields { get; set; }
+    [Parameter]
+    public string AdvancedSummary { get; set; } = string.Empty;
+    [Parameter]
+    public bool AdvancedOpen { get; set; }
+    [Parameter, EditorRequired]
+    public string ApplyLabel { get; set; } = string.Empty;
+    [Parameter, EditorRequired]
+    public string ClearLabel { get; set; } = string.Empty;
+    [Parameter, EditorRequired]
+    public string ClearHref { get; set; } = string.Empty;
+    [Parameter]
+    public EventCallback OnApply { get; set; }
+}

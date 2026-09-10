@@ -1,0 +1,79 @@
+@inherits LocalizedComponentBase
+@page "/tools/base-converter"
+@page "/pt-BR/tools/base-converter"
+@using Portfolio.Blazor.Core
+
+<ToolPage Title="@Title" Description="@Description" CanonicalPath="@CanonicalPath">
+    <SiteToolForm Action="@Action"
+        SubmitLabel="@SubmitLabel"
+        Submit="SiteToolFormSubmit.StaticOnly"
+        OnSubmit="Calculate"
+        AriaLabel="@ValueLabel">
+        <SiteFormField Label="@ValueLabel"
+            For="base-value"><SiteInput Id="base-value"
+                Name="value"
+                Value="@ValueText"
+                ValueChanged="@(v => ValueText = v)" /></SiteFormField>
+        <SiteFormField Label="@FromLabel"
+            For="base-from"><SiteInput Id="base-from"
+                Name="from"
+                Type="number"
+                min="2"
+                max="36"
+                Value="@FromText"
+                ValueChanged="@(v => FromText = v)" /></SiteFormField>
+        <SiteFormField Label="@ToLabel"
+            For="base-to"><SiteInput Id="base-to"
+                Name="to"
+                Type="number"
+                min="2"
+                max="36"
+                Value="@ToText"
+                ValueChanged="@(v => ToText = v)" /></SiteFormField>
+    </SiteToolForm>
+    @if (!Result.IsValid) { <SiteErrorMessage>@ErrorLabel</SiteErrorMessage> }
+    else { <SiteLiveRegion Politeness="SiteLivePoliteness.Polite">
+        <SiteStats>
+            <SiteStatItem Label="@ResultLabel">@Result.Output</SiteStatItem>
+        </SiteStats>
+    </SiteLiveRegion> }
+</ToolPage>
+
+@code {
+    private string CanonicalPath => RequestPath;
+    private string _valueText = "FF", _fromText = "16", _toText = "10";
+    private BaseConversionResult _result = BaseConversionCalculator.Convert("FF", 16, 10);
+    private bool _queryInitialized;
+    [SupplyParameterFromQuery(Name = "value")]
+    private string? QueryValue { get; set; }
+    [SupplyParameterFromQuery(Name = "from")]
+    private string? QueryFrom { get; set; }
+    [SupplyParameterFromQuery(Name = "to")]
+    private string? QueryTo { get; set; }
+    private string Action => L["legacy_9176a6f6d181"];
+    private string Title => L["legacy_fdef8c68bcf3"];
+    private string Description => L["legacy_2430669ec08b"];
+    private string InputLabel => L["legacy_67f93fb28065"];
+    private string ValueLabel => L["legacy_397b9fc38aec"];
+    private string FromLabel => L["legacy_e0d053715998"];
+    private string ToLabel => L["legacy_d95ba9b28604"];
+    private string SubmitLabel => L["legacy_1b13315a70e3"];
+    private string ResultLabel => L["legacy_d9b2a61fb8b3"];
+    private string ErrorLabel => L["legacy_0316235fdf16"];
+    private string ValueText { get => _valueText; set { _valueText = value; Recalculate(); } }
+    private string FromText { get => _fromText; set { _fromText = value; Recalculate(); } }
+    private string ToText { get => _toText; set { _toText = value; Recalculate(); } }
+    private BaseConversionResult Result => _result;
+    protected override void OnParametersSet()
+    {
+        if (_queryInitialized) return;
+        _valueText = QueryValue ?? _valueText;
+        _fromText = QueryFrom ?? _fromText;
+        _toText = QueryTo ?? _toText;
+        Recalculate();
+        _queryInitialized = true;
+    }
+    private void Calculate() => Recalculate();
+    private void Recalculate() => _result = BaseConversionCalculator.Convert(_valueText, Parse(_fromText), Parse(_toText));
+    private static int Parse(string value) => int.TryParse(value, out var result) ? result : 0;
+}

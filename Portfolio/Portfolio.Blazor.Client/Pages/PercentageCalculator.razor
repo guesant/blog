@@ -1,0 +1,241 @@
+@inherits LocalizedComponentBase
+@page "/tools/percentage-calculator"
+@page "/pt-BR/tools/percentage-calculator"
+@using System.Globalization
+@using Portfolio.Blazor.Core
+
+<ToolPage Title="@Title" Description="@Description" CanonicalPath="@CanonicalPath">
+    <SiteToolForm Action="@Action"
+        SubmitLabel="@SubmitLabel"
+        Submit="SiteToolFormSubmit.StaticOnly"
+        OnSubmit="HandleSubmit"
+        AriaLabel="@InputLabel">
+        <SiteHeading Level="2" Visual="6">@OfTitle</SiteHeading>
+        <SiteFormField Label="@OfXLabel"
+            For="percentage-of-x"><SiteInput Id="percentage-of-x"
+                Name="of_x"
+                Type="number"
+                step="any"
+                Value="@OfXText"
+                ValueChanged="@(v => OfXText = v)" /></SiteFormField>
+        <SiteFormField Label="@OfYLabel"
+            For="percentage-of-y"><SiteInput Id="percentage-of-y"
+                Name="of_y"
+                Type="number"
+                step="any"
+                Value="@OfYText"
+                ValueChanged="@(v => OfYText = v)" /></SiteFormField>
+
+        <SiteHeading Level="2" Visual="6">@WhatPctTitle</SiteHeading>
+        <SiteFormField Label="@WhatPctXLabel"
+            For="percentage-what-pct-x"><SiteInput Id="percentage-what-pct-x"
+                Name="wp_x"
+                Type="number"
+                step="any"
+                Value="@WhatPctXText"
+                ValueChanged="@(v => WhatPctXText = v)" /></SiteFormField>
+        <SiteFormField Label="@WhatPctYLabel"
+            For="percentage-what-pct-y"><SiteInput Id="percentage-what-pct-y"
+                Name="wp_y"
+                Type="number"
+                step="any"
+                Value="@WhatPctYText"
+                ValueChanged="@(v => WhatPctYText = v)" /></SiteFormField>
+
+        <SiteHeading Level="2" Visual="6">@OfWhatTitle</SiteHeading>
+        <SiteFormField Label="@OfWhatXLabel"
+            For="percentage-of-what-x"><SiteInput Id="percentage-of-what-x"
+                Name="ow_x"
+                Type="number"
+                step="any"
+                Value="@OfWhatXText"
+                ValueChanged="@(v => OfWhatXText = v)" /></SiteFormField>
+        <SiteFormField Label="@OfWhatYLabel"
+            For="percentage-of-what-y"><SiteInput Id="percentage-of-what-y"
+                Name="ow_y"
+                Type="number"
+                step="any"
+                Value="@OfWhatYText"
+                ValueChanged="@(v => OfWhatYText = v)" /></SiteFormField>
+
+        <SiteHeading Level="2" Visual="6">@ChangeTitle</SiteHeading>
+        <SiteFormField Label="@ChangeFromLabel"
+            For="percentage-change-from"><SiteInput Id="percentage-change-from"
+                Name="ch_from"
+                Type="number"
+                step="any"
+                Value="@ChangeFromText"
+                ValueChanged="@(v => ChangeFromText = v)" /></SiteFormField>
+        <SiteFormField Label="@ChangeToLabel"
+            For="percentage-change-to"><SiteInput Id="percentage-change-to"
+                Name="ch_to"
+                Type="number"
+                step="any"
+                Value="@ChangeToText"
+                ValueChanged="@(v => ChangeToText = v)" /></SiteFormField>
+    </SiteToolForm>
+
+    <SiteLiveRegion Politeness="SiteLivePoliteness.Polite">
+        <SiteCard Class="site-block" Label="@OfTitle">
+            @if (!OfResult.IsValid) { <SiteErrorMessage>@ErrorLabel</SiteErrorMessage> }
+            else { <SiteStats>
+                <SiteStatItem Label="@OfTitle">@FormatOf(OfXText, OfYText, OfResult.Result)</SiteStatItem>
+            </SiteStats> }
+        </SiteCard>
+
+        <SiteCard Class="site-block" Label="@WhatPctTitle">
+            @if (!WhatPctResult.IsValid) { <SiteErrorMessage>@(WhatPctResult.Error == PercentageError.DivisionByZero ? DivisionByZeroLabel : ErrorLabel)</SiteErrorMessage> }
+            else { <SiteStats>
+                <SiteStatItem Label="@WhatPctTitle">@FormatWhatPct(WhatPctResult)</SiteStatItem>
+            </SiteStats> }
+        </SiteCard>
+
+        <SiteCard Class="site-block" Label="@OfWhatTitle">
+            @if (!OfWhatResult.IsValid) { <SiteErrorMessage>@(OfWhatResult.Error == PercentageError.DivisionByZero ? DivisionByZeroLabel : ErrorLabel)</SiteErrorMessage> }
+            else { <SiteStats>
+                <SiteStatItem Label="@OfWhatTitle">@FormatOfWhat(OfWhatResult)</SiteStatItem>
+            </SiteStats> }
+        </SiteCard>
+
+        <SiteCard Class="site-block" Label="@ChangeTitle">
+            @if (!ChangeResult.IsValid) { <SiteErrorMessage>@(ChangeResult.Error == PercentageError.DivisionByZero ? DivisionByZeroLabel : ErrorLabel)</SiteErrorMessage> }
+            else { <SiteStats>
+                <SiteStatItem Label="@ChangeTitle">@FormatChange(ChangeResult)</SiteStatItem>
+            </SiteStats> }
+        </SiteCard>
+    </SiteLiveRegion>
+</ToolPage>
+
+@code {
+    private string CanonicalPath => RequestPath;
+    private string _ofXText = "15";
+    private string _ofYText = "100";
+    private string _whatPctXText = "30";
+    private string _whatPctYText = "150";
+    private string _ofWhatXText = "30";
+    private string _ofWhatYText = "20";
+    private string _changeFromText = "80";
+    private string _changeToText = "100";
+    private PercentageResult _ofResult = Portfolio.Blazor.Core.PercentageCalculator.Calculate(
+        100,
+        15
+    );
+    private PercentageWhatPercentResult _whatPctResult = Portfolio.Blazor.Core.PercentageCalculator.WhatPercentOf(
+        30,
+        150
+    );
+    private PercentageOfWhatResult _ofWhatResult = Portfolio.Blazor.Core.PercentageCalculator.OfWhat(
+        30,
+        20
+    );
+    private PercentageChangeResult _changeResult = Portfolio.Blazor.Core.PercentageCalculator.Change(
+        80,
+        100
+    );
+    private bool _queryInitialized;
+
+    [SupplyParameterFromQuery(Name = "of_x")]
+    private string? QueryOfX { get; set; }
+    [SupplyParameterFromQuery(Name = "of_y")]
+    private string? QueryOfY { get; set; }
+    [SupplyParameterFromQuery(Name = "wp_x")]
+    private string? QueryWhatPctX { get; set; }
+    [SupplyParameterFromQuery(Name = "wp_y")]
+    private string? QueryWhatPctY { get; set; }
+    [SupplyParameterFromQuery(Name = "ow_x")]
+    private string? QueryOfWhatX { get; set; }
+    [SupplyParameterFromQuery(Name = "ow_y")]
+    private string? QueryOfWhatY { get; set; }
+    [SupplyParameterFromQuery(Name = "ch_from")]
+    private string? QueryChangeFrom { get; set; }
+    [SupplyParameterFromQuery(Name = "ch_to")]
+    private string? QueryChangeTo { get; set; }
+
+    private string Action => L["legacy_f022b9812a3b"];
+    private string Title => L["legacy_d14cf9722974"];
+    private string Description => L["percentage_full_description"];
+    private string InputLabel => L["legacy_d6b96d7e7072"];
+    private string SubmitLabel => L["legacy_53519f340509"];
+    private string ErrorLabel => L["legacy_54c7abf41302"];
+    private string DivisionByZeroLabel => L["percentage_division_by_zero"];
+
+    private string OfTitle => L["percentage_of_title"];
+    private string OfXLabel => L["percentage_of_x_label"];
+    private string OfYLabel => L["percentage_of_y_label"];
+    private string WhatPctTitle => L["percentage_what_pct_title"];
+    private string WhatPctXLabel => L["percentage_what_pct_x_label"];
+    private string WhatPctYLabel => L["percentage_what_pct_y_label"];
+    private string OfWhatTitle => L["percentage_of_what_title"];
+    private string OfWhatXLabel => L["percentage_of_what_x_label"];
+    private string OfWhatYLabel => L["percentage_of_what_y_label"];
+    private string ChangeTitle => L["percentage_change_title"];
+    private string ChangeFromLabel => L["percentage_change_from_label"];
+    private string ChangeToLabel => L["percentage_change_to_label"];
+    private string IncreaseLabel => L["percentage_change_increase"];
+    private string DecreaseLabel => L["percentage_change_decrease"];
+
+    private string OfXText { get => _ofXText; set { _ofXText = value; Recalculate(); } }
+    private string OfYText { get => _ofYText; set { _ofYText = value; Recalculate(); } }
+    private string WhatPctXText { get => _whatPctXText; set { _whatPctXText = value; Recalculate(); } }
+    private string WhatPctYText { get => _whatPctYText; set { _whatPctYText = value; Recalculate(); } }
+    private string OfWhatXText { get => _ofWhatXText; set { _ofWhatXText = value; Recalculate(); } }
+    private string OfWhatYText { get => _ofWhatYText; set { _ofWhatYText = value; Recalculate(); } }
+    private string ChangeFromText { get => _changeFromText; set { _changeFromText = value; Recalculate(); } }
+    private string ChangeToText { get => _changeToText; set { _changeToText = value; Recalculate(); } }
+
+    private PercentageResult OfResult => _ofResult;
+    private PercentageWhatPercentResult WhatPctResult => _whatPctResult;
+    private PercentageOfWhatResult OfWhatResult => _ofWhatResult;
+    private PercentageChangeResult ChangeResult => _changeResult;
+
+    protected override void OnParametersSet()
+    {
+        if (!_queryInitialized)
+        {
+            _ofXText = QueryOfX ?? _ofXText;
+            _ofYText = QueryOfY ?? _ofYText;
+            _whatPctXText = QueryWhatPctX ?? _whatPctXText;
+            _whatPctYText = QueryWhatPctY ?? _whatPctYText;
+            _ofWhatXText = QueryOfWhatX ?? _ofWhatXText;
+            _ofWhatYText = QueryOfWhatY ?? _ofWhatYText;
+            _changeFromText = QueryChangeFrom ?? _changeFromText;
+            _changeToText = QueryChangeTo ?? _changeToText;
+            Recalculate();
+            _queryInitialized = true;
+        }
+    }
+
+    private void HandleSubmit() => Recalculate();
+
+    private void Recalculate()
+    {
+        _ofResult = Portfolio.Blazor.Core.PercentageCalculator.Calculate(
+            Parse(_ofYText),
+            Parse(_ofXText)
+        );
+        _whatPctResult = Portfolio.Blazor.Core.PercentageCalculator.WhatPercentOf(
+            Parse(_whatPctXText),
+            Parse(_whatPctYText)
+        );
+        _ofWhatResult = Portfolio.Blazor.Core.PercentageCalculator.OfWhat(
+            Parse(_ofWhatXText),
+            Parse(_ofWhatYText)
+        );
+        _changeResult = Portfolio.Blazor.Core.PercentageCalculator.Change(
+            Parse(_changeFromText),
+            Parse(_changeToText)
+        );
+    }
+
+    private static double Parse(string value) => double.TryParse(value, NumberStyles.Float, CultureInfo.InvariantCulture, out var result) ? result : double.NaN;
+    private static string Format(double value) => value.ToString("G12", CultureInfo.InvariantCulture);
+
+    private string FormatOf(
+        string x,
+        string y,
+        double result
+    ) => $"{Format(Parse(x))}% {OfYLabel.ToLowerInvariant()} {Format(Parse(y))} = {Format(result)}";
+    private string FormatWhatPct(PercentageWhatPercentResult result) => $"{Format(result.X)} = {Format(result.Percentage)}% ({Format(result.Y)})";
+    private string FormatOfWhat(PercentageOfWhatResult result) => $"{Format(result.X)} = {Format(result.Y)}% {OfYLabel.ToLowerInvariant()} {Format(result.Whole)}";
+    private string FormatChange(PercentageChangeResult result) => $"{Format(Math.Abs(result.DeltaPercent))}% {(result.IsIncrease ? IncreaseLabel : DecreaseLabel)} ({Format(result.From)} → {Format(result.To)})";
+}

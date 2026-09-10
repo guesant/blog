@@ -1,0 +1,34 @@
+@inherits SiteInputBase
+
+<input type="text"
+       id="@ResolvedId"
+       name="@Name"
+       value="@Value"
+       placeholder="@Placeholder"
+       autocomplete="@(AutoComplete ? "on" : "off")"
+       class="@InputClass"
+       aria-describedby="@FieldContext?.DescribedBy"
+       aria-required="@(FieldContext?.Required == true ? "true" : null)"
+       aria-invalid="@(FieldContext?.Invalid == true ? "true" : null)"
+       @attributes="ForwardedAttributes"
+       @oninput="HandleInput" />
+
+@code {
+    [Parameter]
+    public string Value { get; set; } = string.Empty;
+    [Parameter]
+    public EventCallback<string> ValueChanged { get; set; }
+    [Parameter]
+    public string Placeholder { get; set; } = string.Empty;
+    [Parameter]
+    public bool AutoComplete { get; set; } = true;
+
+    protected override IReadOnlySet<string> ExcludedAttributeKeys { get; } = new HashSet<string>(StringComparer.OrdinalIgnoreCase) { "class", "id", "name", "value", "type", "placeholder", "autocomplete" };
+
+    private Task HandleInput(ChangeEventArgs args)
+    {
+        var value = args.Value?.ToString() ?? string.Empty;
+        Value = value;
+        return ValueChanged.InvokeAsync(value);
+    }
+}

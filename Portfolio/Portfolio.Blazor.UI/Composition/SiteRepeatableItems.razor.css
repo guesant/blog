@@ -1,0 +1,12 @@
+.site-repeatable-items {
+    display: grid;
+    gap: var(--site-gap-stack);
+}
+
+.site-repeatable-item {
+    display: grid;
+    gap: var(--site-gap-stack);
+    padding: var(--site-inset-card);
+    border: var(--site-border-width) solid var(--site-border-strong);
+    border-radius: var(--site-radius-lg);
+}

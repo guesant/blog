@@ -1,0 +1,10 @@
+id: no-narrative-comment-in-function-tsx
+language: Tsx
+severity: error
+message: Substitua o comentário narrativo por nomes e funções que expressem a intenção do algoritmo.
+
+rule:
+  all:
+    - kind: comment
+    - not:
+        regex: '(biome-ignore|nosemgrep|istanbul|@ts-expect-error|@ts-ignore|@ts-nocheck|IMPORTANT:)'

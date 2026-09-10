@@ -1,0 +1,42 @@
+@attribute [Stories("Feedback/SiteConfirmDialog")]
+@inject SiteDialogService Dialogs
+
+<Stories TComponent="SiteConfirmDialog">
+
+    <Story Name="Default">
+        <Template>
+            <SiteInline>
+                <SiteButton OnClick="AskAsync">ask</SiteButton>
+                <SiteButton Variant="SiteButtonVariant.Destructive" OnClick="AskDestructiveAsync">
+                    ask destructive
+                </SiteButton>
+            </SiteInline>
+            <SiteText id="confirm-dialog-answer">@_answer</SiteText>
+            <SiteConfirmDialog />
+        </Template>
+    </Story>
+
+</Stories>
+
+@code {
+    private string _answer = "no answer yet";
+
+    private async Task AskAsync()
+    {
+        var confirmed = await Dialogs.ConfirmAsync("apply changes?", "this updates the record.");
+        _answer = confirmed ? "confirmed" : "cancelled";
+        StateHasChanged();
+    }
+
+    private async Task AskDestructiveAsync()
+    {
+        var confirmed = await Dialogs.ConfirmAsync(
+            "delete snippet?",
+            "this cannot be undone.",
+            destructive: true,
+            confirmLabel: "delete"
+        );
+        _answer = confirmed ? "confirmed" : "cancelled";
+        StateHasChanged();
+    }
+}

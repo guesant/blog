@@ -1,0 +1,8 @@
+id: component-props-type-suffix
+language: Tsx
+severity: error
+message: Tipos de propriedades devem usar o nome do componente seguido de Props, nunca apenas Props.
+rule:
+  any:
+    - pattern: 'type Props = $VALUE'
+    - pattern: 'interface Props { $$$ }'

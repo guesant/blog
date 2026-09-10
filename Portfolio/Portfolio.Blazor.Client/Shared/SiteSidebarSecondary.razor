@@ -1,0 +1,136 @@
+@inherits LocalizedComponentBase
+@using Portfolio.Blazor.Core
+@using Portfolio.Blazor.Core.Localization
+@inject ICultureCatalog Cultures
+@inject ILocalizedUrlBuilder Urls
+
+<div class="site-sidebar-secondary">
+    <section class="site-sidebar-section" aria-labelledby="right-sidebar-connect-heading">
+        <SiteText Variant="SiteTextVariant.SectionLabel"
+            Class="site-nav-group-label"
+            id="right-sidebar-connect-heading">@ConnectLabel</SiteText>
+        <ul>
+            <li>
+                <SiteNavLink Href="@LocalizedPath("contact")">
+                    <SiteIcon Name="mail" Size="14" Class="icon footer-contact-icon" />
+                    <SiteNavItemLabel>@ContactPageLabel</SiteNavItemLabel>
+                </SiteNavLink>
+            </li>
+        </ul>
+        <SiteStack Gap="SiteSpace.Sm" Class="site-nav-sub">
+            <ContactChannels Profiles="@(Snapshot?.Chrome.Site.ContactProfiles ?? [])"
+                EmailChallenge="@Snapshot?.Chrome.Site.ProtectedEmail"
+                EmailAvailable="@(Snapshot?.Chrome.Site.ContactAvailable == true)"
+                UseSidebarStyle="true" />
+        </SiteStack>
+    </section>
+
+    <section class="site-sidebar-section" aria-labelledby="right-sidebar-legal-heading">
+        <SiteText Variant="SiteTextVariant.SectionLabel"
+            Class="site-nav-group-label"
+            id="right-sidebar-legal-heading">@LegalLabel</SiteText>
+        <ul>
+            @foreach (var link in LegalLinks)
+            {
+                <li>
+                    <SiteNavLink Href="@LocalizedPath(link.Route)">
+                        <SiteIcon Name="@link.Icon" Size="14" />
+                        <SiteNavItemLabel>@link.Label</SiteNavItemLabel>
+                    </SiteNavLink>
+                </li>
+            }
+        </ul>
+    </section>
+
+    <section class="site-sidebar-section" aria-labelledby="right-sidebar-updates-heading">
+        <SiteText Variant="SiteTextVariant.SectionLabel"
+            Class="site-nav-group-label"
+            id="right-sidebar-updates-heading">@UpdatesLabel</SiteText>
+        @if (FollowLink is { } follow)
+        {
+            <ul>
+                <li>
+                    <SiteNavLink Href="@LocalizedPath(follow.Route)">
+                        <SiteIcon Name="bell" Size="14" />
+                        <SiteNavItemLabel>@follow.Label</SiteNavItemLabel>
+                    </SiteNavLink>
+                </li>
+            </ul>
+        }
+        <ul class="site-nav-sub">
+            @foreach (var feed in Feeds)
+            {
+                <li>
+                    <SiteNavLink Href="@feed.Href" Target="_blank" Rel="noopener">
+                        <SiteIcon Name="@feed.Icon" Size="14" />
+                        <SiteNavItemLabel>@feed.Label</SiteNavItemLabel>
+                    </SiteNavLink>
+                </li>
+            }
+        </ul>
+    </section>
+
+    @if (BuildUrl is string buildUrl && BuildSha is string sha)
+    {
+        <section class="site-sidebar-section" aria-labelledby="right-sidebar-source-heading">
+            <SiteText Variant="SiteTextVariant.SectionLabel"
+                Class="site-nav-group-label"
+                id="right-sidebar-source-heading">@SourceLabel</SiteText>
+            <SiteNavLink Href="@buildUrl"
+                Class="footer-build-action"
+                Target="_blank"
+                Rel="noopener">
+                <SiteIcon Name="code-branch" Size="14" />
+                <SiteNavItemLabel>build @sha</SiteNavItemLabel>
+                <SiteIcon Name="external-link" Size="12" Class="icon icon-trailing" />
+            </SiteNavLink>
+        </section>
+    }
+</div>
+
+@code {
+    [Parameter]
+    public PublicSiteSnapshot? Snapshot { get; set; }
+    private string ConnectLabel => L["connect"];
+    private string UpdatesLabel => L["legacy_efc6c5d00b30"];
+
+    private (string Route, string Label)? FollowLink => Snapshot?.Chrome.Navigation.FooterLinks
+        .Where(item => item.Route.Trim('/').Split('/', StringSplitOptions.RemoveEmptyEntries).LastOrDefault() == "follow")
+        .Select(item => ((string Route, string Label)?)("follow", (item.Label ?? "follow").ToLowerInvariant()))
+        .FirstOrDefault();
+
+    private IReadOnlyList<(string Href, string Icon, string Label)> Feeds =>
+    [
+        (L["legacy_362d5aad99f1"], "rss", "RSS"),
+        (L["legacy_eabac209b499"], "rss", "Atom"),
+    ];
+    private string ContactPageLabel => L["contact_page"];
+    private string LegalLabel => L["legal"];
+    private string SourceLabel => L["source"];
+
+    private IReadOnlyList<(string Route, string Icon, string Label)> LegalLinks =>
+    [
+        ("license", "file-text", L["license"]),
+        ("credits", "award", L["credits"]),
+        ("contact", "message-circle", L["report_issue"]),
+    ];
+
+    private string? BuildSha => string.IsNullOrWhiteSpace(Snapshot?.Chrome.Build.CommitSha)
+        ? null
+        : Snapshot!.Chrome.Build.CommitSha[..Math.Min(7, Snapshot.Chrome.Build.CommitSha.Length)];
+
+    private string? BuildUrl => SafeExternalUrl(Snapshot?.Chrome.Site.SourceRepositoryUrl) is string source && BuildSha is not null
+        ? $"{source.TrimEnd('/')}/commit/{Snapshot!.Chrome.Build.CommitSha}"
+        : null;
+
+    private string LocalizedPath(string path) =>
+        Urls.ForCulture(
+            path.Equals("home", StringComparison.OrdinalIgnoreCase) ? "/" : path,
+            Cultures.FromPath(RequestPath).Name
+        );
+
+    private static string? SafeExternalUrl(string? value) =>
+        Uri.TryCreate(value, UriKind.Absolute, out var uri) && uri.Scheme is "http" or "https"
+            ? uri.AbsoluteUri
+            : null;
+}

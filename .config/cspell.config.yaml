@@ -1,0 +1,34 @@
+version: '0.2'
+language: en
+globRoot: '${cwd}'
+import:
+  - '@cspell/dict-pt-br/cspell-ext.json'
+dictionaries:
+  - portfolio
+  - pt-br
+dictionaryDefinitions:
+  - name: portfolio
+    path: ../tools/checks/cspell/dictionary.txt
+    addWords: false
+    noSuggest: false
+ignorePaths:
+  - '**/node_modules/**'
+  - '**/.pnpm-store/**'
+  - '**/*.tsbuildinfo'
+  - pnpm-lock.yaml
+  - '**/dist/**'
+  - '**/coverage/**'
+  - '**/__generated__/**'
+  - '**/*.cpuprofile'
+  - '**/*.svg'
+files:
+  - 'tools/checks/**/*.{yml,yaml}'
+  - '.devcontainer/**/*.{yml,yaml}'
+  - '.config/moon/**/*.{yml,yaml}'
+  - 'moon.yml'
+  - 'pnpm-workspace.yaml'
+overrides:
+  - filename: '**/*.{ts,tsx,js,jsx,mts,mjs}'
+    languageId: typescript
+  - filename: '**/*.{yml,yaml}'
+    languageId: yaml

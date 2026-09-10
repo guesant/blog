@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <data name="tools"><value>ferramentas</value></data>
+  <data name="description"><value>pequenas ferramentas que funcionam diretamente no navegador.</value></data>
+  <data name="filters"><value>filtros de ferramentas</value></data>
+  <data name="search"><value>buscar</value></data>
+  <data name="search_placeholder"><value>nome, área ou descrição</value></data>
+  <data name="category"><value>categoria</value></data>
+  <data name="all_categories"><value>todas as categorias</value></data>
+  <data name="no_category"><value>nenhuma categoria encontrada</value></data>
+  <data name="apply_filters"><value>aplicar filtros</value></data>
+  <data name="clear_filters"><value>limpar filtros</value></data>
+  <data name="no_results"><value>nenhuma ferramenta corresponde aos filtros.</value></data>
+  <data name="pagination"><value>paginação</value></data>
+  <data name="previous"><value>anterior</value></data>
+  <data name="next"><value>próxima</value></data>
+  <data name="stub"><value>stub estrutural · implementação pendente</value></data>
+  <data name="results_summary"><value>mostrando {0} de {1} ferramentas</value></data>
+</root>

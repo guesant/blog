@@ -1,0 +1,34 @@
+.site-toggle-group {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 0;
+}
+.site-toggle-group ::deep .site-toggle-link {
+    flex: 1 1 0;
+    min-width: 0;
+    justify-content: center;
+    border-radius: 0;
+    text-transform: lowercase;
+}
+.site-toggle-group ::deep .site-toggle-link + .site-toggle-link {
+    margin-left: var(--site-overlap);
+}
+.site-toggle-group ::deep .site-toggle-link:first-child {
+    border-top-left-radius: var(--site-radius);
+    border-bottom-left-radius: var(--site-radius);
+}
+.site-toggle-group ::deep .site-toggle-link:last-child {
+    border-top-right-radius: var(--site-radius);
+    border-bottom-right-radius: var(--site-radius);
+}
+.site-toggle-group ::deep .site-toggle-link.active {
+    color: var(--site-primary);
+    background-color: var(--site-accent-bg);
+    border-color: var(--site-accent-border);
+}
+.site-toggle-group ::deep .site-toggle-link.active:hover,
+.site-toggle-group ::deep .site-toggle-link.active:focus-visible {
+    color: var(--site-primary);
+    background-color: var(--site-accent-bg);
+    border-color: var(--site-accent-border);
+}

@@ -1,0 +1,7 @@
+[project]
+name = "portfolio-quality-tools"
+version = "0.1.0"
+requires-python = ">=3.11"
+dependencies = [
+  "lizard==1.23.0",
+]

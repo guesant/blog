@@ -1,0 +1,12 @@
+.site-markdown-split-editor {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--site-gap-cluster);
+}
+
+.site-markdown-split-editor-pane {
+    display: grid;
+    gap: var(--site-gap-inline);
+    flex: 1 1 var(--site-pane-min);
+    min-width: 0;
+}

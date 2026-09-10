@@ -1,0 +1,14 @@
+{
+  "name": "portfolio-coder",
+  "dockerComposeFile": "compose.yaml",
+  "service": "app",
+  "workspaceFolder": "/workspace",
+  "shutdownAction": "stopCompose",
+  "forwardPorts": [3000, 4001],
+  "customizations": {
+    "vscode": {
+      "extensions": ["biomejs.biome"]
+    }
+  },
+  "remoteUser": "root"
+}

@@ -1,0 +1,238 @@
+@page "/admin/credits/create"
+@page "/admin/credits/{Id:int}"
+@inherits AdminEditPageBase<CreditEntry>
+@layout AdminLayout
+
+<PageTitle>@(IsEditing ? "Edit credit" : "New credit")</PageTitle>
+
+<SiteFormShell Title="@(IsEditing ? "Edit credit" : "New credit")"
+    Error="@SaveError"
+    Loading="@IsLoading">
+    <SiteForm EditContext="@_creditEditContext" OnValidSubmit="HandleSaveAsync">
+        <SiteStack Gap="SiteSpace.Lg">
+            <SiteFormField Label="Category"
+                For="category"
+                Required="true"
+                HelpText="Credits are grouped by this on the public credits page.">
+                <SiteTextInput Id="category" @bind-Value="_credit.Category" />
+                <SiteValidationMessage For="@(() => _credit.Category)" />
+            </SiteFormField>
+
+
+            <SiteFormField Label="URL" For="url">
+                <SiteTextInput Id="url"
+                    Value="@(_credit.Url ?? string.Empty)"
+                    ValueChanged="@(value => _credit.Url = NullIfBlank(value))" />
+            </SiteFormField>
+
+            <SiteInline Gap="SiteSpace.Lg">
+                <SiteCheckbox Label="Active" @bind-Value="_credit.Active" />
+            </SiteInline>
+
+            <SiteFormSection Title="Translations">
+                <SiteTranslationTabs Locales="@_locales"
+                    ActiveLocale="@_activeLocale"
+                    ActiveLocaleChanged="@((string locale) => _activeLocale = locale)"
+                    IdPrefix="credit-translation">
+                    <Panel Context="locale">
+                        @if (locale == "en")
+                        {
+                            <CascadingValue Value="_enEditContext"
+                                TValue="EditContext"
+                                IsFixed="true">
+                                <DataAnnotationsValidator />
+                                <SiteFormField Label="Name"
+                                    For="name-en"
+                                    HelpText="Leave blank to skip saving the English translation.">
+                                    <SiteTextInput Id="name-en" @bind-Value="_translationEn.Name" />
+                                </SiteFormField>
+
+                                <SiteFormField Label="Description" For="description-en">
+                                    <SiteTextAreaInput Id="description-en"
+                                        Rows="4"
+                                        Value="@(_translationEn.Description ?? string.Empty)"
+                                        ValueChanged="@(value => _translationEn.Description = NullIfBlank(value))" />
+                                </SiteFormField>
+                            </CascadingValue>
+                        }
+                        else
+                        {
+                            <CascadingValue Value="_ptEditContext"
+                                TValue="EditContext"
+                                IsFixed="true">
+                                <DataAnnotationsValidator />
+                                <SiteFormField Label="Nome"
+                                    For="name-pt"
+                                    HelpText="Deixe em branco para não salvar a tradução em português.">
+                                    <SiteTextInput Id="name-pt"
+                                        @bind-Value="_translationPtBr.Name" />
+                                </SiteFormField>
+
+                                <SiteFormField Label="Descrição" For="description-pt">
+                                    <SiteTextAreaInput Id="description-pt"
+                                        Rows="4"
+                                        Value="@(_translationPtBr.Description ?? string.Empty)"
+                                        ValueChanged="@(value => _translationPtBr.Description = NullIfBlank(value))" />
+                                </SiteFormField>
+                            </CascadingValue>
+                        }
+                    </Panel>
+                </SiteTranslationTabs>
+            </SiteFormSection>
+        </SiteStack>
+
+        <SiteSaveBar Saving="@IsSaving" CancelHref="/admin/credits" />
+    </SiteForm>
+</SiteFormShell>
+
+@code {
+    [Parameter]
+    public int? Id { get; set; }
+
+    private static readonly IReadOnlyList<SiteLocaleTab> _locales = [new(
+        "en",
+        "English"
+    ), new("pt-BR", "Português")];
+
+    private CreditEntry _credit = new();
+    private CreditEntryTranslation _translationEn = new() { Locale = "en" };
+    private CreditEntryTranslation _translationPtBr = new() { Locale = "pt-BR" };
+    private string _activeLocale = "en";
+
+    private EditContext _creditEditContext = default!;
+    private EditContext _enEditContext = default!;
+    private EditContext _ptEditContext = default!;
+
+    private bool IsEditing => Id.HasValue;
+    protected override string EntityLabel => "credit";
+    protected override string ListRoute => "/admin/credits";
+
+    protected override async Task LoadAsync(PortfolioAdminDbContext dbContext)
+    {
+        if (Id is int id)
+        {
+            var credit = await dbContext.CreditEntries
+                .Include(candidate => candidate.Translations)
+                .AsNoTracking()
+                .FirstOrDefaultAsync(candidate => candidate.Id == id);
+
+            if (credit is null)
+            {
+                ToastService.Error("Credit not found.");
+                Navigation.NavigateTo("/admin/credits");
+                return;
+            }
+
+            _credit = credit;
+            _translationEn = credit.Translations.FirstOrDefault(translation => translation.Locale == "en")
+                ?? new CreditEntryTranslation { CreditEntryId = credit.Id, Locale = "en" };
+            _translationPtBr = credit.Translations.FirstOrDefault(translation => translation.Locale == "pt-BR")
+                ?? new CreditEntryTranslation { CreditEntryId = credit.Id, Locale = "pt-BR" };
+        }
+        else
+        {
+            _credit.Active = true;
+        }
+
+        _creditEditContext = new EditContext(_credit);
+        _enEditContext = new EditContext(_translationEn);
+        _ptEditContext = new EditContext(_translationPtBr);
+    }
+
+    protected override Task<bool> ValidateAsync()
+    {
+        var englishHasContent = !string.IsNullOrWhiteSpace(_translationEn.Name);
+        var portugueseHasContent = !string.IsNullOrWhiteSpace(_translationPtBr.Name);
+        var englishValid = !englishHasContent || _enEditContext.Validate();
+        var portugueseValid = !portugueseHasContent || _ptEditContext.Validate();
+
+        if (!englishValid || !portugueseValid)
+        {
+            return Task.FromResult(false);
+        }
+
+        if (!englishHasContent && !portugueseHasContent)
+        {
+            SaveError = "Provide a name in at least one language.";
+            return Task.FromResult(false);
+        }
+
+        return Task.FromResult(true);
+    }
+
+    protected override async Task ApplyChangesAsync(PortfolioAdminDbContext dbContext)
+    {
+        var englishHasContent = !string.IsNullOrWhiteSpace(_translationEn.Name);
+        var portugueseHasContent = !string.IsNullOrWhiteSpace(_translationPtBr.Name);
+
+        if (Id is int id)
+        {
+            var credit = await dbContext.CreditEntries
+                .Include(candidate => candidate.Translations)
+                .FirstAsync(candidate => candidate.Id == id);
+
+            ApplyCreditFields(credit, _credit);
+            ApplyTranslation(credit, "en", _translationEn, englishHasContent);
+            ApplyTranslation(credit, "pt-BR", _translationPtBr, portugueseHasContent);
+        }
+        else
+        {
+            var credit = new CreditEntry();
+            ApplyCreditFields(credit, _credit);
+
+            if (englishHasContent)
+            {
+                credit.Translations.Add(CloneTranslation(_translationEn, "en"));
+            }
+
+            if (portugueseHasContent)
+            {
+                credit.Translations.Add(CloneTranslation(_translationPtBr, "pt-BR"));
+            }
+
+            credit.Order = await NextOrderAsync(dbContext.CreditEntries, entity => entity.Order);
+            dbContext.CreditEntries.Add(credit);
+        }
+    }
+
+    private static void ApplyCreditFields(CreditEntry target, CreditEntry source)
+    {
+        target.Category = source.Category;
+        target.Order = source.Order;
+        target.Url = source.Url;
+        target.Active = source.Active;
+    }
+
+    private static void ApplyTranslation(
+        CreditEntry credit,
+        string locale,
+        CreditEntryTranslation source,
+        bool hasContent
+    )
+    {
+        if (!hasContent)
+        {
+            return;
+        }
+
+        var existing = credit.Translations.FirstOrDefault(translation => translation.Locale == locale);
+        if (existing is null)
+        {
+            credit.Translations.Add(CloneTranslation(source, locale));
+            return;
+        }
+
+        existing.Name = source.Name;
+        existing.Description = source.Description;
+    }
+
+    private static CreditEntryTranslation CloneTranslation(
+        CreditEntryTranslation source,
+        string locale
+    ) => new()
+    {
+        Locale = locale,
+        Name = source.Name,
+        Description = source.Description,
+    };
+}

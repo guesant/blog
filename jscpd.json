@@ -1,0 +1,31 @@
+{
+  "threshold": 3,
+  "minLines": 12,
+  "minTokens": 80,
+  "format": [
+    "csharp",
+    "razor",
+    "css"
+  ],
+  "path": [
+    "Portfolio/Portfolio.Blazor.Client",
+    "Portfolio/Portfolio.Blazor.Core",
+    "Portfolio/Portfolio.Blazor.Core.Tests",
+    "Portfolio/Portfolio.Blazor.Sbom",
+    "Portfolio/Portfolio.Blazor.Snapshot",
+    "Portfolio/Portfolio.Blazor",
+    "Portfolio/Portfolio.Blazor.UI"
+  ],
+  "ignore": [
+    "**/bin/**",
+    "**/obj/**",
+    "**/*.stories.razor",
+    "**/Portfolio.Blazor.Database/**"
+  ],
+  "ignoreCase": true,
+  "reporters": [
+    "console"
+  ],
+  "absolute": true,
+  "gitignore": true
+}

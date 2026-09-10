@@ -1,0 +1,45 @@
+<div @attributes="SectionAttributes"
+    class="@($"site-section section border {Class}")"
+    data-layout-region="@Region"
+    aria-labelledby="@(string.IsNullOrWhiteSpace(Title) ? null : HeadingId)">
+    <div class="site-section-body">
+    @if (!string.IsNullOrWhiteSpace(Label)) { <p class="section-label">@if (!string.IsNullOrWhiteSpace(Icon)) { <SiteIcon Name="@Icon" Size="12" /> }@Label</p> }
+    @if (!string.IsNullOrWhiteSpace(Title)) { <h2 class="section-title h3"
+        id="@HeadingId">@Title</h2> }
+    @if (!string.IsNullOrWhiteSpace(Description)) { <p class="section-description text-body-secondary">@Description</p> }
+    @if (!string.IsNullOrWhiteSpace(ActionHref) && !string.IsNullOrWhiteSpace(ActionLabel))
+    {
+        <SiteLink Variant="SiteButtonVariant.Outline"
+            Class="section-action"
+            Href="@ActionHref"><SiteIcon Name="arrow-right" Size="14" />@ActionLabel</SiteLink>
+    }
+    @ChildContent
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public string? Label { get; set; }
+    /// <summary>Icon rendered before the section label.</summary>
+    [Parameter]
+    public string? Icon { get; set; }
+    [Parameter]
+    public string? Title { get; set; }
+    [Parameter]
+    public string? Description { get; set; }
+    [Parameter]
+    public string? Id { get; set; }
+    [Parameter]
+    public string Region { get; set; } = "section";
+    [Parameter]
+    public string HeadingId { get; set; } = "section-heading";
+    [Parameter]
+    public string? Class { get; set; }
+    [Parameter]
+    public string? ActionHref { get; set; }
+    [Parameter]
+    public string? ActionLabel { get; set; }
+    [Parameter, EditorRequired]
+    public RenderFragment ChildContent { get; set; } = default!;
+    private IReadOnlyDictionary<string, object> SectionAttributes => string.IsNullOrWhiteSpace(Id) ? new Dictionary<string, object>() : new Dictionary<string, object> { ["id"] = Id! };
+}

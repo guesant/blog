@@ -1,0 +1,11 @@
+.site-key-value-input {
+    display: flex;
+    flex-direction: column;
+    gap: var(--site-space-2);
+}
+
+.site-key-value-row ::deep .form-control {
+    flex: 1 1 var(--site-field-min-xs);
+    min-width: 0;
+    width: auto;
+}

@@ -1,0 +1,11 @@
+id: no-console-tsx
+language: Tsx
+severity: error
+message: Não deixe logs de console no código de produção.
+
+rule:
+  any:
+    - pattern: console.log($$$ARGS)
+    - pattern: console.debug($$$ARGS)
+    - pattern: console.info($$$ARGS)
+    - pattern: console.warn($$$ARGS)

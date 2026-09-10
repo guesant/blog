@@ -1,0 +1,21 @@
+@attribute [Stories("DataDisplay/SiteColumn")]
+
+<Stories TComponent="SiteColumn<string>">
+
+    <Story Name="Default">
+        <Template>
+            <SiteDataTable TItem="string"
+                Items="@(new[] { "alpha", "beta" })"
+                Caption="sample table"
+                EmptyText="No items."
+                RowKey="@(item => item)">
+                <Columns>
+                    <SiteColumn TItem="string" Header="name" IsRowHeader="true">
+                        <Cell Context="item">@item</Cell>
+                    </SiteColumn>
+                </Columns>
+            </SiteDataTable>
+        </Template>
+    </Story>
+
+</Stories>

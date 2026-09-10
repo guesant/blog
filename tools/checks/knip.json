@@ -1,0 +1,27 @@
+{
+  "$schema": "https://unpkg.com/knip@6/schema.json",
+  "includeEntryExports": true,
+  "ignoreExportsUsedInFile": true,
+  "ignoreDependencies": ["@ast-grep/cli", "@biomejs/biome", "cspell", "jscpd", "vercel"],
+  "treatConfigHintsAsErrors": true,
+  "treatTagHintsAsErrors": true,
+  "rules": {
+    "cycles": "error",
+    "duplicates": "error",
+    "nsExports": "error",
+    "nsTypes": "error"
+  },
+  "cycles": {
+    "dynamicImports": true
+  },
+  "workspaces": {
+    ".": {
+      "entry": ["tools/checks/*.mjs"],
+      "project": ["tools/checks/**/*.mjs"],
+      "ignoreDependencies": ["@ast-grep/cli", "@biomejs/biome", "cspell", "jscpd", "vercel"],
+      "cspell": {
+        "config": [".config/cspell.config.yaml"]
+      }
+    }
+  }
+}

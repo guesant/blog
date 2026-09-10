@@ -1,0 +1,197 @@
+@inherits ListPageBase
+@page "/cases"
+@page "/pt-BR/cases"
+@using Microsoft.AspNetCore.Components
+@using Portfolio.Blazor.Core
+@using Portfolio.Blazor.Core.Localization
+@inject ILocalizedUrlBuilder Urls
+
+<PageTitle>@PageField("cases", "title", Title)</PageTitle>
+<SeoHead Title="@SeoTitle" Description="@SeoDescription" CanonicalPath="@CanonicalPath" />
+
+<SitePage Template="cases-index">
+    <SiteBreadcrumb HomeUrl="@LocalizedPath("home")"
+        HomeLabel="@(L["legacy_8eec0169bc59"])"
+        Links="@BreadcrumbLinks"
+        CurrentLabel="@PageField("cases", "title", Title)" />
+
+        <SiteHero Title="@SeoTitle"
+            Lead="@SeoDescription"
+            BackHref="@LocalizedPath("portfolio")"
+            BackLabel="@(L["legacy_0d5377122054"])" />
+
+    @if (Snapshot is null || SortedCases.Count == 0)
+    {
+        <SiteListingShell HasResults="false"
+            CurrentPage="@CurrentPage"
+            TotalPages="@PageCount"
+            PaginationLabel="@(L["legacy_79b08b194e08"] )"
+            PreviousLabel="@(L["legacy_e01a927a8e83"] )"
+            NextLabel="@(L["legacy_71e1ccdf2f10"] )"
+            Href="@(page => QueryUrl(ViewMode, page))">
+            <EmptyContent>
+                <SiteEmptyState Message="@(Snapshot is null ? UnavailableLabel : EmptyLabel)" />
+            </EmptyContent>
+        </SiteListingShell>
+    }
+    else
+    {
+        <SiteListingShell HasResults="@(PagedCases.Count > 0)"
+            Summary="@ListingSummary(PagedCases.Count, SortedCases.Count, CurrentPage, PageCount)"
+            CurrentPage="@CurrentPage"
+            TotalPages="@PageCount"
+            PaginationLabel="@(L["legacy_79b08b194e08"])"
+            PreviousLabel="@(L["legacy_e01a927a8e83"])"
+            NextLabel="@(L["legacy_71e1ccdf2f10"])"
+            Href="@(page => QueryUrl(ViewMode, page))">
+        <FilterContent>
+            <SiteListingFilterBar Action="@Action"
+                    ApplyLabel="@(L["legacy_3d48da040c9d"])"
+                    ClearLabel="@(L["legacy_5262517729fc"])"
+                    ClearHref="@Action"
+                    OnApply="@(() => HandleApply(Action, SortValue, Search, DenseView))">
+                    <PrimaryFields>
+                        <SiteFilterSelect Icon="arrow-up-down"
+                            Label="@(L["legacy_194006b2e626"])"
+                            Id="cases-sort"
+                            Name="sort"
+                            @bind-Value="SortValue"
+                            Options="@SortOptions"
+                            Placeholder="@(L["legacy_ebe3321e2c21"])"
+                            EmptyText="@(L["legacy_3259c09e8ab3"])" />
+                    </PrimaryFields>
+                    <SearchField>
+                        <SiteSearchField Label="@(L["legacy_6bb12bff6f09"])"
+                            Id="cases-search"
+                            Name="q"
+                            Value="@Search"
+                            ValueChanged="@((string value) => Search = value)"
+                            Placeholder="@(L["search_by_name"])" />
+                    </SearchField>
+                </SiteListingFilterBar>
+        </FilterContent>
+
+        <ResultContent>
+        <SiteCardGrid id="view-spacious-cases"
+            aria-label="@PageField("cases", "title", Title)"
+            data-layout-region="items">
+            @{ var caseNumber = (CurrentPage - 1) * PageSize; }
+            @foreach (var item in PagedCases)
+            {
+                caseNumber++;
+                <SiteGridColumn>
+                    <SiteFeedCard KindLabel="@(L["kind_case"])"
+                        Date="@(FormatDate(item.PublishedAt) is { } date && date != "·" ? date : null)"
+                        Title="@item.Title"
+                        Href="@LocalizedUrl(item.Url)"
+                        Preview="@item.Summary"
+                        ViewLabel="@(L["read_more"])">
+                        <MetaItems>
+                            <SiteCardMetaItem Icon="star">@(L["selected_case_label", caseNumber])</SiteCardMetaItem>
+                        </MetaItems>
+                        <Tags>
+                            @if (item.Technologies is { Count: > 0 })
+                            {
+                                <SiteChipGroup>
+                                    @foreach (var technology in item.Technologies)
+                                    {
+                                        <SiteChip Label="@technology.Name"
+                                            Href="@LocalizedTechnologyUrl(technology)" />
+                                    }
+                                </SiteChipGroup>
+                            }
+                        </Tags>
+                    </SiteFeedCard>
+                </SiteGridColumn>
+            }
+        </SiteCardGrid>
+        </ResultContent>
+        </SiteListingShell>
+
+    }
+</SitePage>
+
+@code {
+
+    [SupplyParameterFromQuery(Name = "sort")]
+    private string? QuerySort { get; set; }
+
+    [SupplyParameterFromQuery(Name = "view")]
+    private string? QueryView { get; set; }
+
+    [SupplyParameterFromQuery(Name = "page")]
+    private int? QueryPage { get; set; }
+    [SupplyParameterFromQuery(Name = "q")]
+    private string? QuerySearch { get; set; }
+    private string _search = string.Empty;
+    private string Search { get => _search; set => _search = value; }
+    private string Action => LocalizedUrls.Current("/cases");
+    private string CanonicalPath => Action;
+    private string Title => L["legacy_867acccc0ae7"];
+    private string FallbackDescription => L["legacy_7e516bb522ce"];
+    private string EmptyLabel => L["legacy_325451caac6b"];
+    private string UnavailableLabel => L["legacy_fa8c57ffb24f"];
+    private string SeoTitle => PageField("cases", "title", Title);
+    private string SeoDescription => PageField("cases", "description", FallbackDescription);
+    private string Sort => QuerySort is "asc" or "alpha" ? QuerySort : "desc";
+    private string _sortValue = "desc";
+    private string SortValue { get => _sortValue; set => _sortValue = value is "asc" or "alpha" or "desc" ? value : "desc"; }
+    private IReadOnlyList<SiteSelectOption> SortOptions => [new(
+        "desc",
+        L["newest"]
+    ), new("asc", L["oldest"]), new("alpha", L["alphabetical"])];
+    private bool DenseView => string.Equals(QueryView, "dense", StringComparison.OrdinalIgnoreCase);
+    private string ViewMode => DenseView ? "dense" : "spacious";
+    private const int PageSize = 20;
+
+    private IReadOnlyList<PublicCaseStudy> SortedCases => (Snapshot?.Cases ?? [])
+        .Where(item => MatchesSearch(QuerySearch, item.Title, item.Summary))
+        .OrderByDescending(item => Sort.Equals("desc", StringComparison.OrdinalIgnoreCase) ? item.PublishedAt ?? string.Empty : string.Empty)
+        .ThenBy(item => Sort.Equals("alpha", StringComparison.OrdinalIgnoreCase) ? item.Title : string.Empty, StringComparer.OrdinalIgnoreCase)
+        .ThenBy(item => Sort.Equals("asc", StringComparison.OrdinalIgnoreCase) ? item.PublishedAt ?? string.Empty : string.Empty)
+        .ToArray();
+
+    private int PageCount => PageCountFor(SortedCases.Count, PageSize);
+    private int CurrentPage => CurrentPageFor(QueryPage, PageCount);
+    private IReadOnlyList<PublicCaseStudy> PagedCases => ItemsForPage(
+        SortedCases,
+        CurrentPage,
+        PageSize
+    );
+    private static string FormatDate(string? value) => DateTime.TryParse(value, out var date) ? date.ToString("yyyy-MM-dd") : "·";
+
+    private string ResultsSummary => L["count_cases", SortedCases.Count];
+    private string LocalizedTechnologyUrl(PublicTechnology technology) => LocalizedUrls.Current($"/technologies/{technology.Slug}");
+    private IReadOnlyList<BreadcrumbLink> BreadcrumbLinks => [new(
+        L["legacy_0d5377122054"],
+        LocalizedPath("portfolio")
+    )];
+
+    protected override void OnParametersSet()
+    {
+        SortValue = Sort;
+        _search = QuerySearch ?? string.Empty;
+    }
+
+    private string PageField(string page, string field, string fallback)
+    {
+        if (Snapshot?.Pages.TryGetValue(page, out var fields) != true || fields.ValueKind != System.Text.Json.JsonValueKind.Object || !fields.TryGetProperty(field, out var value)) return fallback;
+        return value.GetString() ?? fallback;
+    }
+
+    private string QueryUrl(string view, int page = 1) =>
+        ListingUrl(
+            Action,
+            Sort,
+            QuerySearch,
+            view.Equals("dense", StringComparison.OrdinalIgnoreCase),
+            page
+        );
+    private string LocalizedPath(string path) => LocalizedUrls.Current($"/{path}");
+    private string LocalizedUrl(string url)
+    {
+        if (!Uri.TryCreate(url, UriKind.Absolute, out var absolute)) return url;
+        var path = absolute.AbsolutePath;
+        return LocalizedUrls.Current(path);
+    }
+}

@@ -1,0 +1,43 @@
+config_version = "0"
+
+exclude_patterns = [
+  "**/node_modules/**",
+]
+
+test_patterns = [
+  "**/test/**",
+  "**/tests/**",
+  "**/*.test.*",
+  "**/*.spec.*",
+]
+
+[smells]
+mode = "block"
+
+[smells.boolean_logic]
+threshold = 4
+
+[smells.nested_control_flow]
+threshold = 3
+
+[smells.function_parameters]
+threshold = 5
+
+[smells.return_statements]
+threshold = 5
+
+[smells.file_complexity]
+enabled = false
+
+[smells.function_complexity]
+threshold = 13
+
+[smells.identical_code]
+enabled = false
+
+[smells.similar_code]
+enabled = false
+
+[[source]]
+name = "default"
+default = true

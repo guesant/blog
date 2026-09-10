@@ -1,0 +1,65 @@
+<div class="kmap-fullscreen-backdrop" data-kmap-fullscreen-backdrop hidden>
+</div>
+<div id="@RootId"
+     class="kmap-root"
+     data-kmap-root
+     data-panel-empty-label="@PanelEmptyLabel"
+     data-panel-open-label="@PanelOpenLabel"
+     data-no-results="@NoResultsLabel">
+    <div class="kmap-toolbar">
+        <SiteButton Class="kmap-reset-btn" data-kmap-reset>
+            <SiteIcon Name="rotate-ccw" Size="14" />@ResetViewLabel</SiteButton>
+        <SiteButton Class="kmap-expand-btn" data-kmap-expand aria-label="@ExpandViewLabel">
+            <SiteIcon Name="maximize" Size="16" />
+        </SiteButton>
+    </div>
+    <div class="kmap-legend" data-kmap-legend aria-label="@LegendLabel">
+    </div>
+    <div class="kmap-layout">
+        <div class="kmap-graph">
+            <div id="@ElementId"
+                 class="knowledge-map-cytoscape"
+                 role="application"
+                 aria-labelledby="@HeadingId"
+                 aria-describedby="@DescriptionId"></div>
+        </div>
+        <div class="kmap-panel" data-kmap-panel>
+        </div>
+    </div>
+    <SiteText Class="content-tags" id="@DescriptionId">@Description</SiteText>
+    <script type="application/json" id="@DataId">@((MarkupString)GraphJson)</script>
+    <SiteButton Class="kmap-collapse-btn" data-kmap-collapse hidden aria-label="@CollapseViewLabel">
+        <SiteIcon Name="x" Size="18" />
+    </SiteButton>
+</div>
+
+@code {
+    [Parameter, EditorRequired]
+    public string GraphJson { get; set; } = string.Empty;
+    [Parameter, EditorRequired]
+    public string HeadingId { get; set; } = string.Empty;
+    [Parameter, EditorRequired]
+    public string Description { get; set; } = string.Empty;
+    [Parameter]
+    public string ElementId { get; set; } = "knowledge-map-cytoscape";
+    [Parameter]
+    public string DescriptionId { get; set; } = "knowledge-map-description";
+    [Parameter]
+    public string DataId { get; set; } = "knowledge-map-data";
+    [Parameter]
+    public string RootId { get; set; } = "knowledge-map-root";
+    [Parameter]
+    public string LegendLabel { get; set; } = "node types";
+    [Parameter]
+    public string PanelEmptyLabel { get; set; } = "select a node to see its connections.";
+    [Parameter]
+    public string PanelOpenLabel { get; set; } = "open";
+    [Parameter]
+    public string ResetViewLabel { get; set; } = "reset view";
+    [Parameter]
+    public string NoResultsLabel { get; set; } = "no nodes match this filter.";
+    [Parameter]
+    public string ExpandViewLabel { get; set; } = "expand view";
+    [Parameter]
+    public string CollapseViewLabel { get; set; } = "close";
+}

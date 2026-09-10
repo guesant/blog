@@ -1,0 +1,55 @@
+services:
+  web:
+    # Built and pushed by .github/workflows/publish-image.yml on every push to main;
+    # tools/scripts/deploy.sh pulls this tag and restarts the service.
+    image: ghcr.io/guesant/portfolio:main
+    restart: unless-stopped
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    env_file:
+      - .env
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      PUBLIC_SITE_BASE_URL: ${PUBLIC_SITE_BASE_URL}
+      PORTFOLIO_SQLITE_PATH: /data/sqlite/portfolio.sqlite
+      PORTFOLIO_PUBLIC_ASSET_ROOT: /data/public
+      PORTFOLIO_RESUME_PDF_ROOT: /data/resume-cache
+      PORTFOLIO_DB_BACKUP_ROOT: /data/db-backups
+      TECTONIC_BUNDLE: ${TECTONIC_BUNDLE:-https://data1.fullyjustified.net/tlextras-2022.0r0.tar}
+      TECTONIC_ONLY_CACHED: "true"
+      # Keep startup fail-closed if the persistent SQLite volume is missing.
+      # Set this only for a deliberate first bootstrap, then remove it.
+      PORTFOLIO_ALLOW_EMPTY_BOOTSTRAP: ${PORTFOLIO_ALLOW_EMPTY_BOOTSTRAP:-false}
+    volumes:
+      # Not read-only: the admin panel's EF Core layer writes here now, and
+      # WAL mode needs to create -wal/-shm sidecar files alongside the DB.
+      - portfolio-sqlite-data:/data/sqlite
+      - portfolio-public-data:/data/public:ro
+      - portfolio-resume-cache:/data/resume-cache
+      - portfolio-db-backups:/data/db-backups
+    healthcheck:
+      test: ["CMD-SHELL", "curl --fail --silent http://127.0.0.1:8080/health >/dev/null || exit 1"]
+      interval: 10s
+      timeout: 3s
+      retries: 6
+      start_period: 15s
+
+  cloudflared:
+    image: cloudflare/cloudflared@sha256:0aa26e284f05e6c77ae375b8c9c11d9eb6a448fb7bcd8d40f31cb6176189eb38
+    restart: unless-stopped
+    command: tunnel run
+    environment:
+      TUNNEL_TOKEN: ${CLOUDFLARE_TUNNEL_TOKEN}
+    depends_on:
+      - web
+
+volumes:
+  portfolio-sqlite-data:
+  portfolio-public-data:
+  portfolio-resume-cache:
+  portfolio-db-backups:

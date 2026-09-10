@@ -1,0 +1,130 @@
+@inherits ContentPageBase
+@page "/collections/{Slug}"
+@page "/pt-BR/collections/{Slug}"
+@using Microsoft.AspNetCore.Components
+@using Portfolio.Blazor.Core
+
+<PageTitle>@Title</PageTitle>
+<SeoHead Title="@Title" Description="@Description" CanonicalPath="@CanonicalPath" />
+
+<SitePage Template="collection-detail">
+    <SiteBreadcrumb HomeUrl="@LocalizedPath("home")"
+        HomeLabel="@(L["legacy_8eec0169bc59"])"
+        Links="@BreadcrumbLinks"
+        CurrentLabel="@Title" />
+
+    @if (Snapshot is null)
+    {
+        <SiteHero Title="@LoadingLabel" />
+    }
+    else if (Collection is null)
+    {
+        <SiteHero Title="@NotFoundLabel"
+            Lead="@NotFoundDescription"><ChildContent>
+                <SiteLink Variant="SiteButtonVariant.Outline" Href="@IndexUrl">
+                    <SiteIcon Name="arrow-left" Size="14" />@BackLabel</SiteLink>
+                </ChildContent>
+            </SiteHero>
+    }
+    else
+    {
+        <SiteHero Title="@Collection.Title"
+            Lead="@Collection.Description"
+            BackHref="@IndexUrl"
+            BackLabel="@BackLabel">
+            <PublishedUpdatedMeta PublishedAt="@Collection.PublishedAt"
+                UpdatedAt="@Collection.UpdatedAt" />
+        </SiteHero>
+
+        @if (!string.IsNullOrWhiteSpace(Collection.Intro))
+        {
+            <SiteRichText Html="@((MarkupString)MarkdownRenderer.ToHtml(Collection.Intro))"
+                Region="intro" />
+        }
+
+        @if (Collection.Resources is not { Count: > 0 })
+        {
+            <SiteEmptyState Message="@EmptyLabel" />
+        }
+        else
+        {
+            <SiteSection Region="resource-list"
+                HeadingId="collection-items-heading"
+                Title="@ItemsLabel">
+                <SiteGrid>
+                    @foreach (var item in Collection.Resources)
+                    {
+                        <SiteGridColumn>
+                            <SiteClickableCard Label="@JoinMeta(TypeName(item.Type), RatingName(item.Rating))"
+                                Class="h-100"
+                                Href="@LocalizedUrl(item.Url)"
+                                Title="@item.Title"
+                                TitleClass="h5"
+                                HeadingLevel="3">
+                                @if (!string.IsNullOrWhiteSpace(item.Description)) { <SiteText Variant="SiteTextVariant.Excerpt">@item.Description</SiteText> }
+                                @if (item.Topics is { Count: > 0 }) { <SiteChipGroup>@foreach (var topic in item.Topics.Take(3)) { <SiteChip Label="@(topic.Name ?? topic.Slug)" /> }</SiteChipGroup> }
+                                @if (!string.IsNullOrWhiteSpace(item.Note)) { <SiteText Variant="SiteTextVariant.Meta">@item.Note</SiteText> }
+                            </SiteClickableCard>
+                        </SiteGridColumn>
+                    }
+                </SiteGrid>
+            </SiteSection>
+        }
+
+        <ContentActions Title="@Collection.Title"
+            Url="@CanonicalPath"
+            Body="@(Collection.Intro ?? Collection.Description ?? string.Empty)" />
+        <ContentRelations CurrentUrl="@CanonicalPath" />
+        <RelatedContent Items="@Collection.Related" />
+    }
+</SitePage>
+
+@code {
+    [Parameter]
+    public string Slug { get; set; } = string.Empty;
+    private PublicCollection? Collection => Snapshot?.Collections.FirstOrDefault(item => PublicRouteKey.Matches(item.Url, item.Slug, Slug));
+    private string Title => Collection?.Title ?? Slug;
+    private string Description => Collection?.Description ?? NotFoundDescription;
+    private string CanonicalPath => Collection?.Url ?? RequestPath;
+    private string LoadingLabel => L["legacy_9683d8c027c5"];
+    private string EmptyLabel => L["legacy_190d1b0e3115"];
+    private string ItemsLabel => L["legacy_2dd7696008c3"];
+    private string NotFoundLabel => L["legacy_5e618bd2ed6c"];
+    private string NotFoundDescription => L["legacy_efc41f7ca04b"];
+    private string BackLabel => L["legacy_c9d2e6d195c0"];
+    private string IndexUrl => FeedUrls.ForKind(FeedUrls.Collection);
+    private IReadOnlyList<BreadcrumbLink> BreadcrumbLinks => [new(
+        L["legacy_8bac078d4fc4"],
+        FeedUrls.ForKind(FeedUrls.Collection)
+    ), new(L["legacy_5dbf11ad96f1"], IndexUrl)];
+
+
+    private string LocalizedUrl(string url)
+    {
+        if (!Uri.TryCreate(url, UriKind.Absolute, out var absolute)) return url;
+        var path = absolute.AbsolutePath;
+        return LocalizedUrls.Current(path);
+    }
+
+    private string LocalizedPath(string path) => LocalizedUrls.Current($"/{path}");
+    private string TypeName(string? value) => value?.ToLowerInvariant() switch
+    {
+        "book" => L["legacy_52a466550e65"],
+        "paper" => "paper",
+        "video" => L["legacy_a72255f4487a"],
+        "course" => L["legacy_d2b5307e2886"],
+        "tool" => L["legacy_c3d6b5e3dba2"],
+        null or "" => L["legacy_024313615d66"],
+        _ => value,
+    };
+    private string RatingName(string? value) => value?.ToLowerInvariant() switch
+    {
+        "interesting" => L["legacy_4a7bae9ea04d"],
+        "recommended" => L["legacy_f81edcb6d6b8"],
+        "strongly-recommended" => L["legacy_d9432986b51f"],
+        "not-recommended" => L["legacy_efe593228740"],
+        "not-rated" or null or "" => string.Empty,
+        _ => value,
+    };
+    private static string JoinMeta(params string?[] values) => string.Join(" · ", values.Where(value => !string.IsNullOrWhiteSpace(value)));
+}

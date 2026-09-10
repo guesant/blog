@@ -1,0 +1,107 @@
+@inherits LocalizedComponentBase
+@page "/tools/image-dimension-calculator"
+@page "/pt-BR/tools/image-dimension-calculator"
+@using Microsoft.JSInterop
+@using Portfolio.Blazor.Core
+@inject IJSRuntime JS
+
+<ToolPage Title="@Title" Description="@Description" CanonicalPath="@CanonicalPath">
+    <SiteStack data-tool="image-dimension-calculator">
+        <SiteToolForm Action="@Action" SubmitLabel="@CalculateLabel" AriaLabel="@OptionalFileLabel">
+            <SiteFormField For="image-dimension-file"
+                Label="@OptionalFileLabel"><SiteFileInput type="file"
+                    accept="image/*"
+                    data-image-dimension-file
+                    Id="image-dimension-file" /></SiteFormField>
+            <SiteFormActions>
+                <SiteFormField For="image-dimension-original-width"
+                    Label="@OriginalWidthLabel"><SiteNumberInput TValue="int?"
+                        Id="image-dimension-original-width"
+                        Name="originalWidth"
+                        Value="@OriginalWidth"
+                        ValueChanged="@(v => OriginalWidth = v)"
+                        Step="1"
+                        EnableMinMax="true"
+                        Min="1"
+                        data-image-dimension-original-width /></SiteFormField>
+                <SiteFormField For="image-dimension-original-height"
+                    Label="@OriginalHeightLabel"><SiteNumberInput TValue="int?"
+                        Id="image-dimension-original-height"
+                        Name="originalHeight"
+                        Value="@OriginalHeight"
+                        ValueChanged="@(v => OriginalHeight = v)"
+                        Step="1"
+                        EnableMinMax="true"
+                        Min="1"
+                        data-image-dimension-original-height /></SiteFormField>
+            </SiteFormActions>
+            <SiteFormActions>
+                <SiteFormField For="image-dimension-target-width"
+                    Label="@TargetWidthLabel"><SiteNumberInput TValue="int?"
+                        Id="image-dimension-target-width"
+                        Name="targetWidth"
+                        Value="@TargetWidth"
+                        ValueChanged="@(v => TargetWidth = v)"
+                        Step="1"
+                        EnableMinMax="true"
+                        Min="1" /></SiteFormField>
+                <SiteFormField For="image-dimension-target-height"
+                    Label="@TargetHeightLabel"><SiteNumberInput TValue="int?"
+                        Id="image-dimension-target-height"
+                        Name="targetHeight"
+                        Value="@TargetHeight"
+                        ValueChanged="@(v => TargetHeight = v)"
+                        Step="1"
+                        EnableMinMax="true"
+                        Min="1" /></SiteFormField>
+            </SiteFormActions>
+        </SiteToolForm>
+    </SiteStack>
+    <SiteLiveRegion Politeness="SiteLivePoliteness.Polite">
+        <SiteStats Grid="true">
+            <SiteStatItem Label="@ResultWidthLabel">@(Result.Width?.ToString() ?? "-")</SiteStatItem>
+                <SiteStatItem Label="@ResultHeightLabel">@(Result.Height?.ToString() ?? "-")</SiteStatItem>
+            </SiteStats>
+    </SiteLiveRegion>
+</ToolPage>
+
+@code {
+    private string CanonicalPath => RequestPath;
+    private int? _originalWidth;
+    private int? _originalHeight;
+    private int? _targetWidth;
+    private int? _targetHeight;
+    private bool _queryInitialized;
+    [SupplyParameterFromQuery(Name = "originalWidth")]
+    private int? QueryOriginalWidth { get; set; }
+    [SupplyParameterFromQuery(Name = "originalHeight")]
+    private int? QueryOriginalHeight { get; set; }
+    [SupplyParameterFromQuery(Name = "targetWidth")]
+    private int? QueryTargetWidth { get; set; }
+    [SupplyParameterFromQuery(Name = "targetHeight")]
+    private int? QueryTargetHeight { get; set; }
+    private string Action => L["legacy_a953c5d85114"];
+    private string Title => L["legacy_96ebfb731562"];
+    private string Description => L["legacy_34e68937aa37"];
+    private string OptionalFileLabel => L["legacy_494dcb7851f5"];
+    private string OriginalWidthLabel => L["legacy_1b63cae6ba99"];
+    private string OriginalHeightLabel => L["legacy_b9b337101126"];
+    private string TargetWidthLabel => L["legacy_7ccca359675e"];
+    private string TargetHeightLabel => L["legacy_79116963bcf3"];
+    private string ResultWidthLabel => L["legacy_93a43e4aa46b"];
+    private string ResultHeightLabel => L["legacy_057e0acf661c"];
+    private string CalculateLabel => L["legacy_53519f340509"];
+    private int? OriginalWidth { get => _originalWidth; set { _originalWidth = value; Recalculate(); } }
+    private int? OriginalHeight { get => _originalHeight; set { _originalHeight = value; Recalculate(); } }
+    private int? TargetWidth { get => _targetWidth; set { _targetWidth = value; if (value is > 0) _targetHeight = null; Recalculate(); } }
+    private int? TargetHeight { get => _targetHeight; set { _targetHeight = value; if (value is > 0) _targetWidth = null; Recalculate(); } }
+    private ImageDimensionResult Result => Portfolio.Blazor.Core.ImageDimensionCalculator.Calculate(
+        OriginalWidth ?? 0,
+        OriginalHeight ?? 0,
+        TargetWidth,
+        TargetHeight
+    );
+    protected override void OnParametersSet() { if (_queryInitialized) return; _originalWidth = QueryOriginalWidth; _originalHeight = QueryOriginalHeight; _targetWidth = QueryTargetWidth; _targetHeight = QueryTargetWidth is > 0 ? null : QueryTargetHeight; _queryInitialized = true; }
+    private void Recalculate() => StateHasChanged();
+    protected override async Task OnAfterRenderAsync(bool firstRender) { if (firstRender) await JS.InvokeVoidAsync("import", "/image-dimension-calculator.js"); }
+}

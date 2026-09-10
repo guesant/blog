@@ -1,0 +1,110 @@
+@page "/admin/projects"
+@page "/admin/projects/order"
+@inherits AdminListPageBase<Project>
+@layout AdminLayout
+
+<PageTitle>Projects</PageTitle>
+
+@if (IsOrderMode)
+{
+    <AdminOrderEditor TItem="Project"
+        Title="Projects order"
+        ListRoute="/admin/projects"
+        Items="@Items"
+        DisplayTitle="@DisplayTitle"
+        IsLoading="@IsLoading"
+        IsSaving="@IsSaving"
+        Error="@Error"
+        OnReordered="HandleReorder"
+        OnSave="@(() => HandleSaveOrderAsync("/admin/projects"))" />
+}
+else
+{
+    <SitePageHeader Title="Projects">
+        <Actions>
+            <SiteInline Gap="SiteSpace.Sm">
+                <SiteLink Variant="SiteButtonVariant.Outline" Href="/admin/projects/order">
+                    <SiteIcon Name="arrow-up-down" Size="14" />Edit order</SiteLink>
+                <SiteLink Variant="SiteButtonVariant.Default" Href="/admin/projects/create">
+                    <SiteIcon Name="plus" Size="14" />New project</SiteLink>
+            </SiteInline>
+        </Actions>
+    </SitePageHeader>
+
+    @if (Error is not null)
+    {
+        <SiteNotice Tone="SiteTone.Danger">@Error</SiteNotice>
+    }
+
+    @if (IsLoading)
+    {
+        <SiteLoading Label="Loading…" />
+    }
+    else
+    {
+        <SiteDataTable TItem="Project"
+            Items="@PageItems"
+            EmptyText="No projects yet."
+            RowKey="@(project => project.Id)">
+            <Columns>
+                <SiteColumn TItem="Project" Header="Name" IsRowHeader="true">
+                    <Cell Context="project">@DisplayTitle(project)</Cell>
+                </SiteColumn>
+                <SiteColumn TItem="Project" Header="Slug">
+                    <Cell Context="project">@project.Slug</Cell>
+                </SiteColumn>
+                <SiteColumn TItem="Project" Header="Status">
+                    <Cell Context="project">
+                        <SiteInline Gap="SiteSpace.Sm">
+                            @if (project.Hidden)
+                            {
+                                <SiteBadge Label="Hidden" />
+                            }
+                            @if (project.Nda)
+                            {
+                                <SiteBadge Label="NDA" />
+                            }
+                        </SiteInline>
+                    </Cell>
+                </SiteColumn>
+            </Columns>
+            <Actions Context="project">
+                <SiteInline Gap="SiteSpace.Sm">
+                    <SiteLink Variant="SiteButtonVariant.Outline"
+                        Href="@($"/admin/projects/{project.Id}")">
+                        <SiteIcon Name="pencil" Size="14" />Edit</SiteLink>
+                    <SiteButton Variant="SiteButtonVariant.Destructive"
+                        @onclick="@(() => HandleDeleteAsync(project))"><SiteIcon Name="trash-2"
+                            Size="14" />Delete</SiteButton>
+                </SiteInline>
+            </Actions>
+        </SiteDataTable>
+        <SitePagination CurrentPage="@CurrentPage" TotalPages="@TotalPages" Href="@PageUrl" />
+    }
+}
+
+@code {
+    protected override string EntityLabel => "project";
+
+    protected override void SetOrder(Project entity, int order) => entity.Order = order;
+
+    protected override async Task<List<Project>> LoadEntitiesAsync(PortfolioAdminDbContext dbContext) =>
+        await dbContext.Projects
+            .Include(project => project.Translations)
+            .AsNoTracking()
+            .OrderBy(project => project.Order)
+            .ThenBy(project => project.Slug)
+            .ToListAsync();
+
+    protected override Task<Project?> FindTrackedAsync(PortfolioAdminDbContext dbContext, int id) =>
+        dbContext.Projects.FirstOrDefaultAsync(candidate => candidate.Id == id);
+
+    protected override string DisplayTitle(Project project) =>
+        TranslationLookup.Resolve(project.Translations, translation => translation.Locale, translation => translation.Name, "en")
+        ?? project.Slug;
+
+    protected override int GetId(Project project) => project.Id;
+
+    protected override string DeleteConfirmDescription(Project entity) =>
+        "This permanently removes the project, its translations and its technology links. This cannot be undone.";
+}

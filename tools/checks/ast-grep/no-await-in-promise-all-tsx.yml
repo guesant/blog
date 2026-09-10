@@ -1,0 +1,15 @@
+id: no-await-in-promise-all-tsx
+language: Tsx
+severity: error
+message: Não use await dentro de Promise.all; passe as Promises diretamente para preservar o paralelismo.
+
+rule:
+  all:
+    - pattern: await $VALUE
+    - inside:
+        pattern: Promise.all($_)
+        stopBy:
+          not:
+            any:
+              - kind: array
+              - kind: arguments

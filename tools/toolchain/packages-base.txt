@@ -1,0 +1,16 @@
+bash
+ca-certificates
+coreutils
+curl
+git
+gzip
+jq
+libatomic1
+openssh-client
+perl
+procps
+python3
+tar
+unzip
+util-linux
+xz-utils

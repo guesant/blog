@@ -1,0 +1,11 @@
+@inject NavigationManager Navigation
+
+<SiteText>Redirecting to login…</SiteText>
+
+@code {
+    protected override void OnInitialized() =>
+        Navigation.NavigateTo(
+            $"/admin/login?returnUrl={Uri.EscapeDataString(Navigation.Uri)}",
+            forceLoad: true
+        );
+}

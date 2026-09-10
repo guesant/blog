@@ -1,0 +1,114 @@
+@page "/admin/credits"
+@page "/admin/credits/order"
+@inherits AdminListPageBase<CreditEntry>
+@layout AdminLayout
+
+<PageTitle>Credits</PageTitle>
+
+@if (IsOrderMode)
+{
+    <AdminOrderEditor TItem="CreditEntry"
+        Title="Credits order"
+        ListRoute="/admin/credits"
+        Items="@Items"
+        DisplayTitle="@DisplayTitle"
+        IsLoading="@IsLoading"
+        IsSaving="@IsSaving"
+        Error="@Error"
+        OnReordered="HandleReorder"
+        OnSave="@(() => HandleSaveOrderAsync("/admin/credits"))" />
+}
+else
+{
+    <SitePageHeader Title="Credits">
+        <Actions>
+            <SiteInline Gap="SiteSpace.Sm">
+                <SiteLink Variant="SiteButtonVariant.Outline" Href="/admin/credits/order">
+                    <SiteIcon Name="arrow-up-down" Size="14" />Edit order</SiteLink>
+                <SiteLink Variant="SiteButtonVariant.Default" Href="/admin/credits/create">
+                    <SiteIcon Name="plus" Size="14" />New credit</SiteLink>
+            </SiteInline>
+        </Actions>
+    </SitePageHeader>
+
+    @if (Error is not null)
+    {
+        <SiteNotice Tone="SiteTone.Danger">@Error</SiteNotice>
+    }
+
+    @if (IsLoading)
+    {
+        <SiteLoading Label="Loading…" />
+    }
+    else
+    {
+        <SiteDataTable TItem="CreditEntry"
+            Items="@PageItems"
+            EmptyText="No credits yet."
+            RowKey="@(credit => credit.Id)">
+            <Columns>
+                <SiteColumn TItem="CreditEntry"
+                    Header="Name"
+                    IsRowHeader="true"><Cell Context="credit">@DisplayTitle(credit)</Cell>
+                    </SiteColumn>
+                <SiteColumn TItem="CreditEntry" Header="Category">
+                    <Cell Context="credit">@credit.Category</Cell>
+                </SiteColumn>
+                <SiteColumn TItem="CreditEntry" Header="Status">
+                    <Cell Context="credit">
+                        <SiteInline Gap="SiteSpace.Sm">
+                            @if (!credit.Active)
+                            {
+                                <SiteBadge Label="Inactive" />
+                            }
+                            @if (credit.IsAutomatic)
+                            {
+                                <SiteBadge Label="Automatic" />
+                            }
+                        </SiteInline>
+                    </Cell>
+                </SiteColumn>
+            </Columns>
+            <Actions Context="credit">
+                <SiteInline Gap="SiteSpace.Sm">
+                    <SiteLink Variant="SiteButtonVariant.Outline"
+                        Href="@($"/admin/credits/{credit.Id}")">
+                        <SiteIcon Name="pencil" Size="14" />Edit</SiteLink>
+                    <SiteButton Variant="SiteButtonVariant.Destructive"
+                        @onclick="@(() => HandleDeleteAsync(credit))"><SiteIcon Name="trash-2"
+                            Size="14" />Delete</SiteButton>
+                </SiteInline>
+            </Actions>
+        </SiteDataTable>
+        <SitePagination CurrentPage="@CurrentPage" TotalPages="@TotalPages" Href="@PageUrl" />
+    }
+}
+
+@code {
+    protected override string EntityLabel => "credit";
+
+    protected override void SetOrder(CreditEntry entity, int order) => entity.Order = order;
+
+    protected override async Task<List<CreditEntry>> LoadEntitiesAsync(PortfolioAdminDbContext dbContext) =>
+        await dbContext.CreditEntries
+            .Include(credit => credit.Translations)
+            .AsNoTracking()
+            .OrderBy(credit => credit.Category)
+            .ThenBy(credit => credit.Order)
+            .ToListAsync();
+
+    protected override Task<CreditEntry?> FindTrackedAsync(
+        PortfolioAdminDbContext dbContext,
+        int id
+    ) =>
+        dbContext.CreditEntries.FirstOrDefaultAsync(candidate => candidate.Id == id);
+
+    protected override string DisplayTitle(CreditEntry credit) =>
+        TranslationLookup.Resolve(credit.Translations, translation => translation.Locale, translation => translation.Name, "en")
+        ?? credit.Category;
+
+    protected override int GetId(CreditEntry credit) => credit.Id;
+
+    protected override string DeleteConfirmDescription(CreditEntry entity) =>
+        "This permanently removes the credit and its translations. This cannot be undone.";
+}

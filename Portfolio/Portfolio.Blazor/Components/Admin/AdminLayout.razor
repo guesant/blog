@@ -1,0 +1,27 @@
+@inherits LayoutComponentBase
+
+<BbPortalHost />
+<SiteToastHost />
+<SiteConfirmDialog />
+<SiteAdminShell>
+    <Brand>Admin</Brand>
+    <Nav>
+        <AdminNav />
+    </Nav>
+    <NavFooter>
+        <SiteStack Gap="SiteSpace.Sm">
+            <SiteNavLink Href="/">
+                <SiteIcon Name="house" Size="14" Class="icon nav-item-icon" />
+                <SiteNavItemLabel>View site</SiteNavItemLabel>
+            </SiteNavLink>
+            <SiteThemeSwitch Label="Theme"
+                SystemLabel="System"
+                LightLabel="Light"
+                DarkLabel="Dark" />
+            <AdminSignOutForm />
+        </SiteStack>
+    </NavFooter>
+    <ChildContent>
+        @Body
+    </ChildContent>
+</SiteAdminShell>

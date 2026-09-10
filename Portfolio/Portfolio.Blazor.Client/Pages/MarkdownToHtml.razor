@@ -1,0 +1,29 @@
+@inherits LocalizedComponentBase
+@page "/tools/markdown-to-html"
+@page "/pt-BR/tools/markdown-to-html"
+@using Portfolio.Blazor.Core
+
+<ToolPage Title="@Title" Description="@Description" CanonicalPath="@CanonicalPath">
+    <SiteToolForm Action="@Action" SubmitLabel="@ConvertLabel" AriaLabel="@MarkdownInputLabel">
+        <SiteFormField Label="@MarkdownInputLabel" For="markdown-html-input">
+            <SiteTextAreaInput Id="markdown-html-input"
+                Name="input"
+                Rows="10"
+                spellcheck="false"
+                Value="@Input"
+                ValueChanged="@(v => Input = v)" />
+        </SiteFormField>
+    </SiteToolForm>
+    <SiteLiveRegion Politeness="SiteLivePoliteness.Polite">
+        <SiteCard Class="site-block" Label="@PreviewLabel">
+            <SiteHtmlPreview Class="tool-markdown-preview">@((MarkupString)Html)</SiteHtmlPreview>
+        </SiteCard>
+        <SiteOutputField Id="markdown-html-output"
+            Label="@HtmlOutputLabel"
+            Value="@Html"
+            Multiline="true"
+            CopyLabel="@CopyLabel" />
+    </SiteLiveRegion>
+</ToolPage>
+@code {
+    private string CanonicalPath => RequestPath; private string _input = string.Empty; private bool _queryInitialized; [SupplyParameterFromQuery(Name="input")] private string? QueryInput { get; set; } private string Action => L["legacy_78d25149bfa4"];  private string Title => L["legacy_1323545766d9"]; private string Description => L["legacy_c11325bdae5f"]; private string MarkdownInputLabel => L["legacy_192b01859ac0"]; private string PreviewLabel => L["legacy_3822506f8f59"]; private string HtmlOutputLabel => L["legacy_946c9059cd45"]; private string ConvertLabel => L["legacy_ae125407093e"]; private string CopyLabel => L["legacy_a3b71416a5f3"]; private string Input { get => _input; set => _input = value; } private string Html => Portfolio.Blazor.Core.MarkdownHtmlConverter.Convert(Input); protected override void OnParametersSet() { if (_queryInitialized) return; _input = QueryInput ?? string.Empty; _queryInitialized = true; } }

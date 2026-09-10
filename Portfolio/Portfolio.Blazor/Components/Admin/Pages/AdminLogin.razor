@@ -1,0 +1,30 @@
+@page "/admin/login"
+@layout AdminLoginLayout
+@attribute [AllowAnonymous]
+
+<PageTitle>Admin Login</PageTitle>
+
+<SiteAuthCard Title="Admin Login"
+    Error="@(HasError ? "Google sign-in failed or the account isn't authorized." : null)">
+    <SiteForm Method="post"
+        Action="/admin/sign-in"
+        Mode="SiteFormMode.Static"
+        Enhance="false"
+        Class="site-form-stack">
+        <AntiforgeryToken />
+        <SiteInput type="hidden" name="returnUrl" value="@ReturnUrl" />
+        <SiteButton Variant="SiteButtonVariant.Default"
+            Type="SiteButtonType.Submit"><SiteIcon Name="log-in"
+                Size="14" />Continue with Google</SiteButton>
+    </SiteForm>
+</SiteAuthCard>
+
+@code {
+    [SupplyParameterFromQuery]
+    public string? ReturnUrl { get; set; }
+
+    [SupplyParameterFromQuery(Name = "error")]
+    public string? Error { get; set; }
+
+    private bool HasError => !string.IsNullOrEmpty(Error);
+}

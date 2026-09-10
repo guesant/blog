@@ -1,0 +1,57 @@
+@inherits LocalizedComponentBase
+@page "/tools/env-file-validator"
+@page "/pt-BR/tools/env-file-validator"
+@using Portfolio.Blazor.Core
+
+<ToolPage Title="@Title" Description="@Description" CanonicalPath="@CanonicalPath">
+    <SiteToolForm Action="@Action" SubmitLabel="@ValidateLabel" AriaLabel="@InputLabel">
+        <SiteFormField For="env-input"
+            Label="@InputLabel"><SiteTextAreaInput Id="env-input"
+                Name="content"
+                Rows="10"
+                Value="@Content"
+                ValueChanged="@(v => Content = v)" /></SiteFormField>
+    </SiteToolForm>
+    <SiteLiveRegion Politeness="SiteLivePoliteness.Polite">
+        <SiteHeading Level="2">@IssuesLabel</SiteHeading>
+        @if (Result.Issues.Count == 0) { <SiteNotice>@NoIssuesLabel</SiteNotice> }
+        else { <SiteList>@foreach (var issue in Result.Issues) { <SiteListItem Class="list-group-item site-list-row d-flex flex-wrap justify-content-between align-items-start tool-list-item">
+            <SiteText Variant="SiteTextVariant.Meta"
+                Class="tool-list-value">@LineLabel @issue.Line</SiteText>
+                <SiteInlineError>@IssueMessage(issue)</SiteInlineError>
+            </SiteListItem> }</SiteList> }
+        <SiteHeading Level="2">@EntriesLabel</SiteHeading>
+        <SiteList>@foreach (var entry in Result.Entries) { <SiteListItem Class="list-group-item site-list-row d-flex flex-wrap justify-content-between align-items-start tool-list-item">
+            <SiteText Variant="SiteTextVariant.Meta" Class="tool-list-value">@entry.Key</SiteText>
+                <SiteText Variant="SiteTextVariant.Meta">@entry.Value</SiteText>
+            </SiteListItem> }</SiteList>
+    </SiteLiveRegion>
+</ToolPage>
+
+@code {
+    private string CanonicalPath => RequestPath;
+    private string _content = "# example\nAPP_ENV=local\nAPP_DEBUG=true";
+    private EnvValidationResult _result = EnvFileValidationEngine.Validate("# example\nAPP_ENV=local\nAPP_DEBUG=true");
+    private bool _queryInitialized;
+    [SupplyParameterFromQuery(Name = "content")]
+    private string? QueryContent { get; set; }
+    private string Action => L["legacy_2d6f58ba4827"];
+    private string Title => L["legacy_a1b71a322a5c"];
+    private string Description => L["legacy_b2ac648cd042"];
+    private string InputLabel => L["legacy_c4c61716670f"];
+    private string IssuesLabel => L["legacy_6bbce1ac767e"];
+    private string NoIssuesLabel => L["legacy_ce032fa503a7"];
+    private string EntriesLabel => L["legacy_7415a41dc0f9"];
+    private string LineLabel => L["legacy_3dcd15b72733"];
+    private string ValidateLabel => L["legacy_3fcad41c9c0d"];
+    private string Content { get => _content; set { _content = value; _result = EnvFileValidationEngine.Validate(value); } }
+    private EnvValidationResult Result => _result;
+    private string IssueMessage(EnvIssue issue) => issue.Kind switch { "duplicate" => $"{(L["legacy_5d92aac4b2d4"])}: {issue.Key}", "invalid-key" => $"{(L["legacy_ca8bac6ad8c0"])}: {issue.Key}", _ => L["legacy_ef9f0c08caa5"] };
+    protected override void OnParametersSet()
+    {
+        if (_queryInitialized) return;
+        _content = QueryContent ?? _content;
+        _result = EnvFileValidationEngine.Validate(_content);
+        _queryInitialized = true;
+    }
+}

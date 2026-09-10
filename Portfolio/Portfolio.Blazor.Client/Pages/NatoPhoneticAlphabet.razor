@@ -1,0 +1,33 @@
+@inherits LocalizedComponentBase
+@page "/tools/nato-phonetic-alphabet"
+@page "/pt-BR/tools/nato-phonetic-alphabet"
+@using Portfolio.Blazor.Core
+
+<ToolPage Title="@Title" Description="@Description" CanonicalPath="@CanonicalPath">
+    <SiteToolForm Action="@Action" SubmitLabel="@ConvertLabel" AriaLabel="@AlphabetLabel">
+        <SiteFormField Label="@AlphabetLabel" For="phonetic-alphabet">
+            <SiteSelect @bind-Value="Alphabet"
+                Options="@AlphabetOptions"
+                Id="phonetic-alphabet"
+                Name="alphabet"
+                Placeholder="@AlphabetLabel"
+                EmptyText="@AlphabetLabel" />
+        </SiteFormField>
+        <SiteFormField Label="@InputLabel" For="phonetic-input">
+            <SiteTextAreaInput Id="phonetic-input"
+                Name="input"
+                Rows="6"
+                Value="@Input"
+                ValueChanged="@(v => Input = v)" />
+        </SiteFormField>
+    </SiteToolForm>
+    <SiteLiveRegion Politeness="SiteLivePoliteness.Polite">
+        <SiteOutputField Id="phonetic-output"
+            Label="@OutputLabel"
+            Value="@Output"
+            Multiline="true"
+            CopyLabel="@CopyLabel" />
+    </SiteLiveRegion>
+</ToolPage>
+@code {
+    private string CanonicalPath => RequestPath; private string _input = string.Empty; private string _alphabet = "nato"; private bool _queryInitialized; [SupplyParameterFromQuery(Name="input")] private string? QueryInput { get; set; } [SupplyParameterFromQuery(Name="alphabet")] private string? QueryAlphabet { get; set; } private string Action => L["legacy_ce18e663885e"];  private string Title => L["legacy_2803b24cc63e"]; private string Description => L["legacy_f23ef7818075"]; private string AlphabetLabel => L["legacy_ef3fb5024164"]; private string NatoLabel => L["legacy_42e94e815b3b"]; private string BrazilianLabel => L["legacy_5b0a0fa480c7"]; private string GermanLabel => L["legacy_8ee70100fb30"]; private string InputLabel => L["legacy_c4c61716670f"]; private string OutputLabel => L["legacy_1d1c0e33dc3c"]; private string ConvertLabel => L["legacy_ae125407093e"]; private string CopyLabel => L["legacy_a3b71416a5f3"]; private string Input { get => _input; set { _input = value; } } private string Alphabet { get => _alphabet; set => _alphabet = value; } private IReadOnlyList<SiteSelectOption> AlphabetOptions => [new("nato", NatoLabel), new("brazilian", BrazilianLabel), new("german", GermanLabel)]; private string Output => PhoneticAlphabetConverter.Convert(Input, Alphabet); protected override void OnParametersSet() { if (_queryInitialized) return; _input = QueryInput ?? string.Empty; _alphabet = QueryAlphabet is "brazilian" or "german" ? QueryAlphabet : "nato"; _queryInitialized = true; } }

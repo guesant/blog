@@ -1,0 +1,57 @@
+:root {
+    --background: var(--site-surface);
+    --foreground: var(--site-text-primary);
+    --card: var(--site-surface);
+    --card-foreground: var(--site-text-primary);
+    --popover: var(--site-surface);
+    --popover-foreground: var(--site-text-primary);
+    --primary: var(--site-primary);
+    --primary-foreground: var(--site-primary-contrast);
+    --secondary: var(--site-surface-muted);
+    --secondary-foreground: var(--site-text-primary);
+    --muted: var(--site-surface-muted);
+    --muted-foreground: var(--site-text-secondary);
+    --accent: var(--site-accent-bg);
+    --accent-foreground: var(--site-text-primary);
+    --destructive: var(--site-danger);
+    --destructive-foreground: var(--site-primary-contrast);
+    --border: var(--site-border);
+    --input: var(--site-border);
+    --ring: var(--site-primary);
+
+    --alert-success: var(--site-success);
+    --alert-success-foreground: var(--site-primary-contrast);
+    --alert-success-bg: var(--site-success-bg);
+    --alert-info: var(--site-info);
+    --alert-info-foreground: var(--site-primary-contrast);
+    --alert-info-bg: var(--site-info-bg);
+    --alert-warning: var(--site-warning);
+    --alert-warning-foreground: var(--site-text-primary);
+    --alert-warning-bg: var(--site-warning-bg);
+    --alert-danger: var(--destructive);
+    --alert-danger-foreground: var(--site-primary-contrast);
+    --alert-danger-bg: var(--site-danger-bg);
+
+    --chart-1: var(--site-primary);
+    --chart-2: var(--site-success);
+    --chart-3: var(--site-warning);
+    --chart-4: var(--site-info);
+    --chart-5: var(--destructive);
+
+    --sidebar: var(--site-surface);
+    --sidebar-foreground: var(--site-text-primary);
+    --sidebar-primary: var(--site-primary);
+    --sidebar-primary-foreground: var(--site-primary-contrast);
+    --sidebar-accent: var(--site-accent-bg);
+    --sidebar-accent-foreground: var(--site-text-primary);
+    --sidebar-border: var(--site-border);
+    --sidebar-ring: var(--site-primary);
+    --sidebar-width: var(--site-nav-width);
+    --sidebar-width-mobile: var(--site-nav-width);
+    --sidebar-width-icon: var(--site-nav-width-icon);
+
+    --radius: var(--site-radius);
+    --font-sans: var(--site-font-family);
+    --font-serif: var(--site-font-family);
+    --font-mono: var(--site-font-mono);
+}

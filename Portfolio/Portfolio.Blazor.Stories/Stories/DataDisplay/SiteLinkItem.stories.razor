@@ -1,0 +1,20 @@
+@attribute [Stories("DataDisplay/SiteLinkItem")]
+
+<Stories TComponent="SiteLinkItem">
+
+    <Story Name="Default">
+        <Template>
+            <SiteLinkList>
+                <SiteLinkItem Href="https://example.org/paper.pdf"
+                    Label="In Search of an Understandable Consensus Algorithm"
+                    Meta="example.org"
+                    Icon="file-text"
+                    Badge="free" />
+                <SiteLinkItem Href="/internal"
+                    Label="internal, no outbound arrow"
+                    External="false" />
+            </SiteLinkList>
+        </Template>
+    </Story>
+
+</Stories>

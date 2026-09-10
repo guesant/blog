@@ -1,0 +1,19 @@
+id: no-narrative-comment-in-function-ts
+valid:
+  - |
+      function calculate() {
+        // biome-ignore lint/example: required tool directive.
+        return 1;
+      }
+  - |
+      // IMPORTANT: rare, load-bearing rationale that survives the allowlist.
+      export const example = 1;
+invalid:
+  - |
+      function calculate() {
+        // Add one to compensate for the previous operation.
+        return 1;
+      }
+  - |
+      // Explains what the constant below does.
+      export const example = 1;

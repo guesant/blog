@@ -1,0 +1,69 @@
+@inherits LocalizedComponentBase
+@page "/tools/periodic-table"
+@page "/pt-BR/tools/periodic-table"
+@using Portfolio.Blazor.Core
+
+<ToolPage Title="@Title" Description="@Description" CanonicalPath="@CanonicalPath">
+    <SiteToolForm Action="@Action" SubmitLabel="@SearchButton" AriaLabel="@SearchLabel">
+        <SiteFormField For="periodic-search"
+            Label="@SearchLabel"><SiteInput Id="periodic-search"
+                Name="search"
+                autocomplete="off"
+                Value="@Search"
+                ValueChanged="@(v => Search = v)" /></SiteFormField>
+    </SiteToolForm>
+    <SiteCard Class="site-block" Label="@Title">
+        <SiteGrid Class="tool-periodic-grid">
+            @foreach (var row in PeriodicTableReference.Periods)
+            {
+                foreach (var symbol in row)
+                {
+                    if (symbol is null)
+                    {
+                        <SiteText Variant="SiteTextVariant.Meta"
+                            Class="tool-element-cell tool-element-cell--empty"
+                            aria-hidden="true">@string.Empty</SiteText>
+                    }
+                    else
+                    {
+                        var element = Elements[elementBySymbol[symbol]];
+                        <SiteButton Class="tool-element-cell"
+                            data-category="@element.Category"
+                            hidden="@(Search.Length > 0 && !Matches(element))"
+                            @onclick="() => Select(element)"
+                            Variant="SiteButtonVariant.Default"><SiteText Variant="SiteTextVariant.Meta">@element.AtomicNumber</SiteText>
+                                <SiteText Variant="SiteTextVariant.SectionLabel">@element.Symbol</SiteText>
+                                    <SiteText Variant="SiteTextVariant.Meta">@element.Name</SiteText>
+                                </SiteButton>
+                    }
+                }
+            }
+        </SiteGrid>
+        <SiteNotice>@SeriesNote</SiteNotice>
+        <SiteGrid Class="tool-periodic-series">
+            @foreach (var row in PeriodicTableReference.Series)
+            {
+                foreach (var symbol in row)
+                {
+                    var element = Elements[elementBySymbol[symbol]];
+                    <SiteButton Class="tool-element-cell"
+                        data-category="@element.Category"
+                        hidden="@(Search.Length > 0 && !Matches(element))"
+                        @onclick="() => Select(element)"
+                        Variant="SiteButtonVariant.Default">@element.Symbol</SiteButton>
+                }
+            }
+        </SiteGrid>
+    </SiteCard>
+    <SiteStats Grid="true">
+        @if (Selected is not null)
+        {
+            <SiteStatItem Label="@SymbolLabel">@Selected.Symbol</SiteStatItem>
+            <SiteStatItem Label="@NameLabel">@Selected.Name</SiteStatItem>
+            <SiteStatItem Label="@AtomicNumberLabel">@Selected.AtomicNumber</SiteStatItem>
+            <SiteStatItem Label="@CategoryLabel">@Selected.Category</SiteStatItem>
+        }
+    </SiteStats>
+</ToolPage>
+@code {
+    private string CanonicalPath => RequestPath; private string _search = string.Empty; private bool _queryInitialized; private ChemicalElement? Selected { get; set; } = PeriodicTableReference.All.First(); private IReadOnlyList<ChemicalElement> Elements => PeriodicTableReference.All; private IReadOnlyDictionary<string, int> elementBySymbol => Elements.Select((element, index) => (element.Symbol, index)).ToDictionary(item => item.Symbol, item => item.index); [SupplyParameterFromQuery(Name="search")] private string? QuerySearch { get; set; } private string Action => L["legacy_eb54e023ea16"];  private string Title => L["legacy_1d584ca1d979"]; private string Description => L["legacy_cfd07d382e2a"]; private string SearchLabel => L["legacy_a6e292290757"]; private string SearchButton => L["legacy_6bb12bff6f09"]; private string SeriesNote => L["legacy_2054ceab6cc1"]; private string SymbolLabel => L["legacy_ca81901803d2"]; private string NameLabel => L["legacy_30ae4088d3e0"]; private string AtomicNumberLabel => L["legacy_dc2440a68682"]; private string CategoryLabel => L["legacy_4d729bbc84d4"]; private string Search { get => _search; set => _search = value; } private bool Matches(ChemicalElement element) => $"{element.Symbol} {element.Name}".Contains(Search, StringComparison.OrdinalIgnoreCase); private void Select(ChemicalElement element) => Selected = element; protected override void OnParametersSet() { if (_queryInitialized) return; _search = QuerySearch ?? string.Empty; _queryInitialized = true; } }

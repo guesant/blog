@@ -1,0 +1,149 @@
+@inject IStringLocalizer<SharedResource> L
+@using System.Text.Encodings.Web
+@using System.Text.Json
+@using Portfolio.Blazor.Core
+@inject NavigationManager Navigation
+
+<HeadContent>
+    <meta name="description" content="@Description" />
+    <meta name="application-name" content="guesant.net" />
+    <meta name="format-detection" content="telephone=no, email=no, address=no" />
+    <meta name="category" content="technology" />
+    <meta name="referrer" content="origin-when-cross-origin" />
+    <meta name="robots" content="index, follow" />
+    <meta name="theme-color" content="#ffffff" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="canonical" href="@AbsoluteUrl(CanonicalPath)" />
+    <link rel="alternate" hreflang="en" href="@AbsoluteUrl(EnglishPath ?? CanonicalPath)" />
+    <link rel="alternate" hreflang="pt-BR" href="@AbsoluteUrl(PortuguesePath ?? CanonicalPath)" />
+    <link rel="alternate"
+        type="application/rss+xml"
+        title="RSS"
+        href="@AbsoluteUrl(L["legacy_362d5aad99f1"])" />
+    <link rel="alternate"
+        type="application/atom+xml"
+        title="Atom"
+        href="@AbsoluteUrl(L["legacy_eabac209b499"])" />
+    <link rel="alternate"
+        type="application/feed+json"
+        title="JSON Feed"
+        href="@AbsoluteUrl(L["legacy_02f8bdc0b350"])" />
+    <meta property="og:title" content="@Title" />
+    <meta property="og:description" content="@Description" />
+    <meta property="og:type" content="@OgType" />
+    <meta property="og:url" content="@AbsoluteUrl(CanonicalPath)" />
+    <meta property="og:site_name" content="guesant.net" />
+    <meta property="og:locale" content="@(L["legacy_02c2b85e0a41"])" />
+    <meta property="og:locale:alternate" content="@(L["legacy_3b1e4b5163dc"])" />
+    @if (OgImageUrl is not null)
+    {
+        <meta property="og:image" content="@OgImageUrl" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:image:alt" content="@OgImageAlt" />
+    }
+    <meta name="twitter:card"
+        content="@(OgImageUrl is not null ? "summary_large_image" : "summary")" />
+    <meta name="twitter:title" content="@Title" />
+    <meta name="twitter:description" content="@Description" />
+    @if (OgImageUrl is not null)
+    {
+        <meta name="twitter:image" content="@OgImageUrl" />
+    }
+    @if (!string.IsNullOrWhiteSpace(PublishedTime))
+    {
+        <meta property="article:published_time" content="@PublishedTime" />
+        <meta property="article:author" content="@AbsoluteUrl(L["legacy_3b1e709dfcb9"])" />
+    }
+    @if (Snapshot?.Chrome.Site.MaintenanceEnabled != true)
+    {
+        <script type="application/ld+json">@((MarkupString)StructuredDataJson())</script>
+    }
+</HeadContent>
+
+@code {
+    [Parameter, EditorRequired]
+    public string Title { get; set; } = string.Empty;
+    [Parameter]
+    public string Description { get; set; } = string.Empty;
+    [Parameter, EditorRequired]
+    public string CanonicalPath { get; set; } = "/";
+    [Parameter]
+    public string? EnglishPath { get; set; }
+    [Parameter]
+    public string? PortuguesePath { get; set; }
+    [Parameter]
+    public string OgType { get; set; } = "website";
+    [Parameter]
+    public string? PublishedTime { get; set; }
+    [CascadingParameter]
+    public PublicSiteSnapshot? Snapshot { get; set; }
+    protected override void OnParametersSet()
+    {
+        EnglishPath ??= CultureCatalog.RemoveCulturePrefix(CanonicalPath);
+        PortuguesePath ??= CultureCatalog.HasPortuguesePrefix(CanonicalPath) ? CanonicalPath : $"/pt-BR{CanonicalPath}";
+    }
+
+    private string AbsoluteUrl(string path) => Navigation.ToAbsoluteUri(path).AbsoluteUri;
+    private string? OgImageUrl => SeoField("image") is { Length: > 0 } image ? AbsoluteUrl(image) : null;
+    private string OgImageAlt => SeoField("imageAlt") is { Length: > 0 } alt ? alt : Title;
+    private string? SeoField(string key) => Snapshot?.Chrome.Site.Seo is { ValueKind: JsonValueKind.Object } seo
+        && seo.TryGetProperty(key, out var field) && field.ValueKind == JsonValueKind.String
+        ? field.GetString()
+        : null;
+    private string StructuredDataJson()
+    {
+        var path = CultureCatalog.RemoveCulturePrefix(CanonicalPath);
+        var type = SchemaType(path);
+        var schema = new Dictionary<string, object?>
+        {
+            ["@context"] = "https://schema.org",
+            ["@type"] = type,
+            ["url"] = AbsoluteUrl(CanonicalPath),
+        };
+
+        if (type is "Person")
+        {
+            schema["name"] = Snapshot?.Chrome.Profile?.Name;
+            schema["sameAs"] = (Snapshot?.Chrome.Site.ContactProfiles ?? [])
+                .Select(profile => profile.Url)
+                .Where(url => Uri.TryCreate(url, UriKind.Absolute, out var uri) && uri.Scheme is "http" or "https")
+                .ToArray() ?? [];
+        }
+        else if (type is "Article")
+        {
+            schema["headline"] = Title;
+            schema["description"] = Description;
+            if (!string.IsNullOrWhiteSpace(PublishedTime)) schema["datePublished"] = PublishedTime;
+            if (path.StartsWith("/writing/", StringComparison.OrdinalIgnoreCase) || path.StartsWith("/cases/", StringComparison.OrdinalIgnoreCase))
+            {
+                schema["author"] = new Dictionary<string, object?> { ["@type"] = "Person", ["name"] = Snapshot?.Chrome.Profile?.Name };
+            }
+        }
+        else if (type is "CollectionPage")
+        {
+            schema["name"] = Title;
+            schema["description"] = Description;
+        }
+        else if (type is "SoftwareSourceCode")
+        {
+            schema["name"] = Title;
+            schema["description"] = Description;
+        }
+
+        return JsonSerializer.Serialize(
+            schema,
+            new JsonSerializerOptions { Encoder = JavaScriptEncoder.Default }
+        );
+    }
+
+    private static string SchemaType(string path)
+    {
+        if (path.Equals("/knowledge-map", StringComparison.OrdinalIgnoreCase)) return "WebPage";
+        if (path.StartsWith("/snippets/", StringComparison.OrdinalIgnoreCase)) return "SoftwareSourceCode";
+        if (path.Equals("/snippets", StringComparison.OrdinalIgnoreCase)) return "CollectionPage";
+        if (path.StartsWith("/writing/", StringComparison.OrdinalIgnoreCase) || path.StartsWith("/cases/", StringComparison.OrdinalIgnoreCase) || path.StartsWith("/findings/", StringComparison.OrdinalIgnoreCase) && !path.StartsWith("/findings/types/", StringComparison.OrdinalIgnoreCase)) return "Article";
+        if (path.Equals("/cases", StringComparison.OrdinalIgnoreCase) || path.Equals("/projects", StringComparison.OrdinalIgnoreCase) || path.StartsWith("/findings/types/", StringComparison.OrdinalIgnoreCase) || path.StartsWith("/collections/", StringComparison.OrdinalIgnoreCase) || path.Equals("/topics", StringComparison.OrdinalIgnoreCase) || path.StartsWith("/topics/", StringComparison.OrdinalIgnoreCase) || path.Equals("/technologies", StringComparison.OrdinalIgnoreCase) || path.StartsWith("/technologies/", StringComparison.OrdinalIgnoreCase)) return "CollectionPage";
+        return "Person";
+    }
+}

@@ -1,0 +1,32 @@
+.site-fact-item {
+    display: grid;
+    align-content: start;
+    gap: var(--site-space-1);
+    min-width: 0;
+    padding: var(--site-space-3);
+    border: var(--site-border-width) solid var(--site-border);
+    border-radius: var(--site-radius);
+    background: var(--site-surface);
+}
+.site-fact-item-label {
+    display: flex;
+    align-items: center;
+    gap: var(--site-space-1);
+    margin: 0;
+    color: var(--site-text-secondary);
+    font-size: var(--site-text-xs);
+    font-weight: var(--site-weight-medium);
+    letter-spacing: var(--site-letter-label);
+    text-transform: uppercase;
+}
+.site-fact-item-label ::deep .site-fact-item-icon {
+    color: var(--site-primary);
+}
+.site-fact-item-value {
+    margin: 0;
+    color: var(--site-text-primary);
+    font-size: var(--site-text-body);
+    font-weight: var(--site-weight-medium);
+    line-height: var(--site-leading-normal);
+    overflow-wrap: anywhere;
+}

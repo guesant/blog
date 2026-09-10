@@ -1,0 +1,37 @@
+.site-listing-shell {
+    display: grid;
+    gap: var(--site-space-6);
+}
+.site-listing-filters,
+.site-listing-toolbar,
+.site-listing-results,
+.site-listing-pagination {
+    min-width: 0;
+}
+.site-listing-toolbar,
+/* IMPORTANT: the region is always rendered so the structural contract holds on every
+   listing, but an empty one must not add a grid gap of its own. */
+.site-listing-toolbar:empty {
+    display: none;
+}
+.site-listing-filters > ::deep .site-filter-card,
+.site-listing-filters > ::deep .site-filter-toolbar,
+.site-listing-filters > ::deep .site-form-card {
+    margin-bottom: 0 !important;
+}
+.site-listing-filters,
+.site-listing-results {
+    display: grid;
+    gap: var(--site-space-4);
+}
+.site-listing-filters {
+    gap: var(--site-space-6);
+}
+.site-listing-pagination {
+    display: grid;
+    justify-items: center;
+    gap: var(--site-space-2);
+}
+.site-listing-pagination ::deep .site-listing-summary {
+    text-align: center;
+}

@@ -1,0 +1,84 @@
+@typeparam TItem
+
+@{ ColumnList.Clear(); }
+<CascadingValue Value="this" IsFixed="true">
+    @Columns
+</CascadingValue>
+<SiteTable Caption="@Caption" Class="@Class">
+    <thead>
+        <tr>
+            @foreach (var column in ColumnList)
+            {
+                <th scope="col">@column.Header</th>
+            }
+            @if (Actions is not null)
+            {
+                <th scope="col" data-slot="actions-cell">
+                    <span class="visually-hidden">@ActionsHeader</span>
+                </th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @if (Items.Count == 0)
+        {
+            <tr>
+                <td colspan="@(ColumnList.Count + (Actions is null ? 0 : 1))">@EmptyText</td>
+            </tr>
+        }
+        else
+        {
+            @foreach (var item in Items)
+            {
+                <tr @key="RowKey(item)">
+                    @foreach (var column in ColumnList)
+                    {
+                        @if (column.IsRowHeader)
+                        {
+                            <th scope="row">@column.Cell(item)</th>
+                        }
+                        else
+                        {
+                            <td>@column.Cell(item)</td>
+                        }
+                    }
+                    @if (Actions is not null)
+                    {
+                        <td data-slot="actions-cell">@Actions(item)</td>
+                    }
+                </tr>
+            }
+        }
+    </tbody>
+</SiteTable>
+
+@code {
+    /// <summary>Rows to render.</summary>
+    [Parameter, EditorRequired]
+    public IReadOnlyList<TItem> Items { get; set; } = [];
+    /// <summary>Table caption.</summary>
+    [Parameter]
+    public string? Caption { get; set; }
+    /// <summary>Text shown in a single spanning row when Items is empty.</summary>
+    [Parameter, EditorRequired]
+    public string EmptyText { get; set; } = string.Empty;
+    /// <summary>Visually-hidden accessible name for the actions column header.</summary>
+    [Parameter]
+    public string ActionsHeader { get; set; } = "Actions";
+    /// <summary>Stable key for each row, used for diffing.</summary>
+    [Parameter, EditorRequired]
+    public Func<TItem, object> RowKey { get; set; } = default!;
+    /// <summary>SiteColumn children describing the table's columns.</summary>
+    [Parameter, EditorRequired]
+    public RenderFragment Columns { get; set; } = default!;
+    /// <summary>Optional per-row actions cell.</summary>
+    [Parameter]
+    public RenderFragment<TItem>? Actions { get; set; }
+    /// <summary>Extra class applied to the root element.</summary>
+    [Parameter]
+    public string? Class { get; set; }
+
+    internal List<SiteColumnDefinition<TItem>> ColumnList { get; } = [];
+
+    internal void RegisterColumn(SiteColumnDefinition<TItem> column) => ColumnList.Add(column);
+}

@@ -1,0 +1,54 @@
+@using Microsoft.Extensions.Localization
+@using Portfolio.Blazor.Core.Localization
+@inject IStringLocalizer<SharedResource> L
+
+<div class="site-hero hero">
+    <div class="hero-title-row d-flex align-items-center gap-2">
+        @if (!string.IsNullOrWhiteSpace(BackHref))
+        {
+            <SiteTooltip Text="@BackAriaLabel">
+                <SiteLink Variant="SiteButtonVariant.Outline"
+                    Size="SiteButtonSize.IconSm"
+                    Href="@BackHref"
+                    data-site-back
+                    aria-label="@BackAriaLabel"><SiteIcon Name="arrow-left" Size="14" />
+                    </SiteLink>
+            </SiteTooltip>
+        }
+        @if (TitleContent is null)
+        {
+            <h1 class="site-page-title">@Title</h1>
+        }
+        else
+        {
+            @TitleContent
+        }
+    </div>
+    @if (!string.IsNullOrWhiteSpace(Lead))
+    {
+        <SiteText Variant="SiteTextVariant.Lead" Class="hero-lead">@Lead</SiteText>
+    }
+    @if (!string.IsNullOrWhiteSpace(Meta))
+    {
+        <SiteText Variant="SiteTextVariant.Meta" Class="hero-meta">@Meta</SiteText>
+    }
+    @ChildContent
+</div>
+
+@code {
+    [Parameter, EditorRequired]
+    public string Title { get; set; } = string.Empty;
+    [Parameter]
+    public RenderFragment? TitleContent { get; set; }
+    [Parameter]
+    public string? Lead { get; set; }
+    [Parameter]
+    public string? Meta { get; set; }
+    [Parameter]
+    public string? BackHref { get; set; }
+    [Parameter]
+    public string BackLabel { get; set; } = "previous page";
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+    private string BackAriaLabel => L["back_to", BackLabel];
+}

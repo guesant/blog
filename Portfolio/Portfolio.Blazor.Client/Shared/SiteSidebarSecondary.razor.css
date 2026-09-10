@@ -1,0 +1,24 @@
+.site-sidebar-secondary {
+    display: grid;
+    align-content: start;
+    gap: var(--site-space-6);
+    min-width: 0;
+}
+.site-sidebar-section {
+    display: grid;
+    min-width: 0;
+    gap: var(--site-space-2);
+}
+.site-sidebar-section ::deep .site-nav-sub,
+.site-sidebar-section > .site-nav-sub {
+    margin-left: var(--site-space-3);
+    padding-left: var(--site-space-3);
+    border-left: var(--site-border-width) solid var(--site-border);
+}
+.site-sidebar-section > ul {
+    display: grid;
+    gap: var(--site-space-2);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}

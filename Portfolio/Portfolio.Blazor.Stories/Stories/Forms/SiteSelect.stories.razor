@@ -1,0 +1,48 @@
+@attribute [Stories("Forms/SiteSelect")]
+
+<Stories TComponent="SiteSelect">
+
+    <Story Name="Default">
+        <Template>
+            <EditForm Model="_model" Context="editContext">
+                <SiteSelect @bind-Value="_model.Selected"
+                    Options="Options"
+                    Placeholder="Choose an option" />
+            </EditForm>
+        </Template>
+    </Story>
+
+    <Story Name="Searchable">
+        <Template>
+            <EditForm Model="_model" Context="editContext">
+                <SiteSelect @bind-Value="_model.Selected"
+                    Options="ManyOptions"
+                    Placeholder="Choose a country"
+                    PageSize="10" />
+            </EditForm>
+        </Template>
+    </Story>
+
+</Stories>
+
+@code {
+    private sealed class SelectModel
+    {
+        public string Selected { get; set; } = string.Empty;
+    }
+
+    private readonly SelectModel _model = new();
+
+    private static readonly IReadOnlyList<SiteSelectOption> ManyOptions =
+        Enumerable.Range(
+            1,
+            60
+        ).Select(index => new SiteSelectOption($"c{index}", $"Country {index:00}")).ToList();
+
+    private static readonly IReadOnlyList<SiteSelectOption> Options =
+    [
+        new SiteSelectOption("one", "One"),
+        new SiteSelectOption("two", "Two"),
+        new SiteSelectOption("three", "Three"),
+    ];
+}

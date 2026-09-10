@@ -1,0 +1,7 @@
+id: no-inline-parameter-object-type-ts
+valid:
+  - |-
+      type RenderProps = { value: string }; function render(props: RenderProps) { return props.value; }
+invalid:
+  - |-
+      function render(props: { value: string }) { return props.value; }

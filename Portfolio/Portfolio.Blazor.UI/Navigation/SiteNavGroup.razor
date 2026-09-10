@@ -1,0 +1,16 @@
+<div class="site-nav-group" data-slot="nav-group" data-nested="@(Nested ? "true" : null)">
+    <SiteText Variant="SiteTextVariant.SectionLabel">@Label</SiteText>
+    <ul>
+        @ChildContent
+    </ul>
+</div>
+
+@code {
+    [Parameter, EditorRequired]
+    public string Label { get; set; } = string.Empty;
+    /// <summary>Indents the items under the label with a tree rail, for hierarchical navs.</summary>
+    [Parameter]
+    public bool Nested { get; set; }
+    [Parameter, EditorRequired]
+    public RenderFragment ChildContent { get; set; } = default!;
+}

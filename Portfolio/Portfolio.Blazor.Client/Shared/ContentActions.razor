@@ -1,0 +1,105 @@
+@using System.Text.RegularExpressions
+@using Portfolio.Blazor.Core
+@inject IStringLocalizer<SharedResource> L
+
+<SiteStack Gap="SiteSpace.None" Class="content-actions" data-layout-region="content-actions" data-content-actions
+     data-content-actions-title="@Title" data-content-actions-url="@Url"
+     data-content-actions-filename="@Filename">
+    <template data-content-actions-markdown>@Body</template>
+    <template data-content-actions-text>@PlainText</template>
+    <SiteInline Class="site-content-actions" Wrap="true">
+        <SiteDropdown ExclusiveGroup="content-actions">
+            <ToggleContent>
+                <SiteIcon Name="copy" Size="16" />@CopyMenuLabel
+            </ToggleContent>
+            <MenuContent>
+                <SiteButton Variant="SiteButtonVariant.Ghost"
+                    Class="dropdown-item"
+                    role="menuitem"
+                    data-content-actions-action="copy-url"><span data-content-actions-copy-url-label
+                        data-label="@CopyUrlLabel"
+                        data-copied-label="@CopiedLabel">@CopyUrlLabel</span>
+                        </SiteButton>
+                <SiteButton Variant="SiteButtonVariant.Ghost"
+                    Class="dropdown-item"
+                    role="menuitem"
+                    data-content-actions-action="copy-text"><span data-content-actions-copy-text-label
+                        data-label="@CopyTextLabel"
+                        data-copied-label="@CopiedLabel">@CopyTextLabel</span>
+                        </SiteButton>
+                <SiteButton Variant="SiteButtonVariant.Ghost"
+                    Class="dropdown-item"
+                    role="menuitem"
+                    data-content-actions-action="copy-markdown"><span data-content-actions-copy-markdown-label
+                        data-label="@CopyMarkdownLabel"
+                        data-copied-label="@CopiedLabel">@CopyMarkdownLabel</span>
+                        </SiteButton>
+            </MenuContent>
+        </SiteDropdown>
+        <SiteDropdown ExclusiveGroup="content-actions">
+            <ToggleContent>
+                <SiteIcon Name="download" Size="16" />@DownloadMenuLabel
+            </ToggleContent>
+            <MenuContent>
+                <SiteButton Variant="SiteButtonVariant.Ghost"
+                    Class="dropdown-item"
+                    role="menuitem"
+                    data-content-actions-action="download-txt"><SiteIcon Name="download"
+                        Size="14" />@DownloadTextLabel</SiteButton>
+                <SiteButton Variant="SiteButtonVariant.Ghost"
+                    Class="dropdown-item"
+                    role="menuitem"
+                    data-content-actions-action="download-md"><SiteIcon Name="download"
+                        Size="14" />@DownloadMarkdownLabel</SiteButton>
+            </MenuContent>
+        </SiteDropdown>
+        @if (!string.IsNullOrWhiteSpace(ExternalUrl))
+        {
+            <SiteLink Variant="SiteButtonVariant.Outline"
+                Href="@ExternalUrl"
+                target="_blank"
+                rel="noopener noreferrer">@ExternalLabel</SiteLink>
+        }
+        @if (!string.IsNullOrWhiteSpace(DownloadUrl))
+        {
+            <SiteLink Variant="SiteButtonVariant.Outline"
+                Href="@DownloadUrl"><SiteIcon Name="download"
+                    Size="14" />@DownloadFilesLabel</SiteLink>
+        }
+    </SiteInline>
+</SiteStack>
+
+@code {
+    [Parameter]
+    public string Title { get; set; } = "content";
+    [Parameter]
+    public string Url { get; set; } = "";
+    [Parameter]
+    public string Body { get; set; } = "";
+    [Parameter]
+    public string? ExternalUrl { get; set; }
+    [Parameter]
+    public string? DownloadUrl { get; set; }
+    private string Filename => Slug(Title);
+    private string PlainText => Regex.Replace(
+        MarkdownRenderer.ToHtml(Body),
+        "<[^>]+>",
+        " "
+    ).Replace("&amp;", "&").Replace("&lt;", "<").Replace("&gt;", ">") .Trim();
+    private string CopyMenuLabel => L["copy"];
+    private string DownloadMenuLabel => L["download"];
+    private string CopyUrlLabel => L["copy_url"];
+    private string CopyTextLabel => L["copy_text"];
+    private string CopyMarkdownLabel => L["copy_markdown"];
+    private string CopiedLabel => L["copied"];
+    private string DownloadTextLabel => L["download_text"];
+    private string DownloadMarkdownLabel => L["download_markdown"];
+    private string ExternalLabel => L["open_source"];
+    private string DownloadFilesLabel => L["download_files"];
+
+    private static string Slug(string value)
+    {
+        var slug = Regex.Replace(value.ToLowerInvariant(), "[^a-z0-9]+", "-").Trim('-');
+        return string.IsNullOrWhiteSpace(slug) ? "content" : slug;
+    }
+}

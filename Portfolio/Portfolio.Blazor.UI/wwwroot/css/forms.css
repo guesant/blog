@@ -1,0 +1,582 @@
+.form-label.d-grid {
+    color: var(--site-text-primary);
+    font-weight: var(--site-weight-medium);
+}
+.form-label {
+    color: var(--site-text-label);
+    font-size: var(--site-text-xs);
+    letter-spacing: var(--site-letter-label);
+    text-transform: lowercase;
+}
+.site-form-field {
+    display: grid;
+    gap: var(--site-space-1);
+    min-width: 0;
+}
+.site-form-field > .form-label {
+    margin: 0;
+}
+.site-form-field > .site-control {
+    justify-self: start;
+}
+.d-flex.flex-wrap > .form-label,
+.d-flex.flex-wrap > .site-form-field {
+    flex: 1 1 var(--site-field-min);
+    min-width: min(100%, var(--site-field-min));
+}
+.form-control:not(textarea),
+.form-select {
+    height: var(--site-control-h);
+}
+.form-control,
+.form-select {
+    width: 100%;
+    padding: var(--site-space-2) var(--site-space-3);
+    color: var(--site-text-primary);
+    background-color: var(--site-surface);
+    background-clip: padding-box;
+    border: var(--site-border-width) solid var(--site-border-strong);
+    transition:
+        border-color var(--site-duration-short-3) var(--site-ease-standard),
+        box-shadow var(--site-duration-short-3) var(--site-ease-standard);
+}
+.form-control,
+select.form-select {
+    display: block;
+}
+.form-control::placeholder {
+    color: var(--site-text-secondary);
+    opacity: 1;
+}
+.form-control:disabled,
+.form-select:disabled {
+    background-color: var(--site-surface-muted);
+    opacity: 1;
+}
+.form-control[type="file"] {
+    overflow: hidden;
+}
+.form-control[type="file"]:not(:disabled):not([readonly]) {
+    cursor: pointer;
+}
+.form-control::file-selector-button {
+    padding: var(--site-space-2) var(--site-space-3);
+    margin: calc(var(--site-space-2) * -1) calc(var(--site-space-3) * -1);
+    margin-inline-end: var(--site-space-3);
+    color: var(--site-text-primary);
+    background-color: var(--site-surface-muted);
+    border: 0 solid var(--site-border-strong);
+    border-inline-end-width: var(--site-border-width);
+    pointer-events: none;
+    transition:
+        color var(--site-duration-short-3) var(--site-ease-standard),
+        background-color var(--site-duration-short-3) var(--site-ease-standard),
+        border-color var(--site-duration-short-3) var(--site-ease-standard);
+}
+.form-control:hover:not(:disabled):not([readonly])::file-selector-button {
+    background-color: var(--site-surface-hover);
+}
+.form-select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+select.form-select {
+    padding-right: var(--site-control-inset-clear);
+    background-image: var(--site-select-chevron);
+    background-repeat: no-repeat;
+    background-position: right var(--site-space-3) center;
+    background-size: var(--site-select-chevron-w) var(--site-select-chevron-h);
+}
+select.form-select[multiple],
+select.form-select[size]:not([size="1"]) {
+    padding-right: var(--site-space-3);
+    background-image: none;
+}
+.form-text {
+    margin-top: var(--site-space-1);
+    font-size: var(--site-text-xs);
+    color: var(--site-text-secondary);
+}
+.invalid-feedback,
+.site-validation-message {
+    display: none;
+    width: 100%;
+    margin-top: var(--site-space-1);
+    font-size: var(--site-text-xs);
+    color: var(--site-danger);
+}
+.invalid-feedback.d-block,
+.site-validation-message:not(:empty) {
+    display: block;
+}
+
+/* form-check: checkbox/radio drawn with appearance:none + an inline SVG
+   background swapped on :checked, exactly like Bootstrap, so it keeps
+   working with zero JS in the plain-HTML-form (SiteNativeCheckbox) path. */
+.form-check {
+    display: block;
+    min-height: var(--site-check-row-min);
+    padding-left: var(--site-check-gutter);
+    margin-bottom: var(--site-space-1);
+}
+.form-check .form-check-input {
+    float: left;
+    margin-left: calc(var(--site-check-gutter) * -1);
+}
+.form-check-input {
+    flex-shrink: 0;
+    width: var(--site-check-size);
+    height: var(--site-check-size);
+    margin-top: var(--site-check-shift);
+    vertical-align: top;
+    background-color: var(--site-surface);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    border: var(--site-border-width) solid var(--site-border-strong);
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    cursor: pointer;
+}
+.form-check-input[type="checkbox"] {
+    border-radius: var(--site-check-radius);
+}
+.form-check-input[type="radio"] {
+    border-radius: 50%;
+}
+.form-check-input:active {
+    filter: brightness(90%);
+}
+.form-check-input:checked {
+    background-color: var(--site-primary);
+    border-color: var(--site-primary);
+}
+.form-check-input:checked[type="checkbox"] {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='m6 10 3 3 6-6'/%3e%3c/svg%3e");
+}
+.form-check-input:checked[type="radio"] {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='2' fill='%23fff'/%3e%3c/svg%3e");
+}
+.form-check-input:indeterminate {
+    background-color: var(--site-primary);
+    border-color: var(--site-primary);
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='M6 10h8'/%3e%3c/svg%3e");
+}
+.form-check-input:disabled {
+    pointer-events: none;
+    filter: none;
+    opacity: 0.5;
+}
+.form-check-input:disabled ~ .form-check-label,
+.form-check-input[disabled] ~ .form-check-label {
+    cursor: default;
+    opacity: 0.5;
+}
+.form-check-input:focus-visible {
+    outline: 0;
+    box-shadow: var(--site-focus-shadow);
+    border-color: var(--site-focus-border);
+}
+.form-check-label {
+    cursor: pointer;
+}
+
+/* form-range: the slider thumb/track need the vendor-prefixed pseudo-
+   elements Bootstrap uses (::-webkit-slider-thumb, ::-moz-range-thumb,
+   ::-webkit-slider-runnable-track, ::-moz-range-track) since there is no
+   unprefixed standard for styling a native range input. */
+.form-range {
+    width: 100%;
+    height: var(--site-range-h);
+    padding: 0;
+    background-color: transparent;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+.form-range:focus {
+    outline: 0;
+}
+.form-range:focus-visible::-webkit-slider-thumb {
+    box-shadow:
+        0 0 0 var(--site-border-width) var(--site-surface),
+        var(--site-focus-shadow);
+}
+.form-range:focus-visible::-moz-range-thumb {
+    box-shadow:
+        0 0 0 var(--site-border-width) var(--site-surface),
+        var(--site-focus-shadow);
+}
+.form-range::-webkit-slider-thumb {
+    width: var(--site-range-thumb);
+    height: var(--site-range-thumb);
+    margin-top: var(--site-range-thumb-shift);
+    appearance: none;
+    -webkit-appearance: none;
+    background-color: var(--site-primary);
+    border: 0;
+    border-radius: var(--site-radius-pill);
+    transition:
+        background-color var(--site-duration-short-3) var(--site-ease-standard),
+        box-shadow var(--site-duration-short-3) var(--site-ease-standard);
+}
+.form-range::-webkit-slider-thumb:active {
+    background-color: color-mix(in srgb, var(--site-primary) 60%, var(--site-surface));
+}
+.form-range::-webkit-slider-runnable-track {
+    width: 100%;
+    height: var(--site-range-track-h);
+    color: transparent;
+    cursor: pointer;
+    background-color: var(--site-surface-muted);
+    border-radius: var(--site-radius-pill);
+}
+.form-range::-moz-range-thumb {
+    width: var(--site-range-thumb);
+    height: var(--site-range-thumb);
+    appearance: none;
+    -moz-appearance: none;
+    background-color: var(--site-primary);
+    border: 0;
+    border-radius: var(--site-radius-pill);
+    transition:
+        background-color var(--site-duration-short-3) var(--site-ease-standard),
+        box-shadow var(--site-duration-short-3) var(--site-ease-standard);
+}
+.form-range::-moz-range-thumb:active {
+    background-color: color-mix(in srgb, var(--site-primary) 60%, var(--site-surface));
+}
+.form-range::-moz-range-track {
+    width: 100%;
+    height: var(--site-range-track-h);
+    color: transparent;
+    cursor: pointer;
+    background-color: var(--site-surface-muted);
+    border-radius: var(--site-radius-pill);
+}
+.form-range:disabled {
+    pointer-events: none;
+}
+.form-range:disabled::-webkit-slider-thumb {
+    background-color: var(--site-text-secondary);
+}
+.form-range:disabled::-moz-range-thumb {
+    background-color: var(--site-text-secondary);
+}
+
+.site-form-card {
+    border-radius: var(--site-radius);
+    background: var(--site-surface);
+}
+.site-form-card-header {
+    padding: var(--site-space-3) var(--site-space-4);
+    border-bottom: var(--site-border-width) solid var(--site-border-subtle);
+    border-radius: var(--site-radius) var(--site-radius) 0 0;
+    color: var(--site-text-secondary);
+    font-size: var(--site-text-xs);
+    font-weight: var(--site-weight-semibold);
+    letter-spacing: var(--site-letter-label);
+    text-transform: uppercase;
+}
+.site-form-card-body {
+    display: grid;
+    gap: var(--site-space-4);
+    padding: var(--site-space-6);
+}
+.site-form-card-body > .site-control {
+    justify-self: start;
+}
+.site-tool-form-card > .site-form-card-body {
+    padding: 0;
+}
+.site-tool-form-card > .site-form-card-body > * {
+    margin-inline: var(--site-space-4);
+}
+.site-tool-form-card > .site-form-card-body > *:first-child {
+    margin-top: var(--site-space-4);
+}
+.site-tool-form-card > .site-form-card-body > *:last-child {
+    margin-bottom: var(--site-space-4);
+}
+.site-tool-form-card > .site-form-card-body > .site-form-field,
+.site-tool-form-card > .site-form-card-body > .site-form-field:first-child,
+.site-tool-form-card > .site-form-card-body > .site-form-field:last-child {
+    margin: 0;
+}
+.site-tool-form-card .site-form-field {
+    display: block;
+}
+.site-tool-form-card .site-form-field > .form-label {
+    display: block;
+    margin: 0;
+    padding: var(--site-space-3) var(--site-space-4);
+    border-bottom: var(--site-border-width) solid var(--site-border-subtle);
+    background: var(--site-surface);
+    color: var(--site-text-secondary);
+    font-size: var(--site-text-xs);
+    font-weight: var(--site-weight-semibold);
+    letter-spacing: var(--site-letter-label);
+    text-transform: uppercase;
+}
+.site-tool-form-card .site-form-field-body {
+    display: grid;
+    gap: var(--site-space-1);
+    min-width: 0;
+    padding: var(--site-space-4);
+}
+.site-tool-form-card .site-form-field-body > .site-control {
+    justify-self: start;
+}
+.site-search-wrap {
+    position: relative;
+    width: 100%;
+    min-width: 0;
+}
+.site-search-input {
+    padding-left: var(--site-control-inset-icon);
+}
+.select-field-wrap {
+    position: relative;
+    width: 100%;
+    min-width: 0;
+}
+.select-field-wrap .select-field-icon {
+    position: absolute;
+    left: var(--site-space-3);
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 2;
+    pointer-events: none;
+    color: var(--site-text-secondary);
+}
+.select-field-wrap .form-select {
+    padding-left: var(--site-control-inset-icon);
+}
+.site-select-interactive {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    min-width: 0;
+}
+.site-select-interactive > * {
+    flex: 1;
+    min-width: 0;
+}
+.site-select-interactive [role="combobox"] {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--site-space-2);
+}
+.site-select-value {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--site-space-2);
+    overflow: hidden;
+    min-width: 0;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.site-select-popup [role="option"],
+.blazorblueprint-portal [role="dialog"] [role="option"] {
+    display: flex;
+    align-items: center;
+    gap: var(--site-space-2);
+}
+.site-select-option-icon {
+    flex: 0 0 auto;
+    color: var(--site-text-secondary);
+}
+.site-select-chevron {
+    flex: none;
+    color: var(--site-text-secondary);
+    transition: transform var(--site-duration-short-3) var(--site-ease-standard);
+}
+[data-state="open"] .site-select-chevron {
+    transform: rotate(180deg);
+}
+.site-select-popup {
+    padding: var(--site-space-1);
+    border: var(--site-border-width) solid var(--site-border);
+    border-radius: var(--site-radius);
+    background: var(--site-surface);
+    box-shadow: var(--site-shadow-popover);
+    font-family: var(--site-font-family);
+    font-size: var(--site-text-sm);
+    max-height: var(--site-popup-max-h);
+    overflow-y: auto;
+}
+.site-select-search {
+    position: sticky;
+    top: 0;
+    padding: var(--site-space-1) var(--site-space-1) var(--site-space-2);
+    background: var(--site-surface);
+}
+.site-select-empty {
+    padding: var(--site-action-py) var(--site-action-px);
+    color: var(--site-text-secondary);
+}
+.site-select-more {
+    display: grid;
+    padding-top: var(--site-space-1);
+}
+.site-select-popup [role="option"] {
+    padding: var(--site-action-py) var(--site-action-px);
+    border-radius: var(--site-radius-sm);
+    cursor: pointer;
+}
+.site-select-popup [role="option"][data-focused="true"] {
+    background: var(--site-surface-hover);
+}
+.site-select-popup [role="option"][aria-selected="true"] {
+    font-weight: var(--site-weight-medium);
+}
+.site-select-interactive-clearable .site-select-value {
+    margin-right: var(--site-control-h-xs);
+}
+.site-select-clear-btn {
+    position: absolute;
+    right: calc(var(--site-action-px) + var(--site-icon-box-sm) + var(--site-space-1));
+    top: 50%;
+    transform: translateY(-50%);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--site-control-h-xs);
+    height: var(--site-control-h-xs);
+    padding: 0;
+    border: 0;
+    border-radius: var(--site-radius);
+    background: transparent;
+    color: var(--site-text-secondary);
+    cursor: pointer;
+}
+.site-select-clear-btn:hover,
+.site-select-clear-btn:focus-visible {
+    color: var(--site-text-primary);
+    background: var(--site-border-subtle);
+}
+/* BbTooltipContent (headless primitive, no baked styling) renders its role="tooltip"
+   div inside the same global .blazorblueprint-portal container Popover/Dialog/Combobox
+   use, reparented outside SiteTooltip's own DOM subtree -- confirmed live, a scoped
+   ::deep rule in a SiteTooltip.razor.css never matches it, so it must be styled here. */
+.blazorblueprint-portal .site-tooltip-content {
+    max-width: var(--site-tooltip-max-w);
+    padding: var(--site-space-1) var(--site-space-2);
+    background-color: var(--site-text-primary);
+    color: var(--site-surface);
+    font-family: var(--site-font-family);
+    font-size: var(--site-text-xs);
+    line-height: var(--site-leading-tight);
+    border-radius: var(--site-radius-sm);
+    box-shadow: var(--site-shadow-sm);
+    z-index: var(--site-z-menu);
+}
+.blazorblueprint-portal [role="dialog"] {
+    animation: none !important;
+    transition: none !important;
+    min-width: max-content;
+    border-color: var(--site-border);
+    border-radius: var(--site-radius);
+    box-shadow: var(--site-shadow-popover);
+    font-family: var(--site-font-family);
+    font-size: var(--site-text-sm);
+}
+.blazorblueprint-portal [role="dialog"] [role="listbox"] {
+    border-radius: var(--site-radius);
+}
+.blazorblueprint-portal [role="dialog"] [role="listbox"] > div:has(> input[role="combobox"]) {
+    display: none;
+}
+.blazorblueprint-portal [role="dialog"] [role="option"] {
+    border-radius: var(--site-radius-sm);
+    padding: var(--site-action-py) var(--site-action-px);
+    font-family: inherit;
+    font-size: var(--site-text-sm);
+}
+/* BbMultiSelect (styled component) bakes an unconditional fixed-width Tailwind
+   arbitrary-value class onto its trigger button -- confirmed live, this is a
+   literal fixed width, not a CSS custom property blueprint-theme.css can remap,
+   so it must be beaten here with a plain class selector at equal specificity
+   (this stylesheet loads after BlazorBlueprint's own CSS) plus !important to be
+   robust against load-order changes, matching the .blazorblueprint-portal
+   overrides below. */
+.site-multi-select {
+    width: 100%;
+    min-width: 0;
+}
+.site-multi-select-trigger {
+    width: 100% !important;
+}
+.site-filter-toolbar {
+    padding-bottom: var(--site-space-4);
+    border-bottom: var(--site-border-width) solid var(--site-border-subtle);
+}
+.site-filter-toolbar.site-toolbar-row > form {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: var(--site-space-3) !important;
+}
+.site-filter-toolbar.site-toolbar-row .site-form-field {
+    flex: 1 1 var(--site-field-min-sm);
+    min-width: var(--site-field-min-xs);
+}
+.site-filter-toolbar.site-toolbar-row .site-search-action-row {
+    flex: 1 1 100%;
+}
+.site-filter-toolbar .site-search-action-row > .site-form-field {
+    flex: 1 1 var(--site-field-min);
+    min-width: 0;
+}
+.site-filter-toolbar .site-search-action-row > .site-form-actions[data-fill="true"] {
+    width: auto;
+    flex: 0 1 auto;
+}
+@media (max-width: 47.99875rem) {
+    .site-filter-toolbar .site-search-action-row > .site-form-actions[data-fill="true"] {
+        width: 100%;
+        flex: 1 1 100%;
+    }
+}
+.sort-actions-row > .site-form-field {
+    flex: 1 1 var(--site-field-min-sm);
+    min-width: var(--site-field-min-xs);
+}
+.sort-actions-row > .site-form-actions {
+    flex: none;
+}
+@media (max-width: 47.99875rem) {
+    .sort-actions-row > .site-form-actions {
+        flex: 1 1 100%;
+    }
+}
+.history-compare-form {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+    gap: var(--site-space-4) var(--site-space-6);
+}
+.history-compare-form > .history-compare-field {
+    flex: 1 1 var(--site-field-min);
+    min-width: 0;
+}
+.history-compare-form > .history-compare-submit {
+    flex: none;
+}
+.site-action-group {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--site-space-2);
+}
+.site-form-stack {
+    display: grid;
+    gap: var(--site-gap-stack);
+}
+.site-grid > .site-form-actions {
+    align-self: end;
+}

@@ -1,0 +1,58 @@
+<SiteField Id="@For"
+    Required="@Required"
+    Invalid="@(!string.IsNullOrWhiteSpace(ErrorText))"
+    Class="@Class">
+    <SiteFieldLabel>@Label</SiteFieldLabel>
+    @if (Banded)
+    {
+        <div class="site-form-field-body">@FieldBody</div>
+    }
+    else
+    {
+        @FieldBody
+    }
+</SiteField>
+
+@code {
+    /// <summary>Visible field label.</summary>
+    [Parameter, EditorRequired]
+    public string Label { get; set; } = string.Empty;
+    /// <summary>Id of the control this field wraps; also used to derive help/error ids.</summary>
+    [Parameter, EditorRequired]
+    public string For { get; set; } = string.Empty;
+    /// <summary>Extra class applied to the root element.</summary>
+    [Parameter]
+    public string? Class { get; set; }
+    /// <summary>Optional help text rendered below the control.</summary>
+    [Parameter]
+    public string? HelpText { get; set; }
+    /// <summary>Optional static error text rendered below the control. For EditContext-driven validation, use SiteValidationMessage instead.</summary>
+    [Parameter]
+    public string? ErrorText { get; set; }
+    /// <summary>Shows a required marker next to the label and sets aria-required on the control.</summary>
+    [Parameter]
+    public bool Required { get; set; }
+    [Parameter]
+    public RenderFragment ChildContent { get; set; } = default!;
+
+    /// <summary>
+    /// IMPORTANT: cascaded by SiteToolForm with the exact Name it uses ("SiteToolFormBanded") --
+    /// Blazor only binds a named CascadingParameter to a provider using that same string, so
+    /// renaming one side without the other silently stops the tool-page label banding instead of
+    /// erroring. Stays false (default) for every admin usage, which never provides this value.
+    /// </summary>
+    [CascadingParameter(Name = "SiteToolFormBanded")]
+    private bool Banded { get; set; }
+
+    private RenderFragment FieldBody => @<text>
+        @ChildContent
+        @if (!string.IsNullOrWhiteSpace(HelpText))
+        {
+            <SiteFieldDescription>@HelpText</SiteFieldDescription>
+        }
+        @if (!string.IsNullOrWhiteSpace(ErrorText))
+        {
+            <SiteFieldError>@ErrorText</SiteFieldError>
+        }
+    </text>;
+}

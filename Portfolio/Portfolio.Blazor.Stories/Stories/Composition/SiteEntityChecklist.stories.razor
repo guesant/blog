@@ -1,0 +1,25 @@
+@attribute [Stories("Composition/SiteEntityChecklist")]
+
+<Stories TComponent="SiteEntityChecklist<string>">
+
+    <Story Name="Default">
+        <Template>
+            <SiteEntityChecklist TItem="string"
+                                 Items="@Technologies"
+                                 Key="@(item => Array.IndexOf(Technologies, item))"
+                                 Label="@(item => item)"
+                                 Selected="@_selected"
+                                 SelectedChanged="@(selected => _selected = selected)"
+                                 SearchPlaceholder="search technologies…"
+                                 Legend="technologies" />
+        </Template>
+    </Story>
+
+</Stories>
+
+@code {
+    private static readonly string[] Technologies =
+        Enumerable.Range(1, 45).Select(index => $"technology {index:00}").ToArray();
+
+    private HashSet<int> _selected = [0, 3];
+}

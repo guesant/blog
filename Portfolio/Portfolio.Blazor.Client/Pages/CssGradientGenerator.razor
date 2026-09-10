@@ -1,0 +1,114 @@
+@inherits LocalizedComponentBase
+@page "/tools/css-gradient-generator"
+@page "/pt-BR/tools/css-gradient-generator"
+@using Portfolio.Blazor.Core
+
+<ToolPage Title="@Title" Description="@Description" CanonicalPath="@CanonicalPath">
+    <SiteCard Class="site-block" Label="@Title">
+        <SiteToolForm Action="@Action" SubmitLabel="@GenerateLabel" AriaLabel="@TypeLabel">
+            <SiteFormActions>
+                <SiteFormField Label="@TypeLabel"
+                    For="gradient-type"><SiteSelect @bind-Value="Type"
+                        Options="@TypeOptions"
+                        Id="gradient-type"
+                        Name="type"
+                        Placeholder="@TypeLabel"
+                        EmptyText="@TypeLabel" /></SiteFormField>
+                @if (Type == "linear")
+                {
+                    <SiteFormField Label="@AngleLabel"
+                        For="gradient-angle"><SiteInput Id="gradient-angle"
+                            Name="angle"
+                            Type="number"
+                            min="0"
+                            max="360"
+                            Value="@Angle.ToString()"
+                            ValueChanged="@(v => { if (int.TryParse(v, out var value)) Angle = value; })" /></SiteFormField>
+                }
+            </SiteFormActions>
+        </SiteToolForm>
+        @if (RendererInfo.IsInteractive)
+        {
+            <SiteStack Class="tool-stop-list">@foreach (var stop in Stops) { <SiteInline Class="tool-stop-row">
+                <SiteFormField Label="@ColorLabel"
+                    For="@($"gradient-color-{stop.Id}")"><SiteInput id="@($"gradient-color-{stop.Id}")"
+                        type="color"
+                        @bind="stop.Color" /></SiteFormField>
+                    <SiteFormField Label="@PositionLabel"
+                        For="@($"gradient-position-{stop.Id}")"><SiteInput id="@($"gradient-position-{stop.Id}")"
+                            type="number"
+                            min="0"
+                            max="100"
+                            Value="@stop.Position.ToString()"
+                            OnInput="eventArgs => { if (int.TryParse(eventArgs.Value?.ToString(), out var value)) stop.Position = value; }" /></SiteFormField>
+                                <SiteButton aria-label="@RemoveLabel"
+                                Disabled="@(Stops.Count <= 2)"
+                                @onclick="() => RemoveStop(stop)"
+                                Variant="SiteButtonVariant.Default"
+                                Class="tool-action-btn"><SiteIcon Name="trash-2" Size="14" />
+                                </SiteButton>
+                                </SiteInline> }</SiteStack>
+            <SiteButton @onclick="AddStop"
+                Variant="SiteButtonVariant.Default"
+                Class="tool-action-btn"><SiteIcon Name="plus" Size="14" />@AddLabel</SiteButton>
+        }
+        <SiteLiveRegion Politeness="SiteLivePoliteness.Polite">
+            <SitePreviewBox Class="tool-css-preview"
+                Style="@($"background: {GradientValue}")"
+                AriaLabel="gradient preview" />
+            <SiteOutputField Id="gradient-output"
+                Label="@OutputLabel"
+                Value="@CssValue"
+                CopyLabel="@CopyLabel" />
+        </SiteLiveRegion>
+    </SiteCard>
+</ToolPage>
+
+@code {
+    private string CanonicalPath => RequestPath;
+    private sealed class StopState(
+        int id,
+        string color,
+        int position
+    ) { public int Id { get; } = id; public string Color { get; set; } = color; public int Position { get; set; } = position; }
+    private List<StopState> Stops { get; } = [new(1, "#4f46e5", 0), new(2, "#22d3ee", 100)];
+    private int _nextId = 3;
+    private string _type = "linear";
+    private int _angle = 90;
+    private bool _queryInitialized;
+    [SupplyParameterFromQuery(Name = "type")]
+    private string? QueryType { get; set; }
+    [SupplyParameterFromQuery(Name = "angle")] private int? QueryAngle { get; set; }
+    private string Action => L["legacy_969cf84bc236"];
+    private string Title => L["legacy_c502586c0b5f"];
+    private string Description => L["legacy_d4165d915ce3"];
+    private string InputLabel => L["legacy_d9825dc0fc2f"];
+    private string TypeLabel => L["legacy_9d755e0e961c"];
+    private string LinearLabel => "linear";
+    private string RadialLabel => "radial";
+    private string AngleLabel => L["legacy_8c0c0f7ef16e"];
+    private string ColorLabel => L["legacy_48541bef3bd6"];
+    private string PositionLabel => L["legacy_34b0628a28f6"];
+    private string RemoveLabel => L["legacy_a5257096a74c"];
+    private string AddLabel => L["legacy_9039ea24e5c3"];
+    private string GenerateLabel => L["legacy_cc7df97fb1b2"];
+    private string OutputLabel => L["legacy_1d1c0e33dc3c"];
+    private string CopyLabel => L["legacy_a3b71416a5f3"];
+    private string Type { get => _type; set => _type = value is "radial" ? "radial" : "linear"; }
+    private int Angle { get => _angle; set => _angle = Math.Clamp(value, 0, 360); }
+    private IReadOnlyList<SiteSelectOption> TypeOptions => [new(
+        "linear",
+        LinearLabel
+    ), new("radial", RadialLabel)];
+    private string CssValue => CssGradientFormatter.Format(Type, Angle, Stops.Select(stop => new GradientStop(stop.Color, stop.Position)));
+    private string GradientValue => CssValue.Replace("background: ", string.Empty).TrimEnd(';');
+    protected override void OnParametersSet()
+    {
+        if (_queryInitialized) return;
+        if (QueryType is "linear" or "radial") _type = QueryType;
+        if (QueryAngle.HasValue) _angle = Math.Clamp(QueryAngle.Value, 0, 360);
+        _queryInitialized = true;
+    }
+    private void AddStop() => Stops.Add(new(_nextId++, "#22d3ee", 50));
+    private void RemoveStop(StopState stop) { if (Stops.Count > 2) Stops.Remove(stop); }
+}

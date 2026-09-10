@@ -1,0 +1,23 @@
+@inherits SiteInputBase
+
+<input type="date"
+       id="@ResolvedId"
+       name="@Name"
+       value="@(Value?.ToString("yyyy-MM-dd"))"
+       class="@InputClass"
+       aria-describedby="@FieldContext?.DescribedBy"
+       aria-required="@(FieldContext?.Required == true ? "true" : null)"
+       aria-invalid="@(FieldContext?.Invalid == true ? "true" : null)"
+       @attributes="ForwardedAttributes"
+       @onchange="HandleChange" />
+
+@code {
+    [Parameter]
+    public DateOnly? Value { get; set; }
+    [Parameter]
+    public EventCallback<DateOnly?> ValueChanged { get; set; }
+
+    private Task HandleChange(ChangeEventArgs args) => DateOnly.TryParse(args.Value?.ToString(), out var value)
+        ? ValueChanged.InvokeAsync(value)
+        : Task.CompletedTask;
+}

@@ -1,0 +1,21 @@
+@attribute [Stories("Navigation/SiteDropdown")]
+
+<Stories TComponent="SiteDropdown">
+
+    <Story Name="Default">
+        <Template>
+            <SiteDropdown>
+                <ToggleContent>menu</ToggleContent>
+                <MenuContent>
+                    <SiteButton Variant="SiteButtonVariant.Ghost"
+                        Class="dropdown-item"
+                        role="menuitem">copy</SiteButton>
+                    <SiteButton Variant="SiteButtonVariant.Ghost"
+                        Class="dropdown-item"
+                        role="menuitem">download</SiteButton>
+                </MenuContent>
+            </SiteDropdown>
+        </Template>
+    </Story>
+
+</Stories>

@@ -1,0 +1,150 @@
+@inherits ContentPageBase
+@page "/topics/{Slug}"
+@page "/pt-BR/topics/{Slug}"
+@using Microsoft.AspNetCore.Components
+@using Portfolio.Blazor.Core
+
+<PageTitle>@Title</PageTitle>
+<SeoHead Title="@Title" Description="@Description" CanonicalPath="@CanonicalPath" />
+
+<SitePage Template="topic-detail">
+    <SiteBreadcrumb HomeUrl="@LocalizedPath("home")"
+        HomeLabel="@(L["legacy_ddc150008e2f"])"
+        Links="@BreadcrumbLinks"
+        CurrentLabel="@Title" />
+
+    @if (Snapshot is null)
+    {
+        <SiteHero Title="@LoadingLabel" />
+    }
+    else if (Topic is null)
+    {
+        <SiteHero Title="@NotFoundLabel"
+            Lead="@NotFoundDescription"><ChildContent>
+                <SiteLink Variant="SiteButtonVariant.Outline" Href="@IndexUrl">
+                    <SiteIcon Name="arrow-left" Size="14" />@BackLabel</SiteLink>
+                </ChildContent>
+            </SiteHero>
+    }
+    else
+    {
+        <SiteHero Title="@Title" Lead="@Description" BackHref="@IndexUrl" BackLabel="@BackLabel" />
+        @if (Writings.Count == 0 && Findings.Count == 0)
+        {
+            <SiteEmptyState Message="@EmptyLabel" />
+        }
+        else
+        {
+            @if (Writings.Count > 0)
+            {
+                <SiteSection Region="writing"
+                    HeadingId="topic-writing-heading"
+                    Title="@(L["legacy_ebede9852c81"])">
+                    <SiteGrid>
+                        @foreach (var item in Writings)
+                        {
+                            <SiteGridColumn>
+                                <SiteClickableCard Label="@JoinMeta(WritingKind(item.Type), FormatDate(item.Date), item.ReadingTime)"
+                                    Class="h-100"
+                                    Href="@LocalizedUrl(item.Url)"
+                                    Title="@item.Title"
+                                    TitleClass="h5"
+                                    HeadingLevel="3">
+                                    @if (!string.IsNullOrWhiteSpace(item.Excerpt)) { <SiteText Variant="SiteTextVariant.Excerpt">@item.Excerpt</SiteText> }
+                                </SiteClickableCard>
+                            </SiteGridColumn>
+                        }
+                    </SiteGrid>
+                </SiteSection>
+            }
+            @if (Findings.Count > 0)
+            {
+                <SiteSection Region="findings"
+                    HeadingId="topic-findings-heading"
+                    Title="@(L["legacy_a2d8de463c5a"])">
+                    <SiteGrid>
+                        @foreach (var item in Findings)
+                        {
+                            <SiteGridColumn>
+                                <SiteClickableCard Label="@JoinMeta(FindingKind(item.Type), FormatDate(item.PublishedDate), RatingName(item.Rating))"
+                                    Class="h-100"
+                                    Href="@LocalizedUrl(item.Url)"
+                                    Title="@(item.Title ?? item.Slug)"
+                                    TitleClass="h5"
+                                    HeadingLevel="3">
+                                    @if (!string.IsNullOrWhiteSpace(item.Description)) { <SiteText Variant="SiteTextVariant.Excerpt">@item.Description</SiteText> }
+                                    @if (item.Topics is { Count: > 0 }) { <SiteChipGroup>@foreach (var topic in item.Topics.Take(3)) { <SiteChip Label="@(topic.Name ?? topic.Slug)" Href="@LocalizedUrl(topic.Url ?? $"/topics/{topic.Slug}")" /> }</SiteChipGroup> }
+                                </SiteClickableCard>
+                            </SiteGridColumn>
+                        }
+                    </SiteGrid>
+                </SiteSection>
+            }
+        }
+        <ContentRelations CurrentUrl="@CanonicalPath" />
+    }
+</SitePage>
+
+@code {
+    [Parameter]
+    public string Slug { get; set; } = string.Empty;
+    private PublicTopic? Topic => Snapshot?.Topics.FirstOrDefault(item => PublicRouteKey.Matches(item.Url, item.Slug, Slug));
+    private IReadOnlyList<PublicWriting> Writings => Snapshot?.Writings.Where(item => item.Topics?.Any(value => value.Slug.Equals(ResolvedSlug, StringComparison.OrdinalIgnoreCase)) == true).ToArray() ?? [];
+    private IReadOnlyList<PublicFinding> Findings => Snapshot?.Findings.Where(item => item.Topics?.Any(value => value.Slug.Equals(ResolvedSlug, StringComparison.OrdinalIgnoreCase)) == true).ToArray() ?? [];
+    private string ResolvedSlug => Topic?.Slug ?? Slug;
+    private string Title => Topic?.Name ?? Slug;
+    private string Description => L["browse_topic", Title];
+    private string CanonicalPath => Topic?.Url ?? RequestPath;
+    private string LoadingLabel => L["legacy_aabc9aac22e5"];
+    private string EmptyLabel => L["legacy_1956fff977af"];
+    private string NotFoundLabel => L["legacy_1b967d853961"];
+    private string NotFoundDescription => L["legacy_07773aaef25f"];
+    private string BackLabel => L["legacy_10fac44159a7"];
+    private string IndexUrl => LocalizedPath("topics");
+    private IReadOnlyList<BreadcrumbLink> BreadcrumbLinks => [new(
+        L["legacy_4ab0be41630a"],
+        IndexUrl
+    )];
+    private string WritingKind(string? type) => type?.ToLowerInvariant() switch
+    {
+        "article" => L["legacy_8a7b563164e6"],
+        "note" => L["legacy_9b08c0838f59"],
+        "project-diary" => L["legacy_36f879809607"],
+        _ => string.IsNullOrWhiteSpace(type) ? L["legacy_36f879809607"] : type.Replace('-', ' '),
+    };
+    private string FindingKind(string? type) => type?.ToLowerInvariant() switch
+    {
+        "book" => L["legacy_f64f90d110a7"],
+        "article" => L["legacy_8a7b563164e6"],
+        "paper" => "paper",
+        "repo" => L["legacy_3f6ede9e4d29"],
+        "site" => L["legacy_40bd62db98af"],
+        "docs" => L["legacy_9e5e2519972c"],
+        "tool" => L["legacy_c1ce4f438b8b"],
+        "course" => L["legacy_7101bea24f0f"],
+        "video" => L["legacy_1da31972a3bc"],
+        "playlist" => "playlist",
+        "channel" => L["legacy_806b1ac02287"],
+        "podcast" => "podcast",
+        "film" => L["legacy_6df5e95d416e"],
+        "other" => L["legacy_f44ac71ffd29"],
+        _ => string.IsNullOrWhiteSpace(type) ? (L["legacy_f3b74f6bb3d7"]) : type,
+    };
+    private string RatingName(string? value) => value?.ToLowerInvariant() switch
+    {
+        "interesting" => L["legacy_d45f7b3bf339"],
+        "recommended" => L["legacy_831cadfbf680"],
+        "strongly-recommended" => L["legacy_96f095c0f1f5"],
+        "not-recommended" => L["legacy_5458bea30ae4"],
+        _ => string.Empty,
+    };
+    private string FormatDate(string? value) => DateTime.TryParse(value, out var date) ? date.ToString("dd MMM yyyy", CultureInfo.CurrentCulture) : "";
+    private static string JoinMeta(params string?[] values) => string.Join(" · ", values.Where(value => !string.IsNullOrWhiteSpace(value)));
+    private string LocalizedPath(string path) => path.Equals("home", StringComparison.OrdinalIgnoreCase) ? (L["legacy_0607643fd42c"]) : (LocalizedUrls.Current($"/{path}"));
+    private string LocalizedUrl(string url)
+    {
+        if (!Uri.TryCreate(url, UriKind.Absolute, out var absolute)) return url;
+        var path = absolute.AbsolutePath;
+        return LocalizedUrls.Current(path);
+    }
+}

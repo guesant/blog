@@ -1,0 +1,30 @@
+@attribute [Stories("Navigation/SiteTileLink")]
+
+<Stories TComponent="SiteTileLink">
+
+    <Story Name="Default">
+        <Template>
+            <SiteCardGrid Dense="true">
+                <SiteTileLink Href="sample" Icon="folder" Label="projects" />
+                <SiteTileLink Href="sample" Icon="briefcase" Label="case studies" />
+                <SiteTileLink Href="sample" Icon="pen-line" Label="writings" />
+            </SiteCardGrid>
+        </Template>
+    </Story>
+
+    <Story Name="Layouts">
+        <Template>
+            <SiteCardGrid Dense="true">
+                <SiteTileLink Href="sample" Icon="library" Count="12" Label="collections" />
+                <SiteTileLink Href="sample"
+                    Icon="waypoints"
+                    Count="28"
+                    Label="topics"
+                    CountFirst="true" />
+                <SiteTileLink Href="sample" Icon="lightbulb" Count="5" />
+                <SiteTileLink Href="sample" Count="8" Label="writings" />
+            </SiteCardGrid>
+        </Template>
+    </Story>
+
+</Stories>

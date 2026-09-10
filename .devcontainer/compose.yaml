@@ -1,0 +1,35 @@
+services:
+  app:
+    build:
+      context: ..
+      dockerfile: .devcontainer/toolchain/Containerfile
+      target: browser
+    working_dir: /workspace
+    entrypoint: /usr/local/bin/portfolio-entrypoint
+    command: bash -c 'sleep infinity'
+    init: true
+    environment:
+      HOME: /var/cache/hermit-home
+      PNPM_HOME: /var/cache/pnpm/home
+      PLAYWRIGHT_BROWSERS_PATH: /var/cache/playwright
+      MOON_CACHE_DIR: /var/cache/moon
+      MOON_TOOLCHAIN_FORCE_GLOBALS: 'true'
+      TECTONIC_CACHE_DIR: /var/cache/tectonic
+    volumes:
+      - ..:/workspace
+      - portfolio-hermit:/var/cache/hermit-home
+      - portfolio-pnpm:/var/cache/pnpm
+      - portfolio-node-modules:/workspace/node_modules
+      - portfolio-moon:/var/cache/moon
+      - portfolio-playwright:/var/cache/playwright
+      - portfolio-tectonic:/var/cache/tectonic
+      - portfolio-quality:/workspace/tools/quality/.venv
+
+volumes:
+  portfolio-hermit:
+  portfolio-pnpm:
+  portfolio-node-modules:
+  portfolio-moon:
+  portfolio-playwright:
+  portfolio-tectonic:
+  portfolio-quality:

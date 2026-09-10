@@ -1,0 +1,70 @@
+@inherits LocalizedComponentBase
+@page "/tools/random-color-palette"
+@page "/pt-BR/tools/random-color-palette"
+@using System.Globalization
+@using Microsoft.JSInterop
+@using Portfolio.Blazor.Core
+@inject IJSRuntime JS
+
+<ToolPage Title="@Title" Description="@Description" CanonicalPath="@CanonicalPath">
+    <SiteToolForm Action="@Action"
+        SubmitLabel="@GenerateLabel"
+        Submit="SiteToolFormSubmit.Always"
+        OnSubmit="Generate"
+        AriaLabel="@InputLabel">
+        <ChildContent>
+            <SiteFormField For="palette-count"
+                Label="@CountLabel"><SiteInput Id="palette-count"
+                    Name="count"
+                    Type="number"
+                    min="3"
+                    max="10"
+                    Value="@CountText"
+                    ValueChanged="@(v => CountText = v)" /></SiteFormField>
+        </ChildContent>
+        <Actions>
+            @if (RendererInfo.IsInteractive)
+            {
+                <SiteButton Variant="SiteButtonVariant.Default"
+                    @onclick="CopyAllAsync"
+                    Disabled="@(Result.Values.Count == 0)"><SiteIcon Name="copy"
+                        Size="14" />@CopyAllLabel</SiteButton>
+            }
+        </Actions>
+    </SiteToolForm>
+    <SiteLiveRegion Politeness="SiteLivePoliteness.Polite">
+        <SiteCard Class="site-block" Label="@ResultLabel">
+            <SiteList>@foreach (var color in Result.Values) { <SiteListItem Class="list-group-item site-list-row tool-list-item">
+                <SitePreviewBox Style="@($"width:2.5rem;height:2.5rem;flex:none;display:inline-block;background-color:{color}")"
+                    AriaLabel="@color" />
+                <SiteText Variant="SiteTextVariant.Small"
+                    Class="tool-list-value">@color</SiteText>@if (RendererInfo.IsInteractive) { <SiteButton Variant="SiteButtonVariant.Outline"
+                        @onclick="() => CopyAsync(color)">
+                    <SiteIcon Name="copy"
+                        Size="14" />@CopyLabel</SiteButton> }</SiteListItem> }</SiteList>
+        </SiteCard>
+    </SiteLiveRegion>
+</ToolPage>
+
+@code {
+    private string CanonicalPath => RequestPath;
+    private string _countText = "5"; private bool _queryInitialized;
+    private ColorPaletteResult _result = RandomNumberTools.GenerateColorPalette(5);
+    [SupplyParameterFromQuery(Name = "count")]
+    private int? QueryCount { get; set; }
+    private string Action => L["legacy_1b6ab2171a36"];
+    private string Title => L["legacy_8f7a8ebeac56"];
+    private string Description => L["legacy_975e4c90522d"];
+    private string InputLabel => L["legacy_d9825dc0fc2f"];
+    private string CountLabel => L["legacy_ef308c5310a6"];
+    private string GenerateLabel => L["legacy_cc7df97fb1b2"];
+    private string CopyLabel => L["legacy_a3b71416a5f3"];
+    private string CopyAllLabel => L["legacy_8061dcef46fa"];
+    private string ResultLabel => L["legacy_2f0452494fcb"];
+    private string CountText { get => _countText; set => _countText = value; }
+    private ColorPaletteResult Result => _result;
+    protected override void OnParametersSet() { if (_queryInitialized) return; if (QueryCount.HasValue) _countText = QueryCount.Value.ToString(CultureInfo.InvariantCulture); Generate(); _queryInitialized = true; }
+    private void Generate() => _result = RandomNumberTools.GenerateColorPalette(int.TryParse(_countText, out var count) ? count : 5);
+    private async Task CopyAsync(string value) => await JS.InvokeVoidAsync("navigator.clipboard.writeText", value);
+    private async Task CopyAllAsync() => await JS.InvokeVoidAsync("navigator.clipboard.writeText", string.Join("\n", Result.Values));
+}

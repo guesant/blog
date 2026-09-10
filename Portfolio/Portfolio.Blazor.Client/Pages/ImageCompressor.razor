@@ -1,0 +1,70 @@
+@inherits LocalizedComponentBase
+@page "/tools/image-compressor"
+@page "/pt-BR/tools/image-compressor"
+@using Microsoft.JSInterop
+@inject IJSRuntime JS
+
+<ToolPage Title="@Title" Description="@Description" CanonicalPath="@CanonicalPath">
+    <SiteCard Class="site-block" Label="@Title">
+        <SiteStack data-tool="image-compressor">
+        <SiteFormField Label="@FileLabel"
+            For="image-compressor-input"><SiteFileInput type="file"
+                accept="image/*"
+                data-image-compressor-input
+                id="image-compressor-input" /></SiteFormField>
+        <SiteFormActions>
+            <SiteFormField Label="@FormatLabel"
+                For="image-compressor-format"><SiteNativeSelect data-image-compressor-format
+                    id="image-compressor-format"><option value="image/jpeg">@JpegLabel</option>
+                        <option value="image/webp">@WebpLabel</option>
+                    </SiteNativeSelect>
+                    </SiteFormField>
+                <SiteFormField Label="@QualityLabel"
+                    For="image-compressor-quality"><SiteRangeInput min="1"
+                        max="100"
+                        value="80"
+                        Class="tool-range"
+                        data-image-compressor-quality
+                        id="image-compressor-quality" /><SiteText Variant="SiteTextVariant.Meta"
+                            data-image-compressor-quality-value>80</SiteText>%</SiteFormField>
+            </SiteFormActions>
+        <canvas data-image-compressor-canvas id="image-compressor-canvas" hidden>
+        </canvas>
+        <SiteStats Grid="true">
+            <SiteStatItem Label="@OriginalSizeLabel">
+                <SiteText Variant="SiteTextVariant.Meta"
+                    data-image-compressor-original-size>0 kb</SiteText>
+            </SiteStatItem>
+                <SiteStatItem Label="@CompressedSizeLabel">
+                    <SiteText Variant="SiteTextVariant.Meta"
+                        data-image-compressor-compressed-size>0 kb</SiteText>
+                </SiteStatItem>
+                    <SiteStatItem Label="@ReductionLabel">
+                        <SiteText Variant="SiteTextVariant.Meta"
+                            data-image-compressor-reduction>0%</SiteText>
+                    </SiteStatItem>
+                </SiteStats>
+        <SiteButton data-image-compressor-download
+            Disabled
+            Variant="SiteButtonVariant.Default"
+            Class="tool-action-btn"><SiteIcon Name="download"
+                Size="14" />@DownloadLabel</SiteButton>
+    </SiteStack>
+    </SiteCard>
+</ToolPage>
+
+@code {
+    private string CanonicalPath => RequestPath;
+    private string Title => L["legacy_23fd653867fb"];
+    private string Description => L["legacy_fe10f9dd4905"];
+    private string FileLabel => L["legacy_6320d8841a37"];
+    private string FormatLabel => L["legacy_e0dd9214dd3f"];
+    private string JpegLabel => "JPEG";
+    private string WebpLabel => "WebP";
+    private string QualityLabel => L["legacy_af8853818301"];
+    private string OriginalSizeLabel => L["legacy_ad7018d0174f"];
+    private string CompressedSizeLabel => L["legacy_265bf169dfcb"];
+    private string ReductionLabel => L["legacy_b9343b30c140"];
+    private string DownloadLabel => L["legacy_c36a12636bbd"];
+    protected override async Task OnAfterRenderAsync(bool firstRender) { if (firstRender) await JS.InvokeVoidAsync("import", "/image-compressor.js"); }
+}

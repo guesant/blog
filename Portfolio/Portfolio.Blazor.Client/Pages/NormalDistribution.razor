@@ -1,0 +1,127 @@
+@inherits LocalizedComponentBase
+@implements IDisposable
+@page "/tools/normal-distribution"
+@page "/pt-BR/tools/normal-distribution"
+@using System.Globalization
+@using Portfolio.Blazor.Core
+
+<ToolPage Title="@Title" Description="@Description" CanonicalPath="@CanonicalPath">
+    <SiteToolForm Action="@Action"
+        SubmitLabel="@SubmitLabel"
+        Submit="SiteToolFormSubmit.StaticOnly"
+        OnSubmit="Calculate">
+        <SiteFormField Label="@($"μ ({MeanLabel})")"
+            For="normal-mean"><SiteInput Id="normal-mean"
+                Name="mean"
+                Type="number"
+                step="any"
+                Value="@MeanText"
+                ValueChanged="@(v => MeanText = v)" /></SiteFormField>
+        <SiteFormField Label="@($"σ ({DeviationLabel})")"
+            For="normal-deviation"><SiteInput Id="normal-deviation"
+                Name="deviation"
+                Type="number"
+                min="0"
+                step="any"
+                Value="@DeviationText"
+                ValueChanged="@(v => DeviationText = v)" /></SiteFormField>
+        <SiteFormField Label="@($"x ({PointLabel})")"
+            For="normal-point"><SiteInput Id="normal-point"
+                Name="point"
+                Type="number"
+                step="any"
+                Value="@PointText"
+                ValueChanged="@(v => PointText = v)" /></SiteFormField>
+    </SiteToolForm>
+
+    <SiteLiveRegion Politeness="SiteLivePoliteness.Polite">
+        @if (!Result.IsValid)
+        {
+            <SiteErrorMessage>@ErrorLabel</SiteErrorMessage>
+        }
+        else
+        {
+            <SiteStats>
+                <SiteStatItem Label="z">@Format(Result.Z)</SiteStatItem>
+                <SiteStatItem Label="@ProbabilityLabel">@Percent(Result.CumulativeProbability)</SiteStatItem>
+                <SiteStatItem Label="@DensityLabel">@Format(Result.Density)</SiteStatItem>
+            </SiteStats>
+            <SiteCard Class="site-block" Label="@ChartLabel">
+                @if (RendererInfo.IsInteractive)
+                {
+                    <SiteChart ChartJsConfig="@ChartConfig" AriaLabel="@ChartLabel" />
+                }
+                else
+                {
+                    <SiteText Variant="SiteTextVariant.Body"
+                        id="normal-chart-description">@Description</SiteText>
+                    <SiteList Variant="SiteListVariant.Boxed"
+                        AriaLabel="@ChartLabel">@foreach (var point in Result.Points) { <SiteListItem Class="site-text-list-item">@Format(point.X): @Format(point.Density)</SiteListItem> }</SiteList>
+                }
+            </SiteCard>
+        }
+    </SiteLiveRegion>
+</ToolPage>
+
+@code {
+    private string CanonicalPath => RequestPath;
+    private string _meanText = "0";
+    private string _deviationText = "1";
+    private string _pointText = "1.96";
+    private NormalDistributionResult _result = NormalDistributionCalculator.Analyze(0, 1, 1.96);
+    private bool _queryInitialized;
+    private readonly Debouncer _debouncer = new(TimeSpan.FromMilliseconds(300));
+
+    [SupplyParameterFromQuery(Name = "mean")]
+    private string? QueryMean { get; set; }
+    [SupplyParameterFromQuery(Name = "deviation")]
+    private string? QueryDeviation { get; set; }
+    [SupplyParameterFromQuery(Name = "point")]
+    private string? QueryPoint { get; set; }
+    private string Action => L["legacy_644041e51dad"];
+    private string Title => L["legacy_88be303cb809"];
+    private string Description => L["legacy_26591d18a4bc"];
+    private string InputLabel => L["legacy_d9825dc0fc2f"];
+    private string MeanLabel => L["legacy_bd0cc81ce562"];
+    private string DeviationLabel => L["legacy_d2d9f19515f4"];
+    private string PointLabel => L["legacy_df572b7ce334"];
+    private string ProbabilityLabel => L["legacy_e0e1156cc014"];
+    private string DensityLabel => L["legacy_7f8a10f12ea7"];
+    private string ChartLabel => L["legacy_7f3a7db24b8b"];
+    private string SubmitLabel => L["legacy_53519f340509"];
+    private string ErrorLabel => L["legacy_057a56375dd3"];
+    private string MeanText { get => _meanText; set { _meanText = value; _debouncer.Trigger(() => { Recalculate(); StateHasChanged(); }); } }
+    private string DeviationText { get => _deviationText; set { _deviationText = value; _debouncer.Trigger(() => { Recalculate(); StateHasChanged(); }); } }
+    private string PointText { get => _pointText; set { _pointText = value; _debouncer.Trigger(() => { Recalculate(); StateHasChanged(); }); } }
+    private NormalDistributionResult Result => _result;
+    private SiteChartConfig ChartConfig => new()
+    {
+        Type = SiteChartType.Line,
+        Data = new SiteChartData
+        {
+            Labels = Result.Points.Select(point => Format(point.X)).ToList(),
+            Datasets =
+            [
+                new SiteLineDataset { Label = ChartLabel, Data = Result.Points.Select(point => (object)point.Density).ToList() },
+                new SiteLineDataset { Label = L["legacy_8f16b60ec1da"], Data = Result.Points.Select((point, index) => index == SelectedPointIndex ? (object)point.Density : null!).ToList() }
+            ]
+        }
+    };
+    private int SelectedPointIndex => Result.Points.Count == 0 ? -1 : Result.Points.Select((point, index) => (point, index)).OrderBy(item => Math.Abs(item.point.X - Parse(_pointText))).First().index;
+
+    protected override void OnParametersSet()
+    {
+        if (_queryInitialized) return;
+        _meanText = QueryMean ?? _meanText;
+        _deviationText = QueryDeviation ?? _deviationText;
+        _pointText = QueryPoint ?? _pointText;
+        Recalculate(); _queryInitialized = true;
+    }
+
+    private void Calculate() => Recalculate();
+    private void Recalculate() => _result = NormalDistributionCalculator.Analyze(Parse(_meanText), Parse(_deviationText), Parse(_pointText));
+    private static double Parse(string value) => double.TryParse(value, NumberStyles.Float, CultureInfo.InvariantCulture, out var result) ? result : double.NaN;
+    private static string Format(double value) => value.ToString("G6", CultureInfo.InvariantCulture);
+    private static string Percent(double value) => $"{(value * 100).ToString("G6", CultureInfo.InvariantCulture)}%";
+    public void Dispose() => _debouncer.Dispose();
+}

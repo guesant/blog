@@ -1,0 +1,22 @@
+.site-hero {
+    display: grid;
+    gap: var(--site-space-3);
+}
+.site-hero > .hero-title-row > h1 {
+    margin: 0;
+}
+.hero-title-row ::deep .site-control {
+    flex: 0 0 auto;
+    width: var(--site-control-h-sm);
+    height: var(--site-control-h-sm);
+    min-height: 0;
+    padding: 0;
+    align-self: center;
+}
+.site-page-title {
+    font-family: var(--site-font-family);
+    font-size: var(--site-text-3xl);
+    font-weight: var(--site-weight-bold);
+    letter-spacing: var(--site-letter-heading);
+    line-height: var(--site-leading-tight);
+}

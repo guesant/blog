@@ -1,0 +1,98 @@
+@using Portfolio.Blazor.Core
+@inject IStringLocalizer<SharedResource> L
+
+<SiteStack Gap="SiteSpace.Sm" Class="site-contact-channels">
+    @foreach (var profile in Profiles)
+    {
+        if (TryGetUri(profile.Url) is Uri uri)
+        {
+            var isEmail = uri.Scheme.Equals("mailto", StringComparison.OrdinalIgnoreCase);
+            <SiteLink Href="@uri.AbsoluteUri"
+                Variant="SiteButtonVariant.Outline"
+                Size="@(Variant == "grid" ? SiteButtonSize.Sm : SiteButtonSize.Default)"
+                Class="@FooterLinkClass(null)"
+                Target="@(isEmail ? null : "_blank")"
+                Rel="@(isEmail ? null : "me noopener")">
+                <SiteIcon Name="@ContactIcon(profile.Platform)"
+                    Size="14"
+                    Class="icon footer-contact-icon" />
+                <SiteNavItemLabel>@(string.IsNullOrWhiteSpace(profile.Label) ? profile.Platform : profile.Label)</SiteNavItemLabel>
+                @if (!isEmail)
+                {
+                    <SiteIcon Name="arrow-up-right" Size="12" Class="icon icon-trailing" />
+                }
+            </SiteLink>
+        }
+    }
+    @if (EmailChallenge is not null || EmailAvailable)
+    {
+        <SiteStack Gap="SiteSpace.Sm" Class="email-reveal" data-protected-email>
+            <SiteButton Variant="SiteButtonVariant.Outline"
+                Class="@(ActionClass("email-reveal-trigger"))"
+                data-protected-email-trigger="true"><SiteIcon Name="mail"
+                    Size="14"
+                    Class="icon" /><SiteNavItemLabel>@EmailLabel</SiteNavItemLabel>
+                    </SiteButton>
+            <SiteButton Variant="SiteButtonVariant.Outline"
+                Disabled="true"
+                Class="@(ActionClass("email-reveal-status"))"
+                data-protected-email-state="working"
+                hidden="true"
+                aria-live="polite"><span class="site-loading-spinner"
+                    aria-hidden="true"></span>
+                        <SiteText Variant="SiteTextVariant.Meta"
+                        Class="visually-hidden">@WorkingLabel</SiteText>
+                        </SiteButton>
+            <SiteInline Gap="SiteSpace.Sm"
+                data-protected-email-state="error"
+                hidden
+                aria-live="polite">@ErrorLabel <SiteButton Variant="SiteButtonVariant.Outline"
+                    Size="SiteButtonSize.Sm"
+                    Class="@(ActionClass("email-reveal-retry"))"
+                    data-protected-email-retry="true"><SiteIcon Name="rotate-cw"
+                        Size="14" />@RetryLabel</SiteButton>
+                    </SiteInline>
+            <SiteLink Href="#"
+                Variant="SiteButtonVariant.Outline"
+                Class="@(ActionClass("email-reveal-revealed"))"
+                data-protected-email-revealed="true"
+                data-protected-email-state="revealed"
+                hidden="true"><SiteIcon Name="mail"
+                    Size="14"
+                    Class="icon" /><SiteNavItemLabel data-protected-email-revealed-text>
+                    </SiteNavItemLabel>
+                    </SiteLink>
+        </SiteStack>
+    }
+</SiteStack>
+
+@code {
+    [Parameter]
+    public IReadOnlyList<PublicContactProfile> Profiles { get; set; } = [];
+    [Parameter]
+    public PublicProtectedEmailChallenge? EmailChallenge { get; set; }
+    [Parameter]
+    public bool EmailAvailable { get; set; }
+    [Parameter]
+    public string? Variant { get; set; }
+    [Parameter]
+    public bool UseSidebarStyle { get; set; }
+    private string EmailLabel => L["reveal_email"];
+    private string WorkingLabel => L["preparing_email"];
+    private string ErrorLabel => L["email_error"];
+    private string RetryLabel => L["try_again"];
+    private string FooterLinkClass(string? extra) => UseSidebarStyle
+        ? string.Join(' ', new[] { "nav-link", "sidebar-action", extra }.Where(value => !string.IsNullOrWhiteSpace(value)))
+        : string.IsNullOrWhiteSpace(extra) ? "footer-action" : $"footer-action {extra}";
+    private string ActionClass(string action) => UseSidebarStyle ? $"sidebar-action {action}" : $"footer-action {action}";
+    private static string ContactIcon(string platform) => platform.ToLowerInvariant() switch
+    {
+        "linkedin" => "linkedin",
+        "github" => "github",
+        "gitlab" => "gitlab",
+        "lattes" => "lattes",
+        "orcid" => "orcid",
+        _ => "external-link",
+    };
+    private static Uri? TryGetUri(string? value) => Uri.TryCreate(value, UriKind.Absolute, out var uri) && uri.Scheme is "http" or "https" or "mailto" ? uri : null;
+}

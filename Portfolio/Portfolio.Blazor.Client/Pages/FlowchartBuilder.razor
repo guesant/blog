@@ -1,0 +1,52 @@
+@inherits LocalizedComponentBase
+@page "/tools/flowchart-builder"
+@page "/pt-BR/tools/flowchart-builder"
+@using Microsoft.JSInterop
+@inject IJSRuntime JS
+
+<ToolPage Title="@Title" Description="@Description" CanonicalPath="@CanonicalPath">
+    <SiteCard Class="site-block" Label="@Title">
+        <div data-tool="flowchart-builder" data-chart-label="@ChartLabel">
+        <SiteNotice>@Note</SiteNotice>
+        <SiteToolForm Action="@Action" SubmitLabel="@GenerateLabel" AriaLabel="@InputLabel">
+            <SiteFormField For="flowchart-input"
+                Label="@InputLabel"><SiteTextAreaInput Id="flowchart-input"
+                    Name="source"
+                    Rows="6"
+                    Value="@Source"
+                    ValueChanged="@(v => Source = v)"
+                    data-flowchart-input /></SiteFormField>
+            @if (RendererInfo.IsInteractive)
+            {
+                <SiteButton data-flowchart-download
+                    Variant="SiteButtonVariant.Default"
+                    Class="tool-button"><SiteIcon Name="download"
+                        Size="14" />@DownloadLabel</SiteButton>
+            }
+        </SiteToolForm>
+        <SiteErrorMessage data-flowchart-error>
+        </SiteErrorMessage>
+        <div class="tool-visualization tool-chart-wrap" data-flowchart-chart>
+        </div>
+    </div>
+    </SiteCard>
+</ToolPage>
+
+@code {
+    private string CanonicalPath => RequestPath;
+    private string _source = "Início -> Entrada\nEntrada -> Processamento\nProcessamento -> Resultado";
+    private bool _queryInitialized;
+    [SupplyParameterFromQuery(Name = "source")]
+    private string? QuerySource { get; set; }
+    private string Action => L["legacy_7a914dbc994b"];
+    private string Title => L["legacy_028923f12521"];
+    private string Description => L["legacy_0a3677d8933d"];
+    private string Note => L["legacy_205995c9d061"];
+    private string InputLabel => L["legacy_5ee7cbfbc09d"];
+    private string DownloadLabel => L["legacy_faf8444b785a"];
+    private string GenerateLabel => L["legacy_cc7df97fb1b2"];
+    private string ChartLabel => L["legacy_8e3a96533673"];
+    private string Source { get => _source; set => _source = value; }
+    protected override void OnParametersSet() { if (_queryInitialized) return; _source = QuerySource ?? _source; _queryInitialized = true; }
+    protected override async Task OnAfterRenderAsync(bool firstRender) { if (firstRender) await JS.InvokeVoidAsync("import", "/flowchart-builder.js"); }
+}

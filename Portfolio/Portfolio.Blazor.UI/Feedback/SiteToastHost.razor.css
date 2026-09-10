@@ -1,0 +1,20 @@
+.site-toast-host {
+    position: fixed;
+    inset: auto var(--site-space-6) var(--site-space-6) auto;
+    z-index: var(--site-z-menu);
+    display: grid;
+    gap: var(--site-space-2);
+    width: min(var(--site-toast-w), calc(100vw - var(--site-space-8)));
+    pointer-events: none;
+}
+.site-toast-host:empty {
+    display: none;
+}
+.site-toast-host ::deep .site-toast {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--site-space-3);
+    box-shadow: var(--site-shadow-popover);
+    pointer-events: auto;
+}

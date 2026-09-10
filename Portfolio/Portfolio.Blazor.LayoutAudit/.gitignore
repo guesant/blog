@@ -1,0 +1,11 @@
+node_modules/
+dist/
+test-results/
+playwright-report/
+blob-report/
+a11y-report.md
+lighthouse-report.md
+seo-report.md
+.env
+.env.*
+!.env.example

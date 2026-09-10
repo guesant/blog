@@ -1,0 +1,121 @@
+@page "/admin/nav-items"
+@page "/admin/nav-items/order"
+@inherits AdminListPageBase<NavItem>
+@layout AdminLayout
+
+<PageTitle>Nav items</PageTitle>
+
+@if (IsOrderMode)
+{
+    <AdminOrderEditor TItem="NavItem"
+        Title="Nav items order"
+        ListRoute="/admin/nav-items"
+        Items="@Items"
+        DisplayTitle="@DisplayTitle"
+        IsLoading="@IsLoading"
+        IsSaving="@IsSaving"
+        Error="@Error"
+        OnReordered="HandleReorder"
+        OnSave="@(() => HandleSaveOrderAsync("/admin/nav-items"))" />
+}
+else
+{
+    <SitePageHeader Title="Nav items">
+        <Actions>
+            <SiteInline Gap="SiteSpace.Sm">
+                <SiteLink Variant="SiteButtonVariant.Outline" Href="/admin/nav-items/order">
+                    <SiteIcon Name="arrow-up-down" Size="14" />Edit order</SiteLink>
+                <SiteLink Variant="SiteButtonVariant.Default" Href="/admin/nav-items/create">
+                    <SiteIcon Name="plus" Size="14" />New nav item</SiteLink>
+            </SiteInline>
+        </Actions>
+    </SitePageHeader>
+
+    @if (Error is not null)
+    {
+        <SiteNotice Tone="SiteTone.Danger">@Error</SiteNotice>
+    }
+
+    @if (IsLoading)
+    {
+        <SiteLoading Label="Loading…" />
+    }
+    else
+    {
+        <SiteDataTable TItem="NavItem"
+            Items="@PageItems"
+            EmptyText="No nav items yet."
+            RowKey="@(navItem => navItem.Id)">
+            <Columns>
+                <SiteColumn TItem="NavItem" Header="Label" IsRowHeader="true">
+                    <Cell Context="navItem">@DisplayTitle(navItem)</Cell>
+                </SiteColumn>
+                <SiteColumn TItem="NavItem" Header="Route name">
+                    <Cell Context="navItem">@navItem.RouteName</Cell>
+                </SiteColumn>
+                <SiteColumn TItem="NavItem" Header="Placement">
+                    <Cell Context="navItem">@(navItem.Placement ?? "—")</Cell>
+                </SiteColumn>
+                <SiteColumn TItem="NavItem"
+                    Header="Sidebar group"><Cell Context="navItem">@(navItem.SidebarGroup?.ToString() ?? "—")</Cell>
+                    </SiteColumn>
+                <SiteColumn TItem="NavItem" Header="Parent">
+                    <Cell Context="navItem">@ParentLabel(navItem)</Cell>
+                </SiteColumn>
+            </Columns>
+            <Actions Context="navItem">
+                <SiteInline Gap="SiteSpace.Sm">
+                    <SiteLink Variant="SiteButtonVariant.Outline"
+                        Href="@($"/admin/nav-items/{navItem.Id}")">
+                        <SiteIcon Name="pencil" Size="14" />Edit</SiteLink>
+                    <SiteButton Variant="SiteButtonVariant.Destructive"
+                        @onclick="@(() => HandleDeleteAsync(navItem))"><SiteIcon Name="trash-2"
+                            Size="14" />Delete</SiteButton>
+                </SiteInline>
+            </Actions>
+        </SiteDataTable>
+        <SitePagination CurrentPage="@CurrentPage" TotalPages="@TotalPages" Href="@PageUrl" />
+    }
+}
+
+@code {
+    protected override string EntityLabel => "nav item";
+
+    protected override void SetOrder(NavItem entity, int order) => entity.Order = order;
+
+    protected override async Task<List<NavItem>> LoadEntitiesAsync(PortfolioAdminDbContext dbContext) =>
+        await dbContext.NavItems
+            .Include(navItem => navItem.Translations)
+            .AsNoTracking()
+            .OrderBy(navItem => navItem.SidebarGroup)
+            .ThenBy(navItem => navItem.Order)
+            .ToListAsync();
+
+    protected override Task<NavItem?> FindTrackedAsync(PortfolioAdminDbContext dbContext, int id) =>
+        dbContext.NavItems.FirstOrDefaultAsync(candidate => candidate.Id == id);
+
+    protected override string DisplayTitle(NavItem navItem) =>
+        TranslationLookup.Resolve(navItem.Translations, translation => translation.Locale, translation => translation.Label, "en")
+        ?? navItem.RouteName;
+
+    protected override int GetId(NavItem navItem) => navItem.Id;
+
+    protected override string DeleteConfirmDescription(NavItem entity)
+    {
+        var hasChildren = Items.Any(candidate => candidate.ParentId == entity.Id);
+        return hasChildren
+            ? "This permanently removes the nav item and its translations. This cannot be undone. Its child nav items will not be deleted — they will lose their parent and become top-level items."
+            : "This permanently removes the nav item and its translations. This cannot be undone.";
+    }
+
+    private string ParentLabel(NavItem navItem)
+    {
+        if (navItem.ParentId is not int parentId)
+        {
+            return "—";
+        }
+
+        var parent = Items.FirstOrDefault(candidate => candidate.Id == parentId);
+        return parent is null ? "—" : DisplayTitle(parent);
+    }
+}

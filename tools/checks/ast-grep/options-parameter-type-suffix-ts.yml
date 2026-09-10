@@ -1,0 +1,16 @@
+id: options-parameter-type-suffix-ts
+language: TypeScript
+severity: error
+message: Parâmetros chamados options devem usar um tipo nomeado com o sufixo Options.
+rule:
+  all:
+    - kind: required_parameter
+    - has:
+        kind: identifier
+        regex: '^options$'
+    - not:
+        has:
+          kind: type_annotation
+          has:
+            kind: type_identifier
+            regex: '^[A-Z][A-Za-z0-9]*Options$'

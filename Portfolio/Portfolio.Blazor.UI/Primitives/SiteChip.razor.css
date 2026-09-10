@@ -1,0 +1,29 @@
+.badge {
+    display: inline-block;
+    line-height: 1;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: var(--site-radius);
+}
+.site-chip {
+    padding: var(--site-action-py) var(--site-action-px);
+    border: var(--site-border-width) solid var(--site-border);
+    color: var(--site-text-primary);
+    background: var(--site-surface-muted);
+    font-size: var(--site-text-sm);
+    font-weight: var(--site-weight-medium);
+    line-height: var(--site-leading-normal);
+}
+/* IMPORTANT: a:visited (element + pseudo-class, specificity 0-1-1) beats a
+   single-class rule like .site-chip's own color (0-1-0), so a visited chip
+   link would otherwise fall back to the browser's default visited-link tint.
+   Re-declared at matching two-class specificity, same fix as .site-control:visited
+   in base.css. */
+a.site-chip:visited {
+    color: var(--site-text-primary);
+}
+a.site-chip:hover,
+a.site-chip:focus-visible {
+    border-color: var(--site-border-strong);
+    background: var(--site-surface-hover);
+}

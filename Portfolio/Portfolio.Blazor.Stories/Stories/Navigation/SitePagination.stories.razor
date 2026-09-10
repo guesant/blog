@@ -1,0 +1,11 @@
+@attribute [Stories("Navigation/SitePagination")]
+
+<Stories TComponent="SitePagination">
+
+    <Story Name="Default">
+        <Template>
+            <SitePagination Href="@(page => $"?page={page}")" />
+        </Template>
+    </Story>
+
+</Stories>

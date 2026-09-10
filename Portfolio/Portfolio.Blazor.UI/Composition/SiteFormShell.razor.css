@@ -1,0 +1,8 @@
+.site-form-shell {
+    display: grid;
+    gap: var(--site-gap-section);
+}
+.site-form-shell > ::deep form {
+    display: grid;
+    gap: var(--site-gap-section);
+}

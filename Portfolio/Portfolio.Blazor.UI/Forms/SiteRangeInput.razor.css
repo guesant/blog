@@ -1,0 +1,6 @@
+.site-range-input-value {
+    margin-inline-start: var(--site-space-3);
+    font-variant-numeric: tabular-nums;
+    font-size: var(--site-text-form);
+    color: var(--site-text-label);
+}

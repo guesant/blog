@@ -1,0 +1,43 @@
+@inherits LocalizedComponentBase
+@page "/tools/image-to-base64"
+@page "/pt-BR/tools/image-to-base64"
+@using Microsoft.JSInterop
+@inject IJSRuntime JS
+
+<ToolPage Title="@Title" Description="@Description" CanonicalPath="@CanonicalPath">
+<SiteCard Class="site-block" Label="@Title">
+    <SiteStack data-tool="image-to-base64">
+        <SiteFormField For="image-to-base64-input"
+            Label="@FileLabel"><SiteFileInput type="file"
+                accept="image/*"
+                data-image-to-base64-input
+                id="image-to-base64-input" /></SiteFormField>
+            <SiteStats Grid="true">
+                <SiteStatItem Label="@CharCountLabel">
+                    <SiteText Variant="SiteTextVariant.Meta"
+                        data-image-to-base64-char-count>0</SiteText>
+                </SiteStatItem>
+                    <SiteStatItem Label="@ApproxSizeLabel">
+                        <SiteText Variant="SiteTextVariant.Meta"
+                            data-image-to-base64-approx-size>0 kb</SiteText>
+                    </SiteStatItem>
+                </SiteStats>
+                    <SiteFormField For="image-to-base64-output"
+                        Label="@OutputLabel"><SiteTextAreaInput data-image-to-base64-output
+                            id="image-to-base64-output"
+                            Class="tool-textarea"
+                            rows="10"
+                            readonly></SiteTextAreaInput>
+                            </SiteFormField>
+                            <SiteButton Variant="SiteButtonVariant.Default"
+                                Class="tool-action-btn"
+                                data-image-to-base64-copy><SiteText Variant="SiteTextVariant.Meta"
+                                    data-image-to-base64-copy-label
+                                    data-copy-label="@CopyLabel"
+                                    data-copied-label="@CopiedLabel">@CopyLabel</SiteText>
+                                    </SiteButton>
+                                    </SiteStack>
+                </SiteCard>
+            </ToolPage>
+@code {
+    private string CanonicalPath => RequestPath;  private string Title => L["legacy_801b2e10b5e0"]; private string Description => L["legacy_c647b4f4faeb"]; private string FileLabel => L["legacy_6320d8841a37"]; private string CharCountLabel => L["legacy_825058327466"]; private string ApproxSizeLabel => L["legacy_99db525d460f"]; private string OutputLabel => L["legacy_1d1c0e33dc3c"]; private string CopyLabel => L["legacy_a3b71416a5f3"]; private string CopiedLabel => L["legacy_7098c22fccd8"]; protected override async Task OnAfterRenderAsync(bool firstRender) { if (firstRender) await JS.InvokeVoidAsync("import", "/image-to-base64.js"); } }

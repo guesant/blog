@@ -1,0 +1,22 @@
+@inherits LocalizedComponentBase
+@page "/Error"
+@page "/pt-BR/Error"
+@using Portfolio.Blazor.Core.Localization
+@inject ILocalizedUrlBuilder Urls
+
+<PageTitle>@Title</PageTitle>
+
+<SitePage Template="error">
+    <SiteBreadcrumb HomeUrl="@HomeUrl" HomeLabel="@L["home"]" CurrentLabel="@Title" />
+    <SiteHero Title="@Title" Lead="@L["error_description"]">
+        <ChildContent>
+            <SiteLink Class="site-inline-action" Href="@HomeUrl">
+                <SiteIcon Name="house" Size="14" />@L["return_home"]</SiteLink>
+        </ChildContent>
+    </SiteHero>
+</SitePage>
+
+@code {
+    private string Title => L["error_title"];
+    private string HomeUrl => Urls.ForCulture("/", CurrentLocale);
+}

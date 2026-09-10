@@ -1,0 +1,155 @@
+@inherits ContentPageBase
+@page "/snippets/{Slug}"
+@page "/pt-BR/snippets/{Slug}"
+@using Microsoft.AspNetCore.Components
+@using Portfolio.Blazor.Core
+
+<PageTitle>@Title</PageTitle>
+<SeoHead Title="@Title" Description="@Description" CanonicalPath="@CanonicalPath" />
+
+<SitePage Template="snippet-detail">
+    <SiteBreadcrumb HomeUrl="@LocalizedPath("home")"
+        HomeLabel="@(L["legacy_ddc150008e2f"])"
+        Links="@BreadcrumbLinks"
+        CurrentLabel="@Title" />
+
+    @if (Snapshot is null)
+    {
+        <SiteHero Title="@LoadingLabel" />
+    }
+    else if (Snippet is null)
+    {
+        <SiteHero Title="@NotFoundLabel"
+            Lead="@NotFoundDescription"><ChildContent>
+                <SiteLink Variant="SiteButtonVariant.Outline" Href="@IndexUrl">
+                    <SiteIcon Name="arrow-left" Size="14" />@BackLabel</SiteLink>
+                </ChildContent>
+            </SiteHero>
+    }
+    else
+    {
+        <SiteHero Title="@Snippet.Title"
+            Lead="@Snippet.Description"
+            BackHref="@IndexUrl"
+            BackLabel="@BackLabel">
+            <PublishedUpdatedMeta PublishedAt="@Snippet.PublishedAt"
+                UpdatedAt="@Snippet.UpdatedAt" />
+        </SiteHero>
+
+        @if (Snippet.Files is not { Count: > 0 })
+        {
+            <SiteEmptyState Message="@EmptyLabel" />
+        }
+        else
+        {
+            <SiteGrid Columns="2" Class="snippet-viewer" data-layout-region="snippet-viewer">
+                <SiteGridColumn>
+                <SiteList Class="file-tree" data-layout-region="file-tree">
+                    @foreach (var file in Snippet.Files)
+                    {
+                        <SiteListItem Class="list-group-item">
+                            <SiteLink Variant="SiteButtonVariant.Outline"
+                                Class="file-tree-file d-block text-decoration-none"
+                                Href="@FileAnchor(file)">@file.Path</SiteLink>
+                        </SiteListItem>
+                    }
+                </SiteList>
+                </SiteGridColumn>
+                <SiteGridColumn Class="snippet-file-panel-wrap">
+                    <SiteFilterCard Action="@DownloadUrl"
+                        FormClass="snippet-download-form"
+                        Class="mb-4"
+                        DataLayoutRegion="snippet-download">
+                        <SiteList Class="snippet-file-checklist"
+                            AriaLabel="@(L["legacy_4f259750980f"])">
+                            @foreach (var file in Snippet.Files)
+                            {
+                                <SiteListItem Class="list-group-item">
+                                    <SiteCheckbox Label="@file.Path"
+                                        Id="@($"file-check-{file.Id}")"
+                                        Name="files[]"
+                                        Value="true"
+                                        HtmlValue="@file.Id" />
+                                </SiteListItem>
+                            }
+                        </SiteList>
+                        <SiteButton Variant="SiteButtonVariant.Default"
+                            Class="align-self-start"
+                            Type="SiteButtonType.Submit"><SiteIcon Name="file-archive"
+                                Size="14" />@(L["legacy_c4a51e466e7a"])</SiteButton>
+                    </SiteFilterCard>
+                    <SiteText Variant="SiteTextVariant.Meta">@(L["legacy_e20ab2cd7d4f"])</SiteText>
+                    @if (Snippet.ShowHistory)
+                    {
+                        <SiteText Variant="SiteTextVariant.Meta">@(L["legacy_cba31b016083"])</SiteText>
+                    }
+                    @foreach (var file in Snippet.Files)
+                    {
+                        <SiteStack Gap="SiteSpace.None"
+                            Class="snippet-file-panel"
+                            id="@($"file-{SafeId(file.Path)}")"
+                            data-file-panel
+                            data-file-id="@file.Id"
+                            hidden="@(ActiveFile?.Id == file.Id ? null : "hidden")">
+                            <SiteStack Gap="SiteSpace.None"
+                                Class="snippet-file-header"><SiteText Variant="SiteTextVariant.Meta"
+                                    Class="snippet-file-path">@file.Path</SiteText>
+                                    </SiteStack>
+                            <pre>
+                                <code>@file.Content</code>
+                            </pre>
+                            @if (Snippet.ShowHistory && ActiveFile?.Id == file.Id && file.History is { Count: > 0 })
+                            {
+                                <ContentHistory ShowHistory="true"
+                                    History="@file.History"
+                                    DiffField="content"
+                                    PreserveQueryName="file"
+                                    PreserveQueryValue="@ActiveFileId" />
+                            }
+                        </SiteStack>
+                    }
+                </SiteGridColumn>
+            </SiteGrid>
+        }
+
+        @if (!string.IsNullOrWhiteSpace(Snippet.Description))
+        {
+            <ContentActions Title="@Snippet.Title"
+                Url="@CanonicalPath"
+                Body="@Snippet.Description" />
+        }
+        <ContentHistory ShowHistory="@(Snippet.ShowHistory)"
+            History="@Snippet.History"
+            DiffFields="@SnippetHistoryFields" />
+        <ContentRelations CurrentUrl="@CanonicalPath" />
+        <RelatedContent Items="@Snippet.Related" />
+    }
+</SitePage>
+
+@code {
+    [Parameter]
+    public string Slug { get; set; } = string.Empty;
+    private PublicSnippet? Snippet => Snapshot?.Snippets.FirstOrDefault(item => PublicRouteKey.Matches(item.Url, item.Slug, Slug));
+    private string Title => Snippet?.Title ?? Slug;
+    private string Description => Snippet?.Description ?? NotFoundDescription;
+    private string CanonicalPath => Snippet?.Url ?? RequestPath;
+    private string LoadingLabel => L["legacy_140e4632c54b"];
+    private string FileCount => L["count_files", Snippet?.Files?.Count ?? 0];
+    private string FilesLabel => L["legacy_18a94588a50e"];
+    private string EmptyLabel => L["legacy_d2a544d7a50f"];
+    private string NotFoundLabel => L["legacy_2f77a758b681"];
+    private string NotFoundDescription => L["legacy_3b8af3970aa7"];
+    private string BackLabel => L["legacy_9788633fccc2"];
+    private string IndexUrl => LocalizedPath("snippets");
+    private string DownloadUrl => $"{IndexUrl}/{Snippet?.Slug ?? Slug}/download";
+    private string? ActiveFileId => QueryValue("file");
+    private PublicSnippetFile? ActiveFile => Snippet?.Files?.FirstOrDefault(file => file.Id == ActiveFileId) ?? Snippet?.Files?.FirstOrDefault();
+    private IReadOnlyList<BreadcrumbLink> BreadcrumbLinks => [new("snippets", IndexUrl)];
+    private IReadOnlyList<string> SnippetHistoryFields => ["title", "description"];
+
+
+    private string SafeId(string path) => string.Concat(path.Select(character => char.IsLetterOrDigit(character) ? character : '-'));
+    private string FileAnchor(PublicSnippetFile file) => string.IsNullOrWhiteSpace(file.Id) ? $"#file-{SafeId(file.Path)}" : $"?file={Uri.EscapeDataString(file.Id)}#file-{SafeId(file.Path)}";
+    private string? QueryValue(string name) => new Uri(Navigation.Uri).Query.TrimStart('?').Split('&', StringSplitOptions.RemoveEmptyEntries).Select(value => value.Split('=', 2)).Where(parts => parts.Length == 2 && Uri.UnescapeDataString(parts[0]).Equals(name, StringComparison.OrdinalIgnoreCase)).Select(parts => Uri.UnescapeDataString(parts[1])).FirstOrDefault();
+    private string LocalizedPath(string path) => path.Equals("home", StringComparison.OrdinalIgnoreCase) ? (L["legacy_0607643fd42c"]) : (LocalizedUrls.Current($"/{path}"));
+}

@@ -1,0 +1,89 @@
+@inherits LocalizedComponentBase
+@page "/tools/query-string-parser"
+@page "/pt-BR/tools/query-string-parser"
+@using Portfolio.Blazor.Core
+
+<ToolPage Title="@Title" Description="@Description" CanonicalPath="@CanonicalPath">
+    <SiteToolForm Action="@Action" SubmitLabel="@ParseLabel" AriaLabel="@ParseLabel">
+        <SiteFormField For="query-input"
+            Label="@ParseLabel"><SiteTextAreaInput Id="query-input"
+                Name="query"
+                Rows="3"
+                placeholder="https://example.com/path?foo=bar&baz=qux"
+                Value="@ParseInput"
+                ValueChanged="@(v => ParseInput = v)" /></SiteFormField>
+    </SiteToolForm>
+    <SiteLiveRegion Politeness="SiteLivePoliteness.Polite">
+        <SiteCard Class="site-block">
+            <SiteHeading Level="2" Id="parsed-heading">@ParseLabel</SiteHeading>
+                <SiteList>@foreach (var parameter in Parsed.Parameters) { <SiteListItem Class="list-group-item site-list-row tool-list-item">
+                    <SiteText Variant="SiteTextVariant.Meta"
+                        Class="tool-list-value">@parameter.Key</SiteText>
+                        <SiteText Variant="SiteTextVariant.Meta">@parameter.Value</SiteText>
+                    </SiteListItem> }</SiteList>
+        </SiteCard>
+    </SiteLiveRegion>
+    @if (RendererInfo.IsInteractive)
+    {
+        <SiteCard Class="site-block">
+            <SiteHeading Level="2"
+                Id="build-heading">@BuildLabel</SiteHeading>@foreach (var row in Rows) { <SiteInline Class="tool-output-row">
+                <SiteInput placeholder="@KeyPlaceholder"
+                    Value="@row.Key"
+                    OnInput="eventArgs => UpdateKey(row, eventArgs)" />
+                <SiteInput placeholder="@ValuePlaceholder"
+                    Value="@row.Value"
+                    OnInput="eventArgs => UpdateValue(row, eventArgs)" />
+                <SiteButton Variant="SiteButtonVariant.Default"
+                    @onclick="() => RemoveRow(row)"
+                    Disabled="@(Rows.Count == 1)">
+                    <SiteIcon Name="trash-2" Size="14" />@RemoveLabel</SiteButton>
+                </SiteInline> }<SiteFormActions>
+                    <SiteButton Variant="SiteButtonVariant.Default" @onclick="AddRow">
+                        <SiteIcon Name="plus" Size="14" />@AddLabel</SiteButton>
+                    </SiteFormActions>
+            <SiteFormField For="query-output"
+                Label="@OutputLabel"><SiteTextAreaInput Id="query-output"
+                    readonly
+                    Rows="3"
+                    Value="@BuiltQuery" />
+                </SiteFormField>
+        </SiteCard>
+    }
+</ToolPage>
+
+@code {
+    private string CanonicalPath => RequestPath;
+    private string _parseInput = "https://example.com/path?foo=bar&baz=qux";
+    private bool _queryInitialized;
+    private List<QueryParameterRow> _rows = [new()];
+    private QueryStringParseResult _parsed = QueryStringTools.Parse("https://example.com/path?foo=bar&baz=qux");
+    [SupplyParameterFromQuery(Name = "query")]
+    private string? Query { get; set; }
+    private string Action => L["legacy_5e4145127e27"];
+    private string Title => L["legacy_684ac6d61c44"];
+    private string Description => L["legacy_e3363c44144d"];
+    private string ParseLabel => L["legacy_1922ada5500a"];
+    private string BuildLabel => L["legacy_488880914467"];
+    private string OutputLabel => L["legacy_62f929d726c5"];
+    private string KeyPlaceholder => L["legacy_5fd1ae1806c0"];
+    private string ValuePlaceholder => L["legacy_30206ddec692"];
+    private string AddLabel => L["legacy_06a54336a405"];
+    private string RemoveLabel => L["legacy_3821b4e4a602"];
+    private string ParseInput { get => _parseInput; set { _parseInput = value; _parsed = QueryStringTools.Parse(value); } }
+    private QueryStringParseResult Parsed => _parsed;
+    private IReadOnlyList<QueryParameterRow> Rows => _rows;
+    private string BuiltQuery => QueryStringTools.Build(_rows.Select(row => new QueryParameter(row.Key, row.Value)));
+    protected override void OnParametersSet() { if (_queryInitialized) return; _parseInput = Query ?? _parseInput; _parsed = QueryStringTools.Parse(_parseInput); _queryInitialized = true; }
+    private void AddRow() => _rows.Add(new());
+    private void RemoveRow(QueryParameterRow row) { if (_rows.Count > 1) _rows.Remove(row); }
+    private void UpdateKey(
+        QueryParameterRow row,
+        ChangeEventArgs args
+    ) { row.Key = args.Value?.ToString() ?? ""; }
+    private void UpdateValue(
+        QueryParameterRow row,
+        ChangeEventArgs args
+    ) { row.Value = args.Value?.ToString() ?? ""; }
+    private sealed class QueryParameterRow { public string Key { get; set; } = ""; public string Value { get; set; } = ""; }
+}

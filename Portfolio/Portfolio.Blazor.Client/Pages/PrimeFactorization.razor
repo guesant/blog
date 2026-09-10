@@ -1,0 +1,76 @@
+@inherits LocalizedComponentBase
+@implements IDisposable
+@page "/tools/prime-factorization"
+@page "/pt-BR/tools/prime-factorization"
+@using System.Globalization
+@using Portfolio.Blazor.Core
+
+<ToolPage Title="@Title" Description="@Description" CanonicalPath="@CanonicalPath">
+    <SiteToolForm Action="@Action"
+        SubmitLabel="@SubmitLabel"
+        Submit="SiteToolFormSubmit.StaticOnly"
+        OnSubmit="HandleSubmit"
+        AriaLabel="@InputLabel">
+        <SiteFormField Label="@NumberLabel" For="prime-factorization-number">
+            <SiteInput Id="prime-factorization-number"
+                Name="number"
+                Type="number"
+                min="-1000000000000"
+                max="1000000000000"
+                Value="@NumberText"
+                ValueChanged="@(v => NumberText = v)" />
+        </SiteFormField>
+    </SiteToolForm>
+
+    <SiteLiveRegion Politeness="SiteLivePoliteness.Polite">
+        @if (!Result.IsValid)
+        {
+            <SiteErrorMessage>@ErrorLabel</SiteErrorMessage>
+        }
+        else
+        {
+            <SiteCard Class="site-block" Label="@ResultLabel">
+                <SiteText Variant="SiteTextVariant.Body">
+                    <code>@Result.Number</code> = @string.Join(" × ", Result.Factors)</SiteText>
+            </SiteCard>
+        }
+    </SiteLiveRegion>
+</ToolPage>
+
+@code {
+    private string CanonicalPath => RequestPath;
+    private string _numberText = "360";
+    private PrimeFactorizationResult _result = PrimeFactorizationCalculator.Factor(360);
+    private bool _queryInitialized;
+    private readonly Debouncer _debouncer = new(TimeSpan.FromMilliseconds(300));
+
+    [SupplyParameterFromQuery(Name = "number")]
+    private string? QueryNumber { get; set; }
+    private string Action => L["legacy_991937e77d7a"];
+    private string Title => L["legacy_3c454b737d29"];
+    private string Description => L["legacy_15b2b6bad208"];
+    private string InputLabel => L["legacy_b831d42d15e4"];
+    private string NumberLabel => L["legacy_4bc3227bbd62"];
+    private string ResultLabel => L["legacy_efd3359baf4d"];
+    private string SubmitLabel => L["legacy_d3b5a92ba5e4"];
+    private string ErrorLabel => Result.Error == PrimeFactorizationError.LimitExceeded
+        ? (L["legacy_6d113ce3f155"])
+        : (L["legacy_595e16b252fd"]);
+    private string NumberText { get => _numberText; set { _numberText = value; _debouncer.Trigger(() => { Recalculate(); StateHasChanged(); }); } }
+    private PrimeFactorizationResult Result => _result;
+
+    protected override void OnParametersSet()
+    {
+        if (!_queryInitialized)
+        {
+            _numberText = QueryNumber ?? _numberText;
+            Recalculate();
+            _queryInitialized = true;
+        }
+    }
+
+    private void HandleSubmit() => Recalculate();
+    private void Recalculate() => _result = PrimeFactorizationCalculator.Factor(Parse(_numberText));
+    private static long Parse(string value) => long.TryParse(value, NumberStyles.Integer, CultureInfo.InvariantCulture, out var result) ? result : 0;
+    public void Dispose() => _debouncer.Dispose();
+}

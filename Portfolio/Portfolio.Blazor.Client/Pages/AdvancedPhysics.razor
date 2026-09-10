@@ -1,0 +1,175 @@
+@inherits LocalizedComponentBase
+@implements IDisposable
+@page "/tools/projectile-motion"
+@page "/pt-BR/tools/projectile-motion"
+@page "/tools/circular-motion"
+@page "/pt-BR/tools/circular-motion"
+@using System.Globalization
+@using Portfolio.Blazor.Core
+
+<ToolPage Title="@Title" Description="@Description" CanonicalPath="@CanonicalPath">
+    <SiteToolForm Action="@Action"
+        SubmitLabel="@SubmitLabel"
+        Submit="SiteToolFormSubmit.StaticOnly"
+        OnSubmit="Calculate">
+        @if (IsProjectile)
+        {
+            <SiteFormField Label="@SpeedLabel"
+                For="projectile-speed"><SiteInput Id="projectile-speed"
+                    Name="speed"
+                    Type="number"
+                    min="0"
+                    step="any"
+                    Value="@SpeedText"
+                    ValueChanged="@(v => SpeedText = v)" /></SiteFormField>
+            <SiteFormField Label="@AngleLabel"
+                For="projectile-angle"><SiteInput Id="projectile-angle"
+                    Name="angle"
+                    Type="number"
+                    min="0"
+                    max="90"
+                    step="any"
+                    Value="@AngleText"
+                    ValueChanged="@(v => AngleText = v)" /></SiteFormField>
+            <SiteFormField Label="@GravityLabel"
+                For="projectile-gravity"><SiteInput Id="projectile-gravity"
+                    Name="gravity"
+                    Type="number"
+                    min="0"
+                    step="any"
+                    Value="@GravityText"
+                    ValueChanged="@(v => GravityText = v)" /></SiteFormField>
+        }
+        else
+        {
+            <SiteFormField Label="@RadiusLabel"
+                For="circular-radius"><SiteInput Id="circular-radius"
+                    Name="radius"
+                    Type="number"
+                    min="0"
+                    step="any"
+                    Value="@RadiusText"
+                    ValueChanged="@(v => RadiusText = v)" /></SiteFormField>
+            <SiteFormField Label="@SpeedLabel"
+                For="circular-speed"><SiteInput Id="circular-speed"
+                    Name="speed"
+                    Type="number"
+                    min="0"
+                    step="any"
+                    Value="@CircularSpeedText"
+                    ValueChanged="@(v => CircularSpeedText = v)" /></SiteFormField>
+            <SiteFormField Label="@MassLabel"
+                For="circular-mass"><SiteInput Id="circular-mass"
+                    Name="mass"
+                    Type="number"
+                    min="0"
+                    step="any"
+                    Value="@MassText"
+                    ValueChanged="@(v => MassText = v)" /></SiteFormField>
+        }
+    </SiteToolForm>
+    @if (!ResultIsValid) { <SiteErrorMessage>@ErrorLabel</SiteErrorMessage> }
+    else if (IsProjectile)
+    {
+        <SiteLiveRegion Politeness="SiteLivePoliteness.Polite">
+            <SiteStats>
+                <SiteStatItem Label="@RangeLabel">@Format(Projectile.Range) m</SiteStatItem>
+                    <SiteStatItem Label="@HeightLabel">@Format(Projectile.MaximumHeight) m</SiteStatItem>
+                        <SiteStatItem Label="@FlightLabel">@Format(Projectile.FlightTime) s</SiteStatItem>
+                    </SiteStats>
+            @if (RendererInfo.IsInteractive) { <SiteChart ChartJsConfig="@TrajectoryConfig"
+                AriaLabel="@TrajectoryLabel" /> } else { <SiteList Variant="SiteListVariant.Boxed"
+                    AriaLabel="@TrajectoryLabel">@foreach (var point in Projectile.Trajectory.Take(12)) { <SiteListItem Class="site-text-list-item">@Format(point.X) m, @Format(point.Y) m</SiteListItem> }</SiteList> }
+        </SiteLiveRegion>
+    }
+    else
+    {
+        <SiteLiveRegion Politeness="SiteLivePoliteness.Polite">
+            <SiteStats>
+                <SiteStatItem Label="@AngularLabel">@Format(Circular.AngularVelocity) rad/s</SiteStatItem>
+                    <SiteStatItem Label="@PeriodLabel">@Format(Circular.Period) s</SiteStatItem>
+                        <SiteStatItem Label="@AccelerationLabel">@Format(Circular.CentripetalAcceleration) m/s²</SiteStatItem>@if (Circular.Force is not null) { <SiteStatItem Label="@ForceLabel">@Format(Circular.Force.Value) N</SiteStatItem> }</SiteStats>
+        </SiteLiveRegion>
+    }
+</ToolPage>
+
+@code {
+    private string CanonicalPath => RequestPath;
+    private string _speedText = "20", _angleText = "45", _gravityText = "9.80665", _radiusText = "2", _circularSpeedText = "4", _massText = "3";
+    private ProjectileResult _projectile = PhysicsCalculator.Projectile(20, 45);
+    private CircularMotionResult _circular = PhysicsCalculator.CircularMotion(2, 4, 3);
+    private bool _queryInitialized;
+    [SupplyParameterFromQuery(Name = "speed")]
+    private string? QuerySpeed { get; set; }
+    [SupplyParameterFromQuery(Name = "angle")]
+    private string? QueryAngle { get; set; }
+    [SupplyParameterFromQuery(Name = "gravity")]
+    private string? QueryGravity { get; set; }
+    [SupplyParameterFromQuery(Name = "radius")]
+    private string? QueryRadius { get; set; }
+    [SupplyParameterFromQuery(Name = "mass")]
+    private string? QueryMass { get; set; }
+    private bool IsProjectile => Navigation.Uri.Contains(
+        "projectile-motion",
+        StringComparison.OrdinalIgnoreCase
+    );
+    private string Action => LocalizedUrls.Current($"/tools/{(IsProjectile ? "projectile-motion" : "circular-motion")}");
+    private string Title => IsProjectile ? (L["legacy_68492f3e193f"]) : (L["legacy_7267e359a033"]);
+    private string Description => IsProjectile ? (L["legacy_e6a71ee537a7"]) : (L["legacy_4dbf3a0a5da1"]);
+    private string InputLabel => L["legacy_5b6220fefc5c"];
+    private string SpeedLabel => L["legacy_d0a57448000f"];
+    private string AngleLabel => L["legacy_4579fb011bff"];
+    private string GravityLabel => L["legacy_e96205651caf"];
+    private string RadiusLabel => L["legacy_9d2a70ea99bd"];
+    private string MassLabel => L["legacy_3d20f927558a"];
+    private string SubmitLabel => L["legacy_37565a968d31"];
+    private string ErrorLabel => L["legacy_587a6f4aea8e"];
+    private string RangeLabel => L["legacy_4ba8b2a0e6ed"];
+    private string HeightLabel => L["legacy_29efc6917bd6"];
+    private string FlightLabel => L["legacy_ef68f89da814"];
+    private string TrajectoryLabel => L["legacy_f2cac35ef942"];
+    private string AngularLabel => L["legacy_cd822757b03d"];
+    private string PeriodLabel => L["legacy_005bbc980509"];
+    private string AccelerationLabel => L["legacy_62c15cbb8194"];
+    private string ForceLabel => L["legacy_329f6c120c6e"];
+    private readonly Debouncer _debouncer = new(TimeSpan.FromMilliseconds(300));
+    private string SpeedText { get => _speedText; set { _speedText = value; _debouncer.Trigger(() => { Recalculate(); StateHasChanged(); }); } }
+    private string AngleText { get => _angleText; set { _angleText = value; _debouncer.Trigger(() => { Recalculate(); StateHasChanged(); }); } }
+    private string GravityText { get => _gravityText; set { _gravityText = value; _debouncer.Trigger(() => { Recalculate(); StateHasChanged(); }); } }
+    private string RadiusText { get => _radiusText; set { _radiusText = value; _debouncer.Trigger(() => { Recalculate(); StateHasChanged(); }); } }
+    private string CircularSpeedText { get => _circularSpeedText; set { _circularSpeedText = value; _debouncer.Trigger(() => { Recalculate(); StateHasChanged(); }); } }
+    private string MassText { get => _massText; set { _massText = value; _debouncer.Trigger(() => { Recalculate(); StateHasChanged(); }); } }
+    private ProjectileResult Projectile => _projectile;
+    private CircularMotionResult Circular => _circular;
+    private bool ResultIsValid => IsProjectile ? Projectile.IsValid : Circular.IsValid;
+    private SiteChartConfig TrajectoryConfig => new() { Type = SiteChartType.Line, Data = new SiteChartData { Labels = Projectile.Trajectory.Select(point => Format(point.X)).ToList(), Datasets = [new SiteLineDataset { Label = TrajectoryLabel, Data = Projectile.Trajectory.Select(point => (object)point.Y).ToList() }] } };
+    protected override void OnParametersSet()
+    {
+        if (_queryInitialized) return;
+        _speedText = QuerySpeed ?? _speedText;
+        _angleText = QueryAngle ?? _angleText;
+        _gravityText = QueryGravity ?? _gravityText;
+        _radiusText = QueryRadius ?? _radiusText;
+        _massText = QueryMass ?? _massText;
+        Recalculate();
+        _queryInitialized = true;
+    }
+    private void Calculate() => Recalculate();
+    private void Recalculate()
+    {
+        _projectile = PhysicsCalculator.Projectile(
+            Parse(_speedText),
+            Parse(_angleText),
+            Parse(_gravityText)
+        );
+        _circular = PhysicsCalculator.CircularMotion(
+            Parse(_radiusText),
+            Parse(_circularSpeedText),
+            ParseNullable(_massText)
+        );
+    }
+    private static double Parse(string value) => double.TryParse(value, NumberStyles.Float, CultureInfo.InvariantCulture, out var result) ? result : double.NaN;
+    private static double? ParseNullable(string value) => double.TryParse(value, NumberStyles.Float, CultureInfo.InvariantCulture, out var result) ? result : null;
+    private static string Format(double value) => double.IsFinite(value) ? value.ToString("G8", CultureInfo.InvariantCulture) : "∞";
+    public void Dispose() => _debouncer.Dispose();
+}

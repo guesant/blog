@@ -1,0 +1,7 @@
+id: no-unknown-parameter-type-ts
+valid:
+  - |-
+      function normalize(value: string) { return value.trim(); }
+invalid:
+  - |-
+      function normalize(value: unknown) { return String(value); }

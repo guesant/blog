@@ -1,0 +1,98 @@
+@page "/admin/topics"
+@page "/admin/topics/order"
+@inherits AdminListPageBase<Topic>
+@layout AdminLayout
+
+<PageTitle>Topics</PageTitle>
+
+@if (IsOrderMode)
+{
+    <AdminOrderEditor TItem="Topic"
+        Title="Topics order"
+        ListRoute="/admin/topics"
+        Items="@Items"
+        DisplayTitle="@DisplayTitle"
+        IsLoading="@IsLoading"
+        IsSaving="@IsSaving"
+        Error="@Error"
+        OnReordered="HandleReorder"
+        OnSave="@(() => HandleSaveOrderAsync("/admin/topics"))" />
+}
+else
+{
+    <SitePageHeader Title="Topics">
+        <Actions>
+            <SiteInline Gap="SiteSpace.Sm">
+                <SiteLink Variant="SiteButtonVariant.Outline" Href="/admin/topics/order">
+                    <SiteIcon Name="arrow-up-down" Size="14" />Edit order</SiteLink>
+                <SiteLink Variant="SiteButtonVariant.Default" Href="/admin/topics/create">
+                    <SiteIcon Name="plus" Size="14" />New topic</SiteLink>
+            </SiteInline>
+        </Actions>
+    </SitePageHeader>
+
+    @if (Error is not null)
+    {
+        <SiteNotice Tone="SiteTone.Danger">@Error</SiteNotice>
+    }
+
+    @if (IsLoading)
+    {
+        <SiteLoading Label="Loading…" />
+    }
+    else
+    {
+        <SiteDataTable TItem="Topic"
+            Items="@PageItems"
+            EmptyText="No topics yet."
+            RowKey="@(topic => topic.Id)">
+            <Columns>
+                <SiteColumn TItem="Topic" Header="Name" IsRowHeader="true">
+                    <Cell Context="topic">@DisplayTitle(topic)</Cell>
+                </SiteColumn>
+                <SiteColumn TItem="Topic" Header="Slug">
+                    <Cell Context="topic">@topic.Slug</Cell>
+                </SiteColumn>
+                <SiteColumn TItem="Topic" Header="Kind">
+                    <Cell Context="topic">@topic.Kind</Cell>
+                </SiteColumn>
+            </Columns>
+            <Actions Context="topic">
+                <SiteInline Gap="SiteSpace.Sm">
+                    <SiteLink Variant="SiteButtonVariant.Outline"
+                        Href="@($"/admin/topics/{topic.Id}")">
+                        <SiteIcon Name="pencil" Size="14" />Edit</SiteLink>
+                    <SiteButton Variant="SiteButtonVariant.Destructive"
+                        @onclick="@(() => HandleDeleteAsync(topic))"><SiteIcon Name="trash-2"
+                            Size="14" />Delete</SiteButton>
+                </SiteInline>
+            </Actions>
+        </SiteDataTable>
+        <SitePagination CurrentPage="@CurrentPage" TotalPages="@TotalPages" Href="@PageUrl" />
+    }
+}
+
+@code {
+    protected override string EntityLabel => "topic";
+
+    protected override void SetOrder(Topic entity, int order) => entity.Order = order;
+
+    protected override async Task<List<Topic>> LoadEntitiesAsync(PortfolioAdminDbContext dbContext) =>
+        await dbContext.Topics
+            .Include(topic => topic.Translations)
+            .AsNoTracking()
+            .OrderBy(topic => topic.Order)
+            .ToListAsync();
+
+    protected override Task<Topic?> FindTrackedAsync(PortfolioAdminDbContext dbContext, int id) =>
+        dbContext.Topics.FirstOrDefaultAsync(candidate => candidate.Id == id);
+
+    protected override string DisplayTitle(Topic topic) =>
+        TranslationLookup.Resolve(topic.Translations, translation => translation.Locale, translation => translation.Name, "en")
+        ?? topic.Slug;
+
+    protected override int GetId(Topic topic) => topic.Id;
+
+    protected override string DeleteConfirmDescription(Topic entity) =>
+        "This permanently removes the topic and its translations. This cannot be undone.";
+}

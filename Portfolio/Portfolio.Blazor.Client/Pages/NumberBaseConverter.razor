@@ -1,0 +1,95 @@
+@inherits LocalizedComponentBase
+@page "/tools/number-base-converter"
+@page "/pt-BR/tools/number-base-converter"
+@using Portfolio.Blazor.Core
+
+<ToolPage Title="@Title" Description="@Description" CanonicalPath="@CanonicalPath">
+    <SiteToolForm Action="@Action" SubmitLabel="@SubmitLabel">
+        <SiteFormField For="number-base-value"
+            Label="@InputLabel"><SiteTextInput Id="number-base-value"
+                Name="value"
+                Value="@Value"
+                ValueChanged="@(v => Value = v)"
+                Placeholder="255, 0xff, 0o377, 0b11111111"
+                AutoComplete="false" /></SiteFormField>
+        @if (RendererInfo.IsInteractive)
+        {
+            <SiteFieldSet Legend="@BaseLabel">
+                <SiteButtonGroup AriaLabel="@BaseLabel">
+                @foreach (var option in BaseOptions) { <SiteButton Variant="@(SelectedBase == option.Value ? SiteButtonVariant.Default : SiteButtonVariant.Secondary)"
+                    OnClick="() => SelectBase(option.Value)"
+                    aria-pressed="@(SelectedBase == option.Value)">@option.Label</SiteButton> }
+            </SiteButtonGroup>
+            </SiteFieldSet>
+        }
+        else
+        {
+            <SiteFormField For="number-base-select" Label="@BaseLabel">
+                <SiteNativeSelect Id="number-base-select" Name="base">
+                @foreach (var option in BaseOptions) { <option value="@option.Value"
+                    selected="@(SelectedBase == option.Value)">@option.Label</option> }
+            </SiteNativeSelect>
+            </SiteFormField>
+        }
+    </SiteToolForm>
+    <SiteLiveRegion Politeness="SiteLivePoliteness.Polite">
+        @if (!Result.IsValid) { <SiteErrorMessage>@ErrorLabel</SiteErrorMessage> }
+        else
+        {
+            <SiteCard Class="site-block" Label="@ResultLabel">
+                <SiteStack Class="tool-results">
+                @foreach (var output in Outputs)
+                {
+                    <SiteOutputField Id="@output.Id"
+                        Label="@output.Label"
+                        Value="@output.Value"
+                        Copyable="@(!string.IsNullOrEmpty(output.Value))"
+                        CopyLabel="@CopyLabel" />
+                }
+            </SiteStack>
+            </SiteCard>
+        }
+    </SiteLiveRegion>
+</ToolPage>
+
+@code {
+    private string CanonicalPath => RequestPath;
+    private string _value = "255";
+    private int _selectedBase;
+    private NumberBaseConversionResult _result = NumberBaseConversionCalculator.Convert("255", 0);
+    private bool _queryInitialized;
+    [SupplyParameterFromQuery(Name = "value")]
+    private string? QueryValue { get; set; }
+    [SupplyParameterFromQuery(Name = "base")]
+    private int? QueryBase { get; set; }
+    private string Action => L["legacy_01570c7c3e35"];
+    private string Title => L["legacy_4d67bbd8d9f3"];
+    private string Description => L["legacy_4b9d3bbe1443"];
+    private string InputLabel => L["legacy_b831d42d15e4"];
+    private string BaseLabel => "base";
+    private string ResultLabel => L["legacy_2f0452494fcb"];
+    private string SubmitLabel => L["legacy_ae125407093e"];
+    private string CopyLabel => L["legacy_a3b71416a5f3"];
+    private string ErrorLabel => L["legacy_43f55e54b620"];
+    private IReadOnlyList<(
+        int Value,
+        string Label
+    )> BaseOptions => [(0, L["base_auto"]), (2, L["base_binary"]), (8, L["base_octal"]), (10, L["base_decimal"]), (16, L["base_hexadecimal"])];
+    private int SelectedBase { get => _selectedBase; set { _selectedBase = value; Recalculate(); } }
+    private string Value { get => _value; set { _value = value; Recalculate(); } }
+    private NumberBaseConversionResult Result => _result;
+    private IEnumerable<(
+        string Id,
+        string Label,
+        string Value
+    )> Outputs => [("number-base-binary", L["legacy_259a815454af"], Result.Binary), ("number-base-octal", "octal", Result.Octal), ("number-base-decimal", "decimal", Result.Decimal), ("number-base-hexadecimal", "hexadecimal", Result.Hexadecimal)];
+    protected override void OnParametersSet()
+    {
+        if (_queryInitialized) return;
+        _value = QueryValue ?? _value;
+        if (QueryBase is 0 or 2 or 8 or 10 or 16) _selectedBase = QueryBase.Value;
+        Recalculate(); _queryInitialized = true;
+    }
+    private void SelectBase(int value) => SelectedBase = value;
+    private void Recalculate() => _result = NumberBaseConversionCalculator.Convert(_value, _selectedBase);
+}

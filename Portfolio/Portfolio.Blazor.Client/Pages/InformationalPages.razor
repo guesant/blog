@@ -1,0 +1,427 @@
+@inherits ContentPageBase
+@page "/about"
+@page "/pt-BR/about"
+@page "/portfolio"
+@page "/pt-BR/portfolio"
+@page "/now"
+@page "/pt-BR/now"
+@page "/license"
+@page "/pt-BR/license"
+@page "/follow"
+@page "/pt-BR/follow"
+@using Microsoft.AspNetCore.Components
+@using System.Text.Json
+@using System.Globalization
+@using Portfolio.Blazor.Core
+
+<PageTitle>@Title</PageTitle>
+<SeoHead Title="@Title" Description="@Description" CanonicalPath="@CanonicalPath" />
+
+<SitePage Template="@Kind.ToString().ToLowerInvariant()">
+    <SiteBreadcrumb HomeUrl="@(L["legacy_0607643fd42c"])"
+        HomeLabel="@(L["legacy_ddc150008e2f"])"
+        CurrentLabel="@Title" />
+    @if (Kind == PageKind.Portfolio)
+    {
+        <SiteHero Title="@(Snapshot?.Chrome.Profile?.Name ?? "guesant.net")"
+            Lead="@Field("heroExperience", Description)"
+            BackHref="@(L["legacy_0607643fd42c"])"
+            BackLabel="@(L["legacy_ddc150008e2f"])">
+            <ChildContent>
+                @if (!string.IsNullOrWhiteSpace(Field("heroCurrentFocus"))) { <SiteText>@Field("heroCurrentFocus")</SiteText> }
+                <SiteFormActions>
+                    @if (!string.IsNullOrWhiteSpace(PortfolioWorkTarget)) { <SiteLink Variant="SiteButtonVariant.Default"
+                        Href="@PortfolioWorkTarget"><SiteIcon Name="briefcase"
+                            Size="14" />@(L["legacy_6b9768b2376a"])</SiteLink> }
+                    <SiteLink Variant="SiteButtonVariant.Outline"
+                        Href="@LocalizedPath("about")"><SiteIcon Name="user"
+                            Size="14" />@(L["legacy_232fee6c4e06"])</SiteLink>
+                    <SiteLink Variant="SiteButtonVariant.Outline"
+                        Href="@LocalizedPath("resume")"><SiteIcon Name="file-user"
+                            Size="14" />@(L["legacy_f7556c68e40e"])</SiteLink>
+                </SiteFormActions>
+                @if (Snapshot?.Chrome.Site.ContactAvailable == true && !string.IsNullOrWhiteSpace(Field("availableLabel"))) { <AvailabilityIndicator Label="@Field("availableLabel")" /> }
+            </ChildContent>
+        </SiteHero>
+        @if (Snapshot is not null)
+        {
+            @if (Snapshot.FeaturedCases is { Count: > 0 })
+            {
+                <SiteSection Icon="briefcase" Id="work"
+                    Region="work"
+                    HeadingId="work-heading"
+                    Label="@Field("workEyebrow", L["legacy_94f205b8bbf6"])"
+                    Title="@Field("workTitle", L["legacy_3dc269cea284"])"
+                    Description="@Field("workDescription", L["legacy_f45020ee2810"])"
+                    ActionHref="@LocalizedPath("cases")"
+                    ActionLabel="@(L["legacy_d3df157d8d7c"])">
+                    <SiteGrid>
+                        @{ var caseNumber = 0; }
+                        @foreach (var item in Snapshot.FeaturedCases)
+                        {
+                            caseNumber++;
+                            <SiteGridColumn>
+                                <SiteClickableCard Icon="star" Label="@($"{(L["legacy_841e597ae3c0"])} {caseNumber:00} · {item.Meta ?? item.Status}")"
+                                    Class="h-100"
+                                    Href="@LocalizedUrl(item.Url)"
+                                    Title="@item.Title"
+                                    TitleClass="h5"
+                                    HeadingLevel="3">
+                                    @if (!string.IsNullOrWhiteSpace(item.Summary)) { <SiteText Variant="SiteTextVariant.Meta">@item.Summary</SiteText> }
+                                    @if (!string.IsNullOrWhiteSpace(item.Context) || !string.IsNullOrWhiteSpace(item.Role) || !string.IsNullOrWhiteSpace(item.Result))
+                                    {
+                                        <SiteKeyValueList Layout="SiteKeyValueLayout.Columns"
+                                            Class="small mb-3">
+                                            @if (!string.IsNullOrWhiteSpace(item.Context)) { <SiteKeyValueItem Icon="target"
+                                                Label="@(L["legacy_c6cf358abb20"])">@item.Context</SiteKeyValueItem> }
+                                            @if (!string.IsNullOrWhiteSpace(item.Role)) { <SiteKeyValueItem Icon="user"
+                                                Label="@(L["legacy_7bc2a8b13e9e"])">@item.Role</SiteKeyValueItem> }
+                                            @if (!string.IsNullOrWhiteSpace(item.Result)) { <SiteKeyValueItem Icon="trending-up"
+                                                Label="@(L["legacy_dfea58cad5c4"])">@item.Result</SiteKeyValueItem> }
+                                        </SiteKeyValueList>
+                                    }
+                                    @if (item.Technologies is { Count: > 0 }) { <SiteChipGroup Class="mb-3">@foreach (var technology in item.Technologies) { <SiteChip Label="@technology.Name" Href="@LocalizedPath($"technologies/{technology.Slug}")" /> }</SiteChipGroup> }
+                                    <SiteLink Variant="SiteButtonVariant.Outline"
+                                        Size="SiteButtonSize.Sm"
+                                        Href="@LocalizedUrl(item.Url)"><SiteIcon Name="book-open"
+                                            Size="14" />@(L["legacy_f1d3bdd6b48b"])</SiteLink>
+                                </SiteClickableCard>
+                            </SiteGridColumn>
+                        }
+                    </SiteGrid>
+                </SiteSection>
+            }
+            @if (Snapshot.FeaturedProjects is { Count: > 0 } || Snapshot.Experiments is { Count: > 0 })
+            {
+                <SiteSection Icon="folder-git-2" Id="projects"
+                    Region="projects"
+                    HeadingId="projects-heading"
+                    Label="@Field("projectsEyebrow", L["legacy_ce215081cab3"])"
+                    Title="@Field("projectsTitle", L["legacy_2c505faad45c"])"
+                    Description="@Field("projectsDescription", L["legacy_9cfc8dff64f5"])"
+                    ActionHref="@LocalizedPath("projects")"
+                    ActionLabel="@(L["legacy_825bf44525d5"])">
+                    <SiteGrid>
+                        @foreach (var item in Snapshot.FeaturedProjects ?? [])
+                        {
+                            <SiteGridColumn>
+                                <SiteClickableCard Icon="folder-git-2" Label="@($"project · {item.Status}")"
+                                    Class="h-100"
+                                    Href="@LocalizedUrl(item.Url)"
+                                    Title="@item.Name"
+                                    TitleClass="h5"
+                                    HeadingLevel="3">
+                                    @if (!string.IsNullOrWhiteSpace(item.Purpose)) { <SiteText Variant="SiteTextVariant.Meta">@item.Purpose</SiteText> }
+                                    @if (!string.IsNullOrWhiteSpace(item.Problem)) { <SiteText Variant="SiteTextVariant.Meta">@item.Problem</SiteText> }
+                                    @if (item.Technologies is { Count: > 0 }) { <SiteChipGroup>@foreach (var technology in item.Technologies) { <SiteChip Label="@technology.Name" Href="@LocalizedPath($"technologies/{technology.Slug}")" /> }</SiteChipGroup> }
+                                </SiteClickableCard>
+                            </SiteGridColumn>
+                        }
+                    </SiteGrid>
+                    @if (Snapshot.Experiments is { Count: > 0 } && !string.IsNullOrWhiteSpace(Field("experimentsSummary")))
+                    {
+                        <SiteText Variant="SiteTextVariant.Small">
+                            <SiteLink Variant="SiteButtonVariant.Outline"
+                                Href="@($"{LocalizedPath("projects")}#experiments")">
+                                <SiteIcon Name="flask-conical"
+                                    Size="14" />@Field("experimentsSummary").Replace("{count}", Snapshot.Experiments.Count.ToString())</SiteLink>
+                            </SiteText>
+                    }
+                </SiteSection>
+            }
+        }
+    }
+    else if (Kind == PageKind.About)
+    {
+        <SiteHero Title="@Field("title", L["legacy_232fee6c4e06"])"
+            Lead="@Field("lead", Description)"
+            BackHref="@(L["legacy_0607643fd42c"])"
+            BackLabel="@(L["legacy_ddc150008e2f"])">
+            <ChildContent>
+                @if (!string.IsNullOrWhiteSpace(Field("context"))) { <SiteText>@Field("context")</SiteText> }
+                @if (!string.IsNullOrWhiteSpace(Field("description"))) { <SiteText>@Field("description")</SiteText> }
+            </ChildContent>
+        </SiteHero>
+        @if (Snapshot?.Chrome.Profile is { } profile)
+        {
+            <SiteCard Icon="circle-user" Class="mb-4" Label="@(L["legacy_bda2b99b0c58"])">
+                <SiteHeading Level="3" Visual="5">@profile.Name</SiteHeading>
+                <SiteText Variant="SiteTextVariant.Meta">
+                    <SiteIcon Name="briefcase"
+                        Size="12" />@string.Join(" · ", new[] { profile.Title, profile.Location }.Where(value => !string.IsNullOrWhiteSpace(value)))</SiteText>
+                @if (!string.IsNullOrWhiteSpace(profile.BirthCity) || Age is not null) { <SiteText Variant="SiteTextVariant.Meta">@string.Join(" · ", new[] { Age is null ? null : L["years_old", Age.Value].Value, profile.BirthCity }.Where(value => !string.IsNullOrWhiteSpace(value)))</SiteText> }
+                @if (!string.IsNullOrWhiteSpace(profile.Interests)) { <SiteText Variant="SiteTextVariant.SectionLabel">
+                    <SiteIcon Name="heart" Size="12" />@(L["legacy_3623ae3856a2"])</SiteText>
+                        <SiteText Variant="SiteTextVariant.Meta">@profile.Interests</SiteText> }
+                @if (!string.IsNullOrWhiteSpace(profile.Learning)) { <SiteText Variant="SiteTextVariant.SectionLabel">
+                    <SiteIcon Name="lightbulb" Size="12" />@(L["legacy_b46391ae9f6b"])</SiteText>
+                        <SiteText Variant="SiteTextVariant.Meta">@profile.Learning</SiteText> }
+                @if (PersonalInterestLabels.Count > 0) { <SiteText Variant="SiteTextVariant.SectionLabel">
+                    <SiteIcon Name="star" Size="12" />@(L["legacy_cbc717a597aa"])</SiteText>
+                        <SiteList Class="list-group-flush"
+                            AriaLabel="@(L["legacy_cbc717a597aa"])">@foreach (var interest in PersonalInterestLabels) { <SiteListItem Class="list-group-item">@interest</SiteListItem> }</SiteList> }
+            </SiteCard>
+        }
+        @if (!string.IsNullOrWhiteSpace(Field("story")))
+        {
+            <SiteSection Icon="book-open"
+                Region="story"
+                HeadingId="about-story-heading"
+                Label="@Field("storyEyebrow")"
+                Title="@Field("storyTitle")">
+                <SiteRichText Html="@((MarkupString)MarkdownRenderer.ToHtml(Field("story")))" />
+            </SiteSection>
+        }
+        @if (HasNowEntries)
+        {
+            <SiteSection Icon="compass"
+                Id="now"
+                Region="now"
+                HeadingId="about-now-heading"
+                Label="@(L["legacy_66eeac914710"])"
+                Title="@(L["legacy_8cd1130e7c89"])">
+                <SiteStack Gap="SiteSpace.Md">
+                    @foreach (var entry in NowEntries)
+                    {
+                        var value = SlugField(NowSlug, entry.Key);
+                        if (!string.IsNullOrWhiteSpace(value))
+                        {
+                            <SiteCard>
+                                <SiteHeading Level="3" Visual="5">@entry.Label</SiteHeading>
+                                    <SiteText Variant="SiteTextVariant.Meta">@value</SiteText>
+                                </SiteCard>
+                        }
+                    }
+                </SiteStack>
+            </SiteSection>
+        }
+        @if (ProfileMilestones.Count > 0)
+        {
+            <SiteSection Icon="milestone" Region="milestones"
+                HeadingId="about-milestones-heading"
+                Label="@(L["legacy_8017d58f3148"])"
+                Title="@(L["legacy_2b2f367d39cb"])">
+                <SiteGrid>
+                    @foreach (var milestone in ProfileMilestones) { <SiteGridColumn>
+                        <SiteCard Icon="calendar" Label="@milestone.Year"
+                            Class="h-100"><SiteHeading Level="3"
+                                Visual="5">@milestone.Title</SiteHeading>@if (!string.IsNullOrWhiteSpace(milestone.Description)) { <SiteText Variant="SiteTextVariant.Meta">@milestone.Description</SiteText> }</SiteCard>
+                    </SiteGridColumn> }
+                </SiteGrid>
+            </SiteSection>
+        }
+        <ExploreSection HeadingId="about-explore-heading" />
+    }
+    else if (Kind == PageKind.License)
+    {
+        <SiteHero Title="@Field("title", L["legacy_b820b3234c82"])"
+            Lead="@Description"
+            BackHref="@(L["legacy_0607643fd42c"])"
+            BackLabel="@(L["legacy_ddc150008e2f"])" />
+        <SiteSection Region="license"
+            HeadingId="license-heading"
+            Label="@Field("section_label", L["legacy_2cfb4fecc6f5"])"
+            Title="@Field("section_title", L["legacy_793466b375d6"])">
+            <SiteGrid>
+                @foreach (var item in LicenseEntries) { <SiteGridColumn>
+                    <SiteCard Class="h-100">
+                        <SiteHeading Level="3"
+                            Visual="5">@Field(item.Heading, item.FallbackHeading)</SiteHeading>
+                            <SiteText Variant="SiteTextVariant.Meta">@Field(item.Body, item.FallbackBody)</SiteText>
+                        </SiteCard>
+                </SiteGridColumn> }
+            </SiteGrid>
+        </SiteSection>
+        <SiteText>@Field("contact", L["legacy_c445d2e3965f"])</SiteText>
+        <ContactChannels Profiles="@(Snapshot?.Chrome.Site.ContactProfiles ?? [])"
+            EmailChallenge="@Snapshot?.Chrome.Site.ProtectedEmail"
+            EmailAvailable="@(Snapshot?.Chrome.Site.ContactAvailable == true)" />
+    }
+    else
+    {
+        <SiteHero Title="@Field("title", L["legacy_efc6c5d00b30"])"
+            Lead="@Description"
+            BackHref="@(L["legacy_0607643fd42c"])"
+            BackLabel="@(L["legacy_ddc150008e2f"])" />
+        <SiteSection Region="follow"
+            HeadingId="follow-heading"
+            Label="@(L["legacy_ed4d47deeecb"])"
+            Title="@(L["legacy_54d4fe5cc672"])">
+            <SiteGrid>
+                @foreach (var item in FollowEntries)
+                {
+                    <SiteGridColumn>
+                        @if (string.IsNullOrWhiteSpace(item.Url))
+                        {
+                            <SiteCard Class="h-100">
+                                <SiteHeading Level="3"
+                                    Visual="5">@Field(item.Title, item.FallbackTitle)</SiteHeading>
+                                <SiteText Variant="SiteTextVariant.Meta">@Field(item.Description, item.FallbackDescription)</SiteText>
+                            </SiteCard>
+                        }
+                        else
+                        {
+                            <SiteClickableCard Class="h-100"
+                                Href="@item.Url"
+                                Title="@Field(item.Title, item.FallbackTitle)"
+                                TitleClass="h5"
+                                HeadingLevel="3">
+                                <SiteText Variant="SiteTextVariant.Meta">@Field(item.Description, item.FallbackDescription)</SiteText>
+                            </SiteClickableCard>
+                        }
+                    </SiteGridColumn>
+                }
+            </SiteGrid>
+        </SiteSection>
+        <SiteSection Region="follow-future"
+            HeadingId="follow-future-heading"
+            Label="@(L["legacy_044ada622aeb"])"
+            Title="@(L["legacy_92dca3e0c96d"])">
+            <SiteGrid>
+                @foreach (var item in FutureFollowEntries) { <SiteGridColumn>
+                    <SiteCard Label="@(L["legacy_adff4e85796c"])"
+                        Class="h-100"><SiteHeading Level="3"
+                            Visual="5">@item.FallbackTitle</SiteHeading>
+                                <SiteText Variant="SiteTextVariant.Meta">@Field(item.DescriptionKey, item.FallbackDescription)</SiteText>
+                            </SiteCard>
+                </SiteGridColumn> }
+            </SiteGrid>
+        </SiteSection>
+    }
+</SitePage>
+
+@code {
+    protected override void OnParametersSet()
+    {
+        if (Kind == PageKind.Now)
+        {
+            Navigation.NavigateTo($"{LocalizedPath("about")}#now", replace: true);
+        }
+    }
+
+    private PageKind Kind => RequestPath switch
+    {
+        var path when path.Contains(
+            "/portfolio",
+            StringComparison.OrdinalIgnoreCase
+        ) => PageKind.Portfolio,
+        var path when path.Contains("/now", StringComparison.OrdinalIgnoreCase) => PageKind.Now,
+        var path when path.Contains(
+            "/license",
+            StringComparison.OrdinalIgnoreCase
+        ) => PageKind.License,
+        var path when path.Contains(
+            "/follow",
+            StringComparison.OrdinalIgnoreCase
+        ) => PageKind.Follow,
+        _ => PageKind.About,
+    };
+    private string ApiPageSlug => Kind == PageKind.Now ? NowSlug : Kind.ToString().ToLowerInvariant();
+    private string CanonicalPath => RequestPath;
+    private string Title => Kind switch
+    {
+        PageKind.Portfolio => string.Join(" · ", new[] { Snapshot?.Chrome.Profile?.Name, Field("heroIdentity", Snapshot?.Chrome.Profile?.Title ?? string.Empty) }.Where(value => !string.IsNullOrWhiteSpace(value))),
+        PageKind.Now => L["legacy_ab243226f805"],
+        PageKind.License => Field("title", L["legacy_b820b3234c82"]),
+        PageKind.Follow => Field("title", L["legacy_efc6c5d00b30"]),
+        _ => Field("title", L["legacy_232fee6c4e06"]),
+    };
+    private string Description => Kind switch
+    {
+        PageKind.Portfolio => Field("heroExperience", L["legacy_77e39cb4d5ee"]),
+        PageKind.Now => L["legacy_95867724f45f"],
+        PageKind.Follow => Field("intro", L["legacy_2ae2bc4c964a"]),
+        PageKind.License => Field("description", L["legacy_b3494f1adafc"]),
+        _ => Field("description", L["legacy_0c7acd95d960"]),
+    };
+    private bool HasPortfolioWork => Snapshot?.FeaturedCases is { Count: > 0 } || Snapshot?.FeaturedProjects is { Count: > 0 } || Snapshot?.Experiments is { Count: > 0 };
+    private string? PortfolioWorkTarget => Snapshot?.FeaturedCases is { Count: > 0 } ? "#work" : HasPortfolioWork ? "#projects" : null;
+    private IReadOnlyList<(
+        string Year,
+        string Title,
+        string Description
+    )> ProfileMilestones => Snapshot?.Chrome.Profile?.Milestones is not { ValueKind: JsonValueKind.Array } values ? [] : values.EnumerateArray().Where(value => !value.TryGetProperty(
+        "hidden",
+        out var hidden
+    ) || hidden.ValueKind != JsonValueKind.True).Select(value => (StringValue(
+        value,
+        "year"
+    ), StringValue(value, "title", StringValue(
+        value,
+        "name"
+    )), StringValue(value, "description", StringValue(value, "body")))).Where(item => !string.IsNullOrWhiteSpace(item.Item2) || !string.IsNullOrWhiteSpace(item.Item3)).ToArray();
+    private int? Age => DateTime.TryParse(
+        Snapshot?.Chrome.Profile?.BirthDate,
+        out var birth
+    ) ? Math.Max(0, DateTime.UtcNow.Year - birth.Year - (DateTime.UtcNow.Date < birth.Date.AddYears(DateTime.UtcNow.Year - birth.Year) ? 1 : 0)) : null;
+    private IReadOnlyList<string> PersonalInterestLabels => Snapshot?.Chrome.Profile?.PersonalInterests is not { ValueKind: JsonValueKind.Array } values ? [] : values.EnumerateArray().Select(value => value.ValueKind == JsonValueKind.String ? value.GetString() : StringValue(value, "label")).Where(value => !string.IsNullOrWhiteSpace(value)).Cast<string>().ToArray();
+    private string Field(
+        string name,
+        string fallback = ""
+    ) => SlugField(ApiPageSlug, name, fallback);
+    private string SlugField(string slug, string name, string fallback = "")
+    {
+        if (Snapshot?.Pages.TryGetValue(slug, out var page) != true || page.ValueKind != JsonValueKind.Object || !page.TryGetProperty(name, out var value) || value.ValueKind != JsonValueKind.String) return fallback;
+        return value.GetString() ?? fallback;
+    }
+    private bool HasNowEntries => NowEntries.Any(entry => !string.IsNullOrWhiteSpace(SlugField(NowSlug, entry.Key)));
+    private const string NowSlug = "agora";
+    private static string StringValue(
+        JsonElement value,
+        string key,
+        string fallback = ""
+    ) => value.ValueKind == JsonValueKind.Object && value.TryGetProperty(key, out var field) && field.ValueKind == JsonValueKind.String ? field.GetString() ?? fallback : fallback;
+    private static string? SafeUrl(string? value) => Uri.TryCreate(value, UriKind.Absolute, out var uri) && uri.Scheme is "http" or "https" ? uri.AbsoluteUri : null;
+    private IReadOnlyList<(
+        string Key,
+        string Label
+    )> NowEntries => [("trabalhando", L["working_on"]), ("construindo", L["building"]), ("estudando", L["studying"]), ("lendo", L["reading"]), ("ouvindo", L["listening_to"]), ("assistindo", L["watching"])];
+    private IReadOnlyList<(
+        string Heading,
+        string Body,
+        string FallbackHeading,
+        string FallbackBody
+    )> LicenseEntries => [
+        ("code_heading", "code_body", L["legacy_5a29787b1103"], L["legacy_ca36a0155739"]),
+        ("content_heading", "content_body", L["legacy_9982b77cef8e"], L["legacy_a99741c3fe79"]),
+        ("ai_heading", "ai_body", L["legacy_35ecdd2d1000"], L["legacy_37c48d8345f3"])];
+    private IReadOnlyList<(
+        string Title,
+        string Description,
+        string? Url,
+        string FallbackTitle,
+        string FallbackDescription
+    )> FollowEntries => [
+        ("rss_title", "rss_description", L["legacy_362d5aad99f1"], "RSS", "RSS feed"),
+        ("atom_title", "atom_description", L["legacy_eabac209b499"], "Atom", "Atom feed"),
+        (
+            "jsonfeed_title",
+            "jsonfeed_description",
+            L["legacy_02f8bdc0b350"],
+            "JSON feed",
+            "JSON feed"
+        ),
+        ("api_title", "api_description", "/api/v1/findings", "API", "read-only query API"),
+        ("sitemap_title", "sitemap_description", "/sitemap.xml", "sitemap", "public sitemap"),
+        ("robots_title", "robots_description", "/robots.txt", "robots.txt", "crawler policy"),
+        (
+            "webfinger_title",
+            "webfinger_description",
+            null,
+            "WebFinger",
+            "account discovery for compatible clients"
+        )];
+    private IReadOnlyList<(
+        string DescriptionKey,
+        string FallbackTitle,
+        string FallbackDescription
+    )> FutureFollowEntries => [("activitypub_description", "ActivityPub", L["activitypub_fallback"]), ("websub_description", "WebSub", L["websub_fallback"]), ("webmention_description", "Webmention", L["webmention_fallback"])];
+    private string LocalizedUrl(string url)
+    {
+        var path = new Uri(url).AbsolutePath;
+        return LocalizedUrls.Current(path);
+    }
+    private string LocalizedPath(string path) => LocalizedUrls.Current($"/{path}");
+
+    private enum PageKind { About, Portfolio, Now, License, Follow }
+}

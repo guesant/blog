@@ -1,0 +1,454 @@
+@page "/admin/case-studies/create"
+@page "/admin/case-studies/{Id:int}"
+@using System.Globalization
+@using Portfolio.Blazor.Components.Admin.Shared
+@inherits AdminEditPageBase<CaseStudy>
+@layout AdminLayout
+
+<PageTitle>@(IsEditing ? "Edit case study" : "New case study")</PageTitle>
+
+<SiteFormShell Title="@(IsEditing ? "Edit case study" : "New case study")"
+    Error="@SaveError"
+    Loading="@IsLoading">
+    <SiteForm EditContext="@_caseStudyEditContext" OnValidSubmit="HandleSaveAsync">
+        <SiteStack Gap="SiteSpace.Lg">
+            <SiteFormField Label="Slug"
+                For="slug"
+                Required="true"
+                HelpText="Used in the public case study URL.">
+                <SiteTextInput Id="slug" @bind-Value="_caseStudy.Slug" />
+                <SiteValidationMessage For="@(() => _caseStudy.Slug)" />
+            </SiteFormField>
+
+
+            <SiteFormField Label="Href"
+                For="href"
+                HelpText="External link override, if this case study points elsewhere.">
+                <SiteTextInput Id="href"
+                    Value="@(_caseStudy.Href ?? string.Empty)"
+                    ValueChanged="@(value => _caseStudy.Href = string.IsNullOrWhiteSpace(value) ? null : value)" />
+            </SiteFormField>
+
+            <SiteFormField Label="Published at"
+                For="published-at"
+                HelpText="Leave empty if not yet published.">
+                <SiteDateInput Id="published-at" @bind-Value="_caseStudy.PublishedAt" />
+            </SiteFormField>
+
+            <SiteInline Gap="SiteSpace.Lg">
+                <SiteCheckbox Label="Hidden" @bind-Value="_caseStudy.Hidden" />
+                <SiteCheckbox Label="NDA" @bind-Value="_caseStudy.Nda" />
+                <SiteCheckbox Label="External" @bind-Value="_caseStudy.External" />
+                <SiteCheckbox Label="Show history" @bind-Value="_caseStudy.ShowHistory" />
+            </SiteInline>
+
+            <SiteFormSection Title="Translations">
+                <SiteTranslationTabs Locales="@_locales"
+                    ActiveLocale="@_activeLocale"
+                    ActiveLocaleChanged="@((string locale) => _activeLocale = locale)"
+                    IdPrefix="case-study-translation">
+                    <Panel Context="locale">
+                        @if (locale == "en")
+                        {
+                            <CascadingValue Value="_enEditContext"
+                                TValue="EditContext"
+                                IsFixed="true">
+                                <DataAnnotationsValidator />
+                                <SiteFormField Label="Title"
+                                    For="title-en"
+                                    HelpText="Leave blank to skip saving the English translation.">
+                                    <SiteTextInput Id="title-en"
+                                        @bind-Value="_translationEn.Title" />
+                                </SiteFormField>
+
+                                <SiteFormField Label="Status" For="status-en">
+                                    <SiteTextInput Id="status-en"
+                                        Value="@(_translationEn.Status ?? string.Empty)"
+                                        ValueChanged="@(value => _translationEn.Status = NullIfBlank(value))" />
+                                </SiteFormField>
+
+                                <SiteFormField Label="Meta" For="meta-en">
+                                    <SiteTextInput Id="meta-en"
+                                        Value="@(_translationEn.Meta ?? string.Empty)"
+                                        ValueChanged="@(value => _translationEn.Meta = NullIfBlank(value))" />
+                                </SiteFormField>
+
+                                <SiteFormField Label="Summary" For="summary-en">
+                                    <SiteTextAreaInput Id="summary-en"
+                                        Rows="3"
+                                        Value="@(_translationEn.Summary ?? string.Empty)"
+                                        ValueChanged="@(value => _translationEn.Summary = NullIfBlank(value))" />
+                                </SiteFormField>
+
+                                <SiteFormField Label="Context" For="context-en">
+                                    <SiteTextAreaInput Id="context-en"
+                                        Rows="3"
+                                        Value="@(_translationEn.Context ?? string.Empty)"
+                                        ValueChanged="@(value => _translationEn.Context = NullIfBlank(value))" />
+                                </SiteFormField>
+
+                                <SiteFormField Label="Role" For="role-en">
+                                    <SiteTextInput Id="role-en"
+                                        Value="@(_translationEn.Role ?? string.Empty)"
+                                        ValueChanged="@(value => _translationEn.Role = NullIfBlank(value))" />
+                                </SiteFormField>
+
+                                <SiteFormField Label="Result" For="result-en">
+                                    <SiteTextAreaInput Id="result-en"
+                                        Rows="3"
+                                        Value="@(_translationEn.Result ?? string.Empty)"
+                                        ValueChanged="@(value => _translationEn.Result = NullIfBlank(value))" />
+                                </SiteFormField>
+
+                                <SiteFormField Label="Metrics"
+                                    For="metrics-en"
+                                    HelpText="One entry per metric, with a label and a value, e.g. label &quot;users&quot; / value &quot;10k&quot;. Leave empty if not applicable.">
+                                    <SiteJsonArrayInput Id="metrics-en"
+                                        Fields="@MetricFields"
+                                        Value="@(_translationEn.Metrics ?? string.Empty)"
+                                        ValueChanged="@(value => _translationEn.Metrics = NullIfBlank(value))" />
+                                    <SiteValidationMessage For="@(() => _translationEn.Metrics)" />
+                                </SiteFormField>
+
+                                <SiteFormField Label="SEO"
+                                    For="seo-en"
+                                    HelpText="Standard meta fields for this page; add any extra tag under other fields. Leave empty if not applicable.">
+                                    <SitePageFieldsInput Id="seo-en"
+                                        Slug="PageFieldSlug.Seo"
+                                        Locale="en"
+                                        Value="@(_translationEn.Seo ?? string.Empty)"
+                                        ValueChanged="@(value => _translationEn.Seo = NullIfBlank(value))" />
+                                    <SiteValidationMessage For="@(() => _translationEn.Seo)" />
+                                </SiteFormField>
+
+                                <SiteFormField Label="Body (Markdown)" For="body-en">
+                                    <SiteMarkdownSplitEditor Id="body-en"
+                                        Rows="12"
+                                        Value="@(_translationEn.Body ?? string.Empty)"
+                                        ValueChanged="@(value => _translationEn.Body = NullIfBlank(value))"
+                                        Render="MarkdownRenderer.ToHtml" />
+                                </SiteFormField>
+                            </CascadingValue>
+                        }
+                        else
+                        {
+                            <CascadingValue Value="_ptEditContext"
+                                TValue="EditContext"
+                                IsFixed="true">
+                                <DataAnnotationsValidator />
+                                <SiteFormField Label="Título"
+                                    For="title-pt"
+                                    HelpText="Deixe em branco para não salvar a tradução em português.">
+                                    <SiteTextInput Id="title-pt"
+                                        @bind-Value="_translationPtBr.Title" />
+                                </SiteFormField>
+
+                                <SiteFormField Label="Status" For="status-pt">
+                                    <SiteTextInput Id="status-pt"
+                                        Value="@(_translationPtBr.Status ?? string.Empty)"
+                                        ValueChanged="@(value => _translationPtBr.Status = NullIfBlank(value))" />
+                                </SiteFormField>
+
+                                <SiteFormField Label="Meta" For="meta-pt">
+                                    <SiteTextInput Id="meta-pt"
+                                        Value="@(_translationPtBr.Meta ?? string.Empty)"
+                                        ValueChanged="@(value => _translationPtBr.Meta = NullIfBlank(value))" />
+                                </SiteFormField>
+
+                                <SiteFormField Label="Resumo" For="summary-pt">
+                                    <SiteTextAreaInput Id="summary-pt"
+                                        Rows="3"
+                                        Value="@(_translationPtBr.Summary ?? string.Empty)"
+                                        ValueChanged="@(value => _translationPtBr.Summary = NullIfBlank(value))" />
+                                </SiteFormField>
+
+                                <SiteFormField Label="Contexto" For="context-pt">
+                                    <SiteTextAreaInput Id="context-pt"
+                                        Rows="3"
+                                        Value="@(_translationPtBr.Context ?? string.Empty)"
+                                        ValueChanged="@(value => _translationPtBr.Context = NullIfBlank(value))" />
+                                </SiteFormField>
+
+                                <SiteFormField Label="Papel" For="role-pt">
+                                    <SiteTextInput Id="role-pt"
+                                        Value="@(_translationPtBr.Role ?? string.Empty)"
+                                        ValueChanged="@(value => _translationPtBr.Role = NullIfBlank(value))" />
+                                </SiteFormField>
+
+                                <SiteFormField Label="Resultado" For="result-pt">
+                                    <SiteTextAreaInput Id="result-pt"
+                                        Rows="3"
+                                        Value="@(_translationPtBr.Result ?? string.Empty)"
+                                        ValueChanged="@(value => _translationPtBr.Result = NullIfBlank(value))" />
+                                </SiteFormField>
+
+                                <SiteFormField Label="Métricas"
+                                    For="metrics-pt"
+                                    HelpText="Um item por métrica, com um rótulo e um valor, ex.: rótulo &quot;usuários&quot; / valor &quot;10k&quot;. Deixe vazio se não for aplicável.">
+                                    <SiteJsonArrayInput Id="metrics-pt"
+                                        Fields="@MetricFields"
+                                        Value="@(_translationPtBr.Metrics ?? string.Empty)"
+                                        ValueChanged="@(value => _translationPtBr.Metrics = NullIfBlank(value))" />
+                                    <SiteValidationMessage For="@(() => _translationPtBr.Metrics)" />
+                                </SiteFormField>
+
+                                <SiteFormField Label="SEO"
+                                    For="seo-pt"
+                                    HelpText="Campos meta padrão desta página; tags extras entram em outros campos. Deixe vazio se não for aplicável.">
+                                    <SitePageFieldsInput Id="seo-pt"
+                                        Slug="PageFieldSlug.Seo"
+                                        Locale="pt-BR"
+                                        Value="@(_translationPtBr.Seo ?? string.Empty)"
+                                        ValueChanged="@(value => _translationPtBr.Seo = NullIfBlank(value))" />
+                                    <SiteValidationMessage For="@(() => _translationPtBr.Seo)" />
+                                </SiteFormField>
+
+                                <SiteFormField Label="Corpo (Markdown)" For="body-pt">
+                                    <SiteMarkdownSplitEditor Id="body-pt"
+                                        Rows="12"
+                                        Value="@(_translationPtBr.Body ?? string.Empty)"
+                                        ValueChanged="@(value => _translationPtBr.Body = NullIfBlank(value))"
+                                        Render="MarkdownRenderer.ToHtml" />
+                                </SiteFormField>
+                            </CascadingValue>
+                        }
+                    </Panel>
+                </SiteTranslationTabs>
+            </SiteFormSection>
+
+            <SiteFormSection Title="Technologies">
+                <SiteEntityChecklist TItem="Technology"
+                    Items="_allTechnologies"
+                    Key="@(technology => technology.Id)"
+                    Label="@TechnologyDisplayName"
+                    Selected="_selectedTechnologyIds"
+                    SelectedChanged="HandleSelectedTechnologiesChanged"
+                    SearchPlaceholder="Search technologies…"
+                    EmptyText="@(search => $"No technologies match \"{search}\".")" />
+            </SiteFormSection>
+        </SiteStack>
+
+        <SiteSaveBar Saving="@IsSaving" CancelHref="/admin/case-studies" />
+    </SiteForm>
+</SiteFormShell>
+
+@code {
+    private static readonly string[] MetricFields = ["label", "value"];
+    [Parameter]
+    public int? Id { get; set; }
+
+    private static readonly IReadOnlyList<SiteLocaleTab> _locales = [new(
+        "en",
+        "English"
+    ), new("pt-BR", "Português")];
+
+    private CaseStudy _caseStudy = new();
+    private CaseStudyTranslation _translationEn = new() { Locale = "en" };
+    private CaseStudyTranslation _translationPtBr = new() { Locale = "pt-BR" };
+    private List<Technology> _allTechnologies = [];
+    private HashSet<int> _selectedTechnologyIds = [];
+    private string _activeLocale = "en";
+
+    private static string TechnologyDisplayName(Technology technology) =>
+        TranslationLookup.Resolve(technology.Translations, translation => translation.Locale, translation => translation.Name, "en")
+        ?? technology.Slug;
+
+    private EditContext _caseStudyEditContext = default!;
+    private EditContext _enEditContext = default!;
+    private EditContext _ptEditContext = default!;
+
+    private bool IsEditing => Id.HasValue;
+    protected override string EntityLabel => "case study";
+    protected override string ListRoute => "/admin/case-studies";
+
+    protected override async Task LoadAsync(PortfolioAdminDbContext dbContext)
+    {
+        _allTechnologies = await dbContext.Technologies
+            .Include(technology => technology.Translations)
+            .AsNoTracking()
+            .OrderBy(technology => technology.Order)
+            .ThenBy(technology => technology.Id)
+            .ToListAsync();
+
+        if (Id is int id)
+        {
+            var caseStudy = await dbContext.CaseStudies
+                .Include(candidate => candidate.Translations)
+                .Include(candidate => candidate.CaseStudyTechnologies)
+                .AsNoTracking()
+                .FirstOrDefaultAsync(candidate => candidate.Id == id);
+
+            if (caseStudy is null)
+            {
+                ToastService.Error("Case study not found.");
+                Navigation.NavigateTo("/admin/case-studies");
+                return;
+            }
+
+            _caseStudy = caseStudy;
+            _translationEn = caseStudy.Translations.FirstOrDefault(translation => translation.Locale == "en")
+                ?? new CaseStudyTranslation { CaseStudyId = caseStudy.Id, Locale = "en" };
+            _translationPtBr = caseStudy.Translations.FirstOrDefault(translation => translation.Locale == "pt-BR")
+                ?? new CaseStudyTranslation { CaseStudyId = caseStudy.Id, Locale = "pt-BR" };
+            _selectedTechnologyIds = caseStudy.CaseStudyTechnologies
+                .Select(caseStudyTechnology => caseStudyTechnology.TechnologyId)
+                .ToHashSet();
+        }
+
+        _caseStudyEditContext = new EditContext(_caseStudy);
+        _enEditContext = new EditContext(_translationEn);
+        _ptEditContext = new EditContext(_translationPtBr);
+    }
+
+    private Task HandleSelectedTechnologiesChanged(HashSet<int> selected)
+    {
+        _selectedTechnologyIds = selected;
+        return Task.CompletedTask;
+    }
+
+    protected override Task<bool> ValidateAsync()
+    {
+        var englishHasContent = !string.IsNullOrWhiteSpace(_translationEn.Title);
+        var portugueseHasContent = !string.IsNullOrWhiteSpace(_translationPtBr.Title);
+        var englishValid = !englishHasContent || _enEditContext.Validate();
+        var portugueseValid = !portugueseHasContent || _ptEditContext.Validate();
+
+        if (!englishValid || !portugueseValid)
+        {
+            return Task.FromResult(false);
+        }
+
+        if (!englishHasContent && !portugueseHasContent)
+        {
+            SaveError = "Provide a title in at least one language.";
+            return Task.FromResult(false);
+        }
+
+        return Task.FromResult(true);
+    }
+
+    protected override async Task ApplyChangesAsync(PortfolioAdminDbContext dbContext)
+    {
+        var englishHasContent = !string.IsNullOrWhiteSpace(_translationEn.Title);
+        var portugueseHasContent = !string.IsNullOrWhiteSpace(_translationPtBr.Title);
+
+        var orderedSelectedTechnologyIds = _allTechnologies
+            .OrderBy(technology => technology.Order)
+            .ThenBy(technology => technology.Id)
+            .Select(technology => technology.Id)
+            .Where(technologyId => _selectedTechnologyIds.Contains(technologyId))
+            .ToList();
+
+        if (Id is int id)
+        {
+            var caseStudy = await dbContext.CaseStudies
+                .Include(candidate => candidate.Translations)
+                .Include(candidate => candidate.CaseStudyTechnologies)
+                .FirstAsync(candidate => candidate.Id == id);
+
+            ApplyCaseStudyFields(caseStudy, _caseStudy);
+            ApplyTranslation(caseStudy, "en", _translationEn, englishHasContent);
+            ApplyTranslation(caseStudy, "pt-BR", _translationPtBr, portugueseHasContent);
+
+            dbContext.CaseStudyTechnologies.RemoveRange(caseStudy.CaseStudyTechnologies);
+            for (var index = 0; index < orderedSelectedTechnologyIds.Count; index++)
+            {
+                dbContext.CaseStudyTechnologies.Add(new CaseStudyTechnology
+                {
+                    CaseStudyId = caseStudy.Id,
+                    TechnologyId = orderedSelectedTechnologyIds[index],
+                    Order = index,
+                });
+            }
+        }
+        else
+        {
+            var caseStudy = new CaseStudy();
+            ApplyCaseStudyFields(caseStudy, _caseStudy);
+
+            if (englishHasContent)
+            {
+                caseStudy.Translations.Add(CloneTranslation(_translationEn, "en"));
+            }
+
+            if (portugueseHasContent)
+            {
+                caseStudy.Translations.Add(CloneTranslation(_translationPtBr, "pt-BR"));
+            }
+
+            for (var index = 0; index < orderedSelectedTechnologyIds.Count; index++)
+            {
+                caseStudy.CaseStudyTechnologies.Add(new CaseStudyTechnology
+                {
+                    TechnologyId = orderedSelectedTechnologyIds[index],
+                    Order = index,
+                });
+            }
+
+            caseStudy.Order = await NextOrderAsync(dbContext.CaseStudies, entity => entity.Order);
+            caseStudy.PublicId = PublicIds.New();
+            dbContext.CaseStudies.Add(caseStudy);
+        }
+    }
+
+    private static void ApplyCaseStudyFields(CaseStudy target, CaseStudy source)
+    {
+        target.Slug = source.Slug;
+        target.Hidden = source.Hidden;
+        target.Order = source.Order;
+        target.Href = source.Href;
+        target.External = source.External;
+        target.Nda = source.Nda;
+        target.PublishedAt = source.PublishedAt;
+        target.ShowHistory = source.ShowHistory;
+    }
+
+    private static void ApplyTranslation(
+        CaseStudy caseStudy,
+        string locale,
+        CaseStudyTranslation source,
+        bool hasContent
+    )
+    {
+        if (!hasContent)
+        {
+            return;
+        }
+
+        var existing = caseStudy.Translations.FirstOrDefault(translation => translation.Locale == locale);
+        if (existing is null)
+        {
+            caseStudy.Translations.Add(CloneTranslation(source, locale));
+            return;
+        }
+
+        existing.Title = source.Title;
+        existing.Status = source.Status;
+        existing.Meta = source.Meta;
+        existing.Summary = source.Summary;
+        existing.Context = source.Context;
+        existing.Role = source.Role;
+        existing.Result = source.Result;
+        existing.Metrics = source.Metrics;
+        existing.Body = source.Body;
+        existing.Seo = source.Seo;
+    }
+
+    private static CaseStudyTranslation CloneTranslation(
+        CaseStudyTranslation source,
+        string locale
+    ) => new()
+    {
+        Locale = locale,
+        Title = source.Title,
+        Status = source.Status,
+        Meta = source.Meta,
+        Summary = source.Summary,
+        Context = source.Context,
+        Role = source.Role,
+        Result = source.Result,
+        Metrics = source.Metrics,
+        Body = source.Body,
+        Seo = source.Seo,
+    };
+}

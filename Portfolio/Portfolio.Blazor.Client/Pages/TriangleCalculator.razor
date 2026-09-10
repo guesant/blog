@@ -1,0 +1,57 @@
+@inherits LocalizedComponentBase
+@page "/tools/triangle-calculator"
+@page "/pt-BR/tools/triangle-calculator"
+@using Portfolio.Blazor.Core
+
+<ToolPage Title="@Title" Description="@Description" CanonicalPath="@CanonicalPath">
+    <SiteToolForm Action="@Action" SubmitLabel="@CalculateLabel" AriaLabel="@Title">
+        <SiteFormActions>
+            <SiteFormField For="triangle-a"
+                Label="a"><SiteNumberInput TValue="double"
+                    Id="triangle-a"
+                    Name="a"
+                    Step="0.1"
+                    Value="@A"
+                    ValueChanged="@(v => A = v)" /></SiteFormField>
+            <SiteFormField For="triangle-b"
+                Label="b"><SiteNumberInput TValue="double"
+                    Id="triangle-b"
+                    Name="b"
+                    Step="0.1"
+                    Value="@B"
+                    ValueChanged="@(v => B = v)" /></SiteFormField>
+            <SiteFormField For="triangle-c"
+                Label="c"><SiteNumberInput TValue="double"
+                    Id="triangle-c"
+                    Name="c"
+                    Step="0.1"
+                    Value="@C"
+                    ValueChanged="@(v => C = v)" /></SiteFormField>
+        </SiteFormActions>
+    </SiteToolForm>
+    <SiteLiveRegion Politeness="SiteLivePoliteness.Polite">
+        @if (!Result.IsValid) { <SiteErrorMessage>@ErrorLabel</SiteErrorMessage> } else { <SiteCard Class="site-block" Label="@Title">
+            <SiteText Variant="SiteTextVariant.MetricValue"
+                Class="tool-result-value">@Result.Summary</SiteText>
+        </SiteCard> }
+    </SiteLiveRegion>
+</ToolPage>
+
+@code {
+    private string CanonicalPath => RequestPath;
+    private double A = 3, B = 4, C = 5;
+    private bool initialized;
+    [SupplyParameterFromQuery(Name = "a")]
+    private double? QueryA { get; set; }
+    [SupplyParameterFromQuery(Name = "b")]
+    private double? QueryB { get; set; }
+    [SupplyParameterFromQuery(Name = "c")]
+    private double? QueryC { get; set; }
+    private string Action => L["legacy_3df114556dbe"];
+    private string Title => L["legacy_b3cbf80d575a"];
+    private string Description => L["legacy_d50561c14efc"];
+    private string CalculateLabel => L["legacy_53519f340509"];
+    private string ErrorLabel => L["legacy_572e9b6409dc"];
+    private TriangleResult Result => Portfolio.Blazor.Core.TriangleCalculator.Calculate(A, B, C);
+    protected override void OnParametersSet() { if (initialized) return; A = QueryA ?? A; B = QueryB ?? B; C = QueryC ?? C; initialized = true; }
+}

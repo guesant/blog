@@ -1,0 +1,7 @@
+/CODEOWNERS @guesant
+/.github/workflows/ @guesant
+/.devcontainer/ @guesant
+/justfile @guesant
+/package.json @guesant
+/pnpm-lock.yaml @guesant
+/pnpm-workspace.yaml @guesant

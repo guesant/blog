@@ -1,0 +1,10 @@
+<SiteInline Gap="SiteSpace.Sm" Class="hero-availability">
+    <span class="hero-availability-dot" aria-hidden="true">
+    </span>
+    <SiteText>@Label</SiteText>
+</SiteInline>
+
+@code {
+    [Parameter, EditorRequired]
+    public string Label { get; set; } = string.Empty;
+}

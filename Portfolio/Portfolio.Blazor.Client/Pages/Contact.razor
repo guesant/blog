@@ -1,0 +1,51 @@
+@inherits ContentPageBase
+@page "/contact"
+@page "/pt-BR/contact"
+@using Portfolio.Blazor.Core
+
+<PageTitle>@Title</PageTitle>
+<SeoHead Title="@Title" Description="@Description" CanonicalPath="@CanonicalPath" />
+
+<SitePage Template="contact">
+    <SiteBreadcrumb HomeUrl="@(L["legacy_0607643fd42c"])"
+        HomeLabel="@(L["legacy_ddc150008e2f"])"
+        CurrentLabel="@Title" />
+    <SiteHero Title="@Title"
+        Lead="@Description"
+        BackHref="@(L["legacy_0607643fd42c"])"
+        BackLabel="@(L["legacy_ddc150008e2f"])" />
+    @if (!HasContact)
+    {
+        <SiteEmptyState Message="@(L["legacy_12bb08ef6c94"])" />
+    }
+    else
+    {
+        <SiteSection Region="channels"
+            HeadingId="contact-channels-heading"
+            Label="@(L["legacy_064ef2623972"])"
+            Title="@(L["legacy_e1da200631a9"])">
+            <ContactChannels Profiles="@Profiles"
+                EmailChallenge="@Snapshot?.Chrome.Site.ProtectedEmail"
+                EmailAvailable="@(Snapshot?.Chrome.Site.ContactAvailable == true)"
+                Variant="grid" />
+        </SiteSection>
+    }
+</SitePage>
+
+@code {
+    private string Title => PageField("title", L["legacy_68be6eee1eb9"]);
+    private string Description => HasContact ? PageField(
+        "description",
+        FallbackDescription
+    ) : (L["legacy_5fe6d16f2789"]);
+    private string FallbackDescription => L["legacy_5449bb2d7a16"];
+    private string CanonicalPath => L["legacy_81c69aa356b9"];
+    private IReadOnlyList<PublicContactProfile> Profiles => Snapshot?.Chrome.Site.ContactProfiles ?? [];
+    private bool HasContact => Snapshot?.Chrome.Site.ContactAvailable == true && (Snapshot.Chrome.Site.ProtectedEmail is not null || Profiles.Any(profile => SafeUrl(profile.Url) is not null));
+    private string PageField(string name, string fallback)
+    {
+        if (Snapshot?.Pages.TryGetValue("contact", out var page) != true || page.ValueKind != System.Text.Json.JsonValueKind.Object || !page.TryGetProperty(name, out var value) || value.ValueKind != System.Text.Json.JsonValueKind.String) return fallback;
+        return value.GetString() ?? fallback;
+    }
+    private static string? SafeUrl(string? value) => Uri.TryCreate(value, UriKind.Absolute, out var uri) && uri.Scheme is "http" or "https" or "mailto" ? uri.AbsoluteUri : null;
+}

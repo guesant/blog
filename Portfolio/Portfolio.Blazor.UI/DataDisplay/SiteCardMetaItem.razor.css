@@ -1,0 +1,5 @@
+.card-meta-line {
+    display: flex;
+    align-items: center;
+    gap: var(--site-space-2);
+}

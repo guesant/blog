@@ -1,0 +1,62 @@
+[
+  {
+    "route": "*",
+    "type": "gap-flush",
+    "match": "body > div.page-shell > div.page-layout",
+    "reason": "IMPORTANT: on mobile, .page-shell stacks .site-nav-topbar (header) directly above .page-layout with no declared gap (SiteAppShell.razor.css); the visual separation there is a border-bottom on the topbar, not a gap. Route \"*\" because this is site-shell chrome present identically on every page, not page content."
+  },
+  {
+    "route": "*",
+    "type": "gap-flush",
+    "match": "body > div.page-shell > div.page-layout > div.page-body > div.site-main-scroll > div.page-content > main#main-content > div.breadcrumb-bar > nav > ol.breadcrumb > li.breadcrumb-item:nth-of-type(2)",
+    "reason": "IMPORTANT: SiteBreadcrumb.razor.css sets `.breadcrumb { gap: 0 }` on purpose — breadcrumb items are visually separated by a \"/\" rendered via `.breadcrumb-item + .breadcrumb-item::before`, not by flex gap. Route \"*\": the breadcrumb bar is shell chrome on every page."
+  },
+  {
+    "route": "*",
+    "type": "gap-flush",
+    "match": "body > div.page-shell > div.page-layout > div.page-body > div.site-main-scroll > div.page-content > main#main-content > div.breadcrumb-bar > nav > ol.breadcrumb > li.breadcrumb-item:nth-of-type(3)",
+    "reason": "IMPORTANT: same as the sibling breadcrumb-item entry above — SiteBreadcrumb.razor.css's `.breadcrumb { gap: 0 }` is deliberate; separation comes from the \"/\" pseudo-element, not a gap."
+  },
+  {
+    "route": "*",
+    "type": "gap-flush",
+    "match": "body > div.page-shell > div.page-layout > div.site-nav-offcanvas > aside#site-nav > nav.site-toggle-group > a.site-control:nth-of-type(2)",
+    "reason": "IMPORTANT: SiteToggleGroup.razor.css builds a segmented control on purpose — `gap: 0` plus a `-0.0625rem` negative margin on non-first items so adjoining buttons share a 1px border instead of doubling it. The near-zero/negative distance here is the intended joined-button look, not a missing gap."
+  },
+  {
+    "route": "*",
+    "type": "gap-flush",
+    "match": "*nav.site-pagination > ul.pagination > li.page-item",
+    "reason": "IMPORTANT: SitePagination.razor.css builds a segmented control on purpose, the same convention as the already-allowlisted .site-toggle-group -- page-link items overlap by a negative left margin so adjoining buttons share a 1px border instead of doubling it. Suffix match because the pager renders under several different page wrappers."
+  },
+  {
+    "route": "*",
+    "type": "runtime-error",
+    "match": "WebSocket connection to 'ws://localhost",
+    "reason": "IMPORTANT: dotnet watch's own hot-reload socket, refused because this audit hits the dev server without a browser session dotnet watch recognizes. Dev-tooling noise, not application behavior."
+  },
+  {
+    "route": "*",
+    "type": "runtime-error",
+    "match": "Failed to load resource: net::ERR_FAILED",
+    "reason": "IMPORTANT: the layout-audit static pass deliberately aborts the _framework/blazor.web*.js request (see HYDRATION_SCRIPT_GLOB in layout-audit.spec.ts) so the page never hydrates; the browser logs this exact console error for the aborted request itself. Self-inflicted by the audit, not an application bug."
+  },
+  {
+    "route": "/findings/raft-refresher",
+    "type": "gap-flush",
+    "match": "body > div.page-shell > div.page-layout > div.page-body > div.site-main-scroll > div.page-content > main#main-content > div.site-stack:nth-of-type(9) > div.site-inline > details.site-dropdown > div.content-actions-menu-items > button.site-control:nth-of-type(2)",
+    "reason": "IMPORTANT: ContentActions' dropdown menu (SiteDropdown.razor.css's .content-actions-menu-items) declares no row-gap on purpose — items sit flush and are told apart by padding plus a hover/focus background, the same convention as the already-allowlisted .breadcrumb and .site-toggle-group. The menu is normally `display: none` until `[open]`, so this was invisible to the audit until the layout-audit's openAllDisclosures() step started forcing every <details> open to measure its contents."
+  },
+  {
+    "route": "/findings/raft-refresher",
+    "type": "gap-flush",
+    "match": "body > div.page-shell > div.page-layout > div.page-body > div.site-main-scroll > div.page-content > main#main-content > div.site-stack:nth-of-type(9) > div.site-inline > details.site-dropdown > div.content-actions-menu-items > button.site-control:nth-of-type(3)",
+    "reason": "IMPORTANT: same as the sibling content-actions-menu-items entry above — SiteDropdown.razor.css's flush menu list is deliberate."
+  },
+  {
+    "route": "/findings/raft-refresher",
+    "type": "gap-flush",
+    "match": "body > div.page-shell > div.page-layout > div.page-body > div.site-main-scroll > div.page-content > main#main-content > div.site-stack:nth-of-type(9) > div.site-inline > details.site-dropdown > div.content-actions-menu-items > button.site-control:nth-of-type(4)",
+    "reason": "IMPORTANT: same as the sibling content-actions-menu-items entries above — SiteDropdown.razor.css's flush menu list is deliberate."
+  }
+]

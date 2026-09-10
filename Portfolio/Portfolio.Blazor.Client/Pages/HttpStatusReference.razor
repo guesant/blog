@@ -1,0 +1,55 @@
+@inherits LocalizedComponentBase
+@page "/tools/http-status-reference"
+@page "/pt-BR/tools/http-status-reference"
+@using Portfolio.Blazor.Core
+
+<ToolPage Title="@Title" Description="@Description" CanonicalPath="@CanonicalPath">
+    <SiteToolForm Action="@Action" SubmitLabel="@SearchLabel" AriaLabel="@FilterLabel">
+        <SiteFormField For="http-status-filter"
+            Label="@FilterLabel"><SiteInput Id="http-status-filter"
+                Name="filter"
+                Type="text"
+                autocomplete="off"
+                spellcheck="false"
+                Value="@Filter"
+                ValueChanged="@(v => Filter = v)" /></SiteFormField>
+    </SiteToolForm>
+    <SiteCard Class="site-block" Label="@Title">
+        <SiteList>
+        @foreach (var status in Results)
+        {
+            <SiteListItem Class="list-group-item site-list-row d-flex flex-wrap justify-content-between align-items-start tool-list-item">
+                <SiteText Variant="SiteTextVariant.Meta"
+                    Class="tool-list-value">@status.Code @status.Name</SiteText>
+                    <SiteText Variant="SiteTextVariant.Meta">@status.Description</SiteText>
+                </SiteListItem>
+        }
+    </SiteList>
+    </SiteCard>
+    @if (Results.Count == 0)
+    {
+        <SiteNotice>@EmptyLabel</SiteNotice>
+    }
+</ToolPage>
+
+@code {
+    private string CanonicalPath => RequestPath;
+    [SupplyParameterFromQuery(Name = "filter")]
+    private string? QueryFilter { get; set; }
+    private bool _queryInitialized;
+    private string _filter = string.Empty;
+    private string Action => L["legacy_a17cbc671253"];
+    private string Title => L["legacy_f74303715779"];
+    private string Description => L["legacy_815359dd9c08"];
+    private string FilterLabel => L["legacy_253db84328b6"];
+    private string SearchLabel => L["legacy_cc63bf81c53c"];
+    private string EmptyLabel => L["legacy_3b7293427126"];
+    private string Filter { get => _filter; set => _filter = value; }
+    private IReadOnlyList<HttpStatusEntry> Results => Portfolio.Blazor.Core.HttpStatusReference.Filter(Filter);
+    protected override void OnParametersSet()
+    {
+        if (_queryInitialized) return;
+        _filter = QueryFilter ?? string.Empty;
+        _queryInitialized = true;
+    }
+}

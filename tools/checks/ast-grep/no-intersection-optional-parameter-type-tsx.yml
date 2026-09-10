@@ -1,0 +1,10 @@
+id: no-intersection-optional-parameter-type-tsx
+language: Tsx
+severity: error
+message: Extraia tipos de interseção do parâmetro para um type ou interface nomeado.
+
+rule:
+  kind: intersection_type
+  inside:
+    kind: optional_parameter
+    stopBy: end

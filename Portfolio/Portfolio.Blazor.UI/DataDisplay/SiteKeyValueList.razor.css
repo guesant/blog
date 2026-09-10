@@ -1,0 +1,16 @@
+[data-slot="key-value-list"] {
+    display: grid;
+    gap: var(--site-gap-stack);
+}
+
+[data-slot="key-value-list"] ::deep dt,
+[data-slot="key-value-list"] ::deep dd {
+    margin: 0;
+}
+
+[data-slot="key-value-list"][data-layout="columns"] ::deep [data-slot="key-value-item"] {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+    gap: var(--site-gap-inline);
+    align-items: baseline;
+}

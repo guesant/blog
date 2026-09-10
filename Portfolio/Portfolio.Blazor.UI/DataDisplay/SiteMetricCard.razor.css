@@ -1,0 +1,18 @@
+.site-metric-card {
+    display: grid;
+    gap: var(--site-space-1);
+    padding: var(--site-space-3);
+}
+.site-metric-card > p {
+    margin: 0;
+}
+.site-metric-card ::deep .metric-value {
+    font-size: var(--site-text-2xl);
+    font-weight: var(--site-weight-semibold);
+    line-height: var(--site-leading-tight);
+}
+.site-metric-card ::deep .metric-label {
+    font-size: var(--site-text-sm);
+    font-weight: var(--site-weight-regular);
+    line-height: var(--site-leading-normal);
+}

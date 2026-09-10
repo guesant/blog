@@ -1,0 +1,11 @@
+<SiteInline Class="site-relationship-item border rounded"
+    AdditionalAttributes="@AdditionalAttributes">
+    @ChildContent
+</SiteInline>
+
+@code {
+    [Parameter(CaptureUnmatchedValues = true)]
+    public IReadOnlyDictionary<string, object>? AdditionalAttributes { get; set; }
+    [Parameter, EditorRequired]
+    public RenderFragment ChildContent { get; set; } = default!;
+}

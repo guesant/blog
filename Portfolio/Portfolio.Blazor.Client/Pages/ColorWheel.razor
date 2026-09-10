@@ -1,0 +1,220 @@
+@inherits LocalizedComponentBase
+@page "/tools/color-wheel"
+@page "/pt-BR/tools/color-wheel"
+@using Microsoft.JSInterop
+@inject IJSRuntime JS
+
+<ToolPage Title="@Title" Description="@Description" CanonicalPath="@CanonicalPath">
+    <SiteCard Class="site-block" Label="@Title">
+        <SiteFormActions>
+            <SiteFormField Label="@RuleLabel"
+                For="tool-color-wheel-rule"><SiteNativeSelect class="form-select tool-select"
+                    data-color-wheel-rule
+                    id="tool-color-wheel-rule"><option value="complementary">@RuleText("complementary")</option>
+                        <option value="analogous">@RuleText("analogous")</option>
+                            <option value="monochromatic">@RuleText("monochromatic")</option>
+                                <option value="triad">@RuleText("triad")</option>
+                                    <option value="split-complementary">@RuleText("split-complementary")</option>
+                                        <option value="double-split-complementary">@RuleText("double-split-complementary")</option>
+                                            <option value="square">@RuleText("square")</option>
+                                                <option value="compound">@RuleText("compound")</option>
+                                                    <option value="shades">@RuleText("shades")</option>
+                                                        <option value="custom">@RuleText("custom")</option>
+                                                    </SiteNativeSelect>
+                                                </SiteFormField>
+            <SiteFormField Label="@ModelLabel"
+                For="tool-color-wheel-model"><SiteNativeSelect class="form-select tool-select"
+                    data-color-wheel-model
+                    id="tool-color-wheel-model"><option value="rgb">RGB</option>
+                        <option value="hsb">HSB</option>
+                            <option value="hsl">HSL</option>
+                                <option value="cmyk">CMYK</option>
+                                    <option value="lab">LAB</option>
+                                </SiteNativeSelect>
+                            </SiteFormField>
+            <SiteButton data-color-wheel-random
+                Variant="SiteButtonVariant.Default"
+                Class="tool-action-btn"><SiteIcon Name="dices" Size="14" />@RandomLabel</SiteButton>
+                    <SiteButton data-color-wheel-undo
+                    Variant="SiteButtonVariant.Default"
+                    Class="tool-action-btn"><SiteIcon Name="undo-2"
+                        Size="14" />@UndoLabel</SiteButton>
+                        <SiteButton data-color-wheel-redo
+                        Variant="SiteButtonVariant.Default"
+                        Class="tool-action-btn"><SiteIcon Name="redo-2"
+                            Size="14" />@RedoLabel</SiteButton>
+        </SiteFormActions>
+        <div class="tool-wheel-layout">
+            <div class="tool-wheel-wrap"
+                data-color-wheel-wrap><canvas data-color-wheel-canvas
+                    class="tool-wheel-canvas"></canvas>
+                        <svg data-color-wheel-lines
+                        class="tool-wheel-lines"
+                        viewBox="0 0 260 260"></svg>
+                            <div data-color-wheel-markers
+                            data-marker-label="@MarkerLabel"
+                            class="tool-wheel-markers">
+        </div>
+        </div>
+        <div class="tool-wheel-side">
+            <SiteFormField For="tool-color-wheel-brightness"
+                Label="@BrightnessLabel"><SiteRangeInput min="0"
+                    max="100"
+                    class="form-range tool-range"
+                    data-color-wheel-brightness
+                    id="tool-color-wheel-brightness" /></SiteFormField>
+                <SiteFormField For="tool-color-wheel-hex"
+                    Label="HEX"><SiteInput class="form-control"
+                        type="text"
+                        data-color-wheel-hex-input
+                        id="tool-color-wheel-hex"
+                        autocomplete="off"
+                        spellcheck="false" /></SiteFormField>
+                            <SiteErrorMessage data-color-wheel-hex-error
+                            data-invalid-label="@InvalidHexLabel"
+                            hidden></SiteErrorMessage>
+                                <div data-color-wheel-channels class="tool-channel-editor">
+            </div>
+            <SiteErrorMessage data-color-wheel-channel-error
+                data-invalid-label="@InvalidChannelLabel"
+                hidden></SiteErrorMessage>
+                </div>
+        </div>
+        <p class="section-label">@PaletteLabel</p>
+            <div data-color-wheel-palette
+                data-select-label="@SelectLabel"
+                data-lock-label="@LockLabel"
+                data-locked-label="@LockedLabel"
+                data-copy-hex-label="hex"
+                data-copy-rgb-label="rgb"
+                data-copied-label="@CopiedLabel"
+                class="tool-swatch-grid">
+        </div>
+        <SiteFormActions>
+            <SiteButton data-color-wheel-export-json
+                Variant="SiteButtonVariant.Default"
+                Class="tool-action-btn">
+                <SiteIcon Name="file-down" Size="14" />@ExportJsonLabel</SiteButton>
+                    <SiteButton data-color-wheel-export-css
+                        Variant="SiteButtonVariant.Default"
+                        Class="tool-action-btn">
+                        <SiteIcon Name="file-down" Size="14" />@ExportCssLabel</SiteButton>
+                            <SiteButton data-color-wheel-export-png
+                                Variant="SiteButtonVariant.Default"
+                                Class="tool-action-btn">
+                                <SiteIcon Name="file-down" Size="14" />@ExportPngLabel</SiteButton>
+                            </SiteFormActions>
+        <p class="section-label">@ContrastLabel</p>
+            <SiteList data-color-wheel-contrast
+                data-pass-label="@PassLabel"
+                data-fail-label="@FailLabel"
+                AriaLabel="@ContrastLabel">
+        </SiteList>
+        <p class="section-label">@ColorblindLabel</p>
+            <div data-color-wheel-colorblind
+                data-protanopia-label="protanopia"
+                data-deuteranopia-label="deuteranopia"
+                data-tritanopia-label="tritanopia"
+                class="tool-simulation-grid">
+        </div>
+        <p class="section-label">@ExtractLabel</p>
+            <SiteFormActions>
+                <SiteFormField For="tool-color-wheel-extract-file"
+                    Label="@ExtractFileLabel"><SiteFileInput class="form-control"
+                        type="file"
+                        accept="image/*"
+                        data-color-wheel-extract-file
+                        id="tool-color-wheel-extract-file" /></SiteFormField>
+                    <SiteFormField For="tool-color-wheel-extract-count"
+                        Label="@ExtractCountLabel"><SiteNativeSelect class="form-select tool-select"
+                            data-color-wheel-extract-count
+                            id="tool-color-wheel-extract-count"><option value="4">4</option>
+                                <option value="5" selected>5</option>
+                                    <option value="6">6</option>
+                                        <option value="7">7</option>
+                                            <option value="8">8</option>
+                                        </SiteNativeSelect>
+                                    </SiteFormField>
+                </SiteFormActions>
+        <p class="section-label">@SaveLabel</p>
+            <SiteFormActions>
+                <SiteFormField For="tool-color-wheel-save-name"
+                    Label="@SaveNameLabel"><SiteInput class="form-control"
+                        type="text"
+                        data-color-wheel-save-name
+                        id="tool-color-wheel-save-name"
+                        autocomplete="off" /></SiteFormField>
+                    <SiteFormField For="tool-color-wheel-save-tags"
+                        Label="@SaveTagsLabel"><SiteInput class="form-control"
+                            type="text"
+                            data-color-wheel-save-tags
+                            id="tool-color-wheel-save-tags"
+                            autocomplete="off"
+                            placeholder="@SaveTagsPlaceholder" /></SiteFormField>
+                                <SiteButton data-color-wheel-save-btn
+                                Variant="SiteButtonVariant.Default"
+                                Class="tool-action-btn"><SiteIcon Name="save"
+                                    Size="14" />@SaveButtonLabel</SiteButton>
+                                </SiteFormActions>
+        <p class="section-label">@SavedLabel</p>
+            <SiteFormField For="tool-color-wheel-search"
+                Label="@SearchLabel"><SiteInput class="form-control"
+                    type="text"
+                    data-color-wheel-search
+                    id="tool-color-wheel-search"
+                    autocomplete="off" /></SiteFormField>
+                <SiteList data-color-wheel-saved-list
+                    data-delete-label="@DeleteLabel"
+                    AriaLabel="@SavedLabel">
+            </SiteList>
+                <SiteNotice data-color-wheel-saved-empty>@NoSavedLabel</SiteNotice>
+    </SiteCard>
+</ToolPage>
+
+@code {
+    private string CanonicalPath => RequestPath;
+    private string Title => L["legacy_e482c31489fa"];
+    private string Description => L["legacy_f34bc1e012a3"];
+    private string RuleLabel => L["legacy_3b6b27b2113b"];
+    private string ModelLabel => L["legacy_68cbff4273ac"];
+    private string RandomLabel => L["legacy_923b5b9bffec"];
+    private string UndoLabel => L["legacy_b96bddce9abc"];
+    private string RedoLabel => L["legacy_ace12f80f2b6"];
+    private string BrightnessLabel => L["legacy_b1ae7c65f6f8"];
+    private string MarkerLabel => L["legacy_38be59f205d4"];
+    private string InvalidHexLabel => L["legacy_c9a53ad44b88"];
+    private string InvalidChannelLabel => L["legacy_a762d3e06997"];
+    private string PaletteLabel => L["legacy_3eb05d64a378"];
+    private string SelectLabel => L["legacy_de35a6bb3a7b"];
+    private string LockLabel => L["legacy_959e178a4437"];
+    private string LockedLabel => L["legacy_5f17f726980d"];
+    private string CopiedLabel => L["legacy_7f04c2f80c0b"];
+    private string ExportJsonLabel => L["legacy_60f3fcc95b22"];
+    private string ExportCssLabel => L["legacy_f8323d82a626"];
+    private string ExportPngLabel => L["legacy_93ed0b8d9e10"];
+    private string ContrastLabel => L["legacy_0640f92c435b"];
+    private string PassLabel => L["legacy_f0056f71363c"];
+    private string FailLabel => L["legacy_5e71c00fbbba"];
+    private string ColorblindLabel => L["legacy_6a710c43cfa3"];
+    private string ExtractLabel => L["legacy_1fcf5ae2ac0f"];
+    private string ExtractFileLabel => L["legacy_3b8448ad31bd"];
+    private string ExtractCountLabel => L["legacy_807af1f672e6"];
+    private string SaveLabel => L["legacy_1daa54dee504"];
+    private string SaveNameLabel => L["legacy_a5365aecffee"];
+    private string SaveTagsLabel => L["legacy_9cd2abdd0672"];
+    private string SaveTagsPlaceholder => L["legacy_c24b0cd84a8c"];
+    private string SaveButtonLabel => L["legacy_c3079adaed4c"];
+    private string SavedLabel => L["legacy_968b50230654"];
+    private string SearchLabel => L["legacy_999da25ad2ff"];
+    private string DeleteLabel => L["legacy_1fa1bcd5710b"];
+    private string NoSavedLabel => L["legacy_950e3cf78dd7"];
+    private string RuleText(string rule) => L[$"color_rule_{rule}"];
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JS.InvokeVoidAsync("import", "/color-wheel.js");
+        }
+    }
+}

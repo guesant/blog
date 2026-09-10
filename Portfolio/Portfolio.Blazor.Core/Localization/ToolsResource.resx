@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <data name="tools"><value>tools</value></data>
+  <data name="description"><value>small utilities that run directly in your browser.</value></data>
+  <data name="filters"><value>tool filters</value></data>
+  <data name="search"><value>search</value></data>
+  <data name="search_placeholder"><value>name, subject, or description</value></data>
+  <data name="category"><value>category</value></data>
+  <data name="all_categories"><value>all categories</value></data>
+  <data name="no_category"><value>no category found</value></data>
+  <data name="apply_filters"><value>apply filters</value></data>
+  <data name="clear_filters"><value>clear filters</value></data>
+  <data name="no_results"><value>no tools match these filters.</value></data>
+  <data name="pagination"><value>pagination</value></data>
+  <data name="previous"><value>previous</value></data>
+  <data name="next"><value>next</value></data>
+  <data name="stub"><value>structural stub · implementation pending</value></data>
+  <data name="results_summary"><value>showing {0} of {1} tools</value></data>
+</root>

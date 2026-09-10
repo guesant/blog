@@ -1,0 +1,10 @@
+<span class="card-meta-line" data-slot="card-meta-item">
+    <SiteIcon Name="@Icon" Size="12" Class="icon" />@ChildContent
+</span>
+
+@code {
+    [Parameter, EditorRequired]
+    public string Icon { get; set; } = string.Empty;
+    [Parameter, EditorRequired]
+    public RenderFragment ChildContent { get; set; } = default!;
+}

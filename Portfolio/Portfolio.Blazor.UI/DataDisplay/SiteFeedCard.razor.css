@@ -1,0 +1,96 @@
+.site-feed-card {
+    position: relative;
+    display: grid;
+    gap: var(--site-space-2);
+    padding: var(--site-space-4) var(--site-space-5) var(--site-space-5)
+        calc(var(--site-space-5) + var(--site-feed-accent-w));
+    overflow: hidden;
+    border: var(--site-border-width) solid var(--site-border);
+    border-radius: var(--site-radius);
+    background: var(--site-surface);
+}
+.site-feed-card::before {
+    content: "";
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: var(--site-feed-accent-w);
+    background: var(--site-primary);
+}
+.site-feed-card-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--site-space-3);
+    color: var(--site-text-secondary);
+    font-size: var(--site-text-xs);
+    font-weight: var(--site-weight-medium);
+    letter-spacing: var(--site-letter-label);
+    text-transform: uppercase;
+}
+.site-feed-card-kind {
+    display: inline-flex;
+    align-items: center;
+    padding: var(--site-space-0-5) var(--site-space-2);
+    border-radius: var(--site-radius-sm);
+    background: var(--site-accent-bg);
+    color: var(--site-primary);
+    font-size: var(--site-text-xs);
+    font-weight: var(--site-weight-semibold);
+    letter-spacing: var(--site-letter-label);
+    line-height: var(--site-leading-normal);
+    text-transform: uppercase;
+}
+.site-feed-card-meta ::deep .site-feed-card-external {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--site-space-1);
+    color: var(--site-primary);
+    text-transform: none;
+    letter-spacing: normal;
+}
+.site-feed-card-title {
+    margin: 0;
+    font-size: var(--site-text-xl);
+    font-weight: var(--site-weight-bold);
+    letter-spacing: var(--site-letter-heading);
+    line-height: var(--site-leading-tight);
+}
+.site-feed-card-title ::deep a {
+    color: var(--site-text-primary);
+    font: inherit;
+    text-decoration: none;
+    text-transform: none;
+}
+.site-feed-card-title ::deep a:hover,
+.site-feed-card-title ::deep a:focus-visible {
+    color: var(--site-primary);
+    text-decoration: underline;
+}
+.site-feed-card-preview {
+    margin: 0;
+    max-width: var(--site-feed-preview-max);
+    color: var(--site-text-primary);
+    font-size: var(--site-text-body);
+    line-height: var(--site-leading-relaxed);
+}
+.site-feed-card-ellipsis {
+    color: var(--site-text-secondary);
+}
+.site-feed-card ::deep .site-feed-card-more {
+    display: inline-flex;
+    align-items: center;
+    justify-self: start;
+    gap: var(--site-space-1);
+    color: var(--site-primary);
+    font-size: var(--site-text-sm);
+    font-weight: var(--site-weight-semibold);
+    text-transform: none;
+    text-decoration: none;
+}
+.site-feed-card ::deep .site-feed-card-more:hover,
+.site-feed-card ::deep .site-feed-card-more:focus-visible {
+    text-decoration: underline;
+}
+.site-feed-card-tags {
+    margin-top: var(--site-space-2);
+}

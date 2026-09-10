@@ -1,0 +1,55 @@
+@inherits LocalizedComponentBase
+@page "/tools/svg-to-png"
+@page "/pt-BR/tools/svg-to-png"
+@using Microsoft.JSInterop
+@inject IJSRuntime JS
+
+<ToolPage Title="@Title" Description="@Description" CanonicalPath="@CanonicalPath">
+<SiteCard Class="site-block" Label="@Title">
+    <SiteStack data-tool="svg-to-png">
+        <SiteFormField For="svg-file"
+            Label="@SvgFileLabel"><SiteFileInput type="file"
+                accept=".svg,image/svg+xml"
+                data-svg-to-png-file
+                id="svg-file" /></SiteFormField>
+            <SiteFormField For="svg-input"
+                Label="@SvgInputLabel"><SiteTextAreaInput id="svg-input"
+                    data-svg-to-png-input
+                    Class="tool-textarea"
+                    rows="8"
+                    spellcheck="false"></SiteTextAreaInput>
+                    </SiteFormField>
+                <SiteFormActions>
+                    <SiteFormField For="svg-width"
+                        Label="@WidthLabel"><SiteInput type="number"
+                            min="1"
+                            value="512"
+                            data-svg-to-png-width
+                            id="svg-width" /></SiteFormField>
+                        <SiteFormField For="svg-height"
+                            Label="@HeightLabel"><SiteInput type="number"
+                                min="1"
+                                value="512"
+                                data-svg-to-png-height
+                                id="svg-height" /></SiteFormField>
+                                    <SiteButton Variant="SiteButtonVariant.Default"
+                                    Class="tool-action-btn"
+                                    data-svg-to-png-render><SiteIcon Name="play"
+                                        Size="14" />@RenderLabel</SiteButton>
+                                        </SiteFormActions>
+                                        <SiteErrorMessage data-svg-to-png-error
+                                        data-invalid-label="@InvalidLabel"
+                                        hidden></SiteErrorMessage>
+                                            <canvas data-svg-to-png-canvas
+                                            id="svg-canvas"
+                                            hidden></canvas>
+                                                <SiteButton Variant="SiteButtonVariant.Default"
+                                                Class="tool-action-btn"
+                                                data-svg-to-png-download
+                                                Disabled><SiteIcon Name="download"
+                                                    Size="14" />@DownloadLabel</SiteButton>
+                                                </SiteStack>
+                    </SiteCard>
+                </ToolPage>
+@code {
+    private string CanonicalPath => RequestPath;  private string Title => L["legacy_064669f09539"]; private string Description => L["legacy_7fdbb9503211"]; private string SvgFileLabel => L["legacy_1fc0c7906bc3"]; private string SvgInputLabel => L["legacy_18558a4774c7"]; private string WidthLabel => L["legacy_d62fe4abf513"]; private string HeightLabel => L["legacy_13d945a301ce"]; private string RenderLabel => L["legacy_5f2eecff206c"]; private string InvalidLabel => L["legacy_bd405515bc77"]; private string DownloadLabel => L["legacy_c36a12636bbd"]; protected override async Task OnAfterRenderAsync(bool firstRender) { if (firstRender) await JS.InvokeVoidAsync("import", "/svg-to-png.js"); } }

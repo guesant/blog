@@ -1,0 +1,13 @@
+.site-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--site-space-4);
+}
+
+/* IMPORTANT: an action cluster never needs a full row of its own next to a single
+   field -- give it its content width and let the field beside it take the rest. */
+@media (min-width: 48rem) {
+    .site-grid:has(> .site-form-actions:nth-child(2):last-child) {
+        grid-template-columns: 1fr auto;
+    }
+}

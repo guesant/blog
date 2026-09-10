@@ -1,0 +1,83 @@
+@inherits LocalizedComponentBase
+@page "/tools/robots-txt-generator"
+@page "/pt-BR/tools/robots-txt-generator"
+@using Portfolio.Blazor.Core
+@using Portfolio.Blazor.UI.Composition
+
+<ToolPage Title="@Title" Description="@Description" CanonicalPath="@CanonicalPath">
+    <SiteToolForm Action="@Action" SubmitLabel="@GenerateLabel" AriaLabel="@UserAgentLabel">
+        @if (RendererInfo.IsInteractive)
+        {
+            <SiteRepeatableItems TItem="RobotsRule"
+                Items="@Rules"
+                ItemTitle="@((rule, index) => $"{UserAgentLabel} {index + 1}")"
+                AddLabel="@AddRuleLabel"
+                RemoveLabel="@RemoveLabel"
+                OnAdd="AddRule"
+                OnRemove="@(index => RemoveRule(Rules[index]))">
+                <ItemTemplate Context="ctx">
+                    <SiteFormField Label="@UserAgentLabel"
+                        For="@($"robots-user-agent-{ctx.Index}")"><SiteInput Id="@($"robots-user-agent-{ctx.Index}")"
+                            @bind-Value="ctx.Item.UserAgent" /></SiteFormField>
+                    <SiteFormField Label="@AllowLabel"
+                        For="@($"robots-allow-{ctx.Index}")"><SiteTextAreaInput Id="@($"robots-allow-{ctx.Index}")"
+                            Rows="2"
+                            @bind-Value="ctx.Item.Allow" /></SiteFormField>
+                    <SiteFormField Label="@DisallowLabel"
+                        For="@($"robots-disallow-{ctx.Index}")"><SiteTextAreaInput Id="@($"robots-disallow-{ctx.Index}")"
+                            Rows="2"
+                            @bind-Value="ctx.Item.Disallow" /></SiteFormField>
+                    <SiteFormField Label="@DelayLabel"
+                        For="@($"robots-delay-{ctx.Index}")"><SiteInput Id="@($"robots-delay-{ctx.Index}")"
+                            @bind-Value="ctx.Item.Delay" /></SiteFormField>
+                </ItemTemplate>
+            </SiteRepeatableItems>
+            <SiteFormField Label="@SitemapLabel"
+                For="robots-sitemap"><SiteInput Id="robots-sitemap"
+                    @bind-Value="Sitemap"
+                    autocomplete="off"
+                    spellcheck="false"
+                    placeholder="https://example.com/sitemap.xml" /></SiteFormField>
+        }
+        else
+        {
+            <SiteFormField Label="@UserAgentLabel"
+                For="robots-user-agent"><SiteInput Id="robots-user-agent"
+                    Name="userAgent"
+                    Value="@Rules[0].UserAgent" />
+                </SiteFormField>
+            <SiteFormField Label="@AllowLabel"
+                For="robots-allow"><SiteTextAreaInput Id="robots-allow"
+                    Name="allow"
+                    Rows="2"
+                    Value="@Rules[0].Allow" />
+                </SiteFormField>
+            <SiteFormField Label="@DisallowLabel"
+                For="robots-disallow"><SiteTextAreaInput Id="robots-disallow"
+                    Name="disallow"
+                    Rows="2"
+                    Value="@Rules[0].Disallow" /></SiteFormField>
+            <SiteFormField Label="@DelayLabel"
+                For="robots-delay"><SiteInput Id="robots-delay"
+                    Name="delay"
+                    Value="@Rules[0].Delay" />
+                </SiteFormField>
+            <SiteFormField Label="@SitemapLabel"
+                For="robots-sitemap"><SiteInput Id="robots-sitemap"
+                    Name="sitemap"
+                    Value="@Sitemap"
+                    Placeholder="https://example.com/sitemap.xml" /></SiteFormField>
+        }
+    </SiteToolForm>
+    <SiteLiveRegion Politeness="SiteLivePoliteness.Polite">
+        <SiteCard Class="site-block"
+            Label="@OutputLabel"><SiteOutputField Id="robots-output"
+                Label="@OutputLabel"
+                Value="@Output"
+                Multiline="true"
+                Copyable="true"
+                CopyLabel="@CopyLabel" /></SiteCard>
+    </SiteLiveRegion>
+</ToolPage>
+@code {
+    private string CanonicalPath => RequestPath; private List<RobotsRule> Rules { get; } = [new()]; private string _sitemap = string.Empty; private bool _queryInitialized; [SupplyParameterFromQuery(Name="userAgent")] private string? QueryUserAgent { get; set; } [SupplyParameterFromQuery(Name="allow")] private string? QueryAllow { get; set; } [SupplyParameterFromQuery(Name="disallow")] private string? QueryDisallow { get; set; } [SupplyParameterFromQuery(Name="delay")] private string? QueryDelay { get; set; } [SupplyParameterFromQuery(Name="sitemap")] private string? QuerySitemap { get; set; } private string Action => L["legacy_0c4fe0ae8a55"];  private string Title => L["legacy_0c124738f9d5"]; private string Description => L["legacy_29bcb6c9d94c"]; private string UserAgentLabel => L["legacy_3d361c7e6d13"]; private string AllowLabel => L["legacy_a6afdae7964d"]; private string DisallowLabel => L["legacy_3aafbf448b67"]; private string DelayLabel => L["legacy_95a345155056"]; private string SitemapLabel => L["legacy_84a973a45cf2"]; private string AddRuleLabel => L["legacy_b5b29071a011"]; private string RemoveLabel => L["legacy_89f09a9e2949"]; private string GenerateLabel => L["legacy_cc7df97fb1b2"]; private string OutputLabel => L["legacy_1d1c0e33dc3c"]; private string CopyLabel => L["legacy_a3b71416a5f3"]; private string Sitemap { get => _sitemap; set => _sitemap = value; } private string Output => Portfolio.Blazor.Core.RobotsTxtGenerator.Build(Rules, Sitemap); private void AddRule() => Rules.Add(new()); private void RemoveRule(RobotsRule rule) { if (Rules.Count > 1) Rules.Remove(rule); } protected override void OnParametersSet() { if (_queryInitialized) return; Rules[0].UserAgent = QueryUserAgent ?? "*"; Rules[0].Allow = QueryAllow ?? string.Empty; Rules[0].Disallow = QueryDisallow ?? string.Empty; Rules[0].Delay = QueryDelay ?? string.Empty; _sitemap = QuerySitemap ?? string.Empty; _queryInitialized = true; } }

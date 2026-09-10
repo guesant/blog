@@ -1,0 +1,28 @@
+@attribute [Stories("Forms/SiteKeyValueFreeFormRows")]
+
+<Stories TComponent="SiteKeyValueFreeFormRows">
+
+    <Story Name="Default">
+        <Template>
+            <SiteKeyValueFreeFormRows RootId="free-form-demo"
+                Rows="@_rows"
+                Indices="@_indices"
+                ShowSectionLabel="true"
+                SectionLabel="Other fields"
+                KeyPlaceholder="key"
+                ValuePlaceholder="value"
+                AddLabel="add"
+                RemoveLabel="remove"
+                KeyChanged="@(args => { _rows[args.Index] = (args.Value, _rows[args.Index].Value); })"
+                ValueEdited="@(args => { _rows[args.Index] = (_rows[args.Index].Key, args.Value); })"
+                Removed="@(index => _rows.RemoveAt(index))"
+                Added="@(() => _rows.Add((string.Empty, string.Empty)))" />
+        </Template>
+    </Story>
+
+</Stories>
+
+@code {
+    private readonly List<(string Key, string Value)> _rows = [("legacyKey", "legacy value")];
+    private IReadOnlyList<int> _indices => Enumerable.Range(0, _rows.Count).ToList();
+}

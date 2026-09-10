@@ -1,0 +1,86 @@
+<nav class="site-pagination d-flex justify-content-center"
+    aria-label="@AriaLabel"
+    data-layout-region="pagination">
+    <ul class="pagination pagination-sm">
+        <li class="page-item pagination-edge pagination-previous @(CurrentPage <= 1 ? "disabled" : null)">
+            @if (CurrentPage > 1)
+            {
+                <SiteLink Class="page-link"
+                    Href="@Href(CurrentPage - 1)"
+                    aria-label="@PreviousLabel"
+                    title="@PreviousLabel"><SiteIcon Name="arrow-left" Size="14" />
+                    </SiteLink>
+            }
+            else
+            {
+                <span class="page-link" aria-hidden="true" title="@PreviousLabel">
+                    <SiteIcon Name="arrow-left" Size="14" />
+                </span>
+            }
+        </li>
+        @foreach (var itemPage in VisiblePages)
+        {
+            <li class="page-item @(itemPage == CurrentPage ? "active" : null)"
+                aria-current="@(itemPage == CurrentPage ? "page" : null)">
+                @if (itemPage == CurrentPage)
+                {
+                    <span class="page-link">@itemPage</span>
+                }
+                else
+                {
+                    <SiteLink Class="page-link"
+                        Href="@Href(itemPage)"
+                        aria-label="@itemPage">@itemPage</SiteLink>
+                }
+            </li>
+        }
+        <li class="page-item pagination-edge pagination-next @(CurrentPage >= TotalPages ? "disabled" : null)">
+            @if (CurrentPage < TotalPages)
+            {
+                <SiteLink Class="page-link"
+                    Href="@Href(CurrentPage + 1)"
+                    aria-label="@NextLabel"
+                    title="@NextLabel"><SiteIcon Name="arrow-right" Size="14" />
+                    </SiteLink>
+            }
+            else
+            {
+                <span class="page-link" aria-hidden="true" title="@NextLabel">
+                    <SiteIcon Name="arrow-right" Size="14" />
+                </span>
+            }
+        </li>
+    </ul>
+</nav>
+
+@code {
+    [Parameter]
+    public int CurrentPage { get; set; } = 1;
+    [Parameter]
+    public int TotalPages { get; set; }
+    [Parameter]
+    public int DisplayPages { get; set; } = 5;
+    [Parameter]
+    public string AriaLabel { get; set; } = "pagination";
+    [Parameter]
+    public string PreviousLabel { get; set; } = "previous";
+    [Parameter]
+    public string NextLabel { get; set; } = "next";
+    [Parameter, EditorRequired]
+    public Func<int, string> Href { get; set; } = default!;
+
+    private IEnumerable<int> VisiblePages
+    {
+        get
+        {
+            var count = Math.Max(1, Math.Min(DisplayPages, TotalPages));
+            var first = Math.Clamp(
+                CurrentPage - ((count - 1) / 2),
+                1,
+                Math.Max(1, TotalPages - count + 1)
+            );
+            return Enumerable.Range(first, count);
+        }
+    }
+
+}

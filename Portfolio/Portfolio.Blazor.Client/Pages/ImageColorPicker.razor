@@ -1,0 +1,59 @@
+@inherits LocalizedComponentBase
+@page "/tools/image-color-picker"
+@page "/pt-BR/tools/image-color-picker"
+@using Microsoft.JSInterop
+@inject IJSRuntime JS
+
+<ToolPage Title="@Title" Description="@Description" CanonicalPath="@CanonicalPath">
+    <SiteCard Class="site-block" Label="@FileLabel">
+        <SiteFormField For="image-color-picker-input"
+            Label="@FileLabel"><SiteFileInput class="form-control"
+                type="file"
+                accept="image/*"
+                data-image-color-picker-input
+                id="image-color-picker-input" /></SiteFormField>
+        <SiteNotice>@PickInstruction</SiteNotice>
+        <canvas data-image-color-picker-canvas
+            id="image-color-picker-canvas"
+            class="tool-canvas-preview"
+            hidden>
+        </canvas>
+        <div data-image-color-picker-swatch class="tool-color-swatch">
+        </div>
+        <SiteFormActions>
+            <SiteFormField For="image-color-picker-hex"
+                Label="@HexLabel"><SiteInput class="form-control"
+                    type="text"
+                    data-image-color-picker-hex
+                    id="image-color-picker-hex"
+                    readonly /></SiteFormField>
+            <SiteButton data-image-color-picker-copy-hex
+                Variant="SiteButtonVariant.Default"
+                Class="tool-action-btn"><SiteIcon Name="copy" Size="14" />@CopyLabel</SiteButton>
+            <SiteFormField For="image-color-picker-rgb"
+                Label="@RgbLabel"><SiteInput class="form-control"
+                    type="text"
+                    data-image-color-picker-rgb
+                    id="image-color-picker-rgb"
+                    readonly /></SiteFormField>
+            <SiteButton data-image-color-picker-copy-rgb
+                Variant="SiteButtonVariant.Default"
+                Class="tool-action-btn"><SiteIcon Name="copy" Size="14" />@CopyLabel</SiteButton>
+        </SiteFormActions>
+    </SiteCard>
+</ToolPage>
+
+@code {
+    private string CanonicalPath => RequestPath;
+    private string Title => L["legacy_6ecce5263eaf"];
+    private string Description => L["legacy_096adcee620d"];
+    private string FileLabel => L["legacy_6320d8841a37"];
+    private string PickInstruction => L["legacy_a85bb5f5097f"];
+    private string HexLabel => L["legacy_e2e0c29e18f9"];
+    private string RgbLabel => L["legacy_480903cafe5b"];
+    private string CopyLabel => L["legacy_a3b71416a5f3"];
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender) await JS.InvokeVoidAsync("import", "/image-color-picker.js");
+    }
+}

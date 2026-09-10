@@ -1,0 +1,18 @@
+.site-nav-group {
+    display: grid;
+    gap: var(--site-space-2);
+}
+
+.site-nav-group ul {
+    display: grid;
+    gap: var(--site-space-2);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.site-nav-group[data-nested="true"] ul {
+    margin-left: var(--site-space-3);
+    padding-left: var(--site-space-3);
+    border-left: var(--site-border-width) solid var(--site-border);
+}

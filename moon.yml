@@ -1,0 +1,60 @@
+$schema: 'https://moonrepo.dev/schemas/project.json'
+
+language: javascript
+layer: tool
+toolchains:
+  default: node
+
+tasks:
+  contract:
+    command: 'bash tools/ci/contract.sh'
+    tags: [check]
+    options:
+      cache: false
+      runFromWorkspaceRoot: true
+
+  lint:
+    command: 'biome lint . --error-on-warnings'
+    tags: [check]
+  ast-grep:
+    script: 'ast-grep scan --config .config/sgconfig.yml && ast-grep test --config .config/sgconfig.yml --skip-snapshot-tests'
+    tags: [check]
+  format:
+    command: 'biome format --write .'
+    tags: [format]
+  format-check:
+    command: 'biome format .'
+    tags: [check, format]
+  duplication:
+    command: 'jscpd --min-tokens 65 --min-lines 5 --format javascript,typescript,tsx --reporters console --threshold 0.7 --exit-code 1 .'
+    tags: [check, heavy]
+  infra-duplication:
+    command: 'jscpd --min-tokens 65 --min-lines 5 --format yaml --reporters console --threshold 0.7 --exit-code 1 .devcontainer'
+    tags: [check, heavy]
+  complexity:
+    command: 'bash tools/quality/run.sh lizard -l typescript -C 6 -a 4 -w -i 0 .'
+    tags: [check, heavy]
+  workflow-tests:
+    command: 'node --test tools/checks/*.test.mjs'
+    tags: [check]
+  shellcheck:
+    command: 'shellcheck tools/checks/*.sh'
+    tags: [check]
+  dependencies:
+    command: 'node tools/checks/check-dependencies.mjs'
+    tags: [check]
+  metadata:
+    command: 'node tools/checks/check-project-metadata.mjs'
+    tags: [check]
+  spelling:
+    command: 'cspell --config .config/cspell.config.yaml --no-progress "tools/checks/**/*.{yml,yaml}" ".devcontainer/**/*.{yml,yaml}" ".config/moon/**/*.{yml,yaml}" moon.yml pnpm-workspace.yaml'
+    tags: [check]
+  knip:
+    script: 'knip --config tools/checks/knip.json && knip --config tools/checks/knip.json --files && knip --config tools/checks/knip.json --exports && knip --config tools/checks/knip.json --dependencies && knip --config tools/checks/knip.json --cycles'
+    tags: [check, heavy]
+  freshness:
+    command: 'node tools/checks/check-dependency-freshness.mjs'
+    tags: [check]
+  qlty:
+    command: 'node tools/checks/check-qlty.mjs'
+    tags: [check, heavy]

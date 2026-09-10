@@ -1,0 +1,17 @@
+<div class="site-auth-card" data-slot="auth-card">
+    <h1>@Title</h1>
+    @if (!string.IsNullOrWhiteSpace(Error))
+    {
+        <SiteNotice Tone="SiteTone.Danger">@Error</SiteNotice>
+    }
+    @ChildContent
+</div>
+
+@code {
+    [Parameter, EditorRequired]
+    public string Title { get; set; } = string.Empty;
+    [Parameter]
+    public string? Error { get; set; }
+    [Parameter, EditorRequired]
+    public RenderFragment ChildContent { get; set; } = default!;
+}

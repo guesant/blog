@@ -1,0 +1,32 @@
+@inherits LocalizedComponentBase
+@page "/tools/jwt-decoder"
+@page "/pt-BR/tools/jwt-decoder"
+@using Portfolio.Blazor.Core
+
+<ToolPage Title="@Title" Description="@Description" CanonicalPath="@CanonicalPath">
+    <SiteNotice>@PrivacyNote</SiteNotice>
+    <SiteToolForm Action="@Action" SubmitLabel="@DecodeLabel" AriaLabel="@InputLabel">
+        <SiteFormField For="jwt-input" Label="@InputLabel">
+            <SiteTextAreaInput Id="jwt-input"
+                Name="token"
+                Rows="6"
+                Value="@Token"
+                ValueChanged="@(v => Token = v)" />
+        </SiteFormField>
+    </SiteToolForm>
+    <SiteLiveRegion Politeness="SiteLivePoliteness.Polite">
+        @if (!Result.IsValid) { <SiteErrorMessage>@InvalidLabel</SiteErrorMessage> }
+        <SiteCard Class="site-block" Label="@HeaderLabel">
+            <SiteFormField For="jwt-header" Label="@HeaderLabel">
+                <SiteTextAreaInput Id="jwt-header" Rows="6" Value="@Result.Header" readonly />
+            </SiteFormField>
+        </SiteCard>
+        <SiteCard Class="site-block" Label="@PayloadLabel">
+            <SiteFormField For="jwt-payload" Label="@PayloadLabel">
+                <SiteTextAreaInput Id="jwt-payload" Rows="8" Value="@Result.Payload" readonly />
+            </SiteFormField>
+        </SiteCard>
+    </SiteLiveRegion>
+</ToolPage>
+@code {
+    private string CanonicalPath => RequestPath; private string _token = string.Empty; private bool _queryInitialized; private JwtDecodeResult _result = JwtDecodeResult.Empty; [SupplyParameterFromQuery(Name="token")] private string? QueryToken { get; set; } private string Action => L["legacy_66fa5d803a71"];  private string Title => L["legacy_d9c95f6c7a5c"]; private string Description => L["legacy_af88c17038d4"]; private string PrivacyNote => L["legacy_aa92bb04b548"]; private string InputLabel => L["legacy_c4c61716670f"]; private string DecodeLabel => L["legacy_42acb5571820"]; private string InvalidLabel => L["legacy_1612122b00b3"]; private string HeaderLabel => "Header"; private string PayloadLabel => "Payload"; private string Token { get => _token; set { _token = value; _result = JwtDecoderEngine.Decode(value); } } private JwtDecodeResult Result => _result; protected override void OnParametersSet() { if (_queryInitialized) return; _token = QueryToken ?? string.Empty; _result = JwtDecoderEngine.Decode(_token); _queryInitialized = true; } }

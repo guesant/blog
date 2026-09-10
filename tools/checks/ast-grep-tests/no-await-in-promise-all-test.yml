@@ -1,0 +1,7 @@
+id: no-await-in-promise-all-ts
+valid:
+  - |-
+      async function load() { return Promise.all([first(), second()]); }
+invalid:
+  - |-
+      async function load() { return Promise.all([await first(), second()]); }

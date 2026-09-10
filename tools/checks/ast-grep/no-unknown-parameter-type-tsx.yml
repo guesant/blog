@@ -1,0 +1,13 @@
+id: no-unknown-parameter-type-tsx
+language: Tsx
+severity: error
+message: Não use unknown em assinaturas internas; valide-o em um adapter de fronteira e exponha um tipo de domínio.
+rule:
+  all:
+    - kind: predefined_type
+    - regex: '^unknown$'
+    - inside:
+        any:
+          - kind: required_parameter
+          - kind: optional_parameter
+        stopBy: end

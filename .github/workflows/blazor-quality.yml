@@ -1,0 +1,61 @@
+name: blazor-quality
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  docker-quality:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+
+      - name: Create isolated CI content placeholder
+        run: >-
+          docker run --rm --network none
+          --user "$(id -u):$(id -g)"
+          --volume "$PWD:/src"
+          --workdir /src
+          mcr.microsoft.com/dotnet/sdk@sha256:e1fc6e423f543119c406d24e2e687d67c569f18f04a37a8b0005d80ad0dcee80
+          sh -lc 'mkdir -p data/public && : > data/portfolio.sqlite'
+
+      - name: Validate compose file
+        run: docker compose config --quiet
+
+      - name: Verify read-only content runtime
+        run: docker compose run --rm web sh tools/scripts/verify-readonly-runtime.sh
+
+      - name: Verify supply-chain policy
+        run: docker compose run --rm web sh tools/scripts/verify-supply-chain.sh
+
+      - name: Restore locked NuGet dependencies
+        run: docker compose run --rm web dotnet restore Portfolio.Blazor.slnx --locked-mode
+
+      - name: Audit NuGet dependencies
+        run: docker compose run --rm web dotnet list Portfolio.Blazor.slnx package --vulnerable --include-transitive
+
+      - name: Generate NuGet SPDX SBOM
+        run: docker compose run --rm web sh -lc 'mkdir -p /tmp/blazor-sbom /src/artifacts/sbom && dotnet list Portfolio.Blazor.slnx package --include-transitive --format json > /tmp/blazor-sbom/nuget-packages.json && dotnet run --project Portfolio/Portfolio.Blazor.Sbom/Portfolio.Blazor.Sbom.csproj --no-restore -- /tmp/blazor-sbom/nuget-packages.json /src/artifacts/sbom/dependencies.spdx.json && test -s /src/artifacts/sbom/dependencies.spdx.json'
+
+      - name: Upload SPDX SBOM
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: blazor-nuget-sbom
+          path: artifacts/sbom/dependencies.spdx.json
+          if-no-files-found: error
+
+      - name: Build Blazor solution
+        run: docker compose run --rm web dotnet build Portfolio.Blazor.slnx --configuration Release --no-restore
+
+      - name: Run core checks
+        run: docker compose run --rm web dotnet run --project Portfolio/Portfolio.Blazor.Core.Tests/Portfolio.Blazor.Core.Tests.csproj --no-restore
+
+      - name: Start SSR app for structural smoke tests
+        run: docker compose up -d web
+
+      - name: Verify public route shells without production data
+        run: docker compose exec -T web sh tools/scripts/verify-route-shell.sh

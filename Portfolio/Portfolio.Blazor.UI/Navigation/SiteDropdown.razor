@@ -1,0 +1,61 @@
+<div class="site-dropdown content-actions-menu" data-slot="dropdown">
+    @if (RendererInfo.IsInteractive)
+    {
+        <BlazorBlueprint.Primitives.DropdownMenu.BbDropdownMenu>
+            <BlazorBlueprint.Primitives.DropdownMenu.BbDropdownMenuTrigger AdditionalAttributes="@TriggerAttributes">
+                @ToggleContent
+            </BlazorBlueprint.Primitives.DropdownMenu.BbDropdownMenuTrigger>
+            <BlazorBlueprint.Primitives.DropdownMenu.BbDropdownMenuContent AdditionalAttributes="@ContentAttributes"
+                CloseOnEscape="true">
+                @MenuContent
+            </BlazorBlueprint.Primitives.DropdownMenu.BbDropdownMenuContent>
+        </BlazorBlueprint.Primitives.DropdownMenu.BbDropdownMenu>
+    }
+    else
+    {
+        @* IMPORTANT: content detail routes (App.razor's PageRenderMode) render fully static for
+           this component's tree, so BbDropdownMenu's open/close state -- plain Blazor C# state --
+           can never react to a click; the trigger would render but the menu could never open.
+           <details>/<summary> gets the same disclosure from the browser itself, no Blazor or
+           JavaScript required, and content-actions.js already drives the items by plain DOM
+           listeners so they keep working once the menu can open. *@
+        <details class="site-dropdown-details" name="@ExclusiveGroup">
+            <summary @attributes="TriggerAttributes">@ToggleContent</summary>
+            <div @attributes="StaticContentAttributes">
+                @MenuContent
+            </div>
+        </details>
+    }
+</div>
+
+@code {
+    [Parameter, EditorRequired]
+    public RenderFragment ToggleContent { get; set; } = default!;
+    [Parameter, EditorRequired]
+    public RenderFragment MenuContent { get; set; } = default!;
+    [Parameter]
+    public string? ExclusiveGroup { get; set; }
+
+    private Dictionary<string, object> TriggerAttributes { get; } = new()
+    {
+        ["class"] = "site-control",
+        ["data-slot"] = "button",
+        ["data-variant"] = "outline",
+        ["data-size"] = "default",
+    };
+
+    private Dictionary<string, object> ContentAttributes { get; } = new()
+    {
+        ["class"] = "content-actions-menu-items",
+    };
+
+    // IMPORTANT: BbDropdownMenuContent already sets its own role="menu" internally, so the shared
+    // ContentAttributes above stays generic. The <details> fallback renders a plain <div> with no
+    // ARIA role of its own, so it needs one added explicitly here - see SiteDropdown.razor's IMPORTANT
+    // comment above for why this fallback exists and content-actions.js for its keyboard behavior.
+    private Dictionary<string, object> StaticContentAttributes { get; } = new()
+    {
+        ["class"] = "content-actions-menu-items",
+        ["role"] = "menu",
+    };
+}

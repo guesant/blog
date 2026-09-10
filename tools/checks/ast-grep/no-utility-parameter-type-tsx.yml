@@ -1,0 +1,16 @@
+id: no-utility-parameter-type-tsx
+language: Tsx
+severity: error
+message: Extraia o tipo utilitário do parâmetro para um type ou interface nomeado.
+
+rule:
+  all:
+    - kind: generic_type
+    - has:
+        kind: type_identifier
+        regex: '^(Omit|Pick|Partial|Required|Readonly|Record)$'
+    - inside:
+        any:
+          - kind: required_parameter
+          - kind: optional_parameter
+        stopBy: end

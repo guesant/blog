@@ -1,0 +1,89 @@
+@implements IDisposable
+@inject SiteDialogService Dialogs
+@inject IJSRuntime JS
+
+@if (Dialogs.Current is { } request)
+{
+    <div class="site-dialog-backdrop" data-slot="dialog-backdrop" @onclick="Cancel">
+    </div>
+    <div
+        class="site-dialog"
+        data-slot="dialog"
+        role="alertdialog"
+        aria-modal="true"
+        aria-labelledby="site-dialog-title"
+        aria-describedby="site-dialog-description"
+        @onkeydown="HandleKeyDown"
+        tabindex="-1"
+        @ref="_dialogRef"
+    >
+        <SiteHeading Level="2" Id="site-dialog-title">@request.Title</SiteHeading>
+        <SiteText Id="site-dialog-description">@request.Description</SiteText>
+        <SiteFormActions>
+            <SiteButton
+                Variant="@(request.Destructive ? SiteButtonVariant.Destructive : SiteButtonVariant.Default)"
+                OnClick="Confirm"
+            >
+                @request.ConfirmLabel
+            </SiteButton>
+            <SiteButton Variant="SiteButtonVariant.Outline" OnClick="Cancel">
+                @request.CancelLabel
+            </SiteButton>
+        </SiteFormActions>
+    </div>
+}
+
+@code {
+    private ElementReference _dialogRef;
+    private bool _shouldFocus;
+
+    protected override void OnInitialized() => Dialogs.Changed += HandleChanged;
+
+    private void HandleChanged()
+    {
+        _shouldFocus = Dialogs.Current is not null;
+        InvokeAsync(StateHasChanged);
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!_shouldFocus || Dialogs.Current is null)
+        {
+            return;
+        }
+
+        _shouldFocus = false;
+        await _dialogRef.FocusAsync();
+        await TryInvokeVoidAsync("SiteFocusTrap.trap", _dialogRef);
+    }
+
+    private async Task Confirm()
+    {
+        await TryInvokeVoidAsync("SiteFocusTrap.restoreFocus");
+        Dialogs.Answer(true);
+    }
+
+    private async Task Cancel()
+    {
+        await TryInvokeVoidAsync("SiteFocusTrap.restoreFocus");
+        Dialogs.Answer(false);
+    }
+
+    // IMPORTANT: swallows JSException so a missing/not-yet-loaded focus-trap script (e.g. a host
+    // page, like the Stories harness, that doesn't include App.razor's script tag) degrades to "no
+    // trap" instead of breaking the dialog's actual confirm/cancel behavior.
+    private async Task TryInvokeVoidAsync(string identifier, params object?[] args)
+    {
+        try
+        {
+            await JS.InvokeVoidAsync(identifier, args);
+        }
+        catch (JSException)
+        {
+        }
+    }
+
+    private Task HandleKeyDown(KeyboardEventArgs args) => args.Key == "Escape" ? Cancel() : Task.CompletedTask;
+
+    public void Dispose() => Dialogs.Changed -= HandleChanged;
+}

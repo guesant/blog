@@ -1,0 +1,31 @@
+<div class="admin-shell" data-layout-template="admin-sidebar">
+    <aside class="admin-nav" data-layout-region="sidebar">
+        <div class="admin-nav-brand">@Brand</div>
+        <nav class="admin-nav-links" aria-label="@NavAriaLabel">
+            @Nav
+            @NavFooter
+        </nav>
+    </aside>
+    <main class="admin-content" id="main-content" tabindex="-1" data-layout-region="content">
+        <div class="site-content-max">
+            @ChildContent
+        </div>
+    </main>
+</div>
+
+@code {
+    /// <summary>Brand/logo rendered at the top of the sidebar.</summary>
+    [Parameter]
+    public RenderFragment? Brand { get; set; }
+    /// <summary>Accessible name for the primary nav landmark.</summary>
+    [Parameter]
+    public string NavAriaLabel { get; set; } = "admin";
+    /// <summary>Primary nav links.</summary>
+    [Parameter]
+    public RenderFragment? Nav { get; set; }
+    /// <summary>Content rendered after the nav, e.g. a sign-out form.</summary>
+    [Parameter]
+    public RenderFragment? NavFooter { get; set; }
+    [Parameter, EditorRequired]
+    public RenderFragment ChildContent { get; set; } = default!;
+}

@@ -1,0 +1,54 @@
+@inherits LocalizedComponentBase
+@page "/tools/vigenere-cipher"
+@page "/pt-BR/tools/vigenere-cipher"
+@using Portfolio.Blazor.Core
+@using Microsoft.JSInterop
+@inject IJSRuntime JS
+<ToolPage Title="@Title" Description="@Description" CanonicalPath="@CanonicalPath">
+    <SiteFormCard Class="site-block">
+        <SiteFormField Label="@InputLabel"
+            For="vigenere-input"><SiteTextAreaInput id="vigenere-input"
+                Class="tool-textarea"
+                rows="8"
+                @bind-Value="Input" /></SiteFormField>
+            <SiteFormActions>
+                <SiteFormField Label="@KeyLabel"
+                    For="vigenere-key"><SiteInput id="vigenere-key"
+                        type="text"
+                        @bind-Value="Key" /></SiteFormField>
+                            <SiteButton Variant="SiteButtonVariant.Default"
+                            Class="tool-action-btn"
+                            @onclick="()=>Run(false)"><SiteIcon Name="arrow-right-left"
+                                Size="14" />@EncodeLabel</SiteButton>
+                                    <SiteButton Variant="SiteButtonVariant.Default"
+                                Class="tool-action-btn"
+                                @onclick="()=>Run(true)"><SiteIcon Name="arrow-right-left"
+                                    Size="14" />@DecodeLabel</SiteButton>
+                                    </SiteFormActions>
+            </SiteFormCard>
+                <SiteLiveRegion Politeness="SiteLivePoliteness.Polite">@if(ShowError){<SiteErrorMessage>@ErrorLabel</SiteErrorMessage>}<SiteCard Class="site-block" Label="@OutputLabel">
+                    <SiteOutputField Id="vigenere-output"
+                        Label="@OutputLabel"
+                        Value="@Output"
+                        Multiline="true"
+                        Copyable="true"
+                        CopyLabel="@CopyLabel" />
+                </SiteCard>
+            </SiteLiveRegion>
+        </ToolPage>
+@code {
+    private string CanonicalPath => RequestPath;
+    private string Input = "", Key = "", Output = "";
+    private bool ShowError;
+    private string Title => L["vigenere_title"];
+    private string Description => L["vigenere_description"];
+    private string InputLabel => L["vigenere_input"];
+    private string KeyLabel => L["vigenere_key"];
+    private string OutputLabel => L["vigenere_output"];
+    private string EncodeLabel => L["vigenere_encode"];
+    private string DecodeLabel => L["vigenere_decode"];
+    private string CopyLabel => L["vigenere_copy"];
+    private string ErrorLabel => L["vigenere_error"];
+    private void Run(bool decode) { if (Portfolio.Blazor.Core.VigenereCipher.CleanKey(Key).Length == 0) { Output = ""; ShowError = true; return; } ShowError = false; Output = Portfolio.Blazor.Core.VigenereCipher.Transform(Input, Key, decode); }
+    private async Task CopyAsync() => await JS.InvokeVoidAsync("navigator.clipboard.writeText", Output);
+}

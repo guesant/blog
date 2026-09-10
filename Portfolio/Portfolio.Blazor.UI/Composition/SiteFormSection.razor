@@ -1,0 +1,21 @@
+<SiteStack Gap="SiteSpace.Md" Class="site-form-section" data-slot="form-section">
+    <div>
+        <SiteHeading Level="2" Id="@HeadingId">@Title</SiteHeading>
+        @if (!string.IsNullOrWhiteSpace(Description))
+        {
+            <SiteText Variant="SiteTextVariant.Meta">@Description</SiteText>
+        }
+    </div>
+    @ChildContent
+</SiteStack>
+
+@code {
+    [Parameter, EditorRequired]
+    public string Title { get; set; } = string.Empty;
+    [Parameter]
+    public string? Description { get; set; }
+    [Parameter]
+    public string? HeadingId { get; set; }
+    [Parameter, EditorRequired]
+    public RenderFragment ChildContent { get; set; } = default!;
+}

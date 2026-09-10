@@ -1,0 +1,9 @@
+.site-card-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--site-space-4);
+}
+.site-card-grid[data-dense="true"] {
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, var(--site-tile-min-w)), 1fr));
+    gap: var(--site-space-3);
+}

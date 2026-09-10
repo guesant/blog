@@ -1,0 +1,102 @@
+@page "/admin/languages"
+@page "/admin/languages/order"
+@inherits AdminListPageBase<Language>
+@layout AdminLayout
+
+<PageTitle>Languages</PageTitle>
+
+@if (IsOrderMode)
+{
+    <AdminOrderEditor TItem="Language"
+        Title="Languages order"
+        ListRoute="/admin/languages"
+        Items="@Items"
+        DisplayTitle="@DisplayTitle"
+        IsLoading="@IsLoading"
+        IsSaving="@IsSaving"
+        Error="@Error"
+        OnReordered="HandleReorder"
+        OnSave="@(() => HandleSaveOrderAsync("/admin/languages"))" />
+}
+else
+{
+    <SitePageHeader Title="Languages">
+        <Actions>
+            <SiteInline Gap="SiteSpace.Sm">
+                <SiteLink Variant="SiteButtonVariant.Outline" Href="/admin/languages/order">
+                    <SiteIcon Name="arrow-up-down" Size="14" />Edit order</SiteLink>
+                <SiteLink Variant="SiteButtonVariant.Default" Href="/admin/languages/create">
+                    <SiteIcon Name="plus" Size="14" />New language</SiteLink>
+            </SiteInline>
+        </Actions>
+    </SitePageHeader>
+
+    @if (Error is not null)
+    {
+        <SiteNotice Tone="SiteTone.Danger">@Error</SiteNotice>
+    }
+
+    @if (IsLoading)
+    {
+        <SiteLoading Label="Loading…" />
+    }
+    else
+    {
+        <SiteDataTable TItem="Language"
+            Items="@PageItems"
+            EmptyText="No languages yet."
+            RowKey="@(language => language.Id)">
+            <Columns>
+                <SiteColumn TItem="Language"
+                    Header="Name"
+                    IsRowHeader="true"><Cell Context="language">@DisplayTitle(language)</Cell>
+                    </SiteColumn>
+                <SiteColumn TItem="Language" Header="Slug">
+                    <Cell Context="language">@language.Slug</Cell>
+                </SiteColumn>
+                <SiteColumn TItem="Language" Header="Code">
+                    <Cell Context="language">@language.Code</Cell>
+                </SiteColumn>
+            </Columns>
+            <Actions Context="language">
+                <SiteInline Gap="SiteSpace.Sm">
+                    <SiteLink Variant="SiteButtonVariant.Outline"
+                        Href="@($"/admin/languages/{language.Id}")">
+                        <SiteIcon Name="pencil" Size="14" />Edit</SiteLink>
+                    <SiteButton Variant="SiteButtonVariant.Destructive"
+                        @onclick="@(() => HandleDeleteAsync(language))"><SiteIcon Name="trash-2"
+                            Size="14" />Delete</SiteButton>
+                </SiteInline>
+            </Actions>
+        </SiteDataTable>
+        <SitePagination CurrentPage="@CurrentPage" TotalPages="@TotalPages" Href="@PageUrl" />
+    }
+}
+
+@code {
+    protected override string EntityLabel => "language";
+
+    protected override void SetOrder(Language entity, int order) => entity.Order = order;
+
+    protected override async Task<List<Language>> LoadEntitiesAsync(PortfolioAdminDbContext dbContext) =>
+        await dbContext.Languages
+            .Include(language => language.Translations)
+            .AsNoTracking()
+            .OrderBy(language => language.Order)
+            .ToListAsync();
+
+    protected override Task<Language?> FindTrackedAsync(
+        PortfolioAdminDbContext dbContext,
+        int id
+    ) =>
+        dbContext.Languages.FirstOrDefaultAsync(candidate => candidate.Id == id);
+
+    protected override string DisplayTitle(Language language) =>
+        TranslationLookup.Resolve(language.Translations, translation => translation.Locale, translation => translation.Name, "en")
+        ?? language.Slug;
+
+    protected override int GetId(Language language) => language.Id;
+
+    protected override string DeleteConfirmDescription(Language entity) =>
+        "This permanently removes the language and its translations. This cannot be undone.";
+}

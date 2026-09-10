@@ -1,0 +1,8 @@
+.site-fieldset {
+    display: grid;
+    gap: var(--site-gap-stack);
+    padding: var(--site-inset-card);
+    border: var(--site-border-width) solid var(--site-border);
+    border-radius: var(--site-radius);
+    margin: 0;
+}

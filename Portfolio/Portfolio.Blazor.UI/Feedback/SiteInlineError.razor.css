@@ -1,0 +1,7 @@
+.tool-error {
+    margin: 0;
+    border-radius: var(--site-radius);
+    color: var(--site-danger);
+    background-color: var(--site-danger-bg);
+    border-color: var(--site-danger);
+}

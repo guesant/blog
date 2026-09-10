@@ -1,0 +1,26 @@
+<div class="@RootClass" data-slot="fact-item">
+    <dt class="site-fact-item-label">
+        @if (!string.IsNullOrWhiteSpace(Icon))
+        {
+            <SiteIcon Name="@Icon" Size="12" Class="icon site-fact-item-icon" />
+        }
+        @Label
+    </dt>
+    <dd class="site-fact-item-value">@ChildContent</dd>
+</div>
+
+@code {
+    /// <summary>Short term shown above the value, e.g. "ISBN".</summary>
+    [Parameter, EditorRequired]
+    public string Label { get; set; } = string.Empty;
+    /// <summary>Icon rendered before the term.</summary>
+    [Parameter]
+    public string? Icon { get; set; }
+    /// <summary>Extra class applied to the root element.</summary>
+    [Parameter]
+    public string? Class { get; set; }
+    [Parameter, EditorRequired]
+    public RenderFragment ChildContent { get; set; } = default!;
+
+    private string RootClass => SiteCss.Join("site-fact-item", Class);
+}

@@ -1,0 +1,752 @@
+.skip-link {
+    position: fixed;
+    top: var(--site-space-2);
+    left: var(--site-space-2);
+    z-index: var(--site-z-skip);
+    transform: translateY(-200%);
+}
+.skip-link:focus {
+    transform: translateY(0);
+}
+.container-xxl {
+    width: 100%;
+    padding-inline: var(--site-space-6);
+    margin-inline: auto;
+}
+@media (min-width: 87.5rem) {
+    .container-xxl {
+        max-width: var(--site-container-max);
+    }
+}
+
+/* Utilities: first-party replacement for the generic Bootstrap utility
+   classes still used pervasively across the codebase (display, flexbox,
+   spacing, text, background, border). Values copied verbatim from
+   bootstrap.min.css's compiled output; this is the last blocker before
+   bootstrap.min.css can be removed entirely. */
+.d-flex {
+    display: flex !important;
+}
+.d-block {
+    display: block !important;
+}
+.d-grid {
+    display: grid !important;
+}
+.align-items-center {
+    align-items: center !important;
+}
+.align-items-end {
+    align-items: flex-end !important;
+}
+.align-items-start {
+    align-items: flex-start !important;
+}
+.align-self-start {
+    align-self: flex-start !important;
+}
+.flex-column {
+    flex-direction: column !important;
+}
+.flex-grow-1 {
+    flex-grow: 1 !important;
+}
+.flex-wrap {
+    flex-wrap: wrap !important;
+}
+.justify-content-between {
+    justify-content: space-between !important;
+}
+.justify-content-center {
+    justify-content: center !important;
+}
+.gap-2 {
+    gap: var(--site-space-2) !important;
+}
+.gap-3 {
+    gap: var(--site-space-4) !important;
+}
+.mt-0 {
+    margin-top: 0 !important;
+}
+.mt-3 {
+    margin-top: var(--site-space-4) !important;
+}
+.mb-0 {
+    margin-bottom: 0 !important;
+}
+.mb-3 {
+    margin-bottom: var(--site-space-4) !important;
+}
+.mb-4 {
+    margin-bottom: var(--site-space-6) !important;
+}
+.h-100 {
+    height: 100% !important;
+}
+.position-relative {
+    position: relative !important;
+}
+/* SiteClickableCard renders its title link as a bare "stretched-link"
+   (SiteLinkBase Plain="true"), not paired with .site-control, so the
+   .site-control.stretched-link override above never applies to it. It
+   depends entirely on Bootstrap's own .stretched-link::after overlay
+   (absolutely positioned over the nearest .position-relative ancestor)
+   to make the whole card clickable - never ported to first-party CSS
+   until now, so every clickable card grid was silently relying on
+   bootstrap.min.css for its actual click target. */
+.stretched-link::after {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1;
+    content: "";
+}
+.text-body-secondary {
+    color: var(--site-text-secondary) !important;
+}
+.text-break {
+    word-wrap: break-word !important;
+    word-break: break-word !important;
+}
+.text-center {
+    text-align: center !important;
+}
+.text-decoration-none {
+    text-decoration: none !important;
+}
+.text-bg-light {
+    color: var(--site-text-primary) !important;
+    background-color: var(--site-surface-muted) !important;
+}
+.bg-body-tertiary {
+    background-color: var(--site-surface-muted) !important;
+}
+.bg-white {
+    background-color: var(--site-surface) !important;
+}
+/* border/border-top/rounded use this codebase's own --site-border and
+   --site-radius tokens (already aliased to Bootstrap's own border-color
+   variable, per --site-border above) instead of isolated Bootstrap values,
+   for visual consistency with every other bordered/rounded surface in this
+   file rather than introducing Bootstrap's unused 0.375rem radius. */
+.border {
+    border: var(--site-border-width) solid var(--site-border) !important;
+}
+.border-top {
+    border-top: var(--site-border-width) solid var(--site-border) !important;
+}
+.rounded {
+    border-radius: var(--site-radius) !important;
+}
+
+.page {
+    width: 100%;
+    height: 100dvh;
+    min-height: 0;
+    overflow: hidden;
+}
+.site-nav-brand,
+.site-nav-brand:visited {
+    display: inline-block;
+    margin: 0;
+    color: var(--site-text-primary);
+    font-size: var(--site-text-2xl);
+    font-weight: var(--site-weight-bold);
+    line-height: var(--site-leading-tight);
+    text-decoration: none;
+}
+.nav-item-label {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.site-advanced-select-clear {
+    min-width: var(--site-target-min);
+}
+.page-content > main {
+    width: 100%;
+    height: auto;
+    min-height: 0;
+    margin: 0;
+    flex: none;
+    overflow: visible;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    margin: 0;
+    font-family: var(--site-font-family);
+    font-weight: var(--site-weight-semibold);
+    line-height: var(--site-leading-tight);
+}
+h1 {
+    font-size: var(--site-text-3xl);
+    font-weight: var(--site-weight-bold);
+    letter-spacing: var(--site-letter-heading);
+}
+h2 {
+    font-size: var(--site-text-2xl);
+    font-weight: var(--site-weight-bold);
+    letter-spacing: var(--site-letter-heading);
+}
+h3 {
+    font-size: var(--site-text-xl);
+}
+h4 {
+    font-size: var(--site-text-lg);
+}
+h5 {
+    font-size: var(--site-text-body);
+}
+h6 {
+    font-size: var(--site-text-sm);
+}
+p {
+    margin: 0;
+    font-size: var(--site-text-body);
+    font-weight: var(--site-weight-regular);
+    line-height: var(--site-leading-normal);
+}
+small,
+.small {
+    font-size: var(--site-text-sm);
+    line-height: var(--site-leading-normal);
+}
+strong,
+b {
+    font-weight: var(--site-weight-bold);
+}
+button,
+input,
+select,
+textarea,
+optgroup {
+    font-family: inherit;
+    font-size: var(--site-text-body);
+    font-weight: var(--site-weight-regular);
+    line-height: var(--site-leading-normal);
+}
+input,
+select,
+textarea,
+.form-control,
+.form-select {
+    font-size: var(--site-text-form);
+}
+/* IMPORTANT: FocusOnNavigate (Routes.razor) calls .focus() on this h1 on every
+   client-side route change, including mouse-triggered navigations. Verified live:
+   with no preceding real keyboard interaction in the session, that programmatic
+   focus does not reliably match :focus-visible, so the outline:0 in base.css's
+   :focus-visible rule for h1 does not always cover it -- this plain :focus
+   fallback is still needed to stop the browser's native outline from flashing
+   on every page navigation. */
+h1[tabindex="-1"]:focus {
+    outline: 0;
+    box-shadow: none;
+}
+.site-block {
+    margin: 0 !important;
+}
+.eyebrow,
+.section-label {
+    display: flex;
+    align-items: center;
+    gap: var(--site-gap-inline);
+    color: var(--site-text-secondary);
+    font-size: var(--site-text-xs);
+    font-weight: var(--site-weight-semibold);
+    letter-spacing: var(--site-letter-label);
+    line-height: var(--site-leading-normal);
+    text-transform: uppercase;
+}
+.trajectory-row .period {
+    display: flex;
+    align-items: center;
+    gap: var(--site-gap-inline);
+    color: var(--site-text-secondary);
+    font-size: var(--site-text-sm);
+}
+.lede {
+    max-width: var(--site-lede-max);
+    color: var(--site-text-secondary);
+}
+.hero-availability {
+    margin-top: var(--site-gap-section);
+    padding-top: var(--site-space-4);
+    border-top: var(--site-border-width) solid var(--site-border);
+}
+.hero-availability-dot {
+    flex: 0 0 auto;
+    width: var(--site-dot);
+    height: var(--site-dot);
+    border-radius: var(--site-radius-pill);
+    background: var(--site-success);
+}
+fieldset {
+    display: grid;
+    gap: var(--site-space-3);
+    margin: 0;
+    padding: var(--site-space-4);
+    border: var(--site-border-width) solid var(--site-border);
+    border-radius: var(--site-radius);
+    background: var(--site-surface);
+}
+legend {
+    float: none;
+    width: auto;
+    margin: 0;
+    padding: 0 var(--site-space-1);
+    color: var(--site-text-secondary);
+    font-size: var(--site-text-sm);
+    line-height: var(--site-leading-normal);
+}
+.d-flex.flex-wrap > label:not(.form-label) {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--site-space-2);
+}
+input,
+select,
+textarea {
+    max-width: 100%;
+}
+input:not([type="checkbox"]):not([type="radio"]):not(.form-control),
+select:not(.form-select),
+textarea:not(.form-control) {
+    display: block;
+    width: 100%;
+    padding: var(--site-space-2) var(--site-space-3);
+    border: var(--site-border-width) solid var(--site-border-strong);
+    border-radius: var(--site-radius);
+    color: var(--site-text-primary);
+    background: var(--site-surface);
+}
+input:not([type="checkbox"]):not([type="radio"]),
+select,
+textarea,
+.form-control,
+.form-select {
+    min-height: var(--site-control-h);
+    border-radius: var(--site-radius);
+}
+button,
+.btn {
+    border-radius: var(--site-radius);
+}
+
+.search-field-icon {
+    position: absolute;
+    left: var(--site-space-3);
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    color: var(--site-text-secondary);
+}
+.filter-actions,
+.pagination,
+.site-pagination {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--site-space-2);
+}
+.site-contact-channels {
+    gap: var(--site-space-2);
+}
+.site-content-actions {
+    gap: var(--site-space-2);
+}
+.site-relation-group {
+    display: grid;
+    gap: var(--site-space-2);
+}
+.filter-actions {
+    align-self: end;
+}
+.row-line-boxed {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--site-space-4);
+}
+.row-meta-column {
+    display: flex;
+    flex: 0 0 var(--site-meta-col-w);
+    flex-direction: column;
+    gap: var(--site-space-2);
+    width: var(--site-meta-col-w);
+}
+.row-content {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    gap: var(--site-space-2);
+    min-width: 0;
+}
+[id^="view-spacious"] > [class*="col-"] {
+    flex: 0 0 auto;
+    width: 100%;
+}
+/* list-group: only used by ContentHistory's change list, so styled just
+   enough to keep the list-group-item-danger/-success diff rows readable
+   without Bootstrap, reusing the color-mix recipe already established by
+   .tool-badge--pass/--fail below. */
+.list-group {
+    display: flex;
+    flex-direction: column;
+    padding-left: 0;
+    margin-bottom: 0;
+    border-radius: var(--site-radius);
+}
+.list-group-item {
+    position: relative;
+    display: block;
+    padding: var(--site-space-2) var(--site-space-4);
+    color: var(--site-text-primary);
+    background-color: var(--site-surface);
+    border: var(--site-border-width) solid var(--site-border);
+}
+.list-group-item + .list-group-item {
+    border-top-width: 0;
+}
+.list-group-item-danger {
+    color: var(--site-danger);
+    background-color: color-mix(in srgb, var(--site-danger) 12%, var(--site-surface));
+    border-color: color-mix(in srgb, var(--site-danger) 35%, var(--site-border));
+}
+.list-group-item-success {
+    color: var(--site-success);
+    background-color: color-mix(in srgb, var(--site-success) 12%, var(--site-surface));
+    border-color: color-mix(in srgb, var(--site-success) 35%, var(--site-border));
+}
+.site-history-list {
+    display: grid;
+    gap: var(--site-space-2);
+}
+.history-compare-form {
+    gap: var(--site-space-4);
+}
+.site-form-card.card,
+.site-filter-card.card,
+.section.card,
+.site-section.card {
+    box-shadow: none;
+}
+.site-filter-card .card-body > form {
+    margin: 0;
+}
+.site-inline-action {
+    margin: 0;
+}
+.icon-trailing {
+    margin-left: auto;
+}
+.file-tree-file {
+    padding: var(--site-action-py) var(--site-action-px);
+}
+.tool-list-item {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+.tool-badge--pass {
+    color: var(--site-success);
+    background: color-mix(in srgb, var(--site-success) 12%, var(--site-surface));
+    border-color: color-mix(in srgb, var(--site-success) 35%, var(--site-border)) !important;
+}
+.tool-badge--fail {
+    color: var(--site-danger);
+    background: color-mix(in srgb, var(--site-danger) 12%, var(--site-surface));
+    border-color: color-mix(in srgb, var(--site-danger) 35%, var(--site-border)) !important;
+}
+/* Alerts: base look shared by SiteInlineError (alert-danger) and SiteNotice
+   (alert-light plus its other tones); margin/radius sizing for each lives in
+   their own SiteInlineError.razor.css/SiteNotice.razor.css. */
+.alert {
+    padding: var(--site-space-4);
+    margin-bottom: var(--site-space-4);
+    border: var(--site-border-width) solid transparent;
+    border-radius: var(--site-radius);
+}
+.alert-danger {
+    color: var(--site-danger);
+    background-color: color-mix(in srgb, var(--site-danger) 12%, var(--site-surface));
+    border-color: color-mix(in srgb, var(--site-danger) 35%, var(--site-border));
+}
+.alert-light {
+    color: var(--site-text-primary);
+    background-color: var(--site-surface-muted);
+    border-color: var(--site-border);
+}
+.tool-stat {
+    padding: var(--site-space-4);
+    border: var(--site-border-width) solid var(--site-border);
+    border-radius: var(--site-radius-lg);
+    background: var(--site-surface-muted);
+}
+.data-chart {
+    min-height: var(--site-chart-min-h);
+}
+.snippet-viewer[data-columns="2"] {
+    display: flex;
+    flex-wrap: wrap;
+}
+.snippet-viewer[data-columns="2"] > * {
+    flex: 1 1 var(--site-pane-min);
+    min-width: 0;
+}
+.snippet-viewer[data-columns="2"] > .snippet-file-panel-wrap {
+    flex: 3 1 var(--site-pane-main-min);
+}
+[data-slot="actions-cell"] {
+    width: 1%;
+    white-space: nowrap;
+}
+[data-slot="actions-cell"] [data-slot="inline"] {
+    flex-wrap: nowrap !important;
+}
+.knowledge-map-cytoscape {
+    width: 100%;
+    min-height: var(--site-kmap-min-h);
+    border: var(--site-border-width) solid var(--site-border);
+    border-radius: var(--site-radius);
+    background: var(--site-surface);
+}
+.kmap-root {
+    display: flex;
+    flex-direction: column;
+    gap: var(--site-space-4);
+    container-type: inline-size;
+}
+.kmap-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--site-space-3);
+}
+.kmap-select {
+    min-width: var(--site-kmap-select-min);
+}
+.kmap-expand-btn {
+    margin-inline-start: auto;
+}
+.kmap-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--site-space-4);
+}
+.kmap-legend-item {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--site-space-2);
+    font-family: var(--site-font-family);
+    font-size: var(--site-text-xs);
+    color: var(--site-text-secondary);
+}
+.kmap-legend-swatch {
+    display: inline-block;
+    width: var(--site-swatch);
+    height: var(--site-swatch);
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+.kmap-layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--site-space-6);
+    min-width: 0;
+}
+@container (min-width: 48rem) {
+    .kmap-layout {
+        grid-template-columns: 1fr var(--site-kmap-panel-w);
+    }
+}
+.kmap-graph {
+    min-width: 0;
+}
+.kmap-panel {
+    border: var(--site-border-width) solid var(--site-border);
+    border-radius: var(--site-radius);
+    padding: var(--site-space-4);
+}
+.kmap-panel-empty {
+    font-size: var(--site-text-sm);
+    color: var(--site-text-secondary);
+    margin: 0;
+}
+.kmap-panel-kind {
+    font-family: var(--site-font-family);
+    font-size: var(--site-text-xs);
+    text-transform: lowercase;
+    letter-spacing: var(--site-letter-label);
+    color: var(--site-text-label);
+    margin: 0;
+}
+.kmap-panel-title {
+    font-weight: var(--site-weight-semibold);
+    padding-top: var(--site-space-2);
+    margin: 0;
+}
+.kmap-panel-link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--site-space-2);
+    padding-top: var(--site-space-3);
+    font-size: var(--site-text-sm);
+    font-weight: var(--site-weight-semibold);
+    color: var(--site-primary);
+    text-decoration: none;
+}
+.kmap-panel-link:hover {
+    text-decoration: underline;
+}
+.kmap-panel .kmap-panel-connections {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: var(--site-space-3);
+    margin: 0;
+    padding: var(--site-space-4) 0 0;
+    border-top: var(--site-border-width) solid var(--site-border);
+    margin-top: var(--site-space-4);
+}
+.kmap-panel-connection {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--site-space-1);
+    padding: var(--site-space-2) var(--site-space-3);
+    border: var(--site-border-width) solid var(--site-border-subtle);
+    border-radius: var(--site-radius);
+    font-size: var(--site-text-sm);
+    transition: border-color var(--site-duration-short-3) var(--site-ease-standard);
+}
+.kmap-panel-connection:has(.kmap-panel-connection-link:hover) {
+    border-color: var(--site-primary);
+}
+.kmap-panel-connection-label {
+    color: var(--site-text-secondary);
+}
+.kmap-panel-connection-link {
+    font-weight: var(--site-weight-semibold);
+    color: var(--site-text-primary);
+    text-decoration: none;
+}
+.kmap-panel-connection-link:hover {
+    color: var(--site-primary);
+}
+.kmap-fullscreen-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: calc(var(--site-z-offcanvas) + 5);
+    background: var(--site-backdrop);
+}
+.kmap-collapse-btn {
+    position: fixed;
+    top: calc(var(--site-fullscreen-inset-y) + var(--site-space-4));
+    right: calc(var(--site-fullscreen-inset-x) + var(--site-space-4));
+    z-index: calc(var(--site-z-offcanvas) + 10);
+}
+.kmap-root.is-fullscreen {
+    position: fixed;
+    inset: var(--site-fullscreen-inset-y) var(--site-fullscreen-inset-x);
+    z-index: calc(var(--site-z-offcanvas) + 6);
+    margin: 0;
+    background: var(--site-surface);
+    padding: var(--site-space-6);
+    overflow: auto;
+    overscroll-behavior: contain;
+}
+.kmap-root.is-fullscreen > .kmap-toolbar,
+.kmap-root.is-fullscreen > .kmap-legend,
+.kmap-root.is-fullscreen > .kmap-layout,
+.kmap-root.is-fullscreen > .content-tags {
+    position: relative;
+    z-index: calc(var(--site-z-offcanvas) + 7);
+}
+.kmap-root.is-fullscreen .kmap-layout {
+    flex: 1;
+    min-height: 0;
+    height: calc(100% - var(--site-kmap-toolbar-h));
+}
+.kmap-root.is-fullscreen .knowledge-map-cytoscape {
+    height: 100%;
+    min-height: 0;
+}
+.kmap-root.is-fullscreen .kmap-panel {
+    overflow-y: auto;
+}
+@media (max-width: 47.99875rem) {
+    .kmap-root.is-fullscreen .kmap-layout {
+        display: flex;
+        flex-direction: column;
+    }
+    .kmap-root.is-fullscreen .knowledge-map-cytoscape {
+        flex: 1 1 60%;
+    }
+    .kmap-root.is-fullscreen .kmap-panel {
+        max-height: 30%;
+    }
+}
+.site-contact-channels .email-reveal {
+    display: grid;
+    gap: var(--site-space-2);
+}
+.site-contact-channels .email-reveal > [data-protected-email-state="error"] {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--site-space-2);
+}
+.site-contact-channels .email-reveal-status {
+    justify-content: center !important;
+}
+/* IMPORTANT: every level between the sidebar column and the revealed address needs
+   min-width: 0, or the address's min-content width propagates up and widens the
+   whole column instead of letting the label ellipsize. */
+.site-contact-channels,
+.site-contact-channels .email-reveal,
+.site-contact-channels .email-reveal > * {
+    min-width: 0;
+    max-width: 100%;
+}
+.site-maintenance {
+    display: grid;
+    gap: var(--site-space-6);
+    padding-block: var(--site-space-8);
+}
+.site-maintenance > .card .card-body {
+    display: grid;
+    gap: var(--site-space-4);
+    padding: var(--site-space-6);
+}
+.site-maintenance p,
+.site-maintenance h1,
+.site-maintenance pre {
+    margin: 0;
+}
+
+@media (max-width: 47.99875rem) {
+    html,
+    body {
+        overflow: hidden;
+    }
+    .row-line-boxed {
+        flex-direction: column;
+        gap: var(--site-space-2);
+    }
+    .row-meta-column {
+        flex: 0 0 auto;
+        flex-direction: row;
+        flex-wrap: wrap;
+        width: auto;
+    }
+}

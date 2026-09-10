@@ -1,0 +1,40 @@
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+indent_style = space
+indent_size = 4
+max_line_length = 100
+
+[*.cs]
+dotnet_sort_system_directives_first = true
+dotnet_separate_import_directive_groups = false
+csharp_new_line_before_members_in_chained_calls = true
+csharp_new_line_before_members_in_anonymous_types = true
+csharp_new_line_before_members_in_object_initializers = true
+csharp_new_line_before_members_in_query_expression_clauses = true
+csharp_preserve_single_line_blocks = true
+csharp_preserve_single_line_statements = true
+dotnet_style_require_accessibility_modifiers = for_non_interface_members:suggestion
+dotnet_style_predefined_type_for_locals_parameters_members = true:suggestion
+dotnet_style_predefined_type_for_member_access = true:suggestion
+dotnet_style_qualification_for_field = false:suggestion
+dotnet_style_qualification_for_property = false:suggestion
+dotnet_style_qualification_for_method = false:suggestion
+dotnet_style_qualification_for_event = false:suggestion
+dotnet_diagnostic.CA1711.severity = suggestion
+dotnet_diagnostic.CA1716.severity = suggestion
+dotnet_diagnostic.CA1720.severity = suggestion
+dotnet_diagnostic.CA1305.severity = suggestion
+dotnet_diagnostic.CA1001.severity = suggestion
+dotnet_diagnostic.CA1826.severity = suggestion
+dotnet_diagnostic.CA1861.severity = suggestion
+dotnet_diagnostic.CA1859.severity = suggestion
+dotnet_diagnostic.CA1869.severity = suggestion
+dotnet_diagnostic.CA5350.severity = suggestion
+
+[*.razor]
+indent_style = space
+indent_size = 4

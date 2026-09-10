@@ -1,0 +1,9 @@
+@inherits SiteInputBase
+
+<input id="@ResolvedId"
+       name="@Name"
+       class="@InputClass"
+       aria-describedby="@FieldContext?.DescribedBy"
+       aria-required="@(FieldContext?.Required == true ? "true" : null)"
+       aria-invalid="@(FieldContext?.Invalid == true ? "true" : null)"
+       @attributes="ForwardedAttributes" />

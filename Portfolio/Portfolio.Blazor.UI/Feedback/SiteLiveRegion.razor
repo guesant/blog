@@ -1,0 +1,9 @@
+<div aria-live="@Politeness.ToString().ToLowerInvariant()"
+    data-slot="live-region">@ChildContent</div>
+
+@code {
+    [Parameter]
+    public SiteLivePoliteness Politeness { get; set; } = SiteLivePoliteness.Polite;
+    [Parameter, EditorRequired]
+    public RenderFragment ChildContent { get; set; } = default!;
+}

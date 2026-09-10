@@ -1,0 +1,122 @@
+@inherits ContentPageBase
+@page "/technologies/{Slug}"
+@page "/pt-BR/technologies/{Slug}"
+@using Microsoft.AspNetCore.Components
+@using Portfolio.Blazor.Core
+
+<PageTitle>@Title</PageTitle>
+<SeoHead Title="@Title" Description="@Description" CanonicalPath="@CanonicalPath" />
+
+<SitePage Template="technology-detail">
+    <SiteBreadcrumb HomeUrl="@LocalizedPath("home")"
+        HomeLabel="@(L["legacy_ddc150008e2f"])"
+        Links="@BreadcrumbLinks"
+        CurrentLabel="@Title" />
+
+    @if (Snapshot is null)
+    {
+        <SiteHero Title="@LoadingLabel" />
+    }
+    else if (Technology is null)
+    {
+        <SiteHero Title="@NotFoundLabel"
+            Lead="@NotFoundDescription"><ChildContent>
+                <SiteText>
+                    <SiteLink Variant="SiteButtonVariant.Outline" Href="@IndexUrl">
+                        <SiteIcon Name="arrow-left" Size="14" />@BackLabel</SiteLink>
+                    </SiteText>
+                </ChildContent>
+            </SiteHero>
+    }
+    else
+    {
+        <SiteHero Title="@Title" Lead="@Description" BackHref="@IndexUrl" BackLabel="@BackLabel" />
+        @if (IsEmpty)
+        {
+            <SiteEmptyState Message="@EmptyLabel" />
+        }
+        else
+        {
+            @if (RelatedCases.Count > 0)
+            {
+                <SiteSection Region="cases"
+                    HeadingId="technology-cases-heading"
+                    Title="@(L["legacy_3dc269cea284"])">
+                    <SiteGrid>
+                        @foreach (var item in RelatedCases) { <SiteGridColumn>
+                            <SiteClickableCard Href="@LocalizedUrl(item.Url)"
+                                Title="@item.Title">@if (!string.IsNullOrWhiteSpace(item.Summary)) { <SiteText Variant="SiteTextVariant.Excerpt">@Short(item.Summary)</SiteText> }</SiteClickableCard>
+                        </SiteGridColumn> }
+                    </SiteGrid>
+                </SiteSection>
+            }
+            @if (RelatedProjects.Count > 0)
+            {
+                <SiteSection Region="projects"
+                    HeadingId="technology-projects-heading"
+                    Title="@(L["legacy_2c505faad45c"])">
+                    <SiteGrid>
+                        @foreach (var item in RelatedProjects) { <SiteGridColumn>
+                            <SiteClickableCard Href="@LocalizedUrl(item.Url)"
+                                Title="@item.Name">@if (!string.IsNullOrWhiteSpace(item.Purpose)) { <SiteText Variant="SiteTextVariant.Excerpt">@Short(item.Purpose)</SiteText> }</SiteClickableCard>
+                        </SiteGridColumn> }
+                    </SiteGrid>
+                </SiteSection>
+            }
+            @if (RelatedExperiments.Count > 0)
+            {
+                <SiteSection Region="experiments"
+                    HeadingId="technology-experiments-heading"
+                    Title="@(L["legacy_83f80c05505d"])">
+                    <SiteGrid>
+                        @foreach (var item in RelatedExperiments) { <SiteGridColumn>
+                            <SiteClickableCard Href="@LocalizedUrl(item.Url)"
+                                Title="@item.Name">@if (!string.IsNullOrWhiteSpace(item.Purpose)) { <SiteText Variant="SiteTextVariant.Excerpt">@Short(item.Purpose)</SiteText> }</SiteClickableCard>
+                        </SiteGridColumn> }
+                    </SiteGrid>
+                </SiteSection>
+            }
+            @if (Technology.ResumeSkills is { Count: > 0 })
+            {
+                <SiteSection Region="skills"
+                    HeadingId="technology-skills-heading"
+                    Title="@(L["legacy_84a8324696f3"])">
+                    <SiteChipGroup>@foreach (var skill in Technology.ResumeSkills) { <SiteChip Label="@(skill.Name ?? skill.Slug)" Href="@LocalizedUrl(skill.Url ?? $"/topics/{skill.Slug}")" /> }</SiteChipGroup>
+                </SiteSection>
+            }
+        }
+        <ContentRelations CurrentUrl="@CanonicalPath" />
+    }
+</SitePage>
+
+@code {
+    [Parameter]
+    public string Slug { get; set; } = string.Empty;
+    private PublicTechnology? Technology => Snapshot?.Technologies.FirstOrDefault(item => PublicRouteKey.Matches(item.Url, item.Slug, Slug));
+    private IReadOnlyList<PublicCaseStudy> RelatedCases => Snapshot?.Cases.Where(item => item.Technologies?.Any(technology => technology.Slug.Equals(ResolvedSlug, StringComparison.OrdinalIgnoreCase)) == true).ToArray() ?? [];
+    private IReadOnlyList<PublicProject> RelatedProjects => Snapshot?.Projects.Where(item => item.Technologies?.Any(technology => technology.Slug.Equals(ResolvedSlug, StringComparison.OrdinalIgnoreCase)) == true).ToArray() ?? [];
+    private IReadOnlyList<PublicExperiment> RelatedExperiments => Snapshot?.Experiments.Where(item => item.Technologies?.Any(technology => technology.Slug.Equals(ResolvedSlug, StringComparison.OrdinalIgnoreCase)) == true).ToArray() ?? [];
+    private bool IsEmpty => RelatedCases.Count == 0 && RelatedProjects.Count == 0 && RelatedExperiments.Count == 0 && (Technology?.ResumeSkills?.Count ?? 0) == 0;
+    private string ResolvedSlug => Technology?.Slug ?? Slug;
+    private string Title => Technology?.Name ?? Slug;
+    private string Description => L["browse_technology", Title];
+    private string CanonicalPath => Technology?.Url ?? RequestPath;
+    private string LoadingLabel => L["legacy_f8d5af569106"];
+    private string EmptyLabel => L["legacy_12d8890036fa"];
+    private string NotFoundLabel => L["legacy_68634914bbd9"];
+    private string NotFoundDescription => L["legacy_9883512f7345"];
+    private string BackLabel => L["legacy_6e8c2cd0b9b6"];
+    private string IndexUrl => LocalizedPath("technologies");
+    private IReadOnlyList<BreadcrumbLink> BreadcrumbLinks => [new(
+        L["legacy_b4e2241909e0"],
+        IndexUrl
+    )];
+    private static string Short(string value) => value.Length > 150 ? value[..150].TrimEnd() + "…" : value;
+    private string LocalizedPath(string path) => path.Equals("home", StringComparison.OrdinalIgnoreCase) ? (L["legacy_0607643fd42c"]) : (LocalizedUrls.Current($"/{path}"));
+    private string LocalizedUrl(string url)
+    {
+        if (!Uri.TryCreate(url, UriKind.Absolute, out var absolute)) return url;
+        var path = absolute.AbsolutePath;
+        return LocalizedUrls.Current(path);
+    }
+}

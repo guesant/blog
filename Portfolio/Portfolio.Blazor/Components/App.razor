@@ -1,0 +1,120 @@
+﻿@using Portfolio.Blazor.Core
+@using Microsoft.AspNetCore.Http
+@using System.Globalization
+@using Portfolio.Blazor.Core.Localization
+@using Microsoft.Extensions.Localization
+@inject IPublicSiteContentProvider ContentProvider
+@inject IHttpContextAccessor HttpContextAccessor
+@inject ICultureCatalog Cultures
+@inject IStringLocalizer<SharedResource> L
+
+<!DOCTYPE html>
+<html lang="@DocumentLanguage">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="/" />
+    <link rel="icon" href="/icon.svg" type="image/svg+xml" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <ResourcePreloader />
+    <link rel="stylesheet" href="@Assets["_content/Portfolio.Blazor.UI/css/tokens.css"]" />
+    <script src="@Assets["_content/Portfolio.Blazor.UI/js/theme.js"]">
+    </script>
+    <link rel="stylesheet" href="@Assets["_content/Portfolio.Blazor.UI/css/fonts.css"]" />
+    <link rel="stylesheet"
+        href="@Assets["_content/Portfolio.Blazor.UI/vendor/icons/lucide/lucide.css"]" />
+    <link rel="stylesheet"
+        href="@Assets["_content/Portfolio.Blazor.UI/vendor/icons/phosphor/fill.css"]" />
+    <link rel="stylesheet"
+        href="@Assets["_content/Portfolio.Blazor.UI/vendor/icons/fontawesome/css/fontawesome.css"]" />
+    <link rel="stylesheet"
+        href="@Assets["_content/Portfolio.Blazor.UI/vendor/icons/fontawesome/css/solid.css"]" />
+    <link rel="stylesheet" href="@Assets["_content/Portfolio.Blazor.UI/css/blueprint-theme.css"]" />
+    <link rel="stylesheet" href="@Assets["_content/Portfolio.Blazor.UI/css/base.css"]" />
+    <link rel="stylesheet" href="@Assets["_content/Portfolio.Blazor.UI/css/forms.css"]" />
+    <link rel="stylesheet" href="@Assets["app.css"]" />
+    <link rel="stylesheet" href="@Assets["Portfolio.Blazor.styles.css"]" />
+    <ImportMap />
+    <HeadOutlet @rendermode="PageRenderMode" />
+</head>
+
+<body>
+    <a class="skip-link" href="#main-content">@SkipToContentLabel</a>
+    <Portfolio.Blazor.Client.Routes @rendermode="PageRenderMode" />
+    <script src="@Assets["table-editor.js"]">
+    </script>
+    <script src="@Assets["chart-export.js"]">
+    </script>
+    <script src="@Assets["echarts-tools.js"]">
+    </script>
+<script src="@Assets["knowledge-map.js"]">
+</script>
+<script src="@Assets["protected-email.js"]">
+</script>
+    <script src="@Assets["navigation-behavior.js"]">
+    </script>
+    <script src="@Assets["content-actions.js"]">
+    </script>
+    <script src="@Assets["_content/Portfolio.Blazor.UI/js/focus-trap.js"]">
+    </script>
+    <script src="@Assets["culture-interop.js"]">
+    </script>
+    <script src="@Assets["_framework/blazor.web.js"]">
+    </script>
+</body>
+
+</html>
+
+@code {
+    [Inject]
+    private NavigationManager Navigation { get; set; } = default!;
+
+    private IComponentRenderMode? PageRenderMode
+    {
+        get
+        {
+            var path = new Uri(Navigation.Uri).AbsolutePath;
+            var isAdminRoute = path.StartsWith("/admin", StringComparison.OrdinalIgnoreCase)
+                && !path.Equals("/admin/login", StringComparison.OrdinalIgnoreCase);
+            if (isAdminRoute) return InteractiveServer;
+
+            var unlocalizedPath = path.StartsWith("/pt-BR", StringComparison.OrdinalIgnoreCase)
+                ? path[6..]
+                : path;
+            if (string.IsNullOrEmpty(unlocalizedPath)) unlocalizedPath = "/";
+            var isToolRoute = path.Equals("/tools", StringComparison.OrdinalIgnoreCase)
+                || path.Equals("/pt-BR/tools", StringComparison.OrdinalIgnoreCase)
+                || path.StartsWith("/tools/", StringComparison.OrdinalIgnoreCase)
+                || path.StartsWith("/pt-BR/tools/", StringComparison.OrdinalIgnoreCase)
+                || path.Equals("/findings", StringComparison.OrdinalIgnoreCase)
+                || path.StartsWith("/findings/", StringComparison.OrdinalIgnoreCase)
+                || path.Equals("/pt-BR/findings", StringComparison.OrdinalIgnoreCase)
+                || path.StartsWith("/pt-BR/findings/", StringComparison.OrdinalIgnoreCase);
+            var isInteractiveListing = unlocalizedPath is "/"
+                or "/writing"
+                or "/projects"
+                or "/cases"
+                or "/collections"
+                or "/topics"
+                or "/technologies"
+                or "/snippets"
+                or "/credits";
+
+            return isToolRoute || isInteractiveListing ? InteractiveWebAssembly : null;
+        }
+    }
+
+    private string DocumentLanguage => Cultures.Normalize(CultureInfo.CurrentUICulture.Name).Name;
+    private string SkipToContentLabel => L["skip_to_content"];
+
+    protected override async Task OnInitializedAsync()
+    {
+        var snapshot = await ContentProvider.GetAsync(DocumentLanguage);
+        if (snapshot?.Chrome.Site.MaintenanceEnabled == true && HttpContextAccessor.HttpContext is { Response.HasStarted: false } context)
+        {
+            context.Response.StatusCode = StatusCodes.Status503ServiceUnavailable;
+            context.Response.Headers.RetryAfter = "3600";
+        }
+    }
+}

@@ -1,0 +1,34 @@
+@attribute [Stories("DataDisplay/SiteDataTable")]
+
+<Stories TComponent="SiteDataTable<SiteDataTableRow>">
+
+    <Story Name="Default">
+        <Template>
+            <SiteDataTable TItem="SiteDataTableRow"
+                Items="_rows"
+                EmptyText="No rows."
+                RowKey="@(row => row.Id)">
+                <Columns>
+                    <SiteColumn TItem="SiteDataTableRow" Header="Name" IsRowHeader="true">
+                        <Cell Context="row">@row.Name</Cell>
+                    </SiteColumn>
+                    <SiteColumn TItem="SiteDataTableRow" Header="Role">
+                        <Cell Context="row">@row.Role</Cell>
+                    </SiteColumn>
+                </Columns>
+            </SiteDataTable>
+        </Template>
+    </Story>
+
+</Stories>
+
+@code {
+    private sealed record SiteDataTableRow(int Id, string Name, string Role);
+
+    private readonly IReadOnlyList<SiteDataTableRow> _rows =
+    [
+        new(1, "Ada", "Engineer"),
+        new(2, "Grace", "Admiral"),
+        new(3, "Alan", "Mathematician"),
+    ];
+}

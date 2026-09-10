@@ -1,0 +1,136 @@
+@inherits LocalizedComponentBase
+@page "/tools/age-calculator"
+@page "/pt-BR/tools/age-calculator"
+@page "/tools/bmi-calculator"
+@page "/pt-BR/tools/bmi-calculator"
+@page "/tools/date-difference-calculator"
+@page "/pt-BR/tools/date-difference-calculator"
+@using System.Globalization
+@using Portfolio.Blazor.Core
+
+<ToolPage Title="@Title" Description="@Description" CanonicalPath="@CanonicalPath">
+    @if (Slug == "age-calculator")
+    {
+        <SiteToolForm Action="@Action"
+            SubmitLabel="@SubmitLabel"
+            Submit="SiteToolFormSubmit.StaticOnly"
+            OnSubmit="Calculate"
+            AriaLabel="@BirthLabel">
+            <SiteFormField For="age-birth"
+                Label="@BirthLabel"><SiteInput Id="age-birth"
+                    Name="birth"
+                    Type="date"
+                    Value="@BirthText"
+                    ValueChanged="@(v => { BirthText = v; Calculate(); })" /></SiteFormField>
+        </SiteToolForm>
+        @if (Age.IsValid) { <SiteLiveRegion Politeness="SiteLivePoliteness.Polite">
+            <SiteStats>
+                <SiteStatItem Label="@ResultLabel">@Age.Years @YearsLabel, @Age.Months @MonthsLabel, @Age.Days @DaysLabel</SiteStatItem>
+            </SiteStats>
+        </SiteLiveRegion> }
+    }
+    else if (Slug == "bmi-calculator")
+    {
+        <SiteToolForm Action="@Action"
+            SubmitLabel="@SubmitLabel"
+            Submit="SiteToolFormSubmit.StaticOnly"
+            OnSubmit="Calculate"
+            AriaLabel="@WeightLabel">
+            <SiteFormField For="bmi-weight"
+                Label="@WeightLabel"><SiteInput Id="bmi-weight"
+                    Name="weight"
+                    Type="number"
+                    step="any"
+                    Value="@WeightText"
+                    ValueChanged="@(v => { WeightText = v; Calculate(); })" /></SiteFormField>
+            <SiteFormField For="bmi-height"
+                Label="@HeightLabel"><SiteInput Id="bmi-height"
+                    Name="height"
+                    Type="number"
+                    step="any"
+                    Value="@HeightText"
+                    ValueChanged="@(v => { HeightText = v; Calculate(); })" /></SiteFormField>
+        </SiteToolForm>
+        @if (Bmi.IsValid) { <SiteLiveRegion Politeness="SiteLivePoliteness.Polite">
+            <SiteStats>
+                <SiteStatItem Label="@ResultLabel">@Bmi.Value.ToString("G6", CultureInfo.InvariantCulture) · @Bmi.Category</SiteStatItem>
+            </SiteStats>
+        </SiteLiveRegion> }
+    }
+    else
+    {
+        <SiteToolForm Action="@Action"
+            SubmitLabel="@SubmitLabel"
+            Submit="SiteToolFormSubmit.StaticOnly"
+            OnSubmit="Calculate"
+            AriaLabel="@StartLabel">
+            <SiteFormField For="date-start"
+                Label="@StartLabel"><SiteInput Id="date-start"
+                    Name="start"
+                    Type="date"
+                    Value="@StartText"
+                    ValueChanged="@(v => { StartText = v; Calculate(); })" /></SiteFormField>
+            <SiteFormField For="date-end"
+                Label="@EndLabel"><SiteInput Id="date-end"
+                    Name="end"
+                    Type="date"
+                    Value="@EndText"
+                    ValueChanged="@(v => { EndText = v; Calculate(); })" /></SiteFormField>
+        </SiteToolForm>
+        @if (DateDifference.HasInput && !DateDifference.IsValid) { <SiteErrorMessage>@InvalidDateLabel</SiteErrorMessage> }
+        <SiteLiveRegion Politeness="SiteLivePoliteness.Polite">
+            @if (DateDifference.Reversed) { <SiteNotice>@DateOrderNote</SiteNotice> }
+            <SiteStats Grid="true">
+                <SiteStatItem Label="@TotalDaysLabel">@(DateDifference.IsValid ? DateDifference.TotalDays : '—')</SiteStatItem>
+                    <SiteStatItem Label="@YearsLabel">@(DateDifference.IsValid ? DateDifference.Years : '—')</SiteStatItem>
+                        <SiteStatItem Label="@MonthsLabel">@(DateDifference.IsValid ? DateDifference.Months : '—')</SiteStatItem>
+                            <SiteStatItem Label="@DaysLabel">@(DateDifference.IsValid ? DateDifference.Days : '—')</SiteStatItem>
+                        </SiteStats>
+        </SiteLiveRegion>
+    }
+</ToolPage>
+
+@code {
+    private string CanonicalPath => RequestPath;
+    private string Slug => RequestRouteSegment("age-calculator");
+    private string Action => LocalizedUrls.Current($"/tools/{Slug}");
+    private string Title => Slug switch { "age-calculator" => L["legacy_526a44980e7e"], "bmi-calculator" => L["legacy_086e8206e0b9"], _ => L["legacy_37ed61333496"] };
+    private string Description => L["legacy_235020da38aa"];
+    private string InputLabel => L["legacy_67f93fb28065"];
+    private string BirthLabel => L["legacy_754004108abf"];
+    private string WeightLabel => L["legacy_dee1e3505827"];
+    private string HeightLabel => L["legacy_c2084c7ec998"];
+    private string StartLabel => L["legacy_5249e43de046"];
+    private string EndLabel => L["legacy_fa7de690f78a"];
+    private string SubmitLabel => L["legacy_37565a968d31"];
+    private string ResultLabel => L["legacy_d9b2a61fb8b3"];
+    private string YearsLabel => L["legacy_1bb0f541030b"];
+    private string MonthsLabel => L["legacy_2ec786b77a14"];
+    private string DaysLabel => L["legacy_8bbe81cc5b24"];
+    private string TotalDaysLabel => L["legacy_0e774c4fd56e"];
+    private string InvalidDateLabel => L["legacy_606687da80eb"];
+    private string DateOrderNote => L["legacy_981f71c7e428"];
+    private string BirthText { get; set; } = "2000-01-01";
+    private string WeightText { get; set; } = "70";
+    private string HeightText { get; set; } = "175";
+    private string StartText { get; set; } = "2020-01-01";
+    private string EndText { get; set; } = "2025-01-01";
+    [SupplyParameterFromQuery(Name = "birth")]
+    private string? QueryBirth { get; set; }
+    [SupplyParameterFromQuery(Name = "weight")] private string? QueryWeight { get; set; }
+    [SupplyParameterFromQuery(Name = "height")] private string? QueryHeight { get; set; }
+    [SupplyParameterFromQuery(Name = "start")] private string? QueryStart { get; set; }
+    [SupplyParameterFromQuery(Name = "end")] private string? QueryEnd { get; set; }
+    private AgeResult Age { get; set; } = AgeCalculator.Calculate(
+        new DateOnly(2000, 1, 1),
+        DateOnly.FromDateTime(DateTime.Today)
+    );
+    private BmiResult Bmi { get; set; } = BmiCalculator.Calculate(70, 175);
+    private DateDifferenceResult DateDifference { get; set; } = DateDifferenceCalculator.Calculate(
+        new DateOnly(2020, 1, 1),
+        new DateOnly(2025, 1, 1)
+    );
+    protected override void OnParametersSet() { BirthText = QueryBirth ?? BirthText; WeightText = QueryWeight ?? WeightText; HeightText = QueryHeight ?? HeightText; StartText = QueryStart ?? StartText; EndText = QueryEnd ?? EndText; Calculate(); }
+    private void Calculate() { if (Slug == "age-calculator" && DateOnly.TryParse(BirthText, out var birth)) Age = AgeCalculator.Calculate(birth, DateOnly.FromDateTime(DateTime.Today)); else if (Slug == "bmi-calculator") Bmi = BmiCalculator.Calculate(Parse(WeightText), Parse(HeightText)); else DateDifference = DateDifferenceCalculator.Calculate(DateOnly.TryParse(StartText, out var start) ? start : null, DateOnly.TryParse(EndText, out var end) ? end : null); }
+    private static double Parse(string value) => double.TryParse(value, NumberStyles.Float, CultureInfo.InvariantCulture, out var result) ? result : double.NaN;
+}

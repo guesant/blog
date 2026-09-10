@@ -1,0 +1,43 @@
+<SiteSplit Class="@RootClass" data-slot="page-header">
+    <Start>
+        <SiteInline Gap="SiteSpace.Sm" Align="SiteAlign.Center">
+            @if (!string.IsNullOrWhiteSpace(BackHref))
+            {
+                <SiteTooltip Text="@BackLabel">
+                    <SiteLink Variant="SiteButtonVariant.Outline"
+                        Size="SiteButtonSize.IconSm"
+                        Href="@BackHref"
+                        aria-label="@BackLabel"><SiteIcon Name="arrow-left" Size="14" />
+                        </SiteLink>
+                </SiteTooltip>
+            }
+            <div>
+                @if (!string.IsNullOrWhiteSpace(Eyebrow))
+                {
+                    <SiteText Variant="SiteTextVariant.Eyebrow">@Eyebrow</SiteText>
+                }
+                <SiteHeading Level="1">@Title</SiteHeading>
+            </div>
+        </SiteInline>
+    </Start>
+    <End>
+        @Actions
+    </End>
+</SiteSplit>
+
+@code {
+    [Parameter, EditorRequired]
+    public string Title { get; set; } = string.Empty;
+    [Parameter]
+    public string? Eyebrow { get; set; }
+    [Parameter]
+    public string? BackHref { get; set; }
+    [Parameter]
+    public string? BackLabel { get; set; }
+    [Parameter]
+    public RenderFragment? Actions { get; set; }
+    [Parameter]
+    public string? Class { get; set; }
+
+    private string RootClass => SiteCss.Join("site-page-header", Class);
+}

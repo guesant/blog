@@ -1,0 +1,114 @@
+@page "/admin/case-studies"
+@page "/admin/case-studies/order"
+@inherits AdminListPageBase<CaseStudy>
+@layout AdminLayout
+
+<PageTitle>Case studies</PageTitle>
+
+@if (IsOrderMode)
+{
+    <AdminOrderEditor TItem="CaseStudy"
+        Title="Case studies order"
+        ListRoute="/admin/case-studies"
+        Items="@Items"
+        DisplayTitle="@DisplayTitle"
+        IsLoading="@IsLoading"
+        IsSaving="@IsSaving"
+        Error="@Error"
+        OnReordered="HandleReorder"
+        OnSave="@(() => HandleSaveOrderAsync("/admin/case-studies"))" />
+}
+else
+{
+    <SitePageHeader Title="Case studies">
+        <Actions>
+            <SiteInline Gap="SiteSpace.Sm">
+                <SiteLink Variant="SiteButtonVariant.Outline" Href="/admin/case-studies/order">
+                    <SiteIcon Name="arrow-up-down" Size="14" />Edit order</SiteLink>
+                <SiteLink Variant="SiteButtonVariant.Default" Href="/admin/case-studies/create">
+                    <SiteIcon Name="plus" Size="14" />New case study</SiteLink>
+            </SiteInline>
+        </Actions>
+    </SitePageHeader>
+
+    @if (Error is not null)
+    {
+        <SiteNotice Tone="SiteTone.Danger">@Error</SiteNotice>
+    }
+
+    @if (IsLoading)
+    {
+        <SiteLoading Label="Loading…" />
+    }
+    else
+    {
+        <SiteDataTable TItem="CaseStudy"
+            Items="@PageItems"
+            EmptyText="No case studies yet."
+            RowKey="@(caseStudy => caseStudy.Id)">
+            <Columns>
+                <SiteColumn TItem="CaseStudy"
+                    Header="Title"
+                    IsRowHeader="true"><Cell Context="caseStudy">@DisplayTitle(caseStudy)</Cell>
+                    </SiteColumn>
+                <SiteColumn TItem="CaseStudy" Header="Slug">
+                    <Cell Context="caseStudy">@caseStudy.Slug</Cell>
+                </SiteColumn>
+                <SiteColumn TItem="CaseStudy" Header="Status">
+                    <Cell Context="caseStudy">
+                        <SiteInline Gap="SiteSpace.Sm">
+                            @if (caseStudy.Hidden)
+                            {
+                                <SiteBadge Label="Hidden" />
+                            }
+                            @if (caseStudy.Nda)
+                            {
+                                <SiteBadge Label="NDA" />
+                            }
+                        </SiteInline>
+                    </Cell>
+                </SiteColumn>
+            </Columns>
+            <Actions Context="caseStudy">
+                <SiteInline Gap="SiteSpace.Sm">
+                    <SiteLink Variant="SiteButtonVariant.Outline"
+                        Href="@($"/admin/case-studies/{caseStudy.Id}")">
+                        <SiteIcon Name="pencil" Size="14" />Edit</SiteLink>
+                    <SiteButton Variant="SiteButtonVariant.Destructive"
+                        @onclick="@(() => HandleDeleteAsync(caseStudy))"><SiteIcon Name="trash-2"
+                            Size="14" />Delete</SiteButton>
+                </SiteInline>
+            </Actions>
+        </SiteDataTable>
+        <SitePagination CurrentPage="@CurrentPage" TotalPages="@TotalPages" Href="@PageUrl" />
+    }
+}
+
+@code {
+    protected override string EntityLabel => "case study";
+
+    protected override void SetOrder(CaseStudy entity, int order) => entity.Order = order;
+
+    protected override async Task<List<CaseStudy>> LoadEntitiesAsync(PortfolioAdminDbContext dbContext) =>
+        await dbContext.CaseStudies
+            .Include(caseStudy => caseStudy.Translations)
+            .AsNoTracking()
+            .OrderBy(caseStudy => caseStudy.Order)
+            .ThenBy(caseStudy => caseStudy.Slug)
+            .ToListAsync();
+
+    protected override Task<CaseStudy?> FindTrackedAsync(
+        PortfolioAdminDbContext dbContext,
+        int id
+    ) =>
+        dbContext.CaseStudies.FirstOrDefaultAsync(candidate => candidate.Id == id);
+
+    protected override string DisplayTitle(CaseStudy caseStudy) =>
+        TranslationLookup.Resolve(caseStudy.Translations, translation => translation.Locale, translation => translation.Title, "en")
+        ?? caseStudy.Slug;
+
+    protected override int GetId(CaseStudy caseStudy) => caseStudy.Id;
+
+    protected override string DeleteConfirmDescription(CaseStudy entity) =>
+        "This permanently removes the case study, its translations and its technology links. This cannot be undone.";
+}

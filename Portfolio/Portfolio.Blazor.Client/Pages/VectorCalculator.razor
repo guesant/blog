@@ -1,0 +1,115 @@
+@inherits LocalizedComponentBase
+@page "/tools/vector-calculator"
+@page "/pt-BR/tools/vector-calculator"
+@using System.Globalization
+@using Portfolio.Blazor.Core
+
+<ToolPage Title="@Title" Description="@Description" CanonicalPath="@CanonicalPath">
+    <SiteToolForm Action="@Action"
+        SubmitLabel="@SubmitLabel"
+        Submit="SiteToolFormSubmit.StaticOnly"
+        OnSubmit="Calculate"
+        AriaLabel="@InputLabel">
+        <SiteFieldSet Legend="@VectorALabel">
+            <SiteFormField Label="x"
+                For="vector-a-x"><SiteInput Id="vector-a-x"
+                    Name="ax"
+                    Type="number"
+                    step="any"
+                    Value="@AXText"
+                    ValueChanged="@(v => AXText = v)" /></SiteFormField>
+            <SiteFormField Label="y"
+                For="vector-a-y"><SiteInput Id="vector-a-y"
+                    Name="ay"
+                    Type="number"
+                    step="any"
+                    Value="@AYText"
+                    ValueChanged="@(v => AYText = v)" /></SiteFormField>
+            <SiteFormField Label="z"
+                For="vector-a-z"><SiteInput Id="vector-a-z"
+                    Name="az"
+                    Type="number"
+                    step="any"
+                    Value="@AZText"
+                    ValueChanged="@(v => AZText = v)" /></SiteFormField>
+        </SiteFieldSet>
+        <SiteFieldSet Legend="@VectorBLabel">
+            <SiteFormField Label="x"
+                For="vector-b-x"><SiteInput Id="vector-b-x"
+                    Name="bx"
+                    Type="number"
+                    step="any"
+                    Value="@BXText"
+                    ValueChanged="@(v => BXText = v)" /></SiteFormField>
+            <SiteFormField Label="y"
+                For="vector-b-y"><SiteInput Id="vector-b-y"
+                    Name="by"
+                    Type="number"
+                    step="any"
+                    Value="@BYText"
+                    ValueChanged="@(v => BYText = v)" /></SiteFormField>
+            <SiteFormField Label="z"
+                For="vector-b-z"><SiteInput Id="vector-b-z"
+                    Name="bz"
+                    Type="number"
+                    step="any"
+                    Value="@BZText"
+                    ValueChanged="@(v => BZText = v)" /></SiteFormField>
+        </SiteFieldSet>
+    </SiteToolForm>
+    <SiteLiveRegion Politeness="SiteLivePoliteness.Polite">
+        @if (!Result.IsValid) { <SiteErrorMessage>@ErrorLabel</SiteErrorMessage> }
+        else { <SiteStats>
+            <SiteStatItem Label="@DotLabel">@Format(Result.Dot)</SiteStatItem>
+                <SiteStatItem Label="|A|">@Format(Result.MagnitudeA)</SiteStatItem>
+                    <SiteStatItem Label="|B|">@Format(Result.MagnitudeB)</SiteStatItem>
+                        <SiteStatItem Label="@AngleLabel">@(Result.AngleRadians.HasValue ? $"{Format(Result.AngleRadians.Value * 180 / Math.PI)}°" : "indefinido")</SiteStatItem>
+                            <SiteStatItem Label="@CrossLabel">[@string.Join(", ", Result.Cross.Select(Format))]</SiteStatItem>
+                        </SiteStats> }
+    </SiteLiveRegion>
+</ToolPage>
+
+@code {
+    private string CanonicalPath => RequestPath;
+    private string _axText = "1";
+    private string _ayText = "2";
+    private string _azText = "3";
+    private string _bxText = "4";
+    private string _byText = "5";
+    private string _bzText = "6";
+    private VectorCalculationResult _result = Portfolio.Blazor.Core.VectorCalculator.Calculate(
+        [1, 2, 3],
+        [4, 5, 6]
+    );
+    private bool _queryInitialized;
+    [SupplyParameterFromQuery(Name = "ax")]
+    private string? QueryAX { get; set; }
+    [SupplyParameterFromQuery(Name = "ay")] private string? QueryAY { get; set; }
+    [SupplyParameterFromQuery(Name = "az")] private string? QueryAZ { get; set; }
+    [SupplyParameterFromQuery(Name = "bx")] private string? QueryBX { get; set; }
+    [SupplyParameterFromQuery(Name = "by")] private string? QueryBY { get; set; }
+    [SupplyParameterFromQuery(Name = "bz")] private string? QueryBZ { get; set; }
+    private string Action => L["legacy_d57407602bf1"];
+    private string Title => L["legacy_6f867cb17f9e"];
+    private string Description => L["legacy_012f07b2ce06"];
+    private string InputLabel => L["legacy_08d2fc2bc5c7"];
+    private string VectorALabel => "A";
+    private string VectorBLabel => "B";
+    private string DotLabel => L["legacy_e1746d94093d"];
+    private string AngleLabel => L["legacy_8c0c0f7ef16e"];
+    private string CrossLabel => L["legacy_eff28853259a"];
+    private string SubmitLabel => L["legacy_53519f340509"];
+    private string ErrorLabel => L["legacy_c1572143146a"];
+    private string AXText { get => _axText; set { _axText = value; Recalculate(); } }
+    private string AYText { get => _ayText; set { _ayText = value; Recalculate(); } }
+    private string AZText { get => _azText; set { _azText = value; Recalculate(); } }
+    private string BXText { get => _bxText; set { _bxText = value; Recalculate(); } }
+    private string BYText { get => _byText; set { _byText = value; Recalculate(); } }
+    private string BZText { get => _bzText; set { _bzText = value; Recalculate(); } }
+    private VectorCalculationResult Result => _result;
+    protected override void OnParametersSet() { if (_queryInitialized) return; _axText = QueryAX ?? _axText; _ayText = QueryAY ?? _ayText; _azText = QueryAZ ?? _azText; _bxText = QueryBX ?? _bxText; _byText = QueryBY ?? _byText; _bzText = QueryBZ ?? _bzText; Recalculate(); _queryInitialized = true; }
+    private void Calculate() => Recalculate();
+    private void Recalculate() => _result = Portfolio.Blazor.Core.VectorCalculator.Calculate([Parse(_axText), Parse(_ayText), Parse(_azText)], [Parse(_bxText), Parse(_byText), Parse(_bzText)]);
+    private static double Parse(string value) => double.TryParse(value, NumberStyles.Float, CultureInfo.InvariantCulture, out var result) ? result : double.NaN;
+    private static string Format(double value) => value.ToString("G6", CultureInfo.InvariantCulture);
+}

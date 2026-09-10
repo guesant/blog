@@ -1,0 +1,36 @@
+@inherits LocalizedComponentBase
+@using Portfolio.Blazor.Core
+@using Portfolio.Blazor.Core.Localization
+@inject IStringLocalizer<NavigationResource> NavL
+
+<SiteSection Icon="compass"
+    Region="explore"
+    HeadingId="@HeadingId"
+    Label="@(L["explore"])"
+    Title="@(L["explore_more_title"])">
+    <SiteCardGrid Dense="true" aria-labelledby="@HeadingId" data-layout-region="items">
+        @foreach (var tile in Tiles)
+        {
+            <SiteTileLink Icon="@tile.Icon" Label="@tile.Label" Href="@tile.Href" />
+        }
+    </SiteCardGrid>
+</SiteSection>
+
+@code {
+    [Parameter, EditorRequired]
+    public string HeadingId { get; set; } = string.Empty;
+
+    private sealed record Tile(string Icon, string Label, string Href);
+
+    private IReadOnlyList<Tile> Tiles =>
+    [
+        new("pen-line", NavL["writing"], FeedUrls.ForKind(FeedUrls.Writing)),
+        new("lightbulb", NavL["findings"], FeedUrls.ForKind(FeedUrls.Finding)),
+        new("archive", NavL["collections"], FeedUrls.ForKind(FeedUrls.Collection)),
+        new("layout-list", NavL["topics"], LocalizedUrls.Current("/topics")),
+        new("git-branch", NavL["knowledge_map"], LocalizedUrls.Current("/knowledge-map")),
+        new("folder-git-2", NavL["projects"], LocalizedUrls.Current("/projects")),
+        new("briefcase", NavL["cases"], LocalizedUrls.Current("/cases")),
+        new("wrench", NavL["tools"], LocalizedUrls.Current("/tools")),
+    ];
+}

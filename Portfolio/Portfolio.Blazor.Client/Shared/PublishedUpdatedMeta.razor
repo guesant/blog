@@ -1,0 +1,39 @@
+@using System.Globalization
+@inject IStringLocalizer<SharedResource> L
+
+@if (!string.IsNullOrWhiteSpace(PublishedAt) || ShouldShowUpdated || !string.IsNullOrWhiteSpace(AdditionalText))
+{
+    <SiteStack Gap="SiteSpace.Xs"
+        Class="published-updated-meta"
+        data-layout-region="published-updated">
+        @if (!string.IsNullOrWhiteSpace(PublishedAt))
+        {
+            <SiteInline Gap="SiteSpace.Xs">
+                <SiteIcon Name="calendar" Size="16" />
+                <SiteText Variant="SiteTextVariant.Meta">@L["published_on", FormatDate(PublishedAt)]</SiteText>
+            </SiteInline>
+        }
+        @if (ShouldShowUpdated)
+        {
+            <SiteInline Gap="SiteSpace.Xs">
+                <SiteIcon Name="pencil" Size="16" />
+                <SiteText Variant="SiteTextVariant.Meta">@L["updated_on", FormatDate(UpdatedAt)]</SiteText>
+            </SiteInline>
+        }
+        @if (!string.IsNullOrWhiteSpace(AdditionalText))
+        {
+            <SiteText Variant="SiteTextVariant.Meta">@AdditionalText</SiteText>
+        }
+    </SiteStack>
+}
+
+@code {
+    [Parameter]
+    public string? PublishedAt { get; set; }
+    [Parameter]
+    public string? UpdatedAt { get; set; }
+    [Parameter]
+    public string? AdditionalText { get; set; }
+    private bool ShouldShowUpdated => !string.IsNullOrWhiteSpace(PublishedAt) && !string.IsNullOrWhiteSpace(UpdatedAt) && DateTime.TryParse(PublishedAt, out var published) && DateTime.TryParse(UpdatedAt, out var updated) && (updated - published).TotalHours > 24;
+    private string FormatDate(string? value) => DateTime.TryParse(value, out var date) ? date.ToString("dd MMM yyyy", CultureInfo.CurrentCulture) : value ?? string.Empty;
+}

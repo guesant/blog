@@ -1,0 +1,31 @@
+@attribute [Stories("Forms/SiteSelectWithCustom")]
+
+<Stories TComponent="SiteSelectWithCustom">
+
+    <Story Name="Default">
+        <Template>
+            <SiteStack Gap="SiteSpace.Md">
+                <SiteFormField Label="Platform" For="platform-known">
+                    <SiteSelectWithCustom Id="platform-known"
+                        @bind-Value="_known"
+                        Choices="@Platforms"
+                        Placeholder="select a platform" />
+                </SiteFormField>
+                <SiteFormField Label="Platform (custom value in use)" For="platform-custom">
+                    <SiteSelectWithCustom Id="platform-custom"
+                        @bind-Value="_custom"
+                        Choices="@Platforms"
+                        Placeholder="select a platform" />
+                </SiteFormField>
+                <SiteText Variant="SiteTextVariant.Meta">known: "@_known" · custom: "@_custom"</SiteText>
+            </SiteStack>
+        </Template>
+    </Story>
+
+</Stories>
+
+@code {
+    private static readonly string[] Platforms = ["linkedin", "github", "gitlab", "lattes", "orcid"];
+    private string _known = "github";
+    private string _custom = "mastodon";
+}

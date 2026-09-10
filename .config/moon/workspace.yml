@@ -1,0 +1,22 @@
+$schema: 'https://moonrepo.dev/schemas/workspace.json'
+
+versionConstraint: '=2.4.6'
+telemetry: false
+
+projects:
+  workspace: '.'
+
+vcs:
+  client: git
+  defaultBranch: main
+
+pipeline:
+  installDependencies: false
+  killProcessThreshold: 5000
+
+cache:
+  cas:
+    verifyIntegrity: true
+
+experiments:
+  casOutputsCache: true

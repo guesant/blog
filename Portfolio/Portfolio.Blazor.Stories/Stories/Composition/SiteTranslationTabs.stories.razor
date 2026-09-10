@@ -1,0 +1,27 @@
+@attribute [Stories("Composition/SiteTranslationTabs")]
+
+<Stories TComponent="SiteTranslationTabs">
+
+    <Story Name="Default">
+        <Template>
+            <SiteTranslationTabs Locales="@Locales"
+                ActiveLocale="@_active"
+                ActiveLocaleChanged="@(value => _active = value)">
+                <Panel Context="locale">
+                    <SiteFormField Label="title" For="@($"title-{locale}")">
+                        <SiteTextInput Id="@($"title-{locale}")" Value="@($"title in {locale}")" />
+                    </SiteFormField>
+                </Panel>
+            </SiteTranslationTabs>
+        </Template>
+    </Story>
+
+</Stories>
+
+@code {
+    private static readonly IReadOnlyList<SiteLocaleTab> Locales = [new(
+        "en",
+        "english"
+    ), new("pt-BR", "português")];
+    private string _active = "en";
+}

@@ -1,0 +1,8 @@
+<legend class="site-field-legend" data-slot="field-legend">
+    @ChildContent
+</legend>
+
+@code {
+    [Parameter, EditorRequired]
+    public RenderFragment ChildContent { get; set; } = default!;
+}

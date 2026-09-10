@@ -1,0 +1,184 @@
+@inherits ListPageBase
+@page "/topics"
+@page "/pt-BR/topics"
+@using Portfolio.Blazor.Core
+
+<PageTitle>@PageField("topics", "title", Title)</PageTitle>
+<SeoHead Title="@SeoTitle" Description="@SeoDescription" CanonicalPath="@CanonicalPath" />
+
+<SitePage Template="topics-index">
+    <SiteBreadcrumb HomeUrl="@LocalizedRoute("home")"
+        HomeLabel="@(L["legacy_ddc150008e2f"])"
+        Links="@BreadcrumbLinks"
+        CurrentLabel="@Title" />
+    @if (Snapshot is null)
+    {
+        <SiteHero Title="@Title" Lead="@Description" />
+        <SiteListingShell HasResults="false"
+            CurrentPage="@CurrentPage"
+            TotalPages="@PageCount"
+            PaginationLabel="@(L["legacy_ce41390e654d"])"
+            PreviousLabel="@(L["legacy_c3b535ded088"])"
+            NextLabel="@(L["legacy_a6c78a6436e2"])"
+            Href="@(page => QueryUrl(ViewMode, page))">
+            <EmptyContent>
+                <SiteEmptyState Message="@(L["legacy_59fa21acd9e0"])" />
+            </EmptyContent>
+        </SiteListingShell>
+    }
+    else
+    {
+        <SiteHero Title="@SeoTitle"
+            Lead="@SeoDescription"
+            BackHref="@LocalizedRoute("home")"
+            BackLabel="@(L["legacy_ddc150008e2f"])" />
+        @if (Snapshot.Topics.Count == 0)
+        {
+            <SiteListingShell HasResults="false"
+                CurrentPage="@CurrentPage"
+                TotalPages="@PageCount"
+                PaginationLabel="@(L["legacy_ce41390e654d"] )"
+                PreviousLabel="@(L["legacy_c3b535ded088"] )"
+                NextLabel="@(L["legacy_a6c78a6436e2"] )"
+                Href="@(page => QueryUrl(ViewMode, page))">
+                <EmptyContent>
+                    <SiteEmptyState Message="@EmptyLabel" />
+                </EmptyContent>
+            </SiteListingShell>
+        }
+        else
+        {
+            <SiteListingShell HasResults="@(PagedTopics.Count > 0)"
+                Summary="@ListingSummary(PagedTopics.Count, SortedTopics.Count, CurrentPage, PageCount)"
+                CurrentPage="@CurrentPage"
+                TotalPages="@PageCount"
+                PaginationLabel="@(L["legacy_ce41390e654d"])"
+                PreviousLabel="@(L["legacy_c3b535ded088"])"
+                NextLabel="@(L["legacy_a6c78a6436e2"])"
+                Href="@(page => QueryUrl(ViewMode, page))">
+            <FilterContent>
+                <SiteListingFilterBar Action="@Action"
+                    ApplyLabel="@(L["legacy_c975d2551cc4"])"
+                    ClearLabel="@(L["legacy_5262517729fc"])"
+                    ClearHref="@Action"
+                    OnApply="@(() => HandleApply(Action, SortValue, Search, DenseView))">
+                    <PrimaryFields>
+                        <SiteFilterSelect Icon="arrow-up-down"
+                            Label="@(L["legacy_6541e97b7c64"])"
+                            Id="topics-sort"
+                            Name="sort"
+                            @bind-Value="SortValue"
+                            Options="@SortOptions"
+                            Placeholder="@(L["legacy_d878d9136e0e"])"
+                            EmptyText="@(L["legacy_0bb89437e6cb"])" />
+                    </PrimaryFields>
+                    <SearchField>
+                        <SiteSearchField Label="@(L["legacy_6bb12bff6f09"])"
+                            Id="topics-search"
+                            Name="q"
+                            Value="@Search"
+                            ValueChanged="@((string value) => Search = value)"
+                            Placeholder="@(L["search_by_name"])" />
+                    </SearchField>
+                </SiteListingFilterBar>
+            </FilterContent>
+            <ResultContent>
+                <SiteCardGrid id="view-spacious-topics"
+                    aria-label="@Title"
+                    data-layout-region="items">
+                    @foreach (var topic in PagedTopics)
+                    {
+                        <SiteGridColumn>
+                            <SiteFeedCard KindLabel="@(L["kind_topic"])"
+                                Title="@(topic.Name ?? topic.Slug)"
+                                Href="@LocalizedUrl(topic.Url)"
+                                ViewLabel="@null" />
+                        </SiteGridColumn>
+                    }
+                </SiteCardGrid>
+            </ResultContent>
+            </SiteListingShell>
+        }
+    }
+    <ExploreSection HeadingId="topics-explore-heading" />
+</SitePage>
+
+@code {
+    private string Title => L["legacy_4ab0be41630a"];
+    private string Description => L["legacy_fb92fb8911e0"];
+    private string EmptyLabel => L["legacy_276283580ea5"];
+    private string SeoTitle => PageField("topics", "title", Title);
+    private string SeoDescription => PageField("topics", "description", Description);
+    private string CanonicalPath => LocalizedUrls.Current("/topics");
+    private string Action => CanonicalPath;
+    [SupplyParameterFromQuery(Name = "sort")]
+    private string? QuerySort { get; set; }
+    [SupplyParameterFromQuery(Name = "view")]
+    private string? QueryView { get; set; }
+    [SupplyParameterFromQuery(Name = "page")]
+    private int? QueryPage { get; set; }
+    [SupplyParameterFromQuery(Name = "q")]
+    private string? QuerySearch { get; set; }
+    private string _search = string.Empty;
+    private string Search { get => _search; set => _search = value; }
+    private string _sortValue = string.Empty;
+    private string Sort => QuerySort is "asc" or "desc" or "alpha" ? QuerySort : string.Empty;
+    private string SortValue { get => _sortValue; set => _sortValue = value is "asc" or "desc" or "alpha" ? value : string.Empty; }
+    private IReadOnlyList<SiteSelectOption> SortOptions => [
+        new("", L["legacy_d878d9136e0e"]),
+        new("desc", L["legacy_77c78d92c603"]),
+        new("asc", L["legacy_07b165cdd970"]),
+        new("alpha", L["legacy_cc8d79d78bef"])
+    ];
+    private IReadOnlyList<PublicTopic> MatchingTopics => (Snapshot?.Topics ?? [])
+        .Where(item => MatchesSearch(QuerySearch, item.Name, item.Slug))
+        .ToArray();
+    private IReadOnlyList<PublicTopic> SortedTopics => Sort switch
+    {
+        "alpha" => MatchingTopics.OrderBy(item => item.Name ?? item.Slug, StringComparer.OrdinalIgnoreCase).ToArray(),
+        "asc" => MatchingTopics.AsEnumerable().Reverse().ToArray(),
+        _ => MatchingTopics,
+    };
+    private const int PageSize = 20;
+    private int PageCount => PageCountFor(SortedTopics.Count, PageSize);
+    private int CurrentPage => CurrentPageFor(QueryPage, PageCount);
+    private IReadOnlyList<PublicTopic> PagedTopics => ItemsForPage(
+        SortedTopics,
+        CurrentPage,
+        PageSize
+    );
+    private string ResultsSummary => L["count_entries", SortedTopics.Count];
+
+
+    protected override void OnParametersSet()
+    {
+        _sortValue = Sort;
+        _search = QuerySearch ?? string.Empty;
+    }
+
+    private string ViewMode => QueryView is "dense" ? "dense" : "spacious";
+    private bool DenseView => ViewMode == "dense";
+    private string QueryUrl(string view, int page = 1) =>
+        ListingUrl(Action, Sort, QuerySearch, view == "dense", page);
+
+    private string PageField(string page, string field, string fallback)
+    {
+        if (Snapshot?.Pages.TryGetValue(page, out var fields) != true || fields.ValueKind != System.Text.Json.JsonValueKind.Object || !fields.TryGetProperty(field, out var value))
+        {
+            return fallback;
+        }
+
+        return value.GetString() ?? fallback;
+    }
+
+    private string LocalizedUrl(string? url) => string.IsNullOrWhiteSpace(url) ? "#" : LocalizedPath(url);
+    private string LocalizedPath(string url)
+    {
+        if (!Uri.TryCreate(url, UriKind.Absolute, out var absolute)) return url;
+        var path = absolute.AbsolutePath;
+        return LocalizedUrls.Current(path);
+    }
+
+    private string LocalizedRoute(string path) => LocalizedUrls.Current($"/{path}");
+    private IReadOnlyList<BreadcrumbLink> BreadcrumbLinks => [];
+}

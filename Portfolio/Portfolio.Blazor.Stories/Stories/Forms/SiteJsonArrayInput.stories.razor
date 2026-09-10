@@ -1,0 +1,26 @@
+@attribute [Stories("Forms/SiteJsonArrayInput")]
+
+<Stories TComponent="SiteJsonArrayInput">
+
+    <Story Name="Default">
+        <Template>
+            <SiteJsonArrayInput />
+        </Template>
+    </Story>
+
+    <Story Name="Trajectory">
+        <Template>
+            <SiteJsonArrayInput Id="trajectory"
+                Fields="@TrajectoryFields"
+                Value="@_trajectory"
+                ValueChanged="@(value => _trajectory = value)" />
+        </Template>
+    </Story>
+
+</Stories>
+
+@code {
+    private static readonly string[] TrajectoryFields = ["role", "organization", "period", "highlights:list", "includeInResume:bool", "hidden:bool"];
+
+    private string? _trajectory = """[{"role":"software developer","organization":"private company","period":"2025-2026","highlights":["maintenance","backend changes"],"includeInResume":true,"hidden":false}]""";
+}

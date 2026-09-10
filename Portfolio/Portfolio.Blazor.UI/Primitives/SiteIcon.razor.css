@@ -1,0 +1,73 @@
+.icon,
+.ph-fill,
+.fa-solid {
+    display: inline-block;
+    width: var(--site-icon-glyph);
+    height: var(--site-icon-glyph);
+    flex: 0 0 auto;
+    line-height: var(--site-leading-icon);
+    vertical-align: var(--site-icon-baseline);
+}
+.icon-size-xs {
+    font-size: var(--site-icon-xs);
+}
+.icon-size-sm {
+    font-size: var(--site-icon-sm);
+}
+.icon-size-md {
+    font-size: var(--site-icon-md);
+}
+.icon-size-lg {
+    font-size: var(--site-icon-lg);
+}
+.icon-size-xl {
+    font-size: var(--site-icon-xl);
+}
+.site-icon {
+    display: inline-grid;
+    width: var(--site-icon-box-md);
+    height: var(--site-icon-box-md);
+    flex: 0 0 var(--site-icon-box-md);
+    place-items: center;
+    overflow: hidden;
+    line-height: 1;
+    text-align: center;
+    vertical-align: middle;
+}
+.site-icon.icon-size-xs {
+    width: var(--site-icon-box-xs);
+    height: var(--site-icon-box-xs);
+    flex-basis: var(--site-icon-box-xs);
+}
+.site-icon.icon-size-sm {
+    width: var(--site-icon-box-sm);
+    height: var(--site-icon-box-sm);
+    flex-basis: var(--site-icon-box-sm);
+}
+.site-icon.icon-size-md {
+    width: var(--site-icon-box-md);
+    height: var(--site-icon-box-md);
+    flex-basis: var(--site-icon-box-md);
+}
+.site-icon.icon-size-lg {
+    width: var(--site-icon-box-lg);
+    height: var(--site-icon-box-lg);
+    flex-basis: var(--site-icon-box-lg);
+}
+.site-icon.icon-size-xl {
+    width: var(--site-icon-box-xl);
+    height: var(--site-icon-box-xl);
+    flex-basis: var(--site-icon-box-xl);
+}
+.site-icon::before {
+    max-width: 100%;
+    max-height: 100%;
+}
+/* IMPORTANT: lucide.css matches any class containing " icon-" (incl. our own
+   .icon-size-* utility classes) with `font-family: lucide !important`, which
+   silently overrides Font Awesome's non-!important font-family and renders
+   fa-solid glyphs as tofu. Restore it here with higher specificity. */
+.site-icon.fa-solid {
+    font-family: "Font Awesome 7 Free" !important;
+    font-weight: 900;
+}

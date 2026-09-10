@@ -1,0 +1,39 @@
+@attribute [Stories("DataDisplay/SiteFeedCard")]
+
+<Stories TComponent="SiteFeedCard">
+
+    <Story Name="Default">
+        <Template>
+            <SiteStack Gap="SiteSpace.Md">
+                <SiteFeedCard KindLabel="writing"
+                    Date="15 aug 2026"
+                    ReadingTime="5 min read"
+                    Title="how AI changed the way I build software, not why software interests me"
+                    Href="sample"
+                    Preview="@LongPreview"
+                    Truncated="true"
+                    ViewLabel="read more">
+                    <Tags>
+                        <SiteChipGroup>
+                            <SiteChip Label="AI" />
+                            <SiteChip Label="software development" />
+                            <SiteChip Label="productivity" />
+                        </SiteChipGroup>
+                    </Tags>
+                </SiteFeedCard>
+                <SiteFeedCard KindLabel="collection"
+                    Date="26 aug 2026"
+                    Title="distributed systems starter kit"
+                    Href="sample"
+                    Preview="a short path from the Raft paper to a real implementation."
+                    ViewLabel="read more" />
+            </SiteStack>
+        </Template>
+    </Story>
+
+</Stories>
+
+@code {
+    private const string LongPreview =
+        "I learned to program before generative AI became part of the workflow. Today I use it a lot, but I still treat architecture, constraints and decisions as the core of the job. AI helps me explore options, write drafts, refactor passages and learn new technologies faster. In this text I share how it fits into my day to day, what works well, where I remain cautious and why, and how the thing that interests me most is still solving real problems and building systems that make sense. The preview is cut at a word boundary before the limit";
+}

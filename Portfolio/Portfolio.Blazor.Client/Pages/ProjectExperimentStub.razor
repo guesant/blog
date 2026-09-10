@@ -1,0 +1,85 @@
+@inherits ContentPageBase
+@page "/projects/experiments/{Slug}"
+@page "/pt-BR/projects/experiments/{Slug}"
+@using Portfolio.Blazor.Core
+
+<PageTitle>@Title</PageTitle>
+<SeoHead Title="@Title"
+    Description="@Description"
+    CanonicalPath="@CanonicalPath"
+    OgType="article"
+    PublishedTime="@PublishedAt" />
+
+<SitePage Template="project-detail"
+    data-page-state="@(Experiment is null ? "not-found" : "content")">
+    <SiteBreadcrumb HomeUrl="@LocalizedPath("home")"
+        HomeLabel="@(L["legacy_ddc150008e2f"])"
+        Links="@BreadcrumbLinks"
+        CurrentLabel="@Title" />
+
+    @if (Snapshot is null)
+    {
+        <SiteHero Title="@(L["legacy_44d655649202"])" />
+    }
+    else if (Experiment is null)
+    {
+        <SiteHero Title="@(L["legacy_2a281201e16c"])" Lead="@NotFoundDescription" />
+    }
+    else
+    {
+        <SiteHero Title="@Experiment.Name"
+            Lead="@Experiment.Purpose"
+            BackHref="@LocalizedPath("projects")"
+            BackLabel="@(L["legacy_2c505faad45c"])">
+            <ChildContent>
+                <PublishedUpdatedMeta PublishedAt="@PublishedAt"
+                    UpdatedAt="@Experiment.UpdatedAt" />
+            </ChildContent>
+        </SiteHero>
+
+        @if (Experiment.Technologies is { Count: > 0 })
+        {
+            <SiteChipGroup Class="mb-3"
+                data-layout-region="tags">@foreach (var technology in Experiment.Technologies) { <SiteChip Label="@technology.Name"
+                    Href="@LocalizedPath($"technologies/{technology.Slug}")" /> }</SiteChipGroup>
+        }
+        @if (!string.IsNullOrWhiteSpace(Experiment.Href))
+        {
+            <SiteLink Class="site-inline-action"
+                data-layout-region="source"
+                Variant="SiteButtonVariant.Outline"
+                Size="SiteButtonSize.Sm"
+                Href="@Experiment.Href"
+                target="_blank"
+                rel="noopener noreferrer">@(L["legacy_79472cc5603f"])</SiteLink>
+        }
+
+        @if (!string.IsNullOrWhiteSpace(Experiment.Body)) { <SiteRichText Html="@((MarkupString)MarkdownRenderer.ToHtml(Experiment.Body))"
+            Region="content-footer" /> }
+        <ContentActions Title="@Experiment.Name"
+            Url="@CanonicalPath"
+            Body="@(Experiment.Body ?? Experiment.Purpose ?? string.Empty)"
+            ExternalUrl="@Experiment.Href" />
+        <ContentHistory ShowHistory="@Experiment.ShowHistory"
+            History="@Experiment.History"
+            DiffField="body" />
+        <ContentRelations CurrentUrl="@CanonicalPath" />
+        <RelatedContent Items="@Experiment.Related" />
+    }
+</SitePage>
+
+@code {
+    [Parameter]
+    public string Slug { get; set; } = string.Empty;
+    private PublicExperiment? Experiment => Snapshot?.Experiments.FirstOrDefault(item => PublicRouteKey.Matches(item.Url, item.Slug, Slug));
+    private string Title => Experiment?.Name ?? Slug.Replace('-', ' ');
+    private string Description => Experiment?.Purpose ?? NotFoundDescription;
+    private string? PublishedAt => Experiment?.PublishedAt;
+    private string CanonicalPath => Experiment?.Url ?? RequestPath;
+    private string NotFoundDescription => L["legacy_e74a35c6bf2d"];
+    private IReadOnlyList<BreadcrumbLink> BreadcrumbLinks => [new(
+        L["legacy_5c816876b410"],
+        LocalizedPath("portfolio")
+    ), new(L["legacy_2c505faad45c"], LocalizedPath("projects"))];
+    private string LocalizedPath(string path) => path.Equals("home", StringComparison.OrdinalIgnoreCase) ? (L["legacy_0607643fd42c"]) : (LocalizedUrls.Current($"/{path}"));
+}

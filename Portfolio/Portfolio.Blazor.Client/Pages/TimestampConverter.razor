@@ -1,0 +1,101 @@
+@inherits LocalizedComponentBase
+@page "/tools/timestamp-converter"
+@page "/pt-BR/tools/timestamp-converter"
+@using System.Globalization
+@using Portfolio.Blazor.Core
+
+<ToolPage Title="@Title" Description="@Description" CanonicalPath="@CanonicalPath">
+    @if (RendererInfo.IsInteractive)
+    {
+        <SiteFormCard Class="site-block">
+            <SiteFormField Label="@TimestampInputLabel"
+                For="timestamp-value"><SiteInput id="timestamp-value"
+                    type="text"
+                    placeholder="1735689600"
+                    autocomplete="off"
+                    @bind-Value="TimestampText" /></SiteFormField>
+                        <SiteButton Variant="SiteButtonVariant.Default"
+                        @onclick="SetNow"><SiteIcon Name="clock"
+                            Size="14" />@NowLabel</SiteButton>@if (!Result.IsValid) { <SiteErrorMessage>@ErrorLabel</SiteErrorMessage> }<SiteFormActions>
+                <SiteFormField Label="@UtcLabel"
+                    For="timestamp-utc"><SiteInput id="timestamp-utc"
+                        readonly
+                        value="@Result.Utc" />
+                    </SiteFormField>
+                    <SiteFormField Label="@LocalLabel"
+                        For="timestamp-local"><SiteInput id="timestamp-local"
+                            readonly
+                            value="@Result.Local" />
+                        </SiteFormField>
+                </SiteFormActions>
+                    <SiteFormField Label="@DateLabel"
+                        For="timestamp-date"><SiteInput id="timestamp-date"
+                            type="datetime-local"
+                            step="1"
+                            @bind="DateValue" /></SiteFormField>
+                        <SiteFormField Label="@DateResultLabel"
+                            For="timestamp-result"><SiteInput id="timestamp-result"
+                                readonly
+                                value="@Result.TimestampFromDate" /></SiteFormField>
+                    </SiteFormCard>
+    }
+    else
+    {
+        <SiteFilterCard Action="@Action"
+            DataLayoutRegion="tool-form"
+            FormClass="d-grid gap-3"
+            Class="site-block">
+            <SiteFormField Label="@TimestampInputLabel"
+                For="timestamp-value"><SiteInput id="timestamp-value"
+                    name="timestamp"
+                    type="text"
+                    value="@TimestampText"
+                    placeholder="1735689600" /></SiteFormField>
+                        <SiteButton Variant="SiteButtonVariant.Default"
+                        Type="SiteButtonType.Submit"><SiteIcon Name="arrow-right-left"
+                            Size="14" />@ConvertLabel</SiteButton>
+                                <SiteText>@UtcLabel: @Result.Utc</SiteText>
+                                    <SiteText>@LocalLabel: @Result.Local</SiteText>
+                                        <SiteFormField Label="@DateLabel" For="timestamp-date">
+                                            <SiteInput id="timestamp-date"
+                                                name="date"
+                                                type="datetime-local"
+                                                step="1"
+                                                value="@DateValueText" />
+                                    </SiteFormField>
+                                        <SiteText>@DateResultLabel: @Result.TimestampFromDate</SiteText>
+                                    </SiteFilterCard>
+    }
+</ToolPage>
+
+@code {
+    private string CanonicalPath => RequestPath;
+    private string _timestampText = "1735689600";
+    private DateTime _dateValue = new(2025, 1, 1);
+    private bool _queryInitialized;
+    private TimestampResult _result = TimestampConversion.FromTimestamp("1735689600");
+    [SupplyParameterFromQuery(Name = "timestamp")]
+    private string? QueryTimestamp { get; set; }
+    [SupplyParameterFromQuery(Name = "date")] private string? QueryDate { get; set; }
+    private string Action => L["legacy_8ea136bb42d0"];
+    private string Title => L["legacy_cd9fbcb11d34"];
+    private string Description => L["legacy_3709b96972ef"];
+    private string InputLabel => L["legacy_f2f2808523c8"];
+    private string TimestampInputLabel => L["legacy_aedfcab3ff4d"];
+    private string NowLabel => L["legacy_ab243226f805"];
+    private string UtcLabel => "UTC";
+    private string LocalLabel => L["legacy_1702aa220f98"];
+    private string DateLabel => L["legacy_eac099ce73d6"];
+    private string DateResultLabel => L["legacy_6f48e45282d4"];
+    private string ConvertLabel => L["legacy_ae125407093e"];
+    private string ErrorLabel => L["legacy_700f717ef5ce"];
+    private string TimestampText { get => _timestampText; set { _timestampText = value; _result = TimestampConversion.FromTimestamp(value) with { TimestampFromDate = TimestampConversion.FromDate(_dateValue).TimestampFromDate }; } }
+    private DateTime DateValue { get => _dateValue; set { _dateValue = value; _result = _result with { TimestampFromDate = TimestampConversion.FromDate(value).TimestampFromDate }; } }
+    private string DateValueText => _dateValue.ToString(
+        "yyyy-MM-ddTHH:mm:ss",
+        CultureInfo.InvariantCulture
+    );
+    private TimestampResult Result => _result;
+    protected override void OnParametersSet() { if (_queryInitialized) return; _timestampText = QueryTimestamp ?? _timestampText; if (QueryDate is not null && DateTime.TryParse(QueryDate, CultureInfo.InvariantCulture, DateTimeStyles.AssumeLocal, out var date)) _dateValue = date; _result = TimestampConversion.FromTimestamp(_timestampText) with { TimestampFromDate = TimestampConversion.FromDate(_dateValue).TimestampFromDate }; _queryInitialized = true; }
+    private void SetNow() { _timestampText = DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString(CultureInfo.InvariantCulture); _result = TimestampConversion.FromTimestamp(_timestampText) with { TimestampFromDate = TimestampConversion.FromDate(_dateValue).TimestampFromDate }; }
+}

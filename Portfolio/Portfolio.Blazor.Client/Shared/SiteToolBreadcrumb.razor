@@ -1,0 +1,46 @@
+@using System.Globalization
+@using Microsoft.Extensions.Localization
+@using Portfolio.Blazor.Core
+@using Portfolio.Blazor.Core.Localization
+@inject NavigationManager Navigation
+@inject IStringLocalizer<SharedResource> SharedL
+@inject IStringLocalizer<NavigationResource> NavL
+@inject ICultureCatalog Cultures
+@inject ILocalizedUrlBuilder Urls
+
+<SiteBreadcrumb HomeUrl="@LocalizedPath("/")"
+    HomeLabel="@(SharedL["legacy_8eec0169bc59"])"
+    Links="@ToolBreadcrumbLinks"
+    CurrentLabel="@ToolBreadcrumbCurrentLabel" />
+
+@code {
+    private CultureInfo CurrentCulture => Cultures.Normalize(CultureInfo.CurrentUICulture.Name);
+    private string CurrentPath => CultureCatalog.RemoveCulturePrefix(new Uri(Navigation.Uri).AbsolutePath).TrimEnd('/');
+    private string ToolSlug => CurrentPath.Split(
+        '/',
+        StringSplitOptions.RemoveEmptyEntries
+    ).LastOrDefault() ?? "tools";
+
+    private string ToolBreadcrumbCurrentLabel
+    {
+        get
+        {
+            if (ToolSlug.Equals("tools", StringComparison.OrdinalIgnoreCase))
+            {
+                return NavL["tools"];
+            }
+
+            var definition = ToolCatalog.All.FirstOrDefault(tool => tool.Slug.Equals(ToolSlug, StringComparison.OrdinalIgnoreCase));
+            return !string.IsNullOrWhiteSpace(definition.Slug)
+                ? ToolCatalog.LocalizedTitle(definition, CurrentCulture)
+                : ToolSlug.Replace('-', ' ');
+        }
+    }
+
+    private IReadOnlyList<BreadcrumbLink> ToolBreadcrumbLinks =>
+        ToolSlug.Equals("tools", StringComparison.OrdinalIgnoreCase)
+            ? []
+            : [new(NavL["tools"], LocalizedPath("/tools"))];
+
+    private string LocalizedPath(string path) => Urls.ForCulture(path, CurrentCulture.Name);
+}

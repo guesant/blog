@@ -119,7 +119,10 @@ shell:
     {{compose}} exec web sh
 
 stories:
-    {{compose_dev}} run --rm -p 8081:8081 -e NUGET_PACKAGES=/src/.nuget-cache -e ASPNETCORE_URLS=http://0.0.0.0:8081 web sh -lc 'dotnet run --project Portfolio/Portfolio.Blazor.Stories/Portfolio.Blazor.Stories.csproj --no-restore --urls http://0.0.0.0:8081'
+    {{compose_dev}} run --rm -p 8081:8081 -e NUGET_PACKAGES=/src/.nuget-cache -e ASPNETCORE_URLS=http://0.0.0.0:8081 web sh -lc 'dotnet watch --project Portfolio/Portfolio.Blazor.Stories/Portfolio.Blazor.Stories.csproj --no-launch-profile --no-restore --non-interactive --no-hot-reload -- --urls http://0.0.0.0:8081'
+
+stories-refresh:
+    touch Portfolio/Portfolio.Blazor.Stories/_Imports.razor
 
 vrt: (_vrt "npm test")
 

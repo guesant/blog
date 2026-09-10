@@ -4,10 +4,11 @@ set -eu
 
 base_url="${1:-http://127.0.0.1:8080}"
 
+max_attempts="${ROUTE_SHELL_READY_ATTEMPTS:-30}"
 attempt=0
 until wget -qO- "${base_url}/" >/dev/null 2>&1; do
     attempt=$((attempt + 1))
-    if [ "$attempt" -ge 30 ]; then
+    if [ "$attempt" -ge "$max_attempts" ]; then
         echo "route shell check failed: ${base_url} did not become ready" >&2
         exit 1
     fi

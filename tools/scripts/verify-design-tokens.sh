@@ -17,7 +17,7 @@ matches="$(grep -REn --binary-files=without-match \
     grep -vE ':[0-9]+:[[:space:]]*///' |
     grep -vE '/SiteGrid\.razor:.*style="@RootStyle"' |
     grep -vE '/SitePreviewBox\.razor:.*style="@Style"' |
-    grep -vE '/(PasswordGenerator|CssGradientGenerator|CssClampCalculator|CssBorderRadiusGenerator|CssBoxShadowGenerator|RandomColorPalette|ColorConverter|ContrastChecker)\.razor:' || true)"
+    grep -vE '/(PasswordGenerator|CssGradientGenerator|CssClampCalculator|CssBorderRadiusGenerator|CssBoxShadowGenerator|RandomColorPalette|ColorConverter|ContrastChecker)\.razor(\.cs)?:' || true)"
 
 if [ -n "$matches" ]; then
     fail "raw hex color, px value, or inline style found outside token files:

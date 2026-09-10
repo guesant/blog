@@ -5,6 +5,7 @@
     <Nullable>enable</Nullable>
     <RootNamespace>Portfolio.Blazor.UI</RootNamespace>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);CS1591</NoWarn>
     <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
   </PropertyGroup>
 
@@ -13,5 +14,25 @@
     <PackageReference Include="Microsoft.Extensions.Localization" Version="10.0.11" />
     <PackageReference Include="BlazorBlueprint.Components" Version="3.16.0" />
     <ProjectReference Include="..\Portfolio.Blazor.Core\Portfolio.Blazor.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="Microsoft.AspNetCore.Components" />
+    <Using Include="System.Globalization" />
+    <Using Include="Microsoft.AspNetCore.Components.Forms" />
+    <Using Include="Microsoft.AspNetCore.Components.Routing" />
+    <Using Include="Microsoft.AspNetCore.Components.Web" />
+    <Using Include="Microsoft.AspNetCore.Components.Web.Virtualization" />
+    <Using Include="Microsoft.JSInterop" />
+    <Using Include="BlazorBlueprint.Primitives.Services" />
+    <Using Include="Portfolio.Blazor.UI.Foundations" />
+    <Using Include="Portfolio.Blazor.UI.Primitives" />
+    <Using Include="Portfolio.Blazor.UI.Forms" />
+    <Using Include="Portfolio.Blazor.UI.DataDisplay" />
+    <Using Include="Portfolio.Blazor.UI.Feedback" />
+    <Using Include="Portfolio.Blazor.UI.Layout" />
+    <Using Include="Portfolio.Blazor.UI.Navigation" />
+    <Using Include="Portfolio.Blazor.UI.Composition" />
+    <Using Include="Portfolio.Blazor.UI.Templates" />
   </ItemGroup>
 </Project>

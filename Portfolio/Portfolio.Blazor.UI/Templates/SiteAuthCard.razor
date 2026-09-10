@@ -6,12 +6,3 @@
     }
     @ChildContent
 </div>
-
-@code {
-    [Parameter, EditorRequired]
-    public string Title { get; set; } = string.Empty;
-    [Parameter]
-    public string? Error { get; set; }
-    [Parameter, EditorRequired]
-    public RenderFragment ChildContent { get; set; } = default!;
-}

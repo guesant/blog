@@ -6,31 +6,3 @@
     <div data-slot="split-start">@Start</div>
     <div data-slot="split-end">@End</div>
 </div>
-
-@code {
-    /// <summary>Content pinned to the leading edge.</summary>
-    [Parameter, EditorRequired]
-    public RenderFragment Start { get; set; } = default!;
-    /// <summary>Content pinned to the trailing edge.</summary>
-    [Parameter, EditorRequired]
-    public RenderFragment End { get; set; } = default!;
-    /// <summary>Gap between the two blocks when stacked below the breakpoint.</summary>
-    [Parameter]
-    public SiteSpace Gap { get; set; } = SiteSpace.Sm;
-    /// <summary>Cross-axis alignment of the two blocks.</summary>
-    [Parameter]
-    public SiteAlign Align { get; set; } = SiteAlign.Center;
-    /// <summary>Extra class applied to the root element.</summary>
-    [Parameter]
-    public string? Class { get; set; }
-    [Parameter(CaptureUnmatchedValues = true)]
-    public IReadOnlyDictionary<string, object>? AdditionalAttributes { get; set; }
-
-    private string RootClass => SiteCss.Join("site-split", Class);
-
-    private string GapToken => SiteTokens.Gap(Gap);
-
-    private string AlignToken => SiteTokens.Align(Align);
-
-    private IReadOnlyDictionary<string, object> ForwardedAttributes => AdditionalAttributes ?? new Dictionary<string, object>();
-}

@@ -1,0 +1,134 @@
+using BlazorBlueprint.Primitives.Utilities;
+
+namespace Portfolio.Blazor.UI.Primitives;
+
+public partial class SiteLink
+{
+    /// <summary>Link destination.</summary>
+    [Parameter, EditorRequired]
+    public string Href { get; set; } = string.Empty;
+
+    /// <summary>Anchor target attribute.</summary>
+    [Parameter]
+    public string? Target { get; set; }
+
+    /// <summary>Anchor rel attribute.</summary>
+    [Parameter]
+    public string? Rel { get; set; }
+
+    /// <summary>aria-current value, typically "page".</summary>
+    [Parameter]
+    public string? AriaCurrent { get; set; }
+
+    /// <summary>Visual style. Link renders a plain inline link; any other value renders button-like chrome.</summary>
+    [Parameter]
+    public SiteButtonVariant Variant { get; set; } = SiteButtonVariant.Link;
+
+    /// <summary>Height and density when button-like.</summary>
+    [Parameter]
+    public SiteButtonSize Size { get; set; } = SiteButtonSize.Default;
+
+    /// <summary>Extra class applied to the root element.</summary>
+    [Parameter]
+    public string? Class { get; set; }
+
+    [Parameter, EditorRequired]
+    public RenderFragment ChildContent { get; set; } = default!;
+
+    [Parameter(CaptureUnmatchedValues = true)]
+    public IReadOnlyDictionary<string, object>? AdditionalAttributes { get; set; }
+
+    /// <summary>See SiteButton's identical parameter for why this is wired directly and why Name="TriggerContext" is required.</summary>
+    [CascadingParameter(Name = "TriggerContext")]
+    private TriggerContext? Trigger { get; set; }
+
+    private ElementReference _elementRef;
+
+    private bool IsButtonLike => Variant != SiteButtonVariant.Link;
+    private string RootClass =>
+        IsButtonLike ? SiteCss.Join("site-control", Class) : SiteCss.Join(Class);
+
+    private string VariantToken =>
+        Variant switch
+        {
+            SiteButtonVariant.Default => "default",
+            SiteButtonVariant.Destructive => "destructive",
+            SiteButtonVariant.Secondary => "secondary",
+            SiteButtonVariant.Ghost => "ghost",
+            SiteButtonVariant.Outline => "outline",
+            SiteButtonVariant.Link => "link",
+            // IMPORTANT: falls back to "outline" (not "link") for any future SiteButtonVariant value -
+            // matches SiteButton's own fallback for the same shared enum, so an unhandled variant
+            // renders identically (bordered chrome) regardless of which primitive draws it.
+            _ => "outline",
+        };
+
+    private string SizeToken =>
+        Size switch
+        {
+            SiteButtonSize.Xs => "xs",
+            SiteButtonSize.Sm => "sm",
+            SiteButtonSize.Lg => "lg",
+            SiteButtonSize.IconXs => "icon-xs",
+            SiteButtonSize.IconSm => "icon-sm",
+            SiteButtonSize.Icon => "icon",
+            SiteButtonSize.IconLg => "icon-lg",
+            _ => "default",
+        };
+
+    private Dictionary<string, object> LinkAttributes
+    {
+        get
+        {
+            var attributes = AdditionalAttributes is null
+                ? new Dictionary<string, object>()
+                : new Dictionary<string, object>(AdditionalAttributes);
+            attributes["data-slot"] = "link";
+            attributes["data-variant"] = VariantToken;
+            attributes["data-size"] = SizeToken;
+            if (Rel is not null)
+            {
+                attributes["rel"] = Rel;
+            }
+            if (AriaCurrent is not null)
+            {
+                attributes["aria-current"] = AriaCurrent;
+            }
+            if (Trigger is not null)
+            {
+                if (Trigger.TriggerId is not null)
+                {
+                    attributes["id"] = Trigger.TriggerId;
+                }
+                if (Trigger.AriaHasPopup is not null)
+                {
+                    attributes["aria-haspopup"] = Trigger.AriaHasPopup;
+                }
+                if (Trigger.AriaControls is not null)
+                {
+                    attributes["aria-controls"] = Trigger.AriaControls;
+                }
+                attributes["aria-expanded"] = Trigger.IsOpen ? "true" : "false";
+            }
+            return attributes;
+        }
+    }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender && Trigger is not null)
+        {
+            Trigger.SetTriggerElement?.Invoke(_elementRef);
+            Trigger.NotifyConsumed();
+        }
+    }
+
+    /// <summary>See SiteButton's identical handlers for why these are wired directly.</summary>
+    private void HandleTriggerMouseEnter() => Trigger?.OnMouseEnter?.Invoke();
+
+    private void HandleTriggerMouseLeave() => Trigger?.OnMouseLeave?.Invoke();
+
+    private void HandleTriggerFocus() => Trigger?.OnFocus?.Invoke();
+
+    private void HandleTriggerBlur() => Trigger?.OnBlur?.Invoke();
+}

@@ -19,20 +19,3 @@
     <SiteButton Variant="SiteButtonVariant.Outline" @onclick="AddRow">
         <SiteIcon Name="plus" Size="14" />@AddLabel</SiteButton>
 </div>
-
-@code {
-    [Parameter]
-    public string? Id { get; set; }
-
-    private void HandleKeyChanged(int index, string value)
-    {
-        Rows[index] = (value, Rows[index].Value);
-        NotifyChanged();
-    }
-
-    private void HandleValueChanged(int index, string value)
-    {
-        Rows[index] = (Rows[index].Key, value);
-        NotifyChanged();
-    }
-}

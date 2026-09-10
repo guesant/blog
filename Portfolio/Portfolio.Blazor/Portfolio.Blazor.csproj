@@ -21,4 +21,36 @@
     <PackageReference Include="Konscious.Security.Cryptography.Argon2" Version="1.3.1" />
     <PackageReference Include="Konscious.Security.Cryptography.Blake2" Version="1.1.1" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="Microsoft.AspNetCore.Components" />
+    <Using Include="System.Net.Http.Json" />
+    <Using Include="Microsoft.AspNetCore.Components.Forms" />
+    <Using Include="Microsoft.AspNetCore.Components.Routing" />
+    <Using Include="Microsoft.AspNetCore.Components.Web" />
+    <Using Include="Microsoft.AspNetCore.Components.Web.Virtualization" />
+    <Using Include="Microsoft.JSInterop" />
+    <Using Include="Microsoft.EntityFrameworkCore" />
+    <Using Include="Portfolio.Blazor" />
+    <Using Include="Portfolio.Blazor.Client" />
+    <Using Include="Portfolio.Blazor.Client.Shared" />
+    <Using Include="Portfolio.Blazor.Components" />
+    <Using Include="Portfolio.Blazor.Core" />
+    <Using Include="Portfolio.Blazor.Backups" />
+    <Using Include="Portfolio.Blazor.Data" />
+    <Using Include="Portfolio.Blazor.Data.Entities" />
+    <Using Include="Portfolio.Blazor.UI" />
+    <Using Include="Portfolio.Blazor.UI.Foundations" />
+    <Using Include="Portfolio.Blazor.UI.Primitives" />
+    <Using Include="Portfolio.Blazor.UI.Layout" />
+    <Using Include="Portfolio.Blazor.UI.Forms" />
+    <Using Include="Portfolio.Blazor.UI.DataDisplay" />
+    <Using Include="Portfolio.Blazor.UI.Feedback" />
+    <Using Include="Portfolio.Blazor.UI.Navigation" />
+    <Using Include="Portfolio.Blazor.UI.Composition" />
+    <Using Include="Portfolio.Blazor.UI.Templates" />
+    <Using Include="Portfolio.Blazor.Components.Admin.Shared" />
+    <Using Include="BlazorBlueprint.Primitives.Services" />
+    <Using Include="Microsoft.AspNetCore.Components.Web.RenderMode" Static="true" />
+  </ItemGroup>
 </Project>

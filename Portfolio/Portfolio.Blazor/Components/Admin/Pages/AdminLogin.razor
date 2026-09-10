@@ -18,13 +18,3 @@
                 Size="14" />Continue with Google</SiteButton>
     </SiteForm>
 </SiteAuthCard>
-
-@code {
-    [SupplyParameterFromQuery]
-    public string? ReturnUrl { get; set; }
-
-    [SupplyParameterFromQuery(Name = "error")]
-    public string? Error { get; set; }
-
-    private bool HasError => !string.IsNullOrEmpty(Error);
-}

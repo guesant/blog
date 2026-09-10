@@ -1,0 +1,66 @@
+namespace Portfolio.Blazor.UI.Feedback;
+
+public partial class SiteToastHost
+{
+    /// <summary>Accessible name of each toast's dismiss button.</summary>
+    [Parameter]
+    public string DismissLabel { get; set; } = "dismiss";
+
+    /// <summary>How long a toast stays before auto-dismissing. Set to TimeSpan.Zero to disable auto-dismiss.</summary>
+    [Parameter]
+    public TimeSpan AutoDismissAfter { get; set; } = TimeSpan.FromSeconds(6);
+
+    // IMPORTANT: SiteNotice sets role="alert" for Danger/Warning tones, which itself implies an
+    // assertive live region - nesting that inside this host's own aria-live="polite" container is a
+    // conflicting/redundant live-region pairing. The host's own aria-live already announces every
+    // toast, so force role="status" here regardless of tone (splatted last, overriding SiteNotice's
+    // own role attribute).
+    private static readonly Dictionary<string, object> ToastAttributes = new()
+    {
+        ["role"] = "status",
+    };
+
+    private readonly HashSet<Guid> _scheduled = [];
+
+    protected override void OnInitialized() => Toasts.Changed += HandleChanged;
+
+    protected override void OnParametersSet() => ScheduleAutoDismiss();
+
+    private void HandleChanged()
+    {
+        ScheduleAutoDismiss();
+        InvokeAsync(StateHasChanged);
+    }
+
+    private void ScheduleAutoDismiss()
+    {
+        if (AutoDismissAfter <= TimeSpan.Zero)
+        {
+            return;
+        }
+
+        foreach (var toast in Toasts.Toasts)
+        {
+            if (!_scheduled.Add(toast.Id))
+            {
+                continue;
+            }
+
+            var id = toast.Id;
+            _ = DismissAfterDelay(id);
+        }
+    }
+
+    private async Task DismissAfterDelay(Guid id)
+    {
+        await Task.Delay(AutoDismissAfter);
+        Toasts.Dismiss(id);
+        _scheduled.Remove(id);
+    }
+
+    public void Dispose()
+    {
+        Toasts.Changed -= HandleChanged;
+        GC.SuppressFinalize(this);
+    }
+}

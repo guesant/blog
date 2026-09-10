@@ -44,13 +44,3 @@
     </Story>
 
 </Stories>
-
-@code {
-    private sealed class ShellModel
-    {
-        public string? Title { get; set; } = "Sample snippet";
-        public string? Slug { get; set; } = "sample-snippet";
-    }
-
-    private readonly ShellModel _model = new();
-}

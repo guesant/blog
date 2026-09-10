@@ -4,10 +4,3 @@
     data-slot="field-error">
     @ChildContent
 </div>
-
-@code {
-    [CascadingParameter]
-    private SiteFieldContext Context { get; set; } = default!;
-    [Parameter, EditorRequired]
-    public RenderFragment ChildContent { get; set; } = default!;
-}

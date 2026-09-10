@@ -14,4 +14,31 @@
     <PackageReference Include="BlazorBlueprint.Components" Version="3.16.0" />
     <ProjectReference Include="..\Portfolio.Blazor.UI\Portfolio.Blazor.UI.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="Microsoft.AspNetCore.Components" />
+    <Using Include="System.Net.Http.Json" />
+    <Using Include="Microsoft.AspNetCore.Components.Forms" />
+    <Using Include="Microsoft.AspNetCore.Components.Routing" />
+    <Using Include="Microsoft.AspNetCore.Components.Web" />
+    <Using Include="Microsoft.AspNetCore.Components.Web.Virtualization" />
+    <Using Include="Microsoft.AspNetCore.Components.WebAssembly.Http" />
+    <Using Include="Microsoft.JSInterop" />
+    <Using Include="BlazingStory.Components" />
+    <Using Include="BlazingStory.Components.Layouts" />
+    <Using Include="BlazingStory.Configurations" />
+    <Using Include="BlazingStory.Types" />
+    <Using Include="Portfolio.Blazor.Stories" />
+    <Using Include="Portfolio.Blazor.Stories.Stories" />
+    <Using Include="BlazorBlueprint.Primitives.Services" />
+    <Using Include="Portfolio.Blazor.UI.Foundations" />
+    <Using Include="Portfolio.Blazor.UI.Primitives" />
+    <Using Include="Portfolio.Blazor.UI.Forms" />
+    <Using Include="Portfolio.Blazor.UI.DataDisplay" />
+    <Using Include="Portfolio.Blazor.UI.Feedback" />
+    <Using Include="Portfolio.Blazor.UI.Layout" />
+    <Using Include="Portfolio.Blazor.UI.Navigation" />
+    <Using Include="Portfolio.Blazor.UI.Composition" />
+    <Using Include="Portfolio.Blazor.UI.Templates" />
+  </ItemGroup>
 </Project>

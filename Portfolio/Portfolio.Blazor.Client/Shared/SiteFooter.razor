@@ -5,9 +5,3 @@
 <footer class="site-footer border-top" data-layout-region="footer">
     <SiteText>@(Snapshot?.Chrome.Copyright ?? DefaultCopyright)</SiteText>
 </footer>
-
-@code {
-    [Parameter]
-    public PublicSiteSnapshot? Snapshot { get; set; }
-    private string DefaultCopyright => $"© {DateTime.UtcNow.Year} Gabriel R. Antunes. {L["some_rights_reserved"]}";
-}

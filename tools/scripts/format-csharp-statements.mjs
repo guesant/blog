@@ -92,7 +92,7 @@ function collect(dir, out) {
         if (entry === "bin" || entry === "obj" || entry === "node_modules") continue;
         const full = join(dir, entry);
         if (statSync(full).isDirectory()) collect(full, out);
-        else if (entry.endsWith(".razor") || entry.endsWith(".cs")) out.push(full);
+        else if (entry.endsWith(".razor")) out.push(full);
     }
     return out;
 }

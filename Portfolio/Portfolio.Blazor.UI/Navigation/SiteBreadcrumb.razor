@@ -30,17 +30,3 @@
         </ol>
     </nav>
 </div>
-
-@code {
-    [Parameter]
-    public string HomeUrl { get; set; } = "/";
-    [Parameter]
-    public string HomeLabel { get; set; } = "home";
-    [Parameter]
-    public IReadOnlyList<BreadcrumbLink> Links { get; set; } = [];
-    [Parameter, EditorRequired]
-    public string CurrentLabel { get; set; } = string.Empty;
-    [Parameter]
-    public bool ShowHomeLink { get; set; } = true;
-    private string ResolvedHomeUrl => HomeUrl;
-}

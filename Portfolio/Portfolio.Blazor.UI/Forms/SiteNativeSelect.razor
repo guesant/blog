@@ -9,10 +9,3 @@
         @attributes="ForwardedAttributes">
     @ChildContent
 </select>
-
-@code {
-    [Parameter]
-    public RenderFragment? ChildContent { get; set; }
-
-    protected override string BaseInputClass => "form-select";
-}

@@ -19,4 +19,34 @@
     <PackageReference Include="Microsoft.Extensions.Localization" Version="10.0.11" />
     <PackageReference Include="pax.BlazorChartJs" Version="0.9.1" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="Microsoft.AspNetCore.Components" />
+    <Using Include="System.Globalization" />
+    <Using Include="System.Net.Http.Json" />
+    <Using Include="Microsoft.AspNetCore.Components.Forms" />
+    <Using Include="Microsoft.AspNetCore.Components.Routing" />
+    <Using Include="Microsoft.AspNetCore.Components.Web" />
+    <Using Include="Microsoft.AspNetCore.Components.Web.Virtualization" />
+    <Using Include="Microsoft.JSInterop" />
+    <Using Include="Microsoft.Extensions.Localization" />
+    <Using Include="Portfolio.Blazor.Client" />
+    <Using Include="Portfolio.Blazor.Core.Localization" />
+    <Using Include="Portfolio.Blazor.Client.Layout" />
+    <Using Include="Portfolio.Blazor.Client.Shared" />
+    <Using Include="Portfolio.Blazor.UI" />
+    <Using Include="Portfolio.Blazor.UI.Foundations" />
+    <Using Include="Portfolio.Blazor.UI.Primitives" />
+    <Using Include="Portfolio.Blazor.UI.Forms" />
+    <Using Include="Portfolio.Blazor.UI.Layout" />
+    <Using Include="Portfolio.Blazor.UI.Navigation" />
+    <Using Include="Portfolio.Blazor.UI.Templates" />
+    <Using Include="Portfolio.Blazor.UI.DataDisplay" />
+    <Using Include="Portfolio.Blazor.UI.Feedback" />
+    <Using Include="Portfolio.Blazor.UI.Composition" />
+    <Using Include="BlazorBlueprint.Primitives.Services" />
+    <Using Include="BlazorBlueprint.Icons.Lucide.Components" />
+    <Using Include="BlazorBlueprint.Icons.Lucide.Data" />
+    <Using Include="Microsoft.AspNetCore.Components.Web.RenderMode" Static="true" />
+  </ItemGroup>
 </Project>

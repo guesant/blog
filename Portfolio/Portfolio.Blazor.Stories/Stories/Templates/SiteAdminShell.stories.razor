@@ -4,7 +4,45 @@
 
     <Story Name="Default">
         <Template>
-            <SiteAdminShell>sample</SiteAdminShell>
+            <SiteAdminShell>
+                <Brand>Admin</Brand>
+                <Nav>
+                    <ul>
+                        <li>
+                            <SiteNavLink Href="#" AriaCurrent="page">
+                                <SiteIcon Name="layout-dashboard"
+                                    Size="14"
+                                    Class="icon nav-item-icon" />
+                                <SiteNavItemLabel>Dashboard</SiteNavItemLabel>
+                            </SiteNavLink>
+                        </li>
+                    </ul>
+                    <hr class="site-nav-divider" />
+                    <SiteNavGroup Label="content" Nested="true">
+                        <li>
+                            <SiteNavLink Href="#">
+                                <SiteIcon Name="folder" Size="14" Class="icon nav-item-icon" />
+                                <SiteNavItemLabel>Projects</SiteNavItemLabel>
+                            </SiteNavLink>
+                        </li>
+                        <li>
+                            <SiteNavLink Href="#">
+                                <SiteIcon Name="pen-line" Size="14" Class="icon nav-item-icon" />
+                                <SiteNavItemLabel>Writings</SiteNavItemLabel>
+                            </SiteNavLink>
+                        </li>
+                    </SiteNavGroup>
+                </Nav>
+                <NavFooter>
+                    <SiteNavLink Href="#">
+                        <SiteIcon Name="house" Size="14" Class="icon nav-item-icon" />
+                        <SiteNavItemLabel>View site</SiteNavItemLabel>
+                    </SiteNavLink>
+                </NavFooter>
+                <ChildContent>
+                    <SiteText>sample content</SiteText>
+                </ChildContent>
+            </SiteAdminShell>
         </Template>
     </Story>
 

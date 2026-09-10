@@ -22,7 +22,15 @@
 }
 
 .admin-nav-brand {
+    font-size: var(--site-text-2xl);
     font-weight: var(--site-weight-bold);
+    line-height: var(--site-leading-tight);
+}
+
+.admin-nav ::deep .sidebar-action {
+    display: flex;
+    width: 100%;
+    justify-content: flex-start;
 }
 
 .admin-nav-links {

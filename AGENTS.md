@@ -19,6 +19,7 @@ Este arquivo é a fonte da verdade das convenções. `CLAUDE.md` e `GEMINI.md` s
 - Documentação XML (`///`) só em `Portfolio/Portfolio.Blazor.UI`, o projeto de componentes; nos demais projetos ela conta como comentário narrativo.
 - Diretivas de ferramenta permitidas: `biome-ignore`, `nosemgrep`, `@ts-expect-error`, `@ts-ignore`, `@ts-nocheck`, `istanbul`, `jscpd:ignore-start`/`jscpd:ignore-end`, `zizmor: ignore[...]`, `shellcheck`, `yamllint`.
 - Decisão, justificativa e contexto vão para `docs/pendencias-e-decisoes.md`, nunca inline.
+- O C# de um componente fica em `X.razor.cs` (partial class), nunca em `@code`, salvo quando o bloco contém um template razor (`@<...>`).
 - Toda medida em CSS passa por variáveis de `tokens.css` (nada de `px`/`rem` literais fora dele); conteúdo público só é lido pelo snapshot, nunca pelo `DbContext` do admin; tudo sob `/admin` é privado por construção (middleware + `[Authorize]`).
 
 ## Formatação

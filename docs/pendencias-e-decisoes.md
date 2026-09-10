@@ -19,8 +19,10 @@ Registro único de decisões tomadas (com o porquê) e pendências abertas. Comm
 - O picker de itens da coleção continua fora do `SiteEntityChecklist` porque ali a ordem dos itens é dado salvo (`Order` por índice) e cada item carrega uma nota; o checklist trabalha com conjunto sem ordem.
 - A `main` foi recriada como branch órfã com um único commit em 2026-09-10; a história anterior (Laravel e migração) ficou no GitLab e no branch local `backup/main-gitlab`. A origin passou a ser `https://github.com/guesant/portfolio.git`.
 
+- O C# dos componentes vive em `.razor.cs` (partial class com o mesmo nome e namespace do `.razor`), não em blocos `@code`: só assim o CSharpier e os analisadores (CA1822, CA1816 etc.) alcançam esse código. A única exceção é `SiteFormField.razor`, cujo `@code` guarda um template razor (`@<text>`), que não existe em C# puro. Os `@using` de cada `_Imports.razor` foram espelhados como `<Using>` globais no csproj, para os `.razor.cs` não repetirem o mesmo cabeçalho de imports (o jscpd apontava isso como clone). Os scripts `format-csharp-*.mjs` passaram a tratar só `.razor`, para não brigar com o CSharpier nos `.cs`. Em `X.stories.razor` a classe gerada chama-se `X_stories`, então o CA1707 fica desligado para esses arquivos.
+- `just stories` roda com `dotnet watch` (polling). Edições em arquivos já vigiados reiniciam sozinhas; um arquivo novo só entra na próxima reavaliação do projeto, então `just stories-refresh` (toca o `_Imports.razor`) força isso sem reiniciar o container.
+- A sidebar do admin divergia da do site em um ponto real: os links do admin não tinham a regra `justify-content: flex-start` que a sidebar do site aplica aos `.sidebar-action`, então o texto ficava centralizado dentro do pill, e a marca "Admin" usava o corpo (14px) em vez do `--site-text-2xl` da marca do site. As duas regras entraram no `SiteAdminShell.razor.css`; largura (16rem), padding, gaps, altura dos itens (32px), fonte dos itens (14px) e rótulos de grupo já eram os mesmos tokens. Verificado na story `Templates/SiteAdminShell`, que agora renderiza uma navegação real em vez de um placeholder.
+
 ## Pendências
 
-- Blocos `@code` em `.razor` não são refluídos por nenhum formatador; mover para `.razor.cs` (partial classes) resolveria via CSharpier.
-- O container das Stories não recarrega componentes novos sem reiniciar.
-- Conferir no admin autenticado por que a sidebar parece maior que a do site; por CSS, fonte, altura dos itens, largura e padding são os mesmos tokens.
+Nenhuma no momento.

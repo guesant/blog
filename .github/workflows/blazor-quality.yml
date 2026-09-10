@@ -40,11 +40,13 @@ jobs:
       - name: Restore locked NuGet dependencies
         run: docker compose run --rm web dotnet restore Portfolio.Blazor.slnx --locked-mode
 
+      # IMPORTANT: the solution also holds JavaScript projects (*.esproj) that `dotnet list package`
+      # rejects, so the audit and the SBOM walk the C# projects one by one.
       - name: Audit NuGet dependencies
-        run: docker compose run --rm web dotnet list Portfolio.Blazor.slnx package --vulnerable --include-transitive
+        run: docker compose run --rm web sh -lc 'set -e; for project in Portfolio/*/*.csproj; do dotnet list "$project" package --vulnerable --include-transitive; done'
 
       - name: Generate NuGet SPDX SBOM
-        run: docker compose run --rm web sh -lc 'mkdir -p /tmp/blazor-sbom /src/artifacts/sbom && dotnet list Portfolio.Blazor.slnx package --include-transitive --format json > /tmp/blazor-sbom/nuget-packages.json && dotnet run --project Portfolio/Portfolio.Blazor.Sbom/Portfolio.Blazor.Sbom.csproj --no-restore -- /tmp/blazor-sbom/nuget-packages.json /src/artifacts/sbom/dependencies.spdx.json && test -s /src/artifacts/sbom/dependencies.spdx.json'
+        run: docker compose run --rm web sh -lc 'set -e; mkdir -p /tmp/blazor-sbom /src/artifacts/sbom; for project in Portfolio/*/*.csproj; do dotnet list "$project" package --include-transitive --format json > "/tmp/blazor-sbom/$(basename "$project" .csproj).json"; done; dotnet run --project Portfolio/Portfolio.Blazor.Sbom/Portfolio.Blazor.Sbom.csproj --no-restore -- /tmp/blazor-sbom /src/artifacts/sbom/dependencies.spdx.json && test -s /src/artifacts/sbom/dependencies.spdx.json'
 
       - name: Upload SPDX SBOM
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02

@@ -4,17 +4,28 @@ using System.Text.Json;
 
 if (args.Length != 2)
 {
-    Console.Error.WriteLine("Usage: Portfolio.Blazor.Sbom <nuget-list-json> <spdx-output>");
+    Console.Error.WriteLine(
+        "Usage: Portfolio.Blazor.Sbom <nuget-list-json-file-or-directory> <spdx-output>"
+    );
     return 2;
 }
 
 var inputPath = Path.GetFullPath(args[0]);
 var outputPath = Path.GetFullPath(args[1]);
-using var document = JsonDocument.Parse(await File.ReadAllTextAsync(inputPath));
+var inputFiles = Directory.Exists(inputPath)
+    ? Directory
+        .GetFiles(inputPath, "*.json")
+        .OrderBy(path => path, StringComparer.Ordinal)
+        .ToArray()
+    : [inputPath];
+var documents = new List<JsonDocument>();
+foreach (var inputFile in inputFiles)
+{
+    documents.Add(JsonDocument.Parse(await File.ReadAllTextAsync(inputFile)));
+}
 
-var packages = document
-    .RootElement.GetProperty("projects")
-    .EnumerateArray()
+var packages = documents
+    .SelectMany(document => document.RootElement.GetProperty("projects").EnumerateArray())
     .SelectMany(project => project.GetProperty("frameworks").EnumerateArray())
     .SelectMany(framework =>
         EnumeratePackages(framework, "topLevelPackages")

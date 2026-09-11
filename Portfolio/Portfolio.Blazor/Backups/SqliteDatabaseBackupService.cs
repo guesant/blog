@@ -1,38 +1,31 @@
 using Microsoft.Data.Sqlite;
+using Portfolio.Blazor.Data.Providers;
 
 namespace Portfolio.Blazor.Backups;
 
-public sealed partial class DatabaseBackupService(
-    IConfiguration configuration,
-    ILogger<DatabaseBackupService> logger
+public sealed class SqliteDatabaseBackupService(
+    DatabaseOptions options,
+    ILogger<SqliteDatabaseBackupService> logger
 ) : IDatabaseBackupService
 {
-    private readonly string _sourcePath =
-        configuration["PORTFOLIO_SQLITE_PATH"] ?? "/data/portfolio.sqlite";
-    private readonly string _backupRoot =
-        configuration["PORTFOLIO_DB_BACKUP_ROOT"] ?? "/data/db-backups";
-    private readonly int _keep = int.TryParse(
-        configuration["PORTFOLIO_DB_BACKUP_KEEP"],
-        out var keep
-    )
-        ? keep
-        : 20;
-
     public async Task<string> CreateBackupAsync(CancellationToken cancellationToken = default)
     {
-        Directory.CreateDirectory(_backupRoot);
+        Directory.CreateDirectory(options.BackupRoot);
         var destinationPath = Path.Combine(
-            _backupRoot,
+            options.BackupRoot,
             $"portfolio-{DateTime.UtcNow:yyyyMMddTHHmmssZ}.sqlite"
         );
-        var temporaryPath = Path.Combine(_backupRoot, $".{Path.GetFileName(destinationPath)}.tmp");
+        var temporaryPath = Path.Combine(
+            options.BackupRoot,
+            $".{Path.GetFileName(destinationPath)}.tmp"
+        );
 
         try
         {
             var source = new SqliteConnection(
                 new SqliteConnectionStringBuilder
                 {
-                    DataSource = _sourcePath,
+                    DataSource = options.SqlitePath,
                     Mode = SqliteOpenMode.ReadOnly,
                 }.ToString()
             );
@@ -60,38 +53,7 @@ public sealed partial class DatabaseBackupService(
             throw;
         }
 
-        PruneOldBackups();
+        BackupPruning.Prune(options.BackupRoot, "portfolio-*.sqlite", options.BackupKeep, logger);
         return destinationPath;
     }
-
-    private void PruneOldBackups()
-    {
-        var backups = Directory
-            .GetFiles(_backupRoot, "portfolio-*.sqlite")
-            .OrderBy(path => path, StringComparer.Ordinal)
-            .ToArray();
-
-        foreach (var stale in backups.Take(Math.Max(0, backups.Length - _keep)))
-        {
-            try
-            {
-                File.Delete(stale);
-            }
-            catch (IOException exception)
-            {
-                LogBackupPruneFailed(logger, exception, stale);
-            }
-        }
-    }
-
-    [LoggerMessage(
-        EventId = 2001,
-        Level = LogLevel.Warning,
-        Message = "Failed to prune stale database backup {Path}."
-    )]
-    private static partial void LogBackupPruneFailed(
-        ILogger logger,
-        Exception exception,
-        string path
-    );
 }

@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Portfolio.Blazor.Backups;
 using Portfolio.Blazor.Data;
+using Portfolio.Blazor.Data.Providers;
 using Portfolio.Blazor.UI.Foundations;
 
 namespace Portfolio.Blazor.Components.Admin;
@@ -15,6 +16,9 @@ public abstract partial class AdminEditPageBase<TEntity> : AdminComponentBase
 
     [Inject]
     protected IDatabaseBackupService BackupService { get; set; } = default!;
+
+    [Inject]
+    protected IDatabaseProvider DatabaseProvider { get; set; } = default!;
 
     [Inject]
     protected SiteToastService ToastService { get; set; } = default!;
@@ -86,7 +90,7 @@ public abstract partial class AdminEditPageBase<TEntity> : AdminComponentBase
 
             try
             {
-                await dbContext.CheckpointAsync();
+                await DatabaseProvider.SignalContentChangedAsync(dbContext);
             }
             catch (Exception checkpointException)
             {

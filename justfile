@@ -7,6 +7,7 @@ workspace := `pwd`
 
 compose := "docker compose -f compose.yaml"
 compose_dev := "docker compose -f compose.yaml -f compose.dev.yaml"
+compose_pg := compose_dev + " -f compose.postgres.yaml"
 docker_run := compose + " run --rm --user 0 --entrypoint sh web -lc"
 playwright_image := "mcr.microsoft.com/playwright@sha256:5b8f294aff9041b7191c34a4bab3ac270157a28774d4b0660e9743297b697e48"
 harness_docker := "docker run --rm --user 1000:1000 --add-host host.docker.internal:host-gateway -e HOME=/tmp -v \"" + justfile_directory() + "/Portfolio/Portfolio.Blazor.LayoutAudit:/tmp/harness\" -w /tmp/harness " + playwright_image
@@ -22,6 +23,10 @@ up:
 
 dev:
     {{compose_dev}} up -d web
+
+dev-postgres:
+    {{compose_pg}} up -d --wait postgres
+    {{compose_pg}} up -d web
 
 dev-logs:
     {{compose_dev}} logs -f --tail=100 web
@@ -51,12 +56,19 @@ build:
     {{docker_run}} 'dotnet build Portfolio.Blazor.slnx --configuration Release --no-restore'
 
 restore:
-    {{docker_run}} 'dotnet restore Portfolio.Blazor.slnx'
+    {{compose}} run --rm --entrypoint sh web -lc 'dotnet restore Portfolio.Blazor.slnx --locked-mode'
 
 test:
     {{docker_run}} 'dotnet run --project Portfolio/Portfolio.Blazor.Core.Tests/Portfolio.Blazor.Core.Tests.csproj --configuration Release --no-build'
 
-check: format lint comments duplication duplication-razor build test audit schema tokens ui-imports
+test-data:
+    {{docker_run}} 'dotnet run --project Portfolio/Portfolio.Blazor.Data.Tests/Portfolio.Blazor.Data.Tests.csproj --configuration Release --no-build'
+
+test-data-postgres:
+    {{compose_pg}} up -d --wait postgres
+    {{compose_pg}} run --rm -e NUGET_PACKAGES=/src/.nuget-cache --entrypoint sh web -lc 'cd /src && dotnet run --project Portfolio/Portfolio.Blazor.Data.Tests/Portfolio.Blazor.Data.Tests.csproj --no-restore'
+
+check: format lint comments duplication duplication-razor build test test-data audit schema tokens ui-imports
 
 format:
     docker run --rm --user 1000:1000 -v "${PWD}:/workspace:ro" -w /workspace node@sha256:6642ef280aebc09c4541bee0b15c9f89f0f3f3c247ddee79ae1d37eddfdcbbaa sh -lc 'FORMAT_CHECK=1 node tools/scripts/format-csharp-statements.mjs && FORMAT_CHECK=1 node tools/scripts/format-csharp-arguments.mjs && FORMAT_CHECK=1 node tools/scripts/format-razor.mjs && FORMAT_CHECK=1 node tools/scripts/format-razor-attributes.mjs'
@@ -91,11 +103,12 @@ component-weight-report:
 schema:
     {{docker_run}} 'sh /src/tools/scripts/verify-schema.sh'
 
-db-migration name:
-    {{compose_dev}} run --rm -e NUGET_PACKAGES=/src/.nuget-cache --entrypoint sh web -lc 'cd /src && dotnet tool restore >/dev/null && dotnet tool run dotnet-ef migrations add {{name}} --project Portfolio/Portfolio.Blazor.Database/Portfolio.Blazor.Database.csproj --startup-project Portfolio/Portfolio.Blazor.Database/Portfolio.Blazor.Database.csproj --context PortfolioAdminDbContext'
+db-migration name provider="sqlite":
+    {{ if provider == "postgres" { compose_pg } else { compose_dev } }} run --rm -e NUGET_PACKAGES=/src/.nuget-cache --entrypoint sh web -lc 'cd /src && dotnet tool restore >/dev/null && dotnet tool run dotnet-ef migrations add {{name}} --project Portfolio/{{ if provider == "postgres" { "Portfolio.Blazor.Database.Postgres/Portfolio.Blazor.Database.Postgres.csproj" } else { "Portfolio.Blazor.Database/Portfolio.Blazor.Database.csproj" } }} --startup-project Portfolio/{{ if provider == "postgres" { "Portfolio.Blazor.Database.Postgres/Portfolio.Blazor.Database.Postgres.csproj" } else { "Portfolio.Blazor.Database/Portfolio.Blazor.Database.csproj" } }} --context PortfolioAdminDbContext'
 
-db-update:
-    {{compose_dev}} run --rm -e NUGET_PACKAGES=/src/.nuget-cache --entrypoint sh web -lc 'cd /src && dotnet tool restore >/dev/null && PORTFOLIO_SQLITE_PATH=/data/db/portfolio.sqlite dotnet tool run dotnet-ef database update --project Portfolio/Portfolio.Blazor.Database/Portfolio.Blazor.Database.csproj --startup-project Portfolio/Portfolio.Blazor.Database/Portfolio.Blazor.Database.csproj --context PortfolioAdminDbContext'
+db-update provider="sqlite":
+    {{ if provider == "postgres" { compose_pg + " up -d --wait postgres" } else { "true" } }}
+    {{ if provider == "postgres" { compose_pg } else { compose_dev } }} run --rm -e NUGET_PACKAGES=/src/.nuget-cache --entrypoint sh web -lc 'cd /src && dotnet tool restore >/dev/null && PORTFOLIO_SQLITE_PATH=/data/db/portfolio.sqlite dotnet tool run dotnet-ef database update --project Portfolio/{{ if provider == "postgres" { "Portfolio.Blazor.Database.Postgres/Portfolio.Blazor.Database.Postgres.csproj" } else { "Portfolio.Blazor.Database/Portfolio.Blazor.Database.csproj" } }} --startup-project Portfolio/{{ if provider == "postgres" { "Portfolio.Blazor.Database.Postgres/Portfolio.Blazor.Database.Postgres.csproj" } else { "Portfolio.Blazor.Database/Portfolio.Blazor.Database.csproj" } }} --context PortfolioAdminDbContext'
 
 tokens:
     {{docker_run}} 'sh /src/tools/scripts/verify-design-tokens.sh'

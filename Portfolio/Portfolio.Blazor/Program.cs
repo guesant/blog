@@ -4,7 +4,6 @@ using BlazorBlueprint.Primitives.Extensions;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Localization;
-using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using pax.BlazorChartJs;
 using Portfolio.Blazor;
@@ -14,6 +13,7 @@ using Portfolio.Blazor.Components;
 using Portfolio.Blazor.Core;
 using Portfolio.Blazor.Core.Localization;
 using Portfolio.Blazor.Data;
+using Portfolio.Blazor.Data.Providers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -76,8 +76,7 @@ builder.Services.AddRateLimiter(options =>
     );
 });
 
-builder.Services.AddSingleton<IPublicSiteContentProvider, SqlitePublicSiteContentProvider>();
-builder.Services.AddSingleton<IPublicKnowledgeGraphProvider, SqlitePublicKnowledgeGraphProvider>();
+builder.Services.AddPortfolioDatabase(builder.Configuration);
 builder.Services.AddSingleton<ResumePdfGenerationService>();
 builder.Services.AddSingleton<IResumePdfService>(services =>
     services.GetRequiredService<ResumePdfGenerationService>()
@@ -88,22 +87,6 @@ builder.Services.AddHostedService(services =>
 builder.Services.AddChartJs(options =>
     options.ChartJsLocation = "/vendor/chartjs/chart.esm-shim.js"
 );
-
-builder.Services.AddDbContextFactory<PortfolioAdminDbContext>(options =>
-{
-    var connectionString = new SqliteConnectionStringBuilder
-    {
-        DataSource = builder.Configuration["PORTFOLIO_SQLITE_PATH"] ?? "/data/portfolio.sqlite",
-        Mode = SqliteOpenMode.ReadWrite,
-        ForeignKeys = true,
-    }.ToString();
-    options.UseSqlite(
-        connectionString,
-        sqlite => sqlite.MigrationsAssembly("Portfolio.Blazor.Database")
-    );
-    options.AddInterceptors(new PortfolioAdminConnectionInterceptor());
-});
-builder.Services.AddSingleton<IDatabaseBackupService, DatabaseBackupService>();
 
 var googleClientId = builder.Configuration["PORTFOLIO_ADMIN_GOOGLE_CLIENT_ID"];
 var googleClientSecret = builder.Configuration["PORTFOLIO_ADMIN_GOOGLE_CLIENT_SECRET"];

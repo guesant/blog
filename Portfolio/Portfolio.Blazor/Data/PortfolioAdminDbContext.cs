@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Portfolio.Blazor.Data.Configurations;
 using Portfolio.Blazor.Data.Entities;
 
@@ -59,6 +60,7 @@ public sealed class PortfolioAdminDbContext(DbContextOptions<PortfolioAdminDbCon
     public DbSet<PageFeaturedCase> PageFeaturedCases => Set<PageFeaturedCase>();
     public DbSet<PageFeaturedProject> PageFeaturedProjects => Set<PageFeaturedProject>();
     public DbSet<PageFeaturedWriting> PageFeaturedWritings => Set<PageFeaturedWriting>();
+    public DbSet<ContentRevision> ContentRevisions => Set<ContentRevision>();
 
     // IMPORTANT: this database was created by Laravel and indexes only what it
     // declares. EF's convention of indexing every foreign key would add 22 indexes
@@ -123,13 +125,38 @@ public sealed class PortfolioAdminDbContext(DbContextOptions<PortfolioAdminDbCon
         modelBuilder.ApplyConfiguration(new ContentRelationConfiguration());
         modelBuilder.ApplyConfiguration(new AuditLogEntryConfiguration());
         modelBuilder.ApplyConfiguration(new AuditRequestConfiguration());
+        modelBuilder.ApplyConfiguration(new ContentRevisionConfiguration());
+        ApplyProviderMappings(modelBuilder);
     }
 
-    // IMPORTANT: call this after every committed write. The public site's
-    // SqlitePublicSiteContentProvider invalidates its cache by the main
-    // .sqlite file's length/mtime, but WAL writes land in the -wal sidecar
-    // first — without an explicit checkpoint, an edit can stay invisible on
-    // the public site until SQLite's own 1000-page auto-checkpoint fires.
-    public Task CheckpointAsync(CancellationToken cancellationToken = default) =>
-        Database.ExecuteSqlRawAsync("PRAGMA wal_checkpoint(TRUNCATE);", cancellationToken);
+    // IMPORTANT: the SQLite schema stores dates as TEXT (Laravel legacy), so DateOnly columns go
+    // through a lenient string converter and DateTime stays as text; PostgreSQL gets native date
+    // columns and, because the legacy values are wall-clock timestamps with no zone, "timestamp
+    // without time zone" instead of Npgsql's default timestamptz (which rejects Unspecified kinds).
+    private void ApplyProviderMappings(ModelBuilder modelBuilder)
+    {
+        if (!Database.IsNpgsql())
+        {
+            return;
+        }
+
+        foreach (var entity in modelBuilder.Model.GetEntityTypes())
+        {
+            foreach (var property in entity.GetProperties())
+            {
+                if (property.ClrType == typeof(DateOnly) || property.ClrType == typeof(DateOnly?))
+                {
+                    property.SetValueConverter((ValueConverter?)null);
+                    property.SetColumnType("date");
+                }
+                else if (
+                    property.ClrType == typeof(DateTime)
+                    || property.ClrType == typeof(DateTime?)
+                )
+                {
+                    property.SetColumnType("timestamp without time zone");
+                }
+            }
+        }
+    }
 }

@@ -1,0 +1,25 @@
+services:
+  postgres:
+    image: postgres:17-alpine@sha256:18cfe3ef5e6815560c98237d6216d1e5119702fb0f3894c8785dd58b8bbe5d73
+    environment:
+      POSTGRES_USER: portfolio
+      POSTGRES_PASSWORD: portfolio
+      POSTGRES_DB: portfolio
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U portfolio -d portfolio"]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+  web:
+    environment:
+      PORTFOLIO_DB_PROVIDER: postgres
+      PORTFOLIO_DB_CONNECTION: Host=postgres;Database=portfolio;Username=portfolio;Password=portfolio
+      PORTFOLIO_TEST_PG_CONNECTION: Host=postgres;Database=postgres;Username=portfolio;Password=portfolio
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+volumes:
+  postgres-data:

@@ -8,13 +8,16 @@ fail() {
 
 dotnet tool restore >/dev/null 2>&1 || fail "could not restore the local dotnet tools"
 
-dotnet tool run dotnet-ef migrations has-pending-model-changes \
-    --project Portfolio/Portfolio.Blazor.Database/Portfolio.Blazor.Database.csproj \
-    --startup-project Portfolio/Portfolio.Blazor.Database/Portfolio.Blazor.Database.csproj \
-    --context PortfolioAdminDbContext >/tmp/schema-drift 2>&1 ||
-    {
-        cat /tmp/schema-drift >&2
-        fail "the model has changes with no migration; run 'just db-migration <name>'"
-    }
+for project in Portfolio/Portfolio.Blazor.Database/Portfolio.Blazor.Database.csproj \
+    Portfolio/Portfolio.Blazor.Database.Postgres/Portfolio.Blazor.Database.Postgres.csproj; do
+    dotnet tool run dotnet-ef migrations has-pending-model-changes \
+        --project "$project" \
+        --startup-project "$project" \
+        --context PortfolioAdminDbContext >/tmp/schema-drift 2>&1 ||
+        {
+            cat /tmp/schema-drift >&2
+            fail "the model has changes with no migration in $project; run 'just db-migration <name> <provider>'"
+        }
+done
 
 echo "schema checks passed"

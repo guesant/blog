@@ -222,7 +222,9 @@ for lockfile in Portfolio/Portfolio.Blazor.Core/packages.lock.json \
     Portfolio/Portfolio.Blazor.Client/packages.lock.json \
     Portfolio/Portfolio.Blazor/packages.lock.json \
     Portfolio/Portfolio.Blazor.UI/packages.lock.json \
-    Portfolio/Portfolio.Blazor.Database/packages.lock.json; do
+    Portfolio/Portfolio.Blazor.Database/packages.lock.json \
+    Portfolio/Portfolio.Blazor.Database.Postgres/packages.lock.json \
+    Portfolio/Portfolio.Blazor.Data.Tests/packages.lock.json; do
     [ -f "$lockfile" ] || fail "$lockfile is missing"
 done
 

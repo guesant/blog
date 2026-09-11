@@ -301,6 +301,11 @@ static void AssertContent(HarvestResult result, string engine)
         $"{engine}: site settings booleans and contact profiles must round-trip"
     );
     Check(
+        en.Chrome.Profile is { BirthCity: "Town", Interests: "systems", Learning: "rust" }
+            && en.Chrome.Profile.PersonalInterests is { ValueKind: JsonValueKind.Array },
+        $"{engine}: profile personal fields must reach the snapshot"
+    );
+    Check(
         en.Projects[0].History is { Count: 2 },
         $"{engine}: project history must include both audit rows"
     );

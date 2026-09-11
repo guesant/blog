@@ -115,10 +115,10 @@ public sealed partial class PublicSiteContentProvider(
                     Format.Text(profile.Description),
                     JsonNullable(Format.Text(profile.Milestones)),
                     Format.Date(profile.BirthDate),
-                    string.Empty,
-                    string.Empty,
-                    string.Empty,
-                    null
+                    Format.Text(profile.BirthCity),
+                    Format.Text(profile.Interests),
+                    Format.Text(profile.Learning),
+                    JsonNullable(Format.Text(profile.PersonalInterests))
                 ),
             Copyright(context, siteId, profile?.Name ?? Format.Text(site?.ShortName), locale),
             Navigation(context, locale),

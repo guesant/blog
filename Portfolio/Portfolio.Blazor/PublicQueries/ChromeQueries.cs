@@ -18,7 +18,11 @@ internal sealed record ProfileRow(
     string? Title,
     string? Location,
     string? Description,
-    string? Milestones
+    string? Milestones,
+    string? BirthCity,
+    string? Interests,
+    string? Learning,
+    string? PersonalInterests
 );
 
 internal sealed record PageRow(string Slug, DateTime? UpdatedAt, string? Fields);
@@ -76,7 +80,11 @@ internal static class ChromeQueries
                 t.Title ?? en.Title,
                 t.Location ?? en.Location,
                 t.Description ?? en.Description,
-                t.Milestones ?? en.Milestones
+                t.Milestones ?? en.Milestones,
+                t.BirthCity ?? en.BirthCity,
+                t.Interests ?? en.Interests,
+                t.Learning ?? en.Learning,
+                t.PersonalInterests ?? en.PersonalInterests
             )
         ).FirstOrDefault();
 

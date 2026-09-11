@@ -215,7 +215,7 @@
             HeadingId="about-highlights-heading"
             Label="@(L["legacy_94f205b8bbf6"])"
             Title="@(L["about_highlights_title"])">
-            <SiteCardGrid Dense="true"
+            <SiteGrid Columns="3"
                 aria-labelledby="about-highlights-heading"
                 data-layout-region="items">
                 @foreach (var highlight in Highlights)
@@ -228,7 +228,7 @@
                         <SiteText Variant="SiteTextVariant.Excerpt">@highlight.Description</SiteText>
                     </SiteClickableCard>
                 }
-            </SiteCardGrid>
+            </SiteGrid>
         </SiteSection>
         <ExploreSection HeadingId="about-explore-heading" />
     }

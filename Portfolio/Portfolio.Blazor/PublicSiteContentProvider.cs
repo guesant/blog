@@ -1,16 +1,21 @@
 using System.Collections.Concurrent;
 using System.Data.Common;
+using System.Globalization;
 using System.Text.Json;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using Portfolio.Blazor.Core;
 using Portfolio.Blazor.Core.Localization;
+using Portfolio.Blazor.Data;
 using Portfolio.Blazor.Data.Providers;
+using Portfolio.Blazor.PublicQueries;
 using static Portfolio.Blazor.SqlReadHelpers;
 
 namespace Portfolio.Blazor;
 
 public sealed partial class PublicSiteContentProvider(
     IDatabaseProvider database,
+    IDbContextFactory<PortfolioPublicDbContext> contexts,
     IConfiguration configuration,
     ILogger<PublicSiteContentProvider> logger,
     ProtectedEmailChallengeService challengeService,
@@ -57,7 +62,8 @@ public sealed partial class PublicSiteContentProvider(
                 using var connection = await database.OpenReadOnlyConnectionAsync(
                     cancellationToken
                 );
-                var snapshot = Build(connection, locale);
+                await using var context = await contexts.CreateDbContextAsync(cancellationToken);
+                var snapshot = Build(connection, context, locale);
                 _snapshots[locale] = new CachedSnapshot(fingerprint, snapshot);
                 return snapshot;
             }
@@ -78,51 +84,50 @@ public sealed partial class PublicSiteContentProvider(
         PublicSiteSnapshot Snapshot
     );
 
-    private PublicSiteSnapshot Build(DbConnection db, string locale)
+    private PublicSiteSnapshot Build(
+        DbConnection db,
+        PortfolioPublicDbContext context,
+        string locale
+    )
     {
-        var site = Row(db, "select * from site_settings order by id nulls first limit 1");
-        var profile = Row(
-            db,
-            "select p.*, coalesce(t.title, en.title) as title, coalesce(t.location, en.location) as location, coalesce(t.description, en.description) as description, coalesce(t.milestones, en.milestones) as milestones from profiles p left join profile_translations t on t.profile_id=p.id and t.locale=@locale left join profile_translations en on en.profile_id=p.id and en.locale='en' order by p.id nulls first limit 1",
-            ("@locale", locale)
-        );
-        var pages = Rows(
-                db,
-                "select p.slug, p.updated_at, coalesce(t.fields, en.fields) as fields from pages p left join page_translations t on t.page_id=p.id and t.locale=@locale left join page_translations en on en.page_id=p.id and en.locale='en' where t.id is not null or en.id is not null",
-                ("@locale", locale)
-            )
-            .ToDictionary(row => Text(row, "slug"), PageFields, StringComparer.OrdinalIgnoreCase);
+        var site = ChromeQueries.Site(context);
+        var siteId = site?.Id ?? 0;
+        var profile = ChromeQueries.Profile(context, locale);
+        var pages = ChromeQueries
+            .Pages(context, locale)
+            .ToDictionary(row => row.Slug, PageFields, StringComparer.OrdinalIgnoreCase);
+        var siteTranslation = ChromeQueries.SiteTranslation(context, siteId, locale);
 
         var chrome = new PublicChrome(
             new PublicSite(
-                Text(site, "short_name"),
-                Text(site, "portfolio_url"),
-                Text(site, "source_repository_url"),
-                Bool(site, "contact_available"),
-                ContactProfiles(db, site, locale),
+                Format.Text(site?.ShortName),
+                Format.Text(site?.PortfolioUrl),
+                Format.Text(site?.SourceRepositoryUrl),
+                site?.ContactAvailable ?? false,
+                ContactProfiles(context, siteId),
                 null,
-                Bool(site, "maintenance_enabled"),
-                MaintenanceField(db, site, locale, "maintenance_eyebrow"),
-                MaintenanceField(db, site, locale, "maintenance_title"),
-                MaintenanceField(db, site, locale, "maintenance_description"),
-                SiteSeo(db, site, locale)
+                site?.MaintenanceEnabled ?? false,
+                MaintenanceField(siteTranslation?.MaintenanceEyebrow),
+                MaintenanceField(siteTranslation?.MaintenanceTitle),
+                MaintenanceField(siteTranslation?.MaintenanceDescription),
+                JsonNullable(Format.Text(siteTranslation?.Seo))
             ),
-            profile.Count == 0
+            profile is null
                 ? null
                 : new PublicProfile(
-                    Text(profile, "name"),
-                    Text(profile, "title"),
-                    Text(profile, "location"),
-                    Text(profile, "description"),
-                    JsonNullable(Text(profile, "milestones")),
-                    Date(profile, "birth_date"),
-                    Text(profile, "birth_city"),
-                    Text(profile, "interests"),
-                    Text(profile, "learning"),
-                    JsonNullable(Text(profile, "personal_interests"))
+                    Format.Text(profile.Name),
+                    Format.Text(profile.Title),
+                    Format.Text(profile.Location),
+                    Format.Text(profile.Description),
+                    JsonNullable(Format.Text(profile.Milestones)),
+                    Format.Date(profile.BirthDate),
+                    string.Empty,
+                    string.Empty,
+                    string.Empty,
+                    null
                 ),
-            Copyright(db, site, profile, locale),
-            Navigation(db, locale),
+            Copyright(context, siteId, profile?.Name ?? Format.Text(site?.ShortName), locale),
+            Navigation(context, locale),
             new PublicBuild(_commitSha, _buildTime)
         );
 
@@ -158,12 +163,11 @@ public sealed partial class PublicSiteContentProvider(
         if (!database.IsContentAvailable())
             return null;
 
-        using var connection = await database.OpenReadOnlyConnectionAsync(cancellationToken);
-        var site = Row(
-            connection,
-            "select contact_email from site_settings order by id nulls first limit 1"
+        await using var context = await contexts.CreateDbContextAsync(cancellationToken);
+        return await challengeService.CreateAsync(
+            Format.Text(ChromeQueries.ContactEmail(context)),
+            cancellationToken
         );
-        return await challengeService.CreateAsync(Text(site, "contact_email"), cancellationToken);
     }
 
     private List<string> ResumePdfLocales() =>
@@ -772,13 +776,11 @@ public sealed partial class PublicSiteContentProvider(
             ? JsonDocument.Parse("{}").RootElement.Clone()
             : JsonDocument.Parse(value).RootElement.Clone();
 
-    private static JsonElement PageFields(Dictionary<string, object?> row)
+    private static JsonElement PageFields(PageRow row)
     {
-        var fields = Json(Text(row, "fields"));
-        if (
-            fields.ValueKind != JsonValueKind.Object
-            || string.IsNullOrWhiteSpace(Timestamp(row, "updated_at"))
-        )
+        var fields = Json(Format.Text(row.Fields));
+        var updatedAt = Format.Timestamp(row.UpdatedAt);
+        if (fields.ValueKind != JsonValueKind.Object || updatedAt.Length == 0)
             return fields;
         var values = fields
             .EnumerateObject()
@@ -787,101 +789,36 @@ public sealed partial class PublicSiteContentProvider(
                 item => item.Value.Clone(),
                 StringComparer.OrdinalIgnoreCase
             );
-        values["updated_at"] = JsonSerializer.SerializeToElement(Timestamp(row, "updated_at"));
+        values["updated_at"] = JsonSerializer.SerializeToElement(updatedAt);
         return JsonDocument.Parse(JsonSerializer.Serialize(values)).RootElement.Clone();
     }
 
-    private static JsonElement Json(DbConnection db, Dictionary<string, object?> row)
-    {
-        var fields = row.Where(pair =>
-                pair.Key
-                    is not "id"
-                        and not "resume_id"
-                        and not "locale"
-                        and not "created_at"
-                        and not "updated_at"
-            )
-            .ToDictionary(pair => pair.Key, pair => pair.Value);
-        return JsonDocument
-            .Parse(System.Text.Json.JsonSerializer.Serialize(fields))
-            .RootElement.Clone();
-    }
-
     private static List<PublicContactProfile> ContactProfiles(
-        DbConnection db,
-        Dictionary<string, object?> site,
-        string locale
-    )
-    {
-        var profiles = Rows(
-                db,
-                "select platform, label, url from contact_profiles where site_settings_id=@id order by \"order\" nulls first",
-                ("@id", Id(site, "id"))
-            )
+        PortfolioPublicDbContext context,
+        int siteId
+    ) =>
+        ChromeQueries
+            .ContactProfiles(context, siteId)
             .Select(row => new PublicContactProfile(
-                Text(row, "platform"),
-                Text(row, "label", Text(row, "platform")),
-                Text(row, "url")
+                row.Platform,
+                row.Label ?? row.Platform,
+                row.Url
             ))
             .ToList();
-        return profiles;
-    }
 
-    private static string? MaintenanceField(
-        DbConnection db,
-        Dictionary<string, object?> site,
-        string locale,
-        string field
-    ) =>
-        Text(
-            Row(
-                db,
-                $"select coalesce(t.{field}, en.{field}) as {field} from site_settings_translations t left join site_settings_translations en on en.site_settings_id=t.site_settings_id and en.locale='en' where t.site_settings_id=@id and t.locale=@locale limit 1",
-                ("@id", Id(site, "id")),
-                ("@locale", locale)
-            ),
-            field,
-            string.Empty
-        )
-            is var value
-        && value.Length > 0
-            ? value
-            : null;
-
-    private static JsonElement? SiteSeo(
-        DbConnection db,
-        Dictionary<string, object?> site,
-        string locale
-    ) =>
-        JsonNullable(
-            Text(
-                Row(
-                    db,
-                    "select coalesce(t.seo, en.seo) as seo from site_settings_translations t left join site_settings_translations en on en.site_settings_id=t.site_settings_id and en.locale='en' where t.site_settings_id=@id and t.locale=@locale limit 1",
-                    ("@id", Id(site, "id")),
-                    ("@locale", locale)
-                ),
-                "seo"
-            )
-        );
+    private static string? MaintenanceField(string? value) =>
+        string.IsNullOrEmpty(value) ? null : value;
 
     private string Copyright(
-        DbConnection db,
-        Dictionary<string, object?> site,
-        Dictionary<string, object?> profile,
+        PortfolioPublicDbContext context,
+        int siteId,
+        string name,
         string locale
     )
     {
-        var template = Text(
-            Row(
-                db,
-                "select copyright_template from site_settings_translations where site_settings_id=@id and locale=@locale limit 1",
-                ("@id", Id(site, "id")),
-                ("@locale", locale)
-            ),
-            "copyright_template",
-            localizer["some_rights_reserved"].Value
-        );
+        var template =
+            ChromeQueries.CopyrightTemplate(context, siteId, locale)
+            ?? localizer["some_rights_reserved"].Value;
         template = template.Replace(
             "Some rights reserved",
             "some rights reserved",
@@ -892,27 +829,22 @@ public sealed partial class PublicSiteContentProvider(
             "alguns direitos reservados",
             StringComparison.OrdinalIgnoreCase
         );
-        var name = Text(profile, "name", Text(site, "short_name"));
         return template.Replace("{year}", DateTime.UtcNow.Year.ToString()).Replace("{name}", name);
     }
 
     private static List<PublicNavigationItem> NavigationRoots(
-        IEnumerable<Dictionary<string, object?>> rows,
+        List<NavRow> rows,
         string locale,
-        Func<Dictionary<string, object?>, bool> predicate
-    )
-    {
-        var allRows = rows.ToList();
-        return allRows
-            .Where(row => string.IsNullOrWhiteSpace(Text(row, "parent_id")) && predicate(row))
+        Func<NavRow, bool> predicate
+    ) =>
+        rows.Where(row => row.ParentId == null && predicate(row))
             .Select(row => new PublicNavigationItem(
-                Route(Text(row, "route_name"), "", locale),
-                Text(row, "label"),
-                allRows
-                    .Where(child => Text(child, "parent_id") == Text(row, "id"))
+                Route(row.RouteName, "", locale),
+                Format.Text(row.Label),
+                rows.Where(child => child.ParentId == row.Id)
                     .Select(child => new PublicNavigationItem(
-                        Route(Text(child, "route_name"), "", locale),
-                        Text(child, "label")
+                        Route(child.RouteName, "", locale),
+                        Format.Text(child.Label)
                     ))
                     .GroupBy(child => child.Route, StringComparer.OrdinalIgnoreCase)
                     .Select(group => group.First())
@@ -921,34 +853,26 @@ public sealed partial class PublicSiteContentProvider(
             .GroupBy(item => item.Route, StringComparer.OrdinalIgnoreCase)
             .Select(group => group.First())
             .ToList();
-    }
 
-    private static PublicNavigation Navigation(DbConnection db, string locale)
+    private static PublicNavigation Navigation(PortfolioPublicDbContext context, string locale)
     {
-        var rows = Rows(
-            db,
-            "select n.*, coalesce(t.label, en.label) as label from nav_items n left join nav_item_translations t on t.nav_item_id=n.id and t.locale=@locale left join nav_item_translations en on en.nav_item_id=n.id and en.locale='en' order by n.sidebar_group nulls first, n.\"order\" nulls first",
-            ("@locale", locale)
-        );
+        var rows = ChromeQueries.NavItems(context, locale);
         var sidebarRoots = rows.Where(row =>
-                string.IsNullOrWhiteSpace(Text(row, "parent_id"))
-                && Text(row, "placement") == "sidebar"
+                row.ParentId == null && Format.Text(row.Placement) == "sidebar"
             )
             .ToList();
         var sidebarItems = NavigationRoots(
             rows,
             locale,
-            row => Text(row, "placement") == "sidebar"
+            row => Format.Text(row.Placement) == "sidebar"
         );
         var groups = sidebarRoots
-            .Where(row => Text(row, "sidebar_group").Length > 0)
-            .GroupBy(row => Text(row, "sidebar_group"))
+            .Where(row => row.SidebarGroup != null)
+            .GroupBy(row => row.SidebarGroup!.Value.ToString(CultureInfo.InvariantCulture))
             .OrderBy(group => group.Key)
             .Select(group =>
                 sidebarItems
-                    .Where(item =>
-                        group.Any(row => Route(Text(row, "route_name"), "", locale) == item.Route)
-                    )
+                    .Where(item => group.Any(row => Route(row.RouteName, "", locale) == item.Route))
                     .ToList()
             )
             .Where(group => group.Count > 0)
@@ -956,7 +880,7 @@ public sealed partial class PublicSiteContentProvider(
         var footerLinks = NavigationRoots(
             rows,
             locale,
-            row => Text(row, "placement") == "footer_links"
+            row => Format.Text(row.Placement) == "footer_links"
         );
         var sitemap = NavigationRoots(rows, locale, _ => true);
         return new PublicNavigation(groups, footerLinks, sitemap);

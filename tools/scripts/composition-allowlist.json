@@ -108,5 +108,10 @@
     "file": "src/Portfolio/Portfolio.Blazor.Client/Pages/MatrixCalculator.razor",
     "line-or-pattern": "<tbody>",
     "reason": "IMPORTANT: the static fallback renders an N x N matrix whose column count is only known at runtime, which SiteDataTable's typed Columns API cannot express; the rows stay raw <tr>/<td> inside SiteTable's caption/scroll chrome."
+  },
+  {
+    "file": "src/Portfolio/Portfolio.Blazor/Components/Admin/AdminLoginLayout.razor",
+    "line-or-pattern": "<main id=\"main-content\"",
+    "reason": "The login layout is a bare landmark wrapper for the auth card; SitePage would add the public page chrome (breadcrumb slot, reading width) that the login screen must not have."
   }
 ]

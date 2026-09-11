@@ -112,7 +112,7 @@ hidden_render_logic() {
     done
 }
 
-raw_tags="$(collect_matches '<(div|span|p|h[1-6]|ul|ol|li|table|thead|tbody|tr|th|td|section|article|aside|header|footer|nav|form|input|button|select|textarea|label|a|img|svg|dl|dt|dd|details|summary|strong|small)\b')"
+raw_tags="$(collect_matches '<(div|span|p|h[1-6]|ul|ol|li|table|thead|tbody|tr|th|td|section|article|aside|header|footer|nav|main|form|input|button|select|textarea|label|a|img|svg|dl|dt|dd|details|summary|strong|small)\b')"
 raw_class="$(collect_matches 'class="')"
 hidden="$(hidden_render_logic)"
 
@@ -121,6 +121,48 @@ matches="$(printf '%s\n%s\n%s\n' "$raw_tags" "$raw_class" "$hidden" | grep -v '^
 if [ -n "$matches" ]; then
     fail "raw structural markup, loose class attribute, or MarkupString/RenderFragment in @code found outside src/Portfolio/Portfolio.Blazor.UI/src/Portfolio/Portfolio.Blazor.Stories:
 $matches"
+fi
+
+client="$repo_root/src/Portfolio/Portfolio.Blazor.Client"
+ui="$repo_root/src/Portfolio/Portfolio.Blazor.UI"
+home_feed="$client/Shared/ContentFeed.razor"
+
+for page in "$home_feed" "$client"/Pages/Cases.razor "$client"/Pages/Credits.razor "$client"/Pages/Projects.razor "$client"/Pages/Snippets.razor "$client"/Pages/Technologies.razor "$client"/Pages/Topics.razor "$client"/Pages/Tools.razor; do
+    grep -Eq '<SiteListingShell\b' "$page" || fail "${page#"$repo_root"/} must render its listing through SiteListingShell"
+done
+for page in "$home_feed" "$client"/Pages/Topics.razor "$client"/Pages/Snippets.razor "$client"/Pages/Tools.razor; do
+    grep -Eq '<FilterContent>' "$page" || fail "${page#"$repo_root"/} must expose its filters through the listing shell"
+done
+if grep -REn '<Site(ListHeader|Pagination)\b' "$client/Pages" 2>/dev/null; then
+    fail "pages must not render list headers or pagination outside SiteListingShell"
+fi
+
+renders_site_card() {
+    if grep -qE '<Site(Clickable|Feed)Card\b' "$1"; then
+        return 0
+    fi
+    for component in $(grep -oE '<[A-Z][A-Za-z0-9]*' "$1" | tr -d '<' | sort -u); do
+        composed="$client/Shared/${component}.razor"
+        if [ -f "$composed" ] && grep -qE '<Site(Clickable|Feed)Card\b' "$composed"; then
+            return 0
+        fi
+    done
+    return 1
+}
+for page in "$home_feed" "$client"/Pages/Cases.razor "$client"/Pages/Projects.razor "$client"/Pages/Snippets.razor "$client"/Pages/Technologies.razor "$client"/Pages/Topics.razor "$client"/Pages/Tools.razor; do
+    renders_site_card "$page" || fail "${page#"$repo_root"/} must render entity listings through SiteFeedCard or SiteClickableCard"
+done
+
+grep -Eq 'href="@Href\(|Href="@Href\(' "$ui/Navigation/SitePagination.razor" ||
+    fail "SitePagination must emit real hrefs for progressive navigation"
+grep -Eq '^@inherits[[:space:]]+InputBase<string>' "$ui/Forms/SiteSelect.razor" ||
+    fail "SiteSelect must integrate with Blazor InputBase validation"
+grep -q 'SiteValidationMessage' "$ui/Forms/SiteSelect.razor" ||
+    fail "SiteSelect must render the site-owned validation message"
+grep -q 'name="@Name"' "$ui/Forms/SiteSelect.razor" ||
+    fail "SiteSelect must preserve named values for interactive form POSTs"
+if grep -REn '[✉↗→➜➤]' "$client/Shared" --include='*.razor' 2>/dev/null; then
+    fail "shared components must use SiteIcon instead of Unicode icon characters"
 fi
 
 echo "Composition checks passed"

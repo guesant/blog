@@ -18,3 +18,40 @@ services:
       PORTFOLIO_ADMIN_GOOGLE_CLIENT_SECRET: "${PORTFOLIO_ADMIN_GOOGLE_CLIENT_SECRET:-dev-placeholder}"
       PORTFOLIO_ADMIN_GOOGLE_EMAIL: "${PORTFOLIO_ADMIN_GOOGLE_EMAIL:-}"
     command: sh -lc 'dotnet restore src/Portfolio.Blazor.slnx --locked-mode && exec sh ./tools/scripts/run-with-tectonic.sh'
+  tools:
+    build:
+      context: ..
+      dockerfile: .docker/tools.Dockerfile
+    image: portfolio-tools
+    profiles:
+      - tools
+    user: "${PORTFOLIO_CONTAINER_UID:-1000}:${PORTFOLIO_CONTAINER_GID:-1000}"
+    read_only: true
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    working_dir: /src
+    volumes:
+      - ..:/src
+    tmpfs:
+      - /tmp:uid=${PORTFOLIO_CONTAINER_UID:-1000},gid=${PORTFOLIO_CONTAINER_GID:-1000},mode=1777
+    environment:
+      HOME: /tmp
+    command: ["true"]
+  playwright:
+    image: mcr.microsoft.com/playwright@sha256:5b8f294aff9041b7191c34a4bab3ac270157a28774d4b0660e9743297b697e48
+    profiles:
+      - tools
+    user: "${PORTFOLIO_CONTAINER_UID:-1000}:${PORTFOLIO_CONTAINER_GID:-1000}"
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    working_dir: /workspace
+    volumes:
+      - ../src/Portfolio/Portfolio.Blazor.Stories.VRT:/workspace
+    environment:
+      HOME: /tmp
+      VRT_BASE_URL: http://stories:8081
+    command: ["true"]

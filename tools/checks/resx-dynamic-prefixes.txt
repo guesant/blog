@@ -1,0 +1,3 @@
+# Resource key prefixes built at runtime (L[$"prefix{value}"]); everything under them counts as used.
+color_rule_
+graph_kind_

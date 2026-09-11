@@ -1,0 +1,14 @@
+# Text that may stay literal in Client/UI razor and Client C#: notation, proper nouns, fixtures.
+# Format: <path prefix or *>|<exact text>
+*|protanopia
+*|deuteranopia
+*|tritanopia
+*|guesant.net
+*|Atom
+*|JSON Feed
+*|Windows NT
+*|Mac OS X
+Portfolio/Portfolio.Blazor.Client/Pages/ExtendedTextTools.razor.cs|Olá, mundo! Este texto pode ser transformado.
+Portfolio/Portfolio.Blazor.Client/Pages/TextCodec.razor.cs|Olá, mundo!
+Portfolio/Portfolio.Blazor.Client/Pages/TextUtilities.razor.cs|Olá, mundo!
+Portfolio/Portfolio.Blazor.Client/Pages/TextUtilities.razor.cs|!odnum ,álO

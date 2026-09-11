@@ -68,7 +68,7 @@ test-data-postgres:
     {{compose_pg}} up -d --wait postgres
     {{compose_pg}} run --rm -e NUGET_PACKAGES=/src/.nuget-cache --entrypoint sh web -lc 'cd /src && dotnet run --project Portfolio/Portfolio.Blazor.Data.Tests/Portfolio.Blazor.Data.Tests.csproj --no-restore'
 
-check: format lint comments duplication duplication-razor build test test-data audit schema tokens ui-imports
+check: format lint comments duplication duplication-razor build test test-data audit schema tokens ui-imports resx-keys hardcoded-text
 
 format:
     docker run --rm --user 1000:1000 -v "${PWD}:/workspace:ro" -w /workspace node@sha256:6642ef280aebc09c4541bee0b15c9f89f0f3f3c247ddee79ae1d37eddfdcbbaa sh -lc 'FORMAT_CHECK=1 node tools/scripts/format-csharp-statements.mjs && FORMAT_CHECK=1 node tools/scripts/format-csharp-arguments.mjs && FORMAT_CHECK=1 node tools/scripts/format-razor.mjs && FORMAT_CHECK=1 node tools/scripts/format-razor-attributes.mjs'
@@ -115,6 +115,15 @@ tokens:
 
 ui-imports:
     {{docker_run}} 'sh /src/tools/scripts/verify-ui-imports.sh'
+
+resx-keys:
+    docker run --rm --user 1000:1000 -v "${PWD}:/workspace:ro" -w /workspace node@sha256:6642ef280aebc09c4541bee0b15c9f89f0f3f3c247ddee79ae1d37eddfdcbbaa sh -lc 'node tools/scripts/verify-resx-keys.mjs'
+
+resx-keys-fix:
+    docker run --rm --user 1000:1000 -v "${PWD}:/workspace" -w /workspace node@sha256:6642ef280aebc09c4541bee0b15c9f89f0f3f3c247ddee79ae1d37eddfdcbbaa sh -lc 'FIX=1 node tools/scripts/verify-resx-keys.mjs'
+
+hardcoded-text:
+    docker run --rm --user 1000:1000 -v "${PWD}:/workspace:ro" -w /workspace node@sha256:6642ef280aebc09c4541bee0b15c9f89f0f3f3c247ddee79ae1d37eddfdcbbaa sh -lc 'node tools/scripts/verify-hardcoded-text.mjs'
 
 verify-stories:
     {{docker_run}} 'sh /src/tools/scripts/verify-stories.sh'

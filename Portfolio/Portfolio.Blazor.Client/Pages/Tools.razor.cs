@@ -42,7 +42,8 @@ public partial class Tools
             .Select(category => new SiteSelectOption(category, category))
             .Prepend(new SiteSelectOption("", AllCategoriesLabel))
             .ToArray();
-    private IReadOnlyList<ToolDefinition> FilteredItems => ToolCatalog.Filter(_search, _category);
+    private IReadOnlyList<ToolDefinition> FilteredItems =>
+        ToolCatalog.Filter(QuerySearch ?? string.Empty, QueryCategory ?? string.Empty);
     private int TotalPages => PageCountFor(FilteredItems.Count, PageSize);
     private int Page => CurrentPageFor(_page, TotalPages);
     private IReadOnlyList<ToolDefinition> PageItems => ItemsForPage(FilteredItems, Page, PageSize);
@@ -54,21 +55,13 @@ public partial class Tools
     private string Search
     {
         get => _search;
-        set
-        {
-            _search = value;
-            _page = 1;
-        }
+        set => _search = value;
     }
 
     private string Category
     {
         get => _category;
-        set
-        {
-            _category = value;
-            _page = 1;
-        }
+        set => _category = value;
     }
 
     protected override void OnParametersSet()
@@ -78,7 +71,8 @@ public partial class Tools
         _page = QueryPage.GetValueOrDefault(1);
     }
 
-    private void ApplyFilters() => _page = 1;
+    private void ApplyFilters() =>
+        Navigation.NavigateTo(ListingUrl(_search, _category, ViewMode, 1));
 
     private static string ToolUrl(ToolDefinition tool) =>
         LocalizedUrls.Current($"/tools/{tool.Slug}");
@@ -92,5 +86,8 @@ public partial class Tools
     private string PageUrl(int page) => PageUrl(ViewMode, page);
 
     private string PageUrl(string view, int page) =>
-        $"{Action}?q={Uri.EscapeDataString(_search)}&category={Uri.EscapeDataString(_category)}{(view.Equals("dense", StringComparison.OrdinalIgnoreCase) ? "&view=dense" : string.Empty)}{(page > 1 ? $"&page={page}" : string.Empty)}";
+        ListingUrl(QuerySearch ?? string.Empty, QueryCategory ?? string.Empty, view, page);
+
+    private static string ListingUrl(string search, string category, string view, int page) =>
+        $"{Action}?q={Uri.EscapeDataString(search)}&category={Uri.EscapeDataString(category)}{(view.Equals("dense", StringComparison.OrdinalIgnoreCase) ? "&view=dense" : string.Empty)}{(page > 1 ? $"&page={page}" : string.Empty)}";
 }

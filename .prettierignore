@@ -1,7 +1,0 @@
-**/bin/**
-**/obj/**
-**/node_modules/**
-**/wwwroot/vendor/**
-**/wwwroot/lib/**
-package-lock.json
-**/playwright-report/**

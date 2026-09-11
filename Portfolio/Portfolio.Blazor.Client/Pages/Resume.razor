@@ -21,12 +21,15 @@
                     <SiteIcon Name="map-pin"
                         Size="12" />@Snapshot.Chrome.Profile.Location</SiteText>
             }
-            @if (ResumePdfLocales.Count > 0)
-            {
-                <SiteFormActions Class="resume-pdf-links" data-layout-region="resume-pdf-links">
+            <ContactChannels Profiles="@(Snapshot?.Chrome.Site.ContactProfiles ?? [])"
+                EmailChallenge="@Snapshot?.Chrome.Site.ProtectedEmail"
+                EmailAvailable="@(Snapshot?.Chrome.Site.ContactAvailable == true)"
+                Justify="SiteJustify.Center">
+                <LeadingContent>
                     @foreach (var locale in ResumePdfLocales)
                     {
                         <SiteLink Variant="SiteButtonVariant.Outline"
+                            Class="footer-action"
                             Href="@($"/storage/resume-{locale}.pdf")"
                             target="_blank"
                             rel="noopener"><SiteIcon Name="file-user"
@@ -34,11 +37,8 @@
                                 Size="12"
                                 Class="icon icon-trailing" /></SiteLink>
                     }
-                </SiteFormActions>
-            }
-            <ContactChannels Profiles="@(Snapshot?.Chrome.Site.ContactProfiles ?? [])"
-                EmailChallenge="@Snapshot?.Chrome.Site.ProtectedEmail"
-                EmailAvailable="@(Snapshot?.Chrome.Site.ContactAvailable == true)" />
+                </LeadingContent>
+            </ContactChannels>
         </ChildContent>
     </SiteHero>
     @if (!string.IsNullOrWhiteSpace(Field("summary")))

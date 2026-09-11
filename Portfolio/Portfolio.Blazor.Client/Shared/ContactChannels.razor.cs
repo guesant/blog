@@ -18,6 +18,14 @@ public partial class ContactChannels
 
     [Parameter]
     public bool UseSidebarStyle { get; set; }
+
+    [Parameter]
+    public SiteJustify Justify { get; set; } = SiteJustify.Start;
+
+    [Parameter]
+    public RenderFragment? LeadingContent { get; set; }
+    private string RootClass =>
+        UseSidebarStyle ? "site-contact-channels is-sidebar" : "site-contact-channels";
     private string EmailLabel => L["reveal_email"];
     private string WorkingLabel => L["preparing_email"];
     private string ErrorLabel => L["email_error"];

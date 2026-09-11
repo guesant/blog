@@ -358,9 +358,6 @@ button,
     align-items: center;
     gap: var(--site-space-2);
 }
-.site-contact-channels {
-    gap: var(--site-space-2);
-}
 .site-content-actions {
     gap: var(--site-space-2);
 }
@@ -699,6 +696,9 @@ button,
 .site-contact-channels .email-reveal {
     display: grid;
     gap: var(--site-space-2);
+}
+.site-contact-channels.is-sidebar .email-reveal {
+    width: 100%;
 }
 .site-contact-channels .email-reveal > [data-protected-email-state="error"] {
     display: flex;

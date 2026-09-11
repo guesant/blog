@@ -1,7 +1,8 @@
 @using Portfolio.Blazor.Core
 @inject IStringLocalizer<SharedResource> L
 
-<SiteStack Gap="SiteSpace.Sm" Class="site-contact-channels">
+<SiteInline Gap="SiteSpace.Sm" Justify="@Justify" Class="@RootClass">
+    @LeadingContent
     @foreach (var profile in Profiles)
     {
         if (TryGetUri(profile.Url) is Uri uri)
@@ -64,4 +65,4 @@
                     </SiteLink>
         </SiteStack>
     }
-</SiteStack>
+</SiteInline>

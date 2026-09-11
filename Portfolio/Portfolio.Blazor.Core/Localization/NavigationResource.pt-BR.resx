@@ -2,7 +2,6 @@
 <root>
   <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
   <resheader name="version"><value>2.0</value></resheader>
-  <data name="about_me"><value>sobre mim</value></data>
   <data name="now"><value>agora</value></data>
   <data name="portfolio"><value>portfolio</value></data>
   <data name="cases"><value>cases</value></data>

@@ -12,7 +12,11 @@ const resources = {
     ValidationResource: [],
     ContentResource: [],
 };
-const dynamicPrefixes = readList("tools/checks/resx-dynamic-prefixes.txt");
+const dynamicRules = readList("tools/checks/resx-dynamic-prefixes.txt").map((rule) =>
+    rule.startsWith("^")
+        ? new RegExp(rule)
+        : new RegExp(`^${rule.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}`),
+);
 const frozenLegacy = new Set(readList("tools/checks/resx-legacy-keys.txt"));
 
 function readList(path) {
@@ -64,7 +68,7 @@ for (const [resource, accessors] of Object.entries(resources)) {
     for (const key of base.keys.keys()) {
         if (key === "resmimetype" || key === "version" || key === "reader" || key === "writer")
             continue;
-        if (dynamicPrefixes.some((prefix) => key.startsWith(prefix))) continue;
+        if (dynamicRules.some((rule) => rule.test(key))) continue;
         if (!allCode.includes(`"${key}"`)) {
             unused.push(key);
             continue;

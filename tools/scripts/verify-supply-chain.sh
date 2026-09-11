@@ -159,7 +159,7 @@ rule_declares "$app_shell_css" '\.site-main-scroll \{[^}]*overflow-y: auto' ||
     fail "the split-view wrapper must be vertically scrollable"
 rule_declares "$app_shell_css" '\.page-content \{[^}]*overflow-y: visible' ||
     fail "the page content region must not create a second vertical scrollbar"
-rule_declares "$site_page_css" '\.site-page[^{]*\{[^}]*max-width: var\(--site-page-max\)' ||
+rule_declares "$site_page_css" '\.site-page[^{]*\{[^}]*max-width: var\(--site-content-max\)' ||
     fail "the normal shell must preserve the centered max-width"
 rule_declares "$sidebar_css" '\.site-nav \{[^}]*border-right: (0\.0625rem|var\(--site-border-width\)) solid' ||
     fail "the sidebar must preserve the separator border"

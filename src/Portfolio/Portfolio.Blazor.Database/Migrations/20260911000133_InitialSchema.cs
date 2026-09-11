@@ -4,7 +4,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace Portfolio.Blazor.Database.Postgres.Migrations
+namespace Portfolio.Blazor.Database.Migrations
 {
     /// <inheritdoc />
     public partial class InitialSchema : Migration

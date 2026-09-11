@@ -9,6 +9,5 @@
   <ItemGroup>
     <ProjectReference Include="..\Portfolio.Blazor\Portfolio.Blazor.csproj" />
     <ProjectReference Include="..\Portfolio.Blazor.Database\Portfolio.Blazor.Database.csproj" />
-    <ProjectReference Include="..\Portfolio.Blazor.Database.Postgres\Portfolio.Blazor.Database.Postgres.csproj" />
   </ItemGroup>
 </Project>

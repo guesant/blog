@@ -1,7 +1,5 @@
-using System.Data.Common;
 using System.Text.Json;
 using System.Text.RegularExpressions;
-using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -10,118 +8,60 @@ using Npgsql;
 using Portfolio.Blazor;
 using Portfolio.Blazor.Core;
 using Portfolio.Blazor.Data;
-using Portfolio.Blazor.Data.Providers;
 using Portfolio.Blazor.Data.Tests;
 
-var sqlitePath = Path.Combine(
-    Path.GetTempPath(),
-    $"portfolio-data-tests-{Guid.NewGuid():n}.sqlite"
-);
 var postgresAdmin = Environment.GetEnvironmentVariable("PORTFOLIO_TEST_PG_CONNECTION");
-string? postgresDatabase = null;
+if (string.IsNullOrWhiteSpace(postgresAdmin))
+{
+    Console.Error.WriteLine(
+        "PORTFOLIO_TEST_PG_CONNECTION is required to run the data harness against PostgreSQL."
+    );
+    return 1;
+}
+
+var postgresDatabase = $"portfolio_test_{Guid.NewGuid():n}";
 try
 {
-    var sqliteOptions = new DbContextOptionsBuilder<PortfolioAdminDbContext>()
-        .UseSqlite(
-            $"Data Source={sqlitePath}",
-            sqlite => sqlite.MigrationsAssembly("Portfolio.Blazor.Database")
+    await using (var admin = new NpgsqlConnection(postgresAdmin))
+    {
+        await admin.OpenAsync();
+        await using var create = admin.CreateCommand();
+        create.CommandText = $"create database {postgresDatabase}";
+        await create.ExecuteNonQueryAsync();
+    }
+    var postgresConnection = new NpgsqlConnectionStringBuilder(postgresAdmin)
+    {
+        Database = postgresDatabase,
+    }.ToString();
+    var options = new DbContextOptionsBuilder<PortfolioAdminDbContext>()
+        .UseNpgsql(
+            postgresConnection,
+            npgsql => npgsql.MigrationsAssembly("Portfolio.Blazor.Database")
         )
         .Options;
-    await using (var context = new PortfolioAdminDbContext(sqliteOptions))
+    await using (var context = new PortfolioAdminDbContext(options))
     {
         await context.Database.MigrateAsync();
     }
-    await using (var connection = new SqliteConnection($"Data Source={sqlitePath}"))
+    await using (var connection = new NpgsqlConnection(postgresConnection))
     {
         await connection.OpenAsync();
-        Check(
-            Version.Parse(Scalar(connection, "select sqlite_version()")) >= new Version(3, 30),
-            "bundled SQLite must be 3.30 or newer for nulls last and boolean literals"
-        );
         Seed.Apply(connection);
     }
 
-    var sqliteResult = await Harvest(
-        new Dictionary<string, string?>
-        {
-            ["PORTFOLIO_DB_PROVIDER"] = "sqlite",
-            ["PORTFOLIO_SQLITE_PATH"] = sqlitePath,
-        }
+    var result = await Harvest(
+        new Dictionary<string, string?> { ["PORTFOLIO_DB_CONNECTION"] = postgresConnection }
     );
-    AssertContent(sqliteResult, "sqlite");
-    Console.WriteLine("SQLite provider checks passed.");
-
-    if (string.IsNullOrWhiteSpace(postgresAdmin))
-    {
-        Console.WriteLine(
-            "PostgreSQL provider checks skipped: PORTFOLIO_TEST_PG_CONNECTION is not set."
-        );
-    }
-    else
-    {
-        postgresDatabase = $"portfolio_test_{Guid.NewGuid():n}";
-        await using (var admin = new NpgsqlConnection(postgresAdmin))
-        {
-            await admin.OpenAsync();
-            await using var create = admin.CreateCommand();
-            create.CommandText = $"create database {postgresDatabase}";
-            await create.ExecuteNonQueryAsync();
-        }
-        var postgresConnection = new NpgsqlConnectionStringBuilder(postgresAdmin)
-        {
-            Database = postgresDatabase,
-        }.ToString();
-        var postgresOptions = new DbContextOptionsBuilder<PortfolioAdminDbContext>()
-            .UseNpgsql(
-                postgresConnection,
-                npgsql => npgsql.MigrationsAssembly("Portfolio.Blazor.Database.Postgres")
-            )
-            .Options;
-        await using (var context = new PortfolioAdminDbContext(postgresOptions))
-        {
-            await context.Database.MigrateAsync();
-        }
-        await using (var connection = new NpgsqlConnection(postgresConnection))
-        {
-            await connection.OpenAsync();
-            Seed.Apply(connection);
-        }
-
-        var postgresResult = await Harvest(
-            new Dictionary<string, string?>
-            {
-                ["PORTFOLIO_DB_PROVIDER"] = "postgres",
-                ["PORTFOLIO_DB_CONNECTION"] = postgresConnection,
-            }
-        );
-        AssertContent(postgresResult, "postgres");
-        foreach (var (name, sqliteJson) in sqliteResult.Documents)
-        {
-            var postgresJson = postgresResult.Documents[name];
-            if (sqliteJson != postgresJson)
-            {
-                throw new InvalidOperationException(
-                    $"{name} differs between SQLite and PostgreSQL:\n{FirstDifference(sqliteJson, postgresJson)}"
-                );
-            }
-        }
-        Console.WriteLine("PostgreSQL provider checks passed and match SQLite byte for byte.");
-    }
+    AssertContent(result);
+    Console.WriteLine("PostgreSQL provider checks passed.");
 }
 finally
 {
-    if (File.Exists(sqlitePath))
-    {
-        File.Delete(sqlitePath);
-    }
-    if (postgresDatabase is not null && !string.IsNullOrWhiteSpace(postgresAdmin))
-    {
-        await using var admin = new NpgsqlConnection(postgresAdmin);
-        await admin.OpenAsync();
-        await using var drop = admin.CreateCommand();
-        drop.CommandText = $"drop database if exists {postgresDatabase} with (force)";
-        await drop.ExecuteNonQueryAsync();
-    }
+    await using var admin = new NpgsqlConnection(postgresAdmin);
+    await admin.OpenAsync();
+    await using var drop = admin.CreateCommand();
+    drop.CommandText = $"drop database if exists {postgresDatabase} with (force)";
+    await drop.ExecuteNonQueryAsync();
 }
 
 Console.WriteLine("Portfolio.Blazor.Data checks passed.");
@@ -140,7 +80,7 @@ static async Task<HarvestResult> Harvest(Dictionary<string, string?> settings)
 
     var site = provider.GetRequiredService<IPublicSiteContentProvider>();
     var graph = provider.GetRequiredService<IPublicKnowledgeGraphProvider>();
-    var database = provider.GetRequiredService<IDatabaseProvider>();
+    var revisions = provider.GetRequiredService<ContentRevisionTracker>();
     var factory = provider.GetRequiredService<IDbContextFactory<PortfolioAdminDbContext>>();
 
     var documents = new Dictionary<string, string>(StringComparer.Ordinal);
@@ -165,34 +105,31 @@ static async Task<HarvestResult> Harvest(Dictionary<string, string?> settings)
     var publicFactory = provider.GetRequiredService<IDbContextFactory<PortfolioPublicDbContext>>();
     await using (var publicContext = await publicFactory.CreateDbContextAsync())
     {
-        AssertPublicModel(publicContext, database.Kind.ToString());
+        AssertPublicModel(publicContext);
     }
 
-    var before = await database.ReadFingerprintAsync();
+    var before = await revisions.ReadFingerprintAsync();
     await using (var context = await factory.CreateDbContextAsync())
     {
         await context.SiteSettings.ExecuteUpdateAsync(setters =>
             setters.SetProperty(settings => settings.ShortName, "GB")
         );
-        await database.SignalContentChangedAsync(context);
+        await revisions.SignalContentChangedAsync(context);
     }
-    var after = await database.ReadFingerprintAsync();
-    Check(
-        before != after,
-        $"{database.Kind}: the content fingerprint must change after a signalled write"
-    );
+    var after = await revisions.ReadFingerprintAsync();
+    Check(before != after, "the content fingerprint must change after a signalled write");
     var refreshed =
         await site.GetAsync("en")
         ?? throw new InvalidOperationException("refreshed snapshot was null");
     Check(
         refreshed.Chrome.Site.ShortName == "GB",
-        $"{database.Kind}: the public cache must refresh after a signalled write"
+        "the public cache must refresh after a signalled write"
     );
 
     return new HarvestResult(documents, snapshots);
 }
 
-static void AssertPublicModel(PortfolioPublicDbContext context, string engine)
+static void AssertPublicModel(PortfolioPublicDbContext context)
 {
     foreach (var entityType in context.Model.GetEntityTypes())
     {
@@ -201,34 +138,28 @@ static void AssertPublicModel(PortfolioPublicDbContext context, string engine)
             || entityType.ClrType == typeof(Portfolio.Blazor.Data.Entities.CreditEntry);
         Check(
             !filtered || entityType.GetDeclaredQueryFilters().Count > 0,
-            $"{engine}: {entityType.ClrType.Name} must carry a public visibility filter"
+            $"{entityType.ClrType.Name} must carry a public visibility filter"
         );
     }
     Check(
         context.ChangeTracker.QueryTrackingBehavior == QueryTrackingBehavior.NoTracking,
-        $"{engine}: the public context must be no-tracking"
+        "the public context must be no-tracking"
     );
-    Check(
-        context.Projects.Count() == 2,
-        $"{engine}: the project filter must hide hidden and nda rows"
-    );
-    Check(
-        context.Projects.IgnoreQueryFilters().Count() == 4,
-        $"{engine}: the seed must hold four projects"
-    );
+    Check(context.Projects.Count() == 2, "the project filter must hide hidden and nda rows");
+    Check(context.Projects.IgnoreQueryFilters().Count() == 4, "the seed must hold four projects");
     Check(
         !context.Resources.Any(resource =>
             resource.Slug.StartsWith("hidden-") || resource.Slug.StartsWith("draft-")
         ),
-        $"{engine}: the resource filter must hide hidden and draft rows"
+        "the resource filter must hide hidden and draft rows"
     );
     Check(
         !context.CaseStudies.Any(caseStudy => caseStudy.Slug.StartsWith("nda-")),
-        $"{engine}: the case study filter must hide nda rows"
+        "the case study filter must hide nda rows"
     );
     Check(
         context.CreditEntries.All(credit => credit.Active),
-        $"{engine}: the credit filter must hide inactive rows"
+        "the credit filter must hide inactive rows"
     );
     var threw = false;
     try
@@ -239,10 +170,10 @@ static void AssertPublicModel(PortfolioPublicDbContext context, string engine)
     {
         threw = true;
     }
-    Check(threw, $"{engine}: the public context must refuse SaveChanges");
+    Check(threw, "the public context must refuse SaveChanges");
 }
 
-static void AssertContent(HarvestResult result, string engine)
+static void AssertContent(HarvestResult result)
 {
     var en = result.Snapshots["en"];
     var slugs = string.Join(
@@ -259,82 +190,58 @@ static void AssertContent(HarvestResult result, string engine)
     {
         Check(
             !slugs.Contains(leak, StringComparison.Ordinal),
-            $"{engine}: a {leak} item leaked into the public snapshot"
+            $"a {leak} item leaked into the public snapshot"
         );
     }
     Check(
         en.Projects.Count == 2,
-        $"{engine}: expected the public and undated projects, got {en.Projects.Count}"
+        $"expected the public and undated projects, got {en.Projects.Count}"
     );
-    Check(
-        en.Writings.Count == 3,
-        $"{engine}: expected three public writings, got {en.Writings.Count}"
-    );
+    Check(en.Writings.Count == 3, $"expected three public writings, got {en.Writings.Count}");
     Check(
         en.Writings[0].Slug == "dated-post" && en.Writings[^1].Slug == "undated-post",
-        $"{engine}: writings must sort newest first with the undated one last, got {string.Join(',', en.Writings.Select(item => item.Slug))}"
+        $"writings must sort newest first with the undated one last, got {string.Join(',', en.Writings.Select(item => item.Slug))}"
     );
     Check(
         en.Writings[0].Date == "2026-08-15",
-        $"{engine}: writing date must be ISO yyyy-MM-dd, got '{en.Writings[0].Date}'"
+        $"writing date must be ISO yyyy-MM-dd, got '{en.Writings[0].Date}'"
     );
     var book = en.Findings.Single(item => item.Slug == "public-book");
     Check(
         book.PublishedDate == "2017-03-01",
-        $"{engine}: finding published date must be ISO, got '{book.PublishedDate}'"
+        $"finding published date must be ISO, got '{book.PublishedDate}'"
     );
     Check(
         book.Links is { Count: 2 } && book.Links.Any(link => link.IsFree),
-        $"{engine}: finding links must round-trip with their boolean flags"
+        "finding links must round-trip with their boolean flags"
     );
     Check(
         book.AttributionTopics?.Count(topic => topic.Slug == "author-x") == 1,
-        $"{engine}: the attribution topic must appear exactly once"
+        "the attribution topic must appear exactly once"
     );
     var collection = en.Collections.Single();
     Check(
         collection.Resources is { Count: 2 },
-        $"{engine}: hidden resources must be dropped from collection items, got {collection.Resources?.Count}"
+        $"hidden resources must be dropped from collection items, got {collection.Resources?.Count}"
     );
     Check(
         en.Chrome.Site.ContactAvailable && en.Chrome.Site.ContactProfiles is { Count: 2 },
-        $"{engine}: site settings booleans and contact profiles must round-trip"
+        "site settings booleans and contact profiles must round-trip"
     );
     Check(
         en.Chrome.Profile is { BirthCity: "Town", Interests: "systems", Learning: "rust" }
             && en.Chrome.Profile.PersonalInterests is { ValueKind: JsonValueKind.Array },
-        $"{engine}: profile personal fields must reach the snapshot"
+        "profile personal fields must reach the snapshot"
     );
-    Check(
-        en.Projects[0].History is { Count: 2 },
-        $"{engine}: project history must include both audit rows"
-    );
+    Check(en.Projects[0].History is { Count: 2 }, "project history must include both audit rows");
     Check(
         result.Snapshots["pt-BR"].Projects[0].Name == "Projeto Publico",
-        $"{engine}: pt-BR translations must win over the en fallback"
+        "pt-BR translations must win over the en fallback"
     );
 }
 
 static string Normalize(string json) =>
     Regex.Replace(json, "\"generated_at\":\"[^\"]*\"", "\"generated_at\":\"\"");
-
-static string FirstDifference(string left, string right)
-{
-    var index = 0;
-    while (index < left.Length && index < right.Length && left[index] == right[index])
-    {
-        index++;
-    }
-    var start = Math.Max(0, index - 120);
-    return $"...{left[start..Math.Min(left.Length, index + 120)]}\n---\n...{right[start..Math.Min(right.Length, index + 120)]}";
-}
-
-static string Scalar(DbConnection connection, string sql)
-{
-    using var command = connection.CreateCommand();
-    command.CommandText = sql;
-    return Convert.ToString(command.ExecuteScalar()) ?? string.Empty;
-}
 
 static void Check(bool condition, string message)
 {

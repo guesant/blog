@@ -9,14 +9,14 @@ public sealed class PortfolioAdminDesignTimeFactory
 {
     public PortfolioAdminDbContext CreateDbContext(string[] args)
     {
-        var path =
-            Environment.GetEnvironmentVariable("PORTFOLIO_SQLITE_PATH")
-            ?? "/data/db/portfolio.sqlite";
+        var connection =
+            Environment.GetEnvironmentVariable("PORTFOLIO_DB_CONNECTION")
+            ?? "Host=localhost;Database=portfolio;Username=portfolio;Password=portfolio";
         var options = new DbContextOptionsBuilder<PortfolioAdminDbContext>()
-            .UseSqlite(
-                $"Data Source={path}",
-                sqlite =>
-                    sqlite.MigrationsAssembly(
+            .UseNpgsql(
+                connection,
+                npgsql =>
+                    npgsql.MigrationsAssembly(
                         typeof(PortfolioAdminDesignTimeFactory).Assembly.GetName().Name
                     )
             )

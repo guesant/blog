@@ -16,9 +16,11 @@
       Version="10.0.11"
     />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="10.0.11" />
-    <PackageReference Include="Microsoft.Data.Sqlite" Version="10.0.11" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="10.0.11" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.3" />
+    <!-- Npgsql.EntityFrameworkCore.PostgreSQL 10.0.3 depends on EF Core 10.0.4; pinned
+         explicitly to the 10.0.11 the rest of the SDK ships, matching Microsoft.EntityFrameworkCore.Design
+         in Portfolio.Blazor.Database, or the runtime fails loading a mismatched assembly version. -->
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="10.0.11" />
     <PackageReference Include="Konscious.Security.Cryptography.Argon2" Version="1.3.1" />
     <PackageReference Include="Konscious.Security.Cryptography.Blake2" Version="1.1.1" />
   </ItemGroup>

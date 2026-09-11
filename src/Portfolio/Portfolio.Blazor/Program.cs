@@ -12,7 +12,6 @@ using Portfolio.Blazor.Components;
 using Portfolio.Blazor.Core;
 using Portfolio.Blazor.Core.Localization;
 using Portfolio.Blazor.Data;
-using Portfolio.Blazor.Data.Providers;
 
 var builder = WebApplication.CreateBuilder(args);
 

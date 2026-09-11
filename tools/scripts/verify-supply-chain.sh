@@ -6,7 +6,7 @@ fail() {
     exit 1
 }
 
-for compose_file in .docker/compose.yaml .docker/compose.dev.yaml .docker/compose.postgres.yaml .docker/compose.prod.yaml; do
+for compose_file in .docker/compose.yaml .docker/compose.dev.yaml; do
     [ -f "$compose_file" ] || fail "$compose_file is missing"
 done
 
@@ -31,10 +31,5 @@ for project in src/Portfolio/*/*.csproj; do
     lockfile="$(dirname "$project")/packages.lock.json"
     [ -f "$lockfile" ] || fail "$lockfile is missing"
 done
-
-sh -n tools/scripts/create-content-snapshot.sh || fail "the snapshot script has invalid shell syntax"
-if sh tools/scripts/create-content-snapshot.sh 'portfolio-20260831T000000Z.sqlite;echo-pwned' >/dev/null 2>&1; then
-    fail "the snapshot script accepted a shell metacharacter in its filename"
-fi
 
 echo "Blazor supply-chain checks passed"

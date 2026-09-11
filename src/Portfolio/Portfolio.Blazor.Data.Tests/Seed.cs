@@ -6,9 +6,6 @@ internal static class Seed
 {
     private const string Ts = "'2026-08-01 10:00:00'";
 
-    // IMPORTANT: the seed is plain SQL in the dialect subset both engines share (explicit ids,
-    // true/false literals, ISO text for dates) so that SQLite and PostgreSQL get byte-identical
-    // content and the only thing under test is how each provider reads it back.
     internal static readonly string[] Statements =
     [
         $"insert into site_settings (id, short_name, portfolio_url, maintenance_enabled, contact_email, contact_available, source_repository_url, created_at, updated_at) values (1, 'GA', 'https://example.test', false, 'hello@example.test', true, 'https://github.com/example/portfolio', {Ts}, {Ts})",

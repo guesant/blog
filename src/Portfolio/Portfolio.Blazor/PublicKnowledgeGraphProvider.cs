@@ -5,13 +5,12 @@ using Microsoft.Extensions.Localization;
 using Portfolio.Blazor.Core;
 using Portfolio.Blazor.Core.Localization;
 using Portfolio.Blazor.Data;
-using Portfolio.Blazor.Data.Providers;
 using Portfolio.Blazor.PublicQueries;
 
 namespace Portfolio.Blazor;
 
 public sealed partial class PublicKnowledgeGraphProvider(
-    IDatabaseProvider database,
+    ContentRevisionTracker revisions,
     IDbContextFactory<PortfolioPublicDbContext> contexts,
     ILogger<PublicKnowledgeGraphProvider> logger,
     IStringLocalizer<SharedResource> localizer
@@ -46,16 +45,14 @@ public sealed partial class PublicKnowledgeGraphProvider(
         locale = CultureCatalog.NormalizeName(locale);
         try
         {
-            if (!database.IsContentAvailable())
-                return null;
-            var fingerprint = await database.ReadFingerprintAsync(cancellationToken);
+            var fingerprint = await revisions.ReadFingerprintAsync(cancellationToken);
             if (_graphs.TryGetValue(locale, out var cached) && cached.Fingerprint == fingerprint)
                 return cached.Graph;
 
             await _graphGate.WaitAsync(cancellationToken);
             try
             {
-                fingerprint = await database.ReadFingerprintAsync(cancellationToken);
+                fingerprint = await revisions.ReadFingerprintAsync(cancellationToken);
                 if (_graphs.TryGetValue(locale, out cached) && cached.Fingerprint == fingerprint)
                     return cached.Graph;
 
@@ -86,7 +83,7 @@ public sealed partial class PublicKnowledgeGraphProvider(
                 _graphGate.Release();
             }
         }
-        catch (Exception exception) when (database.IsReadFailure(exception))
+        catch (Exception exception) when (ContentRevisionTracker.IsReadFailure(exception))
         {
             LogKnowledgeGraphReadFailed(logger, exception);
             return null;

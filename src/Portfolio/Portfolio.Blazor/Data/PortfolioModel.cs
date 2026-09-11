@@ -1,7 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Portfolio.Blazor.Data.Configurations;
 
 namespace Portfolio.Blazor.Data;
@@ -15,7 +13,7 @@ internal static class PortfolioModel
     internal static void ConfigureConventions(ModelConfigurationBuilder configurationBuilder) =>
         configurationBuilder.Conventions.Remove<ForeignKeyIndexConvention>();
 
-    internal static void Configure(ModelBuilder modelBuilder, DatabaseFacade database)
+    internal static void Configure(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfiguration(new ProjectConfiguration());
         modelBuilder.ApplyConfiguration(new ProjectTranslationConfiguration());
@@ -70,27 +68,20 @@ internal static class PortfolioModel
         modelBuilder.ApplyConfiguration(new AuditLogEntryConfiguration());
         modelBuilder.ApplyConfiguration(new AuditRequestConfiguration());
         modelBuilder.ApplyConfiguration(new ContentRevisionConfiguration());
-        ApplyProviderMappings(modelBuilder, database);
+        ApplyColumnTypes(modelBuilder);
     }
 
-    // IMPORTANT: the SQLite schema stores dates as TEXT (Laravel legacy), so DateOnly columns go
-    // through a lenient string converter and DateTime stays as text; PostgreSQL gets native date
-    // columns and, because the legacy values are wall-clock timestamps with no zone, "timestamp
-    // without time zone" instead of Npgsql's default timestamptz (which rejects Unspecified kinds).
-    private static void ApplyProviderMappings(ModelBuilder modelBuilder, DatabaseFacade database)
+    // IMPORTANT: the legacy Laravel data this schema was imported from stores dates as wall-clock
+    // values with no time zone, so DateTime columns are "timestamp without time zone" instead of
+    // Npgsql's default timestamptz, which rejects Unspecified DateTimeKind values.
+    private static void ApplyColumnTypes(ModelBuilder modelBuilder)
     {
-        if (!database.IsNpgsql())
-        {
-            return;
-        }
-
         foreach (var entity in modelBuilder.Model.GetEntityTypes())
         {
             foreach (var property in entity.GetProperties())
             {
                 if (property.ClrType == typeof(DateOnly) || property.ClrType == typeof(DateOnly?))
                 {
-                    property.SetValueConverter((ValueConverter?)null);
                     property.SetColumnType("date");
                 }
                 else if (

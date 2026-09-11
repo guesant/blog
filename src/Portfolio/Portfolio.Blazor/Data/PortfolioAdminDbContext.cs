@@ -63,5 +63,5 @@ public sealed class PortfolioAdminDbContext(DbContextOptions<PortfolioAdminDbCon
         PortfolioModel.ConfigureConventions(configurationBuilder);
 
     protected override void OnModelCreating(ModelBuilder modelBuilder) =>
-        PortfolioModel.Configure(modelBuilder, Database);
+        PortfolioModel.Configure(modelBuilder);
 }

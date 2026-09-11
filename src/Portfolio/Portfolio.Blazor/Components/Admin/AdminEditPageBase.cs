@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Portfolio.Blazor.Data;
-using Portfolio.Blazor.Data.Providers;
 using Portfolio.Blazor.UI.Foundations;
 
 namespace Portfolio.Blazor.Components.Admin;
@@ -14,7 +13,7 @@ public abstract partial class AdminEditPageBase<TEntity> : AdminComponentBase
     protected IDbContextFactory<PortfolioAdminDbContext> DbContextFactory { get; set; } = default!;
 
     [Inject]
-    protected IDatabaseProvider DatabaseProvider { get; set; } = default!;
+    protected ContentRevisionTracker ContentRevisions { get; set; } = default!;
 
     [Inject]
     protected SiteToastService ToastService { get; set; } = default!;
@@ -84,7 +83,7 @@ public abstract partial class AdminEditPageBase<TEntity> : AdminComponentBase
 
             try
             {
-                await DatabaseProvider.SignalContentChangedAsync(dbContext);
+                await ContentRevisions.SignalContentChangedAsync(dbContext);
             }
             catch (Exception checkpointException)
             {

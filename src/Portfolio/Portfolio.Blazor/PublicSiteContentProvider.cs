@@ -5,13 +5,12 @@ using Microsoft.Extensions.Localization;
 using Portfolio.Blazor.Core;
 using Portfolio.Blazor.Core.Localization;
 using Portfolio.Blazor.Data;
-using Portfolio.Blazor.Data.Providers;
 using Portfolio.Blazor.PublicQueries;
 
 namespace Portfolio.Blazor;
 
 public sealed partial class PublicSiteContentProvider(
-    IDatabaseProvider database,
+    ContentRevisionTracker revisions,
     IDbContextFactory<PortfolioPublicDbContext> contexts,
     IConfiguration configuration,
     ILogger<PublicSiteContentProvider> logger,
@@ -39,20 +38,14 @@ public sealed partial class PublicSiteContentProvider(
         locale = CultureCatalog.NormalizeName(locale);
         try
         {
-            if (!database.IsContentAvailable())
-            {
-                LogDatabaseNotFound(logger);
-                return null;
-            }
-
-            var fingerprint = await database.ReadFingerprintAsync(cancellationToken);
+            var fingerprint = await revisions.ReadFingerprintAsync(cancellationToken);
             if (_snapshots.TryGetValue(locale, out var cached) && cached.Fingerprint == fingerprint)
                 return cached.Snapshot;
 
             await _snapshotGate.WaitAsync(cancellationToken);
             try
             {
-                fingerprint = await database.ReadFingerprintAsync(cancellationToken);
+                fingerprint = await revisions.ReadFingerprintAsync(cancellationToken);
                 if (_snapshots.TryGetValue(locale, out cached) && cached.Fingerprint == fingerprint)
                     return cached.Snapshot;
 
@@ -66,7 +59,7 @@ public sealed partial class PublicSiteContentProvider(
                 _snapshotGate.Release();
             }
         }
-        catch (Exception exception) when (database.IsReadFailure(exception))
+        catch (Exception exception) when (ContentRevisionTracker.IsReadFailure(exception))
         {
             LogDatabaseReadFailed(logger, exception);
             return null;
@@ -153,9 +146,6 @@ public sealed partial class PublicSiteContentProvider(
     )
     {
         cancellationToken.ThrowIfCancellationRequested();
-        if (!database.IsContentAvailable())
-            return null;
-
         await using var context = await contexts.CreateDbContextAsync(cancellationToken);
         return await challengeService.CreateAsync(
             Format.Text(ChromeQueries.ContactEmail(context)),
@@ -798,13 +788,6 @@ public sealed partial class PublicSiteContentProvider(
 
     private static JsonElement? JsonNullable(string value) =>
         string.IsNullOrWhiteSpace(value) ? null : JsonDocument.Parse(value).RootElement.Clone();
-
-    [LoggerMessage(
-        EventId = 1003,
-        Level = LogLevel.Error,
-        Message = "Public content database is not available."
-    )]
-    private static partial void LogDatabaseNotFound(ILogger logger);
 
     [LoggerMessage(
         EventId = 1004,

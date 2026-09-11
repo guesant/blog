@@ -1,29 +1,11 @@
-using System.Globalization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Portfolio.Blazor.Data.Entities;
 
 namespace Portfolio.Blazor.Data.Configurations;
 
 public sealed class ResourceConfiguration : IEntityTypeConfiguration<Resource>
 {
-    // IMPORTANT: `published_date_iso`/`found_date_iso` are declared as SQLite
-    // `date` columns, but the data actually stored (via the legacy Eloquent
-    // import) is a full datetime string ("2024-01-10 00:00:00"), not a bare
-    // date. Microsoft.Data.Sqlite's native DateOnly reader parses strictly
-    // and throws FormatException on that shape — confirmed live loading
-    // /admin/findings before this converter existed. Route the column
-    // through string + DateTime.Parse instead of the native DateOnly path.
-    private static readonly ValueConverter<DateOnly?, string?> FlexibleDateOnlyConverter = new(
-        date =>
-            date.HasValue ? date.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture) : null,
-        text =>
-            string.IsNullOrWhiteSpace(text)
-                ? null
-                : DateOnly.FromDateTime(DateTime.Parse(text, CultureInfo.InvariantCulture))
-    );
-
     public void Configure(EntityTypeBuilder<Resource> builder)
     {
         builder.ToTable("resources");
@@ -48,14 +30,8 @@ public sealed class ResourceConfiguration : IEntityTypeConfiguration<Resource>
         builder.Property(resource => resource.LanguageId).HasColumnName("language_id");
         builder.Property(resource => resource.Authors).HasColumnName("authors");
         builder.Property(resource => resource.Organizations).HasColumnName("organizations");
-        builder
-            .Property(resource => resource.PublishedDateIso)
-            .HasColumnName("published_date_iso")
-            .HasConversion(FlexibleDateOnlyConverter);
-        builder
-            .Property(resource => resource.FoundDateIso)
-            .HasColumnName("found_date_iso")
-            .HasConversion(FlexibleDateOnlyConverter);
+        builder.Property(resource => resource.PublishedDateIso).HasColumnName("published_date_iso");
+        builder.Property(resource => resource.FoundDateIso).HasColumnName("found_date_iso");
         builder.Property(resource => resource.ConsumptionState).HasColumnName("consumption_state");
         builder.Property(resource => resource.Rating).HasColumnName("rating");
         builder.Property(resource => resource.EditorialState).HasColumnName("editorial_state");

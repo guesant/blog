@@ -74,7 +74,7 @@ public sealed class PortfolioPublicDbContext(DbContextOptions<PortfolioPublicDbC
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        PortfolioModel.Configure(modelBuilder, Database);
+        PortfolioModel.Configure(modelBuilder);
         PublicVisibilityFilters.Apply(modelBuilder);
     }
 

@@ -8,10 +8,9 @@
   <Project Path="Portfolio/Portfolio.Blazor.Core.Tests/Portfolio.Blazor.Core.Tests.csproj" />
   <Project Path="Portfolio/Portfolio.Blazor.Core/Portfolio.Blazor.Core.csproj" />
   <Project Path="Portfolio/Portfolio.Blazor.Database/Portfolio.Blazor.Database.csproj" />
-  <Project Path="Portfolio/Portfolio.Blazor.Database.Postgres/Portfolio.Blazor.Database.Postgres.csproj" />
+  <Project Path="Portfolio/Portfolio.Blazor.Import/Portfolio.Blazor.Import.csproj" />
   <Project Path="Portfolio/Portfolio.Blazor.Data.Tests/Portfolio.Blazor.Data.Tests.csproj" />
   <Project Path="Portfolio/Portfolio.Blazor.Sbom/Portfolio.Blazor.Sbom.csproj" />
-  <Project Path="Portfolio/Portfolio.Blazor.Snapshot/Portfolio.Blazor.Snapshot.csproj" />
   <Project Path="Portfolio/Portfolio.Blazor.Stories/Portfolio.Blazor.Stories.csproj" />
   <Project Path="Portfolio/Portfolio.Blazor.UI/Portfolio.Blazor.UI.csproj" />
   <Project Path="Portfolio/Portfolio.Blazor/Portfolio.Blazor.csproj" />

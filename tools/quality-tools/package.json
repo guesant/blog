@@ -6,11 +6,6 @@
   "engines": {
     "node": ">=24 <25"
   },
-  "scripts": {
-    "duplication": "jscpd --config jscpd.json",
-    "format-web": "prettier --write \"**/*.{css,js,ts,json}\"",
-    "format-web-check": "prettier --check \"**/*.{css,js,ts,json}\""
-  },
   "devDependencies": {
     "jscpd": "^5.0.14",
     "prettier": "^3.4.2"

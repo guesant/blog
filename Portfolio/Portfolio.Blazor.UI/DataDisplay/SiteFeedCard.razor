@@ -43,21 +43,26 @@
                 <span class="site-feed-card-ellipsis" aria-hidden="true">…</span>
             }
         </p>
-        @if (!string.IsNullOrWhiteSpace(Href) && !string.IsNullOrWhiteSpace(ViewLabel))
-        {
-            <SiteLink Variant="SiteButtonVariant.Link"
-                Class="site-feed-card-more"
-                Href="@Href"
-                target="@(External ? "_blank" : null)"
-                rel="@(External ? "noopener noreferrer" : null)"
-                aria-label="@($"{ViewLabel}: {Title}")">
-                @ViewLabel
-                <SiteIcon Name="@(External ? "arrow-up-right" : "arrow-right")" Size="14" />
-            </SiteLink>
-        }
     }
-    @if (Tags is not null)
+    @if (Tags is not null || HasMoreLink)
     {
-        <div class="site-feed-card-tags">@Tags</div>
+        <footer class="site-feed-card-footer">
+            @if (Tags is not null)
+            {
+                <div class="site-feed-card-tags">@Tags</div>
+            }
+            @if (HasMoreLink)
+            {
+                <SiteLink Variant="SiteButtonVariant.Link"
+                    Class="site-feed-card-more"
+                    Href="@Href"
+                    target="@(External ? "_blank" : null)"
+                    rel="@(External ? "noopener noreferrer" : null)"
+                    aria-label="@($"{ViewLabel}: {Title}")">
+                    @ViewLabel
+                    <SiteIcon Name="@(External ? "arrow-up-right" : "arrow-right")" Size="14" />
+                </SiteLink>
+            }
+        </footer>
     }
 </article>

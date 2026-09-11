@@ -49,4 +49,7 @@ public partial class SiteFeedCard
     /// <summary>Optional trailing tags, typically a SiteChipGroup.</summary>
     [Parameter]
     public RenderFragment? Tags { get; set; }
+
+    private bool HasMoreLink =>
+        !string.IsNullOrWhiteSpace(Href) && !string.IsNullOrWhiteSpace(ViewLabel);
 }

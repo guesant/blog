@@ -185,16 +185,19 @@ _vrt npm_command:
     if ! {{docker_run}} 'attempt=0
         until curl -sf http://stories:8081/index.html >/dev/null 2>&1; do
             attempt=$((attempt + 1))
-            if [ "$attempt" -ge 300 ]; then
-                echo "stories did not respond after $attempt attempts" >&2
+            if [ "$attempt" -ge 40 ]; then
+                echo "stories did not respond from web after $attempt attempts" >&2
                 exit 1
-            fi
-            if [ $((attempt % 15)) -eq 0 ]; then
-                echo "waiting for stories (attempt $attempt, $(date -u +%H:%M:%S))"
             fi
             sleep 2
         done
-        echo "stories ready after $attempt attempts"'; then
+        echo "stories reachable from web after $attempt attempts"'; then
+        echo "--- loopback curl from inside stories itself ---" >&2
+        {{compose}} exec -T stories sh -c 'curl -sv http://127.0.0.1:8081/index.html' >&2 2>&1 || true
+        echo "--- ss/proc listing inside stories ---" >&2
+        {{compose}} exec -T stories sh -c '(ss -tlnp || cat /proc/net/tcp) 2>&1' >&2 || true
+        echo "--- cross-container curl from web, verbose ---" >&2
+        {{docker_run}} 'curl -sv http://stories:8081/index.html' >&2 2>&1 || true
         {{compose}} logs --tail 200 --timestamps stories >&2 || true
         exit 1
     fi

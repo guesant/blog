@@ -181,8 +181,21 @@ _vrt npm_command:
     #!/usr/bin/env sh
     set -eu
     trap '{{compose}} rm -sf stories >/dev/null 2>&1 || true' EXIT
-    if ! {{compose}} up -d --wait stories; then
-        {{compose}} logs --tail 50 stories >&2 || true
+    {{compose}} up -d stories
+    if ! {{docker_run}} 'attempt=0
+        until curl -sf http://stories:8081/index.html >/dev/null 2>&1; do
+            attempt=$((attempt + 1))
+            if [ "$attempt" -ge 300 ]; then
+                echo "stories did not respond after $attempt attempts" >&2
+                exit 1
+            fi
+            if [ $((attempt % 15)) -eq 0 ]; then
+                echo "waiting for stories (attempt $attempt, $(date -u +%H:%M:%S))"
+            fi
+            sleep 2
+        done
+        echo "stories ready after $attempt attempts"'; then
+        {{compose}} logs --tail 200 --timestamps stories >&2 || true
         exit 1
     fi
     {{compose_dev}} run --rm playwright sh -lc 'npm ci --no-audit --no-fund && {{npm_command}}'

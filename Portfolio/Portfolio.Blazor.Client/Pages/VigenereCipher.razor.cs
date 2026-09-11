@@ -9,8 +9,8 @@ public partial class VigenereCipher
         Key = "",
         Output = "";
     private bool ShowError;
-    private string Title => L["vigenere_title"];
-    private string Description => L["vigenere_description"];
+    private string Title => ToolsL["vigenere_cipher_page_title"];
+    private string Description => ToolsL["vigenere_cipher_lead"];
     private string InputLabel => L["vigenere_input"];
     private string KeyLabel => L["vigenere_key"];
     private string OutputLabel => L["vigenere_output"];

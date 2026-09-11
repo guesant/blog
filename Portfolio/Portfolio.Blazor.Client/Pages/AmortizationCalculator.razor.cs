@@ -26,8 +26,11 @@ public partial class AmortizationCalculator
         LocalizedUrls.Current(
             $"/tools/{(IsLoan ? "loan-interest-calculator" : "amortization-calculator")}"
         );
-    private string Title => IsLoan ? (L["legacy_dbf1553b5c5f"]) : (L["legacy_501f3d3caa1f"]);
-    private string Description => L["legacy_425dbd96cc7a"];
+    private string Title =>
+        IsLoan
+            ? (ToolsL["loan_interest_calculator_page_title"])
+            : (ToolsL["amortization_calculator_title"]);
+    private string Description => ToolsL["amortization_calculator_lead"];
     private string InputLabel => L["legacy_5b6220fefc5c"];
     private string PrincipalLabel => L["legacy_702e913aa4e2"];
     private string RateLabel => L["legacy_3ec8ab539331"];

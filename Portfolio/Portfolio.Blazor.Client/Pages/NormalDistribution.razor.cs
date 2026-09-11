@@ -21,8 +21,8 @@ public partial class NormalDistribution
     [SupplyParameterFromQuery(Name = "point")]
     private string? QueryPoint { get; set; }
     private string Action => L["legacy_644041e51dad"];
-    private string Title => L["legacy_88be303cb809"];
-    private string Description => L["legacy_26591d18a4bc"];
+    private string Title => ToolsL["normal_distribution_title"];
+    private string Description => ToolsL["normal_distribution_lead"];
     private string InputLabel => L["legacy_d9825dc0fc2f"];
     private string MeanLabel => L["legacy_bd0cc81ce562"];
     private string DeviationLabel => L["legacy_d2d9f19515f4"];

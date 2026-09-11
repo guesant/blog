@@ -24,8 +24,8 @@ public partial class CssClampCalculator
     [SupplyParameterFromQuery(Name = "maxVw")]
     private double? QueryMaxViewport { get; set; }
     private string Action => L["legacy_080681072133"];
-    private string Title => L["legacy_4bdebb41a8c5"];
-    private string Description => L["legacy_592843587f20"];
+    private string Title => ToolsL["css_clamp_calculator_title"];
+    private string Description => ToolsL["css_clamp_calculator_lead"];
     private string InputLabel => L["legacy_d9825dc0fc2f"];
     private string MinSizeLabel => L["legacy_c0446431e838"];
     private string MaxSizeLabel => L["legacy_4b1a011deaa3"];

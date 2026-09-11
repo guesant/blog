@@ -32,8 +32,8 @@ public partial class FractionCalculator
     [SupplyParameterFromQuery(Name = "operation")]
     private string? QueryOperation { get; set; }
     private string Action => L["legacy_e456e11dec65"];
-    private string Title => L["legacy_0a1d87726677"];
-    private string Description => L["legacy_ec7b8657bce0"];
+    private string Title => ToolsL["fraction_calculator_title"];
+    private string Description => ToolsL["fraction_calculator_lead"];
     private string InputLabel => L["legacy_cf8b4a6ab201"];
     private string OperationLabel => L["legacy_bcb0412df16b"];
     private string ResultLabel => L["legacy_f99cb3950d4d"];

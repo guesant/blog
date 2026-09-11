@@ -24,8 +24,8 @@ public partial class RobotsTxtGenerator
     [SupplyParameterFromQuery(Name = "sitemap")]
     private string? QuerySitemap { get; set; }
     private string Action => L["legacy_0c4fe0ae8a55"];
-    private string Title => L["legacy_0c124738f9d5"];
-    private string Description => L["legacy_29bcb6c9d94c"];
+    private string Title => ToolsL["robots_txt_generator_title"];
+    private string Description => ToolsL["robots_txt_generator_lead"];
     private string UserAgentLabel => L["legacy_3d361c7e6d13"];
     private string AllowLabel => L["legacy_a6afdae7964d"];
     private string DisallowLabel => L["legacy_3aafbf448b67"];

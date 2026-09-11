@@ -24,8 +24,8 @@ public partial class MechanicalEnergy
     [SupplyParameterFromQuery(Name = "gravity")]
     private string? QueryGravity { get; set; }
     private string Action => L["legacy_27b819f75f2b"];
-    private string Title => L["legacy_bb9586134d94"];
-    private string Description => L["legacy_e000b20e5c1d"];
+    private string Title => ToolsL["mechanical_energy_title"];
+    private string Description => ToolsL["mechanical_energy_lead"];
     private string InputLabel => L["legacy_d9825dc0fc2f"];
     private string MassLabel => L["legacy_fa0e1f6defb1"];
     private string SpeedLabel => L["legacy_4a5532c608d2"];

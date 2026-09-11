@@ -34,8 +34,8 @@ public partial class FindAndReplace
     [SupplyParameterFromQuery(Name = "useRegex")]
     private bool? QueryUseRegex { get; set; }
     private string Action => L["legacy_0c4b964d35df"];
-    private string Title => L["legacy_05f6cab1caf9"];
-    private string Description => L["legacy_9e029a994693"];
+    private string Title => ToolsL["find_and_replace_title"];
+    private string Description => ToolsL["find_and_replace_lead"];
     private string InputLabel => L["legacy_c4c61716670f"];
     private string FindLabel => L["legacy_fc35e4cd2942"];
     private string ReplaceLabel => L["legacy_e80f252d8928"];

@@ -13,6 +13,9 @@ public abstract class LocalizedComponentBase : ComponentBase
     [Inject]
     protected IStringLocalizer<SharedResource> L { get; set; } = default!;
 
+    [Inject]
+    protected IStringLocalizer<ToolsResource> ToolsL { get; set; } = default!;
+
     protected static string CurrentLocale =>
         CultureCatalog.NormalizeName(CultureInfo.CurrentUICulture.Name);
 

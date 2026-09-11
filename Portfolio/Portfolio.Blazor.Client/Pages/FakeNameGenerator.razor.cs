@@ -20,8 +20,8 @@ public partial class FakeNameGenerator
     [SupplyParameterFromQuery(Name = "email")]
     private bool? QueryEmail { get; set; }
     private string Action => L["legacy_7ade41fac7a1"];
-    private string Title => L["legacy_cd0443858bdc"];
-    private string Description => L["legacy_02997b2d2b4c"];
+    private string Title => ToolsL["fake_name_generator_title"];
+    private string Description => ToolsL["fake_name_generator_lead"];
     private string InputLabel => L["legacy_d9825dc0fc2f"];
     private string CountLabel => L["legacy_ebfc81d5cecc"];
     private string UsernameLabel => L["legacy_e1664b6361eb"];

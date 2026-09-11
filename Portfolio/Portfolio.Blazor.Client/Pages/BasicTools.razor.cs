@@ -10,11 +10,11 @@ public partial class BasicTools
     private string Title =>
         Slug switch
         {
-            "age-calculator" => L["legacy_526a44980e7e"],
-            "bmi-calculator" => L["legacy_086e8206e0b9"],
+            "age-calculator" => ToolsL["age_calculator_title"],
+            "bmi-calculator" => ToolsL["bmi_calculator_title"],
             _ => L["legacy_37ed61333496"],
         };
-    private string Description => L["legacy_235020da38aa"];
+    private string Description => ToolsL["age_calculator_lead"];
     private string InputLabel => L["legacy_67f93fb28065"];
     private string BirthLabel => L["legacy_754004108abf"];
     private string WeightLabel => L["legacy_dee1e3505827"];

@@ -19,8 +19,8 @@ public partial class ResistorNetwork
     [SupplyParameterFromQuery(Name = "mode")]
     private string? QueryMode { get; set; }
     private string Action => L["legacy_a10872a86f7d"];
-    private string Title => L["legacy_58041095521a"];
-    private string Description => L["legacy_3ea372b42f25"];
+    private string Title => ToolsL["resistor_network_title"];
+    private string Description => ToolsL["resistor_network_lead"];
     private string Note => L["legacy_3cb74ef347b2"];
     private string InputLabel => L["legacy_bdae964b227c"];
     private string ModeLabel => L["legacy_5446bebbd295"];

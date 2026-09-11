@@ -16,8 +16,8 @@ public partial class RomanNumeralConverter
     [SupplyParameterFromQuery(Name = "roman")]
     private string? QueryRoman { get; set; }
     private string Action => L["legacy_2d48c5d79f5c"];
-    private string Title => L["legacy_03ddb4a4f34b"];
-    private string Description => L["legacy_2111a97e0c40"];
+    private string Title => ToolsL["roman_numeral_converter_page_title"];
+    private string Description => ToolsL["roman_numeral_converter_lead"];
     private string InputLabel => L["legacy_f2f2808523c8"];
     private string NumberLabel => L["legacy_92b2672538ae"];
     private string RomanLabel => L["legacy_d94d480b36f3"];

@@ -12,8 +12,8 @@ public partial class UuidGenerator
     [SupplyParameterFromQuery(Name = "count")]
     private int? QueryCount { get; set; }
     private string Action => L["legacy_da8feed3343f"];
-    private string Title => L["legacy_48a591b29000"];
-    private string Description => L["legacy_7e5f9949fcae"];
+    private string Title => ToolsL["uuid_generator_page_title"];
+    private string Description => ToolsL["uuid_generator_lead"];
     private string InputLabel => L["legacy_d9825dc0fc2f"];
     private string CountLabel => L["legacy_ebfc81d5cecc"];
     private string GenerateLabel => L["legacy_cc7df97fb1b2"];

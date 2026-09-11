@@ -10,8 +10,8 @@ public partial class UnitConverter
         To = "km";
     private double Value = 1;
     private bool initialized;
-    private string Title => L["unit_converter_title"];
-    private string Description => L["unit_converter_description"];
+    private string Title => ToolsL["unit_converter_title"];
+    private string Description => ToolsL["unit_converter_lead"];
     private string ValueLabel => L["unit_value"];
     private string FromLabel => L["unit_from"];
     private string ToLabel => L["unit_to"];

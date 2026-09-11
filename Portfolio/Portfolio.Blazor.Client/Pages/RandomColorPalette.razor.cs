@@ -12,8 +12,8 @@ public partial class RandomColorPalette
     [SupplyParameterFromQuery(Name = "count")]
     private int? QueryCount { get; set; }
     private string Action => L["legacy_1b6ab2171a36"];
-    private string Title => L["legacy_8f7a8ebeac56"];
-    private string Description => L["legacy_975e4c90522d"];
+    private string Title => ToolsL["random_color_palette_page_title"];
+    private string Description => ToolsL["random_color_palette_lead"];
     private string InputLabel => L["legacy_d9825dc0fc2f"];
     private string CountLabel => L["legacy_ef308c5310a6"];
     private string GenerateLabel => L["legacy_cc7df97fb1b2"];

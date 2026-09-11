@@ -20,8 +20,8 @@ public partial class MatrixCalculator
     [SupplyParameterFromQuery(Name = "operation")]
     private string? QueryOperation { get; set; }
     private string Action => L["legacy_387c6a2e386c"];
-    private string Title => L["legacy_84b13ab80619"];
-    private string Description => L["legacy_9f645b64bcc8"];
+    private string Title => ToolsL["matrix_calculator_title"];
+    private string Description => ToolsL["matrix_calculator_lead"];
     private string InputLabel => L["legacy_73e8b20eaca1"];
     private string OperationLabel => L["legacy_bcb0412df16b"];
     private string DeterminantLabel => L["legacy_1494ea6c1f6b"];

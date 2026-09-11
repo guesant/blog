@@ -13,8 +13,8 @@ public partial class TextCounter
     private string? QueryText { get; set; }
 
     private string Action => L["legacy_3078942a68c1"];
-    private string Title => L["legacy_95a42b1ab997"];
-    private string Description => L["text_counter_description"];
+    private string Title => ToolsL["text_counter_title"];
+    private string Description => ToolsL["text_counter_lead"];
     private string InputLabel => L["legacy_a5b167e7baff"];
     private string SubmitLabel => L["legacy_718517a8ab26"];
     private string CharactersLabel => L["legacy_4947adb6830a"];

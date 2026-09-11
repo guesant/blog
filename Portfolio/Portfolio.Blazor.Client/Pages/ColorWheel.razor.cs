@@ -3,8 +3,8 @@ namespace Portfolio.Blazor.Client.Pages;
 public partial class ColorWheel
 {
     private string CanonicalPath => RequestPath;
-    private string Title => L["legacy_e482c31489fa"];
-    private string Description => L["legacy_f34bc1e012a3"];
+    private string Title => ToolsL["color_wheel_title"];
+    private string Description => ToolsL["color_wheel_lead"];
     private string RuleLabel => L["legacy_3b6b27b2113b"];
     private string ModelLabel => L["legacy_68cbff4273ac"];
     private string RandomLabel => L["legacy_923b5b9bffec"];

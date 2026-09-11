@@ -27,8 +27,8 @@ public partial class CssBorderRadiusGenerator
     [SupplyParameterFromQuery(Name = "linked")]
     private bool? QueryLinked { get; set; }
     private string Action => L["legacy_9577c01c0e1b"];
-    private string Title => L["legacy_e18eec6db1c5"];
-    private string Description => L["legacy_0d82e9cd8484"];
+    private string Title => ToolsL["css_border_radius_generator_title"];
+    private string Description => ToolsL["css_border_radius_generator_lead"];
     private string InputLabel => L["legacy_048a8085c44a"];
     private string LinkedLabel => L["legacy_e5f510defbee"];
     private string TopLeftLabel => L["legacy_ccda4f7c9e4d"];

@@ -11,8 +11,8 @@ public partial class MarkdownToHtml
     [SupplyParameterFromQuery(Name = "input")]
     private string? QueryInput { get; set; }
     private string Action => L["legacy_78d25149bfa4"];
-    private string Title => L["legacy_1323545766d9"];
-    private string Description => L["legacy_c11325bdae5f"];
+    private string Title => ToolsL["markdown_to_html_title"];
+    private string Description => ToolsL["markdown_to_html_lead"];
     private string MarkdownInputLabel => L["legacy_192b01859ac0"];
     private string PreviewLabel => L["legacy_3822506f8f59"];
     private string HtmlOutputLabel => L["legacy_946c9059cd45"];

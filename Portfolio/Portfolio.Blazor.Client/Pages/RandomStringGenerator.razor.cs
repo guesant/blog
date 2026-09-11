@@ -39,8 +39,8 @@ public partial class RandomStringGenerator
     [SupplyParameterFromQuery(Name = "symbols")]
     private bool? QuerySymbols { get; set; }
     private string Action => L["legacy_07c0293b5d88"];
-    private string Title => L["legacy_026419b809e7"];
-    private string Description => L["legacy_22bf482354bf"];
+    private string Title => ToolsL["random_string_generator_title"];
+    private string Description => ToolsL["random_string_generator_lead"];
     private string InputLabel => L["legacy_d9825dc0fc2f"];
     private string LengthLabel => L["legacy_3adb0d7976b8"];
     private string CountLabel => L["legacy_c3c293af9e88"];

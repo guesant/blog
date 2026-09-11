@@ -33,9 +33,10 @@ public partial class AdvancedPhysics
         Navigation.Uri.Contains("projectile-motion", StringComparison.OrdinalIgnoreCase);
     private string Action =>
         LocalizedUrls.Current($"/tools/{(IsProjectile ? "projectile-motion" : "circular-motion")}");
-    private string Title => IsProjectile ? (L["legacy_68492f3e193f"]) : (L["legacy_7267e359a033"]);
+    private string Title =>
+        IsProjectile ? (ToolsL["projectile_motion_title"]) : (ToolsL["circular_motion_title"]);
     private string Description =>
-        IsProjectile ? (L["legacy_e6a71ee537a7"]) : (L["legacy_4dbf3a0a5da1"]);
+        IsProjectile ? (ToolsL["projectile_motion_lead"]) : (ToolsL["circular_motion_lead"]);
     private string InputLabel => L["legacy_5b6220fefc5c"];
     private string SpeedLabel => L["legacy_d0a57448000f"];
     private string AngleLabel => L["legacy_4579fb011bff"];

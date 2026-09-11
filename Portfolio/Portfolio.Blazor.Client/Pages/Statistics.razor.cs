@@ -13,8 +13,8 @@ public partial class Statistics
     [SupplyParameterFromQuery(Name = "values")]
     private string? QueryValues { get; set; }
     private string Action => L["legacy_264f2a8c5e84"];
-    private string Title => L["legacy_d6a804ce4fba"];
-    private string Description => L["statistics_description"];
+    private string Title => ToolsL["statistics_page_title"];
+    private string Description => ToolsL["statistics_lead"];
     private string InputLabel => L["legacy_d6b96d7e7072"];
     private string SubmitLabel => L["legacy_53519f340509"];
     private string CountLabel => L["legacy_1cca238ca682"];

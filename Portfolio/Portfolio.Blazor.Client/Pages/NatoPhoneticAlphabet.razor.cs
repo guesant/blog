@@ -15,8 +15,8 @@ public partial class NatoPhoneticAlphabet
     [SupplyParameterFromQuery(Name = "alphabet")]
     private string? QueryAlphabet { get; set; }
     private string Action => L["legacy_ce18e663885e"];
-    private string Title => L["legacy_2803b24cc63e"];
-    private string Description => L["legacy_f23ef7818075"];
+    private string Title => ToolsL["nato_phonetic_alphabet_title"];
+    private string Description => ToolsL["nato_phonetic_alphabet_lead"];
     private string AlphabetLabel => L["legacy_ef3fb5024164"];
     private string NatoLabel => L["legacy_42e94e815b3b"];
     private string BrazilianLabel => L["legacy_5b0a0fa480c7"];

@@ -30,8 +30,8 @@ public partial class DataCleaner
     [SupplyParameterFromQuery(Name = "duplicates")]
     private string? QueryDuplicates { get; set; }
     private string Action => L["legacy_433470930fce"];
-    private string Title => L["legacy_a468caa4f7be"];
-    private string Description => L["legacy_dfea03ead151"];
+    private string Title => ToolsL["data_cleaner_title"];
+    private string Description => ToolsL["data_cleaner_lead"];
     private string InputLabel => L["legacy_194fe11bbba9"];
     private string OptionsLabel => L["legacy_8245de5f962f"];
     private string TrimLabel => L["legacy_683f5dd969a3"];

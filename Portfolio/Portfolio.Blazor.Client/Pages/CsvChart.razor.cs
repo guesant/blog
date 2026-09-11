@@ -35,8 +35,8 @@ public partial class CsvChart
     [SupplyParameterFromQuery(Name = "filter")]
     private string? QueryFilter { get; set; }
     private string Action => L["legacy_024205604324"];
-    private string Title => L["legacy_010d95aefc52"];
-    private string Description => L["csv_chart_full_description"];
+    private string Title => ToolsL["csv_chart_title"];
+    private string Description => ToolsL["csv_chart_lead"];
     private string InputLabel => L["legacy_2cb19719b24a"];
     private string SubmitLabel => L["legacy_cf6c94423239"];
     private string ErrorLabel => L["legacy_e575de76e132"];

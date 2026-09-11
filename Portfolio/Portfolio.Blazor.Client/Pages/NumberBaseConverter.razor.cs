@@ -16,8 +16,8 @@ public partial class NumberBaseConverter
     [SupplyParameterFromQuery(Name = "base")]
     private int? QueryBase { get; set; }
     private string Action => L["legacy_01570c7c3e35"];
-    private string Title => L["legacy_4d67bbd8d9f3"];
-    private string Description => L["legacy_4b9d3bbe1443"];
+    private string Title => ToolsL["number_base_converter_title"];
+    private string Description => ToolsL["number_base_converter_lead"];
     private string InputLabel => L["legacy_b831d42d15e4"];
     private static string BaseLabel => "base";
     private string ResultLabel => L["legacy_2f0452494fcb"];

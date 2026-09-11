@@ -25,8 +25,8 @@ public partial class CssGradientGenerator
     [SupplyParameterFromQuery(Name = "angle")]
     private int? QueryAngle { get; set; }
     private string Action => L["legacy_969cf84bc236"];
-    private string Title => L["legacy_c502586c0b5f"];
-    private string Description => L["legacy_d4165d915ce3"];
+    private string Title => ToolsL["css_gradient_generator_title"];
+    private string Description => ToolsL["css_gradient_generator_lead"];
     private string InputLabel => L["legacy_d9825dc0fc2f"];
     private string TypeLabel => L["legacy_9d755e0e961c"];
     private static string LinearLabel => "linear";

@@ -17,9 +17,10 @@ public partial class DataConverters
         Navigation.Uri.Contains("/json-to-csv", StringComparison.OrdinalIgnoreCase);
     private string Action =>
         LocalizedUrls.Current($"/tools/{(IsJsonToCsv ? "json-to-csv" : "json-formatter")}");
-    private string Title => IsJsonToCsv ? (L["legacy_66bab7de1aae"]) : (L["legacy_98ab1008ef0c"]);
+    private string Title =>
+        IsJsonToCsv ? (ToolsL["json_to_csv_title"]) : (ToolsL["json_formatter_title"]);
     private string Description =>
-        IsJsonToCsv ? (L["legacy_53703fa9168c"]) : (L["legacy_042b69578eac"]);
+        IsJsonToCsv ? (ToolsL["json_to_csv_lead"]) : (ToolsL["json_formatter_lead"]);
     private string InputLabel => L["legacy_9273dd785105"];
     private string OutputLabel => L["legacy_f2a7eb87e63d"];
     private string SubmitLabel =>

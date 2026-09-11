@@ -35,8 +35,8 @@ public partial class VectorCalculator
     [SupplyParameterFromQuery(Name = "bz")]
     private string? QueryBZ { get; set; }
     private string Action => L["legacy_d57407602bf1"];
-    private string Title => L["legacy_6f867cb17f9e"];
-    private string Description => L["legacy_012f07b2ce06"];
+    private string Title => ToolsL["vector_calculator_title"];
+    private string Description => ToolsL["vector_calculator_lead"];
     private string InputLabel => L["legacy_08d2fc2bc5c7"];
     private static string VectorALabel => "A";
     private static string VectorBLabel => "B";

@@ -16,8 +16,8 @@ public partial class TableEditor
     [SupplyParameterFromQuery(Name = "csv")]
     private string? QueryCsv { get; set; }
     private string Action => L["legacy_eb79613910c9"];
-    private string Title => L["legacy_e1e3f4a86f40"];
-    private string Description => L["legacy_4ba7ac8d201f"];
+    private string Title => ToolsL["table_editor_title"];
+    private string Description => ToolsL["table_editor_lead"];
     private string InputLabel => L["legacy_194fe11bbba9"];
     private string TableLabel => L["legacy_614f63ac9e49"];
     private string ApplyLabel => L["legacy_f3b8f813b8fd"];

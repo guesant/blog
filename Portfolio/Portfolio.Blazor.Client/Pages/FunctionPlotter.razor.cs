@@ -25,8 +25,8 @@ public partial class FunctionPlotter
     [SupplyParameterFromQuery(Name = "max")]
     private string? QueryMaximum { get; set; }
     private string Action => L["legacy_35e6aab7dac8"];
-    private string Title => L["legacy_eb1cf87b4cd6"];
-    private string Description => L["legacy_e7448e74e22c"];
+    private string Title => ToolsL["function_plotter_title"];
+    private string Description => ToolsL["function_plotter_lead"];
     private string InputLabel => L["legacy_492c2a86ee4a"];
     private string ExpressionLabel => L["legacy_31c2fd5d2ab4"];
     private string MinimumLabel => L["legacy_78e9e6a55375"];

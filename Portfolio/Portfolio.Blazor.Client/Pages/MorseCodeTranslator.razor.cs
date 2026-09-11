@@ -16,8 +16,8 @@ public partial class MorseCodeTranslator
     [SupplyParameterFromQuery(Name = "direction")]
     private string? QueryDirection { get; set; }
     private string Action => L["legacy_66dfbbab2970"];
-    private string Title => L["legacy_25535b2d3899"];
-    private string Description => L["legacy_12417cfb8f50"];
+    private string Title => ToolsL["morse_code_translator_page_title"];
+    private string Description => ToolsL["morse_code_translator_lead"];
     private string InputLabel => L["legacy_c4c61716670f"];
     private string OutputLabel => L["legacy_1d1c0e33dc3c"];
     private string ToMorseLabel => L["legacy_4e4de170a862"];

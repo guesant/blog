@@ -21,8 +21,8 @@ public partial class QuadraticEquation
     [SupplyParameterFromQuery(Name = "c")]
     private string? QueryC { get; set; }
     private string Action => L["legacy_983f39df8e04"];
-    private string Title => L["legacy_5e3034876ffe"];
-    private string Description => L["quadratic_description"];
+    private string Title => ToolsL["quadratic_equation_title"];
+    private string Description => ToolsL["quadratic_equation_lead"];
     private string InputLabel => L["legacy_c6be4b29456c"];
     private string SubmitLabel => L["legacy_28b6f5bf458b"];
     private string ExplanationLabel => L["legacy_23470bef125e"];

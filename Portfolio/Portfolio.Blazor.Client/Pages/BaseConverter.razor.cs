@@ -20,8 +20,8 @@ public partial class BaseConverter
     [SupplyParameterFromQuery(Name = "to")]
     private string? QueryTo { get; set; }
     private string Action => L["legacy_9176a6f6d181"];
-    private string Title => L["legacy_fdef8c68bcf3"];
-    private string Description => L["legacy_2430669ec08b"];
+    private string Title => ToolsL["base_converter_title"];
+    private string Description => ToolsL["base_converter_lead"];
     private string InputLabel => L["legacy_67f93fb28065"];
     private string ValueLabel => L["legacy_397b9fc38aec"];
     private string FromLabel => L["legacy_e0d053715998"];

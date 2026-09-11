@@ -19,8 +19,8 @@ public partial class RegexTester
     [SupplyParameterFromQuery(Name = "input")]
     private string? QueryInput { get; set; }
     private string Action => L["legacy_312eb91d9fd3"];
-    private string Title => L["legacy_9fadfadd9248"];
-    private string Description => L["legacy_eab2cc79e4d2"];
+    private string Title => ToolsL["regex_tester_title"];
+    private string Description => ToolsL["regex_tester_lead"];
     private string PatternLabel => L["legacy_5e995a75d37b"];
     private string TestStringLabel => L["legacy_7e40ce38ac57"];
     private string HighlightLabel => L["legacy_b93f00c414ef"];

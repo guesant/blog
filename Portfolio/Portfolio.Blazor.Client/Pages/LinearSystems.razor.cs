@@ -72,15 +72,15 @@ public partial class LinearSystems
     private string Title =>
         Slug switch
         {
-            "linear-system-2x2" => L["legacy_4581b49e1721"],
-            "linear-system-3x3" => L["legacy_b2b5b766b906"],
+            "linear-system-2x2" => ToolsL["linear_system_2x2_title"],
+            "linear-system-3x3" => ToolsL["linear_system_3x3_title"],
             _ => L["legacy_e5adcdc57487"],
         };
     private string Description =>
         Slug switch
         {
-            "linear-system-2x2" => L["legacy_2a8128b62f14"],
-            "linear-system-3x3" => L["legacy_f9cae8a55221"],
+            "linear-system-2x2" => ToolsL["linear_system_2x2_lead"],
+            "linear-system-3x3" => ToolsL["linear_system_3x3_lead"],
             _ => L["legacy_53a02c988762"],
         };
     private string InputLabel => L["legacy_660b2237b175"];

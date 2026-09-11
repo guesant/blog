@@ -34,8 +34,8 @@ public partial class RandomNumberGenerator
     [SupplyParameterFromQuery(Name = "unique")]
     private bool? QueryUnique { get; set; }
     private string Action => L["legacy_8f56e914189c"];
-    private string Title => L["legacy_6831c32bcfe4"];
-    private string Description => L["legacy_595a990f5d78"];
+    private string Title => ToolsL["random_number_generator_title"];
+    private string Description => ToolsL["random_number_generator_lead"];
     private string InputLabel => L["legacy_d9825dc0fc2f"];
     private string MinLabel => L["legacy_5bf471e7b2f9"];
     private string MaxLabel => L["legacy_fee33d9f5fae"];

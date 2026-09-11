@@ -28,8 +28,8 @@ public partial class PasswordGenerator
     [SupplyParameterFromQuery(Name = "symbols")]
     private bool? QuerySymbols { get; set; }
     private string Action => L["legacy_1d1595df3e88"];
-    private string Title => L["legacy_b0afb068c95c"];
-    private string Description => L["legacy_5077a5d9767c"];
+    private string Title => ToolsL["password_generator_page_title"];
+    private string Description => ToolsL["password_generator_lead"];
     private string InputLabel => L["legacy_d9825dc0fc2f"];
     private string LengthLabel => L["legacy_3adb0d7976b8"];
     private string UppercaseLabel => L["legacy_e9280a116a8c"];

@@ -32,9 +32,10 @@ public partial class ChemistryCalculators
         Navigation.Uri.Contains("/dilution-calculator", StringComparison.OrdinalIgnoreCase);
     private string Action =>
         LocalizedUrls.Current($"/tools/{(IsDilution ? "dilution-calculator" : "ph-calculator")}");
-    private string Title => IsDilution ? (L["legacy_4f4c99ad906e"]) : (L["legacy_64e868dce128"]);
+    private string Title =>
+        IsDilution ? (ToolsL["dilution_calculator_title"]) : (ToolsL["ph_calculator_title"]);
     private string Description =>
-        IsDilution ? (L["legacy_f5812f7ff6a4"]) : (L["legacy_f3f397496a70"]);
+        IsDilution ? (ToolsL["dilution_calculator_lead"]) : (ToolsL["ph_calculator_lead"]);
     private string InputLabel => L["legacy_5b6220fefc5c"];
     private string ConcentrationLabel => L["legacy_d71836525f89"];
     private string SubmitLabel => L["legacy_37565a968d31"];

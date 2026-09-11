@@ -19,8 +19,8 @@ public partial class GcdLcmCalculator
     private int? QueryCount { get; set; }
 
     private string Action => L["legacy_a9693a3ca819"];
-    private string Title => L["legacy_5dabcdb613e1"];
-    private string Description => L["legacy_aa4ff8bf9bce"];
+    private string Title => ToolsL["gcd_lcm_calculator_title"];
+    private string Description => ToolsL["gcd_lcm_calculator_lead"];
     private string InputLabel => L["legacy_67b743c4b70b"];
     private string NumbersLabel => L["legacy_67b743c4b70b"];
     private string CountLabel => L["legacy_67b743c4b70b"];

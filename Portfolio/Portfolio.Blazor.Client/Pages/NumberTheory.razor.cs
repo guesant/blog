@@ -21,8 +21,8 @@ public partial class NumberTheory
     [SupplyParameterFromQuery(Name = "limit")]
     private string? QueryLimit { get; set; }
     private string Action => L["legacy_bbd73b253d23"];
-    private string Title => L["legacy_0963092025ad"];
-    private string Description => L["number_theory_description"];
+    private string Title => ToolsL["number_theory_title"];
+    private string Description => ToolsL["number_theory_lead"];
     private string InputLabel => L["legacy_d6b96d7e7072"];
     private string SieveLimitLabel => L["legacy_b86f4c59f284"];
     private string SubmitLabel => L["legacy_53519f340509"];

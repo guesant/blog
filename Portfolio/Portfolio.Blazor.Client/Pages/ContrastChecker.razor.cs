@@ -16,8 +16,8 @@ public partial class ContrastChecker
     [SupplyParameterFromQuery(Name = "background")]
     private string? QueryBackground { get; set; }
     private string Action => L["legacy_8dc841a7631d"];
-    private string Title => L["legacy_aaf5b587b491"];
-    private string Description => L["legacy_765697320a15"];
+    private string Title => ToolsL["contrast_checker_title"];
+    private string Description => ToolsL["contrast_checker_lead"];
     private string ColorsLabel => L["legacy_fb16beca92ab"];
     private string ForegroundLabel => L["legacy_2eb6fd587389"];
     private string BackgroundLabel => L["legacy_cac11bc85975"];

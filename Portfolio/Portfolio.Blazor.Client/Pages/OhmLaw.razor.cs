@@ -24,8 +24,8 @@ public partial class OhmLaw
     [SupplyParameterFromQuery(Name = "p")]
     private string? QueryPower { get; set; }
     private string Action => L["legacy_afe22151ab44"];
-    private string Title => L["legacy_cfa18146b0f7"];
-    private string Description => L["legacy_896563a8c8f0"];
+    private string Title => ToolsL["ohm_law_page_title"];
+    private string Description => ToolsL["ohm_law_lead"];
     private string InputLabel => L["legacy_caeab30bd75f"];
     private string VoltageLabel => L["legacy_0fa2b3e4cbe4"];
     private string CurrentLabel => L["legacy_63919d049b72"];

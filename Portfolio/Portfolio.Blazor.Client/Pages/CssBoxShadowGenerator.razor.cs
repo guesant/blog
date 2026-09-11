@@ -47,8 +47,8 @@ public partial class CssBoxShadowGenerator
     private bool? QueryInset { get; set; }
     private bool _queryInitialized;
     private string Action => L["legacy_abce337d2698"];
-    private string Title => L["legacy_dc31d8a04f79"];
-    private string Description => L["legacy_538477850730"];
+    private string Title => ToolsL["css_box_shadow_generator_title"];
+    private string Description => ToolsL["css_box_shadow_generator_lead"];
     private static string BlurLabel => "blur";
     private static string SpreadLabel => "spread";
     private string ColorLabel => L["legacy_48541bef3bd6"];

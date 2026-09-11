@@ -12,8 +12,8 @@ public partial class CompositionCalculator
     [SupplyParameterFromQuery(Name = "formula")]
     private string? QueryFormula { get; set; }
     private string Action => L["legacy_f82761af13b1"];
-    private string Title => L["legacy_e9eef96ab56f"];
-    private string Description => L["legacy_eda1e418f9a0"];
+    private string Title => ToolsL["composition_calculator_title"];
+    private string Description => ToolsL["composition_calculator_lead"];
     private string Note => L["legacy_ccbeda9455e8"];
     private string InputLabel => L["legacy_5b6220fefc5c"];
     private string FormulaLabel => L["legacy_82c24536a3b2"];

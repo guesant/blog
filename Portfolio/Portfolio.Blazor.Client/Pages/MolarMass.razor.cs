@@ -14,12 +14,12 @@ public partial class MolarMass
     [SupplyParameterFromQuery(Name = "formula")]
     private string? QueryFormula { get; set; }
     private string Action => L["legacy_9d2cd72a69f5"];
-    private string Title => L["legacy_b2464e4168d1"];
-    private string Description => L["legacy_b613bec1a276"];
+    private string Title => ToolsL["molar_mass_title"];
+    private string Description => ToolsL["molar_mass_lead"];
     private string InputLabel => L["legacy_bd3ca9b280a6"];
     private string SubmitLabel => L["legacy_53519f340509"];
     private string ResultLabel => L["legacy_23470bef125e"];
-    private string MolarMassLabel => L["legacy_b2464e4168d1"];
+    private string MolarMassLabel => L["molar_mass_label"];
     private string CompositionLabel => L["legacy_acf22d5a00b1"];
     private string ElementLabel => L["legacy_802482317f1f"];
     private string AtomsLabel => L["legacy_8ef8342700be"];

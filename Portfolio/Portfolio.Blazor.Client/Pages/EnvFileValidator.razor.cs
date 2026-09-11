@@ -14,8 +14,8 @@ public partial class EnvFileValidator
     [SupplyParameterFromQuery(Name = "content")]
     private string? QueryContent { get; set; }
     private string Action => L["legacy_2d6f58ba4827"];
-    private string Title => L["legacy_a1b71a322a5c"];
-    private string Description => L["legacy_b2ac648cd042"];
+    private string Title => ToolsL["env_file_validator_title"];
+    private string Description => ToolsL["env_file_validator_lead"];
     private string InputLabel => L["legacy_c4c61716670f"];
     private string IssuesLabel => L["legacy_6bbce1ac767e"];
     private string NoIssuesLabel => L["legacy_ce032fa503a7"];

@@ -31,15 +31,15 @@ public partial class Sequences
     private string Title =>
         Slug switch
         {
-            "arithmetic-progression" => L["legacy_af87e54ada59"],
-            "geometric-progression" => L["legacy_e7837c69fa54"],
+            "arithmetic-progression" => ToolsL["arithmetic_progression_title"],
+            "geometric-progression" => ToolsL["geometric_progression_title"],
             _ => L["legacy_e267a2bdc933"],
         };
     private string Description =>
         Slug switch
         {
-            "arithmetic-progression" => L["legacy_e4132f7dcfbe"],
-            "geometric-progression" => L["legacy_24eaf52a848a"],
+            "arithmetic-progression" => ToolsL["arithmetic_progression_lead"],
+            "geometric-progression" => ToolsL["geometric_progression_lead"],
             _ => L["legacy_05985e9b53e4"],
         };
     private string InputLabel => L["legacy_31a82eb2550c"];

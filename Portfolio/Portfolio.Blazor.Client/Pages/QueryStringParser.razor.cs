@@ -15,8 +15,8 @@ public partial class QueryStringParser
     [SupplyParameterFromQuery(Name = "query")]
     private string? Query { get; set; }
     private string Action => L["legacy_5e4145127e27"];
-    private string Title => L["legacy_684ac6d61c44"];
-    private string Description => L["legacy_e3363c44144d"];
+    private string Title => ToolsL["query_string_parser_title"];
+    private string Description => ToolsL["query_string_parser_lead"];
     private string ParseLabel => L["legacy_1922ada5500a"];
     private string BuildLabel => L["legacy_488880914467"];
     private string OutputLabel => L["legacy_62f929d726c5"];

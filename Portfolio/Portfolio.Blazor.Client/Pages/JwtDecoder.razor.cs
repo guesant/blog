@@ -12,8 +12,8 @@ public partial class JwtDecoder
     [SupplyParameterFromQuery(Name = "token")]
     private string? QueryToken { get; set; }
     private string Action => L["legacy_66fa5d803a71"];
-    private string Title => L["legacy_d9c95f6c7a5c"];
-    private string Description => L["legacy_af88c17038d4"];
+    private string Title => ToolsL["jwt_decoder_title"];
+    private string Description => ToolsL["jwt_decoder_lead"];
     private string PrivacyNote => L["legacy_aa92bb04b548"];
     private string InputLabel => L["legacy_c4c61716670f"];
     private string DecodeLabel => L["legacy_42acb5571820"];

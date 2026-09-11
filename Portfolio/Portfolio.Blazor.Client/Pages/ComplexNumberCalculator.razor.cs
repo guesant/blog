@@ -21,8 +21,8 @@ public partial class ComplexNumberCalculator
     [SupplyParameterFromQuery(Name = "operation")]
     private string? QueryOperation { get; set; }
     private string Action => L["legacy_d6ee3036ba77"];
-    private string Title => L["legacy_c449c80b2b8f"];
-    private string Description => L["legacy_36fdc49cd419"];
+    private string Title => ToolsL["complex_number_calculator_title"];
+    private string Description => ToolsL["complex_number_calculator_lead"];
     private string Note => L["legacy_3d682cdddbc5"];
     private string InputLabel => L["legacy_6b9251521287"];
     private string OperationLabel => L["legacy_8092cabe63d1"];

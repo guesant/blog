@@ -17,8 +17,8 @@ public partial class Combinatorics
     [SupplyParameterFromQuery(Name = "r")]
     private string? QueryR { get; set; }
     private string Action => L["legacy_ddd25a990b88"];
-    private string Title => L["legacy_e6ea4abc6fa9"];
-    private string Description => L["legacy_f5e7f543966d"];
+    private string Title => ToolsL["combinatorics_title"];
+    private string Description => ToolsL["combinatorics_lead"];
     private string InputLabel => L["legacy_67f93fb28065"];
     private string SubmitLabel => L["legacy_37565a968d31"];
     private string ErrorLabel => L["legacy_a6b892708533"];

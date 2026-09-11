@@ -16,8 +16,8 @@ public partial class ChemistryAmount
     [SupplyParameterFromQuery(Name = "molar-mass")]
     private string? QueryMolarMass { get; set; }
     private string Action => L["legacy_87674d2a6642"];
-    private string Title => L["legacy_4ff6e83f70e1"];
-    private string Description => L["legacy_6552bd96b7d4"];
+    private string Title => ToolsL["moles_calculator_title"];
+    private string Description => ToolsL["moles_calculator_lead"];
     private string InputLabel => L["legacy_5b6220fefc5c"];
     private string MassLabel => L["legacy_885c7112818c"];
     private string MolarMassLabel => L["legacy_81887c406b3b"];

@@ -22,8 +22,11 @@ public partial class Correlation
         LocalizedUrls.Current(
             $"/tools/{(IsRegression ? "linear-regression" : "correlation-calculator")}"
         );
-    private string Title => IsRegression ? (L["legacy_a869bb9b351f"]) : (L["legacy_26f24f00f60c"]);
-    private string Description => L["legacy_cf355a3a6183"];
+    private string Title =>
+        IsRegression
+            ? (ToolsL["linear_regression_title"])
+            : (ToolsL["correlation_calculator_title"]);
+    private string Description => ToolsL["correlation_calculator_lead"];
     private string InputLabel => L["legacy_7ef23c6467bd"];
     private string XLabel => L["legacy_280005dd8f05"];
     private string YLabel => L["legacy_44c6bdd1d76b"];

@@ -13,8 +13,8 @@ public partial class PrimeFactorization
     [SupplyParameterFromQuery(Name = "number")]
     private string? QueryNumber { get; set; }
     private string Action => L["legacy_991937e77d7a"];
-    private string Title => L["legacy_3c454b737d29"];
-    private string Description => L["legacy_15b2b6bad208"];
+    private string Title => ToolsL["prime_factorization_title"];
+    private string Description => ToolsL["prime_factorization_lead"];
     private string InputLabel => L["legacy_b831d42d15e4"];
     private string NumberLabel => L["legacy_4bc3227bbd62"];
     private string ResultLabel => L["legacy_efd3359baf4d"];

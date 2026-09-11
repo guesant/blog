@@ -3,8 +3,8 @@ namespace Portfolio.Blazor.Client.Pages;
 public partial class ImageToBase64
 {
     private string CanonicalPath => RequestPath;
-    private string Title => L["legacy_801b2e10b5e0"];
-    private string Description => L["legacy_c647b4f4faeb"];
+    private string Title => ToolsL["image_to_base64_title"];
+    private string Description => ToolsL["image_to_base64_lead"];
     private string FileLabel => L["legacy_6320d8841a37"];
     private string CharCountLabel => L["legacy_825058327466"];
     private string ApproxSizeLabel => L["legacy_99db525d460f"];

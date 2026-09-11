@@ -16,8 +16,8 @@ public partial class TimestampConverter
     [SupplyParameterFromQuery(Name = "date")]
     private string? QueryDate { get; set; }
     private string Action => L["legacy_8ea136bb42d0"];
-    private string Title => L["legacy_cd9fbcb11d34"];
-    private string Description => L["legacy_3709b96972ef"];
+    private string Title => ToolsL["timestamp_converter_title"];
+    private string Description => ToolsL["timestamp_converter_lead"];
     private string InputLabel => L["legacy_f2f2808523c8"];
     private string TimestampInputLabel => L["legacy_aedfcab3ff4d"];
     private string NowLabel => L["legacy_ab243226f805"];

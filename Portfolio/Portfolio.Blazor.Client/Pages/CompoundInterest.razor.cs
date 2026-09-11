@@ -24,8 +24,8 @@ public partial class CompoundInterest
     [SupplyParameterFromQuery(Name = "contribution")]
     private string? QueryContribution { get; set; }
     private string Action => L["legacy_037d63ab9743"];
-    private string Title => L["legacy_5d57b2162f7c"];
-    private string Description => L["legacy_5805920d0054"];
+    private string Title => ToolsL["compound_interest_page_title"];
+    private string Description => ToolsL["compound_interest_lead"];
     private string InputLabel => L["legacy_5b6220fefc5c"];
     private string PrincipalLabel => L["legacy_e52598d26d1a"];
     private string RateLabel => L["legacy_6825c2556498"];

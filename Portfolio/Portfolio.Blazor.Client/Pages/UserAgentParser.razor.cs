@@ -5,8 +5,8 @@ public partial class UserAgentParser
     private string CanonicalPath => RequestPath;
     private string CurrentUa = "",
         InputUa = "";
-    private string Title => L["user_agent_title"];
-    private string Description => L["user_agent_description"];
+    private string Title => ToolsL["user_agent_parser_page_title"];
+    private string Description => ToolsL["user_agent_parser_lead"];
     private string HeuristicNote => L["user_agent_note"];
     private string CurrentLabel => L["your_user_agent"];
     private string InputLabel => L["user_agent_to_parse"];

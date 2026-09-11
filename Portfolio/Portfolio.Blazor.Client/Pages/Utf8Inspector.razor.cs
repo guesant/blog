@@ -6,8 +6,8 @@ public partial class Utf8Inspector
 {
     private string CanonicalPath => RequestPath;
     private string Input = "";
-    private string Title => L["utf8_title"];
-    private string Description => L["utf8_description"];
+    private string Title => ToolsL["utf8_inspector_page_title"];
+    private string Description => ToolsL["utf8_inspector_lead"];
     private string InputLabel => L["vigenere_input"];
     private string ByteLabel => L["bytes"];
     private string CharacterLabel => L["characters"];

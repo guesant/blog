@@ -20,8 +20,8 @@ public partial class SensibleHeat
     [SupplyParameterFromQuery(Name = "delta")]
     private string? QueryDeltaTemperature { get; set; }
     private string Action => L["legacy_426f7a7cf555"];
-    private string Title => L["legacy_2cb752da9335"];
-    private string Description => L["legacy_9b4758a0dce0"];
+    private string Title => ToolsL["sensible_heat_title"];
+    private string Description => ToolsL["sensible_heat_lead"];
     private string Note => L["legacy_a5c089410c31"];
     private string InputLabel => L["legacy_d9825dc0fc2f"];
     private string SubmitLabel => L["legacy_53519f340509"];

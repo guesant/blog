@@ -23,8 +23,8 @@ public partial class ImageDimensionCalculator
     [SupplyParameterFromQuery(Name = "targetHeight")]
     private int? QueryTargetHeight { get; set; }
     private string Action => L["legacy_a953c5d85114"];
-    private string Title => L["legacy_96ebfb731562"];
-    private string Description => L["legacy_34e68937aa37"];
+    private string Title => ToolsL["image_dimension_calculator_title"];
+    private string Description => ToolsL["image_dimension_calculator_lead"];
     private string OptionalFileLabel => L["legacy_494dcb7851f5"];
     private string OriginalWidthLabel => L["legacy_1b63cae6ba99"];
     private string OriginalHeightLabel => L["legacy_b9b337101126"];

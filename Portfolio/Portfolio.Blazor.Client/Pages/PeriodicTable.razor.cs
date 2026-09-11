@@ -17,8 +17,8 @@ public partial class PeriodicTable
     [SupplyParameterFromQuery(Name = "search")]
     private string? QuerySearch { get; set; }
     private string Action => L["legacy_eb54e023ea16"];
-    private string Title => L["legacy_1d584ca1d979"];
-    private string Description => L["legacy_cfd07d382e2a"];
+    private string Title => ToolsL["periodic_table_title"];
+    private string Description => ToolsL["periodic_table_lead"];
     private string SearchLabel => L["legacy_a6e292290757"];
     private string SearchButton => L["legacy_6bb12bff6f09"];
     private string SeriesNote => L["legacy_2054ceab6cc1"];

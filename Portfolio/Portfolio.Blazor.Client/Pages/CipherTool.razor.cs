@@ -20,8 +20,8 @@ public partial class CipherTool
     [SupplyParameterFromQuery(Name = "operation")]
     private string? QueryOperation { get; set; }
     private string Action => L["legacy_99f33be40dd2"];
-    private string Title => L["legacy_e59a04d80fff"];
-    private string Description => L["legacy_9bc5b47b831b"];
+    private string Title => ToolsL["cipher_tool_title"];
+    private string Description => ToolsL["cipher_tool_lead"];
     private string InputLabel => L["legacy_2c18cd904ab1"];
     private string OutputLabel => L["legacy_5271811ebe62"];
     private string ShiftLabel => L["legacy_afa1ac95c295"];

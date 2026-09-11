@@ -50,8 +50,8 @@ public partial class PercentageCalculator
     private string? QueryChangeTo { get; set; }
 
     private string Action => L["legacy_f022b9812a3b"];
-    private string Title => L["legacy_d14cf9722974"];
-    private string Description => L["percentage_full_description"];
+    private string Title => ToolsL["percentage_calculator_title"];
+    private string Description => ToolsL["percentage_calculator_lead"];
     private string InputLabel => L["legacy_d6b96d7e7072"];
     private string SubmitLabel => L["legacy_53519f340509"];
     private string ErrorLabel => L["legacy_54c7abf41302"];

@@ -24,19 +24,19 @@ public partial class TextCodec
     private string Title =>
         Slug switch
         {
-            "base64-encoder" => L["legacy_d7e51bc67cdd"],
-            "hex-text-codec" => L["legacy_c24fd51f650b"],
-            "binary-text-codec" => L["legacy_e78cb3eb33c1"],
-            "html-entity-codec" => L["legacy_729bd2f4fc1a"],
+            "base64-encoder" => ToolsL["base64_encoder_title"],
+            "hex-text-codec" => ToolsL["hex_text_codec_page_title"],
+            "binary-text-codec" => ToolsL["binary_text_codec_page_title"],
+            "html-entity-codec" => ToolsL["html_entity_codec_page_title"],
             _ => L["legacy_c0d420f0d314"],
         };
     private string Description =>
         Slug switch
         {
-            "base64-encoder" => L["legacy_ffb1f7f03abf"],
-            "hex-text-codec" => L["legacy_7f9239699170"],
-            "binary-text-codec" => L["legacy_14e28fb3896f"],
-            "html-entity-codec" => L["legacy_db904b48a5b4"],
+            "base64-encoder" => ToolsL["base64_encoder_lead"],
+            "hex-text-codec" => ToolsL["hex_text_codec_lead"],
+            "binary-text-codec" => ToolsL["binary_text_codec_lead"],
+            "html-entity-codec" => ToolsL["html_entity_codec_lead"],
             _ => L["legacy_72b6d8f8fae7"],
         };
     private string InputLabel => L["legacy_c4c61716670f"];

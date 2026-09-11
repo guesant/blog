@@ -5,8 +5,8 @@ public partial class ViewportInfo
     private string CanonicalPath => RequestPath;
     private ViewportSnapshot Info = new();
     private IJSObjectReference? Module;
-    private string Title => L["viewport_title"];
-    private string Description => L["viewport_description"];
+    private string Title => ToolsL["viewport_info_page_title"];
+    private string Description => ToolsL["viewport_info_lead"];
     private string ViewportWidthLabel => L["viewport_width"];
     private string ViewportHeightLabel => L["viewport_height"];
     private string ScreenWidthLabel => L["screen_width"];

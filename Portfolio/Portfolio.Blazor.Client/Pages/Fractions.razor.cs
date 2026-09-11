@@ -24,8 +24,8 @@ public partial class Fractions
     [SupplyParameterFromQuery(Name = "operation")]
     private string? QueryOperation { get; set; }
     private string Action => L["legacy_b2a9e5d206d2"];
-    private string Title => L["legacy_0a1d87726677"];
-    private string Description => L["legacy_0111302696f7"];
+    private string Title => ToolsL["fractions_title"];
+    private string Description => ToolsL["fractions_lead"];
     private string InputLabel => L["legacy_cf8b4a6ab201"];
     private string FirstLabel => L["legacy_07724ee75734"];
     private string SecondLabel => L["legacy_98a24d1219f9"];

@@ -15,8 +15,8 @@ public partial class ChemicalEquationBalancer
     [SupplyParameterFromQuery(Name = "equation")]
     private string? QueryEquation { get; set; }
     private string Action => L["legacy_2ca4c29bb9f9"];
-    private string Title => L["legacy_0843a7a3eac8"];
-    private string Description => L["legacy_75e85c5ece00"];
+    private string Title => ToolsL["chemical_equation_balancer_title"];
+    private string Description => ToolsL["chemical_equation_balancer_lead"];
     private string InputLabel => L["legacy_3dbfde4d48d6"];
     private string TableLabel => L["legacy_90020d6d564f"];
     private string ElementLabel => L["legacy_9d4c071bfb3b"];

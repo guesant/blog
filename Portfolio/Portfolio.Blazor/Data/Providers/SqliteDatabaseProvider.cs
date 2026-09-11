@@ -41,6 +41,16 @@ public sealed class SqliteDatabaseProvider(DatabaseOptions options) : IDatabaseP
         builder.AddInterceptors(new PortfolioAdminConnectionInterceptor());
     }
 
+    public void ConfigurePublicRead(DbContextOptionsBuilder builder) =>
+        builder.UseSqlite(
+            new SqliteConnectionStringBuilder
+            {
+                DataSource = options.SqlitePath,
+                Mode = SqliteOpenMode.ReadOnly,
+                Cache = SqliteCacheMode.Shared,
+            }.ToString()
+        );
+
     public Task<ContentFingerprint> ReadFingerprintAsync(
         CancellationToken cancellationToken = default
     )

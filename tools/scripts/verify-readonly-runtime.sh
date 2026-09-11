@@ -17,6 +17,27 @@ grep -q 'Mode = SqliteOpenMode.ReadOnly' Portfolio/Portfolio.Blazor/Data/Provide
     fail "the SQLite provider must open public connections read-only"
 grep -q 'default_transaction_read_only=on' Portfolio/Portfolio.Blazor/Data/Providers/PostgresDatabaseProvider.cs ||
     fail "the PostgreSQL provider must open public connections with default_transaction_read_only=on"
+awk '/ConfigurePublicRead/,/;$/' Portfolio/Portfolio.Blazor/Data/Providers/SqliteDatabaseProvider.cs >/tmp/readonly-sqlite-public
+grep -q 'Mode = SqliteOpenMode.ReadOnly' /tmp/readonly-sqlite-public ||
+    fail "the SQLite public context must open the database read-only"
+if grep -qE 'AddInterceptors|ReadWrite' /tmp/readonly-sqlite-public; then
+    fail "the SQLite public context must not attach writers or open read-write"
+fi
+awk '/ConfigurePublicRead/,/;$/' Portfolio/Portfolio.Blazor/Data/Providers/PostgresDatabaseProvider.cs >/tmp/readonly-postgres-public
+grep -q 'default_transaction_read_only=on' /tmp/readonly-postgres-public ||
+    fail "the PostgreSQL public context must run read-only transactions"
+public_context=Portfolio/Portfolio.Blazor/Data/PortfolioPublicDbContext.cs
+grep -q 'QueryTrackingBehavior.NoTracking' "$public_context" || fail "the public context must be no-tracking"
+grep -q 'override int SaveChanges' "$public_context" || fail "the public context must override SaveChanges"
+grep -q 'override Task<int> SaveChangesAsync' "$public_context" || fail "the public context must override SaveChangesAsync"
+if grep -q 'base.SaveChanges' "$public_context"; then
+    fail "the public context must not reach the base SaveChanges"
+fi
+public_read_files="$(find Portfolio/Portfolio.Blazor/PublicQueries -name '*.cs' 2>/dev/null || true) Portfolio/Portfolio.Blazor/PublicSiteContentProvider.cs Portfolio/Portfolio.Blazor/PublicKnowledgeGraphProvider.cs"
+# shellcheck disable=SC2086
+if grep -En 'SaveChanges|ExecuteUpdate|ExecuteDelete|\.Update\(|\.AddAsync\(|\.AddRange\(|\.RemoveRange\(' $public_read_files; then
+    fail "public read code must not write"
+fi
 
 # NOTE: since the admin panel's EF Core layer needs to write the DB (and WAL
 # mode needs sidecar files alongside it), the SQLite mount is a directory

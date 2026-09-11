@@ -162,6 +162,12 @@ static async Task<HarvestResult> Harvest(Dictionary<string, string?> settings)
         );
     }
 
+    var publicFactory = provider.GetRequiredService<IDbContextFactory<PortfolioPublicDbContext>>();
+    await using (var publicContext = await publicFactory.CreateDbContextAsync())
+    {
+        AssertPublicModel(publicContext, database.Kind.ToString());
+    }
+
     var before = await database.ReadFingerprintAsync();
     await using (var context = await factory.CreateDbContextAsync())
     {
@@ -184,6 +190,56 @@ static async Task<HarvestResult> Harvest(Dictionary<string, string?> settings)
     );
 
     return new HarvestResult(documents, snapshots);
+}
+
+static void AssertPublicModel(PortfolioPublicDbContext context, string engine)
+{
+    foreach (var entityType in context.Model.GetEntityTypes())
+    {
+        var filtered =
+            entityType.FindProperty("Hidden") is not null
+            || entityType.ClrType == typeof(Portfolio.Blazor.Data.Entities.CreditEntry);
+        Check(
+            !filtered || entityType.GetDeclaredQueryFilters().Count > 0,
+            $"{engine}: {entityType.ClrType.Name} must carry a public visibility filter"
+        );
+    }
+    Check(
+        context.ChangeTracker.QueryTrackingBehavior == QueryTrackingBehavior.NoTracking,
+        $"{engine}: the public context must be no-tracking"
+    );
+    Check(
+        context.Projects.Count() == 2,
+        $"{engine}: the project filter must hide hidden and nda rows"
+    );
+    Check(
+        context.Projects.IgnoreQueryFilters().Count() == 4,
+        $"{engine}: the seed must hold four projects"
+    );
+    Check(
+        !context.Resources.Any(resource =>
+            resource.Slug.StartsWith("hidden-") || resource.Slug.StartsWith("draft-")
+        ),
+        $"{engine}: the resource filter must hide hidden and draft rows"
+    );
+    Check(
+        !context.CaseStudies.Any(caseStudy => caseStudy.Slug.StartsWith("nda-")),
+        $"{engine}: the case study filter must hide nda rows"
+    );
+    Check(
+        context.CreditEntries.All(credit => credit.Active),
+        $"{engine}: the credit filter must hide inactive rows"
+    );
+    var threw = false;
+    try
+    {
+        context.SaveChanges();
+    }
+    catch (InvalidOperationException)
+    {
+        threw = true;
+    }
+    Check(threw, $"{engine}: the public context must refuse SaveChanges");
 }
 
 static void AssertContent(HarvestResult result, string engine)

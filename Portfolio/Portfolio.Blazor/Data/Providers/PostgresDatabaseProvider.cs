@@ -35,27 +35,35 @@ public sealed class PostgresDatabaseProvider(DatabaseOptions options) : IDatabas
             npgsql => npgsql.MigrationsAssembly("Portfolio.Blazor.Database.Postgres")
         );
 
+    public void ConfigurePublicRead(DbContextOptionsBuilder builder) =>
+        builder.UseNpgsql(
+            new NpgsqlConnectionStringBuilder(options.PostgresReadConnectionString)
+            {
+                Options = "-c default_transaction_read_only=on",
+            }.ToString()
+        );
+
     public async Task<ContentFingerprint> ReadFingerprintAsync(
         CancellationToken cancellationToken = default
     )
     {
-        var connection = await OpenReadOnlyConnectionAsync(cancellationToken);
-        await using (connection.ConfigureAwait(false))
+        var context = new PortfolioPublicDbContext(ReadOptions());
+        await using (context.ConfigureAwait(false))
         {
-            var command = connection.CreateCommand();
-            await using (command.ConfigureAwait(false))
-            {
-                command.CommandText =
-                    "select coalesce(max(version), 0), coalesce(count(*), 0) from content_revisions";
-                var reader = await command.ExecuteReaderAsync(cancellationToken);
-                await using (reader.ConfigureAwait(false))
-                {
-                    return await reader.ReadAsync(cancellationToken)
-                        ? new ContentFingerprint(reader.GetInt64(0), reader.GetInt64(1))
-                        : new ContentFingerprint(0, 0);
-                }
-            }
+            var version = await context.ContentRevisions.MaxAsync(
+                revision => (long?)revision.Version,
+                cancellationToken
+            );
+            var count = await context.ContentRevisions.LongCountAsync(cancellationToken);
+            return new ContentFingerprint(version ?? 0, count);
         }
+    }
+
+    private DbContextOptions<PortfolioPublicDbContext> ReadOptions()
+    {
+        var builder = new DbContextOptionsBuilder<PortfolioPublicDbContext>();
+        ConfigurePublicRead(builder);
+        return builder.Options;
     }
 
     public Task SignalContentChangedAsync(

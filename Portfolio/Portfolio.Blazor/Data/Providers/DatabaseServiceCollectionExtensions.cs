@@ -25,6 +25,10 @@ public static class DatabaseServiceCollectionExtensions
             (provider, builder) =>
                 provider.GetRequiredService<IDatabaseProvider>().ConfigureAdmin(builder)
         );
+        services.AddDbContextFactory<PortfolioPublicDbContext>(
+            (provider, builder) =>
+                provider.GetRequiredService<IDatabaseProvider>().ConfigurePublicRead(builder)
+        );
         services.AddSingleton<IPublicSiteContentProvider, PublicSiteContentProvider>();
         services.AddSingleton<IPublicKnowledgeGraphProvider, PublicKnowledgeGraphProvider>();
         return services;

@@ -15,6 +15,8 @@ public interface IDatabaseProvider
 
     void ConfigureAdmin(DbContextOptionsBuilder builder);
 
+    void ConfigurePublicRead(DbContextOptionsBuilder builder);
+
     Task<ContentFingerprint> ReadFingerprintAsync(CancellationToken cancellationToken = default);
 
     Task SignalContentChangedAsync(

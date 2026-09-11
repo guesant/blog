@@ -3,7 +3,11 @@ using Portfolio.Blazor.Data.Entities;
 
 namespace Portfolio.Blazor.Data;
 
-public sealed class PortfolioAdminDbContext(DbContextOptions<PortfolioAdminDbContext> options)
+// IMPORTANT: this is the only context the public site reads through. The query filters applied in
+// PublicVisibilityFilters are what keep hidden, NDA, non-public and inactive rows off the public
+// site, by construction; disabling those filters is forbidden in the runtime by
+// tools/scripts/verify-hidden-content.sh, and the connection is opened read-only by the provider.
+public sealed class PortfolioPublicDbContext(DbContextOptions<PortfolioPublicDbContext> options)
     : DbContext(options)
 {
     public DbSet<Project> Projects => Set<Project>();
@@ -57,11 +61,28 @@ public sealed class PortfolioAdminDbContext(DbContextOptions<PortfolioAdminDbCon
     public DbSet<PageFeaturedCase> PageFeaturedCases => Set<PageFeaturedCase>();
     public DbSet<PageFeaturedProject> PageFeaturedProjects => Set<PageFeaturedProject>();
     public DbSet<PageFeaturedWriting> PageFeaturedWritings => Set<PageFeaturedWriting>();
+    public DbSet<RelationType> RelationTypes => Set<RelationType>();
+    public DbSet<ContentRelation> ContentRelations => Set<ContentRelation>();
+    public DbSet<AuditLogEntry> AuditLog => Set<AuditLogEntry>();
     public DbSet<ContentRevision> ContentRevisions => Set<ContentRevision>();
 
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder) =>
         PortfolioModel.ConfigureConventions(configurationBuilder);
 
-    protected override void OnModelCreating(ModelBuilder modelBuilder) =>
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) =>
+        optionsBuilder.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
         PortfolioModel.Configure(modelBuilder, Database);
+        PublicVisibilityFilters.Apply(modelBuilder);
+    }
+
+    public override int SaveChanges(bool acceptAllChangesOnSuccess) =>
+        throw new InvalidOperationException("The public context is read-only.");
+
+    public override Task<int> SaveChangesAsync(
+        bool acceptAllChangesOnSuccess,
+        CancellationToken cancellationToken = default
+    ) => throw new InvalidOperationException("The public context is read-only.");
 }

@@ -50,9 +50,9 @@
                 <SiteSection Icon="briefcase" Id="work"
                     Region="work"
                     HeadingId="work-heading"
-                    Label="@Field("workEyebrow", L["legacy_94f205b8bbf6"])"
-                    Title="@Field("workTitle", L["legacy_3dc269cea284"])"
-                    Description="@Field("workDescription", L["legacy_f45020ee2810"])"
+                    Label="@Field("workEyebrow")"
+                    Title="@Field("workTitle")"
+                    Description="@Field("workDescription")"
                     ActionHref="@LocalizedPath("cases")"
                     ActionLabel="@(L["legacy_d3df157d8d7c"])">
                     <SiteGrid>
@@ -96,9 +96,9 @@
                 <SiteSection Icon="folder-git-2" Id="projects"
                     Region="projects"
                     HeadingId="projects-heading"
-                    Label="@Field("projectsEyebrow", L["legacy_ce215081cab3"])"
-                    Title="@Field("projectsTitle", L["legacy_2c505faad45c"])"
-                    Description="@Field("projectsDescription", L["legacy_9cfc8dff64f5"])"
+                    Label="@Field("projectsEyebrow")"
+                    Title="@Field("projectsTitle")"
+                    Description="@Field("projectsDescription")"
                     ActionHref="@LocalizedPath("projects")"
                     ActionLabel="@(L["legacy_825bf44525d5"])">
                     <SiteGrid>
@@ -133,7 +133,7 @@
     }
     else if (Kind == PageKind.About)
     {
-        <SiteHero Title="@Field("title", L["legacy_232fee6c4e06"])"
+        <SiteHero Title="@Field("title")"
             Lead="@Field("lead", Description)"
             BackHref="@(L["legacy_0607643fd42c"])"
             BackLabel="@(L["legacy_ddc150008e2f"])">
@@ -234,59 +234,59 @@
     }
     else if (Kind == PageKind.License)
     {
-        <SiteHero Title="@Field("title", L["legacy_b820b3234c82"])"
+        <SiteHero Title="@Field("title")"
             Lead="@Description"
             BackHref="@(L["legacy_0607643fd42c"])"
             BackLabel="@(L["legacy_ddc150008e2f"])" />
         <SiteSection Region="license"
             HeadingId="license-heading"
-            Label="@Field("section_label", L["legacy_2cfb4fecc6f5"])"
-            Title="@Field("section_title", L["legacy_793466b375d6"])">
+            Label="@Field("section_label")"
+            Title="@Field("section_title")">
             <SiteGrid>
-                @foreach (var item in LicenseEntries) { <SiteGridColumn>
+                @foreach (var item in LicenseEntries.Where(entry => !string.IsNullOrWhiteSpace(Field(entry.Body)))) { <SiteGridColumn>
                     <SiteCard Class="h-100">
                         <SiteHeading Level="3"
-                            Visual="5">@Field(item.Heading, item.FallbackHeading)</SiteHeading>
-                            <SiteText Variant="SiteTextVariant.Meta">@Field(item.Body, item.FallbackBody)</SiteText>
+                            Visual="5">@Field(item.Heading)</SiteHeading>
+                            <SiteText Variant="SiteTextVariant.Meta">@Field(item.Body)</SiteText>
                         </SiteCard>
                 </SiteGridColumn> }
             </SiteGrid>
         </SiteSection>
-        <SiteText>@Field("contact", L["legacy_c445d2e3965f"])</SiteText>
+        @if (!string.IsNullOrWhiteSpace(Field("contact"))) { <SiteText>@Field("contact")</SiteText> }
         <ContactChannels Profiles="@(Snapshot?.Chrome.Site.ContactProfiles ?? [])"
             EmailChallenge="@Snapshot?.Chrome.Site.ProtectedEmail"
             EmailAvailable="@(Snapshot?.Chrome.Site.ContactAvailable == true)" />
     }
     else
     {
-        <SiteHero Title="@Field("title", L["legacy_efc6c5d00b30"])"
+        <SiteHero Title="@Field("title")"
             Lead="@Description"
             BackHref="@(L["legacy_0607643fd42c"])"
             BackLabel="@(L["legacy_ddc150008e2f"])" />
         <SiteSection Region="follow"
             HeadingId="follow-heading"
-            Label="@(L["legacy_ed4d47deeecb"])"
-            Title="@(L["legacy_54d4fe5cc672"])">
+            Label="@Field("section_label")"
+            Title="@Field("section_title")">
             <SiteGrid>
-                @foreach (var item in FollowEntries)
+                @foreach (var item in FollowEntries.Where(entry => !string.IsNullOrWhiteSpace(Field(entry.Title))))
                 {
                     <SiteGridColumn>
                         @if (string.IsNullOrWhiteSpace(item.Url))
                         {
                             <SiteCard Class="h-100">
                                 <SiteHeading Level="3"
-                                    Visual="5">@Field(item.Title, item.FallbackTitle)</SiteHeading>
-                                <SiteText Variant="SiteTextVariant.Meta">@Field(item.Description, item.FallbackDescription)</SiteText>
+                                    Visual="5">@Field(item.Title)</SiteHeading>
+                                <SiteText Variant="SiteTextVariant.Meta">@Field(item.Description)</SiteText>
                             </SiteCard>
                         }
                         else
                         {
                             <SiteClickableCard Class="h-100"
                                 Href="@item.Url"
-                                Title="@Field(item.Title, item.FallbackTitle)"
+                                Title="@Field(item.Title)"
                                 TitleClass="h5"
                                 HeadingLevel="3">
-                                <SiteText Variant="SiteTextVariant.Meta">@Field(item.Description, item.FallbackDescription)</SiteText>
+                                <SiteText Variant="SiteTextVariant.Meta">@Field(item.Description)</SiteText>
                             </SiteClickableCard>
                         }
                     </SiteGridColumn>
@@ -295,14 +295,14 @@
         </SiteSection>
         <SiteSection Region="follow-future"
             HeadingId="follow-future-heading"
-            Label="@(L["legacy_044ada622aeb"])"
-            Title="@(L["legacy_92dca3e0c96d"])">
+            Label="@Field("future_label")"
+            Title="@Field("future_title")">
             <SiteGrid>
-                @foreach (var item in FutureFollowEntries) { <SiteGridColumn>
-                    <SiteCard Label="@(L["legacy_adff4e85796c"])"
+                @foreach (var item in FutureFollowEntries.Where(entry => !string.IsNullOrWhiteSpace(Field(entry.Title)))) { <SiteGridColumn>
+                    <SiteCard Label="@Field("planned_label")"
                         Class="h-100"><SiteHeading Level="3"
-                            Visual="5">@item.FallbackTitle</SiteHeading>
-                                <SiteText Variant="SiteTextVariant.Meta">@Field(item.DescriptionKey, item.FallbackDescription)</SiteText>
+                            Visual="5">@Field(item.Title)</SiteHeading>
+                                <SiteText Variant="SiteTextVariant.Meta">@Field(item.Description)</SiteText>
                             </SiteCard>
                 </SiteGridColumn> }
             </SiteGrid>

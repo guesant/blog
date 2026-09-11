@@ -40,18 +40,18 @@ public partial class InformationalPages
                 }.Where(value => !string.IsNullOrWhiteSpace(value))
             ),
             PageKind.Now => L["legacy_ab243226f805"],
-            PageKind.License => Field("title", L["legacy_b820b3234c82"]),
-            PageKind.Follow => Field("title", L["legacy_efc6c5d00b30"]),
-            _ => Field("title", L["legacy_232fee6c4e06"]),
+            PageKind.License => Field("title"),
+            PageKind.Follow => Field("title"),
+            _ => Field("title"),
         };
     private string Description =>
         Kind switch
         {
-            PageKind.Portfolio => Field("heroExperience", L["legacy_77e39cb4d5ee"]),
+            PageKind.Portfolio => Field("heroExperience"),
             PageKind.Now => L["legacy_95867724f45f"],
-            PageKind.Follow => Field("intro", L["legacy_2ae2bc4c964a"]),
-            PageKind.License => Field("description", L["legacy_b3494f1adafc"]),
-            _ => Field("description", L["legacy_0c7acd95d960"]),
+            PageKind.Follow => Field("intro"),
+            PageKind.License => Field("description"),
+            _ => Field("description"),
         };
     private bool HasPortfolioWork =>
         Snapshot?.FeaturedCases is { Count: > 0 }
@@ -174,54 +174,27 @@ public partial class InformationalPages
             ("ouvindo", L["listening_to"]),
             ("assistindo", L["watching"]),
         ];
-    private IReadOnlyList<(
-        string Heading,
-        string Body,
-        string FallbackHeading,
-        string FallbackBody
-    )> LicenseEntries =>
+    private static IReadOnlyList<(string Heading, string Body)> LicenseEntries =>
         [
-            ("code_heading", "code_body", L["legacy_5a29787b1103"], L["legacy_ca36a0155739"]),
-            ("content_heading", "content_body", L["legacy_9982b77cef8e"], L["legacy_a99741c3fe79"]),
-            ("ai_heading", "ai_body", L["legacy_35ecdd2d1000"], L["legacy_37c48d8345f3"]),
+            ("code_heading", "code_body"),
+            ("content_heading", "content_body"),
+            ("ai_heading", "ai_body"),
         ];
-    private IReadOnlyList<(
-        string Title,
-        string Description,
-        string? Url,
-        string FallbackTitle,
-        string FallbackDescription
-    )> FollowEntries =>
+    private IReadOnlyList<(string Title, string Description, string? Url)> FollowEntries =>
         [
-            ("rss_title", "rss_description", L["legacy_362d5aad99f1"], "RSS", "RSS feed"),
-            ("atom_title", "atom_description", L["legacy_eabac209b499"], "Atom", "Atom feed"),
-            (
-                "jsonfeed_title",
-                "jsonfeed_description",
-                L["legacy_02f8bdc0b350"],
-                "JSON feed",
-                "JSON feed"
-            ),
-            ("api_title", "api_description", "/api/v1/findings", "API", "read-only query API"),
-            ("sitemap_title", "sitemap_description", "/sitemap.xml", "sitemap", "public sitemap"),
-            ("robots_title", "robots_description", "/robots.txt", "robots.txt", "crawler policy"),
-            (
-                "webfinger_title",
-                "webfinger_description",
-                null,
-                "WebFinger",
-                "account discovery for compatible clients"
-            ),
+            ("rss_title", "rss_description", L["legacy_362d5aad99f1"]),
+            ("atom_title", "atom_description", L["legacy_eabac209b499"]),
+            ("jsonfeed_title", "jsonfeed_description", L["legacy_02f8bdc0b350"]),
+            ("api_title", "api_description", "/api/v1/findings"),
+            ("sitemap_title", "sitemap_description", "/sitemap.xml"),
+            ("robots_title", "robots_description", "/robots.txt"),
+            ("webfinger_title", "webfinger_description", null),
         ];
-    private IReadOnlyList<(
-        string DescriptionKey,
-        string FallbackTitle,
-        string FallbackDescription
-    )> FutureFollowEntries =>
+    private static IReadOnlyList<(string Title, string Description)> FutureFollowEntries =>
         [
-            ("activitypub_description", "ActivityPub", L["activitypub_fallback"]),
-            ("websub_description", "WebSub", L["websub_fallback"]),
-            ("webmention_description", "Webmention", L["webmention_fallback"]),
+            ("activitypub_title", "activitypub_description"),
+            ("websub_title", "websub_description"),
+            ("webmention_title", "webmention_description"),
         ];
 
     private static string LocalizedUrl(string url)

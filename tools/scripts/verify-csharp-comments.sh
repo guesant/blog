@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 set -eu
 
-projects="Portfolio/Portfolio.Blazor.Client Portfolio/Portfolio.Blazor.Core Portfolio/Portfolio.Blazor.Core.Tests Portfolio/Portfolio.Blazor.Sbom Portfolio/Portfolio.Blazor.Snapshot Portfolio/Portfolio.Blazor Portfolio/Portfolio.Blazor.UI"
+projects="Portfolio/Portfolio.Blazor.Client Portfolio/Portfolio.Blazor.Core Portfolio/Portfolio.Blazor.Core.Tests Portfolio/Portfolio.Blazor.Data.Tests Portfolio/Portfolio.Blazor.Sbom Portfolio/Portfolio.Blazor.Snapshot Portfolio/Portfolio.Blazor Portfolio/Portfolio.Blazor.UI"
 [ -d Portfolio/Portfolio.Blazor.Stories ] && projects="$projects Portfolio/Portfolio.Blazor.Stories"
 
 matches="$(find $projects -type f \( -name '*.cs' -o -name '*.razor' \) -not -path '*/bin/*' -not -path '*/obj/*' -print0 | xargs -0 awk '

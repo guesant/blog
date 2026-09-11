@@ -11,6 +11,7 @@
     "Portfolio/Portfolio.Blazor.Client",
     "Portfolio/Portfolio.Blazor.Core",
     "Portfolio/Portfolio.Blazor.Core.Tests",
+    "Portfolio/Portfolio.Blazor.Data.Tests",
     "Portfolio/Portfolio.Blazor.Sbom",
     "Portfolio/Portfolio.Blazor.Snapshot",
     "Portfolio/Portfolio.Blazor",
@@ -20,7 +21,8 @@
     "**/bin/**",
     "**/obj/**",
     "**/*.stories.razor",
-    "**/Portfolio.Blazor.Database/**"
+    "**/Portfolio.Blazor.Database/**",
+    "**/Portfolio.Blazor.Data.Tests/Seed.cs"
   ],
   "ignoreCase": true,
   "reporters": [

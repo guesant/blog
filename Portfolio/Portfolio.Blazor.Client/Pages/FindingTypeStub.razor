@@ -54,6 +54,7 @@
     else
     {
         <SiteListingShell HasResults="@(PagedFindings.Count > 0)"
+            Summary="@ResultsSummary"
             CurrentPage="@CurrentPage"
             TotalPages="@PageCount"
             PaginationLabel="@(L["legacy_ce41390e654d"])"

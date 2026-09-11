@@ -7,7 +7,7 @@ compose := "docker compose" + env_file + " -f .docker/compose.yaml"
 compose_dev := compose + " -f .docker/compose.dev.yaml"
 compose_pg := compose_dev + " -f .docker/compose.postgres.yaml"
 docker_run := compose + " run --rm --entrypoint sh web -lc"
-playwright_image := "mcr.microsoft.com/playwright@sha256:5b8f294aff9041b7191c34a4bab3ac270157a28774d4b0660e9743297b697e48"
+tools_run := compose_dev + " run --rm tools sh -lc"
 
 default: status
 
@@ -61,19 +61,22 @@ test-data-postgres:
     {{compose_pg}} up -d --wait postgres
     {{compose_pg}} run --rm -e NUGET_PACKAGES=/src/.nuget-cache --entrypoint sh web -lc 'cd /src && dotnet run --project src/Portfolio/Portfolio.Blazor.Data.Tests/Portfolio.Blazor.Data.Tests.csproj --no-restore'
 
-check: format lint comments duplication duplication-razor build test test-data audit schema tokens ui-imports resx-keys hardcoded-text composition verify-stories vrt
+check: tools-build format lint comments duplication duplication-razor build test test-data audit schema tokens ui-imports resx-keys hardcoded-text composition verify-stories vrt
+
+tools-build:
+    {{compose_dev}} build tools
 
 format:
-    docker run --rm --user 1000:1000 -v "${PWD}:/workspace:ro" -w /workspace node@sha256:6642ef280aebc09c4541bee0b15c9f89f0f3f3c247ddee79ae1d37eddfdcbbaa sh -lc 'FORMAT_CHECK=1 node tools/scripts/format-razor.mjs && FORMAT_CHECK=1 node tools/scripts/format-razor-attributes.mjs'
+    {{tools_run}} 'FORMAT_CHECK=1 node tools/scripts/format-razor.mjs && FORMAT_CHECK=1 node tools/scripts/format-razor-attributes.mjs'
     {{docker_run}} 'dotnet tool restore >/dev/null && HOME=/tmp dotnet csharpier check src/Portfolio'
-    docker run --rm --user 1000:1000 -v "${PWD}:/workspace:ro" -w /workspace node@sha256:6642ef280aebc09c4541bee0b15c9f89f0f3f3c247ddee79ae1d37eddfdcbbaa sh -lc 'mkdir -p /tmp/quality-tools && cp tools/quality-tools/package.json tools/quality-tools/package-lock.json /tmp/quality-tools/ && npm ci --prefix /tmp/quality-tools --ignore-scripts --no-audit --no-fund >/dev/null && /tmp/quality-tools/node_modules/.bin/prettier --check "src/Portfolio/Portfolio.Blazor*/**/*.{css,js,ts,html}" "tools/scripts/*.mjs"'
-    docker run --rm -v "${PWD}:/workspace:ro" -w /workspace mvdan/shfmt:v3 -i 4 -ci -d tools/scripts
+    {{tools_run}} 'prettier --config .config/prettierrc.json --ignore-path .config/prettierignore --ignore-path .gitignore --check "src/Portfolio/Portfolio.Blazor*/**/*.{css,js,ts,html}" "tools/scripts/*.mjs"'
+    {{tools_run}} 'shfmt -i 4 -ci -d tools/scripts'
 
 format-fix:
-    docker run --rm --user 1000:1000 -v "${PWD}:/workspace" -w /workspace node@sha256:6642ef280aebc09c4541bee0b15c9f89f0f3f3c247ddee79ae1d37eddfdcbbaa sh -lc 'node tools/scripts/format-razor.mjs && node tools/scripts/format-razor-attributes.mjs'
+    {{tools_run}} 'node tools/scripts/format-razor.mjs && node tools/scripts/format-razor-attributes.mjs'
     {{docker_run}} 'dotnet tool restore >/dev/null && HOME=/tmp dotnet csharpier format src/Portfolio'
-    docker run --rm --user 1000:1000 -v "${PWD}:/workspace" -w /workspace node@sha256:6642ef280aebc09c4541bee0b15c9f89f0f3f3c247ddee79ae1d37eddfdcbbaa sh -lc 'mkdir -p /tmp/quality-tools && cp tools/quality-tools/package.json tools/quality-tools/package-lock.json /tmp/quality-tools/ && npm ci --prefix /tmp/quality-tools --ignore-scripts --no-audit --no-fund >/dev/null && /tmp/quality-tools/node_modules/.bin/prettier --write "src/Portfolio/Portfolio.Blazor*/**/*.{css,js,ts,html}" "tools/scripts/*.mjs"'
-    docker run --rm -v "${PWD}:/workspace" -w /workspace mvdan/shfmt:v3 -i 4 -ci -w tools/scripts
+    {{tools_run}} 'prettier --config .config/prettierrc.json --ignore-path .config/prettierignore --ignore-path .gitignore --write "src/Portfolio/Portfolio.Blazor*/**/*.{css,js,ts,html}" "tools/scripts/*.mjs"'
+    {{tools_run}} 'shfmt -i 4 -ci -w tools/scripts'
 
 lint:
     {{docker_run}} 'dotnet format src/Portfolio.Blazor.slnx analyzers --verify-no-changes --no-restore --severity warn --verbosity minimal && dotnet build src/Portfolio.Blazor.slnx --configuration Release --no-restore --nologo'
@@ -82,10 +85,10 @@ comments:
     {{docker_run}} 'sh /src/tools/scripts/verify-csharp-comments.sh'
 
 duplication:
-    docker run --rm --user 1000:1000 -v "${PWD}:/workspace:ro" -w /workspace node@sha256:6642ef280aebc09c4541bee0b15c9f89f0f3f3c247ddee79ae1d37eddfdcbbaa sh -lc 'mkdir -p /tmp/quality-tools && cp tools/quality-tools/package.json tools/quality-tools/package-lock.json /tmp/quality-tools/ && npm ci --prefix /tmp/quality-tools --ignore-scripts --no-audit --no-fund >/dev/null && /tmp/quality-tools/node_modules/.bin/jscpd --config jscpd.json --format csharp'
+    {{tools_run}} 'jscpd --config .config/jscpd.json --format csharp'
 
 duplication-razor:
-    docker run --rm --user 1000:1000 -v "${PWD}:/workspace:ro" -w /workspace node@sha256:6642ef280aebc09c4541bee0b15c9f89f0f3f3c247ddee79ae1d37eddfdcbbaa sh -lc 'mkdir -p /tmp/quality-tools && cp tools/quality-tools/package.json tools/quality-tools/package-lock.json /tmp/quality-tools/ && npm ci --prefix /tmp/quality-tools --ignore-scripts --no-audit --no-fund >/dev/null && /tmp/quality-tools/node_modules/.bin/jscpd --config jscpd.json --format razor'
+    {{tools_run}} 'jscpd --config .config/jscpd.json --format razor'
 
 schema:
     {{docker_run}} 'sh /src/tools/scripts/verify-schema.sh'
@@ -104,13 +107,13 @@ ui-imports:
     {{docker_run}} 'sh /src/tools/scripts/verify-ui-imports.sh'
 
 resx-keys:
-    docker run --rm --user 1000:1000 -v "${PWD}:/workspace:ro" -w /workspace node@sha256:6642ef280aebc09c4541bee0b15c9f89f0f3f3c247ddee79ae1d37eddfdcbbaa sh -lc 'node tools/scripts/verify-resx-keys.mjs'
+    {{tools_run}} 'node tools/scripts/verify-resx-keys.mjs'
 
 resx-keys-fix:
-    docker run --rm --user 1000:1000 -v "${PWD}:/workspace" -w /workspace node@sha256:6642ef280aebc09c4541bee0b15c9f89f0f3f3c247ddee79ae1d37eddfdcbbaa sh -lc 'FIX=1 node tools/scripts/verify-resx-keys.mjs'
+    {{tools_run}} 'FIX=1 node tools/scripts/verify-resx-keys.mjs'
 
 hardcoded-text:
-    docker run --rm --user 1000:1000 -v "${PWD}:/workspace:ro" -w /workspace node@sha256:6642ef280aebc09c4541bee0b15c9f89f0f3f3c247ddee79ae1d37eddfdcbbaa sh -lc 'node tools/scripts/verify-hardcoded-text.mjs'
+    {{tools_run}} 'node tools/scripts/verify-hardcoded-text.mjs'
 
 verify-stories:
     {{docker_run}} 'sh /src/tools/scripts/verify-stories.sh'
@@ -137,19 +140,9 @@ vrt-update: (_vrt "npm run snapshots:update")
 _vrt npm_command:
     #!/usr/bin/env sh
     set -eu
-    docker rm -f blazor-stories-vrt >/dev/null 2>&1 || true
-    {{compose_dev}} run -d --rm --name blazor-stories-vrt -p 8081:8081 -e NUGET_PACKAGES=/src/.nuget-cache -e ASPNETCORE_URLS=http://0.0.0.0:8081 web sh -lc 'dotnet run --project src/Portfolio/Portfolio.Blazor.Stories/Portfolio.Blazor.Stories.csproj --configuration Release --no-build --urls http://0.0.0.0:8081' >/dev/null
-    trap 'docker rm -f blazor-stories-vrt >/dev/null 2>&1 || true' EXIT
-    i=0
-    while ! curl -sf http://localhost:8081/ >/dev/null 2>&1; do
-        i=$((i + 1))
-        if [ "$i" -ge 600 ]; then
-            echo "stories server did not start on :8081" >&2
-            docker port blazor-stories-vrt >&2 || true
-            curl -sv http://localhost:8081/ 2>&1 | head -n 20 >&2 || true
-            docker logs --tail 50 blazor-stories-vrt >&2 || true
-            exit 1
-        fi
-        sleep 1
-    done
-    docker run --rm --user 1000:1000 --add-host host.docker.internal:host-gateway -e HOME=/tmp -v "{{justfile_directory()}}/src/Portfolio/Portfolio.Blazor.Stories.VRT:/workspace" -w /workspace {{playwright_image}} sh -lc 'npm ci --no-audit --no-fund && {{npm_command}}'
+    trap '{{compose}} rm -sf stories >/dev/null 2>&1 || true' EXIT
+    if ! {{compose}} up -d --wait stories; then
+        {{compose}} logs --tail 50 stories >&2 || true
+        exit 1
+    fi
+    {{compose_dev}} run --rm playwright sh -lc 'npm ci --no-audit --no-fund && {{npm_command}}'

@@ -58,6 +58,11 @@ the MIT License:
 Copyright (c) 2026 Gabriel R. Antunes. All rights reserved, except as licensed
 below.
 
+This content is not stored as files in this repository: it lives in the site's
+database and is published only through the website. Every file tracked here is
+software or configuration and is licensed under the MIT License, as declared in
+`REUSE.toml`.
+
 This material is licensed under the Creative Commons
 Attribution-NonCommercial-NoDerivatives 4.0 International License
 (CC BY-NC-ND 4.0):

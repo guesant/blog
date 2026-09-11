@@ -48,6 +48,7 @@ public partial class Credits
             "reference" => L["legacy_bcbf55423dd0"],
             "infrastructure" => L["legacy_351f47acccb1"],
             "library" => L["legacy_cf1488bbaf91"],
+            "tool" => L["credit_category_tools"],
             _ => category,
         };
 

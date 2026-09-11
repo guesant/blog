@@ -142,11 +142,11 @@ public sealed partial class PublicSiteContentProvider(
             Writings(db, locale),
             Findings(db, locale),
             Collections(db, locale),
-            Topics(db, locale),
-            Technologies(db, locale),
+            Topics(context, locale),
+            Technologies(context, locale),
             Experiments(db, locale),
             Snippets(db, locale),
-            Credits(db, locale),
+            Credits(context, locale),
             Resume(db, locale),
             FeaturedCases(db, locale),
             FeaturedProjects(db, locale),
@@ -320,34 +320,51 @@ public sealed partial class PublicSiteContentProvider(
             ))
             .ToList();
 
-    private static List<PublicTopic> Topics(DbConnection db, string locale) =>
-        Rows(
-                db,
-                "select t.*, coalesce(tt.name, en.name) as name from topics t left join topic_translations tt on tt.topic_id=t.id and tt.locale=@locale left join topic_translations en on en.topic_id=t.id and en.locale='en' order by t.\"order\" nulls first",
-                ("@locale", locale)
-            )
+    private static List<PublicTopic> Topics(PortfolioPublicDbContext context, string locale) =>
+        TopicQueries
+            .Topics(context, locale)
             .Select(row => new PublicTopic(
-                Text(row, "slug"),
-                Text(row, "name", Text(row, "slug")),
-                Route("topics.show", Key(row), locale)
+                row.Slug,
+                row.Name ?? row.Slug,
+                Route("topics.show", PublicRouteKey.Compose(row.PublicId, row.Slug), locale)
             ))
             .ToList();
 
-    private static List<PublicTechnology> Technologies(DbConnection db, string locale) =>
-        Rows(
-                db,
-                "select t.*, coalesce(tt.name, en.name) as name from technologies t left join technology_translations tt on tt.technology_id=t.id and tt.locale=@locale left join technology_translations en on en.technology_id=t.id and en.locale='en' order by t.\"order\" nulls first",
-                ("@locale", locale)
-            )
+    private static List<PublicTechnology> Technologies(
+        PortfolioPublicDbContext context,
+        string locale
+    )
+    {
+        var skills = TopicQueries
+            .ResumeSkillTopics(context, locale)
+            .ToLookup(row => row.TechnologyId);
+        return TopicQueries
+            .Technologies(context, locale)
             .Select(row => new PublicTechnology(
-                Text(row, "slug"),
-                Text(row, "name", Text(row, "slug")),
-                Text(row, "code"),
-                Route("technologies.show", Key(row), locale),
-                SkillsFor(db, Id(row, "id"), locale),
-                ResumeSkillTopicsFor(db, Id(row, "id"), locale)
+                row.Slug,
+                row.Name ?? row.Slug,
+                Format.Text(row.Code),
+                Route("technologies.show", PublicRouteKey.Compose(row.PublicId, row.Slug), locale),
+                skills[row.Id]
+                    .Select(skill => Format.Text(skill.Name))
+                    .Where(value => value.Length > 0)
+                    .ToList(),
+                skills[row.Id]
+                    .Select(skill => new PublicTopic(
+                        skill.Slug,
+                        skill.Name ?? skill.Slug,
+                        Route(
+                            "topics.show",
+                            PublicRouteKey.Compose(skill.PublicId, skill.Slug),
+                            locale
+                        )
+                    ))
+                    .GroupBy(topic => topic.Slug, StringComparer.OrdinalIgnoreCase)
+                    .Select(group => group.First())
+                    .ToList()
             ))
             .ToList();
+    }
 
     private static List<PublicExperiment> Experiments(DbConnection db, string locale) =>
         Rows(
@@ -582,18 +599,15 @@ public sealed partial class PublicSiteContentProvider(
             ))
             .ToList();
 
-    private static List<PublicCredit> Credits(DbConnection db, string locale) =>
-        Rows(
-                db,
-                "select c.*, coalesce(t.name, en.name) as name, coalesce(t.description, en.description) as description from credit_entries c left join credit_entry_translations t on t.credit_entry_id=c.id and t.locale=@locale left join credit_entry_translations en on en.credit_entry_id=c.id and en.locale='en' where c.active=true order by c.category nulls first, c.\"order\" nulls first",
-                ("@locale", locale)
-            )
+    private static List<PublicCredit> Credits(PortfolioPublicDbContext context, string locale) =>
+        CreditQueries
+            .Credits(context, locale)
             .Select(row => new PublicCredit(
-                Text(row, "category"),
-                Text(row, "name", Text(row, "category")),
-                Text(row, "description"),
-                Text(row, "url"),
-                Timestamp(row, "created_at")
+                row.Category,
+                row.Name ?? row.Category,
+                Format.Text(row.Description),
+                Format.Text(row.Url),
+                Format.Timestamp(row.CreatedAt)
             ))
             .ToList();
 
@@ -903,37 +917,6 @@ public sealed partial class PublicSiteContentProvider(
                 Text(row, "slug"),
                 Text(row, "name", Text(row, "slug"))
             ))
-            .ToList();
-
-    private static List<string> SkillsFor(DbConnection db, long technologyId, string locale) =>
-        Rows(
-                db,
-                "select coalesce(tt.name, en.name) as name from resume_skill_technology x join resume_skills s on s.id=x.resume_skill_id join topics t on t.id=s.topic_id left join topic_translations tt on tt.topic_id=t.id and tt.locale=@locale left join topic_translations en on en.topic_id=t.id and en.locale='en' where x.technology_id=@id order by s.\"order\" nulls first",
-                ("@id", technologyId),
-                ("@locale", locale)
-            )
-            .Select(row => Text(row, "name"))
-            .Where(value => value.Length > 0)
-            .ToList();
-
-    private static List<PublicTopic> ResumeSkillTopicsFor(
-        DbConnection db,
-        long technologyId,
-        string locale
-    ) =>
-        Rows(
-                db,
-                "select t.slug, t.public_id, coalesce(tt.name, en.name) as name from resume_skill_technology x join resume_skills s on s.id=x.resume_skill_id join topics t on t.id=s.topic_id left join topic_translations tt on tt.topic_id=t.id and tt.locale=@locale left join topic_translations en on en.topic_id=t.id and en.locale='en' where x.technology_id=@id order by s.\"order\" nulls first, t.\"order\" nulls first",
-                ("@id", technologyId),
-                ("@locale", locale)
-            )
-            .Select(row => new PublicTopic(
-                Text(row, "slug"),
-                Text(row, "name", Text(row, "slug")),
-                Route("topics.show", Key(row), locale)
-            ))
-            .GroupBy(topic => topic.Slug, StringComparer.OrdinalIgnoreCase)
-            .Select(group => group.First())
             .ToList();
 
     private static List<PublicTopic> TopicsFor(

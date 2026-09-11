@@ -17,7 +17,7 @@ services:
       - nuget-cache:/tmp/nuget-packages
     command: sh -lc 'mkdir -p /tmp/nuget-packages && chown -R ${PORTFOLIO_CONTAINER_UID:-1000}:${PORTFOLIO_CONTAINER_GID:-1000} /tmp/nuget-packages'
     restart: "no"
-  web:
+  web: &sdk
     image: mcr.microsoft.com/dotnet/sdk@sha256:e1fc6e423f543119c406d24e2e687d67c569f18f04a37a8b0005d80ad0dcee80
     user: "${PORTFOLIO_CONTAINER_UID:-1000}:${PORTFOLIO_CONTAINER_GID:-1000}"
     read_only: true
@@ -77,6 +77,24 @@ services:
         condition: service_completed_successfully
       nuget-cache-init:
         condition: service_completed_successfully
+  stories:
+    <<: *sdk
+    profiles:
+      - tools
+    ports: []
+    environment:
+      ASPNETCORE_URLS: http://0.0.0.0:8081
+      DOTNET_CLI_TELEMETRY_OPTOUT: "1"
+      DOTNET_NOLOGO: "true"
+      DOTNET_CLI_HOME: /tmp/dotnet
+      NUGET_PACKAGES: /tmp/nuget-packages
+    healthcheck:
+      test: ["CMD-SHELL", "curl --fail --silent http://127.0.0.1:8081/index.html >/dev/null || exit 1"]
+      interval: 2s
+      timeout: 3s
+      retries: 300
+      start_period: 5s
+    command: dotnet run --project src/Portfolio/Portfolio.Blazor.Stories/Portfolio.Blazor.Stories.csproj --configuration Release --no-build --urls http://0.0.0.0:8081
 
 volumes:
   nuget-cache:

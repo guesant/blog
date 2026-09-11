@@ -1,0 +1,33 @@
+{
+  "threshold": 3,
+  "minLines": 12,
+  "minTokens": 80,
+  "format": [
+    "csharp",
+    "razor",
+    "css"
+  ],
+  "path": [
+    "src/Portfolio/Portfolio.Blazor.Client",
+    "src/Portfolio/Portfolio.Blazor.Core",
+    "src/Portfolio/Portfolio.Blazor.Core.Tests",
+    "src/Portfolio/Portfolio.Blazor.Data.Tests",
+    "src/Portfolio/Portfolio.Blazor.Sbom",
+    "src/Portfolio/Portfolio.Blazor.Snapshot",
+    "src/Portfolio/Portfolio.Blazor",
+    "src/Portfolio/Portfolio.Blazor.UI"
+  ],
+  "ignore": [
+    "**/bin/**",
+    "**/obj/**",
+    "**/*.stories.razor",
+    "**/Portfolio.Blazor.Database/**",
+    "**/Portfolio.Blazor.Data.Tests/Seed.cs"
+  ],
+  "ignoreCase": true,
+  "reporters": [
+    "console"
+  ],
+  "absolute": true,
+  "gitignore": true
+}

@@ -40,7 +40,7 @@
                     Items="@RowIndexes"
                     RowKey="@(row => row)"
                     Caption="@TableLabel"
-                    EmptyText="No elements.">
+                    EmptyText="@(L["no_elements"])">
                     <Columns>
                         <SiteColumn TItem="int" Header="@ElementLabel" IsRowHeader="true">
                             <Cell Context="row">@Result.Elements[row]</Cell>

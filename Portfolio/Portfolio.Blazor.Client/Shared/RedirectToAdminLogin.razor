@@ -1,3 +1,5 @@
+@using Portfolio.Blazor.Core.Localization
 @inject NavigationManager Navigation
+@inject IStringLocalizer<SharedResource> L
 
-<SiteText>Redirecting to login…</SiteText>
+<SiteText>@(L["redirecting_to_login"])</SiteText>

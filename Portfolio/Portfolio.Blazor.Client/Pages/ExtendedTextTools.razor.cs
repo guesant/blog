@@ -43,7 +43,7 @@ public partial class ExtendedTextTools
             "pig-latin" => L["legacy_b71f1916495a"],
             "leetspeak" => L["legacy_dc1bedcb4357"],
             "uwu-speak" => L["legacy_1c800d938959"],
-            _ => "text tools",
+            _ => L["text_tools"],
         };
     private string Description =>
         Slug switch

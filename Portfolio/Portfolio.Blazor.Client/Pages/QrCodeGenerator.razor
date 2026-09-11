@@ -20,7 +20,7 @@
         @if (!string.IsNullOrEmpty(Input) && !Result.IsValid) { <SiteErrorMessage>@InvalidLabel</SiteErrorMessage> }
         @if (Result.IsValid) { <SiteCard Class="site-block" Label="@DownloadLabel">
             <SiteStack Class="tool-qr-preview"
-                aria-label="QR code">@((MarkupString)Result.Svg)</SiteStack>@if (RendererInfo.IsInteractive) { <SiteButton Variant="SiteButtonVariant.Default"
+                aria-label="@(L["qr_code"])">@((MarkupString)Result.Svg)</SiteStack>@if (RendererInfo.IsInteractive) { <SiteButton Variant="SiteButtonVariant.Default"
                     Class="tool-action-btn"
                     @onclick="DownloadAsync"><SiteIcon Name="download"
                         Size="14" />@DownloadLabel</SiteButton> } else { <SiteLink Variant="SiteButtonVariant.Default"

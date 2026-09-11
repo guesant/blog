@@ -40,7 +40,7 @@ public partial class FindAndReplace
     private string FindLabel => L["legacy_fc35e4cd2942"];
     private string ReplaceLabel => L["legacy_e80f252d8928"];
     private string CaseSensitiveLabel => L["legacy_29fea5f0afa1"];
-    private static string UseRegexLabel => "usar regex";
+    private string UseRegexLabel => L["use_regex"];
     private string ReplaceButtonLabel => L["legacy_f907d90d2b53"];
     private string InvalidRegexLabel => L["legacy_372712157bbc"];
     private string OutputLabel => L["legacy_1d1c0e33dc3c"];

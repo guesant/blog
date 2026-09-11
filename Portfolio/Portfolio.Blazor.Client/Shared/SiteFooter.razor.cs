@@ -6,6 +6,5 @@ public partial class SiteFooter
 {
     [Parameter]
     public PublicSiteSnapshot? Snapshot { get; set; }
-    private string DefaultCopyright =>
-        $"© {DateTime.UtcNow.Year} Gabriel R. Antunes. {L["some_rights_reserved"]}";
+    private string Copyright => Snapshot?.Chrome.Copyright ?? string.Empty;
 }

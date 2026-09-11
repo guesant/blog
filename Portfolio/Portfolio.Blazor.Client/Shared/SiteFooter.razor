@@ -1,7 +1,8 @@
 @using Portfolio.Blazor.Core
-@using Portfolio.Blazor.Core.Localization
-@inject IStringLocalizer<SharedResource> L
 
 <footer class="site-footer border-top" data-layout-region="footer">
-    <SiteText>@(Snapshot?.Chrome.Copyright ?? DefaultCopyright)</SiteText>
+    @if (Copyright.Length > 0)
+    {
+        <SiteText>@Copyright</SiteText>
+    }
 </footer>

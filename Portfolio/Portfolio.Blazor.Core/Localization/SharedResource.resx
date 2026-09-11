@@ -1183,6 +1183,15 @@
   <data name="about_highlights_title"><value>where to start</value></data>
   <data name="about_highlight_portfolio"><value>portfolio</value></data>
   <data name="about_highlight_portfolio_description"><value>the selected work and the independent projects in one place.</value></data>
+  <data name="use_regex"><value>use regex</value></data>
+  <data name="text_tools"><value>text tools</value></data>
+  <data name="no_elements"><value>no elements.</value></data>
+  <data name="redirecting_to_login"><value>redirecting to login…</value></data>
+  <data name="border_radius_preview"><value>border radius preview</value></data>
+  <data name="box_shadow_preview"><value>box shadow preview</value></data>
+  <data name="gradient_preview"><value>gradient preview</value></data>
+  <data name="no_results_found"><value>no results.</value></data>
+  <data name="qr_code"><value>QR code</value></data>
   <data name="years_old"><value>{0} years old</value></data>
   <data name="estimated_time"><value>estimated time: {0}m {1}s</value></data>
   <data name="base_auto"><value>auto</value></data>

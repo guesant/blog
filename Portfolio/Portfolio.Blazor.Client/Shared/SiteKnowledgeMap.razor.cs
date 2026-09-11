@@ -24,23 +24,23 @@ public partial class SiteKnowledgeMap
     public string RootId { get; set; } = "knowledge-map-root";
 
     [Parameter]
-    public string LegendLabel { get; set; } = "node types";
+    public string LegendLabel { get; set; } = string.Empty;
 
     [Parameter]
-    public string PanelEmptyLabel { get; set; } = "select a node to see its connections.";
+    public string PanelEmptyLabel { get; set; } = string.Empty;
 
     [Parameter]
-    public string PanelOpenLabel { get; set; } = "open";
+    public string PanelOpenLabel { get; set; } = string.Empty;
 
     [Parameter]
-    public string ResetViewLabel { get; set; } = "reset view";
+    public string ResetViewLabel { get; set; } = string.Empty;
 
     [Parameter]
-    public string NoResultsLabel { get; set; } = "no nodes match this filter.";
+    public string NoResultsLabel { get; set; } = string.Empty;
 
     [Parameter]
-    public string ExpandViewLabel { get; set; } = "expand view";
+    public string ExpandViewLabel { get; set; } = string.Empty;
 
     [Parameter]
-    public string CollapseViewLabel { get; set; } = "close";
+    public string CollapseViewLabel { get; set; } = string.Empty;
 }

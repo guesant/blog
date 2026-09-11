@@ -109,7 +109,7 @@
                             Items="@Result.Rows"
                             RowKey="@(row => row.Label)"
                             Caption="@ResultLabel"
-                            EmptyText="No results.">
+                            EmptyText="@(L["no_results_found"])">
                             <Columns>
                                 <SiteColumn TItem="TextToolRow"
                                     Header="@WordLabel"

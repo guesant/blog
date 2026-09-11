@@ -42,7 +42,7 @@
                         Items="@Result.Composition"
                         RowKey="@(element => element.Symbol)"
                         Caption="@CompositionLabel"
-                        EmptyText="No elements.">
+                        EmptyText="@(L["no_elements"])">
                         <Columns>
                             <SiteColumn TItem="ElementComposition"
                                 Header="@ElementLabel"

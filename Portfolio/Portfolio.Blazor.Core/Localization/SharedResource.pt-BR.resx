@@ -1183,6 +1183,15 @@
   <data name="about_highlights_title"><value>por onde começar</value></data>
   <data name="about_highlight_portfolio"><value>portfólio</value></data>
   <data name="about_highlight_portfolio_description"><value>o trabalho selecionado e os projetos independentes em um só lugar.</value></data>
+  <data name="use_regex"><value>usar regex</value></data>
+  <data name="text_tools"><value>ferramentas de texto</value></data>
+  <data name="no_elements"><value>nenhum elemento.</value></data>
+  <data name="redirecting_to_login"><value>redirecionando para o login…</value></data>
+  <data name="border_radius_preview"><value>pré-visualização do border radius</value></data>
+  <data name="box_shadow_preview"><value>pré-visualização da sombra</value></data>
+  <data name="gradient_preview"><value>pré-visualização do gradiente</value></data>
+  <data name="no_results_found"><value>nenhum resultado.</value></data>
+  <data name="qr_code"><value>código QR</value></data>
   <data name="years_old"><value>{0} anos</value></data>
   <data name="estimated_time"><value>tempo estimado: {0}min {1}s</value></data>
   <data name="base_auto"><value>automático</value></data>

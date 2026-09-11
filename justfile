@@ -2,9 +2,10 @@ set shell := ["bash", "-uc"]
 set positional-arguments
 
 
-compose := "docker compose -f compose.yaml"
-compose_dev := "docker compose -f compose.yaml -f compose.dev.yaml"
-compose_pg := compose_dev + " -f compose.postgres.yaml"
+env_file := if path_exists(".env") == "true" { " --env-file .env" } else { "" }
+compose := "docker compose" + env_file + " -f .docker/compose.yaml"
+compose_dev := compose + " -f .docker/compose.dev.yaml"
+compose_pg := compose_dev + " -f .docker/compose.postgres.yaml"
 docker_run := compose + " run --rm --entrypoint sh web -lc"
 playwright_image := "mcr.microsoft.com/playwright@sha256:5b8f294aff9041b7191c34a4bab3ac270157a28774d4b0660e9743297b697e48"
 

@@ -27,19 +27,19 @@ services:
       - no-new-privileges:true
     working_dir: /src
     volumes:
-      - .:/src
+      - ..:/src
       # A single-file bind mount can't hold the -wal/-shm sidecar files SQLite
       # needs once the DB is in WAL mode (required so the admin panel's writes
       # don't block the public site's concurrent reads) — confirmed live via
       # "SQLite Error 14: unable to open database file" until this was changed
       # to mount the containing directory instead of just the one file.
       - type: bind
-        source: ${PORTFOLIO_SQLITE_HOST_DIR:-./data}
+        source: ${PORTFOLIO_SQLITE_HOST_DIR:-../data}
         target: /data/db
         bind:
           create_host_path: false
       - type: bind
-        source: ${PORTFOLIO_PUBLIC_ASSET_PATH:-./data/public}
+        source: ${PORTFOLIO_PUBLIC_ASSET_PATH:-../data/public}
         target: /data/public
         read_only: true
         bind:

@@ -39,12 +39,12 @@ fi
 # The admin context writes the SQLite file (WAL needs sidecar files), so the mount is a directory
 # bind. This section only guards that the mount exists and cannot silently materialize as an
 # empty directory; the public read path is kept read-only by the ConfigurePublicRead checks above.
-grep -q 'target: /data/db' compose.yaml ||
+grep -q 'target: /data/db' .docker/compose.yaml ||
     fail "the SQLite bind mount target is missing"
-grep -q 'create_host_path: false' compose.yaml ||
+grep -q 'create_host_path: false' .docker/compose.yaml ||
     fail "a missing SQLite source could be silently created as a directory"
 
-if grep -REn '(\.\./laravel/|laravel_[A-Za-z0-9_-]+)' compose.yaml tools/scripts 2>/dev/null; then
+if grep -REn '(\.\./laravel/|laravel_[A-Za-z0-9_-]+)' .docker/compose.yaml tools/scripts 2>/dev/null; then
     fail "the Blazor runtime still has an operational Laravel dependency"
 fi
 

@@ -10,7 +10,7 @@ case "$snapshot_name" in
         ;;
 esac
 
-docker compose run --rm --entrypoint sh web -lc \
+docker compose -f .docker/compose.yaml run --rm --entrypoint sh web -lc \
     'set -eu
      mkdir -p /src/data/snapshots
      dotnet run --project src/Portfolio/Portfolio.Blazor.Snapshot/Portfolio.Blazor.Snapshot.csproj --no-restore -- /data/db/portfolio.sqlite "/src/data/snapshots/$1"' \

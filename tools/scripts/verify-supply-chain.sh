@@ -6,18 +6,18 @@ fail() {
     exit 1
 }
 
-for compose_file in compose.yaml compose.dev.yaml compose.postgres.yaml; do
+for compose_file in .docker/compose.yaml .docker/compose.dev.yaml .docker/compose.postgres.yaml .docker/compose.prod.yaml; do
     [ -f "$compose_file" ] || fail "$compose_file is missing"
 done
 
-grep -Eq '^[[:space:]]*image:[[:space:]]*[^@[:space:]]+@sha256:[0-9a-f]{64}[[:space:]]*$' compose*.yaml ||
+grep -Eq '^[[:space:]]*image:[[:space:]]*[^@[:space:]]+@sha256:[0-9a-f]{64}[[:space:]]*$' .docker/compose.yaml ||
     fail "the development image must be pinned by digest"
 
-if grep -En '^[[:space:]]*(image:|FROM[[:space:]]).*(^|:)latest([[:space:]]|$)' compose*.yaml Dockerfile 2>/dev/null; then
+if grep -En '^[[:space:]]*(image:|FROM[[:space:]]).*(^|:)latest([[:space:]]|$)' .docker/compose*.yaml .docker/Dockerfile 2>/dev/null; then
     fail "an image still uses an unpinned latest tag"
 fi
 
-if grep -En '^[[:space:]]*FROM[[:space:]]' Dockerfile | grep -Ev '@sha256:[0-9a-f]{64}'; then
+if grep -En '^[[:space:]]*FROM[[:space:]]' .docker/Dockerfile | grep -Ev '@sha256:[0-9a-f]{64}'; then
     fail "every Dockerfile base image must be pinned by digest"
 fi
 
@@ -26,7 +26,7 @@ if find src/Portfolio -path '*/Portfolio.Blazor.Stories.VRT' -prune -o -type d -
 fi
 
 if grep -REn -i 'https?://[^" ]*(cdn|unpkg|jsdelivr)|curl[[:space:]].*\|[[:space:]]*(sh|bash)|wget[[:space:]].*\|[[:space:]]*(sh|bash)' \
-    src/Portfolio/Portfolio.Blazor src/Portfolio/Portfolio.Blazor.Client src/Portfolio/Portfolio.Blazor.Core src/Portfolio/Portfolio.Blazor.UI compose.yaml 2>/dev/null; then
+    src/Portfolio/Portfolio.Blazor src/Portfolio/Portfolio.Blazor.Client src/Portfolio/Portfolio.Blazor.Core src/Portfolio/Portfolio.Blazor.UI .docker/compose.yaml 2>/dev/null; then
     fail "remote scripts or CDN assets are not allowed"
 fi
 

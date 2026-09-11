@@ -12,7 +12,7 @@ services:
     cap_drop:
       - ALL
     env_file:
-      - .env
+      - ../.env
     environment:
       ASPNETCORE_ENVIRONMENT: Production
       PUBLIC_SITE_BASE_URL: ${PUBLIC_SITE_BASE_URL}

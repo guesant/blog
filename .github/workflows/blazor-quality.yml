@@ -10,6 +10,8 @@ permissions:
 jobs:
   docker-quality:
     runs-on: ubuntu-24.04
+    env:
+      COMPOSE_FILE: .docker/compose.yaml
     steps:
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
@@ -69,6 +71,8 @@ jobs:
 
   postgres-smoke:
     runs-on: ubuntu-24.04
+    env:
+      COMPOSE_FILE: .docker/compose.yaml:.docker/compose.dev.yaml:.docker/compose.postgres.yaml
     steps:
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
@@ -88,26 +92,26 @@ jobs:
           sh -lc 'mkdir -p data/public && : > data/portfolio.sqlite'
 
       - name: Start PostgreSQL
-        run: docker compose -f compose.yaml -f compose.dev.yaml -f compose.postgres.yaml up -d --wait postgres
+        run: docker compose up -d --wait postgres
 
       - name: Restore locked NuGet dependencies
-        run: docker compose -f compose.yaml -f compose.dev.yaml -f compose.postgres.yaml run --rm web dotnet restore src/Portfolio.Blazor.slnx --locked-mode
+        run: docker compose run --rm web dotnet restore src/Portfolio.Blazor.slnx --locked-mode
 
       - name: Build Blazor solution
-        run: docker compose -f compose.yaml -f compose.dev.yaml -f compose.postgres.yaml run --rm web dotnet build src/Portfolio.Blazor.slnx --configuration Release --no-restore
+        run: docker compose run --rm web dotnet build src/Portfolio.Blazor.slnx --configuration Release --no-restore
 
       - name: Apply PostgreSQL migrations
-        run: docker compose -f compose.yaml -f compose.dev.yaml -f compose.postgres.yaml run --rm web sh -lc 'dotnet tool restore >/dev/null && dotnet tool run dotnet-ef database update --project src/Portfolio/Portfolio.Blazor.Database.Postgres/Portfolio.Blazor.Database.Postgres.csproj --startup-project src/Portfolio/Portfolio.Blazor.Database.Postgres/Portfolio.Blazor.Database.Postgres.csproj --context PortfolioAdminDbContext --configuration Release --no-build'
+        run: docker compose run --rm web sh -lc 'dotnet tool restore >/dev/null && dotnet tool run dotnet-ef database update --project src/Portfolio/Portfolio.Blazor.Database.Postgres/Portfolio.Blazor.Database.Postgres.csproj --startup-project src/Portfolio/Portfolio.Blazor.Database.Postgres/Portfolio.Blazor.Database.Postgres.csproj --context PortfolioAdminDbContext --configuration Release --no-build'
 
       - name: Compare the public snapshot across SQLite and PostgreSQL
-        run: docker compose -f compose.yaml -f compose.dev.yaml -f compose.postgres.yaml run --rm web dotnet run --project src/Portfolio/Portfolio.Blazor.Data.Tests/Portfolio.Blazor.Data.Tests.csproj --configuration Release --no-build
+        run: docker compose run --rm web dotnet run --project src/Portfolio/Portfolio.Blazor.Data.Tests/Portfolio.Blazor.Data.Tests.csproj --configuration Release --no-build
 
       - name: Start SSR app on PostgreSQL
-        run: docker compose -f compose.yaml -f compose.dev.yaml -f compose.postgres.yaml up -d web
+        run: docker compose up -d web
 
       - name: Verify public route shells on PostgreSQL
-        run: docker compose -f compose.yaml -f compose.dev.yaml -f compose.postgres.yaml exec -T -e ROUTE_SHELL_READY_ATTEMPTS=600 web sh tools/scripts/verify-route-shell.sh
+        run: docker compose exec -T -e ROUTE_SHELL_READY_ATTEMPTS=600 web sh tools/scripts/verify-route-shell.sh
 
       - name: Dump app logs on failure
         if: failure()
-        run: docker compose -f compose.yaml -f compose.dev.yaml -f compose.postgres.yaml logs --no-color --tail=200 web postgres
+        run: docker compose logs --no-color --tail=200 web postgres

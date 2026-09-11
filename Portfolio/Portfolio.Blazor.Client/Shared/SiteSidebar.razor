@@ -53,7 +53,7 @@
                     Href="@LocalizedPath("about")"
                     AriaCurrent="@(IsAbout ? "page" : null)">
                     <SidebarNavIcon Route="about" Active="@IsAbout" />
-                    <SiteNavItemLabel>@AboutLabel</SiteNavItemLabel>
+                    <SiteNavItemLabel>@NavLabel("about")</SiteNavItemLabel>
                 </SiteNavLink>
                 <ul class="site-nav-sub">
                     @foreach (var route in AboutChildren)
@@ -62,7 +62,7 @@
                             <SiteNavLink Href="@LocalizedPath(route)"
                                 AriaCurrent="@(IsRoute(route) ? "page" : null)">
                                 <SidebarNavIcon Route="@route" Active="@IsRoute(route)" />
-                                <SiteNavItemLabel>@NavL[route]</SiteNavItemLabel>
+                                <SiteNavItemLabel>@NavLabel(route)</SiteNavItemLabel>
                             </SiteNavLink>
                         </li>
                     }

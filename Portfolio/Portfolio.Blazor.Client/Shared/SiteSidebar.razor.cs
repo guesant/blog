@@ -12,10 +12,22 @@ public partial class SiteSidebar
     private static string NavigationLabel => "menu";
     private string HomeLabel => L["legacy_ddc150008e2f"];
     private bool IsHome => RequestPath.TrimEnd('/') == LocalizedPath("home").TrimEnd('/');
-    private string AboutLabel => NavL["about_me"];
     private bool IsAbout => IsRoute("about");
     private bool IsAboutChild => new[] { "portfolio", "resume", "cases", "projects" }.Any(IsRoute);
     private static IReadOnlyList<string> AboutChildren => ["resume", "portfolio", "cases"];
+
+    private string NavLabel(string route) =>
+        Lower(
+            NavigationItems.FirstOrDefault(item => LastSegment(item.Route) == route)?.Label
+                ?? string.Empty
+        );
+
+    private IEnumerable<PublicNavigationItem> NavigationItems =>
+        Snapshot is null
+            ? []
+            : Snapshot
+                .Chrome.Navigation.Sidebar.SelectMany(group => group)
+                .SelectMany(item => (item.Children ?? []).Prepend(item));
 
     private bool IsRoute(string route) =>
         RequestPath

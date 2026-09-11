@@ -9,17 +9,18 @@
         <AdminNav />
     </Nav>
     <NavFooter>
-        <SiteStack Gap="SiteSpace.Sm">
-            <SiteNavLink Href="/">
-                <SiteIcon Name="house" Size="14" Class="icon nav-item-icon" />
-                <SiteNavItemLabel>View site</SiteNavItemLabel>
-            </SiteNavLink>
-            <SiteThemeSwitch Label="Theme"
-                SystemLabel="System"
-                LightLabel="Light"
-                DarkLabel="Dark" />
-            <AdminSignOutForm />
-        </SiteStack>
+        <hr class="site-nav-divider" />
+        <SiteNavLink Href="/">
+            <SiteIcon Name="house" Size="14" Class="icon nav-item-icon" />
+            <SiteNavItemLabel>View site</SiteNavItemLabel>
+        </SiteNavLink>
+        <hr class="site-nav-divider" />
+        <SiteThemeSwitch Label="Theme"
+            SystemLabel="System"
+            LightLabel="Light"
+            DarkLabel="Dark" />
+        <hr class="site-nav-divider" />
+        <AdminSignOutForm />
     </NavFooter>
     <ChildContent>
         @Body

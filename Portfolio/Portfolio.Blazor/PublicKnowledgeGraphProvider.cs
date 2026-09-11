@@ -1,17 +1,18 @@
 using System.Collections.Concurrent;
-using System.Data.Common;
 using System.Text.Json;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using Portfolio.Blazor.Core;
 using Portfolio.Blazor.Core.Localization;
+using Portfolio.Blazor.Data;
 using Portfolio.Blazor.Data.Providers;
-using static Portfolio.Blazor.SqlReadHelpers;
+using Portfolio.Blazor.PublicQueries;
 
 namespace Portfolio.Blazor;
 
 public sealed partial class PublicKnowledgeGraphProvider(
     IDatabaseProvider database,
-    IConfiguration configuration,
+    IDbContextFactory<PortfolioPublicDbContext> contexts,
     ILogger<PublicKnowledgeGraphProvider> logger,
     IStringLocalizer<SharedResource> localizer
 ) : IPublicKnowledgeGraphProvider
@@ -20,26 +21,6 @@ public sealed partial class PublicKnowledgeGraphProvider(
     private readonly ConcurrentDictionary<string, CachedGraph> _graphs = new(
         StringComparer.OrdinalIgnoreCase
     );
-    private static readonly IReadOnlyDictionary<
-        string,
-        (string Table, string Translation, string Label, string ForeignKey)
-    > NodeSources = new Dictionary<string, (string, string, string, string)>
-    {
-        ["topic"] = ("topics", "topic_translations", "name", "topic_id"),
-        ["technology"] = ("technologies", "technology_translations", "name", "technology_id"),
-        ["project"] = ("projects", "project_translations", "name", "project_id"),
-        ["case-study"] = ("case_studies", "case_study_translations", "title", "case_study_id"),
-        ["writing"] = ("writings", "writing_translations", "title", "writing_id"),
-        ["finding"] = ("resources", "resource_translations", "title", "resource_id"),
-        ["experiment"] = ("experiments", "experiment_translations", "name", "experiment_id"),
-        ["snippet"] = ("snippets", "snippet_translations", "title", "snippet_id"),
-        ["collection"] = (
-            "reference_collections",
-            "reference_collection_translations",
-            "title",
-            "reference_collection_id"
-        ),
-    };
     private static readonly IReadOnlyDictionary<string, string> Colors = new Dictionary<
         string,
         string
@@ -78,13 +59,13 @@ public sealed partial class PublicKnowledgeGraphProvider(
                 if (_graphs.TryGetValue(locale, out cached) && cached.Fingerprint == fingerprint)
                     return cached.Graph;
 
-                using var db = await database.OpenReadOnlyConnectionAsync(cancellationToken);
+                await using var db = await contexts.CreateDbContextAsync(cancellationToken);
                 var nodes = Nodes(db, locale);
                 var index = nodes.ToDictionary(node => node.Id, StringComparer.Ordinal);
                 var edges = new List<PublicGraphEdge>();
-                AddTopicEdges(db, index, edges, locale);
-                AddTechnologyEdges(db, index, edges, locale);
-                AddCollectionEdges(db, index, edges, locale);
+                AddTopicEdges(db, index, edges);
+                AddTechnologyEdges(db, index, edges);
+                AddCollectionEdges(db, index, edges);
                 AddRelationEdges(db, index, edges, locale);
                 var kinds = nodes
                     .Select(node => node.Kind)
@@ -92,7 +73,7 @@ public sealed partial class PublicKnowledgeGraphProvider(
                     .ToDictionary(
                         kind => kind,
                         kind => new PublicGraphKind(
-                            Label(kind, locale),
+                            Label(kind),
                             Colors.TryGetValue(kind, out var color) ? color : "#6b6b6b"
                         )
                     );
@@ -114,39 +95,21 @@ public sealed partial class PublicKnowledgeGraphProvider(
 
     private sealed record CachedGraph(ContentFingerprint Fingerprint, PublicKnowledgeGraph Graph);
 
-    private static List<PublicGraphNode> Nodes(DbConnection db, string locale)
+    private static List<PublicGraphNode> Nodes(PortfolioPublicDbContext db, string locale)
     {
         var nodes = new List<PublicGraphNode>();
-        foreach (var source in NodeSources)
+        foreach (var (kind, rows) in GraphQueries.Nodes(db, locale))
         {
-            var visibility =
-                source.Key is "topic" or "technology" ? ""
-                : source.Key is "finding" ? " and x.hidden=false and x.visibility='public'"
-                : source.Key is "project" or "case-study" ? " and x.hidden=false and x.nda=false"
-                : " and x.hidden=false";
-            var ordering =
-                source.Key == "writing" ? "x.date_iso desc nulls last" : "x.\"order\" nulls first";
-            var rows = Rows(
-                db,
-                $"select x.id, x.slug, x.public_id, t.{source.Value.Label} label from {source.Value.Table} x left join {source.Value.Translation} t on t.{source.Value.ForeignKey}=x.id and t.locale=@locale where 1=1{visibility} order by {ordering}",
-                ("@locale", locale)
-            );
             foreach (var row in rows)
             {
-                var id = $"{source.Key}:{Text(row, "id")}";
-                var label = Text(row, "label", Text(row, "slug"));
                 nodes.Add(
                     new PublicGraphNode(
-                        id,
-                        source.Key,
-                        label,
-                        Url(
-                            source.Key,
-                            PublicRouteKey.Compose(Text(row, "public_id"), Text(row, "slug")),
-                            locale
-                        ),
+                        $"{kind}:{Format.Id(row.Id)}",
+                        kind,
+                        row.Label ?? row.Slug,
+                        Url(kind, PublicRouteKey.Compose(row.PublicId, row.Slug), locale),
                         JsonDocument
-                            .Parse($"{{\"kind\":{JsonSerializer.Serialize(source.Key)}}}")
+                            .Parse($"{{\"kind\":{JsonSerializer.Serialize(kind)}}}")
                             .RootElement.Clone()
                     )
                 );
@@ -156,24 +119,17 @@ public sealed partial class PublicKnowledgeGraphProvider(
     }
 
     private void AddTopicEdges(
-        DbConnection db,
+        PortfolioPublicDbContext db,
         IReadOnlyDictionary<string, PublicGraphNode> index,
-        List<PublicGraphEdge> edges,
-        string locale
+        List<PublicGraphEdge> edges
     )
     {
-        foreach (
-            var row in Rows(
-                db,
-                "select topic_id, topicable_type, topicable_id, role from topicables order by id nulls first"
-            )
-        )
+        foreach (var row in GraphQueries.TopicEdges(db))
         {
-            var sourceKind = Text(row, "topicable_type");
-            var source = $"{sourceKind}:{Text(row, "topicable_id")}";
-            var target = $"topic:{Text(row, "topic_id")}";
+            var source = $"{row.TopicableType}:{Format.Id(row.TopicableId)}";
+            var target = $"topic:{Format.Id(row.TopicId)}";
             var baseLabel = localizer["graph_has_topic"].Value;
-            var role = Text(row, "role");
+            var role = Format.Text(row.Role);
             var label =
                 !string.IsNullOrWhiteSpace(role)
                 && !role.Equals("primary", StringComparison.OrdinalIgnoreCase)
@@ -185,52 +141,35 @@ public sealed partial class PublicKnowledgeGraphProvider(
     }
 
     private void AddTechnologyEdges(
-        DbConnection db,
+        PortfolioPublicDbContext db,
         IReadOnlyDictionary<string, PublicGraphNode> index,
-        List<PublicGraphEdge> edges,
-        string locale
+        List<PublicGraphEdge> edges
     )
     {
-        foreach (
-            var pivot in new[]
-            {
-                ("project_technology", "project", "project_id"),
-                ("case_study_technology", "case-study", "case_study_id"),
-                ("experiment_technology", "experiment", "experiment_id"),
-            }
-        )
-        foreach (
-            var row in Rows(
-                db,
-                $"select {pivot.Item3}, technology_id from {pivot.Item1} order by {pivot.Item3} nulls first, technology_id nulls first"
-            )
-        )
+        foreach (var (kind, rows) in GraphQueries.TechnologyEdges(db))
         {
-            var source = $"{pivot.Item2}:{Text(row, pivot.Item3)}";
-            var target = $"technology:{Text(row, "technology_id")}";
-            if (index.ContainsKey(source) && index.ContainsKey(target))
-                edges.Add(
-                    new PublicGraphEdge(source, target, "uses", localizer["graph_uses"].Value)
-                );
+            foreach (var row in rows)
+            {
+                var source = $"{kind}:{Format.Id(row.OwnerId)}";
+                var target = $"technology:{Format.Id(row.TechnologyId)}";
+                if (index.ContainsKey(source) && index.ContainsKey(target))
+                    edges.Add(
+                        new PublicGraphEdge(source, target, "uses", localizer["graph_uses"].Value)
+                    );
+            }
         }
     }
 
     private void AddCollectionEdges(
-        DbConnection db,
+        PortfolioPublicDbContext db,
         IReadOnlyDictionary<string, PublicGraphNode> index,
-        List<PublicGraphEdge> edges,
-        string locale
+        List<PublicGraphEdge> edges
     )
     {
-        foreach (
-            var row in Rows(
-                db,
-                "select reference_collection_id, resource_id from reference_collection_item order by reference_collection_id nulls first, resource_id nulls first"
-            )
-        )
+        foreach (var row in GraphQueries.CollectionEdges(db))
         {
-            var source = $"collection:{Text(row, "reference_collection_id")}";
-            var target = $"finding:{Text(row, "resource_id")}";
+            var source = $"collection:{Format.Id(row.CollectionId)}";
+            var target = $"finding:{Format.Id(row.ResourceId)}";
             if (index.ContainsKey(source) && index.ContainsKey(target))
                 edges.Add(
                     new PublicGraphEdge(
@@ -244,69 +183,36 @@ public sealed partial class PublicKnowledgeGraphProvider(
     }
 
     private static void AddRelationEdges(
-        DbConnection db,
+        PortfolioPublicDbContext db,
         IReadOnlyDictionary<string, PublicGraphNode> index,
         List<PublicGraphEdge> edges,
         string locale
     )
     {
-        foreach (
-            var row in Rows(
-                db,
-                "select r.subject_type, r.subject_id, r.object_type, r.object_id, r.note, r.context, r.status, t.key, t.family, t.symmetric, t.outbound_label_en, t.outbound_label_pt_br, t.inbound_label_en, t.inbound_label_pt_br from content_relations r join relation_types t on t.id=r.relation_type_id where r.visibility is null or r.visibility='public' order by r.id nulls first"
-            )
-        )
+        var portuguese = CultureCatalog.NormalizeName(locale) == "pt-BR";
+        foreach (var row in GraphQueries.RelationEdges(db))
         {
-            var source = $"{Text(row, "subject_type")}:{Text(row, "subject_id")}";
-            var target = $"{Text(row, "object_type")}:{Text(row, "object_id")}";
+            var source = $"{row.SubjectType}:{Format.Id(row.SubjectId)}";
+            var target = $"{row.ObjectType}:{Format.Id(row.ObjectId)}";
             if (index.ContainsKey(source) && index.ContainsKey(target))
                 edges.Add(
                     new PublicGraphEdge(
                         source,
                         target,
-                        Text(row, "key"),
-                        TextForLocale(
-                            row,
-                            locale,
-                            "outbound_label_en",
-                            "outbound_label_pt_br",
-                            Text(row, "key")
-                        ),
-                        Text(row, "family"),
-                        Bool(row, "symmetric"),
-                        TextForLocale(
-                            row,
-                            locale,
-                            "inbound_label_en",
-                            "inbound_label_pt_br",
-                            Text(row, "key")
-                        ),
-                        Text(row, "note"),
-                        Text(row, "context"),
-                        Text(row, "status")
+                        row.Key,
+                        portuguese ? row.OutboundLabelPtBr : row.OutboundLabelEn,
+                        row.Family,
+                        row.Symmetric,
+                        portuguese ? row.InboundLabelPtBr : row.InboundLabelEn,
+                        Format.Text(row.Note),
+                        Format.Text(row.Context),
+                        Format.Text(row.Status)
                     )
                 );
         }
     }
 
-    private string Label(string kind, string locale) =>
-        localizer[$"graph_kind_{kind.Replace('-', '_')}"];
-
-    private static string TextForLocale(
-        Dictionary<string, object?> row,
-        string locale,
-        string englishColumn,
-        string portugueseColumn,
-        string fallback
-    )
-    {
-        var column = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
-        {
-            ["en"] = englishColumn,
-            ["pt-BR"] = portugueseColumn,
-        }[CultureCatalog.NormalizeName(locale)];
-        return Text(row, column, fallback);
-    }
+    private string Label(string kind) => localizer[$"graph_kind_{kind.Replace('-', '_')}"];
 
     private static string? Url(string kind, string slug, string locale)
     {
@@ -329,7 +235,7 @@ public sealed partial class PublicKnowledgeGraphProvider(
     [LoggerMessage(
         EventId = 1002,
         Level = LogLevel.Error,
-        Message = "Could not read the knowledge graph from SQLite in read-only mode."
+        Message = "Could not read the knowledge graph in read-only mode."
     )]
     private static partial void LogKnowledgeGraphReadFailed(ILogger logger, Exception exception);
 }

@@ -1,9 +1,9 @@
 # Database schema
 
-The SQLite schema is owned by EF Core migrations in `Portfolio.Blazor.Database`.
-It used to be owned by Laravel's migrations, which is why the table and column
-names are snake_case and the indexes carry Laravel's naming (`projects_slug_unique`
-rather than `IX_projects_slug`). The model preserves those names deliberately, via
+The PostgreSQL schema is owned by EF Core migrations in `Portfolio.Blazor.Database`.
+The table and column names are snake_case and the indexes carry the naming of the
+Laravel application this content was imported from (`projects_slug_unique` rather
+than `IX_projects_slug`). The model preserves those names deliberately, via
 `HasDatabaseName`, so the migrations describe the database that actually exists.
 
 Two conventions are turned off or overridden for the same reason:
@@ -17,16 +17,15 @@ Two conventions are turned off or overridden for the same reason:
 
 ## The initial migration is a baseline
 
-`InitialSchema` was generated from the model and then recorded as applied against the
-existing database by inserting its row into `__EFMigrationsHistory`. It was never run
-against a populated database. Before recording it, a database built from the migration
-was compared against the live one: 52 tables, 402 columns, 33 indexes and 48 foreign
-keys, with zero differences in names, defaults, nullability or primary keys.
+`InitialSchema` was generated from the model. The content was imported from a legacy
+SQLite export table by table (see the "Importing content" section below), matched
+against the migrated, empty schema, so the row counts and shapes tie out to what that
+export held.
 
 ## Working on the schema
 
     just db-migration <Name>   # author a migration from model changes
-    just db-update             # apply pending migrations to the dev database
+    just db-update              # apply pending migrations to the dev database
     just schema                # fail if the model has changes with no migration
 
 `just schema` runs inside `just check`. It is what keeps the model and the migrations
@@ -36,47 +35,46 @@ Production never migrates on boot. `.docker/entrypoint.prod.sh` refuses to start
 without a database and applies nothing. Applying a migration in production is a
 deliberate step, after a backup.
 
-## Two providers
+## PostgreSQL
 
-The app runs on SQLite (default) or PostgreSQL, chosen by `PORTFOLIO_DB_PROVIDER`
-(`sqlite` | `postgres`). PostgreSQL needs `PORTFOLIO_DB_CONNECTION` (admin, read-write)
+The app runs on PostgreSQL only, through `PORTFOLIO_DB_CONNECTION` (admin, read-write)
 and optionally `PORTFOLIO_DB_READ_CONNECTION` (a SELECT-only role for the public site;
-falls back to the admin connection). The public readers always open PostgreSQL sessions
-with `default_transaction_read_only=on`, so they cannot write even with a permissive role.
+falls back to the admin connection). Both are required at startup; there is no other
+provider to fall back to. The public readers always open PostgreSQL sessions with
+`default_transaction_read_only=on`, so they cannot write even with a permissive role.
+`Data/DatabaseServiceCollectionExtensions.cs` is the only place that configures a
+provider for the running app.
 
-The EF model is shared; each provider has its own migrations assembly, generated from the
-same model with that provider's design-time factory:
-
-    Portfolio.Blazor.Database            # SQLite, the historical baseline
-    Portfolio.Blazor.Database.Postgres   # PostgreSQL, generated fresh (InitialSchema)
-
-    just db-migration <Name> [sqlite|postgres]
-    just db-update [sqlite|postgres]
-    just schema                          # has-pending-model-changes for both assemblies
-
-Provider-specific mapping lives in `PortfolioModel.ApplyProviderMappings`, shared by both
-contexts: on
-PostgreSQL, `DateOnly` columns are native `date` (the lenient text converter is SQLite-only)
-and every `DateTime` is `timestamp without time zone`, because the legacy values are
-wall-clock timestamps with no zone. Do not start writing `DateTime.UtcNow` from the admin
-without revisiting that mapping.
+`DateOnly` columns are native `date` and every `DateTime` is `timestamp without time
+zone` (`PortfolioModel.ApplyColumnTypes`), because the legacy values this schema was
+imported from are wall-clock timestamps with no zone. Do not start writing
+`DateTime.UtcNow` from the admin without revisiting that mapping.
 
 PostgreSQL truncates identifiers to 63 characters, so the two Laravel index names longer
 than that (`reference_collection_translations_reference_collection_id_locale_unique` and
-`FK_site_settings_translations_site_settings_site_settings_id`) exist truncated there. The
-"zero differences" claim above is about the SQLite baseline only.
+`FK_site_settings_translations_site_settings_site_settings_id`) exist truncated.
 
-The public cache invalidates by file length and mtime on SQLite and by the
-`content_revisions` row on PostgreSQL (read through the public context); the admin bumps that row after every committed write
-through `IDatabaseProvider.SignalContentChangedAsync` (on SQLite the same call is the WAL
-checkpoint). Backups are not the app's job on either engine: copy the SQLite file (the
-`Portfolio.Blazor.Snapshot` CLI does that for dev snapshots) or run `pg_dump` from the host.
+The public cache invalidates by the `content_revisions` row, read through the public
+context; the admin bumps that row after every committed write through
+`ContentRevisionTracker.SignalContentChangedAsync`. Backups are not the app's job:
+`just db-backup` runs `pg_dump -Fc` into `data/snapshots/`, and `just db-restore <file>`
+restores it with `pg_restore --clean --if-exists`.
 
-`just test-data` runs `Portfolio.Blazor.Data.Tests`: it migrates a fresh SQLite file, seeds it
-with plain SQL, builds the public snapshot and knowledge graph through the real providers,
-and asserts the hidden-content rules, the declared query filters and the orderings. With `PORTFOLIO_TEST_PG_CONNECTION` set
-(`just test-data-postgres`, and the `postgres-smoke` CI job) it does the same against a
-throwaway PostgreSQL database and requires the two JSON outputs to be identical.
+`just test-data` runs `Portfolio.Blazor.Data.Tests`: it creates a throwaway PostgreSQL
+database, migrates it, seeds it with plain SQL, builds the public snapshot and knowledge
+graph through the real providers, and asserts the hidden-content rules, the declared
+query filters, the orderings and that the fingerprint refreshes after a signalled write.
+
+## Importing content
+
+The site's content was originally in a SQLite database (a Laravel export). It moved to
+PostgreSQL through a one-off importer, `Portfolio.Blazor.Import` (`just db-import-sqlite
+<file>`): it copies every table via `COPY ... FROM STDIN (FORMAT BINARY)`, refuses to run
+against a non-empty destination, and resets every identity sequence from the imported
+max id afterwards. It has no dependency on the EF model, so it also carries the tables
+that have no `DbSet` on the admin context. This project is temporary and is removed once
+every environment that held SQLite content has been imported; see
+`docs/pendencias-e-decisoes.md` for its status.
 
 ## Two contexts
 
@@ -87,9 +85,8 @@ migrations assemblies target. `PortfolioPublicDbContext` is what the public site
 through (`PublicSiteContentProvider`, `PublicKnowledgeGraphProvider` and the LINQ queries
 in `src/Portfolio/Portfolio.Blazor/PublicQueries/`). It applies `PublicVisibilityFilters` as
 global query filters (`hidden`, `nda`, `visibility = 'public'`, active credits), runs with
-`QueryTrackingBehavior.NoTracking`, throws from `SaveChanges`, and gets its connection from
-`IDatabaseProvider.ConfigurePublicRead`: SQLite opened with `Mode=ReadOnly`, PostgreSQL with
-`default_transaction_read_only=on`. Reaching a filtered parent from a pivot uses an explicit
+`QueryTrackingBehavior.NoTracking`, throws from `SaveChanges`, and gets a connection opened
+with `default_transaction_read_only=on`. Reaching a filtered parent from a pivot uses an explicit
 `join` on the filtered `DbSet`, never the navigation, so the row disappears instead of
 turning into a left join with nulls. `IgnoreQueryFilters` is forbidden in the runtime by
 `verify-hidden-content.sh`; only the data tests use it, to prove the filters bite.

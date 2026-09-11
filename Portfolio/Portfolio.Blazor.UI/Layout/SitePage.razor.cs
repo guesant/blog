@@ -12,10 +12,6 @@ public partial class SitePage
     [Parameter]
     public string? Class { get; set; }
 
-    /// <summary>Caps the whole page at the prose measure so cards and rich text share the same edges.</summary>
-    [Parameter]
-    public bool Reading { get; set; }
-
     /// <summary>Breadcrumb rendered before the page content; callers opt in explicitly instead of relying on Template value.</summary>
     [Parameter]
     public RenderFragment? Breadcrumb { get; set; }

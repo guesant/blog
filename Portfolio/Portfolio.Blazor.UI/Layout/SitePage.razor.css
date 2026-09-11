@@ -1,15 +1,12 @@
 .site-page {
     display: flex;
     width: 100%;
-    max-width: var(--site-page-max);
+    max-width: var(--site-content-max);
     margin-inline: auto;
     flex-direction: column;
     gap: var(--site-space-6);
     padding-top: var(--site-space-6) !important;
     padding-bottom: var(--site-space-6) !important;
-}
-.site-page[data-reading="true"] {
-    max-width: var(--site-content-max);
 }
 .site-page > ::deep .breadcrumb-bar,
 .site-page > ::deep .site-hero {

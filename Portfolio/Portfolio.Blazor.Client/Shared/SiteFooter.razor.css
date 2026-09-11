@@ -10,11 +10,8 @@
 }
 .site-main-scroll > .site-footer {
     flex: 0 0 auto;
-    width: min(100%, var(--site-page-max));
-    margin-inline: auto;
-}
-.site-main-scroll:has(> .page-content > main[data-reading="true"]) > .site-footer {
     width: min(100%, var(--site-content-max));
+    margin-inline: auto;
 }
 
 @media (min-width: 48rem) {

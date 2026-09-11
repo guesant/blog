@@ -137,19 +137,19 @@ public sealed partial class PublicSiteContentProvider(
             DateTimeOffset.UtcNow.ToString("O"),
             chrome,
             pages,
-            Projects(db, locale),
-            Cases(db, locale),
+            Projects(context, locale),
+            Cases(context, locale),
             Writings(db, locale),
             Findings(db, locale),
             Collections(db, locale),
             Topics(context, locale),
             Technologies(context, locale),
-            Experiments(db, locale),
+            Experiments(context, locale),
             Snippets(db, locale),
             Credits(context, locale),
-            Resume(db, locale),
-            FeaturedCases(db, locale),
-            FeaturedProjects(db, locale),
+            Resume(db, context, locale),
+            FeaturedCases(db, context, locale),
+            FeaturedProjects(db, context, locale),
             FeaturedWritings(db, locale),
             ResumePdfLocales()
         );
@@ -178,67 +178,77 @@ public sealed partial class PublicSiteContentProvider(
             )
             .ToList();
 
-    private static List<PublicProject> Projects(DbConnection db, string locale) =>
-        Rows(
-                db,
-                "select p.*, coalesce(t.name, en.name) as name, coalesce(t.purpose, en.purpose) as purpose, coalesce(t.problem, en.problem) as problem, coalesce(t.current_focus, en.current_focus) as current_focus, coalesce(t.status, en.status) as status, coalesce(t.metrics, en.metrics) as metrics, coalesce(t.body, en.body) as body from projects p left join project_translations t on t.project_id=p.id and t.locale=@locale left join project_translations en on en.project_id=p.id and en.locale='en' where p.hidden=false and p.nda=false order by p.\"order\" nulls first",
-                ("@locale", locale)
-            )
+    private static List<PublicProject> Projects(PortfolioPublicDbContext context, string locale)
+    {
+        var technologies = ProjectQueries
+            .Technologies(context, locale)
+            .ToLookup(row => row.OwnerId);
+        var history = HistoryQueries.ForProjects(context, locale).ToLookup(row => row.OwnerId);
+        return ProjectQueries
+            .Projects(context, locale)
             .Select(row => new PublicProject(
-                Text(row, "slug"),
-                Route("projects.show", Key(row), locale),
-                Text(row, "name", Text(row, "slug")),
-                Text(row, "purpose"),
-                Text(row, "status"),
-                Timestamp(row, "published_at"),
-                Bool(row, "external"),
-                Text(row, "problem"),
-                Text(row, "current_focus"),
-                JsonNullable(Text(row, "metrics")),
-                Text(row, "body"),
-                TechnologiesFor(db, "project_technology", "project_id", Id(row, "id"), locale),
-                Bool(row, "show_history"),
-                HistoryFor(db, "App\\Models\\Project", Id(row, "id"), locale),
-                Text(row, "href"),
-                RelatedProjects(db, Id(row, "id"), locale),
-                Timestamp(row, "updated_at")
-            ))
-            .ToList();
-
-    private static List<PublicCaseStudy> Cases(DbConnection db, string locale) =>
-        Rows(
-                db,
-                "select c.*, coalesce(t.title, en.title) as title, coalesce(t.status, en.status) as status, coalesce(t.meta, en.meta) as meta, coalesce(t.summary, en.summary) as summary, coalesce(t.context, en.context) as context, coalesce(t.role, en.role) as role, coalesce(t.result, en.result) as result, coalesce(t.metrics, en.metrics) as metrics, coalesce(t.body, en.body) as body from case_studies c left join case_study_translations t on t.case_study_id=c.id and t.locale=@locale left join case_study_translations en on en.case_study_id=c.id and en.locale='en' where c.hidden=false and c.nda=false order by c.\"order\" nulls first",
-                ("@locale", locale)
-            )
-            .Select(row => new PublicCaseStudy(
-                Text(row, "slug"),
-                Route("cases.show", Key(row), locale),
-                Text(row, "title", Text(row, "slug")),
-                Text(row, "status"),
-                Text(row, "summary"),
-                Timestamp(row, "published_at"),
-                Bool(row, "external"),
-                Text(row, "meta"),
-                Text(row, "context"),
-                Text(row, "role"),
-                Text(row, "result"),
-                JsonNullable(Text(row, "metrics")),
-                Text(row, "body"),
-                TechnologiesFor(
-                    db,
-                    "case_study_technology",
-                    "case_study_id",
-                    Id(row, "id"),
+                row.Slug,
+                Route("projects.show", PublicRouteKey.Compose(row.PublicId, row.Slug), locale),
+                row.Name ?? row.Slug,
+                Format.Text(row.Purpose),
+                Format.Text(row.Status),
+                Format.Timestamp(row.PublishedAt),
+                row.External,
+                Format.Text(row.Problem),
+                Format.Text(row.CurrentFocus),
+                JsonNullable(Format.Text(row.Metrics)),
+                Format.Text(row.Body),
+                Technologies(technologies[row.Id]),
+                row.ShowHistory,
+                History(history[row.Id]),
+                Format.Text(row.Href),
+                Related(
+                    "projects.show",
+                    ProjectQueries.RelatedBySharedTechnology(context, row.Id, locale),
+                    () => ProjectQueries.RelatedRecent(context, row.Id, locale),
                     locale
                 ),
-                Bool(row, "show_history"),
-                HistoryFor(db, "App\\Models\\CaseStudy", Id(row, "id"), locale),
-                Text(row, "href"),
-                RelatedCases(db, Id(row, "id"), locale),
-                Timestamp(row, "updated_at")
+                Format.Timestamp(row.UpdatedAt)
             ))
             .ToList();
+    }
+
+    private static List<PublicCaseStudy> Cases(PortfolioPublicDbContext context, string locale)
+    {
+        var technologies = CaseStudyQueries
+            .Technologies(context, locale)
+            .ToLookup(row => row.OwnerId);
+        var history = HistoryQueries.ForCaseStudies(context, locale).ToLookup(row => row.OwnerId);
+        return CaseStudyQueries
+            .Cases(context, locale)
+            .Select(row => new PublicCaseStudy(
+                row.Slug,
+                Route("cases.show", PublicRouteKey.Compose(row.PublicId, row.Slug), locale),
+                row.Title ?? row.Slug,
+                Format.Text(row.Status),
+                Format.Text(row.Summary),
+                Format.Timestamp(row.PublishedAt),
+                row.External,
+                Format.Text(row.Meta),
+                Format.Text(row.Context),
+                Format.Text(row.Role),
+                Format.Text(row.Result),
+                JsonNullable(Format.Text(row.Metrics)),
+                Format.Text(row.Body),
+                Technologies(technologies[row.Id]),
+                row.ShowHistory,
+                History(history[row.Id]),
+                Format.Text(row.Href),
+                Related(
+                    "cases.show",
+                    CaseStudyQueries.RelatedBySharedTechnology(context, row.Id, locale),
+                    () => CaseStudyQueries.RelatedRecent(context, row.Id, locale),
+                    locale
+                ),
+                Format.Timestamp(row.UpdatedAt)
+            ))
+            .ToList();
+    }
 
     private static List<PublicWriting> Writings(DbConnection db, string locale) =>
         Rows(
@@ -366,102 +376,71 @@ public sealed partial class PublicSiteContentProvider(
             .ToList();
     }
 
-    private static List<PublicExperiment> Experiments(DbConnection db, string locale) =>
-        Rows(
-                db,
-                "select e.*, coalesce(t.name, en.name) as name, coalesce(t.purpose, en.purpose) as purpose, coalesce(t.body, en.body) as body from experiments e left join experiment_translations t on t.experiment_id=e.id and t.locale=@locale left join experiment_translations en on en.experiment_id=e.id and en.locale='en' where e.hidden=false order by e.\"order\" nulls first",
-                ("@locale", locale)
-            )
+    private static List<PublicExperiment> Experiments(
+        PortfolioPublicDbContext context,
+        string locale
+    )
+    {
+        var technologies = ExperimentQueries
+            .Technologies(context, locale)
+            .ToLookup(row => row.OwnerId);
+        var history = HistoryQueries.ForExperiments(context, locale).ToLookup(row => row.OwnerId);
+        return ExperimentQueries
+            .Experiments(context, locale)
             .Select(row => new PublicExperiment(
-                Text(row, "slug"),
-                Route("projects.experiments.show", Key(row), locale),
-                Text(row, "name", Text(row, "slug")),
-                Text(row, "purpose"),
-                Text(row, "body"),
-                Timestamp(row, "published_at"),
-                Bool(row, "external"),
-                TechnologiesFor(
-                    db,
-                    "experiment_technology",
-                    "experiment_id",
-                    Id(row, "id"),
+                row.Slug,
+                Route(
+                    "projects.experiments.show",
+                    PublicRouteKey.Compose(row.PublicId, row.Slug),
                     locale
                 ),
-                Text(row, "href"),
-                Timestamp(row, "updated_at"),
-                Bool(row, "show_history"),
-                HistoryFor(db, "App\\Models\\Experiment", Id(row, "id"), locale),
-                RelatedExperiments(db, Id(row, "id"), locale)
+                row.Name ?? row.Slug,
+                Format.Text(row.Purpose),
+                Format.Text(row.Body),
+                Format.Timestamp(row.PublishedAt),
+                row.External,
+                Technologies(technologies[row.Id]),
+                Format.Text(row.Href),
+                Format.Timestamp(row.UpdatedAt),
+                row.ShowHistory,
+                History(history[row.Id]),
+                Related(
+                    "projects.experiments.show",
+                    ExperimentQueries.RelatedBySharedTechnology(context, row.Id, locale),
+                    () => ExperimentQueries.RelatedRecent(context, row.Id, locale),
+                    locale
+                )
+            ))
+            .ToList();
+    }
+
+    private static List<PublicTechnology> Technologies(IEnumerable<OwnerTechnologyRow> rows) =>
+        rows.Select(row => new PublicTechnology(row.Slug, row.Name ?? row.Slug)).ToList();
+
+    private static List<PublicHistoryEntry> History(IEnumerable<HistoryRow> rows) =>
+        rows.Select(row => new PublicHistoryEntry(
+                Format.Id(row.Id),
+                Format.Timestamp(row.CreatedAt) is { Length: > 0 } createdAt
+                    ? createdAt
+                    : Format.Id(row.Id),
+                Values(Format.Text(row.OldValues)),
+                Values(Format.Text(row.NewValues))
             ))
             .ToList();
 
-    private static List<PublicRelatedContent> RelatedExperiments(
-        DbConnection db,
-        long id,
+    private static List<PublicRelatedContent> Related(
+        string route,
+        List<RelatedRow> shared,
+        Func<List<RelatedRow>> recent,
         string locale
-    )
-    {
-        const string shared =
-            "select e.slug, e.public_id, t.name, e.published_at from experiments e left join experiment_translations t on t.experiment_id=e.id and t.locale=@locale where e.hidden=false and e.id<>@id and exists (select 1 from experiment_technology current_technology join experiment_technology related_technology on related_technology.technology_id=current_technology.technology_id where current_technology.experiment_id=@id and related_technology.experiment_id=e.id) order by e.published_at desc nulls last limit 3";
-        var rows = Rows(db, shared, ("@id", id), ("@locale", locale));
-        if (rows.Count == 0)
-            rows = Rows(
-                db,
-                "select e.slug, e.public_id, t.name, e.published_at from experiments e left join experiment_translations t on t.experiment_id=e.id and t.locale=@locale where e.hidden=false and e.id<>@id order by e.published_at desc nulls last limit 3",
-                ("@id", id),
-                ("@locale", locale)
-            );
-        return rows.Select(row => new PublicRelatedContent(
-                Text(row, "name", Text(row, "slug")),
-                Route("projects.experiments.show", Key(row), locale),
-                Timestamp(row, "published_at")
+    ) =>
+        (shared.Count == 0 ? recent() : shared)
+            .Select(row => new PublicRelatedContent(
+                row.Title ?? row.Slug,
+                Route(route, PublicRouteKey.Compose(row.PublicId, row.Slug), locale),
+                Format.Timestamp(row.Date)
             ))
             .ToList();
-    }
-
-    private static List<PublicRelatedContent> RelatedProjects(
-        DbConnection db,
-        long id,
-        string locale
-    )
-    {
-        const string shared =
-            "select p.slug, p.public_id, t.name, p.published_at from projects p left join project_translations t on t.project_id=p.id and t.locale=@locale where p.hidden=false and p.nda=false and p.id<>@id and exists (select 1 from project_technology current_technology join project_technology related_technology on related_technology.technology_id=current_technology.technology_id where current_technology.project_id=@id and related_technology.project_id=p.id) order by p.published_at desc nulls last limit 3";
-        var rows = Rows(db, shared, ("@id", id), ("@locale", locale));
-        if (rows.Count == 0)
-            rows = Rows(
-                db,
-                "select p.slug, p.public_id, t.name, p.published_at from projects p left join project_translations t on t.project_id=p.id and t.locale=@locale where p.hidden=false and p.nda=false and p.id<>@id order by p.published_at desc nulls last limit 3",
-                ("@id", id),
-                ("@locale", locale)
-            );
-        return rows.Select(row => new PublicRelatedContent(
-                Text(row, "name", Text(row, "slug")),
-                Route("projects.show", Key(row), locale),
-                Timestamp(row, "published_at")
-            ))
-            .ToList();
-    }
-
-    private static List<PublicRelatedContent> RelatedCases(DbConnection db, long id, string locale)
-    {
-        const string shared =
-            "select c.slug, c.public_id, t.title, c.published_at from case_studies c left join case_study_translations t on t.case_study_id=c.id and t.locale=@locale where c.hidden=false and c.nda=false and c.id<>@id and exists (select 1 from case_study_technology current_technology join case_study_technology related_technology on related_technology.technology_id=current_technology.technology_id where current_technology.case_study_id=@id and related_technology.case_study_id=c.id) order by c.published_at desc nulls last limit 3";
-        var rows = Rows(db, shared, ("@id", id), ("@locale", locale));
-        if (rows.Count == 0)
-            rows = Rows(
-                db,
-                "select c.slug, c.public_id, t.title, c.published_at from case_studies c left join case_study_translations t on t.case_study_id=c.id and t.locale=@locale where c.hidden=false and c.nda=false and c.id<>@id order by c.published_at desc nulls last limit 3",
-                ("@id", id),
-                ("@locale", locale)
-            );
-        return rows.Select(row => new PublicRelatedContent(
-                Text(row, "title", Text(row, "slug")),
-                Route("cases.show", Key(row), locale),
-                Timestamp(row, "published_at")
-            ))
-            .ToList();
-    }
 
     private static List<PublicRelatedContent> RelatedWritings(
         DbConnection db,
@@ -611,9 +590,13 @@ public sealed partial class PublicSiteContentProvider(
             ))
             .ToList();
 
-    private static List<PublicCaseStudy> FeaturedCases(DbConnection db, string locale)
+    private static List<PublicCaseStudy> FeaturedCases(
+        DbConnection db,
+        PortfolioPublicDbContext context,
+        string locale
+    )
     {
-        var all = Cases(db, locale)
+        var all = Cases(context, locale)
             .ToDictionary(item => item.Slug, StringComparer.OrdinalIgnoreCase);
         return Rows(
                 db,
@@ -626,9 +609,13 @@ public sealed partial class PublicSiteContentProvider(
             .ToList();
     }
 
-    private static List<PublicProject> FeaturedProjects(DbConnection db, string locale)
+    private static List<PublicProject> FeaturedProjects(
+        DbConnection db,
+        PortfolioPublicDbContext context,
+        string locale
+    )
     {
-        var all = Projects(db, locale)
+        var all = Projects(context, locale)
             .ToDictionary(item => item.Slug, StringComparer.OrdinalIgnoreCase);
         return Rows(
                 db,
@@ -656,7 +643,11 @@ public sealed partial class PublicSiteContentProvider(
             .ToList();
     }
 
-    private static JsonElement Resume(DbConnection db, string locale)
+    private static JsonElement Resume(
+        DbConnection db,
+        PortfolioPublicDbContext context,
+        string locale
+    )
     {
         var row = Row(
             db,
@@ -737,7 +728,7 @@ public sealed partial class PublicSiteContentProvider(
                     ("@id", resumeId)
                 )
                 .Select(item =>
-                    Cases(db, locale).FirstOrDefault(value => value.Slug == Text(item, "slug"))
+                    Cases(context, locale).FirstOrDefault(value => value.Slug == Text(item, "slug"))
                 )
                 .Where(value => value is not null)
                 .ToArray();

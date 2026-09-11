@@ -65,16 +65,14 @@ database, migrates it, seeds it with plain SQL, builds the public snapshot and k
 graph through the real providers, and asserts the hidden-content rules, the declared
 query filters, the orderings and that the fingerprint refreshes after a signalled write.
 
-## Importing content
+## The content was imported from SQLite
 
 The site's content was originally in a SQLite database (a Laravel export). It moved to
-PostgreSQL through a one-off importer, `Portfolio.Blazor.Import` (`just db-import-sqlite
-<file>`): it copies every table via `COPY ... FROM STDIN (FORMAT BINARY)`, refuses to run
-against a non-empty destination, and resets every identity sequence from the imported
-max id afterwards. It has no dependency on the EF model, so it also carries the tables
-that have no `DbSet` on the admin context. This project is temporary and is removed once
-every environment that held SQLite content has been imported; see
-`docs/pendencias-e-decisoes.md` for its status.
+PostgreSQL through a one-off importer (`Portfolio.Blazor.Import`, removed after use, see
+`docs/pendencias-e-decisoes.md`): it copied every table via `COPY ... FROM STDIN (FORMAT
+BINARY)`, without depending on the EF model, so it also carried the tables that have no
+`DbSet` on the admin context. The last SQLite state before the cutover is kept as the
+single backup in `data/snapshots/`.
 
 ## Two contexts
 

@@ -166,12 +166,6 @@ db-restore file:
     {{compose_dev}} up -d --wait postgres
     cat "{{file}}" | {{compose_dev}} exec -T postgres pg_restore -U portfolio -d portfolio --clean --if-exists
 
-db-import-sqlite file:
-    {{compose_dev}} up -d --wait postgres
-    {{compose_dev}} run --rm --entrypoint sh web -lc \
-        'dotnet run --project src/Portfolio/Portfolio.Blazor.Import/Portfolio.Blazor.Import.csproj --configuration Release --no-build -- "{{file}}" "$PORTFOLIO_DB_CONNECTION"'
-
-
 stories:
     {{compose_dev}} run --rm -p 8081:8081 -e NUGET_PACKAGES=/src/.nuget-cache -e ASPNETCORE_URLS=http://0.0.0.0:8081 web sh -lc \
         'dotnet watch --project src/Portfolio/Portfolio.Blazor.Stories/Portfolio.Blazor.Stories.csproj --no-launch-profile --no-restore --non-interactive --no-hot-reload -- --urls http://0.0.0.0:8081'

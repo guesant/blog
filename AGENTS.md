@@ -29,7 +29,7 @@ Este arquivo é a fonte da verdade das convenções. `CLAUDE.md` e `GEMINI.md` s
 
 ## Qualidade
 
-- `just check` é o gate completo: formatação, lint, comentários, duplicação, build, testes, supply-chain, runtime somente-leitura, guard do admin, conteúdo oculto, schema (migrações EF), tokens de design e imports do UI. `just composition` e `just verify-stories` completam (composição por componentes `Site*` e uma story por componente).
+- `just check` é o gate completo: formatação, lint, comentários, duplicação, build, testes, supply-chain, runtime somente-leitura, guard do admin, conteúdo oculto, schema (migrações EF), tokens de design, imports do UI, chaves de resx, texto fixo, composição por componentes `Site*`, uma story por componente e a regressão visual das stories (`vrt`; `just vrt-update` refaz os baselines depois de uma mudança visual intencional). A CI roda o mesmo `just check`.
 - Nunca rodar comandos que apaguem ou recriem o banco de desenvolvimento; ele contém conteúdo real. Faça backup em `data/snapshots/` antes de qualquer operação de risco no banco.
 
 ## Documentação

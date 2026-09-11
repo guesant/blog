@@ -31,14 +31,14 @@ jobs:
       - name: Validate compose file
         run: docker compose config --quiet
 
-      - name: Verify read-only content runtime
-        run: docker compose run --rm web sh tools/scripts/verify-readonly-runtime.sh
-
-      - name: Verify supply-chain policy
-        run: docker compose run --rm web sh tools/scripts/verify-supply-chain.sh
+      - name: Install just
+        run: sudo apt-get update && sudo apt-get install --yes --no-install-recommends just
 
       - name: Restore locked NuGet dependencies
         run: docker compose run --rm web dotnet restore src/Portfolio.Blazor.slnx --locked-mode
+
+      - name: Run the quality gate
+        run: just check
 
       # IMPORTANT: the solution also holds JavaScript projects (*.esproj) that `dotnet list package`
       # rejects, so the audit and the SBOM walk the C# projects one by one.
@@ -54,12 +54,6 @@ jobs:
           name: blazor-nuget-sbom
           path: artifacts/sbom/dependencies.spdx.json
           if-no-files-found: error
-
-      - name: Build Blazor solution
-        run: docker compose run --rm web dotnet build src/Portfolio.Blazor.slnx --configuration Release --no-restore
-
-      - name: Run core checks
-        run: docker compose run --rm web dotnet run --project src/Portfolio/Portfolio.Blazor.Core.Tests/Portfolio.Blazor.Core.Tests.csproj --no-restore
 
       - name: Start SSR app for structural smoke tests
         run: docker compose up -d web

@@ -51,8 +51,8 @@
   <data name="copy_markdown"><value>copiar Markdown</value></data>
   <data name="copied"><value>copiado</value></data>
   <data name="download"><value>baixar</value></data>
-  <data name="download_text"><value>baixar TXT</value></data>
-  <data name="download_markdown"><value>baixar Markdown</value></data>
+  <data name="download_text"><value>baixar como TXT</value></data>
+  <data name="download_markdown"><value>baixar como Markdown</value></data>
   <data name="open_source"><value>abrir fonte</value></data>
   <data name="download_files"><value>baixar arquivos</value></data>
   <data name="reveal_email"><value>email</value></data>

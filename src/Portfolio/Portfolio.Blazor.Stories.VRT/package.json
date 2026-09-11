@@ -6,9 +6,7 @@
   "type": "module",
   "scripts": {
     "test": "playwright test",
-    "test:open": "playwright test & start  \"\" \"playwright-report/index.html\"",
-    "snapshots:update": "playwright test --update-snapshots",
-    "stories:gen": "playwright test -g wont-match-anything --pass-with-no-tests"
+    "snapshots:update": "playwright test --update-snapshots"
   },
   "devDependencies": {
     "@playwright/test": "1.61.1",

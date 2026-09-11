@@ -18,11 +18,5 @@
     "scripts/**/*.ts",
     "playwright.config.ts",
     "vrt.config.ts"
-  ],
-  // The inactive provider adapter variants reference SDKs that are not
-  // installed (only the active provider's SDK is); the active copy
-  // (scripts/snapshot-storage.ts) is what gets type-checked.
-  "exclude": [
-    "scripts/snapshot-storage.*.ts"
   ]
 }

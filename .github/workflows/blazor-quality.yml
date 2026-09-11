@@ -42,8 +42,6 @@ jobs:
       - name: Run the quality gate
         run: just check
 
-      # IMPORTANT: the solution also holds JavaScript projects (*.esproj) that `dotnet list package`
-      # rejects, so the audit and the SBOM walk the C# projects one by one.
       - name: Audit NuGet dependencies
         run: docker compose run --rm web sh -lc 'set -e; for project in src/Portfolio/*/*.csproj; do dotnet list "$project" package --vulnerable --include-transitive; done'
 

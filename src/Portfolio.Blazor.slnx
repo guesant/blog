@@ -12,9 +12,6 @@
   <Project Path="Portfolio/Portfolio.Blazor.Data.Tests/Portfolio.Blazor.Data.Tests.csproj" />
   <Project Path="Portfolio/Portfolio.Blazor.Sbom/Portfolio.Blazor.Sbom.csproj" />
   <Project Path="Portfolio/Portfolio.Blazor.Snapshot/Portfolio.Blazor.Snapshot.csproj" />
-  <Project Path="Portfolio/Portfolio.Blazor.Stories.VRT/Portfolio.Blazor.Stories.VRT.esproj">
-    <Platform Project="AnyCPU" />
-  </Project>
   <Project Path="Portfolio/Portfolio.Blazor.Stories/Portfolio.Blazor.Stories.csproj" />
   <Project Path="Portfolio/Portfolio.Blazor.UI/Portfolio.Blazor.UI.csproj" />
   <Project Path="Portfolio/Portfolio.Blazor/Portfolio.Blazor.csproj" />

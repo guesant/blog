@@ -140,8 +140,8 @@ public sealed partial class PublicSiteContentProvider(
             Projects(context, locale),
             Cases(context, locale),
             Writings(context, locale),
-            Findings(db, locale),
-            Collections(db, locale),
+            Findings(context, locale),
+            Collections(context, locale),
             Topics(context, locale),
             Technologies(context, locale),
             Experiments(context, locale),
@@ -297,65 +297,136 @@ public sealed partial class PublicSiteContentProvider(
             .ToList();
     }
 
-    private static List<PublicFinding> Findings(DbConnection db, string locale) =>
-        Rows(
-                db,
-                "select r.*, coalesce(t.title, en.title) as title, coalesce(t.alternative_title, en.alternative_title) as alternative_title, coalesce(t.description, en.description) as description, coalesce(t.personal_note, en.personal_note) as personal_note, coalesce(t.reason_found, en.reason_found) as reason_found from resources r left join resource_translations t on t.resource_id=r.id and t.locale=@locale left join resource_translations en on en.resource_id=r.id and en.locale='en' where r.hidden=false and r.visibility='public' order by r.\"order\" nulls first",
-                ("@locale", locale)
-            )
+    private static List<PublicFinding> Findings(PortfolioPublicDbContext context, string locale)
+    {
+        var topics = TopicQueries
+            .TopicsFor(context, "finding", context.Resources.Select(r => r.Id), locale)
+            .ToLookup(row => row.OwnerId);
+        var attribution = FindingQueries
+            .AttributionTopics(context, locale)
+            .ToLookup(row => row.ResourceId);
+        var links = FindingQueries.Links(context).ToLookup(row => row.ResourceId);
+        var identifiers = FindingQueries.Identifiers(context).ToLookup(row => row.ResourceId);
+        return FindingQueries
+            .Findings(context, locale)
             .Select(row => new PublicFinding(
-                Text(row, "slug"),
-                Route("findings.show", Key(row), locale),
-                Text(row, "type"),
-                Text(row, "authors"),
-                Text(row, "organizations"),
-                Date(row, "published_date_iso"),
-                Date(row, "found_date_iso"),
-                Text(row, "rating"),
-                Text(row, "consumption_state"),
-                JsonNullable(Text(row, "type_details")),
-                Text(row, "title"),
-                Text(row, "alternative_title"),
-                Text(row, "description"),
-                Text(row, "personal_note"),
-                Text(row, "reason_found"),
-                Date(row, "updated_at"),
-                TopicsFor(db, "resource", Id(row, "id"), locale),
-                AttributionTopicsFor(db, Id(row, "id"), locale),
-                LinksFor(db, Id(row, "id")),
-                IdentifiersFor(db, Id(row, "id")),
-                RelatedFindings(db, Id(row, "id"), Text(row, "type"), locale)
+                row.Slug,
+                Route("findings.show", PublicRouteKey.Compose(row.PublicId, row.Slug), locale),
+                row.Type,
+                Format.Text(row.Authors),
+                Format.Text(row.Organizations),
+                Format.Date(row.PublishedDateIso),
+                Format.Date(row.FoundDateIso),
+                Format.Text(row.Rating),
+                Format.Text(row.ConsumptionState),
+                JsonNullable(Format.Text(row.TypeDetails)),
+                Format.Text(row.Title),
+                Format.Text(row.AlternativeTitle),
+                Format.Text(row.Description),
+                Format.Text(row.PersonalNote),
+                Format.Text(row.ReasonFound),
+                Format.Date(row.UpdatedAt),
+                Topics(topics[row.Id], locale),
+                attribution[row.Id]
+                    .Distinct()
+                    .Select(topic => Topic(topic.Slug, topic.PublicId, topic.Name, locale))
+                    .ToList(),
+                links[row.Id]
+                    .Select(link => new PublicFindingLink(
+                        link.Url,
+                        Format.Text(link.Label),
+                        Format.Text(link.Platform),
+                        Format.Text(link.Purpose),
+                        link.IsFree,
+                        link.IsPrimary
+                    ))
+                    .ToList(),
+                identifiers[row.Id]
+                    .Select(identifier => new PublicIdentifier(identifier.Kind, identifier.Value))
+                    .ToList(),
+                RelatedFindings(context, row.Id, row.Type, locale)
             ))
             .ToList();
+    }
 
-    private static List<PublicCollection> Collections(DbConnection db, string locale) =>
-        Rows(
-                db,
-                "select c.*, coalesce(t.title, en.title) as title, coalesce(t.description, en.description) as description, coalesce(t.intro, en.intro) as intro from reference_collections c left join reference_collection_translations t on t.reference_collection_id=c.id and t.locale=@locale left join reference_collection_translations en on en.reference_collection_id=c.id and en.locale='en' where c.hidden=false order by c.\"order\" nulls first",
-                ("@locale", locale)
-            )
-            .Select(row => new PublicCollection(
-                Text(row, "slug"),
-                Route("collections.show", Key(row), locale),
-                Text(row, "title", Text(row, "slug")),
-                Text(row, "description"),
-                Text(row, "intro"),
-                Timestamp(row, "published_at"),
-                CollectionItems(db, Id(row, "id"), locale),
-                RelatedCollections(db, Id(row, "id"), locale),
-                Timestamp(row, "updated_at"),
-                Timestamp(row, "created_at")
+    private static List<PublicRelatedContent> RelatedFindings(
+        PortfolioPublicDbContext context,
+        int id,
+        string type,
+        string locale
+    )
+    {
+        var rows = FindingQueries.RelatedByTopic(context, id, locale);
+        if (rows.Count == 0)
+            rows = FindingQueries.RelatedByType(context, id, type, locale);
+        return rows.Select(row => new PublicRelatedContent(
+                row.Title ?? row.Slug,
+                Route("findings.show", PublicRouteKey.Compose(row.PublicId, row.Slug), locale),
+                Format.Date(row.Date)
             ))
             .ToList();
+    }
+
+    private static List<PublicTopic> Topics(IEnumerable<OwnerTopicRow> rows, string locale) =>
+        rows.Select(row => Topic(row.Slug, row.PublicId, row.Name, locale)).ToList();
+
+    private static PublicTopic Topic(string slug, string publicId, string? name, string locale) =>
+        new(
+            slug,
+            name ?? slug,
+            Route("topics.show", PublicRouteKey.Compose(publicId, slug), locale)
+        );
+
+    private static List<PublicCollection> Collections(
+        PortfolioPublicDbContext context,
+        string locale
+    )
+    {
+        var items = CollectionQueries.Items(context, locale).ToLookup(row => row.CollectionId);
+        var topics = TopicQueries
+            .TopicsFor(context, "finding", context.Resources.Select(r => r.Id), locale)
+            .ToLookup(row => row.OwnerId);
+        return CollectionQueries
+            .Collections(context, locale)
+            .Select(row => new PublicCollection(
+                row.Slug,
+                Route("collections.show", PublicRouteKey.Compose(row.PublicId, row.Slug), locale),
+                row.Title ?? row.Slug,
+                Format.Text(row.Description),
+                Format.Text(row.Intro),
+                Format.Timestamp(row.PublishedAt),
+                items[row.Id]
+                    .Select(item => new PublicCollectionItem(
+                        item.Slug,
+                        Route(
+                            "findings.show",
+                            PublicRouteKey.Compose(item.PublicId, item.Slug),
+                            locale
+                        ),
+                        item.Title ?? item.Slug,
+                        Format.Text(item.Description),
+                        item.Type,
+                        Format.Text(item.Rating),
+                        Format.Text(item.Note),
+                        Topics(topics[item.ResourceId], locale)
+                    ))
+                    .ToList(),
+                Related(
+                    "collections.show",
+                    CollectionQueries.RelatedRecent(context, row.Id, locale),
+                    () => [],
+                    locale
+                ),
+                Format.Timestamp(row.UpdatedAt),
+                Format.Timestamp(row.CreatedAt)
+            ))
+            .ToList();
+    }
 
     private static List<PublicTopic> Topics(PortfolioPublicDbContext context, string locale) =>
         TopicQueries
             .Topics(context, locale)
-            .Select(row => new PublicTopic(
-                row.Slug,
-                row.Name ?? row.Slug,
-                Route("topics.show", PublicRouteKey.Compose(row.PublicId, row.Slug), locale)
-            ))
+            .Select(row => Topic(row.Slug, row.PublicId, row.Name, locale))
             .ToList();
 
     private static List<PublicTechnology> Technologies(
@@ -378,15 +449,7 @@ public sealed partial class PublicSiteContentProvider(
                     .Where(value => value.Length > 0)
                     .ToList(),
                 skills[row.Id]
-                    .Select(skill => new PublicTopic(
-                        skill.Slug,
-                        skill.Name ?? skill.Slug,
-                        Route(
-                            "topics.show",
-                            PublicRouteKey.Compose(skill.PublicId, skill.Slug),
-                            locale
-                        )
-                    ))
+                    .Select(skill => Topic(skill.Slug, skill.PublicId, skill.Name, locale))
                     .GroupBy(topic => topic.Slug, StringComparer.OrdinalIgnoreCase)
                     .Select(group => group.First())
                     .ToList()
@@ -459,62 +522,6 @@ public sealed partial class PublicSiteContentProvider(
                 Format.Timestamp(row.Date)
             ))
             .ToList();
-
-    private static List<PublicRelatedContent> RelatedCollections(
-        DbConnection db,
-        long id,
-        string locale
-    ) =>
-        Rows(
-                db,
-                "select c.slug, c.public_id, t.title, c.published_at from reference_collections c left join reference_collection_translations t on t.reference_collection_id=c.id and t.locale=@locale where c.hidden=false and c.id<>@id order by c.published_at desc nulls last limit 3",
-                ("@id", id),
-                ("@locale", locale)
-            )
-            .Select(row => new PublicRelatedContent(
-                Text(row, "title", Text(row, "slug")),
-                Route("collections.show", Key(row), locale),
-                Timestamp(row, "published_at")
-            ))
-            .ToList();
-
-    private static List<PublicRelatedContent> RelatedFindings(
-        DbConnection db,
-        long id,
-        string type,
-        string locale
-    )
-    {
-        var topic = Rows(
-                db,
-                "select topic_id from topicables where topicable_type='finding' and topicable_id=@id limit 1",
-                ("@id", id)
-            )
-            .FirstOrDefault();
-        var rows = topic is not null
-            ? Rows(
-                db,
-                "select r.slug, r.public_id, t.title, r.published_date_iso from resources r left join resource_translations t on t.resource_id=r.id and t.locale=@locale where r.hidden=false and r.visibility='public' and r.id<>@id and exists (select 1 from topicables link where link.topic_id=@topic and link.topicable_type='finding' and link.topicable_id=r.id) order by r.published_date_iso desc nulls last limit 3",
-                ("@id", id),
-                ("@topic", Id(topic, "topic_id")),
-                ("@locale", locale)
-            )
-            : [];
-        if (rows.Count == 0)
-            rows = Rows(
-                db,
-                "select r.slug, r.public_id, t.title, r.published_date_iso from resources r left join resource_translations t on t.resource_id=r.id and t.locale=@locale where r.hidden=false and r.visibility='public' and r.id<>@id and r.type=@type order by r.published_date_iso desc nulls last limit 3",
-                ("@id", id),
-                ("@type", type),
-                ("@locale", locale)
-            );
-        return rows.Select(row => new PublicRelatedContent(
-                Text(row, "title", Text(row, "slug")),
-                Route("findings.show", Key(row), locale),
-                Date(row, "published_date_iso")
-            ))
-            .ToList();
-    }
 
     private static List<PublicSnippet> Snippets(PortfolioPublicDbContext context, string locale)
     {
@@ -887,26 +894,6 @@ public sealed partial class PublicSiteContentProvider(
             ))
             .ToList();
 
-    private static List<PublicTopic> TopicsFor(
-        DbConnection db,
-        string kind,
-        long id,
-        string locale
-    ) =>
-        Rows(
-                db,
-                "select t.slug, t.public_id, coalesce(tt.name, en.name) as name from topicables x join topics t on t.id=x.topic_id left join topic_translations tt on tt.topic_id=t.id and tt.locale=@locale left join topic_translations en on en.topic_id=t.id and en.locale='en' where x.topicable_type=@kind and x.topicable_id=@id order by t.\"order\" nulls first",
-                ("@kind", kind == "writing" ? "writing" : "finding"),
-                ("@id", id),
-                ("@locale", locale)
-            )
-            .Select(row => new PublicTopic(
-                Text(row, "slug"),
-                Text(row, "name", Text(row, "slug")),
-                Route("topics.show", Key(row), locale)
-            ))
-            .ToList();
-
     private static Dictionary<string, string?> Values(string json)
     {
         if (string.IsNullOrWhiteSpace(json))
@@ -932,72 +919,6 @@ public sealed partial class PublicSiteContentProvider(
             return new(StringComparer.OrdinalIgnoreCase);
         }
     }
-
-    private static List<PublicFindingLink> LinksFor(DbConnection db, long id) =>
-        Rows(
-                db,
-                "select url, label, platform, purpose, is_free, is_primary from resource_links where resource_id=@id order by id nulls first",
-                ("@id", id)
-            )
-            .Select(row => new PublicFindingLink(
-                Text(row, "url"),
-                Text(row, "label"),
-                Text(row, "platform"),
-                Text(row, "purpose"),
-                Bool(row, "is_free"),
-                Bool(row, "is_primary")
-            ))
-            .ToList();
-
-    private static List<PublicTopic> AttributionTopicsFor(
-        DbConnection db,
-        long id,
-        string locale
-    ) =>
-        Rows(
-                db,
-                "select distinct t.slug, t.public_id, coalesce(tt.name, en.name) as name, t.\"order\" from content_relations r join relation_types rt on rt.id=r.relation_type_id join topics t on t.id=r.object_id left join topic_translations tt on tt.topic_id=t.id and tt.locale=@locale left join topic_translations en on en.topic_id=t.id and en.locale='en' where r.subject_type='finding' and r.subject_id=@id and r.object_type='topic' and rt.key in ('authored-by', 'published-by') and (r.visibility is null or r.visibility='public') order by t.\"order\" nulls first, t.slug nulls first",
-                ("@id", id),
-                ("@locale", locale)
-            )
-            .Select(row => new PublicTopic(
-                Text(row, "slug"),
-                Text(row, "name", Text(row, "slug")),
-                Route("topics.show", Key(row), locale)
-            ))
-            .ToList();
-
-    private static List<PublicIdentifier> IdentifiersFor(DbConnection db, long id) =>
-        Rows(
-                db,
-                "select kind, value from resource_identifiers where resource_id=@id order by id nulls first",
-                ("@id", id)
-            )
-            .Select(row => new PublicIdentifier(Text(row, "kind"), Text(row, "value")))
-            .ToList();
-
-    private static List<PublicCollectionItem> CollectionItems(
-        DbConnection db,
-        long id,
-        string locale
-    ) =>
-        Rows(
-                db,
-                "select r.slug, r.public_id, r.id, coalesce(t.title, en.title) as title, coalesce(t.description, en.description) as description, r.type, r.rating, x.note from reference_collection_item x join resources r on r.id=x.resource_id left join resource_translations t on t.resource_id=r.id and t.locale=@locale left join resource_translations en on en.resource_id=r.id and en.locale='en' where x.reference_collection_id=@id and r.hidden=false and r.visibility='public' order by x.\"order\" nulls first",
-                ("@id", id),
-                ("@locale", locale)
-            )
-            .Select(row => new PublicCollectionItem(
-                Text(row, "slug"),
-                Route("findings.show", Key(row), locale),
-                Text(row, "title", Text(row, "slug")),
-                Text(row, "description"),
-                Text(row, "type"),
-                Text(row, "rating"),
-                Text(row, "note"),
-                TopicsFor(db, "finding", Id(row, "id"), locale)
-            ))
-            .ToList();
 
     private static JsonElement? JsonNullable(string value) =>
         string.IsNullOrWhiteSpace(value) ? null : JsonDocument.Parse(value).RootElement.Clone();

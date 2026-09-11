@@ -1180,6 +1180,9 @@
   <data name="count_items"><value>{0} itens</value></data>
   <data name="home_headline"><value>guesant.net</value></data>
   <data name="home_subline"><value>ferramentas, escritos, achados e trabalhos selecionados.</value></data>
+  <data name="about_highlights_title"><value>por onde começar</value></data>
+  <data name="about_highlight_portfolio"><value>portfólio</value></data>
+  <data name="about_highlight_portfolio_description"><value>o trabalho selecionado e os projetos independentes em um só lugar.</value></data>
   <data name="years_old"><value>{0} anos</value></data>
   <data name="estimated_time"><value>tempo estimado: {0}min {1}s</value></data>
   <data name="base_auto"><value>automático</value></data>

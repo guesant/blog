@@ -81,6 +81,31 @@ public partial class InformationalPages
                     !string.IsNullOrWhiteSpace(item.Item2) || !string.IsNullOrWhiteSpace(item.Item3)
                 )
                 .ToArray();
+
+    private sealed record Highlight(string Icon, string Title, string Description, string Href);
+
+    private IReadOnlyList<Highlight> Highlights =>
+        [
+            new(
+                "briefcase",
+                L["legacy_3dc269cea284"],
+                L["legacy_f45020ee2810"],
+                LocalizedUrls.Current("/cases")
+            ),
+            new(
+                "folder-git-2",
+                L["legacy_2c505faad45c"],
+                L["legacy_9cfc8dff64f5"],
+                LocalizedUrls.Current("/projects")
+            ),
+            new(
+                "layout-grid",
+                L["about_highlight_portfolio"],
+                L["about_highlight_portfolio_description"],
+                LocalizedUrls.Current("/portfolio")
+            ),
+        ];
+
     private int? Age =>
         DateTime.TryParse(Snapshot?.Chrome.Profile?.BirthDate, out var birth)
             ? Math.Max(

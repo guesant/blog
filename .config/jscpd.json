@@ -12,8 +12,8 @@
     "../src/Portfolio/Portfolio.Blazor.Core",
     "../src/Portfolio/Portfolio.Blazor.Core.Tests",
     "../src/Portfolio/Portfolio.Blazor.Data.Tests",
+    "../src/Portfolio/Portfolio.Blazor.Import",
     "../src/Portfolio/Portfolio.Blazor.Sbom",
-    "../src/Portfolio/Portfolio.Blazor.Snapshot",
     "../src/Portfolio/Portfolio.Blazor",
     "../src/Portfolio/Portfolio.Blazor.UI"
   ],

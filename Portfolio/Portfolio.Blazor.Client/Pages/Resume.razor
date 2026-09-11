@@ -23,8 +23,7 @@
             }
             <ContactChannels Profiles="@(Snapshot?.Chrome.Site.ContactProfiles ?? [])"
                 EmailChallenge="@Snapshot?.Chrome.Site.ProtectedEmail"
-                EmailAvailable="@(Snapshot?.Chrome.Site.ContactAvailable == true)"
-                Justify="SiteJustify.Center">
+                EmailAvailable="@(Snapshot?.Chrome.Site.ContactAvailable == true)">
                 <LeadingContent>
                     @foreach (var locale in ResumePdfLocales)
                     {

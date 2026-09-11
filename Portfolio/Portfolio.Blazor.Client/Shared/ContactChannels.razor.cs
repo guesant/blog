@@ -20,7 +20,7 @@ public partial class ContactChannels
     public bool UseSidebarStyle { get; set; }
 
     [Parameter]
-    public SiteJustify Justify { get; set; } = SiteJustify.Start;
+    public SiteJustify Justify { get; set; } = SiteJustify.Center;
 
     [Parameter]
     public RenderFragment? LeadingContent { get; set; }

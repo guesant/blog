@@ -1,7 +1,9 @@
 @using Portfolio.Blazor.Core
 @inject IStringLocalizer<SharedResource> L
 
-<SiteInline Gap="SiteSpace.Sm" Justify="@Justify" Class="@RootClass">
+<SiteInline Gap="SiteSpace.Sm"
+    Justify="@(UseSidebarStyle ? SiteJustify.Start : Justify)"
+    Class="@RootClass">
     @LeadingContent
     @foreach (var profile in Profiles)
     {

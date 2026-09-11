@@ -38,7 +38,7 @@
             BackLabel="@DetailIndexLabel">
             @if (IsWriting)
             {
-                <SiteStack Gap="SiteSpace.Xs"
+                <SiteInline Gap="SiteSpace.Md"
                     Class="published-updated-meta"
                     data-layout-region="published-updated">
                     @if (!string.IsNullOrWhiteSpace(PublishedTime) || !string.IsNullOrWhiteSpace(ReadingTime))
@@ -55,7 +55,7 @@
                             <SiteText Variant="SiteTextVariant.Meta">@L["updated_on", FormatHumanDate(UpdatedTime)]</SiteText>
                         </SiteInline>
                     }
-                </SiteStack>
+                </SiteInline>
             }
             else
             {

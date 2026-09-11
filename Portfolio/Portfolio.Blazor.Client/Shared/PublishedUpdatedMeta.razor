@@ -3,7 +3,7 @@
 
 @if (!string.IsNullOrWhiteSpace(PublishedAt) || ShouldShowUpdated || !string.IsNullOrWhiteSpace(AdditionalText))
 {
-    <SiteStack Gap="SiteSpace.Xs"
+    <SiteInline Gap="SiteSpace.Md"
         Class="published-updated-meta"
         data-layout-region="published-updated">
         @if (!string.IsNullOrWhiteSpace(PublishedAt))
@@ -24,5 +24,5 @@
         {
             <SiteText Variant="SiteTextVariant.Meta">@AdditionalText</SiteText>
         }
-    </SiteStack>
+    </SiteInline>
 }

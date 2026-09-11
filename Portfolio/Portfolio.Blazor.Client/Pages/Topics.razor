@@ -10,7 +10,7 @@
     <SiteBreadcrumb HomeUrl="@LocalizedRoute("home")"
         HomeLabel="@(L["legacy_ddc150008e2f"])"
         Links="@BreadcrumbLinks"
-        CurrentLabel="@Title" />
+        CurrentLabel="@CrumbLabel("topics", L["legacy_4ab0be41630a"])" />
     @if (Snapshot is null)
     {
         <SiteHero Title="@Title" Lead="@Description" />

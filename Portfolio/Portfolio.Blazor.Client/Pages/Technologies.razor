@@ -9,7 +9,7 @@
 <SitePage Template="technologies-index">
     <SiteBreadcrumb HomeUrl="@LocalizedPath("home")"
         HomeLabel="@(L["legacy_ddc150008e2f"])"
-        CurrentLabel="@PageField("technologies", "title", Title)" />
+        CurrentLabel="@CrumbLabel("technologies", L["legacy_b4e2241909e0"])" />
     @if (Snapshot is null)
     {
         <SiteHero Title="@Title" Lead="@Description" />

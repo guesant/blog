@@ -133,7 +133,7 @@ public partial class Projects
         LocalizedUrls.Current($"/technologies/{technology.Slug}");
 
     private IReadOnlyList<BreadcrumbLink> BreadcrumbLinks =>
-        [new(L["legacy_5c816876b410"], LocalizedPath("portfolio"))];
+        [new(CrumbLabel("portfolio", L["legacy_5c816876b410"]), LocalizedPath("portfolio"))];
 
     protected override void OnParametersSet()
     {

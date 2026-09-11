@@ -26,7 +26,8 @@ public partial class SnippetDetail
     private PublicSnippetFile? ActiveFile =>
         Snippet?.Files?.FirstOrDefault(file => file.Id == ActiveFileId)
         ?? Snippet?.Files?.FirstOrDefault();
-    private IReadOnlyList<BreadcrumbLink> BreadcrumbLinks => [new("snippets", IndexUrl)];
+    private IReadOnlyList<BreadcrumbLink> BreadcrumbLinks =>
+        [new(CrumbLabel("snippets", L["legacy_b87eedb8eefd"]), IndexUrl)];
     private static IReadOnlyList<string> SnippetHistoryFields => ["title", "description"];
 
     private static string SafeId(string path) =>

@@ -64,16 +64,22 @@ public partial class ContentDetail
         IsCase
             ?
             [
-                new(L["legacy_5c816876b410"], LocalizedPath("portfolio")),
-                new(L["legacy_3dc269cea284"], LocalizedPath("cases")),
+                new(CrumbLabel("portfolio", L["legacy_5c816876b410"]), LocalizedPath("portfolio")),
+                new(CrumbLabel("cases", L["legacy_3dc269cea284"]), LocalizedPath("cases")),
             ]
         : IsProject
             ?
             [
-                new(L["legacy_5c816876b410"], LocalizedPath("portfolio")),
-                new(L["legacy_2c505faad45c"], LocalizedPath("projects")),
+                new(CrumbLabel("portfolio", L["legacy_5c816876b410"]), LocalizedPath("portfolio")),
+                new(CrumbLabel("projects", L["legacy_2c505faad45c"]), LocalizedPath("projects")),
             ]
-        : [new(L["legacy_ebede9852c81"], FeedUrls.ForKind(FeedUrls.Writing))];
+        :
+        [
+            new(
+                CrumbLabel("writing", L["legacy_ebede9852c81"]),
+                FeedUrls.ForKind(FeedUrls.Writing)
+            ),
+        ];
     private string LoadingTitle => L["legacy_d6a275b8ae9c"];
     private string NotFoundTitle => L["legacy_44d5d0470edb"];
     private string NotFoundDescription => L["legacy_6913e54f5c0f"];

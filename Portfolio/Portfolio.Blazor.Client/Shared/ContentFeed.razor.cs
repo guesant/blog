@@ -39,6 +39,14 @@ public partial class ContentFeed
             "collections" => FeedUrls.Collection,
             _ => null,
         };
+    private string FixedRoute =>
+        FixedKind switch
+        {
+            FeedUrls.Writing => "writing",
+            FeedUrls.Finding => "findings",
+            FeedUrls.Collection => "collections",
+            _ => string.Empty,
+        };
     private string FixedPageSlug =>
         FixedKind switch
         {

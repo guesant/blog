@@ -35,7 +35,7 @@ public partial class FindingDetail
     private static string IndexUrl => FeedUrls.ForKind(FeedUrls.Finding);
     private IReadOnlyList<PublicRelatedContent> RelatedFindings => Finding?.Related ?? [];
     private IReadOnlyList<BreadcrumbLink> BreadcrumbLinks =>
-        [new(L["legacy_a2d8de463c5a"], IndexUrl)];
+        [new(CrumbLabel("findings", L["legacy_a2d8de463c5a"]), IndexUrl)];
     private string ActionBody =>
         string.Join(
             "\n\n",

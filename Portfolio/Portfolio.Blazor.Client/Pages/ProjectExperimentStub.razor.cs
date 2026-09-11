@@ -17,8 +17,8 @@ public partial class ProjectExperimentStub
     private string NotFoundDescription => L["legacy_e74a35c6bf2d"];
     private IReadOnlyList<BreadcrumbLink> BreadcrumbLinks =>
         [
-            new(L["legacy_5c816876b410"], LocalizedPath("portfolio")),
-            new(L["legacy_2c505faad45c"], LocalizedPath("projects")),
+            new(CrumbLabel("portfolio", L["legacy_5c816876b410"]), LocalizedPath("portfolio")),
+            new(CrumbLabel("projects", L["legacy_2c505faad45c"]), LocalizedPath("projects")),
         ];
 
     private string LocalizedPath(string path) =>

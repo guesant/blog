@@ -21,10 +21,7 @@ public partial class CollectionDetail
     private string BackLabel => L["legacy_c9d2e6d195c0"];
     private static string IndexUrl => FeedUrls.ForKind(FeedUrls.Collection);
     private IReadOnlyList<BreadcrumbLink> BreadcrumbLinks =>
-        [
-            new(L["legacy_8bac078d4fc4"], FeedUrls.ForKind(FeedUrls.Collection)),
-            new(L["legacy_5dbf11ad96f1"], IndexUrl),
-        ];
+        [new(CrumbLabel("collections", L["legacy_5dbf11ad96f1"]), IndexUrl)];
 
     private static string LocalizedUrl(string url)
     {

@@ -37,7 +37,7 @@ public partial class TopicDetail
     private string BackLabel => L["legacy_10fac44159a7"];
     private string IndexUrl => LocalizedPath("topics");
     private IReadOnlyList<BreadcrumbLink> BreadcrumbLinks =>
-        [new(L["legacy_4ab0be41630a"], IndexUrl)];
+        [new(CrumbLabel("topics", L["legacy_4ab0be41630a"]), IndexUrl)];
 
     private string WritingKind(string? type) =>
         type?.ToLowerInvariant() switch

@@ -9,7 +9,7 @@
 <SitePage Template="snippets-index">
     <SiteBreadcrumb HomeUrl="@LocalizedPath("home")"
         HomeLabel="@(L["legacy_ddc150008e2f"])"
-        CurrentLabel="@Title" />
+        CurrentLabel="@CrumbLabel("snippets", L["legacy_b87eedb8eefd"])" />
     @if (Snapshot is null)
     {
         <SiteHero Title="@LoadingLabel" />

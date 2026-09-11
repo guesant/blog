@@ -9,7 +9,7 @@
 <SitePage Template="credits">
     <SiteBreadcrumb HomeUrl="@(L["legacy_0607643fd42c"])"
         HomeLabel="@(L["legacy_ddc150008e2f"])"
-        CurrentLabel="@Title" />
+        CurrentLabel="@CrumbLabel("credits", L["legacy_eb7813cfa4e0"])" />
     <SiteHero Title="@Title"
         Lead="@Description"/>
     @if (Snapshot is null || Snapshot.Credits.Count == 0)

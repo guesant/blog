@@ -1,10 +1,9 @@
-@inherits LocalizedComponentBase
+@inherits ContentPageBase
 @page "/knowledge-map"
 @page "/pt-BR/knowledge-map"
 @using System.Text.Json
 @using Portfolio.Blazor.Core
 @inject IPublicKnowledgeGraphProvider GraphProvider
-@inject IPublicSiteContentProvider ContentProvider
 
 <PageTitle>@PageField("knowledge-map", "title", Title)</PageTitle>
 <SeoHead Title="@SeoTitle" Description="@SeoDescription" CanonicalPath="@CanonicalPath" />
@@ -13,7 +12,7 @@
     <SiteBreadcrumb HomeUrl="@(L["legacy_0607643fd42c"])"
         HomeLabel="@(L["legacy_ddc150008e2f"])"
         Links="@BreadcrumbLinks"
-        CurrentLabel="@Title" />
+        CurrentLabel="@CrumbLabel("knowledge-map", L["legacy_34a684f24942"])" />
     @if (Snapshot is null || Graph is null)
     {
         <SiteHero Title="@LoadingLabel" Lead="@Description" />

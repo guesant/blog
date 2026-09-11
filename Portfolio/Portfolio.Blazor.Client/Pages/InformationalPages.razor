@@ -20,7 +20,7 @@
 <SitePage Template="@Kind.ToString().ToLowerInvariant()">
     <SiteBreadcrumb HomeUrl="@(L["legacy_0607643fd42c"])"
         HomeLabel="@(L["legacy_ddc150008e2f"])"
-        CurrentLabel="@Title" />
+        CurrentLabel="@CrumbLabel(Kind.ToString().ToLowerInvariant(), Title)" />
     @if (Kind == PageKind.Portfolio)
     {
         <SiteHero Title="@(Snapshot?.Chrome.Profile?.Name ?? "guesant.net")"

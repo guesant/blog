@@ -5,7 +5,6 @@ namespace Portfolio.Blazor.Client.Pages;
 
 public partial class KnowledgeMap
 {
-    private PublicSiteSnapshot? Snapshot { get; set; }
     private PublicKnowledgeGraph? Graph { get; set; }
     private string Title => L["legacy_34a684f24942"];
     private string Description => L["legacy_0b5e5b9a5c97"];
@@ -59,13 +58,12 @@ public partial class KnowledgeMap
             }
         );
     private IReadOnlyList<BreadcrumbLink> BreadcrumbLinks =>
-        [new(L["legacy_4ab0be41630a"], LocalizedUrl("/topics"))];
+        [new(CrumbLabel("topics", L["legacy_4ab0be41630a"]), LocalizedUrl("/topics"))];
 
     protected override async Task OnInitializedAsync()
     {
-        var locale = CurrentLocale;
-        Snapshot = await ContentProvider.GetAsync(locale);
-        Graph = await GraphProvider.GetAsync(locale);
+        await base.OnInitializedAsync();
+        Graph = await GraphProvider.GetAsync(CurrentLocale);
     }
 
     private string PageField(string page, string field, string fallback)

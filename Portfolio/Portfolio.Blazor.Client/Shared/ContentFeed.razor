@@ -15,7 +15,7 @@
     {
         <SiteBreadcrumb HomeUrl="@LocalizedUrls.Current("/")"
             HomeLabel="@(L["legacy_ddc150008e2f"])"
-            CurrentLabel="@Headline" />
+            CurrentLabel="@CrumbLabel(FixedRoute, KindLabel(FixedKind!))" />
     }
 
     <SiteHero Title="@Headline" Lead="@Subline" />

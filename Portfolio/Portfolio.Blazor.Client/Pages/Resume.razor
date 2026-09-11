@@ -11,7 +11,7 @@
 <SitePage Template="resume">
     <SiteBreadcrumb HomeUrl="@(L["legacy_0607643fd42c"])"
         HomeLabel="@(L["legacy_ddc150008e2f"])"
-        CurrentLabel="@Title" />
+        CurrentLabel="@CrumbLabel("resume", L["legacy_f7556c68e40e"])" />
     <SiteHero Title="@(Snapshot?.Chrome.Profile?.Name ?? Title)"
         Lead="@Snapshot?.Chrome.Profile?.Title">
         <ChildContent>

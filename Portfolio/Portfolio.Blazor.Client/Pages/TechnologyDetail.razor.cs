@@ -53,7 +53,7 @@ public partial class TechnologyDetail
     private string BackLabel => L["legacy_6e8c2cd0b9b6"];
     private string IndexUrl => LocalizedPath("technologies");
     private IReadOnlyList<BreadcrumbLink> BreadcrumbLinks =>
-        [new(L["legacy_b4e2241909e0"], IndexUrl)];
+        [new(CrumbLabel("technologies", L["legacy_b4e2241909e0"]), IndexUrl)];
 
     private static string Short(string value) =>
         value.Length > 150 ? value[..150].TrimEnd() + "…" : value;

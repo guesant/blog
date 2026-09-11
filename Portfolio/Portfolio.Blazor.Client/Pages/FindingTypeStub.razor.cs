@@ -68,7 +68,7 @@ public partial class FindingTypeStub
     private string ResultsSummary =>
         L["showing_findings", PagedFindings.Count, SortedFindings.Count];
     private IReadOnlyList<BreadcrumbLink> BreadcrumbLinks =>
-        [new(L["legacy_a2d8de463c5a"], FeedUrls.ForKind(FeedUrls.Finding))];
+        [new(CrumbLabel("findings", L["legacy_a2d8de463c5a"]), FeedUrls.ForKind(FeedUrls.Finding))];
 
     protected override void OnParametersSet() => SortValue = Sort;
 

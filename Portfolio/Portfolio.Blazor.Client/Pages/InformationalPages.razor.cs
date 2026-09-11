@@ -151,7 +151,7 @@ public partial class InformationalPages
 
     private bool HasNowEntries =>
         NowEntries.Any(entry => !string.IsNullOrWhiteSpace(SlugField(NowSlug, entry.Key)));
-    private const string NowSlug = "agora";
+    private const string NowSlug = "now";
 
     private static string StringValue(JsonElement value, string key, string fallback = "") =>
         value.ValueKind == JsonValueKind.Object

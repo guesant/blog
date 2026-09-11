@@ -16,7 +16,7 @@
     {
         <SiteLink Class="site-nav-brand text-decoration-none"
             Href="@LocalizedPath("home")">guesant.net</SiteLink>
-        <hr class="site-nav-divider" />
+        <SiteNavDivider />
         <nav class="site-nav-links" aria-label="@NavigationLabel">
             <ul>
                 <li>
@@ -29,7 +29,7 @@
             </ul>
             @foreach (var group in SidebarGroups)
             {
-                <hr class="site-nav-divider" />
+                <SiteNavDivider />
                 <SiteNavGroup Label="@group.Label">
                     @foreach (var item in group.Items)
                     {
@@ -46,7 +46,7 @@
                 </SiteNavGroup>
             }
         </nav>
-        <hr class="site-nav-divider" />
+        <SiteNavDivider />
         <ul>
             <li>
                 <SiteNavLink Class="@(IsAboutChild ? "is-active-parent" : null)"
@@ -69,7 +69,7 @@
                 </ul>
             </li>
         </ul>
-        <hr class="site-nav-divider" />
+        <SiteNavDivider />
         <ul>
             <li>
                 <SiteNavLink Href="/admin">
@@ -78,7 +78,7 @@
                 </SiteNavLink>
             </li>
         </ul>
-        <hr class="site-nav-divider" />
+        <SiteNavDivider />
         <SiteStack Gap="SiteSpace.Sm" Class="site-nav-settings">
             <SiteToggleGroup AriaLabel="@LanguageLabel" Class="lang-switch">
                 <SiteToggleLink Href="@LanguageUrl("en")"

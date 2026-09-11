@@ -12,7 +12,7 @@
 </ul>
 @foreach (var group in NavGroups)
 {
-    <hr class="site-nav-divider" />
+    <SiteNavDivider />
     <SiteNavGroup Label="@group.Label" Nested="true">
         @foreach (var item in group.Items)
         {

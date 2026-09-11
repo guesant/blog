@@ -11,11 +11,6 @@
   },
   {
     "file": "Portfolio/Portfolio.Blazor/Components/Admin/Shared/AdminNav.razor",
-    "line-or-pattern": "<hr class=\"site-nav-divider\" />",
-    "reason": "Group separator, the same bare <hr class=\"site-nav-divider\"> the public SiteSidebar renders between its nav groups; there is no Site* divider component and the rule is pure structure."
-  },
-  {
-    "file": "Portfolio/Portfolio.Blazor/Components/Admin/Shared/AdminNav.razor",
     "line-or-pattern": "<li>",
     "reason": "Bare <li> required because SiteNavGroup already renders the parent <ul> and expects list items as children; the child SiteNavLink already composes the interactive control. SiteListItem does not fit here because it renders a list-group row (used for search-result-style listings), without the nav-link/sidebar-action classes or AriaCurrent handling SiteNavLink already provides for sidebar navigation."
   },

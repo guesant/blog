@@ -8,8 +8,8 @@ fail() {
 
 dotnet tool restore >/dev/null 2>&1 || fail "could not restore the local dotnet tools"
 
-for project in Portfolio/Portfolio.Blazor.Database/Portfolio.Blazor.Database.csproj \
-    Portfolio/Portfolio.Blazor.Database.Postgres/Portfolio.Blazor.Database.Postgres.csproj; do
+for project in src/Portfolio/Portfolio.Blazor.Database/Portfolio.Blazor.Database.csproj \
+    src/Portfolio/Portfolio.Blazor.Database.Postgres/Portfolio.Blazor.Database.Postgres.csproj; do
     dotnet tool run dotnet-ef migrations has-pending-model-changes \
         --project "$project" \
         --startup-project "$project" \

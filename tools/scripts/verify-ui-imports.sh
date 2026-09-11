@@ -6,10 +6,10 @@ fail() {
     exit 1
 }
 
-ui_namespaces="$(find Portfolio/Portfolio.Blazor.UI -mindepth 1 -maxdepth 1 -type d \
+ui_namespaces="$(find src/Portfolio/Portfolio.Blazor.UI -mindepth 1 -maxdepth 1 -type d \
     ! -name bin ! -name obj ! -name wwwroot -exec basename {} \; | sort)"
 
-imports_files="Portfolio/Portfolio.Blazor.UI/_Imports.razor Portfolio/Portfolio.Blazor.Client/_Imports.razor Portfolio/Portfolio.Blazor/Components/_Imports.razor Portfolio/Portfolio.Blazor.Stories/_Imports.razor"
+imports_files="src/Portfolio/Portfolio.Blazor.UI/_Imports.razor src/Portfolio/Portfolio.Blazor.Client/_Imports.razor src/Portfolio/Portfolio.Blazor/Components/_Imports.razor src/Portfolio/Portfolio.Blazor.Stories/_Imports.razor"
 
 failed=0
 for file in $imports_files; do

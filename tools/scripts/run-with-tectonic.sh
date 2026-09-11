@@ -59,6 +59,6 @@ if [ "${PORTFOLIO_RUN_PUBLISHED:-0}" = "1" ]; then
 fi
 
 if [ "${PORTFOLIO_WATCH:-0}" = "1" ]; then
-    exec dotnet watch --project Portfolio/Portfolio.Blazor/Portfolio.Blazor.csproj --no-launch-profile --no-restore --non-interactive --no-hot-reload
+    exec dotnet watch --project src/Portfolio/Portfolio.Blazor/Portfolio.Blazor.csproj --no-launch-profile --no-restore --non-interactive --no-hot-reload
 fi
-exec dotnet run --project Portfolio/Portfolio.Blazor/Portfolio.Blazor.csproj --no-launch-profile --no-restore
+exec dotnet run --project src/Portfolio/Portfolio.Blazor/Portfolio.Blazor.csproj --no-launch-profile --no-restore

@@ -7,8 +7,8 @@ fail() {
 }
 
 repo_root="$(cd "$(dirname "$0")/../.." && pwd)"
-ui_dir="$repo_root/Portfolio/Portfolio.Blazor.UI"
-stories_dir="$repo_root/Portfolio/Portfolio.Blazor.Stories/Stories"
+ui_dir="$repo_root/src/Portfolio/Portfolio.Blazor.UI"
+stories_dir="$repo_root/src/Portfolio/Portfolio.Blazor.Stories/Stories"
 
 missing=""
 count=0

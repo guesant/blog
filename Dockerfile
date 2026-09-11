@@ -8,8 +8,8 @@ ENV DOTNET_CLI_TELEMETRY_OPTOUT=1 \
 # even solution-wide, silently drops _framework/blazor.web.js from the published static web
 # assets manifest (a runtime 404 with no build error), so the restore layer is not cached.
 COPY . .
-RUN dotnet restore Portfolio.Blazor.slnx --locked-mode
-RUN dotnet publish Portfolio/Portfolio.Blazor/Portfolio.Blazor.csproj \
+RUN dotnet restore src/Portfolio.Blazor.slnx --locked-mode
+RUN dotnet publish src/Portfolio/Portfolio.Blazor/Portfolio.Blazor.csproj \
     --configuration Release \
     --no-restore \
     --output /app/publish

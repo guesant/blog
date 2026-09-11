@@ -13,5 +13,5 @@ esac
 docker compose run --rm --entrypoint sh web -lc \
     'set -eu
      mkdir -p /src/data/snapshots
-     dotnet run --project Portfolio/Portfolio.Blazor.Snapshot/Portfolio.Blazor.Snapshot.csproj --no-restore -- /data/db/portfolio.sqlite "/src/data/snapshots/$1"' \
+     dotnet run --project src/Portfolio/Portfolio.Blazor.Snapshot/Portfolio.Blazor.Snapshot.csproj --no-restore -- /data/db/portfolio.sqlite "/src/data/snapshots/$1"' \
     snapshot "$snapshot_name"

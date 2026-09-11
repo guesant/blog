@@ -38,15 +38,15 @@ jobs:
         run: docker compose run --rm web sh tools/scripts/verify-supply-chain.sh
 
       - name: Restore locked NuGet dependencies
-        run: docker compose run --rm web dotnet restore Portfolio.Blazor.slnx --locked-mode
+        run: docker compose run --rm web dotnet restore src/Portfolio.Blazor.slnx --locked-mode
 
       # IMPORTANT: the solution also holds JavaScript projects (*.esproj) that `dotnet list package`
       # rejects, so the audit and the SBOM walk the C# projects one by one.
       - name: Audit NuGet dependencies
-        run: docker compose run --rm web sh -lc 'set -e; for project in Portfolio/*/*.csproj; do dotnet list "$project" package --vulnerable --include-transitive; done'
+        run: docker compose run --rm web sh -lc 'set -e; for project in src/Portfolio/*/*.csproj; do dotnet list "$project" package --vulnerable --include-transitive; done'
 
       - name: Generate NuGet SPDX SBOM
-        run: docker compose run --rm web sh -lc 'set -e; mkdir -p /tmp/blazor-sbom /src/artifacts/sbom; for project in Portfolio/*/*.csproj; do dotnet list "$project" package --include-transitive --format json > "/tmp/blazor-sbom/$(basename "$project" .csproj).json"; done; dotnet run --project Portfolio/Portfolio.Blazor.Sbom/Portfolio.Blazor.Sbom.csproj --no-restore -- /tmp/blazor-sbom /src/artifacts/sbom/dependencies.spdx.json && test -s /src/artifacts/sbom/dependencies.spdx.json'
+        run: docker compose run --rm web sh -lc 'set -e; mkdir -p /tmp/blazor-sbom /src/artifacts/sbom; for project in src/Portfolio/*/*.csproj; do dotnet list "$project" package --include-transitive --format json > "/tmp/blazor-sbom/$(basename "$project" .csproj).json"; done; dotnet run --project src/Portfolio/Portfolio.Blazor.Sbom/Portfolio.Blazor.Sbom.csproj --no-restore -- /tmp/blazor-sbom /src/artifacts/sbom/dependencies.spdx.json && test -s /src/artifacts/sbom/dependencies.spdx.json'
 
       - name: Upload SPDX SBOM
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
@@ -56,10 +56,10 @@ jobs:
           if-no-files-found: error
 
       - name: Build Blazor solution
-        run: docker compose run --rm web dotnet build Portfolio.Blazor.slnx --configuration Release --no-restore
+        run: docker compose run --rm web dotnet build src/Portfolio.Blazor.slnx --configuration Release --no-restore
 
       - name: Run core checks
-        run: docker compose run --rm web dotnet run --project Portfolio/Portfolio.Blazor.Core.Tests/Portfolio.Blazor.Core.Tests.csproj --no-restore
+        run: docker compose run --rm web dotnet run --project src/Portfolio/Portfolio.Blazor.Core.Tests/Portfolio.Blazor.Core.Tests.csproj --no-restore
 
       - name: Start SSR app for structural smoke tests
         run: docker compose up -d web
@@ -97,16 +97,16 @@ jobs:
         run: docker compose -f compose.yaml -f compose.dev.yaml -f compose.postgres.yaml up -d --wait postgres
 
       - name: Restore locked NuGet dependencies
-        run: docker compose -f compose.yaml -f compose.dev.yaml -f compose.postgres.yaml run --rm web dotnet restore Portfolio.Blazor.slnx --locked-mode
+        run: docker compose -f compose.yaml -f compose.dev.yaml -f compose.postgres.yaml run --rm web dotnet restore src/Portfolio.Blazor.slnx --locked-mode
 
       - name: Build Blazor solution
-        run: docker compose -f compose.yaml -f compose.dev.yaml -f compose.postgres.yaml run --rm web dotnet build Portfolio.Blazor.slnx --configuration Release --no-restore
+        run: docker compose -f compose.yaml -f compose.dev.yaml -f compose.postgres.yaml run --rm web dotnet build src/Portfolio.Blazor.slnx --configuration Release --no-restore
 
       - name: Apply PostgreSQL migrations
-        run: docker compose -f compose.yaml -f compose.dev.yaml -f compose.postgres.yaml run --rm web sh -lc 'dotnet tool restore >/dev/null && dotnet tool run dotnet-ef database update --project Portfolio/Portfolio.Blazor.Database.Postgres/Portfolio.Blazor.Database.Postgres.csproj --startup-project Portfolio/Portfolio.Blazor.Database.Postgres/Portfolio.Blazor.Database.Postgres.csproj --context PortfolioAdminDbContext --configuration Release --no-build'
+        run: docker compose -f compose.yaml -f compose.dev.yaml -f compose.postgres.yaml run --rm web sh -lc 'dotnet tool restore >/dev/null && dotnet tool run dotnet-ef database update --project src/Portfolio/Portfolio.Blazor.Database.Postgres/Portfolio.Blazor.Database.Postgres.csproj --startup-project src/Portfolio/Portfolio.Blazor.Database.Postgres/Portfolio.Blazor.Database.Postgres.csproj --context PortfolioAdminDbContext --configuration Release --no-build'
 
       - name: Compare the public snapshot across SQLite and PostgreSQL
-        run: docker compose -f compose.yaml -f compose.dev.yaml -f compose.postgres.yaml run --rm web dotnet run --project Portfolio/Portfolio.Blazor.Data.Tests/Portfolio.Blazor.Data.Tests.csproj --configuration Release --no-build
+        run: docker compose -f compose.yaml -f compose.dev.yaml -f compose.postgres.yaml run --rm web dotnet run --project src/Portfolio/Portfolio.Blazor.Data.Tests/Portfolio.Blazor.Data.Tests.csproj --configuration Release --no-build
 
       - name: Start SSR app on PostgreSQL
         run: docker compose -f compose.yaml -f compose.dev.yaml -f compose.postgres.yaml up -d web

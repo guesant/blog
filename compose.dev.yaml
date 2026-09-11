@@ -17,4 +17,4 @@ services:
       PORTFOLIO_ADMIN_GOOGLE_CLIENT_ID: "${PORTFOLIO_ADMIN_GOOGLE_CLIENT_ID:-dev-placeholder}"
       PORTFOLIO_ADMIN_GOOGLE_CLIENT_SECRET: "${PORTFOLIO_ADMIN_GOOGLE_CLIENT_SECRET:-dev-placeholder}"
       PORTFOLIO_ADMIN_GOOGLE_EMAIL: "${PORTFOLIO_ADMIN_GOOGLE_EMAIL:-}"
-    command: sh -lc 'dotnet restore Portfolio.Blazor.slnx --locked-mode && exec sh ./tools/scripts/run-with-tectonic.sh'
+    command: sh -lc 'dotnet restore src/Portfolio.Blazor.slnx --locked-mode && exec sh ./tools/scripts/run-with-tectonic.sh'

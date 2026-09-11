@@ -8,7 +8,7 @@
 *|JSON Feed
 *|Windows NT
 *|Mac OS X
-Portfolio/Portfolio.Blazor.Client/Pages/ExtendedTextTools.razor.cs|Olá, mundo! Este texto pode ser transformado.
-Portfolio/Portfolio.Blazor.Client/Pages/TextCodec.razor.cs|Olá, mundo!
-Portfolio/Portfolio.Blazor.Client/Pages/TextUtilities.razor.cs|Olá, mundo!
-Portfolio/Portfolio.Blazor.Client/Pages/TextUtilities.razor.cs|!odnum ,álO
+src/Portfolio/Portfolio.Blazor.Client/Pages/ExtendedTextTools.razor.cs|Olá, mundo! Este texto pode ser transformado.
+src/Portfolio/Portfolio.Blazor.Client/Pages/TextCodec.razor.cs|Olá, mundo!
+src/Portfolio/Portfolio.Blazor.Client/Pages/TextUtilities.razor.cs|Olá, mundo!
+src/Portfolio/Portfolio.Blazor.Client/Pages/TextUtilities.razor.cs|!odnum ,álO

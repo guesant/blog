@@ -80,7 +80,7 @@ for (const file of files) {
         : `<${name}${attributeText} />`;
 
     const target = join(
-        "Portfolio/Portfolio.Blazor.Stories/Stories",
+        "src/Portfolio/Portfolio.Blazor.Stories/Stories",
         folder,
         `${name}.stories.razor`,
     );

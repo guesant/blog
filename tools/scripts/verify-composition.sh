@@ -65,7 +65,7 @@ all_razor_files="$(find "$repo_root" -type f -name '*.razor' -not -path '*/bin/*
 native_scope_files=""
 for f in $all_razor_files; do
     case "$f" in
-        */Portfolio/Portfolio.Blazor.UI/* | */Portfolio/Portfolio.Blazor.Stories/*) continue ;;
+        */src/Portfolio/Portfolio.Blazor.UI/* | */src/Portfolio/Portfolio.Blazor.Stories/*) continue ;;
     esac
     native_scope_files="$native_scope_files
 $f"
@@ -119,7 +119,7 @@ hidden="$(hidden_render_logic)"
 matches="$(printf '%s\n%s\n%s\n' "$raw_tags" "$raw_class" "$hidden" | grep -v '^$' || true)"
 
 if [ -n "$matches" ]; then
-    fail "raw structural markup, loose class attribute, or MarkupString/RenderFragment in @code found outside Portfolio/Portfolio.Blazor.UI/Portfolio/Portfolio.Blazor.Stories:
+    fail "raw structural markup, loose class attribute, or MarkupString/RenderFragment in @code found outside src/Portfolio/Portfolio.Blazor.UI/src/Portfolio/Portfolio.Blazor.Stories:
 $matches"
 fi
 

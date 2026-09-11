@@ -85,7 +85,7 @@ throwaway PostgreSQL database and requires the two JSON outputs to be identical.
 `PortfolioAdminDbContext` is the admin's read-write context, unfiltered, and the one the
 migrations assemblies target. `PortfolioPublicDbContext` is what the public site reads
 through (`PublicSiteContentProvider`, `PublicKnowledgeGraphProvider` and the LINQ queries
-in `Portfolio/Portfolio.Blazor/PublicQueries/`). It applies `PublicVisibilityFilters` as
+in `src/Portfolio/Portfolio.Blazor/PublicQueries/`). It applies `PublicVisibilityFilters` as
 global query filters (`hidden`, `nda`, `visibility = 'public'`, active credits), runs with
 `QueryTrackingBehavior.NoTracking`, throws from `SaveChanges`, and gets its connection from
 `IDatabaseProvider.ConfigurePublicRead`: SQLite opened with `Mode=ReadOnly`, PostgreSQL with

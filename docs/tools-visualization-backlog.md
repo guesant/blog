@@ -8,7 +8,7 @@ contra as 130 rotas já registradas em `ToolCatalog.cs` (dados de
 2026-09-09), para isolar apenas o que ainda não tem equivalente.
 
 Duas dependências já estão vendorizadas e podem ser reaproveitadas nos itens
-abaixo: Tabulator (`Portfolio/Portfolio.Blazor/wwwroot/vendor/tabulator`), usado hoje só
+abaixo: Tabulator (`src/Portfolio/Portfolio.Blazor/wwwroot/vendor/tabulator`), usado hoje só
 no editor de tabela, e ECharts, usado hoje só na calculadora de matrizes.
 Nenhuma das libs listadas na seção final está presente no projeto ainda.
 

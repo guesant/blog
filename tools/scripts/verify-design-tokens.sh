@@ -6,7 +6,7 @@ fail() {
     exit 1
 }
 
-targets="Portfolio/Portfolio.Blazor.UI Portfolio/Portfolio.Blazor.Client Portfolio/Portfolio.Blazor/Components Portfolio/Portfolio.Blazor/wwwroot/app.css"
+targets="src/Portfolio/Portfolio.Blazor.UI src/Portfolio/Portfolio.Blazor.Client src/Portfolio/Portfolio.Blazor/Components src/Portfolio/Portfolio.Blazor/wwwroot/app.css"
 
 matches="$(grep -REn --binary-files=without-match \
     --exclude-dir=bin --exclude-dir=obj \

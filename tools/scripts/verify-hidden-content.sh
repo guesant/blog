@@ -7,7 +7,7 @@ fail() {
 }
 
 repo_root="$(cd "$(dirname "$0")/../.." && pwd)"
-host="$repo_root/Portfolio/Portfolio.Blazor"
+host="$repo_root/src/Portfolio/Portfolio.Blazor"
 
 public_code="$host/PublicSiteContentProvider.cs $host/PublicKnowledgeGraphProvider.cs $host/PublicMetadataEndpoints.cs $(find "$host/PublicQueries" -name '*.cs')"
 # shellcheck disable=SC2086
@@ -35,7 +35,7 @@ fi
 graph="$host/PublicKnowledgeGraphProvider.cs"
 grep -q 'index.ContainsKey(source) && index.ContainsKey(target)' "$graph" || fail "knowledge graph edges must be dropped when either endpoint is not a public node"
 
-for file in "$repo_root"/Portfolio/Portfolio.Blazor.Client/Pages/*.razor "$repo_root"/Portfolio/Portfolio.Blazor.Client/Shared/*.razor; do
+for file in "$repo_root"/src/Portfolio/Portfolio.Blazor.Client/Pages/*.razor "$repo_root"/src/Portfolio/Portfolio.Blazor.Client/Shared/*.razor; do
     if grep -qE 'IDbContextFactory|PortfolioAdminDbContext|PortfolioPublicDbContext' "$file"; then
         fail "$file must read public content through the snapshot, never the admin DbContext"
     fi

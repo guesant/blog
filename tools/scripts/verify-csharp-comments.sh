@@ -1,8 +1,8 @@
 #!/usr/bin/env sh
 set -eu
 
-projects="Portfolio/Portfolio.Blazor.Client Portfolio/Portfolio.Blazor.Core Portfolio/Portfolio.Blazor.Core.Tests Portfolio/Portfolio.Blazor.Data.Tests Portfolio/Portfolio.Blazor.Sbom Portfolio/Portfolio.Blazor.Snapshot Portfolio/Portfolio.Blazor Portfolio/Portfolio.Blazor.UI"
-[ -d Portfolio/Portfolio.Blazor.Stories ] && projects="$projects Portfolio/Portfolio.Blazor.Stories"
+projects="src/Portfolio/Portfolio.Blazor.Client src/Portfolio/Portfolio.Blazor.Core src/Portfolio/Portfolio.Blazor.Core.Tests src/Portfolio/Portfolio.Blazor.Data.Tests src/Portfolio/Portfolio.Blazor.Sbom src/Portfolio/Portfolio.Blazor.Snapshot src/Portfolio/Portfolio.Blazor src/Portfolio/Portfolio.Blazor.UI"
+[ -d src/Portfolio/Portfolio.Blazor.Stories ] && projects="$projects src/Portfolio/Portfolio.Blazor.Stories"
 
 matches="$(find $projects -type f \( -name '*.cs' -o -name '*.razor' \) -not -path '*/bin/*' -not -path '*/obj/*' -print0 | xargs -0 awk '
 FNR == 1 { allowed_block = 0; in_block = 0 }
@@ -19,7 +19,7 @@ FNR == 1 { allowed_block = 0; in_block = 0 }
     if (!is_comment) { allowed_block = 0; next }
 
     is_doc_comment = (line ~ /^[[:space:]]*\/\/\//)
-    in_ui = (FILENAME ~ /^Portfolio\/Portfolio\.Blazor\.UI\//)
+    in_ui = (FILENAME ~ /^src\/Portfolio\/Portfolio\.Blazor\.UI\//)
     if (in_ui && is_doc_comment) { allowed_block = 0; next }
 
     # A comment block opening with IMPORTANT: records a non-obvious invariant and is

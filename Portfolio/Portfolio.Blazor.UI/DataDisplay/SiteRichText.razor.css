@@ -5,6 +5,10 @@
     font-size: var(--site-text-xl);
     line-height: var(--site-leading-relaxed);
 }
+.rich-text ::deep p {
+    text-align: justify;
+    hyphens: auto;
+}
 .rich-text ::deep h1,
 .rich-text ::deep h2,
 .rich-text ::deep h3,

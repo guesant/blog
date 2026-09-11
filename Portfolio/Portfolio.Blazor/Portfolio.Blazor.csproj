@@ -37,7 +37,6 @@
     <Using Include="Portfolio.Blazor.Client.Shared" />
     <Using Include="Portfolio.Blazor.Components" />
     <Using Include="Portfolio.Blazor.Core" />
-    <Using Include="Portfolio.Blazor.Backups" />
     <Using Include="Portfolio.Blazor.Data" />
     <Using Include="Portfolio.Blazor.Data.Entities" />
     <Using Include="Portfolio.Blazor.UI" />

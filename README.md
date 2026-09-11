@@ -12,7 +12,7 @@ Sobe o app em <http://localhost:8080> via Docker Compose, em SQLite. `just dev-p
 
 ## Produção
 
-A cada push em `main`, o GitHub Actions roda os portões (`blazor-quality`) e publica a imagem `ghcr.io/guesant/portfolio` (`publish-image`). O deploy é `tools/scripts/deploy.sh`, que faz pull da tag `main` e sobe `docker-compose.prod.yml`. Migrações nunca rodam no deploy; use `just db-update` com backup antes. O banco é SQLite por padrão; `PORTFOLIO_DB_PROVIDER=postgres` com `PORTFOLIO_DB_CONNECTION` (e opcionalmente `PORTFOLIO_DB_READ_CONNECTION`, `PORTFOLIO_DB_BACKUP_MODE`) troca para PostgreSQL, detalhes em [docs/database-schema.md](docs/database-schema.md).
+A cada push em `main`, o GitHub Actions roda os portões (`blazor-quality`) e publica a imagem `ghcr.io/guesant/portfolio` (`publish-image`). O deploy é `tools/scripts/deploy.sh`, que faz pull da tag `main` e sobe `docker-compose.prod.yml`. Migrações nunca rodam no deploy; use `just db-update` com backup antes. O banco é SQLite por padrão; `PORTFOLIO_DB_PROVIDER=postgres` com `PORTFOLIO_DB_CONNECTION` (e opcionalmente `PORTFOLIO_DB_READ_CONNECTION`) troca para PostgreSQL, detalhes em [docs/database-schema.md](docs/database-schema.md).
 
 ## Segurança e licença
 

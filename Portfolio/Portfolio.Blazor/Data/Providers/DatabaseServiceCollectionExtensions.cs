@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using Portfolio.Blazor.Backups;
 using Portfolio.Blazor.Core;
 
 namespace Portfolio.Blazor.Data.Providers;
@@ -16,12 +15,10 @@ public static class DatabaseServiceCollectionExtensions
         if (options.Provider == DatabaseProviderKind.Postgres)
         {
             services.AddSingleton<IDatabaseProvider, PostgresDatabaseProvider>();
-            services.AddSingleton<IDatabaseBackupService, PostgresDatabaseBackupService>();
         }
         else
         {
             services.AddSingleton<IDatabaseProvider, SqliteDatabaseProvider>();
-            services.AddSingleton<IDatabaseBackupService, SqliteDatabaseBackupService>();
         }
 
         services.AddDbContextFactory<PortfolioAdminDbContext>(

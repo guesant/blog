@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Portfolio.Blazor.Backups;
 using Portfolio.Blazor.Data;
 using Portfolio.Blazor.Data.Providers;
 using Portfolio.Blazor.UI.Foundations;
@@ -13,9 +12,6 @@ public abstract partial class AdminEditPageBase<TEntity> : AdminComponentBase
 {
     [Inject]
     protected IDbContextFactory<PortfolioAdminDbContext> DbContextFactory { get; set; } = default!;
-
-    [Inject]
-    protected IDatabaseBackupService BackupService { get; set; } = default!;
 
     [Inject]
     protected IDatabaseProvider DatabaseProvider { get; set; } = default!;
@@ -72,8 +68,6 @@ public abstract partial class AdminEditPageBase<TEntity> : AdminComponentBase
         IsSaving = true;
         try
         {
-            await BackupService.CreateBackupAsync();
-
             await using var dbContext = await DbContextFactory.CreateDbContextAsync();
             await using var transaction = await dbContext.Database.BeginTransactionAsync();
             try

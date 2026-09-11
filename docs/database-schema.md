@@ -68,9 +68,8 @@ than that (`reference_collection_translations_reference_collection_id_locale_uni
 The public cache invalidates by file length and mtime on SQLite and by the
 `content_revisions` row on PostgreSQL; the admin bumps that row after every committed write
 through `IDatabaseProvider.SignalContentChangedAsync` (on SQLite the same call is the WAL
-checkpoint). Backups on PostgreSQL default to `PORTFOLIO_DB_BACKUP_MODE=none` (the database
-host owns them); `pg_dump` mode shells out to a `pg_dump` binary that the production image
-does not ship yet.
+checkpoint). Backups are not the app's job on either engine: copy the SQLite file (the
+`Portfolio.Blazor.Snapshot` CLI does that for dev snapshots) or run `pg_dump` from the host.
 
 `just test-data` runs `Portfolio.Blazor.Data.Tests`: it migrates a fresh SQLite file, seeds it
 with plain SQL, builds the public snapshot and knowledge graph through the real providers,

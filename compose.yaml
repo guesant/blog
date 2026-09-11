@@ -10,13 +10,6 @@ services:
       - resume-pdf-cache:/data/resume-cache
     command: sh -lc 'mkdir -p /data/resume-cache && chown -R ${PORTFOLIO_CONTAINER_UID:-1000}:${PORTFOLIO_CONTAINER_GID:-1000} /data/resume-cache'
     restart: "no"
-  db-backups-init:
-    image: mcr.microsoft.com/dotnet/sdk@sha256:e1fc6e423f543119c406d24e2e687d67c569f18f04a37a8b0005d80ad0dcee80
-    user: "0:0"
-    volumes:
-      - db-backups:/data/db-backups
-    command: sh -lc 'mkdir -p /data/db-backups && chown -R ${PORTFOLIO_CONTAINER_UID:-1000}:${PORTFOLIO_CONTAINER_GID:-1000} /data/db-backups'
-    restart: "no"
   nuget-cache-init:
     image: mcr.microsoft.com/dotnet/sdk@sha256:e1fc6e423f543119c406d24e2e687d67c569f18f04a37a8b0005d80ad0dcee80
     user: "0:0"
@@ -53,7 +46,6 @@ services:
           create_host_path: false
       - resume-pdf-cache:/data/resume-cache
       - nuget-cache:/tmp/nuget-packages
-      - db-backups:/data/db-backups
     tmpfs:
       - /tmp:uid=${PORTFOLIO_CONTAINER_UID:-1000},gid=${PORTFOLIO_CONTAINER_GID:-1000},mode=1777
     environment:
@@ -62,7 +54,6 @@ services:
       PORTFOLIO_SQLITE_PATH: /data/db/portfolio.sqlite
       PORTFOLIO_PUBLIC_ASSET_ROOT: /data/public
       PORTFOLIO_RESUME_PDF_ROOT: /data/resume-cache
-      PORTFOLIO_DB_BACKUP_ROOT: /data/db-backups
       TECTONIC_BUNDLE: https://data1.fullyjustified.net/tlextras-2022.0r0.tar
       TECTONIC_ONLY_CACHED: "true"
       HOME: /data/resume-cache
@@ -84,12 +75,9 @@ services:
     depends_on:
       resume-cache-init:
         condition: service_completed_successfully
-      db-backups-init:
-        condition: service_completed_successfully
       nuget-cache-init:
         condition: service_completed_successfully
 
 volumes:
   nuget-cache:
   resume-pdf-cache:
-  db-backups:

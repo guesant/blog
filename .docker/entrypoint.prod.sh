@@ -27,6 +27,6 @@ esac
 
 # The schema is owned by EF Core migrations in Portfolio.Blazor.Database, but
 # they are never applied here: a deploy must not rewrite schema on its own.
-# Run 'just db-update' deliberately, after a backup. The admin panel does write
-# this file, and backups run in-process before each save (DatabaseBackupService).
+# Run 'just db-update' deliberately, after a backup taken by the host (the app never
+# copies or dumps its own database).
 exec sh /app/scripts/run-with-tectonic.sh

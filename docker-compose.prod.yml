@@ -19,7 +19,6 @@ services:
       PORTFOLIO_SQLITE_PATH: /data/sqlite/portfolio.sqlite
       PORTFOLIO_PUBLIC_ASSET_ROOT: /data/public
       PORTFOLIO_RESUME_PDF_ROOT: /data/resume-cache
-      PORTFOLIO_DB_BACKUP_ROOT: /data/db-backups
       TECTONIC_BUNDLE: ${TECTONIC_BUNDLE:-https://data1.fullyjustified.net/tlextras-2022.0r0.tar}
       TECTONIC_ONLY_CACHED: "true"
       # Keep startup fail-closed if the persistent SQLite volume is missing.
@@ -31,7 +30,6 @@ services:
       - portfolio-sqlite-data:/data/sqlite
       - portfolio-public-data:/data/public:ro
       - portfolio-resume-cache:/data/resume-cache
-      - portfolio-db-backups:/data/db-backups
     healthcheck:
       test: ["CMD-SHELL", "curl --fail --silent http://127.0.0.1:8080/health >/dev/null || exit 1"]
       interval: 10s
@@ -52,4 +50,3 @@ volumes:
   portfolio-sqlite-data:
   portfolio-public-data:
   portfolio-resume-cache:
-  portfolio-db-backups:

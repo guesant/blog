@@ -10,10 +10,7 @@ public sealed record DatabaseOptions(
     DatabaseProviderKind Provider,
     string SqlitePath,
     string? PostgresConnectionString,
-    string? PostgresReadConnectionString,
-    string BackupRoot,
-    int BackupKeep,
-    string BackupMode
+    string? PostgresReadConnectionString
 )
 {
     public static DatabaseOptions FromConfiguration(IConfiguration configuration)
@@ -39,10 +36,7 @@ public sealed record DatabaseOptions(
             provider,
             configuration["PORTFOLIO_SQLITE_PATH"] ?? "/data/portfolio.sqlite",
             connection,
-            configuration["PORTFOLIO_DB_READ_CONNECTION"] ?? connection,
-            configuration["PORTFOLIO_DB_BACKUP_ROOT"] ?? "/data/db-backups",
-            int.TryParse(configuration["PORTFOLIO_DB_BACKUP_KEEP"], out var keep) ? keep : 20,
-            (configuration["PORTFOLIO_DB_BACKUP_MODE"] ?? "none").Trim().ToLowerInvariant()
+            configuration["PORTFOLIO_DB_READ_CONNECTION"] ?? connection
         );
     }
 }

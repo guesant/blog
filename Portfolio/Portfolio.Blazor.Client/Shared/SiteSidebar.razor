@@ -55,6 +55,18 @@
                     <SidebarNavIcon Route="about" Active="@IsAbout" />
                     <SiteNavItemLabel>@AboutLabel</SiteNavItemLabel>
                 </SiteNavLink>
+                <ul class="site-nav-sub">
+                    @foreach (var route in AboutChildren)
+                    {
+                        <li>
+                            <SiteNavLink Href="@LocalizedPath(route)"
+                                AriaCurrent="@(IsRoute(route) ? "page" : null)">
+                                <SidebarNavIcon Route="@route" Active="@IsRoute(route)" />
+                                <SiteNavItemLabel>@NavL[route]</SiteNavItemLabel>
+                            </SiteNavLink>
+                        </li>
+                    }
+                </ul>
             </li>
         </ul>
         <hr class="site-nav-divider" />

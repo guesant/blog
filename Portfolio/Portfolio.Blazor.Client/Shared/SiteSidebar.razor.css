@@ -56,7 +56,12 @@
     line-height: var(--site-leading-normal);
     text-transform: lowercase;
 }
-.site-nav-footer-links .site-nav-sub {
+.site-nav > ul > li {
+    display: flex;
+    flex-direction: column;
+}
+.site-nav-footer-links .site-nav-sub,
+.site-nav > ul .site-nav-sub {
     width: calc(100% - var(--site-space-4));
     gap: var(--site-space-3);
     margin: var(--site-space-3) 0 0 var(--site-space-4);

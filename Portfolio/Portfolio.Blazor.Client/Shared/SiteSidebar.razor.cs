@@ -15,6 +15,7 @@ public partial class SiteSidebar
     private string AboutLabel => NavL["about_me"];
     private bool IsAbout => IsRoute("about");
     private bool IsAboutChild => new[] { "portfolio", "resume", "cases", "projects" }.Any(IsRoute);
+    private static IReadOnlyList<string> AboutChildren => ["resume", "portfolio", "cases"];
 
     private bool IsRoute(string route) =>
         RequestPath

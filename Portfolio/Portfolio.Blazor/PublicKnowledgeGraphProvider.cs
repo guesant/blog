@@ -1,21 +1,21 @@
 using System.Collections.Concurrent;
+using System.Data.Common;
 using System.Text.Json;
-using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Localization;
 using Portfolio.Blazor.Core;
 using Portfolio.Blazor.Core.Localization;
-using static Portfolio.Blazor.SqliteReadHelpers;
+using Portfolio.Blazor.Data.Providers;
+using static Portfolio.Blazor.SqlReadHelpers;
 
 namespace Portfolio.Blazor;
 
-public sealed partial class SqlitePublicKnowledgeGraphProvider(
+public sealed partial class PublicKnowledgeGraphProvider(
+    IDatabaseProvider database,
     IConfiguration configuration,
-    ILogger<SqlitePublicKnowledgeGraphProvider> logger,
+    ILogger<PublicKnowledgeGraphProvider> logger,
     IStringLocalizer<SharedResource> localizer
 ) : IPublicKnowledgeGraphProvider
 {
-    private readonly string _databasePath =
-        configuration["PORTFOLIO_SQLITE_PATH"] ?? "/data/portfolio.sqlite";
     private readonly SemaphoreSlim _graphGate = new(1, 1);
     private readonly ConcurrentDictionary<string, CachedGraph> _graphs = new(
         StringComparer.OrdinalIgnoreCase
@@ -65,28 +65,20 @@ public sealed partial class SqlitePublicKnowledgeGraphProvider(
         locale = CultureCatalog.NormalizeName(locale);
         try
         {
-            if (!File.Exists(_databasePath))
+            if (!database.IsContentAvailable())
                 return null;
-            var fingerprint = DatabaseFingerprint.Read(_databasePath);
+            var fingerprint = await database.ReadFingerprintAsync(cancellationToken);
             if (_graphs.TryGetValue(locale, out var cached) && cached.Fingerprint == fingerprint)
                 return cached.Graph;
 
             await _graphGate.WaitAsync(cancellationToken);
             try
             {
-                fingerprint = DatabaseFingerprint.Read(_databasePath);
+                fingerprint = await database.ReadFingerprintAsync(cancellationToken);
                 if (_graphs.TryGetValue(locale, out cached) && cached.Fingerprint == fingerprint)
                     return cached.Graph;
 
-                using var db = new SqliteConnection(
-                    new SqliteConnectionStringBuilder
-                    {
-                        DataSource = _databasePath,
-                        Mode = SqliteOpenMode.ReadOnly,
-                        Cache = SqliteCacheMode.Shared,
-                    }.ToString()
-                );
-                await db.OpenAsync(cancellationToken);
+                using var db = await database.OpenReadOnlyConnectionAsync(cancellationToken);
                 var nodes = Nodes(db, locale);
                 var index = nodes.ToDictionary(node => node.Id, StringComparer.Ordinal);
                 var edges = new List<PublicGraphEdge>();
@@ -113,40 +105,31 @@ public sealed partial class SqlitePublicKnowledgeGraphProvider(
                 _graphGate.Release();
             }
         }
-        catch (Exception exception)
-            when (exception is SqliteException or IOException or UnauthorizedAccessException)
+        catch (Exception exception) when (database.IsReadFailure(exception))
         {
             LogKnowledgeGraphReadFailed(logger, exception);
             return null;
         }
     }
 
-    private sealed record CachedGraph(DatabaseFingerprint Fingerprint, PublicKnowledgeGraph Graph);
+    private sealed record CachedGraph(ContentFingerprint Fingerprint, PublicKnowledgeGraph Graph);
 
-    private readonly record struct DatabaseFingerprint(long Length, long LastWriteTicks)
-    {
-        public static DatabaseFingerprint Read(string path)
-        {
-            var file = new FileInfo(path);
-            return new DatabaseFingerprint(file.Length, file.LastWriteTimeUtc.Ticks);
-        }
-    }
-
-    private static List<PublicGraphNode> Nodes(SqliteConnection db, string locale)
+    private static List<PublicGraphNode> Nodes(DbConnection db, string locale)
     {
         var nodes = new List<PublicGraphNode>();
         foreach (var source in NodeSources)
         {
             var visibility =
                 source.Key is "topic" or "technology" ? ""
-                : source.Key is "finding" ? " and x.hidden=0 and x.visibility='public'"
-                : source.Key is "project" or "case-study" ? " and x.hidden=0 and x.nda=0"
-                : " and x.hidden=0";
-            var ordering = source.Key == "writing" ? "x.date_iso desc" : "x.[order]";
+                : source.Key is "finding" ? " and x.hidden=false and x.visibility='public'"
+                : source.Key is "project" or "case-study" ? " and x.hidden=false and x.nda=false"
+                : " and x.hidden=false";
+            var ordering =
+                source.Key == "writing" ? "x.date_iso desc nulls last" : "x.\"order\" nulls first";
             var rows = Rows(
                 db,
-                $"select x.id, x.slug, x.public_id, t.{source.Value.Label} label from {source.Value.Table} x left join {source.Value.Translation} t on t.{source.Value.ForeignKey}=x.id and t.locale=$locale where 1=1{visibility} order by {ordering}",
-                ("$locale", locale)
+                $"select x.id, x.slug, x.public_id, t.{source.Value.Label} label from {source.Value.Table} x left join {source.Value.Translation} t on t.{source.Value.ForeignKey}=x.id and t.locale=@locale where 1=1{visibility} order by {ordering}",
+                ("@locale", locale)
             );
             foreach (var row in rows)
             {
@@ -173,7 +156,7 @@ public sealed partial class SqlitePublicKnowledgeGraphProvider(
     }
 
     private void AddTopicEdges(
-        SqliteConnection db,
+        DbConnection db,
         IReadOnlyDictionary<string, PublicGraphNode> index,
         List<PublicGraphEdge> edges,
         string locale
@@ -182,7 +165,7 @@ public sealed partial class SqlitePublicKnowledgeGraphProvider(
         foreach (
             var row in Rows(
                 db,
-                "select topic_id, topicable_type, topicable_id, role from topicables"
+                "select topic_id, topicable_type, topicable_id, role from topicables order by id nulls first"
             )
         )
         {
@@ -202,7 +185,7 @@ public sealed partial class SqlitePublicKnowledgeGraphProvider(
     }
 
     private void AddTechnologyEdges(
-        SqliteConnection db,
+        DbConnection db,
         IReadOnlyDictionary<string, PublicGraphNode> index,
         List<PublicGraphEdge> edges,
         string locale
@@ -216,7 +199,12 @@ public sealed partial class SqlitePublicKnowledgeGraphProvider(
                 ("experiment_technology", "experiment", "experiment_id"),
             }
         )
-        foreach (var row in Rows(db, $"select {pivot.Item3}, technology_id from {pivot.Item1}"))
+        foreach (
+            var row in Rows(
+                db,
+                $"select {pivot.Item3}, technology_id from {pivot.Item1} order by {pivot.Item3} nulls first, technology_id nulls first"
+            )
+        )
         {
             var source = $"{pivot.Item2}:{Text(row, pivot.Item3)}";
             var target = $"technology:{Text(row, "technology_id")}";
@@ -228,7 +216,7 @@ public sealed partial class SqlitePublicKnowledgeGraphProvider(
     }
 
     private void AddCollectionEdges(
-        SqliteConnection db,
+        DbConnection db,
         IReadOnlyDictionary<string, PublicGraphNode> index,
         List<PublicGraphEdge> edges,
         string locale
@@ -237,7 +225,7 @@ public sealed partial class SqlitePublicKnowledgeGraphProvider(
         foreach (
             var row in Rows(
                 db,
-                "select reference_collection_id, resource_id from reference_collection_item"
+                "select reference_collection_id, resource_id from reference_collection_item order by reference_collection_id nulls first, resource_id nulls first"
             )
         )
         {
@@ -256,7 +244,7 @@ public sealed partial class SqlitePublicKnowledgeGraphProvider(
     }
 
     private static void AddRelationEdges(
-        SqliteConnection db,
+        DbConnection db,
         IReadOnlyDictionary<string, PublicGraphNode> index,
         List<PublicGraphEdge> edges,
         string locale
@@ -265,7 +253,7 @@ public sealed partial class SqlitePublicKnowledgeGraphProvider(
         foreach (
             var row in Rows(
                 db,
-                "select r.subject_type, r.subject_id, r.object_type, r.object_id, r.note, r.context, r.status, t.key, t.family, t.symmetric, t.outbound_label_en, t.outbound_label_pt_br, t.inbound_label_en, t.inbound_label_pt_br from content_relations r join relation_types t on t.id=r.relation_type_id where r.visibility is null or r.visibility='public'"
+                "select r.subject_type, r.subject_id, r.object_type, r.object_id, r.note, r.context, r.status, t.key, t.family, t.symmetric, t.outbound_label_en, t.outbound_label_pt_br, t.inbound_label_en, t.inbound_label_pt_br from content_relations r join relation_types t on t.id=r.relation_type_id where r.visibility is null or r.visibility='public' order by r.id nulls first"
             )
         )
         {

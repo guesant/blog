@@ -1,4 +1,3 @@
-using System.Data;
 using Microsoft.AspNetCore.Authorization;
 
 namespace Portfolio.Blazor.Components.Admin.Pages.Technologies;
@@ -90,31 +89,8 @@ public partial class TechnologyList
             return true;
         }
 
-        var connection = dbContext.Database.GetDbConnection();
-        var wasClosed = connection.State != ConnectionState.Open;
-        if (wasClosed)
-        {
-            await connection.OpenAsync();
-        }
-
-        try
-        {
-            await using var command = connection.CreateCommand();
-            command.CommandText =
-                "select count(*) from resume_skill_technology where technology_id = $technologyId";
-            var parameter = command.CreateParameter();
-            parameter.ParameterName = "$technologyId";
-            parameter.Value = technologyId;
-            command.Parameters.Add(parameter);
-            var result = await command.ExecuteScalarAsync();
-            return Convert.ToInt64(result) > 0;
-        }
-        finally
-        {
-            if (wasClosed)
-            {
-                await connection.CloseAsync();
-            }
-        }
+        return await dbContext.ResumeSkillTechnologies.AnyAsync(pivot =>
+            pivot.TechnologyId == technologyId
+        );
     }
 }

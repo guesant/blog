@@ -1,22 +1,22 @@
 using System.Collections.Concurrent;
+using System.Data.Common;
 using System.Text.Json;
-using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Localization;
 using Portfolio.Blazor.Core;
 using Portfolio.Blazor.Core.Localization;
-using static Portfolio.Blazor.SqliteReadHelpers;
+using Portfolio.Blazor.Data.Providers;
+using static Portfolio.Blazor.SqlReadHelpers;
 
 namespace Portfolio.Blazor;
 
-public sealed partial class SqlitePublicSiteContentProvider(
+public sealed partial class PublicSiteContentProvider(
+    IDatabaseProvider database,
     IConfiguration configuration,
-    ILogger<SqlitePublicSiteContentProvider> logger,
+    ILogger<PublicSiteContentProvider> logger,
     ProtectedEmailChallengeService challengeService,
     IStringLocalizer<SharedResource> localizer
 ) : IPublicSiteContentProvider
 {
-    private readonly string _databasePath =
-        configuration["PORTFOLIO_SQLITE_PATH"] ?? "/data/portfolio.sqlite";
     private readonly string _publicAssetRoot =
         configuration["PORTFOLIO_PUBLIC_ASSET_ROOT"] ?? "/data/public";
     private readonly string _resumePdfRoot =
@@ -37,32 +37,26 @@ public sealed partial class SqlitePublicSiteContentProvider(
         locale = CultureCatalog.NormalizeName(locale);
         try
         {
-            if (!File.Exists(_databasePath))
+            if (!database.IsContentAvailable())
             {
-                LogDatabaseNotFound(logger, _databasePath);
+                LogDatabaseNotFound(logger);
                 return null;
             }
 
-            var fingerprint = DatabaseFingerprint.Read(_databasePath);
+            var fingerprint = await database.ReadFingerprintAsync(cancellationToken);
             if (_snapshots.TryGetValue(locale, out var cached) && cached.Fingerprint == fingerprint)
                 return cached.Snapshot;
 
             await _snapshotGate.WaitAsync(cancellationToken);
             try
             {
-                fingerprint = DatabaseFingerprint.Read(_databasePath);
+                fingerprint = await database.ReadFingerprintAsync(cancellationToken);
                 if (_snapshots.TryGetValue(locale, out cached) && cached.Fingerprint == fingerprint)
                     return cached.Snapshot;
 
-                using var connection = new SqliteConnection(
-                    new SqliteConnectionStringBuilder
-                    {
-                        DataSource = _databasePath,
-                        Mode = SqliteOpenMode.ReadOnly,
-                        Cache = SqliteCacheMode.Shared,
-                    }.ToString()
+                using var connection = await database.OpenReadOnlyConnectionAsync(
+                    cancellationToken
                 );
-                await connection.OpenAsync(cancellationToken);
                 var snapshot = Build(connection, locale);
                 _snapshots[locale] = new CachedSnapshot(fingerprint, snapshot);
                 return snapshot;
@@ -72,8 +66,7 @@ public sealed partial class SqlitePublicSiteContentProvider(
                 _snapshotGate.Release();
             }
         }
-        catch (Exception exception)
-            when (exception is SqliteException or IOException or UnauthorizedAccessException)
+        catch (Exception exception) when (database.IsReadFailure(exception))
         {
             LogDatabaseReadFailed(logger, exception);
             return null;
@@ -81,31 +74,22 @@ public sealed partial class SqlitePublicSiteContentProvider(
     }
 
     private sealed record CachedSnapshot(
-        DatabaseFingerprint Fingerprint,
+        ContentFingerprint Fingerprint,
         PublicSiteSnapshot Snapshot
     );
 
-    private readonly record struct DatabaseFingerprint(long Length, long LastWriteTicks)
+    private PublicSiteSnapshot Build(DbConnection db, string locale)
     {
-        public static DatabaseFingerprint Read(string path)
-        {
-            var file = new FileInfo(path);
-            return new DatabaseFingerprint(file.Length, file.LastWriteTimeUtc.Ticks);
-        }
-    }
-
-    private PublicSiteSnapshot Build(SqliteConnection db, string locale)
-    {
-        var site = Row(db, "select * from site_settings order by id limit 1");
+        var site = Row(db, "select * from site_settings order by id nulls first limit 1");
         var profile = Row(
             db,
-            "select p.*, coalesce(t.title, en.title) as title, coalesce(t.location, en.location) as location, coalesce(t.description, en.description) as description, coalesce(t.milestones, en.milestones) as milestones from profiles p left join profile_translations t on t.profile_id=p.id and t.locale=$locale left join profile_translations en on en.profile_id=p.id and en.locale='en' order by p.id limit 1",
-            ("$locale", locale)
+            "select p.*, coalesce(t.title, en.title) as title, coalesce(t.location, en.location) as location, coalesce(t.description, en.description) as description, coalesce(t.milestones, en.milestones) as milestones from profiles p left join profile_translations t on t.profile_id=p.id and t.locale=@locale left join profile_translations en on en.profile_id=p.id and en.locale='en' order by p.id nulls first limit 1",
+            ("@locale", locale)
         );
         var pages = Rows(
                 db,
-                "select p.slug, p.updated_at, coalesce(t.fields, en.fields) as fields from pages p left join page_translations t on t.page_id=p.id and t.locale=$locale left join page_translations en on en.page_id=p.id and en.locale='en' where t.id is not null or en.id is not null",
-                ("$locale", locale)
+                "select p.slug, p.updated_at, coalesce(t.fields, en.fields) as fields from pages p left join page_translations t on t.page_id=p.id and t.locale=@locale left join page_translations en on en.page_id=p.id and en.locale='en' where t.id is not null or en.id is not null",
+                ("@locale", locale)
             )
             .ToDictionary(row => Text(row, "slug"), PageFields, StringComparer.OrdinalIgnoreCase);
 
@@ -131,7 +115,7 @@ public sealed partial class SqlitePublicSiteContentProvider(
                     Text(profile, "location"),
                     Text(profile, "description"),
                     JsonNullable(Text(profile, "milestones")),
-                    Text(profile, "birth_date"),
+                    Date(profile, "birth_date"),
                     Text(profile, "birth_city"),
                     Text(profile, "interests"),
                     Text(profile, "learning"),
@@ -171,19 +155,14 @@ public sealed partial class SqlitePublicSiteContentProvider(
     )
     {
         cancellationToken.ThrowIfCancellationRequested();
-        if (!File.Exists(_databasePath))
+        if (!database.IsContentAvailable())
             return null;
 
-        using var connection = new SqliteConnection(
-            new SqliteConnectionStringBuilder
-            {
-                DataSource = _databasePath,
-                Mode = SqliteOpenMode.ReadOnly,
-                Cache = SqliteCacheMode.Shared,
-            }.ToString()
+        using var connection = await database.OpenReadOnlyConnectionAsync(cancellationToken);
+        var site = Row(
+            connection,
+            "select contact_email from site_settings order by id nulls first limit 1"
         );
-        await connection.OpenAsync(cancellationToken);
-        var site = Row(connection, "select contact_email from site_settings order by id limit 1");
         return await challengeService.CreateAsync(Text(site, "contact_email"), cancellationToken);
     }
 
@@ -195,11 +174,11 @@ public sealed partial class SqlitePublicSiteContentProvider(
             )
             .ToList();
 
-    private static List<PublicProject> Projects(SqliteConnection db, string locale) =>
+    private static List<PublicProject> Projects(DbConnection db, string locale) =>
         Rows(
                 db,
-                "select p.*, coalesce(t.name, en.name) as name, coalesce(t.purpose, en.purpose) as purpose, coalesce(t.problem, en.problem) as problem, coalesce(t.current_focus, en.current_focus) as current_focus, coalesce(t.status, en.status) as status, coalesce(t.metrics, en.metrics) as metrics, coalesce(t.body, en.body) as body from projects p left join project_translations t on t.project_id=p.id and t.locale=$locale left join project_translations en on en.project_id=p.id and en.locale='en' where p.hidden=0 and p.nda=0 order by p.[order]",
-                ("$locale", locale)
+                "select p.*, coalesce(t.name, en.name) as name, coalesce(t.purpose, en.purpose) as purpose, coalesce(t.problem, en.problem) as problem, coalesce(t.current_focus, en.current_focus) as current_focus, coalesce(t.status, en.status) as status, coalesce(t.metrics, en.metrics) as metrics, coalesce(t.body, en.body) as body from projects p left join project_translations t on t.project_id=p.id and t.locale=@locale left join project_translations en on en.project_id=p.id and en.locale='en' where p.hidden=false and p.nda=false order by p.\"order\" nulls first",
+                ("@locale", locale)
             )
             .Select(row => new PublicProject(
                 Text(row, "slug"),
@@ -207,26 +186,26 @@ public sealed partial class SqlitePublicSiteContentProvider(
                 Text(row, "name", Text(row, "slug")),
                 Text(row, "purpose"),
                 Text(row, "status"),
-                Text(row, "published_at"),
+                Timestamp(row, "published_at"),
                 Bool(row, "external"),
                 Text(row, "problem"),
                 Text(row, "current_focus"),
                 JsonNullable(Text(row, "metrics")),
                 Text(row, "body"),
-                TechnologiesFor(db, "project_technology", "project_id", Text(row, "id"), locale),
+                TechnologiesFor(db, "project_technology", "project_id", Id(row, "id"), locale),
                 Bool(row, "show_history"),
-                HistoryFor(db, "App\\Models\\Project", Text(row, "id"), locale),
+                HistoryFor(db, "App\\Models\\Project", Id(row, "id"), locale),
                 Text(row, "href"),
-                RelatedProjects(db, Text(row, "id"), locale),
-                Text(row, "updated_at")
+                RelatedProjects(db, Id(row, "id"), locale),
+                Timestamp(row, "updated_at")
             ))
             .ToList();
 
-    private static List<PublicCaseStudy> Cases(SqliteConnection db, string locale) =>
+    private static List<PublicCaseStudy> Cases(DbConnection db, string locale) =>
         Rows(
                 db,
-                "select c.*, coalesce(t.title, en.title) as title, coalesce(t.status, en.status) as status, coalesce(t.meta, en.meta) as meta, coalesce(t.summary, en.summary) as summary, coalesce(t.context, en.context) as context, coalesce(t.role, en.role) as role, coalesce(t.result, en.result) as result, coalesce(t.metrics, en.metrics) as metrics, coalesce(t.body, en.body) as body from case_studies c left join case_study_translations t on t.case_study_id=c.id and t.locale=$locale left join case_study_translations en on en.case_study_id=c.id and en.locale='en' where c.hidden=0 and c.nda=0 order by c.[order]",
-                ("$locale", locale)
+                "select c.*, coalesce(t.title, en.title) as title, coalesce(t.status, en.status) as status, coalesce(t.meta, en.meta) as meta, coalesce(t.summary, en.summary) as summary, coalesce(t.context, en.context) as context, coalesce(t.role, en.role) as role, coalesce(t.result, en.result) as result, coalesce(t.metrics, en.metrics) as metrics, coalesce(t.body, en.body) as body from case_studies c left join case_study_translations t on t.case_study_id=c.id and t.locale=@locale left join case_study_translations en on en.case_study_id=c.id and en.locale='en' where c.hidden=false and c.nda=false order by c.\"order\" nulls first",
+                ("@locale", locale)
             )
             .Select(row => new PublicCaseStudy(
                 Text(row, "slug"),
@@ -234,7 +213,7 @@ public sealed partial class SqlitePublicSiteContentProvider(
                 Text(row, "title", Text(row, "slug")),
                 Text(row, "status"),
                 Text(row, "summary"),
-                Text(row, "published_at"),
+                Timestamp(row, "published_at"),
                 Bool(row, "external"),
                 Text(row, "meta"),
                 Text(row, "context"),
@@ -246,22 +225,22 @@ public sealed partial class SqlitePublicSiteContentProvider(
                     db,
                     "case_study_technology",
                     "case_study_id",
-                    Text(row, "id"),
+                    Id(row, "id"),
                     locale
                 ),
                 Bool(row, "show_history"),
-                HistoryFor(db, "App\\Models\\CaseStudy", Text(row, "id"), locale),
+                HistoryFor(db, "App\\Models\\CaseStudy", Id(row, "id"), locale),
                 Text(row, "href"),
-                RelatedCases(db, Text(row, "id"), locale),
-                Text(row, "updated_at")
+                RelatedCases(db, Id(row, "id"), locale),
+                Timestamp(row, "updated_at")
             ))
             .ToList();
 
-    private static List<PublicWriting> Writings(SqliteConnection db, string locale) =>
+    private static List<PublicWriting> Writings(DbConnection db, string locale) =>
         Rows(
                 db,
-                "select w.*, coalesce(t.title, en.title) as title, coalesce(t.excerpt, en.excerpt) as excerpt, coalesce(t.reading_time, en.reading_time) as reading_time, coalesce(t.body, en.body) as body from writings w left join writing_translations t on t.writing_id=w.id and t.locale=$locale left join writing_translations en on en.writing_id=w.id and en.locale='en' where w.hidden=0 order by w.date_iso desc",
-                ("$locale", locale)
+                "select w.*, coalesce(t.title, en.title) as title, coalesce(t.excerpt, en.excerpt) as excerpt, coalesce(t.reading_time, en.reading_time) as reading_time, coalesce(t.body, en.body) as body from writings w left join writing_translations t on t.writing_id=w.id and t.locale=@locale left join writing_translations en on en.writing_id=w.id and en.locale='en' where w.hidden=false order by w.date_iso desc nulls last",
+                ("@locale", locale)
             )
             .Select(row => new PublicWriting(
                 Text(row, "slug"),
@@ -270,9 +249,9 @@ public sealed partial class SqlitePublicSiteContentProvider(
                 Text(row, "excerpt"),
                 Text(row, "reading_time"),
                 Text(row, "type"),
-                Text(row, "date_iso"),
+                Date(row, "date_iso"),
                 Text(row, "body"),
-                TopicsFor(db, "writing", Text(row, "id"), locale)
+                TopicsFor(db, "writing", Id(row, "id"), locale)
                     .Select(topic => new PublicTechnology(
                         topic.Slug,
                         topic.Name ?? topic.Slug,
@@ -280,17 +259,17 @@ public sealed partial class SqlitePublicSiteContentProvider(
                     ))
                     .ToList(),
                 Bool(row, "show_history"),
-                HistoryFor(db, "App\\Models\\Writing", Text(row, "id"), locale),
-                RelatedWritings(db, Text(row, "id"), locale),
-                Text(row, "updated_at")
+                HistoryFor(db, "App\\Models\\Writing", Id(row, "id"), locale),
+                RelatedWritings(db, Id(row, "id"), locale),
+                Timestamp(row, "updated_at")
             ))
             .ToList();
 
-    private static List<PublicFinding> Findings(SqliteConnection db, string locale) =>
+    private static List<PublicFinding> Findings(DbConnection db, string locale) =>
         Rows(
                 db,
-                "select r.*, coalesce(t.title, en.title) as title, coalesce(t.alternative_title, en.alternative_title) as alternative_title, coalesce(t.description, en.description) as description, coalesce(t.personal_note, en.personal_note) as personal_note, coalesce(t.reason_found, en.reason_found) as reason_found from resources r left join resource_translations t on t.resource_id=r.id and t.locale=$locale left join resource_translations en on en.resource_id=r.id and en.locale='en' where r.hidden=0 and r.visibility='public' order by r.[order]",
-                ("$locale", locale)
+                "select r.*, coalesce(t.title, en.title) as title, coalesce(t.alternative_title, en.alternative_title) as alternative_title, coalesce(t.description, en.description) as description, coalesce(t.personal_note, en.personal_note) as personal_note, coalesce(t.reason_found, en.reason_found) as reason_found from resources r left join resource_translations t on t.resource_id=r.id and t.locale=@locale left join resource_translations en on en.resource_id=r.id and en.locale='en' where r.hidden=false and r.visibility='public' order by r.\"order\" nulls first",
+                ("@locale", locale)
             )
             .Select(row => new PublicFinding(
                 Text(row, "slug"),
@@ -298,8 +277,8 @@ public sealed partial class SqlitePublicSiteContentProvider(
                 Text(row, "type"),
                 Text(row, "authors"),
                 Text(row, "organizations"),
-                DateOnly(Text(row, "published_date_iso")),
-                DateOnly(Text(row, "found_date_iso")),
+                Date(row, "published_date_iso"),
+                Date(row, "found_date_iso"),
                 Text(row, "rating"),
                 Text(row, "consumption_state"),
                 JsonNullable(Text(row, "type_details")),
@@ -308,20 +287,20 @@ public sealed partial class SqlitePublicSiteContentProvider(
                 Text(row, "description"),
                 Text(row, "personal_note"),
                 Text(row, "reason_found"),
-                DateOnly(Text(row, "updated_at")),
-                TopicsFor(db, "resource", Text(row, "id"), locale),
-                AttributionTopicsFor(db, Text(row, "id"), locale),
-                LinksFor(db, Text(row, "id")),
-                IdentifiersFor(db, Text(row, "id")),
-                RelatedFindings(db, Text(row, "id"), Text(row, "type"), locale)
+                Date(row, "updated_at"),
+                TopicsFor(db, "resource", Id(row, "id"), locale),
+                AttributionTopicsFor(db, Id(row, "id"), locale),
+                LinksFor(db, Id(row, "id")),
+                IdentifiersFor(db, Id(row, "id")),
+                RelatedFindings(db, Id(row, "id"), Text(row, "type"), locale)
             ))
             .ToList();
 
-    private static List<PublicCollection> Collections(SqliteConnection db, string locale) =>
+    private static List<PublicCollection> Collections(DbConnection db, string locale) =>
         Rows(
                 db,
-                "select c.*, coalesce(t.title, en.title) as title, coalesce(t.description, en.description) as description, coalesce(t.intro, en.intro) as intro from reference_collections c left join reference_collection_translations t on t.reference_collection_id=c.id and t.locale=$locale left join reference_collection_translations en on en.reference_collection_id=c.id and en.locale='en' where c.hidden=0 order by c.[order]",
-                ("$locale", locale)
+                "select c.*, coalesce(t.title, en.title) as title, coalesce(t.description, en.description) as description, coalesce(t.intro, en.intro) as intro from reference_collections c left join reference_collection_translations t on t.reference_collection_id=c.id and t.locale=@locale left join reference_collection_translations en on en.reference_collection_id=c.id and en.locale='en' where c.hidden=false order by c.\"order\" nulls first",
+                ("@locale", locale)
             )
             .Select(row => new PublicCollection(
                 Text(row, "slug"),
@@ -329,19 +308,19 @@ public sealed partial class SqlitePublicSiteContentProvider(
                 Text(row, "title", Text(row, "slug")),
                 Text(row, "description"),
                 Text(row, "intro"),
-                Text(row, "published_at"),
-                CollectionItems(db, Text(row, "id"), locale),
-                RelatedCollections(db, Text(row, "id"), locale),
-                Text(row, "updated_at"),
-                Text(row, "created_at")
+                Timestamp(row, "published_at"),
+                CollectionItems(db, Id(row, "id"), locale),
+                RelatedCollections(db, Id(row, "id"), locale),
+                Timestamp(row, "updated_at"),
+                Timestamp(row, "created_at")
             ))
             .ToList();
 
-    private static List<PublicTopic> Topics(SqliteConnection db, string locale) =>
+    private static List<PublicTopic> Topics(DbConnection db, string locale) =>
         Rows(
                 db,
-                "select t.*, coalesce(tt.name, en.name) as name from topics t left join topic_translations tt on tt.topic_id=t.id and tt.locale=$locale left join topic_translations en on en.topic_id=t.id and en.locale='en' order by t.[order]",
-                ("$locale", locale)
+                "select t.*, coalesce(tt.name, en.name) as name from topics t left join topic_translations tt on tt.topic_id=t.id and tt.locale=@locale left join topic_translations en on en.topic_id=t.id and en.locale='en' order by t.\"order\" nulls first",
+                ("@locale", locale)
             )
             .Select(row => new PublicTopic(
                 Text(row, "slug"),
@@ -350,27 +329,27 @@ public sealed partial class SqlitePublicSiteContentProvider(
             ))
             .ToList();
 
-    private static List<PublicTechnology> Technologies(SqliteConnection db, string locale) =>
+    private static List<PublicTechnology> Technologies(DbConnection db, string locale) =>
         Rows(
                 db,
-                "select t.*, coalesce(tt.name, en.name) as name from technologies t left join technology_translations tt on tt.technology_id=t.id and tt.locale=$locale left join technology_translations en on en.technology_id=t.id and en.locale='en' order by t.[order]",
-                ("$locale", locale)
+                "select t.*, coalesce(tt.name, en.name) as name from technologies t left join technology_translations tt on tt.technology_id=t.id and tt.locale=@locale left join technology_translations en on en.technology_id=t.id and en.locale='en' order by t.\"order\" nulls first",
+                ("@locale", locale)
             )
             .Select(row => new PublicTechnology(
                 Text(row, "slug"),
                 Text(row, "name", Text(row, "slug")),
                 Text(row, "code"),
                 Route("technologies.show", Key(row), locale),
-                SkillsFor(db, Text(row, "id"), locale),
-                ResumeSkillTopicsFor(db, Text(row, "id"), locale)
+                SkillsFor(db, Id(row, "id"), locale),
+                ResumeSkillTopicsFor(db, Id(row, "id"), locale)
             ))
             .ToList();
 
-    private static List<PublicExperiment> Experiments(SqliteConnection db, string locale) =>
+    private static List<PublicExperiment> Experiments(DbConnection db, string locale) =>
         Rows(
                 db,
-                "select e.*, coalesce(t.name, en.name) as name, coalesce(t.purpose, en.purpose) as purpose, coalesce(t.body, en.body) as body from experiments e left join experiment_translations t on t.experiment_id=e.id and t.locale=$locale left join experiment_translations en on en.experiment_id=e.id and en.locale='en' where e.hidden=0 order by e.[order]",
-                ("$locale", locale)
+                "select e.*, coalesce(t.name, en.name) as name, coalesce(t.purpose, en.purpose) as purpose, coalesce(t.body, en.body) as body from experiments e left join experiment_translations t on t.experiment_id=e.id and t.locale=@locale left join experiment_translations en on en.experiment_id=e.id and en.locale='en' where e.hidden=false order by e.\"order\" nulls first",
+                ("@locale", locale)
             )
             .Select(row => new PublicExperiment(
                 Text(row, "slug"),
@@ -378,253 +357,249 @@ public sealed partial class SqlitePublicSiteContentProvider(
                 Text(row, "name", Text(row, "slug")),
                 Text(row, "purpose"),
                 Text(row, "body"),
-                Text(row, "published_at"),
+                Timestamp(row, "published_at"),
                 Bool(row, "external"),
                 TechnologiesFor(
                     db,
                     "experiment_technology",
                     "experiment_id",
-                    Text(row, "id"),
+                    Id(row, "id"),
                     locale
                 ),
                 Text(row, "href"),
-                Text(row, "updated_at"),
+                Timestamp(row, "updated_at"),
                 Bool(row, "show_history"),
-                HistoryFor(db, "App\\Models\\Experiment", Text(row, "id"), locale),
-                RelatedExperiments(db, Text(row, "id"), locale)
+                HistoryFor(db, "App\\Models\\Experiment", Id(row, "id"), locale),
+                RelatedExperiments(db, Id(row, "id"), locale)
             ))
             .ToList();
 
     private static List<PublicRelatedContent> RelatedExperiments(
-        SqliteConnection db,
-        string id,
+        DbConnection db,
+        long id,
         string locale
     )
     {
         const string shared =
-            "select e.slug, e.public_id, t.name, e.published_at from experiments e left join experiment_translations t on t.experiment_id=e.id and t.locale=$locale where e.hidden=0 and e.id<>$id and exists (select 1 from experiment_technology current_technology join experiment_technology related_technology on related_technology.technology_id=current_technology.technology_id where current_technology.experiment_id=$id and related_technology.experiment_id=e.id) order by e.published_at desc limit 3";
-        var rows = Rows(db, shared, ("$id", id), ("$locale", locale));
+            "select e.slug, e.public_id, t.name, e.published_at from experiments e left join experiment_translations t on t.experiment_id=e.id and t.locale=@locale where e.hidden=false and e.id<>@id and exists (select 1 from experiment_technology current_technology join experiment_technology related_technology on related_technology.technology_id=current_technology.technology_id where current_technology.experiment_id=@id and related_technology.experiment_id=e.id) order by e.published_at desc nulls last limit 3";
+        var rows = Rows(db, shared, ("@id", id), ("@locale", locale));
         if (rows.Count == 0)
             rows = Rows(
                 db,
-                "select e.slug, e.public_id, t.name, e.published_at from experiments e left join experiment_translations t on t.experiment_id=e.id and t.locale=$locale where e.hidden=0 and e.id<>$id order by e.published_at desc limit 3",
-                ("$id", id),
-                ("$locale", locale)
+                "select e.slug, e.public_id, t.name, e.published_at from experiments e left join experiment_translations t on t.experiment_id=e.id and t.locale=@locale where e.hidden=false and e.id<>@id order by e.published_at desc nulls last limit 3",
+                ("@id", id),
+                ("@locale", locale)
             );
         return rows.Select(row => new PublicRelatedContent(
                 Text(row, "name", Text(row, "slug")),
                 Route("projects.experiments.show", Key(row), locale),
-                Text(row, "published_at")
+                Timestamp(row, "published_at")
             ))
             .ToList();
     }
 
     private static List<PublicRelatedContent> RelatedProjects(
-        SqliteConnection db,
-        string id,
+        DbConnection db,
+        long id,
         string locale
     )
     {
         const string shared =
-            "select p.slug, p.public_id, t.name, p.published_at from projects p left join project_translations t on t.project_id=p.id and t.locale=$locale where p.hidden=0 and p.nda=0 and p.id<>$id and exists (select 1 from project_technology current_technology join project_technology related_technology on related_technology.technology_id=current_technology.technology_id where current_technology.project_id=$id and related_technology.project_id=p.id) order by p.published_at desc limit 3";
-        var rows = Rows(db, shared, ("$id", id), ("$locale", locale));
+            "select p.slug, p.public_id, t.name, p.published_at from projects p left join project_translations t on t.project_id=p.id and t.locale=@locale where p.hidden=false and p.nda=false and p.id<>@id and exists (select 1 from project_technology current_technology join project_technology related_technology on related_technology.technology_id=current_technology.technology_id where current_technology.project_id=@id and related_technology.project_id=p.id) order by p.published_at desc nulls last limit 3";
+        var rows = Rows(db, shared, ("@id", id), ("@locale", locale));
         if (rows.Count == 0)
             rows = Rows(
                 db,
-                "select p.slug, p.public_id, t.name, p.published_at from projects p left join project_translations t on t.project_id=p.id and t.locale=$locale where p.hidden=0 and p.nda=0 and p.id<>$id order by p.published_at desc limit 3",
-                ("$id", id),
-                ("$locale", locale)
+                "select p.slug, p.public_id, t.name, p.published_at from projects p left join project_translations t on t.project_id=p.id and t.locale=@locale where p.hidden=false and p.nda=false and p.id<>@id order by p.published_at desc nulls last limit 3",
+                ("@id", id),
+                ("@locale", locale)
             );
         return rows.Select(row => new PublicRelatedContent(
                 Text(row, "name", Text(row, "slug")),
                 Route("projects.show", Key(row), locale),
-                Text(row, "published_at")
+                Timestamp(row, "published_at")
             ))
             .ToList();
     }
 
-    private static List<PublicRelatedContent> RelatedCases(
-        SqliteConnection db,
-        string id,
-        string locale
-    )
+    private static List<PublicRelatedContent> RelatedCases(DbConnection db, long id, string locale)
     {
         const string shared =
-            "select c.slug, c.public_id, t.title, c.published_at from case_studies c left join case_study_translations t on t.case_study_id=c.id and t.locale=$locale where c.hidden=0 and c.nda=0 and c.id<>$id and exists (select 1 from case_study_technology current_technology join case_study_technology related_technology on related_technology.technology_id=current_technology.technology_id where current_technology.case_study_id=$id and related_technology.case_study_id=c.id) order by c.published_at desc limit 3";
-        var rows = Rows(db, shared, ("$id", id), ("$locale", locale));
+            "select c.slug, c.public_id, t.title, c.published_at from case_studies c left join case_study_translations t on t.case_study_id=c.id and t.locale=@locale where c.hidden=false and c.nda=false and c.id<>@id and exists (select 1 from case_study_technology current_technology join case_study_technology related_technology on related_technology.technology_id=current_technology.technology_id where current_technology.case_study_id=@id and related_technology.case_study_id=c.id) order by c.published_at desc nulls last limit 3";
+        var rows = Rows(db, shared, ("@id", id), ("@locale", locale));
         if (rows.Count == 0)
             rows = Rows(
                 db,
-                "select c.slug, c.public_id, t.title, c.published_at from case_studies c left join case_study_translations t on t.case_study_id=c.id and t.locale=$locale where c.hidden=0 and c.nda=0 and c.id<>$id order by c.published_at desc limit 3",
-                ("$id", id),
-                ("$locale", locale)
+                "select c.slug, c.public_id, t.title, c.published_at from case_studies c left join case_study_translations t on t.case_study_id=c.id and t.locale=@locale where c.hidden=false and c.nda=false and c.id<>@id order by c.published_at desc nulls last limit 3",
+                ("@id", id),
+                ("@locale", locale)
             );
         return rows.Select(row => new PublicRelatedContent(
                 Text(row, "title", Text(row, "slug")),
                 Route("cases.show", Key(row), locale),
-                Text(row, "published_at")
+                Timestamp(row, "published_at")
             ))
             .ToList();
     }
 
     private static List<PublicRelatedContent> RelatedWritings(
-        SqliteConnection db,
-        string id,
+        DbConnection db,
+        long id,
         string locale
     )
     {
         var topic = Rows(
                 db,
-                "select topic_id from topicables where topicable_type='writing' and topicable_id=$id limit 1",
-                ("$id", id)
+                "select topic_id from topicables where topicable_type='writing' and topicable_id=@id limit 1",
+                ("@id", id)
             )
             .FirstOrDefault();
         if (topic is null)
             return [];
-        var topicId = Text(topic, "topic_id");
+        var topicId = Id(topic, "topic_id");
         return Rows(
                 db,
-                "select w.slug, w.public_id, t.title, w.date_iso from writings w left join writing_translations t on t.writing_id=w.id and t.locale=$locale where w.hidden=0 and w.id<>$id and exists (select 1 from topicables link where link.topic_id=$topic and link.topicable_type='writing' and link.topicable_id=w.id) order by w.date_iso desc limit 3",
-                ("$id", id),
-                ("$topic", topicId),
-                ("$locale", locale)
+                "select w.slug, w.public_id, t.title, w.date_iso from writings w left join writing_translations t on t.writing_id=w.id and t.locale=@locale where w.hidden=false and w.id<>@id and exists (select 1 from topicables link where link.topic_id=@topic and link.topicable_type='writing' and link.topicable_id=w.id) order by w.date_iso desc nulls last limit 3",
+                ("@id", id),
+                ("@topic", topicId),
+                ("@locale", locale)
             )
             .Select(row => new PublicRelatedContent(
                 Text(row, "title", Text(row, "slug")),
                 Route("writing.show", Key(row), locale),
-                Text(row, "date_iso")
+                Date(row, "date_iso")
             ))
             .ToList();
     }
 
     private static List<PublicRelatedContent> RelatedCollections(
-        SqliteConnection db,
-        string id,
+        DbConnection db,
+        long id,
         string locale
     ) =>
         Rows(
                 db,
-                "select c.slug, c.public_id, t.title, c.published_at from reference_collections c left join reference_collection_translations t on t.reference_collection_id=c.id and t.locale=$locale where c.hidden=0 and c.id<>$id order by c.published_at desc limit 3",
-                ("$id", id),
-                ("$locale", locale)
+                "select c.slug, c.public_id, t.title, c.published_at from reference_collections c left join reference_collection_translations t on t.reference_collection_id=c.id and t.locale=@locale where c.hidden=false and c.id<>@id order by c.published_at desc nulls last limit 3",
+                ("@id", id),
+                ("@locale", locale)
             )
             .Select(row => new PublicRelatedContent(
                 Text(row, "title", Text(row, "slug")),
                 Route("collections.show", Key(row), locale),
-                Text(row, "published_at")
+                Timestamp(row, "published_at")
             ))
             .ToList();
 
     private static List<PublicRelatedContent> RelatedSnippets(
-        SqliteConnection db,
-        string id,
+        DbConnection db,
+        long id,
         string locale
     ) =>
         Rows(
                 db,
-                "select s.slug, s.public_id, t.title, s.published_at from snippets s left join snippet_translations t on t.snippet_id=s.id and t.locale=$locale where s.hidden=0 and s.id<>$id order by s.published_at desc limit 3",
-                ("$id", id),
-                ("$locale", locale)
+                "select s.slug, s.public_id, t.title, s.published_at from snippets s left join snippet_translations t on t.snippet_id=s.id and t.locale=@locale where s.hidden=false and s.id<>@id order by s.published_at desc nulls last limit 3",
+                ("@id", id),
+                ("@locale", locale)
             )
             .Select(row => new PublicRelatedContent(
                 Text(row, "title", Text(row, "slug")),
                 Route("snippets.show", Key(row), locale),
-                Text(row, "published_at")
+                Timestamp(row, "published_at")
             ))
             .ToList();
 
     private static List<PublicRelatedContent> RelatedFindings(
-        SqliteConnection db,
-        string id,
+        DbConnection db,
+        long id,
         string type,
         string locale
     )
     {
         var topic = Rows(
                 db,
-                "select topic_id from topicables where topicable_type='finding' and topicable_id=$id limit 1",
-                ("$id", id)
+                "select topic_id from topicables where topicable_type='finding' and topicable_id=@id limit 1",
+                ("@id", id)
             )
             .FirstOrDefault();
         var rows = topic is not null
             ? Rows(
                 db,
-                "select r.slug, r.public_id, t.title, r.published_date_iso from resources r left join resource_translations t on t.resource_id=r.id and t.locale=$locale where r.hidden=0 and r.visibility='public' and r.id<>$id and exists (select 1 from topicables link where link.topic_id=$topic and link.topicable_type='finding' and link.topicable_id=r.id) order by r.published_date_iso desc limit 3",
-                ("$id", id),
-                ("$topic", Text(topic, "topic_id")),
-                ("$locale", locale)
+                "select r.slug, r.public_id, t.title, r.published_date_iso from resources r left join resource_translations t on t.resource_id=r.id and t.locale=@locale where r.hidden=false and r.visibility='public' and r.id<>@id and exists (select 1 from topicables link where link.topic_id=@topic and link.topicable_type='finding' and link.topicable_id=r.id) order by r.published_date_iso desc nulls last limit 3",
+                ("@id", id),
+                ("@topic", Id(topic, "topic_id")),
+                ("@locale", locale)
             )
             : [];
         if (rows.Count == 0)
             rows = Rows(
                 db,
-                "select r.slug, r.public_id, t.title, r.published_date_iso from resources r left join resource_translations t on t.resource_id=r.id and t.locale=$locale where r.hidden=0 and r.visibility='public' and r.id<>$id and r.type=$type order by r.published_date_iso desc limit 3",
-                ("$id", id),
-                ("$type", type),
-                ("$locale", locale)
+                "select r.slug, r.public_id, t.title, r.published_date_iso from resources r left join resource_translations t on t.resource_id=r.id and t.locale=@locale where r.hidden=false and r.visibility='public' and r.id<>@id and r.type=@type order by r.published_date_iso desc nulls last limit 3",
+                ("@id", id),
+                ("@type", type),
+                ("@locale", locale)
             );
         return rows.Select(row => new PublicRelatedContent(
                 Text(row, "title", Text(row, "slug")),
                 Route("findings.show", Key(row), locale),
-                DateOnly(Text(row, "published_date_iso"))
+                Date(row, "published_date_iso")
             ))
             .ToList();
     }
 
-    private static List<PublicSnippet> Snippets(SqliteConnection db, string locale) =>
+    private static List<PublicSnippet> Snippets(DbConnection db, string locale) =>
         Rows(
                 db,
-                "select s.*, coalesce(t.title, en.title) as title, coalesce(t.description, en.description) as description from snippets s left join snippet_translations t on t.snippet_id=s.id and t.locale=$locale left join snippet_translations en on en.snippet_id=s.id and en.locale='en' where s.hidden=0 order by s.[order]",
-                ("$locale", locale)
+                "select s.*, coalesce(t.title, en.title) as title, coalesce(t.description, en.description) as description from snippets s left join snippet_translations t on t.snippet_id=s.id and t.locale=@locale left join snippet_translations en on en.snippet_id=s.id and en.locale='en' where s.hidden=false order by s.\"order\" nulls first",
+                ("@locale", locale)
             )
             .Select(row => new PublicSnippet(
                 Text(row, "slug"),
                 Route("snippets.show", Key(row), locale),
                 Text(row, "title", Text(row, "slug")),
                 Text(row, "description"),
-                Text(row, "published_at"),
+                Timestamp(row, "published_at"),
                 Rows(
                         db,
-                        "select id, path, language, content from snippet_files where snippet_id=$id order by [order]",
-                        ("$id", Text(row, "id"))
+                        "select id, path, language, content from snippet_files where snippet_id=@id order by \"order\" nulls first",
+                        ("@id", Id(row, "id"))
                     )
                     .Select(file => new PublicSnippetFile(
                         Text(file, "path"),
                         Text(file, "language"),
                         Text(file, "content"),
                         Text(file, "id"),
-                        HistoryFor(db, "App\\Models\\SnippetFile", Text(file, "id"), locale)
+                        HistoryFor(db, "App\\Models\\SnippetFile", Id(file, "id"), locale)
                     ))
                     .ToList(),
                 Bool(row, "show_history"),
-                HistoryFor(db, "App\\Models\\Snippet", Text(row, "id"), locale),
-                RelatedSnippets(db, Text(row, "id"), locale),
-                Text(row, "updated_at")
+                HistoryFor(db, "App\\Models\\Snippet", Id(row, "id"), locale),
+                RelatedSnippets(db, Id(row, "id"), locale),
+                Timestamp(row, "updated_at")
             ))
             .ToList();
 
-    private static List<PublicCredit> Credits(SqliteConnection db, string locale) =>
+    private static List<PublicCredit> Credits(DbConnection db, string locale) =>
         Rows(
                 db,
-                "select c.*, coalesce(t.name, en.name) as name, coalesce(t.description, en.description) as description from credit_entries c left join credit_entry_translations t on t.credit_entry_id=c.id and t.locale=$locale left join credit_entry_translations en on en.credit_entry_id=c.id and en.locale='en' where c.active=1 order by c.category, c.[order]",
-                ("$locale", locale)
+                "select c.*, coalesce(t.name, en.name) as name, coalesce(t.description, en.description) as description from credit_entries c left join credit_entry_translations t on t.credit_entry_id=c.id and t.locale=@locale left join credit_entry_translations en on en.credit_entry_id=c.id and en.locale='en' where c.active=true order by c.category nulls first, c.\"order\" nulls first",
+                ("@locale", locale)
             )
             .Select(row => new PublicCredit(
                 Text(row, "category"),
                 Text(row, "name", Text(row, "category")),
                 Text(row, "description"),
                 Text(row, "url"),
-                Text(row, "created_at")
+                Timestamp(row, "created_at")
             ))
             .ToList();
 
-    private static List<PublicCaseStudy> FeaturedCases(SqliteConnection db, string locale)
+    private static List<PublicCaseStudy> FeaturedCases(DbConnection db, string locale)
     {
         var all = Cases(db, locale)
             .ToDictionary(item => item.Slug, StringComparer.OrdinalIgnoreCase);
         return Rows(
                 db,
-                "select c.slug from pages p join page_featured_case x on x.page_id=p.id join case_studies c on c.id=x.case_study_id where p.slug='portfolio' and c.hidden=0 and c.nda=0 order by x.[order] limit 3",
+                "select c.slug from pages p join page_featured_case x on x.page_id=p.id join case_studies c on c.id=x.case_study_id where p.slug='portfolio' and c.hidden=false and c.nda=false order by x.\"order\" nulls first limit 3",
                 Array.Empty<(string Name, object Value)>()
             )
             .Select(row => all.GetValueOrDefault(Text(row, "slug")))
@@ -633,13 +608,13 @@ public sealed partial class SqlitePublicSiteContentProvider(
             .ToList();
     }
 
-    private static List<PublicProject> FeaturedProjects(SqliteConnection db, string locale)
+    private static List<PublicProject> FeaturedProjects(DbConnection db, string locale)
     {
         var all = Projects(db, locale)
             .ToDictionary(item => item.Slug, StringComparer.OrdinalIgnoreCase);
         return Rows(
                 db,
-                "select p.slug from pages x join page_featured_project y on y.page_id=x.id join projects p on p.id=y.project_id where x.slug='portfolio' and p.hidden=0 and p.nda=0 order by y.[order] limit 3",
+                "select p.slug from pages x join page_featured_project y on y.page_id=x.id join projects p on p.id=y.project_id where x.slug='portfolio' and p.hidden=false and p.nda=false order by y.\"order\" nulls first limit 3",
                 Array.Empty<(string Name, object Value)>()
             )
             .Select(row => all.GetValueOrDefault(Text(row, "slug")))
@@ -648,13 +623,13 @@ public sealed partial class SqlitePublicSiteContentProvider(
             .ToList();
     }
 
-    private static List<PublicWriting> FeaturedWritings(SqliteConnection db, string locale)
+    private static List<PublicWriting> FeaturedWritings(DbConnection db, string locale)
     {
         var all = Writings(db, locale)
             .ToDictionary(item => item.Slug, StringComparer.OrdinalIgnoreCase);
         return Rows(
                 db,
-                "select w.slug from pages x join page_featured_writing y on y.page_id=x.id join writings w on w.id=y.writing_id where x.slug='portfolio' and w.hidden=0 order by y.[order]",
+                "select w.slug from pages x join page_featured_writing y on y.page_id=x.id join writings w on w.id=y.writing_id where x.slug='portfolio' and w.hidden=false order by y.\"order\" nulls first",
                 Array.Empty<(string Name, object Value)>()
             )
             .Select(row => all.GetValueOrDefault(Text(row, "slug")))
@@ -663,12 +638,12 @@ public sealed partial class SqlitePublicSiteContentProvider(
             .ToList();
     }
 
-    private static JsonElement Resume(SqliteConnection db, string locale)
+    private static JsonElement Resume(DbConnection db, string locale)
     {
         var row = Row(
             db,
-            "select coalesce(t.id, en.id) as id, coalesce(t.resume_id, en.resume_id) as resume_id, coalesce(t.summary, en.summary) as summary, coalesce(t.leadership, en.leadership) as leadership, coalesce(t.education, en.education) as education, coalesce(t.certificates, en.certificates) as certificates, coalesce(t.certifications, en.certifications) as certifications, coalesce(t.publications, en.publications) as publications, coalesce(t.recommendations, en.recommendations) as recommendations, coalesce(t.technical_productions, en.technical_productions) as technical_productions, coalesce(t.events, en.events) as events, coalesce(t.awards, en.awards) as awards from resumes r left join resume_translations t on t.resume_id=r.id and t.locale=$locale left join resume_translations en on en.resume_id=r.id and en.locale='en' where t.id is not null or en.id is not null order by r.id limit 1",
-            ("$locale", locale)
+            "select coalesce(t.id, en.id) as id, coalesce(t.resume_id, en.resume_id) as resume_id, coalesce(t.summary, en.summary) as summary, coalesce(t.leadership, en.leadership) as leadership, coalesce(t.education, en.education) as education, coalesce(t.certificates, en.certificates) as certificates, coalesce(t.certifications, en.certifications) as certifications, coalesce(t.publications, en.publications) as publications, coalesce(t.recommendations, en.recommendations) as recommendations, coalesce(t.technical_productions, en.technical_productions) as technical_productions, coalesce(t.events, en.events) as events, coalesce(t.awards, en.awards) as awards from resumes r left join resume_translations t on t.resume_id=r.id and t.locale=@locale left join resume_translations en on en.resume_id=r.id and en.locale='en' where t.id is not null or en.id is not null order by r.id nulls first limit 1",
+            ("@locale", locale)
         );
         if (row.Count == 0)
             return JsonDocument.Parse("{}").RootElement.Clone();
@@ -716,8 +691,8 @@ public sealed partial class SqlitePublicSiteContentProvider(
 
         var profile = Row(
             db,
-            "select coalesce(t.trajectory, en.trajectory) as trajectory from profiles p left join profile_translations t on t.profile_id=p.id and t.locale=$locale left join profile_translations en on en.profile_id=p.id and en.locale='en' where t.id is not null or en.id is not null order by p.id limit 1",
-            ("$locale", locale)
+            "select coalesce(t.trajectory, en.trajectory) as trajectory from profiles p left join profile_translations t on t.profile_id=p.id and t.locale=@locale left join profile_translations en on en.profile_id=p.id and en.locale='en' where t.id is not null or en.id is not null order by p.id nulls first limit 1",
+            ("@locale", locale)
         );
         if (
             profile.TryGetValue("trajectory", out var trajectory)
@@ -735,13 +710,13 @@ public sealed partial class SqlitePublicSiteContentProvider(
             }
         }
 
-        var resumeId = Text(row, "resume_id");
-        if (resumeId.Length > 0)
+        var resumeId = Id(row, "resume_id");
+        if (resumeId > 0)
         {
             var selectedCases = Rows(
                     db,
-                    "select c.slug from resume_selected_case x join case_studies c on c.id=x.case_study_id where x.resume_id=$id and c.hidden=0 and c.nda=0 order by x.[order]",
-                    ("$id", resumeId)
+                    "select c.slug from resume_selected_case x join case_studies c on c.id=x.case_study_id where x.resume_id=@id and c.hidden=false and c.nda=false order by x.\"order\" nulls first",
+                    ("@id", resumeId)
                 )
                 .Select(item =>
                     Cases(db, locale).FirstOrDefault(value => value.Slug == Text(item, "slug"))
@@ -754,9 +729,9 @@ public sealed partial class SqlitePublicSiteContentProvider(
 
             var skills = Rows(
                     db,
-                    "select s.id, t.slug, coalesce(tt.name, en.name) as name from resume_skills s join topics t on t.id=s.topic_id left join topic_translations tt on tt.topic_id=t.id and tt.locale=$locale left join topic_translations en on en.topic_id=t.id and en.locale='en' where s.resume_id=$id order by s.[order]",
-                    ("$id", resumeId),
-                    ("$locale", locale)
+                    "select s.id, t.slug, coalesce(tt.name, en.name) as name from resume_skills s join topics t on t.id=s.topic_id left join topic_translations tt on tt.topic_id=t.id and tt.locale=@locale left join topic_translations en on en.topic_id=t.id and en.locale='en' where s.resume_id=@id order by s.\"order\" nulls first",
+                    ("@id", resumeId),
+                    ("@locale", locale)
                 )
                 .Select(item => new
                 {
@@ -765,7 +740,7 @@ public sealed partial class SqlitePublicSiteContentProvider(
                         db,
                         "resume_skill_technology",
                         "resume_skill_id",
-                        Text(item, "id"),
+                        Id(item, "id"),
                         locale
                     ),
                 })
@@ -774,9 +749,9 @@ public sealed partial class SqlitePublicSiteContentProvider(
 
             var languages = Rows(
                     db,
-                    "select l.slug, coalesce(lt.name, en.name) as name, x.proficiency from resume_languages x join languages l on l.id=x.language_id left join language_translations lt on lt.language_id=l.id and lt.locale=$locale left join language_translations en on en.language_id=l.id and en.locale='en' where x.resume_id=$id order by x.[order]",
-                    ("$id", resumeId),
-                    ("$locale", locale)
+                    "select l.slug, coalesce(lt.name, en.name) as name, x.proficiency from resume_languages x join languages l on l.id=x.language_id left join language_translations lt on lt.language_id=l.id and lt.locale=@locale left join language_translations en on en.language_id=l.id and en.locale='en' where x.resume_id=@id order by x.\"order\" nulls first",
+                    ("@id", resumeId),
+                    ("@locale", locale)
                 )
                 .Select(item => new
                 {
@@ -802,7 +777,7 @@ public sealed partial class SqlitePublicSiteContentProvider(
         var fields = Json(Text(row, "fields"));
         if (
             fields.ValueKind != JsonValueKind.Object
-            || string.IsNullOrWhiteSpace(Text(row, "updated_at"))
+            || string.IsNullOrWhiteSpace(Timestamp(row, "updated_at"))
         )
             return fields;
         var values = fields
@@ -812,11 +787,11 @@ public sealed partial class SqlitePublicSiteContentProvider(
                 item => item.Value.Clone(),
                 StringComparer.OrdinalIgnoreCase
             );
-        values["updated_at"] = JsonSerializer.SerializeToElement(Text(row, "updated_at"));
+        values["updated_at"] = JsonSerializer.SerializeToElement(Timestamp(row, "updated_at"));
         return JsonDocument.Parse(JsonSerializer.Serialize(values)).RootElement.Clone();
     }
 
-    private static JsonElement Json(SqliteConnection db, Dictionary<string, object?> row)
+    private static JsonElement Json(DbConnection db, Dictionary<string, object?> row)
     {
         var fields = row.Where(pair =>
                 pair.Key
@@ -833,15 +808,15 @@ public sealed partial class SqlitePublicSiteContentProvider(
     }
 
     private static List<PublicContactProfile> ContactProfiles(
-        SqliteConnection db,
+        DbConnection db,
         Dictionary<string, object?> site,
         string locale
     )
     {
         var profiles = Rows(
                 db,
-                "select platform, label, url from contact_profiles where site_settings_id=$id order by [order]",
-                ("$id", Text(site, "id"))
+                "select platform, label, url from contact_profiles where site_settings_id=@id order by \"order\" nulls first",
+                ("@id", Id(site, "id"))
             )
             .Select(row => new PublicContactProfile(
                 Text(row, "platform"),
@@ -853,7 +828,7 @@ public sealed partial class SqlitePublicSiteContentProvider(
     }
 
     private static string? MaintenanceField(
-        SqliteConnection db,
+        DbConnection db,
         Dictionary<string, object?> site,
         string locale,
         string field
@@ -861,9 +836,9 @@ public sealed partial class SqlitePublicSiteContentProvider(
         Text(
             Row(
                 db,
-                $"select coalesce(t.{field}, en.{field}) as {field} from site_settings_translations t left join site_settings_translations en on en.site_settings_id=t.site_settings_id and en.locale='en' where t.site_settings_id=$id and t.locale=$locale limit 1",
-                ("$id", Text(site, "id")),
-                ("$locale", locale)
+                $"select coalesce(t.{field}, en.{field}) as {field} from site_settings_translations t left join site_settings_translations en on en.site_settings_id=t.site_settings_id and en.locale='en' where t.site_settings_id=@id and t.locale=@locale limit 1",
+                ("@id", Id(site, "id")),
+                ("@locale", locale)
             ),
             field,
             string.Empty
@@ -874,7 +849,7 @@ public sealed partial class SqlitePublicSiteContentProvider(
             : null;
 
     private static JsonElement? SiteSeo(
-        SqliteConnection db,
+        DbConnection db,
         Dictionary<string, object?> site,
         string locale
     ) =>
@@ -882,16 +857,16 @@ public sealed partial class SqlitePublicSiteContentProvider(
             Text(
                 Row(
                     db,
-                    "select coalesce(t.seo, en.seo) as seo from site_settings_translations t left join site_settings_translations en on en.site_settings_id=t.site_settings_id and en.locale='en' where t.site_settings_id=$id and t.locale=$locale limit 1",
-                    ("$id", Text(site, "id")),
-                    ("$locale", locale)
+                    "select coalesce(t.seo, en.seo) as seo from site_settings_translations t left join site_settings_translations en on en.site_settings_id=t.site_settings_id and en.locale='en' where t.site_settings_id=@id and t.locale=@locale limit 1",
+                    ("@id", Id(site, "id")),
+                    ("@locale", locale)
                 ),
                 "seo"
             )
         );
 
     private string Copyright(
-        SqliteConnection db,
+        DbConnection db,
         Dictionary<string, object?> site,
         Dictionary<string, object?> profile,
         string locale
@@ -900,9 +875,9 @@ public sealed partial class SqlitePublicSiteContentProvider(
         var template = Text(
             Row(
                 db,
-                "select copyright_template from site_settings_translations where site_settings_id=$id and locale=$locale limit 1",
-                ("$id", Text(site, "id")),
-                ("$locale", locale)
+                "select copyright_template from site_settings_translations where site_settings_id=@id and locale=@locale limit 1",
+                ("@id", Id(site, "id")),
+                ("@locale", locale)
             ),
             "copyright_template",
             localizer["some_rights_reserved"].Value
@@ -948,12 +923,12 @@ public sealed partial class SqlitePublicSiteContentProvider(
             .ToList();
     }
 
-    private static PublicNavigation Navigation(SqliteConnection db, string locale)
+    private static PublicNavigation Navigation(DbConnection db, string locale)
     {
         var rows = Rows(
             db,
-            "select n.*, coalesce(t.label, en.label) as label from nav_items n left join nav_item_translations t on t.nav_item_id=n.id and t.locale=$locale left join nav_item_translations en on en.nav_item_id=n.id and en.locale='en' order by n.sidebar_group, n.[order]",
-            ("$locale", locale)
+            "select n.*, coalesce(t.label, en.label) as label from nav_items n left join nav_item_translations t on t.nav_item_id=n.id and t.locale=@locale left join nav_item_translations en on en.nav_item_id=n.id and en.locale='en' order by n.sidebar_group nulls first, n.\"order\" nulls first",
+            ("@locale", locale)
         );
         var sidebarRoots = rows.Where(row =>
                 string.IsNullOrWhiteSpace(Text(row, "parent_id"))
@@ -988,17 +963,17 @@ public sealed partial class SqlitePublicSiteContentProvider(
     }
 
     private static List<PublicTechnology> TechnologiesFor(
-        SqliteConnection db,
+        DbConnection db,
         string pivot,
         string key,
-        string id,
+        long id,
         string locale
     ) =>
         Rows(
                 db,
-                $"select t.slug, t.public_id, coalesce(tt.name, en.name) as name from {pivot} p join technologies t on t.id=p.technology_id left join technology_translations tt on tt.technology_id=t.id and tt.locale=$locale left join technology_translations en on en.technology_id=t.id and en.locale='en' where p.{key}=$id order by t.[order], t.slug",
-                ("$id", id),
-                ("$locale", locale)
+                $"select t.slug, t.public_id, coalesce(tt.name, en.name) as name from {pivot} p join technologies t on t.id=p.technology_id left join technology_translations tt on tt.technology_id=t.id and tt.locale=@locale left join technology_translations en on en.technology_id=t.id and en.locale='en' where p.{key}=@id order by t.\"order\" nulls first, t.slug nulls first",
+                ("@id", id),
+                ("@locale", locale)
             )
             .Select(row => new PublicTechnology(
                 Text(row, "slug"),
@@ -1006,31 +981,27 @@ public sealed partial class SqlitePublicSiteContentProvider(
             ))
             .ToList();
 
-    private static List<string> SkillsFor(
-        SqliteConnection db,
-        string technologyId,
-        string locale
-    ) =>
+    private static List<string> SkillsFor(DbConnection db, long technologyId, string locale) =>
         Rows(
                 db,
-                "select coalesce(tt.name, en.name) as name from resume_skill_technology x join resume_skills s on s.id=x.resume_skill_id join topics t on t.id=s.topic_id left join topic_translations tt on tt.topic_id=t.id and tt.locale=$locale left join topic_translations en on en.topic_id=t.id and en.locale='en' where x.technology_id=$id order by s.[order]",
-                ("$id", technologyId),
-                ("$locale", locale)
+                "select coalesce(tt.name, en.name) as name from resume_skill_technology x join resume_skills s on s.id=x.resume_skill_id join topics t on t.id=s.topic_id left join topic_translations tt on tt.topic_id=t.id and tt.locale=@locale left join topic_translations en on en.topic_id=t.id and en.locale='en' where x.technology_id=@id order by s.\"order\" nulls first",
+                ("@id", technologyId),
+                ("@locale", locale)
             )
             .Select(row => Text(row, "name"))
             .Where(value => value.Length > 0)
             .ToList();
 
     private static List<PublicTopic> ResumeSkillTopicsFor(
-        SqliteConnection db,
-        string technologyId,
+        DbConnection db,
+        long technologyId,
         string locale
     ) =>
         Rows(
                 db,
-                "select t.slug, t.public_id, coalesce(tt.name, en.name) as name from resume_skill_technology x join resume_skills s on s.id=x.resume_skill_id join topics t on t.id=s.topic_id left join topic_translations tt on tt.topic_id=t.id and tt.locale=$locale left join topic_translations en on en.topic_id=t.id and en.locale='en' where x.technology_id=$id order by s.[order], t.[order]",
-                ("$id", technologyId),
-                ("$locale", locale)
+                "select t.slug, t.public_id, coalesce(tt.name, en.name) as name from resume_skill_technology x join resume_skills s on s.id=x.resume_skill_id join topics t on t.id=s.topic_id left join topic_translations tt on tt.topic_id=t.id and tt.locale=@locale left join topic_translations en on en.topic_id=t.id and en.locale='en' where x.technology_id=@id order by s.\"order\" nulls first, t.\"order\" nulls first",
+                ("@id", technologyId),
+                ("@locale", locale)
             )
             .Select(row => new PublicTopic(
                 Text(row, "slug"),
@@ -1042,17 +1013,17 @@ public sealed partial class SqlitePublicSiteContentProvider(
             .ToList();
 
     private static List<PublicTopic> TopicsFor(
-        SqliteConnection db,
+        DbConnection db,
         string kind,
-        string id,
+        long id,
         string locale
     ) =>
         Rows(
                 db,
-                "select t.slug, t.public_id, coalesce(tt.name, en.name) as name from topicables x join topics t on t.id=x.topic_id left join topic_translations tt on tt.topic_id=t.id and tt.locale=$locale left join topic_translations en on en.topic_id=t.id and en.locale='en' where x.topicable_type=$kind and x.topicable_id=$id order by t.[order]",
-                ("$kind", kind == "writing" ? "writing" : "finding"),
-                ("$id", id),
-                ("$locale", locale)
+                "select t.slug, t.public_id, coalesce(tt.name, en.name) as name from topicables x join topics t on t.id=x.topic_id left join topic_translations tt on tt.topic_id=t.id and tt.locale=@locale left join topic_translations en on en.topic_id=t.id and en.locale='en' where x.topicable_type=@kind and x.topicable_id=@id order by t.\"order\" nulls first",
+                ("@kind", kind == "writing" ? "writing" : "finding"),
+                ("@id", id),
+                ("@locale", locale)
             )
             .Select(row => new PublicTopic(
                 Text(row, "slug"),
@@ -1062,9 +1033,9 @@ public sealed partial class SqlitePublicSiteContentProvider(
             .ToList();
 
     private static List<PublicHistoryEntry> HistoryFor(
-        SqliteConnection db,
+        DbConnection db,
         string auditableType,
-        string id,
+        long id,
         string locale
     )
     {
@@ -1098,12 +1069,12 @@ public sealed partial class SqlitePublicSiteContentProvider(
             _ => (Type: auditableType, Table: string.Empty, ForeignKey: string.Empty),
         };
         var query = string.IsNullOrWhiteSpace(translation.Table)
-            ? "select id, created_at, old_values, new_values from audit_log where auditable_type=$type and auditable_id=$id and action='updated' order by created_at, id"
-            : $"select id, created_at, old_values, new_values from audit_log where auditable_type=$type and auditable_id in (select id from {translation.Table} where {translation.ForeignKey}=$id and locale=$locale) and action='updated' order by created_at, id";
-        return Rows(db, query, ("$type", translation.Type), ("$id", id), ("$locale", locale))
+            ? "select id, created_at, old_values, new_values from audit_log where auditable_type=@type and auditable_id=@id and action='updated' order by created_at nulls first, id nulls first"
+            : $"select id, created_at, old_values, new_values from audit_log where auditable_type=@type and auditable_id in (select id from {translation.Table} where {translation.ForeignKey}=@id and locale=@locale) and action='updated' order by created_at nulls first, id nulls first";
+        return Rows(db, query, ("@type", translation.Type), ("@id", id), ("@locale", locale))
             .Select(row => new PublicHistoryEntry(
                 Text(row, "id"),
-                Text(row, "created_at", Text(row, "id")),
+                Timestamp(row, "created_at", Text(row, "id")),
                 Values(Text(row, "old_values")),
                 Values(Text(row, "new_values"))
             ))
@@ -1136,11 +1107,11 @@ public sealed partial class SqlitePublicSiteContentProvider(
         }
     }
 
-    private static List<PublicFindingLink> LinksFor(SqliteConnection db, string id) =>
+    private static List<PublicFindingLink> LinksFor(DbConnection db, long id) =>
         Rows(
                 db,
-                "select url, label, platform, purpose, is_free, is_primary from resource_links where resource_id=$id order by id",
-                ("$id", id)
+                "select url, label, platform, purpose, is_free, is_primary from resource_links where resource_id=@id order by id nulls first",
+                ("@id", id)
             )
             .Select(row => new PublicFindingLink(
                 Text(row, "url"),
@@ -1153,15 +1124,15 @@ public sealed partial class SqlitePublicSiteContentProvider(
             .ToList();
 
     private static List<PublicTopic> AttributionTopicsFor(
-        SqliteConnection db,
-        string id,
+        DbConnection db,
+        long id,
         string locale
     ) =>
         Rows(
                 db,
-                "select distinct t.slug, t.public_id, coalesce(tt.name, en.name) as name from content_relations r join relation_types rt on rt.id=r.relation_type_id join topics t on t.id=r.object_id left join topic_translations tt on tt.topic_id=t.id and tt.locale=$locale left join topic_translations en on en.topic_id=t.id and en.locale='en' where r.subject_type='finding' and r.subject_id=$id and r.object_type='topic' and rt.key in ('authored-by', 'published-by') and (r.visibility is null or r.visibility='public') order by t.[order], t.slug",
-                ("$id", id),
-                ("$locale", locale)
+                "select distinct t.slug, t.public_id, coalesce(tt.name, en.name) as name, t.\"order\" from content_relations r join relation_types rt on rt.id=r.relation_type_id join topics t on t.id=r.object_id left join topic_translations tt on tt.topic_id=t.id and tt.locale=@locale left join topic_translations en on en.topic_id=t.id and en.locale='en' where r.subject_type='finding' and r.subject_id=@id and r.object_type='topic' and rt.key in ('authored-by', 'published-by') and (r.visibility is null or r.visibility='public') order by t.\"order\" nulls first, t.slug nulls first",
+                ("@id", id),
+                ("@locale", locale)
             )
             .Select(row => new PublicTopic(
                 Text(row, "slug"),
@@ -1170,25 +1141,25 @@ public sealed partial class SqlitePublicSiteContentProvider(
             ))
             .ToList();
 
-    private static List<PublicIdentifier> IdentifiersFor(SqliteConnection db, string id) =>
+    private static List<PublicIdentifier> IdentifiersFor(DbConnection db, long id) =>
         Rows(
                 db,
-                "select kind, value from resource_identifiers where resource_id=$id order by id",
-                ("$id", id)
+                "select kind, value from resource_identifiers where resource_id=@id order by id nulls first",
+                ("@id", id)
             )
             .Select(row => new PublicIdentifier(Text(row, "kind"), Text(row, "value")))
             .ToList();
 
     private static List<PublicCollectionItem> CollectionItems(
-        SqliteConnection db,
-        string id,
+        DbConnection db,
+        long id,
         string locale
     ) =>
         Rows(
                 db,
-                "select r.slug, r.public_id, r.id, coalesce(t.title, en.title) as title, coalesce(t.description, en.description) as description, r.type, r.rating, x.note from reference_collection_item x join resources r on r.id=x.resource_id left join resource_translations t on t.resource_id=r.id and t.locale=$locale left join resource_translations en on en.resource_id=r.id and en.locale='en' where x.reference_collection_id=$id and r.hidden=0 and r.visibility='public' order by x.[order]",
-                ("$id", id),
-                ("$locale", locale)
+                "select r.slug, r.public_id, r.id, coalesce(t.title, en.title) as title, coalesce(t.description, en.description) as description, r.type, r.rating, x.note from reference_collection_item x join resources r on r.id=x.resource_id left join resource_translations t on t.resource_id=r.id and t.locale=@locale left join resource_translations en on en.resource_id=r.id and en.locale='en' where x.reference_collection_id=@id and r.hidden=false and r.visibility='public' order by x.\"order\" nulls first",
+                ("@id", id),
+                ("@locale", locale)
             )
             .Select(row => new PublicCollectionItem(
                 Text(row, "slug"),
@@ -1198,12 +1169,9 @@ public sealed partial class SqlitePublicSiteContentProvider(
                 Text(row, "type"),
                 Text(row, "rating"),
                 Text(row, "note"),
-                TopicsFor(db, "finding", Text(row, "id"), locale)
+                TopicsFor(db, "finding", Id(row, "id"), locale)
             ))
             .ToList();
-
-    private static string DateOnly(string value) =>
-        DateTime.TryParse(value, out var date) ? date.ToString("yyyy-MM-dd") : value;
 
     private static JsonElement? JsonNullable(string value) =>
         string.IsNullOrWhiteSpace(value) ? null : JsonDocument.Parse(value).RootElement.Clone();
@@ -1211,9 +1179,9 @@ public sealed partial class SqlitePublicSiteContentProvider(
     [LoggerMessage(
         EventId = 1003,
         Level = LogLevel.Error,
-        Message = "Read-only portfolio SQLite database was not found at {Path}."
+        Message = "Public content database is not available."
     )]
-    private static partial void LogDatabaseNotFound(ILogger logger, string path);
+    private static partial void LogDatabaseNotFound(ILogger logger);
 
     [LoggerMessage(
         EventId = 1004,

@@ -8,19 +8,19 @@ fail() {
 
 repo_root="$(cd "$(dirname "$0")/../.." && pwd)"
 host="$repo_root/Portfolio/Portfolio.Blazor"
-readers="$host/SqlitePublicSiteContentProvider.cs $host/SqlitePublicKnowledgeGraphProvider.cs $host/PublicMetadataEndpoints.cs $host/Program.cs"
+readers="$host/PublicSiteContentProvider.cs $host/PublicKnowledgeGraphProvider.cs $host/PublicMetadataEndpoints.cs $host/Program.cs"
 
 # Every SQL string in a public reader that touches a table with a hidden flag must filter it on the
 # same alias, in the same query. Resources additionally need visibility='public'; projects and case
-# studies additionally need nda=0. Related-content, pivot and lookup queries count too: a hidden item
+# studies additionally need nda=false. Related-content, pivot and lookup queries count too: a hidden item
 # reached through a public one is still a leak.
-rules="projects:hidden=0,nda=0
-case_studies:hidden=0,nda=0
-writings:hidden=0
-resources:hidden=0,visibility='public'
-reference_collections:hidden=0
-experiments:hidden=0
-snippets:hidden=0"
+rules="projects:hidden=false,nda=false
+case_studies:hidden=false,nda=false
+writings:hidden=false
+resources:hidden=false,visibility='public'
+reference_collections:hidden=false
+experiments:hidden=false
+snippets:hidden=false"
 
 problems=0
 for file in $readers; do
@@ -48,9 +48,9 @@ if [ -s /tmp/hidden-content-problems ]; then
     fail "a public query reads a hidden-capable table without filtering it"
 fi
 
-graph="$host/SqlitePublicKnowledgeGraphProvider.cs"
-grep -q "x.hidden=0 and x.visibility='public'" "$graph" || fail "the knowledge graph must exclude hidden and non-public findings"
-grep -q "x.hidden=0 and x.nda=0" "$graph" || fail "the knowledge graph must exclude hidden and NDA projects/case studies"
+graph="$host/PublicKnowledgeGraphProvider.cs"
+grep -q "x.hidden=false and x.visibility='public'" "$graph" || fail "the knowledge graph must exclude hidden and non-public findings"
+grep -q "x.hidden=false and x.nda=false" "$graph" || fail "the knowledge graph must exclude hidden and NDA projects/case studies"
 grep -q 'index.ContainsKey(source) && index.ContainsKey(target)' "$graph" || fail "knowledge graph edges must be dropped when either endpoint is not a public node"
 
 for file in "$repo_root"/Portfolio/Portfolio.Blazor.Client/Pages/*.razor "$repo_root"/Portfolio/Portfolio.Blazor.Client/Shared/*.razor; do

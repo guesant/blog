@@ -39,6 +39,7 @@ const textAttributes = new Set([
 const phrase = /[A-Za-zÀ-ÿ]{2,}[\s,.;:!?]+[A-Za-zÀ-ÿ]{2,}/;
 const words = new RegExp(`${phrase.source}|^[A-Za-zÀ-ÿ]{4,}[.!?…]?$`);
 const acronym = /^[A-Z][A-Za-z0-9]*[A-Z0-9][A-Za-z0-9]*$|^[A-Z]{2,}(\s[A-Z][a-z]+)?$/;
+const classList = /^[a-z0-9]+(-[a-z0-9]+)+( [a-z0-9]+(-[a-z0-9]+)+)+$/;
 const codeLike = /[(){}=<>;|&!@$\\]|=>|\.\w+\(/;
 
 function walk(dir, out = []) {
@@ -96,6 +97,7 @@ for (const file of files) {
                 if (
                     /yyyy|MMM|HH:/.test(value) ||
                     codeLike.test(value) ||
+                    classList.test(value) ||
                     /^[\w.-]+\.[\w.-]+$/.test(value)
                 )
                     continue;

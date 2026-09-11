@@ -17,7 +17,7 @@
 <PageTitle>@Title</PageTitle>
 <SeoHead Title="@Title" Description="@Description" CanonicalPath="@CanonicalPath" />
 
-<SitePage Template="@Kind.ToString().ToLowerInvariant()">
+<SitePage Template="@Kind.ToString().ToLowerInvariant()" Reading="@(Kind != PageKind.Portfolio)">
     <SiteBreadcrumb HomeUrl="@(L["legacy_0607643fd42c"])"
         HomeLabel="@(L["legacy_ddc150008e2f"])"
         CurrentLabel="@Title" />

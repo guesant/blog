@@ -85,9 +85,6 @@ public partial class TopicDetail
             ? date.ToString("dd MMM yyyy", CultureInfo.CurrentCulture)
             : "";
 
-    private static string JoinMeta(params string?[] values) =>
-        string.Join(" · ", values.Where(value => !string.IsNullOrWhiteSpace(value)));
-
     private string LocalizedPath(string path) =>
         path.Equals("home", StringComparison.OrdinalIgnoreCase)
             ? (L["legacy_0607643fd42c"])

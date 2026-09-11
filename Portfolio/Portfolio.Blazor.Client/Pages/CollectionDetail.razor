@@ -51,23 +51,26 @@
             <SiteSection Region="resource-list"
                 HeadingId="collection-items-heading"
                 Title="@ItemsLabel">
-                <SiteGrid>
+                <SiteCardGrid data-layout-region="items">
                     @foreach (var item in Collection.Resources)
                     {
                         <SiteGridColumn>
-                            <SiteClickableCard Label="@JoinMeta(TypeName(item.Type), RatingName(item.Rating))"
-                                Class="h-100"
-                                Href="@LocalizedUrl(item.Url)"
+                            <SiteFeedCard KindLabel="@TypeName(item.Type)"
                                 Title="@item.Title"
-                                TitleClass="h5"
-                                HeadingLevel="3">
-                                @if (!string.IsNullOrWhiteSpace(item.Description)) { <SiteText Variant="SiteTextVariant.Excerpt">@item.Description</SiteText> }
-                                @if (item.Topics is { Count: > 0 }) { <SiteChipGroup>@foreach (var topic in item.Topics.Take(3)) { <SiteChip Label="@(topic.Name ?? topic.Slug)" /> }</SiteChipGroup> }
-                                @if (!string.IsNullOrWhiteSpace(item.Note)) { <SiteText Variant="SiteTextVariant.Meta">@item.Note</SiteText> }
-                            </SiteClickableCard>
+                                Href="@LocalizedUrl(item.Url)"
+                                Preview="@item.Description"
+                                ViewLabel="@(L["read_more"])">
+                                <MetaItems>
+                                    @if (!string.IsNullOrWhiteSpace(RatingName(item.Rating))) { <SiteCardMetaItem Icon="star">@RatingName(item.Rating)</SiteCardMetaItem> }
+                                    @if (!string.IsNullOrWhiteSpace(item.Note)) { <SiteCardMetaItem Icon="message-square">@item.Note</SiteCardMetaItem> }
+                                </MetaItems>
+                                <Tags>
+                                    @if (item.Topics is { Count: > 0 }) { <SiteChipGroup>@foreach (var topic in item.Topics.Take(3)) { <SiteChip Label="@(topic.Name ?? topic.Slug)" /> }</SiteChipGroup> }
+                                </Tags>
+                            </SiteFeedCard>
                         </SiteGridColumn>
                     }
-                </SiteGrid>
+                </SiteCardGrid>
             </SiteSection>
         }
 

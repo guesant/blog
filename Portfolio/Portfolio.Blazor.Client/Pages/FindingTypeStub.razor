@@ -90,21 +90,19 @@
                 @foreach (var finding in PagedFindings)
                 {
                     <SiteGridColumn>
-                        <SiteClickableCard Class="h-100"
-                            Href="@LocalizedUrl(finding.Url)"
+                        <SiteFeedCard KindLabel="@Title"
+                            Date="@finding.PublishedDate"
                             Title="@(finding.Title ?? finding.Slug)"
-                            TitleClass="h5">
-                            <LabelContent>
-                                <SiteCardMeta>
-                                    <SiteCardMetaItem Icon="lightbulb">@Title</SiteCardMetaItem>
-                                    @if (!string.IsNullOrWhiteSpace(finding.PublishedDate)) { <SiteCardMetaItem Icon="clock">@finding.PublishedDate@(string.IsNullOrWhiteSpace(finding.Rating) ? "" : $" · {finding.Rating}")</SiteCardMetaItem> }
-                                </SiteCardMeta>
-                            </LabelContent>
-                            <ChildContent>
-                                @if (!string.IsNullOrWhiteSpace(finding.Description)) { <SiteText Variant="SiteTextVariant.Excerpt">@finding.Description</SiteText> }
+                            Href="@LocalizedUrl(finding.Url)"
+                            Preview="@finding.Description"
+                            ViewLabel="@(L["read_more"])">
+                            <MetaItems>
+                                @if (!string.IsNullOrWhiteSpace(finding.Rating)) { <SiteCardMetaItem Icon="star">@finding.Rating</SiteCardMetaItem> }
+                            </MetaItems>
+                            <Tags>
                                 @if (finding.Topics is { Count: > 0 }) { <SiteChipGroup>@foreach (var topic in finding.Topics.Take(3)) { <SiteChip Label="@(topic.Name ?? topic.Slug)" /> }</SiteChipGroup> }
-                            </ChildContent>
-                        </SiteClickableCard>
+                            </Tags>
+                        </SiteFeedCard>
                     </SiteGridColumn>
                 }
             </SiteCardGrid>

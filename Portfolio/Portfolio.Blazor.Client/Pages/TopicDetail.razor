@@ -40,21 +40,21 @@
                 <SiteSection Region="writing"
                     HeadingId="topic-writing-heading"
                     Title="@(L["legacy_ebede9852c81"])">
-                    <SiteGrid>
+                    <SiteCardGrid aria-labelledby="topic-writing-heading"
+                        data-layout-region="items">
                         @foreach (var item in Writings)
                         {
                             <SiteGridColumn>
-                                <SiteClickableCard Label="@JoinMeta(WritingKind(item.Type), FormatDate(item.Date), item.ReadingTime)"
-                                    Class="h-100"
-                                    Href="@LocalizedUrl(item.Url)"
+                                <SiteFeedCard KindLabel="@WritingKind(item.Type)"
+                                    Date="@FormatDate(item.Date)"
+                                    ReadingTime="@item.ReadingTime"
                                     Title="@item.Title"
-                                    TitleClass="h5"
-                                    HeadingLevel="3">
-                                    @if (!string.IsNullOrWhiteSpace(item.Excerpt)) { <SiteText Variant="SiteTextVariant.Excerpt">@item.Excerpt</SiteText> }
-                                </SiteClickableCard>
+                                    Href="@LocalizedUrl(item.Url)"
+                                    Preview="@item.Excerpt"
+                                    ViewLabel="@(L["read_more"])" />
                             </SiteGridColumn>
                         }
-                    </SiteGrid>
+                    </SiteCardGrid>
                 </SiteSection>
             }
             @if (Findings.Count > 0)
@@ -62,22 +62,27 @@
                 <SiteSection Region="findings"
                     HeadingId="topic-findings-heading"
                     Title="@(L["legacy_a2d8de463c5a"])">
-                    <SiteGrid>
+                    <SiteCardGrid aria-labelledby="topic-findings-heading"
+                        data-layout-region="items">
                         @foreach (var item in Findings)
                         {
                             <SiteGridColumn>
-                                <SiteClickableCard Label="@JoinMeta(FindingKind(item.Type), FormatDate(item.PublishedDate), RatingName(item.Rating))"
-                                    Class="h-100"
-                                    Href="@LocalizedUrl(item.Url)"
+                                <SiteFeedCard KindLabel="@FindingKind(item.Type)"
+                                    Date="@FormatDate(item.PublishedDate)"
                                     Title="@(item.Title ?? item.Slug)"
-                                    TitleClass="h5"
-                                    HeadingLevel="3">
-                                    @if (!string.IsNullOrWhiteSpace(item.Description)) { <SiteText Variant="SiteTextVariant.Excerpt">@item.Description</SiteText> }
-                                    @if (item.Topics is { Count: > 0 }) { <SiteChipGroup>@foreach (var topic in item.Topics.Take(3)) { <SiteChip Label="@(topic.Name ?? topic.Slug)" Href="@LocalizedUrl(topic.Url ?? $"/topics/{topic.Slug}")" /> }</SiteChipGroup> }
-                                </SiteClickableCard>
+                                    Href="@LocalizedUrl(item.Url)"
+                                    Preview="@item.Description"
+                                    ViewLabel="@(L["read_more"])">
+                                    <MetaItems>
+                                        @if (!string.IsNullOrWhiteSpace(RatingName(item.Rating))) { <SiteCardMetaItem Icon="star">@RatingName(item.Rating)</SiteCardMetaItem> }
+                                    </MetaItems>
+                                    <Tags>
+                                        @if (item.Topics is { Count: > 0 }) { <SiteChipGroup>@foreach (var topic in item.Topics.Take(3)) { <SiteChip Label="@(topic.Name ?? topic.Slug)" Href="@LocalizedUrl(topic.Url ?? $"/topics/{topic.Slug}")" /> }</SiteChipGroup> }
+                                    </Tags>
+                                </SiteFeedCard>
                             </SiteGridColumn>
                         }
-                    </SiteGrid>
+                    </SiteCardGrid>
                 </SiteSection>
             }
         }

@@ -58,7 +58,4 @@ public partial class CollectionDetail
             "not-rated" or null or "" => string.Empty,
             _ => value,
         };
-
-    private static string JoinMeta(params string?[] values) =>
-        string.Join(" · ", values.Where(value => !string.IsNullOrWhiteSpace(value)));
 }

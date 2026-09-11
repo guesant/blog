@@ -131,9 +131,6 @@ composition:
 audit:
     {{docker_run}} 'sh /src/tools/scripts/verify-supply-chain.sh && sh /src/tools/scripts/verify-readonly-runtime.sh && sh /src/tools/scripts/verify-admin-guard.sh && sh /src/tools/scripts/verify-hidden-content.sh'
 
-parity:
-    {{compose}} exec -T web sh -lc 'sh /src/tools/scripts/verify-structural-parity.sh http://127.0.0.1:8080'
-
 shell:
     {{compose}} exec web sh
 

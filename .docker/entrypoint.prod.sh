@@ -1,29 +1,10 @@
 #!/usr/bin/env sh
 set -eu
 
-case "${PORTFOLIO_DB_PROVIDER:-sqlite}" in
-    sqlite)
-        DB_FILE="${PORTFOLIO_SQLITE_PATH:-/data/sqlite/portfolio.sqlite}"
-        if [ ! -s "$DB_FILE" ]; then
-            if [ "${PORTFOLIO_ALLOW_EMPTY_BOOTSTRAP:-false}" != "true" ]; then
-                echo "Refusing to start: SQLite file is missing or empty at $DB_FILE." >&2
-                echo "Restore a verified copy of portfolio.sqlite into the persistent volume, or explicitly set PORTFOLIO_ALLOW_EMPTY_BOOTSTRAP=true for local testing only." >&2
-                exit 1
-            fi
-            echo "Starting without a database at $DB_FILE (PORTFOLIO_ALLOW_EMPTY_BOOTSTRAP=true): pages will render without content until a real copy is restored." >&2
-        fi
-        ;;
-    postgres)
-        if [ -z "${PORTFOLIO_DB_CONNECTION:-}" ]; then
-            echo "Refusing to start: PORTFOLIO_DB_CONNECTION is empty while PORTFOLIO_DB_PROVIDER=postgres." >&2
-            exit 1
-        fi
-        ;;
-    *)
-        echo "Refusing to start: PORTFOLIO_DB_PROVIDER must be sqlite or postgres." >&2
-        exit 1
-        ;;
-esac
+if [ -z "${PORTFOLIO_DB_CONNECTION:-}" ]; then
+    echo "Refusing to start: PORTFOLIO_DB_CONNECTION is empty." >&2
+    exit 1
+fi
 
 # The schema is owned by EF Core migrations in Portfolio.Blazor.Database, but
 # they are never applied here: a deploy must not rewrite schema on its own.

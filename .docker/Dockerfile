@@ -22,7 +22,7 @@ RUN apt-get update \
     && apt-get install --yes --no-install-recommends curl \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
-RUN mkdir -p /data/sqlite /data/public /data/resume-cache \
+RUN mkdir -p /data/public /data/resume-cache \
     && chown -R app:app /data
 COPY --from=build --chown=app:app /app/publish ./
 COPY --chown=app:app tools/scripts/run-with-tectonic.sh /app/scripts/run-with-tectonic.sh
@@ -32,7 +32,6 @@ ENV ASPNETCORE_ENVIRONMENT=Production \
     ASPNETCORE_URLS=http://0.0.0.0:8080 \
     PORTFOLIO_RUN_PUBLISHED=1 \
     PORTFOLIO_APP_DLL=/app/Portfolio.Blazor.dll \
-    PORTFOLIO_SQLITE_PATH=/data/sqlite/portfolio.sqlite \
     PORTFOLIO_PUBLIC_ASSET_ROOT=/data/public \
     PORTFOLIO_RESUME_PDF_ROOT=/data/resume-cache \
     TECTONIC_BUNDLE=https://data1.fullyjustified.net/tlextras-2022.0r0.tar \

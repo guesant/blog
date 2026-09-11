@@ -5,7 +5,6 @@ set positional-arguments
 env_file := if path_exists(".env") == "true" { " --env-file .env" } else { "" }
 compose := "docker compose" + env_file + " -f .docker/compose.yaml"
 compose_dev := compose + " -f .docker/compose.dev.yaml"
-compose_pg := compose_dev + " -f .docker/compose.postgres.yaml"
 docker_run := compose + " run --rm --entrypoint sh web -lc"
 tools_run := compose_dev + " run --rm tools sh -lc"
 
@@ -19,10 +18,6 @@ up:
 
 dev:
     {{compose_dev}} up -d web
-
-dev-postgres:
-    {{compose_pg}} up -d --wait postgres
-    {{compose_pg}} up -d web
 
 dev-logs:
     {{compose_dev}} logs -f --tail=100 web
@@ -57,10 +52,6 @@ test:
 test-data:
     {{docker_run}} 'dotnet run --project src/Portfolio/Portfolio.Blazor.Data.Tests/Portfolio.Blazor.Data.Tests.csproj --configuration Release --no-build'
 
-test-data-postgres:
-    {{compose_pg}} up -d --wait postgres
-    {{compose_pg}} run --rm -e NUGET_PACKAGES=/src/.nuget-cache --entrypoint sh web -lc 'cd /src && dotnet run --project src/Portfolio/Portfolio.Blazor.Data.Tests/Portfolio.Blazor.Data.Tests.csproj --no-restore'
-
 check: tools-build format lint comments duplication duplication-razor build test test-data audit schema tokens ui-imports resx-keys hardcoded-text composition verify-stories vrt
 
 tools-build:
@@ -93,12 +84,29 @@ duplication-razor:
 schema:
     {{docker_run}} 'sh /src/tools/scripts/verify-schema.sh'
 
-db-migration name provider="sqlite":
-    {{ if provider == "postgres" { compose_pg } else { compose_dev } }} run --rm -e NUGET_PACKAGES=/src/.nuget-cache --entrypoint sh web -lc 'cd /src && dotnet tool restore >/dev/null && dotnet tool run dotnet-ef migrations add {{name}} --project src/Portfolio/{{ if provider == "postgres" { "Portfolio.Blazor.Database.Postgres/Portfolio.Blazor.Database.Postgres.csproj" } else { "Portfolio.Blazor.Database/Portfolio.Blazor.Database.csproj" } }} --startup-project src/Portfolio/{{ if provider == "postgres" { "Portfolio.Blazor.Database.Postgres/Portfolio.Blazor.Database.Postgres.csproj" } else { "Portfolio.Blazor.Database/Portfolio.Blazor.Database.csproj" } }} --context PortfolioAdminDbContext'
+db-migration name:
+    {{compose_dev}} up -d --wait postgres
+    {{compose_dev}} run --rm -e NUGET_PACKAGES=/src/.nuget-cache --entrypoint sh web -lc 'cd /src && dotnet tool restore >/dev/null && dotnet tool run dotnet-ef migrations add {{name}} --project src/Portfolio/Portfolio.Blazor.Database/Portfolio.Blazor.Database.csproj --startup-project src/Portfolio/Portfolio.Blazor.Database/Portfolio.Blazor.Database.csproj --context PortfolioAdminDbContext'
 
-db-update provider="sqlite":
-    {{ if provider == "postgres" { compose_pg + " up -d --wait postgres" } else { "true" } }}
-    {{ if provider == "postgres" { compose_pg } else { compose_dev } }} run --rm -e NUGET_PACKAGES=/src/.nuget-cache --entrypoint sh web -lc 'cd /src && dotnet tool restore >/dev/null && PORTFOLIO_SQLITE_PATH=/data/db/portfolio.sqlite dotnet tool run dotnet-ef database update --project src/Portfolio/{{ if provider == "postgres" { "Portfolio.Blazor.Database.Postgres/Portfolio.Blazor.Database.Postgres.csproj" } else { "Portfolio.Blazor.Database/Portfolio.Blazor.Database.csproj" } }} --startup-project src/Portfolio/{{ if provider == "postgres" { "Portfolio.Blazor.Database.Postgres/Portfolio.Blazor.Database.Postgres.csproj" } else { "Portfolio.Blazor.Database/Portfolio.Blazor.Database.csproj" } }} --context PortfolioAdminDbContext'
+db-update:
+    {{compose_dev}} up -d --wait postgres
+    {{compose_dev}} run --rm -e NUGET_PACKAGES=/src/.nuget-cache --entrypoint sh web -lc 'cd /src && dotnet tool restore >/dev/null && dotnet tool run dotnet-ef database update --project src/Portfolio/Portfolio.Blazor.Database/Portfolio.Blazor.Database.csproj --startup-project src/Portfolio/Portfolio.Blazor.Database/Portfolio.Blazor.Database.csproj --context PortfolioAdminDbContext'
+
+db-backup:
+    #!/usr/bin/env sh
+    set -eu
+    mkdir -p data/snapshots
+    file="data/snapshots/portfolio-$(date -u +%Y%m%dT%H%M%SZ).dump"
+    {{compose_dev}} exec -T postgres pg_dump -U portfolio -Fc portfolio > "$file"
+    echo "wrote $file"
+
+db-restore file:
+    {{compose_dev}} up -d --wait postgres
+    cat "{{file}}" | {{compose_dev}} exec -T postgres pg_restore -U portfolio -d portfolio --clean --if-exists
+
+db-import-sqlite file:
+    {{compose_dev}} up -d --wait postgres
+    {{compose_dev}} run --rm --entrypoint sh web -lc 'dotnet run --project src/Portfolio/Portfolio.Blazor.Import/Portfolio.Blazor.Import.csproj --configuration Release --no-build -- "{{file}}" "$PORTFOLIO_DB_CONNECTION"'
 
 tokens:
     {{docker_run}} 'sh /src/tools/scripts/verify-design-tokens.sh'

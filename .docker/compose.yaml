@@ -3,6 +3,19 @@
 name: portfolio
 
 services:
+  postgres:
+    image: postgres:17-alpine@sha256:18cfe3ef5e6815560c98237d6216d1e5119702fb0f3894c8785dd58b8bbe5d73
+    environment:
+      POSTGRES_USER: portfolio
+      POSTGRES_PASSWORD: portfolio
+      POSTGRES_DB: portfolio
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U portfolio -d portfolio"]
+      interval: 5s
+      timeout: 3s
+      retries: 12
   resume-cache-init:
     image: mcr.microsoft.com/dotnet/sdk@sha256:e1fc6e423f543119c406d24e2e687d67c569f18f04a37a8b0005d80ad0dcee80
     user: "0:0"
@@ -28,16 +41,6 @@ services:
     working_dir: /src
     volumes:
       - ..:/src
-      # A single-file bind mount can't hold the -wal/-shm sidecar files SQLite
-      # needs once the DB is in WAL mode (required so the admin panel's writes
-      # don't block the public site's concurrent reads) — confirmed live via
-      # "SQLite Error 14: unable to open database file" until this was changed
-      # to mount the containing directory instead of just the one file.
-      - type: bind
-        source: ${PORTFOLIO_SQLITE_HOST_DIR:-../data}
-        target: /data/db
-        bind:
-          create_host_path: false
       - type: bind
         source: ${PORTFOLIO_PUBLIC_ASSET_PATH:-../data/public}
         target: /data/public
@@ -51,7 +54,8 @@ services:
     environment:
       ASPNETCORE_ENVIRONMENT: Development
       ASPNETCORE_URLS: http://0.0.0.0:8080
-      PORTFOLIO_SQLITE_PATH: /data/db/portfolio.sqlite
+      PORTFOLIO_DB_CONNECTION: Host=postgres;Database=portfolio;Username=portfolio;Password=portfolio
+      PORTFOLIO_TEST_PG_CONNECTION: Host=postgres;Database=postgres;Username=portfolio;Password=portfolio
       PORTFOLIO_PUBLIC_ASSET_ROOT: /data/public
       PORTFOLIO_RESUME_PDF_ROOT: /data/resume-cache
       TECTONIC_BUNDLE: https://data1.fullyjustified.net/tlextras-2022.0r0.tar
@@ -73,6 +77,8 @@ services:
       start_period: 15s
     command: sh ./tools/scripts/run-with-tectonic.sh
     depends_on:
+      postgres:
+        condition: service_healthy
       resume-cache-init:
         condition: service_completed_successfully
       nuget-cache-init:
@@ -84,6 +90,7 @@ services:
     ports: []
     environment:
       ASPNETCORE_URLS: http://0.0.0.0:8081
+      PORTFOLIO_DB_CONNECTION: Host=postgres;Database=portfolio;Username=portfolio;Password=portfolio
       DOTNET_CLI_TELEMETRY_OPTOUT: "1"
       DOTNET_NOLOGO: "true"
       DOTNET_CLI_HOME: /tmp/dotnet
@@ -97,5 +104,6 @@ services:
     command: dotnet run --project src/Portfolio/Portfolio.Blazor.Stories/Portfolio.Blazor.Stories.csproj --configuration Release --no-build --urls http://0.0.0.0:8081
 
 volumes:
+  postgres-data:
   nuget-cache:
   resume-pdf-cache:

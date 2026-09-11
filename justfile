@@ -7,8 +7,6 @@ compose_dev := "docker compose -f compose.yaml -f compose.dev.yaml"
 compose_pg := compose_dev + " -f compose.postgres.yaml"
 docker_run := compose + " run --rm --user 0 --entrypoint sh web -lc"
 playwright_image := "mcr.microsoft.com/playwright@sha256:5b8f294aff9041b7191c34a4bab3ac270157a28774d4b0660e9743297b697e48"
-harness_docker := "docker run --rm --user 1000:1000 --add-host host.docker.internal:host-gateway -e HOME=/tmp -v \"" + justfile_directory() + "/src/Portfolio/Portfolio.Blazor.LayoutAudit:/tmp/harness\" -w /tmp/harness " + playwright_image
-harness_setup := "cp /tmp/harness/package.json /tmp/harness/package-lock.json /tmp/ && (cd /tmp && npm ci --no-audit --no-fund) && "
 
 default: status
 
@@ -151,53 +149,3 @@ _vrt npm_command:
         sleep 1
     done
     docker run --rm --user 1000:1000 --add-host host.docker.internal:host-gateway -e HOME=/tmp -v "{{justfile_directory()}}/src/Portfolio/Portfolio.Blazor.Stories.VRT:/workspace" -w /workspace {{playwright_image}} sh -lc 'npm ci --no-audit --no-fund && {{npm_command}}'
-
-_require-dev-server:
-    #!/usr/bin/env sh
-    set -eu
-    curl -sf http://localhost:8080/ >/dev/null || {
-        echo "the dev server is not reachable at http://localhost:8080 (run 'just up' or 'just dev' first)" >&2
-        exit 1
-    }
-
-layout-audit: _require-dev-server
-    {{harness_docker}} sh -lc '{{harness_setup}}npm test'
-
-audit-a11y: _require-dev-server
-    {{harness_docker}} sh -lc '{{harness_setup}}npm run audit:a11y'
-
-audit-lighthouse: _require-dev-server
-    {{harness_docker}} sh -lc '{{harness_setup}}npm run audit:lighthouse'
-
-audit-seo: _require-dev-server
-    {{harness_docker}} sh -lc '{{harness_setup}}npm run audit:seo'
-
-audit-all:
-    #!/usr/bin/env sh
-    set -eu
-    curl -sf http://localhost:8080/ >/dev/null || {
-        echo "the dev server is not reachable at http://localhost:8080 (run 'just up' or 'just dev' first)" >&2
-        exit 1
-    }
-    recipes="layout-audit audit-a11y audit-seo composition duplication-razor"
-    overall=0
-    summary=""
-    for recipe in $recipes; do
-        echo "=== $recipe ==="
-        log=$(mktemp)
-        if just "$recipe" >"$log" 2>&1; then
-            status="pass"
-        else
-            status="FAIL"
-            overall=1
-        fi
-        tail -n 20 "$log"
-        rm -f "$log"
-        summary=$(printf '%s\n%s:%s' "$summary" "$recipe" "$status")
-    done
-    echo ""
-    echo "=== summary ==="
-    printf '%s\n' "$summary" | sed '/^$/d' | sed 's/^/  /'
-    echo ""
-    echo "note: just audit-lighthouse is slower and not included here, run it separately"
-    exit $overall

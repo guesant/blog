@@ -10,9 +10,6 @@
   <Project Path="Portfolio/Portfolio.Blazor.Database/Portfolio.Blazor.Database.csproj" />
   <Project Path="Portfolio/Portfolio.Blazor.Database.Postgres/Portfolio.Blazor.Database.Postgres.csproj" />
   <Project Path="Portfolio/Portfolio.Blazor.Data.Tests/Portfolio.Blazor.Data.Tests.csproj" />
-  <Project Path="Portfolio/Portfolio.Blazor.LayoutAudit/Portfolio.Blazor.LayoutAudit.esproj">
-    <Platform Project="AnyCPU" />
-  </Project>
   <Project Path="Portfolio/Portfolio.Blazor.Sbom/Portfolio.Blazor.Sbom.csproj" />
   <Project Path="Portfolio/Portfolio.Blazor.Snapshot/Portfolio.Blazor.Snapshot.csproj" />
   <Project Path="Portfolio/Portfolio.Blazor.Stories.VRT/Portfolio.Blazor.Stories.VRT.esproj">

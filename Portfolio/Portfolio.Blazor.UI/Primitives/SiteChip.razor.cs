@@ -18,15 +18,6 @@ public partial class SiteChip
     [Parameter]
     public string? Class { get; set; }
 
-    private string SpanClass =>
-        SiteCss.Join("badge", "text-bg-light", "border", "site-chip", Class);
-    private string LinkClass =>
-        SiteCss.Join(
-            "badge",
-            "text-bg-light",
-            "border",
-            "text-decoration-none",
-            "site-chip",
-            Class
-        );
+    private string SpanClass => SiteCss.Join("badge", "site-chip", Class);
+    private string LinkClass => SiteCss.Join("badge", "site-chip", Class);
 }

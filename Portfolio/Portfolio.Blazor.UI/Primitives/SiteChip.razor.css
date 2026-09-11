@@ -7,9 +7,10 @@
 }
 .site-chip {
     padding: var(--site-action-py) var(--site-action-px);
+    text-decoration: none;
     border: var(--site-border-width) solid var(--site-border);
     color: var(--site-text-primary);
-    background: var(--site-surface-muted);
+    background: transparent;
     font-size: var(--site-text-sm);
     font-weight: var(--site-weight-medium);
     line-height: var(--site-leading-normal);
@@ -25,5 +26,4 @@ a.site-chip:visited {
 a.site-chip:hover,
 a.site-chip:focus-visible {
     border-color: var(--site-border-strong);
-    background: var(--site-surface-hover);
 }

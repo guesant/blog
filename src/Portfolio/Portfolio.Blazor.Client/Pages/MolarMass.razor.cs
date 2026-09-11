@@ -13,24 +13,24 @@ public partial class MolarMass
 
     [SupplyParameterFromQuery(Name = "formula")]
     private string? QueryFormula { get; set; }
-    private string Action => L["legacy_9d2cd72a69f5"];
+    private string Action => L["tools_molar_mass"];
     private string Title => ToolsL["molar_mass_title"];
     private string Description => ToolsL["molar_mass_lead"];
-    private string InputLabel => L["legacy_bd3ca9b280a6"];
-    private string SubmitLabel => L["legacy_53519f340509"];
-    private string ResultLabel => L["legacy_23470bef125e"];
+    private string InputLabel => L["chemical_formula"];
+    private string SubmitLabel => L["calculate"];
+    private string ResultLabel => L["result"];
     private string MolarMassLabel => L["molar_mass_label"];
-    private string CompositionLabel => L["legacy_acf22d5a00b1"];
-    private string ElementLabel => L["legacy_802482317f1f"];
-    private string AtomsLabel => L["legacy_8ef8342700be"];
-    private string PercentageLabel => L["legacy_316a40c7bd0b"];
-    private string CompositionTableId => L["legacy_21df82a5bf74"];
+    private string CompositionLabel => L["percentage_composition"];
+    private string ElementLabel => L["element"];
+    private string AtomsLabel => L["atoms"];
+    private string PercentageLabel => L["percentage"];
+    private string CompositionTableId => L["molar_composition_pt"];
     private string ErrorMessage =>
         Result.Error switch
         {
-            MolarMassError.EmptyFormula => L["legacy_7403a7a28707"],
-            MolarMassError.UnknownElement => L["legacy_6a76b322c1d4"],
-            _ => L["legacy_4935bfa283db"],
+            MolarMassError.EmptyFormula => L["provide_a_chemical_formula"],
+            MolarMassError.UnknownElement => L["the_formula_contains_an_unknown_element"],
+            _ => L["the_chemical_formula_is_invalid"],
         };
     private string Formula
     {

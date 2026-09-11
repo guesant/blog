@@ -19,16 +19,16 @@ public partial class CipherTool
 
     [SupplyParameterFromQuery(Name = "operation")]
     private string? QueryOperation { get; set; }
-    private string Action => L["legacy_99f33be40dd2"];
+    private string Action => L["tools_cipher_tool"];
     private string Title => ToolsL["cipher_tool_title"];
     private string Description => ToolsL["cipher_tool_lead"];
-    private string InputLabel => L["legacy_2c18cd904ab1"];
-    private string OutputLabel => L["legacy_5271811ebe62"];
-    private string ShiftLabel => L["legacy_afa1ac95c295"];
+    private string InputLabel => L["input"];
+    private string OutputLabel => L["output"];
+    private string ShiftLabel => L["shift"];
     private static string Rot13Label => "ROT13";
-    private string EncodeLabel => L["legacy_360020cc7b01"];
-    private string DecodeLabel => L["legacy_4c0e9b70ce8c"];
-    private string CopyLabel => L["legacy_b4bdba0acbfb"];
+    private string EncodeLabel => L["encode"];
+    private string DecodeLabel => L["decode"];
+    private string CopyLabel => L["copy"];
     private string Input
     {
         get => _input;

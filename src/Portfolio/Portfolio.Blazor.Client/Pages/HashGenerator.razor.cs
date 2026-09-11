@@ -11,14 +11,14 @@ public partial class HashGenerator
 
     [SupplyParameterFromQuery(Name = "input")]
     private string? QueryInput { get; set; }
-    private string Action => L["legacy_22d7b9c91ac1"];
+    private string Action => L["tools_hash_generator"];
     private string Title => ToolsL["hash_generator_page_title"];
     private string Description => ToolsL["hash_generator_lead"];
-    private string InputLabel => L["legacy_c4c61716670f"];
-    private string ResultLabel => L["legacy_2f0452494fcb"];
-    private string CalculateLabel => L["legacy_53519f340509"];
-    private string CopyLabel => L["legacy_a3b71416a5f3"];
-    private string Md5Note => L["legacy_a2ec678f7171"];
+    private string InputLabel => L["input"];
+    private string ResultLabel => L["results"];
+    private string CalculateLabel => L["calculate"];
+    private string CopyLabel => L["copy"];
+    private string Md5Note => L["md5_is_not_offered_here_this_tool_provides_only"];
     private string Input
     {
         get => _input;

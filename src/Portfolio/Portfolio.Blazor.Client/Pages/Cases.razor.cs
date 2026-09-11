@@ -23,10 +23,10 @@ public partial class Cases
     }
     private static string Action => LocalizedUrls.Current("/cases");
     private static string CanonicalPath => Action;
-    private string Title => L["legacy_867acccc0ae7"];
-    private string FallbackDescription => L["legacy_7e516bb522ce"];
-    private string EmptyLabel => L["legacy_325451caac6b"];
-    private string UnavailableLabel => L["legacy_fa8c57ffb24f"];
+    private string Title => L["cases_and_professional_projects"];
+    private string FallbackDescription => L["stories_from_systems_i_worked_on"];
+    private string EmptyLabel => L["no_cases_available"];
+    private string UnavailableLabel => L["public_content_is_temporarily_unavailable"];
     private string SeoTitle => PageField("cases", "title", Title);
     private string SeoDescription => PageField("cases", "description", FallbackDescription);
     private string Sort => QuerySort is "asc" or "alpha" ? QuerySort : "desc";
@@ -78,7 +78,7 @@ public partial class Cases
         LocalizedUrls.Current($"/technologies/{technology.Slug}");
 
     private IReadOnlyList<BreadcrumbLink> BreadcrumbLinks =>
-        [new(CrumbLabel("portfolio", L["legacy_0d5377122054"]), LocalizedPath("portfolio"))];
+        [new(CrumbLabel("portfolio", L["portfolio"]), LocalizedPath("portfolio"))];
 
     protected override void OnParametersSet()
     {

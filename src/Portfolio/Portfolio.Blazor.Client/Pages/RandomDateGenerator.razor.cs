@@ -32,17 +32,17 @@ public partial class RandomDateGenerator
 
     [SupplyParameterFromQuery(Name = "time")]
     private bool? QueryTime { get; set; }
-    private string Action => L["legacy_2b9d7b531f92"];
+    private string Action => L["tools_random_date_generator"];
     private string Title => ToolsL["random_date_generator_title"];
     private string Description => ToolsL["random_date_generator_lead"];
-    private string InputLabel => L["legacy_d9825dc0fc2f"];
-    private string FromLabel => L["legacy_1bcd30c56b1d"];
-    private string ToLabel => L["legacy_b2bb2abf83d9"];
-    private string CountLabel => L["legacy_c3c293af9e88"];
-    private string IncludeTimeLabel => L["legacy_7417654bcf34"];
-    private string GenerateLabel => L["legacy_cc7df97fb1b2"];
-    private string ResultLabel => L["legacy_2f0452494fcb"];
-    private string ErrorLabel => L["legacy_49e60b7327a6"];
+    private string InputLabel => L["parameters"];
+    private string FromLabel => L["from"];
+    private string ToLabel => L["to_range"];
+    private string CountLabel => L["how_many_alt"];
+    private string IncludeTimeLabel => L["include_time"];
+    private string GenerateLabel => L["generate"];
+    private string ResultLabel => L["results"];
+    private string ErrorLabel => L["enter_a_valid_date_range"];
     private string FromText
     {
         get => _fromText;

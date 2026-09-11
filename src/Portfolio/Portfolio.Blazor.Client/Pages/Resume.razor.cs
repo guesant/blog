@@ -5,9 +5,10 @@ namespace Portfolio.Blazor.Client.Pages;
 
 public partial class Resume
 {
-    private string Title => PageField("title", L["legacy_f7556c68e40e"]);
-    private string Description => PageField("description", L["legacy_4c9291e2bd4a"]);
-    private string CanonicalPath => L["legacy_f938930c586f"];
+    private string Title => PageField("title", L["resume"]);
+    private string Description =>
+        PageField("description", L["professional_trajectory_education_and_technical"]);
+    private string CanonicalPath => L["resume_path"];
     private JsonElement ResumeData => Snapshot?.Resume ?? default;
     private IReadOnlyList<string> ResumePdfLocales => Snapshot?.ResumePdfLocales ?? [];
 

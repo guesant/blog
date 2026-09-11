@@ -33,20 +33,20 @@ public partial class RandomNumberGenerator
 
     [SupplyParameterFromQuery(Name = "unique")]
     private bool? QueryUnique { get; set; }
-    private string Action => L["legacy_8f56e914189c"];
+    private string Action => L["tools_random_number_generator"];
     private string Title => ToolsL["random_number_generator_title"];
     private string Description => ToolsL["random_number_generator_lead"];
-    private string InputLabel => L["legacy_d9825dc0fc2f"];
-    private string MinLabel => L["legacy_5bf471e7b2f9"];
-    private string MaxLabel => L["legacy_fee33d9f5fae"];
-    private string CountLabel => L["legacy_ebfc81d5cecc"];
-    private string ModeLabel => L["legacy_7c900961a252"];
-    private string IntegerLabel => L["legacy_4bc3227bbd62"];
-    private string DecimalLabel => L["legacy_226a493e1985"];
-    private string NoDuplicatesLabel => L["legacy_7d663f92919b"];
-    private string GenerateLabel => L["legacy_cc7df97fb1b2"];
-    private string ResultLabel => L["legacy_2f0452494fcb"];
-    private string ErrorLabel => L["legacy_59d251025993"];
+    private string InputLabel => L["parameters"];
+    private string MinLabel => L["min"];
+    private string MaxLabel => L["max"];
+    private string CountLabel => L["how_many"];
+    private string ModeLabel => L["mode"];
+    private string IntegerLabel => L["integer"];
+    private string DecimalLabel => L["decimal"];
+    private string NoDuplicatesLabel => L["no_duplicates"];
+    private string GenerateLabel => L["generate"];
+    private string ResultLabel => L["results"];
+    private string ErrorLabel => L["enter_a_valid_range"];
     private string MinText
     {
         get => _minText;

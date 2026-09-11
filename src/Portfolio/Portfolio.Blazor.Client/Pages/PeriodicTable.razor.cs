@@ -16,16 +16,16 @@ public partial class PeriodicTable
 
     [SupplyParameterFromQuery(Name = "search")]
     private string? QuerySearch { get; set; }
-    private string Action => L["legacy_eb54e023ea16"];
+    private string Action => L["tools_periodic_table"];
     private string Title => ToolsL["periodic_table_title"];
     private string Description => ToolsL["periodic_table_lead"];
-    private string SearchLabel => L["legacy_a6e292290757"];
-    private string SearchButton => L["legacy_6bb12bff6f09"];
-    private string SeriesNote => L["legacy_2054ceab6cc1"];
-    private string SymbolLabel => L["legacy_ca81901803d2"];
-    private string NameLabel => L["legacy_30ae4088d3e0"];
-    private string AtomicNumberLabel => L["legacy_dc2440a68682"];
-    private string CategoryLabel => L["legacy_4d729bbc84d4"];
+    private string SearchLabel => L["search_element"];
+    private string SearchButton => L["search"];
+    private string SeriesNote => L["lanthanides_and_actinides_are_displayed_in"];
+    private string SymbolLabel => L["symbol"];
+    private string NameLabel => L["name"];
+    private string AtomicNumberLabel => L["atomic_number"];
+    private string CategoryLabel => L["category"];
     private string Search
     {
         get => _search;

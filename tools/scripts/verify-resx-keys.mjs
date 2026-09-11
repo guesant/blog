@@ -17,7 +17,6 @@ const dynamicRules = readList("tools/checks/resx-dynamic-prefixes.txt").map((rul
         ? new RegExp(rule)
         : new RegExp(`^${rule.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}`),
 );
-const frozenLegacy = new Set(readList("tools/checks/resx-legacy-keys.txt"));
 
 function readList(path) {
     return readFileSync(join(root, path), "utf8")
@@ -73,10 +72,8 @@ for (const [resource, accessors] of Object.entries(resources)) {
             unused.push(key);
             continue;
         }
-        if (key.startsWith("legacy_") && !frozenLegacy.has(key)) {
-            problems.push(
-                `${resource}: ${key} is a new legacy_ key; give new keys a descriptive name`,
-            );
+        if (key.startsWith("legacy_")) {
+            problems.push(`${resource}: ${key} has no descriptive name`);
         }
     }
     if (unused.length > 0) {

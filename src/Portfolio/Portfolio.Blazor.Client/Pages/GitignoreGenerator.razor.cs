@@ -22,14 +22,14 @@ public partial class GitignoreGenerator
 
     [SupplyParameterFromQuery(Name = "filter")]
     private string? QueryFilter { get; set; }
-    private string Action => L["legacy_f1e81c4c631e"];
+    private string Action => L["tools_gitignore_generator"];
     private string Title => ToolsL["gitignore_generator_title"];
     private string Description => ToolsL["gitignore_generator_lead"];
-    private string FilterLabel => L["legacy_717aaf07d311"];
-    private string OutputLabel => L["legacy_1d1c0e33dc3c"];
-    private string GenerateLabel => L["legacy_cc7df97fb1b2"];
-    private string CopyLabel => L["legacy_a3b71416a5f3"];
-    private string DownloadLabel => L["legacy_c36a12636bbd"];
+    private string FilterLabel => L["filter_templates"];
+    private string OutputLabel => L["output"];
+    private string GenerateLabel => L["generate"];
+    private string CopyLabel => L["copy"];
+    private string DownloadLabel => L["download"];
     private string Filter
     {
         get => _filter;

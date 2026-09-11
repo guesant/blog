@@ -38,9 +38,9 @@ public partial class ContentDetail
     private IReadOnlyList<PublicRelatedContent>? Related =>
         Project?.Related ?? CaseStudy?.Related ?? Writing?.Related;
     private string KindLabel =>
-        IsCase ? (L["legacy_3dc269cea284"])
-        : IsWriting ? (L["legacy_ebede9852c81"])
-        : (L["legacy_2c505faad45c"]);
+        IsCase ? (L["cases"])
+        : IsWriting ? (L["writings"])
+        : (L["projects"]);
     private string Title =>
         Project?.Name ?? CaseStudy?.Title ?? Writing?.Title ?? Slug.Replace('-', ' ');
     private string Description =>
@@ -57,32 +57,26 @@ public partial class ContentDetail
         : IsProject ? LocalizedPath("projects")
         : FeedUrls.ForKind(FeedUrls.Writing);
     private string DetailIndexLabel =>
-        IsCase ? (L["legacy_3dc269cea284"])
-        : IsProject ? (L["legacy_2c505faad45c"])
-        : (L["legacy_ebede9852c81"]);
+        IsCase ? (L["cases"])
+        : IsProject ? (L["projects"])
+        : (L["writings"]);
     private IReadOnlyList<BreadcrumbLink> BreadcrumbLinks =>
         IsCase
             ?
             [
-                new(CrumbLabel("portfolio", L["legacy_5c816876b410"]), LocalizedPath("portfolio")),
-                new(CrumbLabel("cases", L["legacy_3dc269cea284"]), LocalizedPath("cases")),
+                new(CrumbLabel("portfolio", L["portfolio"]), LocalizedPath("portfolio")),
+                new(CrumbLabel("cases", L["cases"]), LocalizedPath("cases")),
             ]
         : IsProject
             ?
             [
-                new(CrumbLabel("portfolio", L["legacy_5c816876b410"]), LocalizedPath("portfolio")),
-                new(CrumbLabel("projects", L["legacy_2c505faad45c"]), LocalizedPath("projects")),
+                new(CrumbLabel("portfolio", L["portfolio"]), LocalizedPath("portfolio")),
+                new(CrumbLabel("projects", L["projects"]), LocalizedPath("projects")),
             ]
-        :
-        [
-            new(
-                CrumbLabel("writing", L["legacy_ebede9852c81"]),
-                FeedUrls.ForKind(FeedUrls.Writing)
-            ),
-        ];
-    private string LoadingTitle => L["legacy_d6a275b8ae9c"];
-    private string NotFoundTitle => L["legacy_44d5d0470edb"];
-    private string NotFoundDescription => L["legacy_6913e54f5c0f"];
+        : [new(CrumbLabel("writing", L["writings"]), FeedUrls.ForKind(FeedUrls.Writing))];
+    private string LoadingTitle => L["loading_content"];
+    private string NotFoundTitle => L["content_not_found"];
+    private string NotFoundDescription => L["this_address_does_not_match_public_content"];
     private IReadOnlyList<PublicTechnology> TechnologyLinks =>
         Project?.Technologies ?? CaseStudy?.Technologies ?? [];
     private IReadOnlyList<PublicTechnology> TopicLinks => IsWriting ? Writing?.Topics ?? [] : [];
@@ -93,9 +87,9 @@ public partial class ContentDetail
         IsCase
             ? new (string Key, string Label, string? Value)[]
             {
-                ("context", L["legacy_c6cf358abb20"].Value, CaseStudy?.Context),
-                ("role", L["legacy_7bc2a8b13e9e"].Value, CaseStudy?.Role),
-                ("outcome", L["legacy_dfea58cad5c4"].Value, CaseStudy?.Result),
+                ("context", L["context"].Value, CaseStudy?.Context),
+                ("role", L["role"].Value, CaseStudy?.Role),
+                ("outcome", L["outcome"].Value, CaseStudy?.Result),
             }
                 .Where(item => !string.IsNullOrWhiteSpace(item.Value))
                 .Select(item => (item.Key, item.Label, item.Value!))
@@ -103,8 +97,8 @@ public partial class ContentDetail
         : IsProject
             ? new (string Key, string Label, string? Value)[]
             {
-                ("problem", L["legacy_1c5ab9596d6b"].Value, Project?.Problem),
-                ("current-focus", L["legacy_a7c989edbc53"].Value, Project?.CurrentFocus),
+                ("problem", L["problem"].Value, Project?.Problem),
+                ("current-focus", L["current_focus"].Value, Project?.CurrentFocus),
             }
                 .Where(item => !string.IsNullOrWhiteSpace(item.Value))
                 .Select(item => (item.Key, item.Label, item.Value!))

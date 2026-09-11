@@ -20,20 +20,20 @@ public partial class QuadraticEquation
 
     [SupplyParameterFromQuery(Name = "c")]
     private string? QueryC { get; set; }
-    private string Action => L["legacy_983f39df8e04"];
+    private string Action => L["tools_quadratic_equation"];
     private string Title => ToolsL["quadratic_equation_title"];
     private string Description => ToolsL["quadratic_equation_lead"];
-    private string InputLabel => L["legacy_c6be4b29456c"];
-    private string SubmitLabel => L["legacy_28b6f5bf458b"];
-    private string ExplanationLabel => L["legacy_23470bef125e"];
-    private string RootsLabel => L["legacy_bb2552fd4574"];
-    private string ComplexRootsLabel => L["legacy_d2eb7657b4dd"];
+    private string InputLabel => L["coeficientes"];
+    private string SubmitLabel => L["dimension"];
+    private string ExplanationLabel => L["result"];
+    private string RootsLabel => L["real_roots"];
+    private string ComplexRootsLabel => L["complex_roots"];
     private string ErrorMessage =>
         Result.Error switch
         {
-            QuadraticEquationError.NonFiniteInput => L["legacy_9e807fdb152e"],
+            QuadraticEquationError.NonFiniteInput => L["use_finite_numbers_only"],
             QuadraticEquationError.ZeroLeadingCoefficient => L["quadratic_zero_leading"],
-            _ => L["legacy_150a37d19e71"],
+            _ => L["the_equation_could_not_be_solved"],
         };
     private QuadraticEquationResult Result => _result;
     private string ChartLabel => L["quadratic_chart_label"];

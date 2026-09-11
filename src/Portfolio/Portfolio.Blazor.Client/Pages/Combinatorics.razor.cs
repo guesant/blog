@@ -16,12 +16,12 @@ public partial class Combinatorics
 
     [SupplyParameterFromQuery(Name = "r")]
     private string? QueryR { get; set; }
-    private string Action => L["legacy_ddd25a990b88"];
+    private string Action => L["tools_combinatorics"];
     private string Title => ToolsL["combinatorics_title"];
     private string Description => ToolsL["combinatorics_lead"];
-    private string InputLabel => L["legacy_67f93fb28065"];
-    private string SubmitLabel => L["legacy_37565a968d31"];
-    private string ErrorLabel => L["legacy_a6b892708533"];
+    private string InputLabel => L["input_values"];
+    private string SubmitLabel => L["calculate"];
+    private string ErrorLabel => L["use_0_r_n_500"];
     private string NText
     {
         get => _nText;

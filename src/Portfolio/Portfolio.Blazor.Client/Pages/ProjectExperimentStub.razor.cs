@@ -14,15 +14,15 @@ public partial class ProjectExperimentStub
     private string Description => Experiment?.Purpose ?? NotFoundDescription;
     private string? PublishedAt => Experiment?.PublishedAt;
     private string CanonicalPath => Experiment?.Url ?? RequestPath;
-    private string NotFoundDescription => L["legacy_e74a35c6bf2d"];
+    private string NotFoundDescription => L["this_address_does_not_match_a_public_experiment"];
     private IReadOnlyList<BreadcrumbLink> BreadcrumbLinks =>
         [
-            new(CrumbLabel("portfolio", L["legacy_5c816876b410"]), LocalizedPath("portfolio")),
-            new(CrumbLabel("projects", L["legacy_2c505faad45c"]), LocalizedPath("projects")),
+            new(CrumbLabel("portfolio", L["portfolio"]), LocalizedPath("portfolio")),
+            new(CrumbLabel("projects", L["projects"]), LocalizedPath("projects")),
         ];
 
     private string LocalizedPath(string path) =>
         path.Equals("home", StringComparison.OrdinalIgnoreCase)
-            ? (L["legacy_0607643fd42c"])
+            ? (L[""])
             : (LocalizedUrls.Current($"/{path}"));
 }

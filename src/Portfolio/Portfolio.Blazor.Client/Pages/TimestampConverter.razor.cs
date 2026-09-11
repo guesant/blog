@@ -15,18 +15,18 @@ public partial class TimestampConverter
 
     [SupplyParameterFromQuery(Name = "date")]
     private string? QueryDate { get; set; }
-    private string Action => L["legacy_8ea136bb42d0"];
+    private string Action => L["tools_timestamp_converter"];
     private string Title => ToolsL["timestamp_converter_title"];
     private string Description => ToolsL["timestamp_converter_lead"];
-    private string InputLabel => L["legacy_f2f2808523c8"];
-    private string TimestampInputLabel => L["legacy_aedfcab3ff4d"];
-    private string NowLabel => L["legacy_ab243226f805"];
+    private string InputLabel => L["inputs"];
+    private string TimestampInputLabel => L["timestamp"];
+    private string NowLabel => L["now"];
     private static string UtcLabel => "UTC";
-    private string LocalLabel => L["legacy_1702aa220f98"];
-    private string DateLabel => L["legacy_eac099ce73d6"];
-    private string DateResultLabel => L["legacy_6f48e45282d4"];
-    private string ConvertLabel => L["legacy_ae125407093e"];
-    private string ErrorLabel => L["legacy_700f717ef5ce"];
+    private string LocalLabel => L["local"];
+    private string DateLabel => L["date_and_time"];
+    private string DateResultLabel => L["result_timestamp"];
+    private string ConvertLabel => L["converter"];
+    private string ErrorLabel => L["enter_a_valid_integer_timestamp"];
     private string TimestampText
     {
         get => _timestampText;

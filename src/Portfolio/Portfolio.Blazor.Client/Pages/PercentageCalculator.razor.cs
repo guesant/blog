@@ -49,12 +49,12 @@ public partial class PercentageCalculator
     [SupplyParameterFromQuery(Name = "ch_to")]
     private string? QueryChangeTo { get; set; }
 
-    private string Action => L["legacy_f022b9812a3b"];
+    private string Action => L["tools_percentage_calculator"];
     private string Title => ToolsL["percentage_calculator_title"];
     private string Description => ToolsL["percentage_calculator_lead"];
-    private string InputLabel => L["legacy_d6b96d7e7072"];
-    private string SubmitLabel => L["legacy_53519f340509"];
-    private string ErrorLabel => L["legacy_54c7abf41302"];
+    private string InputLabel => L["values"];
+    private string SubmitLabel => L["calculate"];
+    private string ErrorLabel => L["provide_valid_numeric_values"];
     private string DivisionByZeroLabel => L["percentage_division_by_zero"];
 
     private string OfTitle => L["percentage_of_title"];

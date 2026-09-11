@@ -13,13 +13,13 @@ public partial class SnippetDetail
     private string Title => Snippet?.Title ?? Slug;
     private string Description => Snippet?.Description ?? NotFoundDescription;
     private string CanonicalPath => Snippet?.Url ?? RequestPath;
-    private string LoadingLabel => L["legacy_140e4632c54b"];
+    private string LoadingLabel => L["loading_snippet"];
     private string FileCount => L["count_files", Snippet?.Files?.Count ?? 0];
-    private string FilesLabel => L["legacy_18a94588a50e"];
-    private string EmptyLabel => L["legacy_d2a544d7a50f"];
-    private string NotFoundLabel => L["legacy_2f77a758b681"];
-    private string NotFoundDescription => L["legacy_3b8af3970aa7"];
-    private string BackLabel => L["legacy_9788633fccc2"];
+    private string FilesLabel => L["snippet_files_count_0_arquivos"];
+    private string EmptyLabel => L["snippet_files"];
+    private string NotFoundLabel => L["this_snippet_has_no_public_files"];
+    private string NotFoundDescription => L["snippet_not_found"];
+    private string BackLabel => L["this_address_does_not_match_a_public_snippet"];
     private string IndexUrl => LocalizedPath("snippets");
     private string DownloadUrl => $"{IndexUrl}/{Snippet?.Slug ?? Slug}/download";
     private string? ActiveFileId => QueryValue("file");
@@ -27,7 +27,7 @@ public partial class SnippetDetail
         Snippet?.Files?.FirstOrDefault(file => file.Id == ActiveFileId)
         ?? Snippet?.Files?.FirstOrDefault();
     private IReadOnlyList<BreadcrumbLink> BreadcrumbLinks =>
-        [new(CrumbLabel("snippets", L["legacy_b87eedb8eefd"]), IndexUrl)];
+        [new(CrumbLabel("snippets", L["snippets"]), IndexUrl)];
     private static IReadOnlyList<string> SnippetHistoryFields => ["title", "description"];
 
     private static string SafeId(string path) =>
@@ -52,6 +52,6 @@ public partial class SnippetDetail
 
     private string LocalizedPath(string path) =>
         path.Equals("home", StringComparison.OrdinalIgnoreCase)
-            ? (L["legacy_0607643fd42c"])
+            ? (L[""])
             : (LocalizedUrls.Current($"/{path}"));
 }

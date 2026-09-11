@@ -46,21 +46,21 @@ public partial class TechnologyDetail
     private string Title => Technology?.Name ?? Slug;
     private string Description => L["browse_technology", Title];
     private string CanonicalPath => Technology?.Url ?? RequestPath;
-    private string LoadingLabel => L["legacy_f8d5af569106"];
-    private string EmptyLabel => L["legacy_12d8890036fa"];
-    private string NotFoundLabel => L["legacy_68634914bbd9"];
-    private string NotFoundDescription => L["legacy_9883512f7345"];
-    private string BackLabel => L["legacy_6e8c2cd0b9b6"];
+    private string LoadingLabel => L["browse_cases_projects_and_experiments_using"];
+    private string EmptyLabel => L["loading_technology"];
+    private string NotFoundLabel => L["no_content_is_currently_published_using_this"];
+    private string NotFoundDescription => L["technology_not_found"];
+    private string BackLabel => L["this_address_does_not_match_a_public_technology"];
     private string IndexUrl => LocalizedPath("technologies");
     private IReadOnlyList<BreadcrumbLink> BreadcrumbLinks =>
-        [new(CrumbLabel("technologies", L["legacy_b4e2241909e0"]), IndexUrl)];
+        [new(CrumbLabel("technologies", L["technologies"]), IndexUrl)];
 
     private static string Short(string value) =>
         value.Length > 150 ? value[..150].TrimEnd() + "…" : value;
 
     private string LocalizedPath(string path) =>
         path.Equals("home", StringComparison.OrdinalIgnoreCase)
-            ? (L["legacy_0607643fd42c"])
+            ? (L[""])
             : (LocalizedUrls.Current($"/{path}"));
 
     private static string LocalizedUrl(string url)

@@ -39,7 +39,7 @@ public partial class InformationalPages
                     Field("heroIdentity", Snapshot?.Chrome.Profile?.Title ?? string.Empty),
                 }.Where(value => !string.IsNullOrWhiteSpace(value))
             ),
-            PageKind.Now => L["legacy_ab243226f805"],
+            PageKind.Now => L["now"],
             PageKind.License => Field("title"),
             PageKind.Follow => Field("title"),
             _ => Field("title"),
@@ -48,7 +48,7 @@ public partial class InformationalPages
         Kind switch
         {
             PageKind.Portfolio => Field("heroExperience"),
-            PageKind.Now => L["legacy_95867724f45f"],
+            PageKind.Now => L["what_i_am_currently_working_on_building"],
             PageKind.Follow => Field("intro"),
             PageKind.License => Field("description"),
             _ => Field("description"),
@@ -88,14 +88,14 @@ public partial class InformationalPages
         [
             new(
                 "briefcase",
-                L["legacy_3dc269cea284"],
-                L["legacy_f45020ee2810"],
+                L["cases"],
+                L["a_few_projects_worth_a_closer_look"],
                 LocalizedUrls.Current("/cases")
             ),
             new(
                 "folder-git-2",
-                L["legacy_2c505faad45c"],
-                L["legacy_9cfc8dff64f5"],
+                L["projects"],
+                L["smaller_builds_and_experiments_outside_client"],
                 LocalizedUrls.Current("/projects")
             ),
             new(
@@ -182,9 +182,9 @@ public partial class InformationalPages
         ];
     private IReadOnlyList<(string Title, string Description, string? Url)> FollowEntries =>
         [
-            ("rss_title", "rss_description", L["legacy_362d5aad99f1"]),
-            ("atom_title", "atom_description", L["legacy_eabac209b499"]),
-            ("jsonfeed_title", "jsonfeed_description", L["legacy_02f8bdc0b350"]),
+            ("rss_title", "rss_description", L["feed_xml"]),
+            ("atom_title", "atom_description", L["atom_xml"]),
+            ("jsonfeed_title", "jsonfeed_description", L["feed_json"]),
             ("api_title", "api_description", "/api/v1/findings"),
             ("sitemap_title", "sitemap_description", "/sitemap.xml"),
             ("robots_title", "robots_description", "/robots.txt"),

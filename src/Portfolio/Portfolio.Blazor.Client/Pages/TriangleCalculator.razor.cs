@@ -18,11 +18,11 @@ public partial class TriangleCalculator
 
     [SupplyParameterFromQuery(Name = "c")]
     private double? QueryC { get; set; }
-    private string Action => L["legacy_3df114556dbe"];
+    private string Action => L["tools_triangle_calculator"];
     private string Title => ToolsL["triangle_calculator_page_title"];
     private string Description => ToolsL["triangle_calculator_lead"];
-    private string CalculateLabel => L["legacy_53519f340509"];
-    private string ErrorLabel => L["legacy_572e9b6409dc"];
+    private string CalculateLabel => L["calculate"];
+    private string ErrorLabel => L["enter_three_positive_sides_that_form_a_triangle"];
     private TriangleResult Result => Portfolio.Blazor.Core.TriangleCalculator.Calculate(A, B, C);
 
     protected override void OnParametersSet()

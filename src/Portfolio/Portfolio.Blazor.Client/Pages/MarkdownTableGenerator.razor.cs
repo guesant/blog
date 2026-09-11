@@ -11,13 +11,13 @@ public partial class MarkdownTableGenerator
 
     [SupplyParameterFromQuery(Name = "input")]
     private string? QueryInput { get; set; }
-    private string Action => L["legacy_8047a2524a2c"];
+    private string Action => L["tools_markdown_table_generator"];
     private string Title => ToolsL["markdown_table_generator_title"];
     private string Description => ToolsL["markdown_table_generator_lead"];
-    private string InputLabel => L["legacy_b26024713364"];
-    private string OutputLabel => L["legacy_1d1c0e33dc3c"];
-    private string GenerateLabel => L["legacy_cc7df97fb1b2"];
-    private string CopyLabel => L["legacy_a3b71416a5f3"];
+    private string InputLabel => L["rows_tab_or_comma_separated_one_per_line"];
+    private string OutputLabel => L["output"];
+    private string GenerateLabel => L["generate"];
+    private string CopyLabel => L["copy"];
     private string Input
     {
         get => _input;

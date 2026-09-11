@@ -23,19 +23,19 @@ public partial class RobotsTxtGenerator
 
     [SupplyParameterFromQuery(Name = "sitemap")]
     private string? QuerySitemap { get; set; }
-    private string Action => L["legacy_0c4fe0ae8a55"];
+    private string Action => L["tools_robots_txt_generator"];
     private string Title => ToolsL["robots_txt_generator_title"];
     private string Description => ToolsL["robots_txt_generator_lead"];
-    private string UserAgentLabel => L["legacy_3d361c7e6d13"];
-    private string AllowLabel => L["legacy_a6afdae7964d"];
-    private string DisallowLabel => L["legacy_3aafbf448b67"];
-    private string DelayLabel => L["legacy_95a345155056"];
-    private string SitemapLabel => L["legacy_84a973a45cf2"];
-    private string AddRuleLabel => L["legacy_b5b29071a011"];
-    private string RemoveLabel => L["legacy_89f09a9e2949"];
-    private string GenerateLabel => L["legacy_cc7df97fb1b2"];
-    private string OutputLabel => L["legacy_1d1c0e33dc3c"];
-    private string CopyLabel => L["legacy_a3b71416a5f3"];
+    private string UserAgentLabel => L["user_agent"];
+    private string AllowLabel => L["allow_one_path_per_line"];
+    private string DisallowLabel => L["disallow_one_path_per_line"];
+    private string DelayLabel => L["crawl_delay_seconds_optional"];
+    private string SitemapLabel => L["sitemap_url"];
+    private string AddRuleLabel => L["add_rule"];
+    private string RemoveLabel => L["remove_rule"];
+    private string GenerateLabel => L["generate"];
+    private string OutputLabel => L["output"];
+    private string CopyLabel => L["copy"];
     private string Sitemap
     {
         get => _sitemap;

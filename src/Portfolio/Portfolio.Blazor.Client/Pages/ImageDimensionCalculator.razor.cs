@@ -22,17 +22,17 @@ public partial class ImageDimensionCalculator
 
     [SupplyParameterFromQuery(Name = "targetHeight")]
     private int? QueryTargetHeight { get; set; }
-    private string Action => L["legacy_a953c5d85114"];
+    private string Action => L["tools_image_dimension_calculator"];
     private string Title => ToolsL["image_dimension_calculator_title"];
     private string Description => ToolsL["image_dimension_calculator_lead"];
-    private string OptionalFileLabel => L["legacy_494dcb7851f5"];
-    private string OriginalWidthLabel => L["legacy_1b63cae6ba99"];
-    private string OriginalHeightLabel => L["legacy_b9b337101126"];
-    private string TargetWidthLabel => L["legacy_7ccca359675e"];
-    private string TargetHeightLabel => L["legacy_79116963bcf3"];
-    private string ResultWidthLabel => L["legacy_93a43e4aa46b"];
-    private string ResultHeightLabel => L["legacy_057e0acf661c"];
-    private string CalculateLabel => L["legacy_53519f340509"];
+    private string OptionalFileLabel => L["image_file_optional_to_read_dimensions"];
+    private string OriginalWidthLabel => L["original_width"];
+    private string OriginalHeightLabel => L["original_height"];
+    private string TargetWidthLabel => L["target_width"];
+    private string TargetHeightLabel => L["target_height"];
+    private string ResultWidthLabel => L["resulting_width"];
+    private string ResultHeightLabel => L["resulting_height"];
+    private string CalculateLabel => L["calculate"];
     private int? OriginalWidth
     {
         get => _originalWidth;

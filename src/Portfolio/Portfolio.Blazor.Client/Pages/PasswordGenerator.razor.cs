@@ -27,19 +27,19 @@ public partial class PasswordGenerator
 
     [SupplyParameterFromQuery(Name = "symbols")]
     private bool? QuerySymbols { get; set; }
-    private string Action => L["legacy_1d1595df3e88"];
+    private string Action => L["tools_password_generator"];
     private string Title => ToolsL["password_generator_page_title"];
     private string Description => ToolsL["password_generator_lead"];
-    private string InputLabel => L["legacy_d9825dc0fc2f"];
-    private string LengthLabel => L["legacy_3adb0d7976b8"];
-    private string UppercaseLabel => L["legacy_e9280a116a8c"];
-    private string LowercaseLabel => L["legacy_5614ce52f619"];
-    private string NumbersLabel => L["legacy_67b743c4b70b"];
-    private string SymbolsLabel => L["legacy_242ec1e1ec73"];
-    private string GenerateLabel => L["legacy_cc7df97fb1b2"];
-    private string OutputLabel => L["legacy_43de9a92be0e"];
-    private string StrengthLabel => L["legacy_59f4fd8868f2"];
-    private string CopyLabel => L["legacy_a3b71416a5f3"];
+    private string InputLabel => L["parameters"];
+    private string LengthLabel => L["length"];
+    private string UppercaseLabel => L["uppercase"];
+    private string LowercaseLabel => L["lowercase"];
+    private string NumbersLabel => L["numbers"];
+    private string SymbolsLabel => L["symbols"];
+    private string GenerateLabel => L["generate"];
+    private string OutputLabel => L["password"];
+    private string StrengthLabel => L["estimated_entropy_bits"];
+    private string CopyLabel => L["copy"];
     private int Length
     {
         get => _length;

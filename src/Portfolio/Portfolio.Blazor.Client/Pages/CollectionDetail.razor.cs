@@ -13,15 +13,15 @@ public partial class CollectionDetail
     private string Title => Collection?.Title ?? Slug;
     private string Description => Collection?.Description ?? NotFoundDescription;
     private string CanonicalPath => Collection?.Url ?? RequestPath;
-    private string LoadingLabel => L["legacy_9683d8c027c5"];
-    private string EmptyLabel => L["legacy_190d1b0e3115"];
-    private string ItemsLabel => L["legacy_2dd7696008c3"];
-    private string NotFoundLabel => L["legacy_5e618bd2ed6c"];
-    private string NotFoundDescription => L["legacy_efc41f7ca04b"];
-    private string BackLabel => L["legacy_c9d2e6d195c0"];
+    private string LoadingLabel => L["loading_collection"];
+    private string EmptyLabel => L["this_collection_has_no_public_items_yet"];
+    private string ItemsLabel => L["collection_items"];
+    private string NotFoundLabel => L["collection_not_found"];
+    private string NotFoundDescription => L["this_address_does_not_match_a_public_collection"];
+    private string BackLabel => L["back_to_collections"];
     private static string IndexUrl => FeedUrls.ForKind(FeedUrls.Collection);
     private IReadOnlyList<BreadcrumbLink> BreadcrumbLinks =>
-        [new(CrumbLabel("collections", L["legacy_5dbf11ad96f1"]), IndexUrl)];
+        [new(CrumbLabel("collections", L["collections"]), IndexUrl)];
 
     private static string LocalizedUrl(string url)
     {
@@ -36,22 +36,22 @@ public partial class CollectionDetail
     private string TypeName(string? value) =>
         value?.ToLowerInvariant() switch
         {
-            "book" => L["legacy_52a466550e65"],
+            "book" => L["book"],
             "paper" => "paper",
-            "video" => L["legacy_a72255f4487a"],
-            "course" => L["legacy_d2b5307e2886"],
-            "tool" => L["legacy_c3d6b5e3dba2"],
-            null or "" => L["legacy_024313615d66"],
+            "video" => L["video"],
+            "course" => L["course"],
+            "tool" => L["tool"],
+            null or "" => L["finding"],
             _ => value,
         };
 
     private string RatingName(string? value) =>
         value?.ToLowerInvariant() switch
         {
-            "interesting" => L["legacy_4a7bae9ea04d"],
-            "recommended" => L["legacy_f81edcb6d6b8"],
-            "strongly-recommended" => L["legacy_d9432986b51f"],
-            "not-recommended" => L["legacy_efe593228740"],
+            "interesting" => L["interesting"],
+            "recommended" => L["recommended"],
+            "strongly-recommended" => L["strongly_recommended"],
+            "not-recommended" => L["not_recommended"],
             "not-rated" or null or "" => string.Empty,
             _ => value,
         };

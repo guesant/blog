@@ -4,11 +4,13 @@ namespace Portfolio.Blazor.Client.Pages;
 
 public partial class Contact
 {
-    private string Title => PageField("title", L["legacy_68be6eee1eb9"]);
+    private string Title => PageField("title", L["contact"]);
     private string Description =>
-        HasContact ? PageField("description", FallbackDescription) : (L["legacy_5fe6d16f2789"]);
-    private string FallbackDescription => L["legacy_5449bb2d7a16"];
-    private string CanonicalPath => L["legacy_81c69aa356b9"];
+        HasContact
+            ? PageField("description", FallbackDescription)
+            : (L["contact_is_currently_unavailable"]);
+    private string FallbackDescription => L["talk_about_software_development_technical"];
+    private string CanonicalPath => L["contact_path"];
     private IReadOnlyList<PublicContactProfile> Profiles =>
         Snapshot?.Chrome.Site.ContactProfiles ?? [];
     private bool HasContact =>

@@ -9,10 +9,10 @@
 <SeoHead Title="@SeoTitle" Description="@SeoDescription" CanonicalPath="@CanonicalPath" />
 
 <SitePage Template="knowledge-map">
-    <SiteBreadcrumb HomeUrl="@(L["legacy_0607643fd42c"])"
-        HomeLabel="@(L["legacy_ddc150008e2f"])"
+    <SiteBreadcrumb HomeUrl="@(L[""])"
+        HomeLabel="@(L["home"])"
         Links="@BreadcrumbLinks"
-        CurrentLabel="@CrumbLabel("knowledge-map", L["legacy_34a684f24942"])" />
+        CurrentLabel="@CrumbLabel("knowledge-map", L["knowledge_map"])" />
     @if (Snapshot is null || Graph is null)
     {
         <SiteHero Title="@LoadingLabel" Lead="@Description" />

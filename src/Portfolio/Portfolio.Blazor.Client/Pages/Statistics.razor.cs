@@ -12,29 +12,29 @@ public partial class Statistics
 
     [SupplyParameterFromQuery(Name = "values")]
     private string? QueryValues { get; set; }
-    private string Action => L["legacy_264f2a8c5e84"];
+    private string Action => L["tools_statistics"];
     private string Title => ToolsL["statistics_page_title"];
     private string Description => ToolsL["statistics_lead"];
-    private string InputLabel => L["legacy_d6b96d7e7072"];
-    private string SubmitLabel => L["legacy_53519f340509"];
-    private string CountLabel => L["legacy_1cca238ca682"];
-    private string MinimumLabel => L["legacy_817f5288d94b"];
-    private string MaximumLabel => L["legacy_b1be8ef71097"];
-    private string MeanLabel => L["legacy_bd0cc81ce562"];
-    private string MedianLabel => L["legacy_88d5137cdffb"];
-    private string ModeLabel => L["legacy_84981e5d02b2"];
-    private string NoModeLabel => L["legacy_a189d42e3a37"];
+    private string InputLabel => L["values"];
+    private string SubmitLabel => L["calculate"];
+    private string CountLabel => L["count"];
+    private string MinimumLabel => L["minimum"];
+    private string MaximumLabel => L["maximum"];
+    private string MeanLabel => L["mean"];
+    private string MedianLabel => L["median"];
+    private string ModeLabel => L["statistical_mode"];
+    private string NoModeLabel => L["no_mode"];
     private static string FirstQuartileLabel => "Q1";
     private static string ThirdQuartileLabel => "Q3";
     private static string IqrLabel => "IQR";
-    private string PopulationStdDevLabel => L["legacy_99b53267b82d"];
-    private string SampleStdDevLabel => L["legacy_b8c4256bc427"];
-    private string HistogramLabel => L["legacy_02170aaac43d"];
-    private string BinItemsLabel => L["legacy_405448a63f0e"];
+    private string PopulationStdDevLabel => L["population_standard_deviation"];
+    private string SampleStdDevLabel => L["sample_standard_deviation"];
+    private string HistogramLabel => L["histogram"];
+    private string BinItemsLabel => L["items"];
     private string ErrorMessage =>
         Summary.Error == StatisticsError.InvalidNumber
-            ? (L["legacy_f8421ef9ff43"])
-            : (L["legacy_2f9e5de45de8"]);
+            ? (L["use_finite_numbers_separated_by_spaces_commas"])
+            : (L["provide_at_least_one_value"]);
     private string Values
     {
         get => _values;

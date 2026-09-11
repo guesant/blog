@@ -15,7 +15,7 @@
         OnSubmit="Calculate">
         @if (Mode == FinanceToolMode.Roi)
         {
-            <SiteFormField Label="@(L["legacy_30dd91d8e443"])"
+            <SiteFormField Label="@(L["investment"])"
                 For="roi-investment"><SiteInput Id="roi-investment"
                     Name="investment"
                     Type="number"
@@ -23,7 +23,7 @@
                     step="any"
                     Value="@InvestmentText"
                     ValueChanged="@(v => InvestmentText = v)" /></SiteFormField>
-            <SiteFormField Label="@(L["legacy_ef295ba56755"])"
+            <SiteFormField Label="@(L["return_value"])"
                 For="roi-return"><SiteInput Id="roi-return"
                     Name="return"
                     Type="number"
@@ -34,7 +34,7 @@
         }
         else if (Mode == FinanceToolMode.Inflation)
         {
-            <SiteFormField Label="@(L["legacy_fb8884fa8e99"])"
+            <SiteFormField Label="@(L["current_amount"])"
                 For="inflation-amount"><SiteInput Id="inflation-amount"
                     Name="amount"
                     Type="number"
@@ -42,14 +42,14 @@
                     step="any"
                     Value="@AmountText"
                     ValueChanged="@(v => AmountText = v)" /></SiteFormField>
-            <SiteFormField Label="@(L["legacy_0d11a24d6b42"])"
+            <SiteFormField Label="@(L["inflation_per_period"])"
                 For="inflation-rate"><SiteInput Id="inflation-rate"
                     Name="rate"
                     Type="number"
                     step="any"
                     Value="@RateText"
                     ValueChanged="@(v => RateText = v)" /></SiteFormField>
-            <SiteFormField Label="@(L["legacy_07719a98d7e3"])"
+            <SiteFormField Label="@(L["periods"])"
                 For="inflation-periods"><SiteInput Id="inflation-periods"
                     Name="periods"
                     Type="number"
@@ -60,7 +60,7 @@
         }
         else
         {
-            <SiteFormField Label="@(L["legacy_85513800c336"])"
+            <SiteFormField Label="@(L["fixed_costs"])"
                 For="break-even-fixed"><SiteInput Id="break-even-fixed"
                     Name="fixed"
                     Type="number"
@@ -68,7 +68,7 @@
                     step="any"
                     Value="@FixedCostsText"
                     ValueChanged="@(v => FixedCostsText = v)" /></SiteFormField>
-            <SiteFormField Label="@(L["legacy_1353c602fc42"])"
+            <SiteFormField Label="@(L["unit_price"])"
                 For="break-even-price"><SiteInput Id="break-even-price"
                     Name="price"
                     Type="number"
@@ -76,7 +76,7 @@
                     step="any"
                     Value="@UnitPriceText"
                     ValueChanged="@(v => UnitPriceText = v)" /></SiteFormField>
-            <SiteFormField Label="@(L["legacy_08a353311b19"])"
+            <SiteFormField Label="@(L["unit_variable_cost"])"
                 For="break-even-variable"><SiteInput Id="break-even-variable"
                     Name="variable"
                     Type="number"

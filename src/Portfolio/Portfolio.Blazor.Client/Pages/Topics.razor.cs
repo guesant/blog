@@ -4,9 +4,9 @@ namespace Portfolio.Blazor.Client.Pages;
 
 public partial class Topics
 {
-    private string Title => L["legacy_4ab0be41630a"];
-    private string Description => L["legacy_fb92fb8911e0"];
-    private string EmptyLabel => L["legacy_276283580ea5"];
+    private string Title => L["topics"];
+    private string Description => L["subjects_connecting_writing_and_references"];
+    private string EmptyLabel => L["no_topics_available"];
     private string SeoTitle => PageField("topics", "title", Title);
     private string SeoDescription => PageField("topics", "description", Description);
     private static string CanonicalPath => LocalizedUrls.Current("/topics");
@@ -38,10 +38,10 @@ public partial class Topics
     }
     private IReadOnlyList<SiteSelectOption> SortOptions =>
         [
-            new("", L["legacy_d878d9136e0e"]),
-            new("desc", L["legacy_77c78d92c603"]),
-            new("asc", L["legacy_07b165cdd970"]),
-            new("alpha", L["legacy_cc8d79d78bef"]),
+            new("", L["sort"]),
+            new("desc", L["default"]),
+            new("asc", L["newest"]),
+            new("alpha", L["alphabetical"]),
         ];
     private IReadOnlyList<PublicTopic> MatchingTopics =>
         (Snapshot?.Topics ?? [])

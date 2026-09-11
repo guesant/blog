@@ -23,19 +23,19 @@ public partial class CssClampCalculator
 
     [SupplyParameterFromQuery(Name = "maxVw")]
     private double? QueryMaxViewport { get; set; }
-    private string Action => L["legacy_080681072133"];
+    private string Action => L["tools_css_clamp_calculator"];
     private string Title => ToolsL["css_clamp_calculator_title"];
     private string Description => ToolsL["css_clamp_calculator_lead"];
-    private string InputLabel => L["legacy_d9825dc0fc2f"];
-    private string MinSizeLabel => L["legacy_c0446431e838"];
-    private string MaxSizeLabel => L["legacy_4b1a011deaa3"];
-    private string MinViewportLabel => L["legacy_884fbc11c83f"];
-    private string MaxViewportLabel => L["legacy_a835c06b7309"];
-    private string CalculateLabel => L["legacy_53519f340509"];
-    private string InvalidLabel => L["legacy_c253d22ad0a8"];
-    private string OutputLabel => L["legacy_1d1c0e33dc3c"];
-    private string CopyLabel => L["legacy_a3b71416a5f3"];
-    private string PreviewText => L["legacy_96d90049ff5e"];
+    private string InputLabel => L["parameters"];
+    private string MinSizeLabel => L["minimum_size_px"];
+    private string MaxSizeLabel => L["maximum_size_px"];
+    private string MinViewportLabel => L["minimum_viewport_px"];
+    private string MaxViewportLabel => L["maximum_viewport_px"];
+    private string CalculateLabel => L["calculate"];
+    private string InvalidLabel => L["provide_positive_values_and_a_minimum_viewport"];
+    private string OutputLabel => L["output"];
+    private string CopyLabel => L["copy"];
+    private string PreviewText => L["preview_text"];
     private double MinSize
     {
         get => _minSize;

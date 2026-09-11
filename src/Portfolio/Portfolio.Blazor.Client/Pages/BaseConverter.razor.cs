@@ -19,16 +19,16 @@ public partial class BaseConverter
 
     [SupplyParameterFromQuery(Name = "to")]
     private string? QueryTo { get; set; }
-    private string Action => L["legacy_9176a6f6d181"];
+    private string Action => L["tools_base_converter"];
     private string Title => ToolsL["base_converter_title"];
     private string Description => ToolsL["base_converter_lead"];
-    private string InputLabel => L["legacy_67f93fb28065"];
-    private string ValueLabel => L["legacy_397b9fc38aec"];
-    private string FromLabel => L["legacy_e0d053715998"];
-    private string ToLabel => L["legacy_d95ba9b28604"];
-    private string SubmitLabel => L["legacy_1b13315a70e3"];
-    private string ResultLabel => L["legacy_d9b2a61fb8b3"];
-    private string ErrorLabel => L["legacy_0316235fdf16"];
+    private string InputLabel => L["input_values"];
+    private string ValueLabel => L["value"];
+    private string FromLabel => L["source_base"];
+    private string ToLabel => L["target_base"];
+    private string SubmitLabel => L["convert"];
+    private string ResultLabel => L["result"];
+    private string ErrorLabel => L["use_a_valid_integer_and_bases_between_2_and_36"];
     private string ValueText
     {
         get => _valueText;

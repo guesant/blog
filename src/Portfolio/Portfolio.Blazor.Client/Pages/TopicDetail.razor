@@ -9,7 +9,7 @@
 
 <SitePage Template="topic-detail">
     <SiteBreadcrumb HomeUrl="@LocalizedPath("home")"
-        HomeLabel="@(L["legacy_ddc150008e2f"])"
+        HomeLabel="@(L["home"])"
         Links="@BreadcrumbLinks"
         CurrentLabel="@Title" />
 
@@ -39,7 +39,7 @@
             {
                 <SiteSection Region="writing"
                     HeadingId="topic-writing-heading"
-                    Title="@(L["legacy_ebede9852c81"])">
+                    Title="@(L["writings"])">
                     <SiteCardGrid aria-labelledby="topic-writing-heading"
                         data-layout-region="items">
                         @foreach (var item in Writings)
@@ -61,7 +61,7 @@
             {
                 <SiteSection Region="findings"
                     HeadingId="topic-findings-heading"
-                    Title="@(L["legacy_a2d8de463c5a"])">
+                    Title="@(L["findings"])">
                     <SiteCardGrid aria-labelledby="topic-findings-heading"
                         data-layout-region="items">
                         @foreach (var item in Findings)

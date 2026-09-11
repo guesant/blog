@@ -23,22 +23,22 @@ public partial class CompoundInterest
 
     [SupplyParameterFromQuery(Name = "contribution")]
     private string? QueryContribution { get; set; }
-    private string Action => L["legacy_037d63ab9743"];
+    private string Action => L["tools_compound_interest"];
     private string Title => ToolsL["compound_interest_page_title"];
     private string Description => ToolsL["compound_interest_lead"];
-    private string InputLabel => L["legacy_5b6220fefc5c"];
-    private string PrincipalLabel => L["legacy_e52598d26d1a"];
-    private string RateLabel => L["legacy_6825c2556498"];
-    private string PeriodsLabel => L["legacy_864f1bcc7b1e"];
-    private string ContributionLabel => L["legacy_a1209edf42d6"];
-    private string SubmitLabel => L["legacy_37565a968d31"];
-    private string FutureValueLabel => L["legacy_b3970297edb8"];
-    private string ContributedLabel => L["legacy_c31eb213616f"];
-    private string InterestLabel => L["legacy_e0ede7ec1dee"];
+    private string InputLabel => L["parameters"];
+    private string PrincipalLabel => L["principal"];
+    private string RateLabel => L["rate_per_period"];
+    private string PeriodsLabel => L["periods"];
+    private string ContributionLabel => L["contribution_per_period"];
+    private string SubmitLabel => L["calculate"];
+    private string FutureValueLabel => L["future_value"];
+    private string ContributedLabel => L["total_contributed"];
+    private string InterestLabel => L["interest_earned"];
     private string ErrorMessage =>
         Result.Error == CompoundInterestError.LimitExceeded
-            ? (L["legacy_8141805028c6"])
-            : (L["legacy_adfd99b7f994"]);
+            ? (L["use_between_1_and_10000_periods"])
+            : (L["provide_valid_values_the_rate_must_be_greater"]);
     private string PrincipalText
     {
         get => _principalText;

@@ -34,17 +34,17 @@ public partial class VectorCalculator
 
     [SupplyParameterFromQuery(Name = "bz")]
     private string? QueryBZ { get; set; }
-    private string Action => L["legacy_d57407602bf1"];
+    private string Action => L["tools_vector_calculator"];
     private string Title => ToolsL["vector_calculator_title"];
     private string Description => ToolsL["vector_calculator_lead"];
-    private string InputLabel => L["legacy_08d2fc2bc5c7"];
+    private string InputLabel => L["vectors"];
     private static string VectorALabel => "A";
     private static string VectorBLabel => "B";
-    private string DotLabel => L["legacy_e1746d94093d"];
-    private string AngleLabel => L["legacy_8c0c0f7ef16e"];
-    private string CrossLabel => L["legacy_eff28853259a"];
-    private string SubmitLabel => L["legacy_53519f340509"];
-    private string ErrorLabel => L["legacy_c1572143146a"];
+    private string DotLabel => L["dot_product"];
+    private string AngleLabel => L["angle"];
+    private string CrossLabel => L["cross_product_a_b"];
+    private string SubmitLabel => L["calculate"];
+    private string ErrorLabel => L["provide_three_valid_components_for_each_vector"];
     private string AXText
     {
         get => _axText;

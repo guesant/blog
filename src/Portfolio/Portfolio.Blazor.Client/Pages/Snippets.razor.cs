@@ -4,10 +4,10 @@ namespace Portfolio.Blazor.Client.Pages;
 
 public partial class Snippets
 {
-    private string Title => L["legacy_b87eedb8eefd"];
-    private string Description => L["legacy_7bf683bdb7c8"];
-    private string LoadingLabel => L["legacy_bfb6d168bf4a"];
-    private string EmptyLabel => L["legacy_c691155905c0"];
+    private string Title => L["snippets"];
+    private string Description => L["small_reusable_code_files_and_experiments"];
+    private string LoadingLabel => L["loading_snippets"];
+    private string EmptyLabel => L["no_snippets_available"];
     private string ResultsSummary => L["count_entries", SortedSnippets.Count];
     private static string CanonicalPath => LocalizedUrls.Current("/snippets");
     private static string Action => CanonicalPath;
@@ -38,10 +38,10 @@ public partial class Snippets
     }
     private IReadOnlyList<SiteSelectOption> SortOptions =>
         [
-            new("", L["legacy_d878d9136e0e"]),
-            new("desc", L["legacy_77c78d92c603"]),
-            new("asc", L["legacy_07b165cdd970"]),
-            new("alpha", L["legacy_cc8d79d78bef"]),
+            new("", L["sort"]),
+            new("desc", L["default"]),
+            new("asc", L["newest"]),
+            new("alpha", L["alphabetical"]),
         ];
     private string ViewMode => QueryView is "dense" ? "dense" : "spacious";
     private bool DenseView => ViewMode == "dense";
@@ -92,7 +92,7 @@ public partial class Snippets
 
     private string LocalizedPath(string path) =>
         path.Equals("home", StringComparison.OrdinalIgnoreCase)
-            ? (L["legacy_0607643fd42c"])
+            ? (L[""])
             : (LocalizedUrls.Current($"/{path}"));
 
     private string PageField(string field, string fallback)

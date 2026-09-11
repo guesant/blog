@@ -10,12 +10,12 @@ public partial class HttpStatusReference
     private string? QueryFilter { get; set; }
     private bool _queryInitialized;
     private string _filter = string.Empty;
-    private string Action => L["legacy_a17cbc671253"];
+    private string Action => L["tools_http_status_reference"];
     private string Title => ToolsL["http_status_reference_title"];
     private string Description => ToolsL["http_status_reference_lead"];
-    private string FilterLabel => L["legacy_253db84328b6"];
-    private string SearchLabel => L["legacy_cc63bf81c53c"];
-    private string EmptyLabel => L["legacy_3b7293427126"];
+    private string FilterLabel => L["filter_by_code_or_name"];
+    private string SearchLabel => L["filter"];
+    private string EmptyLabel => L["no_status_codes_match_that_filter"];
     private string Filter
     {
         get => _filter;

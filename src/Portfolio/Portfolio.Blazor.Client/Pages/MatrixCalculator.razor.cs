@@ -19,19 +19,19 @@ public partial class MatrixCalculator
 
     [SupplyParameterFromQuery(Name = "operation")]
     private string? QueryOperation { get; set; }
-    private string Action => L["legacy_387c6a2e386c"];
+    private string Action => L["tools_matrix_calculator"];
     private string Title => ToolsL["matrix_calculator_title"];
     private string Description => ToolsL["matrix_calculator_lead"];
-    private string InputLabel => L["legacy_73e8b20eaca1"];
-    private string OperationLabel => L["legacy_bcb0412df16b"];
-    private string DeterminantLabel => L["legacy_1494ea6c1f6b"];
-    private string TransposeLabel => L["legacy_f586c4ea5bae"];
-    private string InverseLabel => L["legacy_ff3e7e4b8a5f"];
-    private string ResultLabel => L["legacy_7aa9296397b6"];
-    private string MatrixTableId => L["legacy_a57b42f7e22c"];
-    private string MatrixChartId => L["legacy_25d6cfd9aac3"];
-    private string SubmitLabel => L["legacy_53519f340509"];
-    private string ErrorLabel => L["legacy_b57334988f83"];
+    private string InputLabel => L["matrix_one_row_per_line"];
+    private string OperationLabel => L["operation"];
+    private string DeterminantLabel => L["determinant"];
+    private string TransposeLabel => L["transpose"];
+    private string InverseLabel => L["inverse"];
+    private string ResultLabel => L["matrix_result"];
+    private string MatrixTableId => L["matrix_result_pt"];
+    private string MatrixChartId => L["matrix_chart_pt"];
+    private string SubmitLabel => L["calculate"];
+    private string ErrorLabel => L["provide_a_valid_square_matrix_up_to_6_6_an"];
     private string MatrixText
     {
         get => _matrixText;

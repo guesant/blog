@@ -23,19 +23,19 @@ public partial class OhmLaw
 
     [SupplyParameterFromQuery(Name = "p")]
     private string? QueryPower { get; set; }
-    private string Action => L["legacy_afe22151ab44"];
+    private string Action => L["tools_ohm_law"];
     private string Title => ToolsL["ohm_law_page_title"];
     private string Description => ToolsL["ohm_law_lead"];
-    private string InputLabel => L["legacy_caeab30bd75f"];
-    private string VoltageLabel => L["legacy_0fa2b3e4cbe4"];
-    private string CurrentLabel => L["legacy_63919d049b72"];
-    private string ResistanceLabel => L["legacy_45a194dbc421"];
-    private string PowerLabel => L["legacy_c75e63a07ced"];
-    private string SubmitLabel => L["legacy_53519f340509"];
+    private string InputLabel => L["electrical_values"];
+    private string VoltageLabel => L["voltage"];
+    private string CurrentLabel => L["current"];
+    private string ResistanceLabel => L["resistance"];
+    private string PowerLabel => L["power"];
+    private string SubmitLabel => L["calculate"];
     private string ErrorMessage =>
         Result.Error == OhmLawError.NeedTwoValues
-            ? (L["legacy_3092f378de8d"])
-            : (L["legacy_01353e8bc6f0"]);
+            ? (L["provide_at_least_two_values"])
+            : (L["use_positive_finite_values_only"]);
     private string VoltageText
     {
         get => _voltageText;

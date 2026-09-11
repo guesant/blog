@@ -15,15 +15,15 @@ public partial class RomanNumeralConverter
 
     [SupplyParameterFromQuery(Name = "roman")]
     private string? QueryRoman { get; set; }
-    private string Action => L["legacy_2d48c5d79f5c"];
+    private string Action => L["tools_roman_numeral_converter"];
     private string Title => ToolsL["roman_numeral_converter_page_title"];
     private string Description => ToolsL["roman_numeral_converter_lead"];
-    private string InputLabel => L["legacy_f2f2808523c8"];
-    private string NumberLabel => L["legacy_92b2672538ae"];
-    private string RomanLabel => L["legacy_d94d480b36f3"];
-    private string NumberError => L["legacy_823478c8c529"];
-    private string RomanError => L["legacy_e899045f5495"];
-    private string ConvertLabel => L["legacy_ae125407093e"];
+    private string InputLabel => L["inputs"];
+    private string NumberLabel => L["number_1_3999"];
+    private string RomanLabel => L["roman_numeral"];
+    private string NumberError => L["enter_a_whole_number_between_1_and_3999"];
+    private string RomanError => L["not_a_valid_roman_numeral"];
+    private string ConvertLabel => L["converter"];
     private string NumberText
     {
         get => _numberText;

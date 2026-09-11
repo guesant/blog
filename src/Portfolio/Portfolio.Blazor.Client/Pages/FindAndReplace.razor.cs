@@ -33,18 +33,18 @@ public partial class FindAndReplace
 
     [SupplyParameterFromQuery(Name = "useRegex")]
     private bool? QueryUseRegex { get; set; }
-    private string Action => L["legacy_0c4b964d35df"];
+    private string Action => L["tools_find_and_replace"];
     private string Title => ToolsL["find_and_replace_title"];
     private string Description => ToolsL["find_and_replace_lead"];
-    private string InputLabel => L["legacy_c4c61716670f"];
-    private string FindLabel => L["legacy_fc35e4cd2942"];
-    private string ReplaceLabel => L["legacy_e80f252d8928"];
-    private string CaseSensitiveLabel => L["legacy_29fea5f0afa1"];
+    private string InputLabel => L["input"];
+    private string FindLabel => L["find"];
+    private string ReplaceLabel => L["replace_with"];
+    private string CaseSensitiveLabel => L["case_sensitive"];
     private string UseRegexLabel => L["use_regex"];
-    private string ReplaceButtonLabel => L["legacy_f907d90d2b53"];
-    private string InvalidRegexLabel => L["legacy_372712157bbc"];
-    private string OutputLabel => L["legacy_1d1c0e33dc3c"];
-    private string CopyLabel => L["legacy_a3b71416a5f3"];
+    private string ReplaceButtonLabel => L["replace"];
+    private string InvalidRegexLabel => L["invalid_regular_expression"];
+    private string OutputLabel => L["output"];
+    private string CopyLabel => L["copy"];
     private string Input
     {
         get => _input;

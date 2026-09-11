@@ -229,32 +229,32 @@ public partial class PhysicsCalculators
     private string Title =>
         Mode switch
         {
-            PhysicsToolMode.Newton => L["legacy_199c1c0d2987"],
-            PhysicsToolMode.IdealGas => L["legacy_c045546d20d5"],
-            PhysicsToolMode.Wave => L["legacy_8a77a6a2d1a6"],
-            _ => L["legacy_648f86c0b980"],
+            PhysicsToolMode.Newton => L["newton_s_second_law"],
+            PhysicsToolMode.IdealGas => L["ideal_gas_law"],
+            PhysicsToolMode.Wave => L["wave_calculator"],
+            _ => L["kinematics"],
         };
     private string Description =>
         Mode switch
         {
-            PhysicsToolMode.Newton => L["legacy_71e22a0e830a"],
-            PhysicsToolMode.IdealGas => L["legacy_f64a6349cdee"],
-            PhysicsToolMode.Wave => L["legacy_c170451330da"],
-            _ => L["legacy_0f3dfed65e55"],
+            PhysicsToolMode.Newton => L["calculate_force_from_mass_and_acceleration"],
+            PhysicsToolMode.IdealGas => L["solve_pv_nrt_by_providing_three_of_four"],
+            PhysicsToolMode.Wave => L["calculate_speed_frequency_or_wavelength"],
+            _ => L["kinematics"],
         };
-    private string InputLabel => L["legacy_d9825dc0fc2f"];
-    private string SubmitLabel => L["legacy_53519f340509"];
-    private string FinalVelocityLabel => L["legacy_e2145814512a"];
-    private string DisplacementLabel => L["legacy_7731b7d4e592"];
-    private string ForceLabel => L["legacy_21c86148eb6c"];
-    private string PressureLabel => L["legacy_70824ce1f619"];
-    private string VolumeLabel => L["legacy_143b6b066b46"];
-    private string MolesLabel => L["legacy_b1820eb50171"];
-    private string TemperatureLabel => L["legacy_5861fc1588fd"];
-    private string SpeedLabel => L["legacy_455d4c82bc06"];
-    private string FrequencyLabel => L["legacy_c08391b45bf1"];
-    private string WavelengthLabel => L["legacy_fa69b23fe2c3"];
-    private string ErrorLabel => L["legacy_565531b0ab2c"];
+    private string InputLabel => L["parameters"];
+    private string SubmitLabel => L["calculate"];
+    private string FinalVelocityLabel => L["calculate"];
+    private string DisplacementLabel => L["final_velocity"];
+    private string ForceLabel => L["displacement"];
+    private string PressureLabel => L["force"];
+    private string VolumeLabel => L["pressure"];
+    private string MolesLabel => L["volume"];
+    private string TemperatureLabel => L["amount_of_substance"];
+    private string SpeedLabel => L["temperature"];
+    private string FrequencyLabel => L["speed"];
+    private string WavelengthLabel => L["frequency"];
+    private string ErrorLabel => L["wavelength"];
     private bool ResultIsValid =>
         Mode switch
         {

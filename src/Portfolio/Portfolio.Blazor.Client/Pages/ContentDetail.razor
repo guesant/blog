@@ -18,7 +18,7 @@
 
 <SitePage Template="content-detail">
     <SiteBreadcrumb HomeUrl="@LocalizedPath("home")"
-        HomeLabel="@(L["legacy_ddc150008e2f"])"
+        HomeLabel="@(L["home"])"
         Links="@BreadcrumbLinks"
         CurrentLabel="@Title" />
 
@@ -94,14 +94,14 @@
                 Href="@ExternalHref"
                 target="_blank"
                 rel="noopener noreferrer"><SiteIcon Name="external-link"
-                    Size="14" />@(L["legacy_79472cc5603f"])</SiteLink>
+                    Size="14" />@(L["external_source"])</SiteLink>
         }
 
         @if (Facts.Count > 0)
         {
             <SiteSection Region="facts"
                 HeadingId="content-facts-heading"
-                Title="@(L["legacy_528ea158020c"])">
+                Title="@(L["fatos"])">
                 <SiteKeyValueList Layout="SiteKeyValueLayout.Columns" Class="mb-0">
                     @foreach (var fact in Facts)
                     {

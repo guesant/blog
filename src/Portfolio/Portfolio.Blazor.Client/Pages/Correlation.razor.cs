@@ -27,22 +27,24 @@ public partial class Correlation
             ? (ToolsL["linear_regression_title"])
             : (ToolsL["correlation_calculator_title"]);
     private string Description => ToolsL["correlation_calculator_lead"];
-    private string InputLabel => L["legacy_7ef23c6467bd"];
-    private string XLabel => L["legacy_280005dd8f05"];
-    private string YLabel => L["legacy_44c6bdd1d76b"];
-    private string CountLabel => L["legacy_0ce5db4763a3"];
-    private string CorrelationLabel => L["legacy_f4d4de40d5d9"];
-    private string SlopeLabel => L["legacy_dec16ece71b2"];
-    private string InterceptLabel => L["legacy_ec0ece99067d"];
-    private string R2Label => L["legacy_ba1311430910"];
-    private string ChartLabel => L["legacy_4a9a3679fafc"];
-    private string SubmitLabel => L["legacy_4c0a9833b6a4"];
+    private string InputLabel => L["numeric_series"];
+    private string XLabel => L["x_series"];
+    private string YLabel => L["y_series"];
+    private string CountLabel => L["points"];
+    private string CorrelationLabel => L["pearson_correlation_r"];
+    private string SlopeLabel => L["slope"];
+    private string InterceptLabel => L["intercept"];
+    private string R2Label => L["coefficient_of_determination_r2"];
+    private string ChartLabel => L["scatter_plot_and_regression_line"];
+    private string SubmitLabel => L["analyze"];
     private string ErrorLabel =>
         Result.Error switch
         {
-            CorrelationError.MismatchedLengths => L["legacy_6b0a980b196d"],
-            CorrelationError.ConstantSeries => L["legacy_a8447b375a25"],
-            _ => L["legacy_2e7d2313c7b1"],
+            CorrelationError.MismatchedLengths => L[
+                "the_series_must_have_the_same_number_of_values"
+            ],
+            CorrelationError.ConstantSeries => L["the_series_cannot_be_constant"],
+            _ => L["provide_at_least_two_valid_numbers_in_each"],
         };
     private string XText
     {
@@ -87,7 +89,7 @@ public partial class Correlation
                     },
                     new SiteLineDataset
                     {
-                        Label = L["legacy_e5f240440152"],
+                        Label = L["regression_line"],
                         Data = Result
                             .Points.Select(point =>
                                 (object)(Result.Slope * point.X + Result.Intercept)

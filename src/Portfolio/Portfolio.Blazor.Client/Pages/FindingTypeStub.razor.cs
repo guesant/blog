@@ -28,11 +28,7 @@ public partial class FindingTypeStub
         set => _sortValue = value is "asc" or "alpha" or "desc" ? value : "desc";
     }
     private IReadOnlyList<SiteSelectOption> SortOptions =>
-        [
-            new("desc", L["legacy_77c78d92c603"]),
-            new("asc", L["legacy_07b165cdd970"]),
-            new("alpha", L["legacy_cc8d79d78bef"]),
-        ];
+        [new("desc", L["default"]), new("asc", L["newest"]), new("alpha", L["alphabetical"])];
     private int CurrentPage => CurrentPageFor(QueryPage, PageCount);
     private const int PageSize = 20;
     private PublicFinding? KnownType =>
@@ -68,7 +64,7 @@ public partial class FindingTypeStub
     private string ResultsSummary =>
         L["showing_findings", PagedFindings.Count, SortedFindings.Count];
     private IReadOnlyList<BreadcrumbLink> BreadcrumbLinks =>
-        [new(CrumbLabel("findings", L["legacy_a2d8de463c5a"]), FeedUrls.ForKind(FeedUrls.Finding))];
+        [new(CrumbLabel("findings", L["findings"]), FeedUrls.ForKind(FeedUrls.Finding))];
 
     protected override void OnParametersSet() => SortValue = Sort;
 
@@ -82,23 +78,23 @@ public partial class FindingTypeStub
 
     private string TypeName(string? value) =>
         string.IsNullOrWhiteSpace(value)
-            ? (L["legacy_f3b74f6bb3d7"])
+            ? (L["finding"])
             : value.ToLowerInvariant() switch
             {
-                "book" => L["legacy_f64f90d110a7"],
-                "article" => L["legacy_8a7b563164e6"],
-                "paper" => L["legacy_e3944d90d2b9"],
-                "repo" => L["legacy_3f6ede9e4d29"],
-                "site" => L["legacy_40bd62db98af"],
-                "docs" => L["legacy_9e5e2519972c"],
-                "tool" => L["legacy_c1ce4f438b8b"],
-                "course" => L["legacy_7101bea24f0f"],
-                "video" => L["legacy_1da31972a3bc"],
+                "book" => L["book"],
+                "article" => L["article"],
+                "paper" => L["article"],
+                "repo" => L["repository"],
+                "site" => L["site"],
+                "docs" => L["documentation"],
+                "tool" => L["tool"],
+                "course" => L["course"],
+                "video" => L["video"],
                 "playlist" => "playlist",
-                "channel" => L["legacy_806b1ac02287"],
+                "channel" => L["channel"],
                 "podcast" => "podcast",
-                "film" => L["legacy_6df5e95d416e"],
-                "other" => L["legacy_f44ac71ffd29"],
+                "film" => L["film"],
+                "other" => L["other"],
                 _ => value.Replace('-', ' '),
             };
 
@@ -106,6 +102,6 @@ public partial class FindingTypeStub
 
     private string LocalizedPath(string path) =>
         path.Equals("home", StringComparison.OrdinalIgnoreCase)
-            ? (L["legacy_0607643fd42c"])
+            ? (L[""])
             : (LocalizedUrls.Current($"/{path}"));
 }

@@ -12,17 +12,17 @@ public partial class PrimeFactorization
 
     [SupplyParameterFromQuery(Name = "number")]
     private string? QueryNumber { get; set; }
-    private string Action => L["legacy_991937e77d7a"];
+    private string Action => L["tools_prime_factorization"];
     private string Title => ToolsL["prime_factorization_title"];
     private string Description => ToolsL["prime_factorization_lead"];
-    private string InputLabel => L["legacy_b831d42d15e4"];
-    private string NumberLabel => L["legacy_4bc3227bbd62"];
-    private string ResultLabel => L["legacy_efd3359baf4d"];
-    private string SubmitLabel => L["legacy_d3b5a92ba5e4"];
+    private string InputLabel => L["number"];
+    private string NumberLabel => L["integer"];
+    private string ResultLabel => L["prime_factors"];
+    private string SubmitLabel => L["factorize"];
     private string ErrorLabel =>
         Result.Error == PrimeFactorizationError.LimitExceeded
-            ? (L["legacy_6d113ce3f155"])
-            : (L["legacy_595e16b252fd"]);
+            ? (L["use_a_number_between_1_000_000_000_000_and_1"])
+            : (L["provide_an_integer_other_than_zero_1_and_1"]);
     private string NumberText
     {
         get => _numberText;

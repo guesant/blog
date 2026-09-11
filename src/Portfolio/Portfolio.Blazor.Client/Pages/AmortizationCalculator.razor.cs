@@ -31,15 +31,15 @@ public partial class AmortizationCalculator
             ? (ToolsL["loan_interest_calculator_page_title"])
             : (ToolsL["amortization_calculator_title"]);
     private string Description => ToolsL["amortization_calculator_lead"];
-    private string InputLabel => L["legacy_5b6220fefc5c"];
-    private string PrincipalLabel => L["legacy_702e913aa4e2"];
-    private string RateLabel => L["legacy_3ec8ab539331"];
-    private string PeriodsLabel => L["legacy_59496c17e76b"];
-    private string FirstPaymentLabel => L["legacy_9608ac660a8e"];
-    private string TotalPaidLabel => L["legacy_e7658b2effb7"];
-    private string InterestLabel => L["legacy_04de30cc9c75"];
-    private string SubmitLabel => L["legacy_37565a968d31"];
-    private string ErrorLabel => L["legacy_30a39ad3bce6"];
+    private string InputLabel => L["parameters"];
+    private string PrincipalLabel => L["financed_amount"];
+    private string RateLabel => L["annual_rate"];
+    private string PeriodsLabel => L["monthly_payments"];
+    private string FirstPaymentLabel => L["first_payment"];
+    private string TotalPaidLabel => L["total_paid"];
+    private string InterestLabel => L["interest"];
+    private string SubmitLabel => L["calculate"];
+    private string ErrorLabel => L["provide_a_valid_principal_rate_and_number_of"];
     private string ChartLabel => L["amortization_chart_label"];
     private string PeriodLabel => L["amortization_period_label"];
     private string PriceSeriesLabel => L["amortization_price_series"];

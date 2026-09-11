@@ -7,21 +7,21 @@
 <SeoHead Title="@Title" Description="@Description" CanonicalPath="@CanonicalPath" />
 
 <SitePage Template="contact">
-    <SiteBreadcrumb HomeUrl="@(L["legacy_0607643fd42c"])"
-        HomeLabel="@(L["legacy_ddc150008e2f"])"
-        CurrentLabel="@CrumbLabel("contact", L["legacy_68be6eee1eb9"])" />
+    <SiteBreadcrumb HomeUrl="@(L[""])"
+        HomeLabel="@(L["home"])"
+        CurrentLabel="@CrumbLabel("contact", L["contact"])" />
     <SiteHero Title="@Title"
         Lead="@Description"/>
     @if (!HasContact)
     {
-        <SiteEmptyState Message="@(L["legacy_12bb08ef6c94"])" />
+        <SiteEmptyState Message="@(L["contact_channels_are_currently_unavailable"])" />
     }
     else
     {
         <SiteSection Region="channels"
             HeadingId="contact-channels-heading"
-            Label="@(L["legacy_064ef2623972"])"
-            Title="@(L["legacy_e1da200631a9"])">
+            Label="@(L["reach_me"])"
+            Title="@(L["ways_to_get_in_touch"])">
             <ContactChannels Profiles="@Profiles"
                 EmailChallenge="@Snapshot?.Chrome.Site.ProtectedEmail"
                 EmailAvailable="@(Snapshot?.Chrome.Site.ContactAvailable == true)"

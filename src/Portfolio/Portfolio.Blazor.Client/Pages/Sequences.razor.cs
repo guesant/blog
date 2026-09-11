@@ -33,24 +33,24 @@ public partial class Sequences
         {
             "arithmetic-progression" => ToolsL["arithmetic_progression_title"],
             "geometric-progression" => ToolsL["geometric_progression_title"],
-            _ => L["legacy_e267a2bdc933"],
+            _ => L["arithmetic_and_geometric_sequences"],
         };
     private string Description =>
         Slug switch
         {
             "arithmetic-progression" => ToolsL["arithmetic_progression_lead"],
             "geometric-progression" => ToolsL["geometric_progression_lead"],
-            _ => L["legacy_05985e9b53e4"],
+            _ => L["arithmetic_and_geometric_sequences"],
         };
-    private string InputLabel => L["legacy_31a82eb2550c"];
-    private string FirstLabel => L["legacy_3251698f2435"];
-    private string DifferenceLabel => L["legacy_abb0b5fc28a1"];
-    private string RatioLabel => L["legacy_be6e986e73fb"];
-    private string TermsLabel => L["legacy_9f17a3e18f16"];
-    private string SubmitLabel => L["legacy_53519f340509"];
-    private string ErrorLabel => L["legacy_5e897c1040e8"];
-    private string InfiniteLabel => L["legacy_96c856f51e3c"];
-    private string ChartLabel => L["legacy_6cd348c4a1f9"];
+    private string InputLabel => L["calculate_terms_and_sums_of_sequences_locally"];
+    private string FirstLabel => L["input_values"];
+    private string DifferenceLabel => L["first_term"];
+    private string RatioLabel => L["difference_ap"];
+    private string TermsLabel => L["ratio_gp"];
+    private string SubmitLabel => L["calculate"];
+    private string ErrorLabel => L["calculate"];
+    private string InfiniteLabel => L["provide_finite_values_and_between_1_and_100_000"];
+    private string ChartLabel => L["infinite_gp_sum_r_1"];
     private SiteChartConfig SequenceConfig =>
         new()
         {

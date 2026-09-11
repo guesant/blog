@@ -28,7 +28,7 @@ public partial class TextCodec
             "hex-text-codec" => ToolsL["hex_text_codec_page_title"],
             "binary-text-codec" => ToolsL["binary_text_codec_page_title"],
             "html-entity-codec" => ToolsL["html_entity_codec_page_title"],
-            _ => L["legacy_c0d420f0d314"],
+            _ => L["url_encoder_decoder"],
         };
     private string Description =>
         Slug switch
@@ -37,15 +37,15 @@ public partial class TextCodec
             "hex-text-codec" => ToolsL["hex_text_codec_lead"],
             "binary-text-codec" => ToolsL["binary_text_codec_lead"],
             "html-entity-codec" => ToolsL["html_entity_codec_lead"],
-            _ => L["legacy_72b6d8f8fae7"],
+            _ => L["encode_text_for_a_url_or_decode_percent_encoded"],
         };
-    private string InputLabel => L["legacy_c4c61716670f"];
-    private string OutputLabel => L["legacy_1d1c0e33dc3c"];
-    private string EncodeLabel => L["legacy_1f25e36c2666"];
-    private string DecodeLabel => L["legacy_42acb5571820"];
-    private string CopyLabel => L["legacy_a3b71416a5f3"];
+    private string InputLabel => L["input"];
+    private string OutputLabel => L["output"];
+    private string EncodeLabel => L["output"];
+    private string DecodeLabel => L["decode"];
+    private string CopyLabel => L["copy"];
     private string ErrorLabel =>
-        Slug == "binary-text-codec" ? (L["legacy_ec4bfccb2ec2"]) : (L["legacy_37956dffe17b"]);
+        Slug == "binary-text-codec" ? (L["copy"]) : (L["invalid_binary_string"]);
     private string Input
     {
         get => _input;

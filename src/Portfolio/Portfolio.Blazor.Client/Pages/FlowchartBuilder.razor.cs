@@ -9,14 +9,14 @@ public partial class FlowchartBuilder
 
     [SupplyParameterFromQuery(Name = "source")]
     private string? QuerySource { get; set; }
-    private string Action => L["legacy_7a914dbc994b"];
+    private string Action => L["tools_flowchart_builder"];
     private string Title => ToolsL["flowchart_builder_title"];
     private string Description => ToolsL["flowchart_builder_lead"];
-    private string Note => L["legacy_205995c9d061"];
-    private string InputLabel => L["legacy_5ee7cbfbc09d"];
-    private string DownloadLabel => L["legacy_faf8444b785a"];
-    private string GenerateLabel => L["legacy_cc7df97fb1b2"];
-    private string ChartLabel => L["legacy_8e3a96533673"];
+    private string Note => L["use_one_connection_per_line_in_the_format"];
+    private string InputLabel => L["connections"];
+    private string DownloadLabel => L["download_svg"];
+    private string GenerateLabel => L["generate"];
+    private string ChartLabel => L["flowchart"];
     private string Source
     {
         get => _source;

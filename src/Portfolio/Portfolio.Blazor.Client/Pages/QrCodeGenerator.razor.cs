@@ -10,13 +10,13 @@ public partial class QrCodeGenerator
 
     [SupplyParameterFromQuery(Name = "input")]
     private string? QueryInput { get; set; }
-    private string Action => L["legacy_d6f37f5d3529"];
+    private string Action => L["tools_qr_code_generator"];
     private string Title => ToolsL["qr_code_generator_page_title"];
     private string Description => ToolsL["qr_code_generator_lead"];
-    private string InputLabel => L["legacy_b5fe689222ce"];
-    private string GenerateLabel => L["legacy_cc7df97fb1b2"];
-    private string DownloadLabel => L["legacy_c36a12636bbd"];
-    private string InvalidLabel => L["legacy_93577aecb1ab"];
+    private string InputLabel => L["text_or_url"];
+    private string GenerateLabel => L["generate"];
+    private string DownloadLabel => L["download"];
+    private string InvalidLabel => L["invalid_content_for_qr_code_generation"];
     private string Input
     {
         get => _input;

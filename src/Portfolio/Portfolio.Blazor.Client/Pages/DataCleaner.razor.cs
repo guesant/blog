@@ -29,20 +29,20 @@ public partial class DataCleaner
 
     [SupplyParameterFromQuery(Name = "duplicates")]
     private string? QueryDuplicates { get; set; }
-    private string Action => L["legacy_433470930fce"];
+    private string Action => L["tools_data_cleaner"];
     private string Title => ToolsL["data_cleaner_title"];
     private string Description => ToolsL["data_cleaner_lead"];
-    private string InputLabel => L["legacy_194fe11bbba9"];
-    private string OptionsLabel => L["legacy_8245de5f962f"];
-    private string TrimLabel => L["legacy_683f5dd969a3"];
-    private string EmptyRowsLabel => L["legacy_f02ea6353def"];
-    private string DuplicateRowsLabel => L["legacy_2bffc6ec40ee"];
-    private string SubmitLabel => L["legacy_7ac1691de5eb"];
-    private string ResultLabel => L["legacy_23470bef125e"];
-    private string ErrorLabel => L["legacy_e4021f92700e"];
-    private string RemovedEmptyLabel => L["legacy_6249ecd09030"];
-    private string RemovedDuplicateLabel => L["legacy_43dde49957ae"];
-    private string DownloadLabel => L["legacy_7df88bb823a8"];
+    private string InputLabel => L["input_csv"];
+    private string OptionsLabel => L["cleaning_options"];
+    private string TrimLabel => L["trim_cell_whitespace"];
+    private string EmptyRowsLabel => L["remove_empty_rows"];
+    private string DuplicateRowsLabel => L["remove_duplicate_rows"];
+    private string SubmitLabel => L["clean_data"];
+    private string ResultLabel => L["result"];
+    private string ErrorLabel => L["provide_csv_within_the_allowed_limit"];
+    private string RemovedEmptyLabel => L["empty_removed"];
+    private string RemovedDuplicateLabel => L["duplicates_removed"];
+    private string DownloadLabel => L["download_csv"];
     private string CsvText
     {
         get => _csvText;

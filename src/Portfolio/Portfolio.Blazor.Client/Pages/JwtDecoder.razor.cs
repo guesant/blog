@@ -11,13 +11,13 @@ public partial class JwtDecoder
 
     [SupplyParameterFromQuery(Name = "token")]
     private string? QueryToken { get; set; }
-    private string Action => L["legacy_66fa5d803a71"];
+    private string Action => L["tools_jwt_decoder"];
     private string Title => ToolsL["jwt_decoder_title"];
     private string Description => ToolsL["jwt_decoder_lead"];
-    private string PrivacyNote => L["legacy_aa92bb04b548"];
-    private string InputLabel => L["legacy_c4c61716670f"];
-    private string DecodeLabel => L["legacy_42acb5571820"];
-    private string InvalidLabel => L["legacy_1612122b00b3"];
+    private string PrivacyNote => L["this_only_decodes_it_never_verifies_the"];
+    private string InputLabel => L["input"];
+    private string DecodeLabel => L["decode"];
+    private string InvalidLabel => L["invalid_token"];
     private static string HeaderLabel => "Header";
     private static string PayloadLabel => "Payload";
     private string Token

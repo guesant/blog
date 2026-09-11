@@ -36,10 +36,10 @@ public partial class ChemistryCalculators
         IsDilution ? (ToolsL["dilution_calculator_title"]) : (ToolsL["ph_calculator_title"]);
     private string Description =>
         IsDilution ? (ToolsL["dilution_calculator_lead"]) : (ToolsL["ph_calculator_lead"]);
-    private string InputLabel => L["legacy_5b6220fefc5c"];
-    private string ConcentrationLabel => L["legacy_d71836525f89"];
-    private string SubmitLabel => L["legacy_37565a968d31"];
-    private string ErrorLabel => L["legacy_4dcf843f6e91"];
+    private string InputLabel => L["parameters"];
+    private string ConcentrationLabel => L["concentration"];
+    private string SubmitLabel => L["calculate"];
+    private string ErrorLabel => L["provide_three_positive_values_or_a_positive"];
     private string C1Text
     {
         get => _c1Text;

@@ -12,17 +12,17 @@ public partial class TextCounter
     [SupplyParameterFromQuery(Name = "text")]
     private string? QueryText { get; set; }
 
-    private string Action => L["legacy_3078942a68c1"];
+    private string Action => L["tools_text_counter"];
     private string Title => ToolsL["text_counter_title"];
     private string Description => ToolsL["text_counter_lead"];
-    private string InputLabel => L["legacy_a5b167e7baff"];
-    private string SubmitLabel => L["legacy_718517a8ab26"];
-    private string CharactersLabel => L["legacy_4947adb6830a"];
-    private string CharactersWithoutSpacesLabel => L["legacy_2d0b5336dd9c"];
-    private string WordsLabel => L["legacy_2badb3241476"];
-    private string SentencesLabel => L["legacy_651fdc2bba19"];
-    private string LinesLabel => L["legacy_fe63ef856ae5"];
-    private string ParagraphsLabel => L["legacy_9252aae5ccfa"];
+    private string InputLabel => L["text"];
+    private string SubmitLabel => L["count_action"];
+    private string CharactersLabel => L["characters"];
+    private string CharactersWithoutSpacesLabel => L["characters_without_spaces"];
+    private string WordsLabel => L["no_it_is_not_a_palindrome"];
+    private string SentencesLabel => L["sentences"];
+    private string LinesLabel => L["lines"];
+    private string ParagraphsLabel => L["paragraphs"];
 
     private string Text
     {

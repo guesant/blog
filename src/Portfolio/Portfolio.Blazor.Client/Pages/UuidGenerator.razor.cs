@@ -11,15 +11,15 @@ public partial class UuidGenerator
 
     [SupplyParameterFromQuery(Name = "count")]
     private int? QueryCount { get; set; }
-    private string Action => L["legacy_da8feed3343f"];
+    private string Action => L["tools_uuid_generator"];
     private string Title => ToolsL["uuid_generator_page_title"];
     private string Description => ToolsL["uuid_generator_lead"];
-    private string InputLabel => L["legacy_d9825dc0fc2f"];
-    private string CountLabel => L["legacy_ebfc81d5cecc"];
-    private string GenerateLabel => L["legacy_cc7df97fb1b2"];
-    private string CopyLabel => L["legacy_a3b71416a5f3"];
-    private string CopyAllLabel => L["legacy_9f9fe92b068b"];
-    private string ResultLabel => L["legacy_2f0452494fcb"];
+    private string InputLabel => L["parameters"];
+    private string CountLabel => L["how_many"];
+    private string GenerateLabel => L["generate"];
+    private string CopyLabel => L["copy"];
+    private string CopyAllLabel => L["copy_all"];
+    private string ResultLabel => L["results"];
     private string CountText
     {
         get => _countText;

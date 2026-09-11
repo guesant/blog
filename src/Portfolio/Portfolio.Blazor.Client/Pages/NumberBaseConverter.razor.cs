@@ -15,15 +15,15 @@ public partial class NumberBaseConverter
 
     [SupplyParameterFromQuery(Name = "base")]
     private int? QueryBase { get; set; }
-    private string Action => L["legacy_01570c7c3e35"];
+    private string Action => L["tools_number_base_converter"];
     private string Title => ToolsL["number_base_converter_title"];
     private string Description => ToolsL["number_base_converter_lead"];
-    private string InputLabel => L["legacy_b831d42d15e4"];
+    private string InputLabel => L["number"];
     private static string BaseLabel => "base";
-    private string ResultLabel => L["legacy_2f0452494fcb"];
-    private string SubmitLabel => L["legacy_ae125407093e"];
-    private string CopyLabel => L["legacy_a3b71416a5f3"];
-    private string ErrorLabel => L["legacy_43f55e54b620"];
+    private string ResultLabel => L["results"];
+    private string SubmitLabel => L["converter"];
+    private string CopyLabel => L["copy"];
+    private string ErrorLabel => L["invalid_digit_for_this_base"];
     private IReadOnlyList<(int Value, string Label)> BaseOptions =>
         [
             (0, L["base_auto"]),
@@ -53,7 +53,7 @@ public partial class NumberBaseConverter
     private NumberBaseConversionResult Result => _result;
     private IEnumerable<(string Id, string Label, string Value)> Outputs =>
         [
-            ("number-base-binary", L["legacy_259a815454af"], Result.Binary),
+            ("number-base-binary", L["binary"], Result.Binary),
             ("number-base-octal", "octal", Result.Octal),
             ("number-base-decimal", "decimal", Result.Decimal),
             ("number-base-hexadecimal", "hexadecimal", Result.Hexadecimal),

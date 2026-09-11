@@ -7,7 +7,7 @@ public partial class SiteSidebarSecondary
     [Parameter]
     public PublicSiteSnapshot? Snapshot { get; set; }
     private string ConnectLabel => L["connect"];
-    private string UpdatesLabel => L["legacy_efc6c5d00b30"];
+    private string UpdatesLabel => L["updates"];
 
     private (string Route, string Label)? FollowLink =>
         Snapshot
@@ -23,7 +23,7 @@ public partial class SiteSidebarSecondary
             .FirstOrDefault();
 
     private IReadOnlyList<(string Href, string Icon, string Label)> Feeds =>
-        [(L["legacy_362d5aad99f1"], "rss", "RSS"), (L["legacy_eabac209b499"], "rss", "Atom")];
+        [(L["feed_xml"], "rss", "RSS"), (L["atom_xml"], "rss", "Atom")];
     private string ContactPageLabel => L["contact_page"];
     private string LegalLabel => L["legal"];
     private string SourceLabel => L["source"];

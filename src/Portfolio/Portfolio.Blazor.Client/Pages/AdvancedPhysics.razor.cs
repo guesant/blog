@@ -37,22 +37,22 @@ public partial class AdvancedPhysics
         IsProjectile ? (ToolsL["projectile_motion_title"]) : (ToolsL["circular_motion_title"]);
     private string Description =>
         IsProjectile ? (ToolsL["projectile_motion_lead"]) : (ToolsL["circular_motion_lead"]);
-    private string InputLabel => L["legacy_5b6220fefc5c"];
-    private string SpeedLabel => L["legacy_d0a57448000f"];
-    private string AngleLabel => L["legacy_4579fb011bff"];
-    private string GravityLabel => L["legacy_e96205651caf"];
-    private string RadiusLabel => L["legacy_9d2a70ea99bd"];
-    private string MassLabel => L["legacy_3d20f927558a"];
-    private string SubmitLabel => L["legacy_37565a968d31"];
-    private string ErrorLabel => L["legacy_587a6f4aea8e"];
-    private string RangeLabel => L["legacy_4ba8b2a0e6ed"];
-    private string HeightLabel => L["legacy_29efc6917bd6"];
-    private string FlightLabel => L["legacy_ef68f89da814"];
-    private string TrajectoryLabel => L["legacy_f2cac35ef942"];
-    private string AngularLabel => L["legacy_cd822757b03d"];
-    private string PeriodLabel => L["legacy_005bbc980509"];
-    private string AccelerationLabel => L["legacy_62c15cbb8194"];
-    private string ForceLabel => L["legacy_329f6c120c6e"];
+    private string InputLabel => L["parameters"];
+    private string SpeedLabel => L["speed_m_s"];
+    private string AngleLabel => L["angle_degrees"];
+    private string GravityLabel => L["gravity_m_s2"];
+    private string RadiusLabel => L["radius_m"];
+    private string MassLabel => L["mass_kg_optional"];
+    private string SubmitLabel => L["calculate"];
+    private string ErrorLabel => L["provide_valid_values_for_the_model"];
+    private string RangeLabel => L["range"];
+    private string HeightLabel => L["maximum_height"];
+    private string FlightLabel => L["flight_time"];
+    private string TrajectoryLabel => L["projectile_trajectory"];
+    private string AngularLabel => L["angular_velocity"];
+    private string PeriodLabel => L["period"];
+    private string AccelerationLabel => L["centripetal_acceleration"];
+    private string ForceLabel => L["centripetal_force"];
     private readonly Debouncer _debouncer = new(TimeSpan.FromMilliseconds(300));
     private string SpeedText
     {

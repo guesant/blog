@@ -63,25 +63,25 @@ public partial class FinanceTools
     private string Title =>
         Mode switch
         {
-            FinanceToolMode.Inflation => L["legacy_90a8410649b5"],
-            FinanceToolMode.BreakEven => L["legacy_efc1d67881c9"],
-            _ => L["legacy_a7e4d0a64bc2"],
+            FinanceToolMode.Inflation => L["inflation_calculator"],
+            FinanceToolMode.BreakEven => L["break_even_calculator"],
+            _ => L["roi_calculator"],
         };
     private string Description =>
         Mode switch
         {
-            FinanceToolMode.Inflation => L["legacy_fc26e2e3b723"],
-            FinanceToolMode.BreakEven => L["legacy_2de4dfd388d1"],
-            _ => L["legacy_398f5eec5065"],
+            FinanceToolMode.Inflation => L["estimate_how_much_an_amount_must_keep_up_with"],
+            FinanceToolMode.BreakEven => L["calculate_how_many_units_must_be_sold_to_cover"],
+            _ => L["calculate_profit_and_return_on_the_amount"],
         };
-    private string InputLabel => L["legacy_d9825dc0fc2f"];
-    private string SubmitLabel => L["legacy_53519f340509"];
+    private string InputLabel => L["parameters"];
+    private string SubmitLabel => L["calculate"];
     private string ErrorLabel =>
         Mode switch
         {
-            FinanceToolMode.Inflation => L["legacy_5eca2d23680b"],
-            FinanceToolMode.BreakEven => L["legacy_4d27f1c17b53"],
-            _ => L["legacy_5a6f95aaa0b9"],
+            FinanceToolMode.Inflation => L["provide_a_valid_amount_rate_and_number_of"],
+            FinanceToolMode.BreakEven => L["the_unit_price_must_be_greater_than_the"],
+            _ => L["provide_a_positive_investment_and_a_valid_return"],
         };
     private bool IsValid =>
         Mode switch
@@ -95,19 +95,15 @@ public partial class FinanceTools
         {
             FinanceToolMode.Inflation =>
             [
-                (L["legacy_e6f105b6e7ac"], Money(_inflation.AdjustedAmount)),
-                (L["legacy_6151715c6f1f"], Money(_inflation.Increase)),
+                (L["adjusted_value"], Money(_inflation.AdjustedAmount)),
+                (L["increase"], Money(_inflation.Increase)),
             ],
             FinanceToolMode.BreakEven =>
             [
-                (L["legacy_39ffe0cdff3f"], Number(_breakEven.Units)),
-                (L["legacy_2c2c627a0fc7"], Money(_breakEven.Revenue)),
+                (L["break_even_units"], Number(_breakEven.Units)),
+                (L["break_even_revenue"], Money(_breakEven.Revenue)),
             ],
-            _ =>
-            [
-                (L["legacy_e5e02bb9a2ef"], Money(_roi.Profit)),
-                (L["legacy_62fad1475e56"], Percent(_roi.ReturnPercent)),
-            ],
+            _ => [(L["profit"], Money(_roi.Profit)), (L["return"], Percent(_roi.ReturnPercent))],
         };
 
     protected override void OnParametersSet()

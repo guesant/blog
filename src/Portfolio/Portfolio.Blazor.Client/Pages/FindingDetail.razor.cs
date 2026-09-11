@@ -11,31 +11,31 @@ public partial class FindingDetail
         Snapshot?.Findings.FirstOrDefault(item =>
             PublicRouteKey.Matches(item.Url, item.Slug, Slug)
         );
-    private string Eyebrow => L["legacy_f3b74f6bb3d7"];
+    private string Eyebrow => L["finding"];
     private string TypeEyebrow =>
         $"{TypeName(Finding?.Type)}{(string.IsNullOrWhiteSpace(Finding?.Rating) ? string.Empty : $" · {RatingName(Finding!.Rating)}")}";
     private string Title => Finding?.Title ?? Slug;
     private string Description => Finding?.Description ?? NotFoundDescription;
     private string CanonicalPath => Finding?.Url ?? RequestPath;
-    private string LoadingTitle => L["legacy_74768c2a7c3e"];
-    private string NotFoundTitle => L["legacy_ad1847844acd"];
-    private string NotFoundDescription => L["legacy_4ace82508c7a"];
-    private string FoundLabel => L["legacy_609679755e04"];
-    private string StateLabel => L["legacy_cb3cee2bceb0"];
-    private string TopicsLabel => L["legacy_4ab0be41630a"];
-    private string CycleLabel => L["legacy_65c5f4ba61d0"];
-    private string DetailsLabel => L["legacy_1904257596f9"];
-    private string LinksLabel => L["legacy_5574d2f679a0"];
-    private string ReasonLabel => L["legacy_0e9871d0ddf7"];
-    private string PersonalNoteLabel => L["legacy_cda1689ba97c"];
-    private string RelatedLabel => L["legacy_495726be1d55"];
-    private string ConnectionsLabel => L["legacy_7cdaecf10f80"];
-    private string FreeLabel => L["legacy_fb3c60675f35"];
-    private string BackLabel => L["legacy_06852c4f5c74"];
+    private string LoadingTitle => L["loading_finding"];
+    private string NotFoundTitle => L["finding_not_found"];
+    private string NotFoundDescription => L["this_address_does_not_match_a_public_finding"];
+    private string FoundLabel => L["found_on"];
+    private string StateLabel => L["state"];
+    private string TopicsLabel => L["topics"];
+    private string CycleLabel => L["cycle"];
+    private string DetailsLabel => L["details"];
+    private string LinksLabel => L["links"];
+    private string ReasonLabel => L["why_it_was_saved"];
+    private string PersonalNoteLabel => L["personal_note"];
+    private string RelatedLabel => L["related_content"];
+    private string ConnectionsLabel => L["connections_and_related_content"];
+    private string FreeLabel => L["free"];
+    private string BackLabel => L["back_to_findings"];
     private static string IndexUrl => FeedUrls.ForKind(FeedUrls.Finding);
     private IReadOnlyList<PublicRelatedContent> RelatedFindings => Finding?.Related ?? [];
     private IReadOnlyList<BreadcrumbLink> BreadcrumbLinks =>
-        [new(CrumbLabel("findings", L["legacy_a2d8de463c5a"]), IndexUrl)];
+        [new(CrumbLabel("findings", L["findings"]), IndexUrl)];
     private string ActionBody =>
         string.Join(
             "\n\n",
@@ -55,44 +55,44 @@ public partial class FindingDetail
             ? Eyebrow
             : value switch
             {
-                "book" => L["legacy_f64f90d110a7"],
-                "article" => L["legacy_8a7b563164e6"],
+                "book" => L["book"],
+                "article" => L["article"],
                 "paper" => "paper",
-                "repo" => L["legacy_3f6ede9e4d29"],
-                "site" => L["legacy_40bd62db98af"],
-                "docs" => L["legacy_9e5e2519972c"],
-                "tool" => L["legacy_c1ce4f438b8b"],
-                "course" => L["legacy_7101bea24f0f"],
-                "video" => L["legacy_1da31972a3bc"],
+                "repo" => L["repository"],
+                "site" => L["site"],
+                "docs" => L["documentation"],
+                "tool" => L["tool"],
+                "course" => L["course"],
+                "video" => L["video"],
                 "playlist" => "playlist",
-                "channel" => L["legacy_806b1ac02287"],
+                "channel" => L["channel"],
                 "podcast" => "podcast",
-                "film" => L["legacy_6df5e95d416e"],
-                "other" => L["legacy_f44ac71ffd29"],
+                "film" => L["film"],
+                "other" => L["other"],
                 _ => value,
             };
 
     private string RatingName(string value) =>
         value switch
         {
-            "interesting" => L["legacy_d45f7b3bf339"],
-            "recommended" => L["legacy_831cadfbf680"],
-            "strongly-recommended" => L["legacy_96f095c0f1f5"],
-            "not-recommended" => L["legacy_5458bea30ae4"],
-            "not-rated" => L["legacy_f3e1db84de77"],
+            "interesting" => L["interesting"],
+            "recommended" => L["recommended"],
+            "strongly-recommended" => L["strongly_recommended"],
+            "not-recommended" => L["not_recommended"],
+            "not-rated" => L["not_rated"],
             _ => value,
         };
 
     private string StateName(string value) =>
         value switch
         {
-            "found" => L["legacy_c0747f9c453f"],
-            "saved-for-later" => L["legacy_5ea83f883480"],
-            "exploring" => L["legacy_fc4d4e95b75b"],
-            "in-progress" => L["legacy_f9e603d208ea"],
-            "completed" => L["legacy_69fad4c3aabf"],
-            "abandoned" => L["legacy_40fa689d2b74"],
-            "archived" => L["legacy_8432df564a5f"],
+            "found" => L["found"],
+            "saved-for-later" => L["saved_for_later"],
+            "exploring" => L["exploring"],
+            "in-progress" => L["in_progress"],
+            "completed" => L["completed"],
+            "abandoned" => L["abandoned"],
+            "archived" => L["arquivado"],
             _ => value,
         };
 

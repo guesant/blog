@@ -24,17 +24,17 @@ public partial class FunctionPlotter
 
     [SupplyParameterFromQuery(Name = "max")]
     private string? QueryMaximum { get; set; }
-    private string Action => L["legacy_35e6aab7dac8"];
+    private string Action => L["tools_function_plotter"];
     private string Title => ToolsL["function_plotter_title"];
     private string Description => ToolsL["function_plotter_lead"];
-    private string InputLabel => L["legacy_492c2a86ee4a"];
-    private string ExpressionLabel => L["legacy_31c2fd5d2ab4"];
-    private string MinimumLabel => L["legacy_78e9e6a55375"];
-    private string MaximumLabel => L["legacy_3508c7d57ea7"];
-    private string SamplesLabel => L["legacy_75a0d73a5c30"];
-    private string ChartLabel => L["legacy_6affb9b73508"];
-    private string SubmitLabel => L["legacy_44c94566af88"];
-    private string ErrorLabel => L["legacy_e80a92c29f64"];
+    private string InputLabel => L["function"];
+    private string ExpressionLabel => L["expression_in_x"];
+    private string MinimumLabel => L["x_minimum"];
+    private string MaximumLabel => L["x_maximum"];
+    private string SamplesLabel => L["amostras"];
+    private string ChartLabel => L["function_curve"];
+    private string SubmitLabel => L["plot"];
+    private string ErrorLabel => L["provide_a_valid_expression_and_an_increasing"];
     private string ExpressionText
     {
         get => _expressionText;

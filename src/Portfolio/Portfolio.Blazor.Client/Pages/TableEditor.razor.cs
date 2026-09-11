@@ -11,18 +11,18 @@ public partial class TableEditor
     private bool _queryInitialized;
     private bool _spreadsheetPending;
     private readonly Debouncer _debouncer = new(TimeSpan.FromMilliseconds(300));
-    private string SpreadsheetId => L["legacy_fd56f560af05"];
+    private string SpreadsheetId => L["table_editor_spreadsheet_pt"];
 
     [SupplyParameterFromQuery(Name = "csv")]
     private string? QueryCsv { get; set; }
-    private string Action => L["legacy_eb79613910c9"];
+    private string Action => L["tools_table_editor"];
     private string Title => ToolsL["table_editor_title"];
     private string Description => ToolsL["table_editor_lead"];
-    private string InputLabel => L["legacy_194fe11bbba9"];
-    private string TableLabel => L["legacy_614f63ac9e49"];
-    private string ApplyLabel => L["legacy_f3b8f813b8fd"];
-    private string ExportLabel => L["legacy_8d8bc1d614a0"];
-    private string ErrorLabel => L["legacy_9f1bc827bda3"];
+    private string InputLabel => L["input_csv"];
+    private string TableLabel => L["editable_table"];
+    private string ApplyLabel => L["load_table"];
+    private string ExportLabel => L["export_csv"];
+    private string ErrorLabel => L["the_csv_exceeds_the_allowed_limits"];
     private List<List<string>> Rows => _rows;
     private string CsvText
     {
@@ -78,7 +78,7 @@ public partial class TableEditor
         await JS.InvokeVoidAsync(
             "tableEditor.downloadCsv",
             SpreadsheetId,
-            L["legacy_7268a45ac707"],
+            L["table_csv"],
             Rows[0],
             ExportLabel
         );

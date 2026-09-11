@@ -14,16 +14,16 @@ public partial class QueryStringParser
 
     [SupplyParameterFromQuery(Name = "query")]
     private string? Query { get; set; }
-    private string Action => L["legacy_5e4145127e27"];
+    private string Action => L["tools_query_string_parser"];
     private string Title => ToolsL["query_string_parser_title"];
     private string Description => ToolsL["query_string_parser_lead"];
-    private string ParseLabel => L["legacy_1922ada5500a"];
-    private string BuildLabel => L["legacy_488880914467"];
-    private string OutputLabel => L["legacy_62f929d726c5"];
-    private string KeyPlaceholder => L["legacy_5fd1ae1806c0"];
-    private string ValuePlaceholder => L["legacy_30206ddec692"];
-    private string AddLabel => L["legacy_06a54336a405"];
-    private string RemoveLabel => L["legacy_3821b4e4a602"];
+    private string ParseLabel => L["parse"];
+    private string BuildLabel => L["build"];
+    private string OutputLabel => L["query_string"];
+    private string KeyPlaceholder => L["key"];
+    private string ValuePlaceholder => L["value"];
+    private string AddLabel => L["add_row"];
+    private string RemoveLabel => L["remove_row"];
     private string ParseInput
     {
         get => _parseInput;

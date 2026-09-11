@@ -18,27 +18,27 @@
 <SeoHead Title="@Title" Description="@Description" CanonicalPath="@CanonicalPath" />
 
 <SitePage Template="@Kind.ToString().ToLowerInvariant()">
-    <SiteBreadcrumb HomeUrl="@(L["legacy_0607643fd42c"])"
-        HomeLabel="@(L["legacy_ddc150008e2f"])"
+    <SiteBreadcrumb HomeUrl="@(L[""])"
+        HomeLabel="@(L["home"])"
         CurrentLabel="@CrumbLabel(Kind.ToString().ToLowerInvariant(), Title)" />
     @if (Kind == PageKind.Portfolio)
     {
         <SiteHero Title="@(Snapshot?.Chrome.Profile?.Name ?? "guesant.net")"
             Lead="@Field("heroExperience", Description)"
-            BackHref="@(L["legacy_0607643fd42c"])"
-            BackLabel="@(L["legacy_ddc150008e2f"])">
+            BackHref="@(L[""])"
+            BackLabel="@(L["home"])">
             <ChildContent>
                 @if (!string.IsNullOrWhiteSpace(Field("heroCurrentFocus"))) { <SiteText>@Field("heroCurrentFocus")</SiteText> }
                 <SiteFormActions>
                     @if (!string.IsNullOrWhiteSpace(PortfolioWorkTarget)) { <SiteLink Variant="SiteButtonVariant.Default"
                         Href="@PortfolioWorkTarget"><SiteIcon Name="briefcase"
-                            Size="14" />@(L["legacy_6b9768b2376a"])</SiteLink> }
+                            Size="14" />@(L["view_work"])</SiteLink> }
                     <SiteLink Variant="SiteButtonVariant.Outline"
                         Href="@LocalizedPath("about")"><SiteIcon Name="user"
-                            Size="14" />@(L["legacy_232fee6c4e06"])</SiteLink>
+                            Size="14" />@(L["about_me"])</SiteLink>
                     <SiteLink Variant="SiteButtonVariant.Outline"
                         Href="@LocalizedPath("resume")"><SiteIcon Name="file-user"
-                            Size="14" />@(L["legacy_f7556c68e40e"])</SiteLink>
+                            Size="14" />@(L["resume"])</SiteLink>
                 </SiteFormActions>
                 @if (Snapshot?.Chrome.Site.ContactAvailable == true && !string.IsNullOrWhiteSpace(Field("availableLabel"))) { <AvailabilityIndicator Label="@Field("availableLabel")" /> }
             </ChildContent>
@@ -54,14 +54,14 @@
                     Title="@Field("workTitle")"
                     Description="@Field("workDescription")"
                     ActionHref="@LocalizedPath("cases")"
-                    ActionLabel="@(L["legacy_d3df157d8d7c"])">
+                    ActionLabel="@(L["view_all_cases"])">
                     <SiteGrid>
                         @{ var caseNumber = 0; }
                         @foreach (var item in Snapshot.FeaturedCases)
                         {
                             caseNumber++;
                             <SiteGridColumn>
-                                <SiteClickableCard Icon="star" Label="@($"{(L["legacy_841e597ae3c0"])} {caseNumber:00} · {item.Meta ?? item.Status}")"
+                                <SiteClickableCard Icon="star" Label="@($"{(L["selected_case"])} {caseNumber:00} · {item.Meta ?? item.Status}")"
                                     Class="h-100"
                                     Href="@LocalizedUrl(item.Url)"
                                     Title="@item.Title"
@@ -73,18 +73,18 @@
                                         <SiteKeyValueList Layout="SiteKeyValueLayout.Columns"
                                             Class="small mb-3">
                                             @if (!string.IsNullOrWhiteSpace(item.Context)) { <SiteKeyValueItem Icon="target"
-                                                Label="@(L["legacy_c6cf358abb20"])">@item.Context</SiteKeyValueItem> }
+                                                Label="@(L["context"])">@item.Context</SiteKeyValueItem> }
                                             @if (!string.IsNullOrWhiteSpace(item.Role)) { <SiteKeyValueItem Icon="user"
-                                                Label="@(L["legacy_7bc2a8b13e9e"])">@item.Role</SiteKeyValueItem> }
+                                                Label="@(L["role"])">@item.Role</SiteKeyValueItem> }
                                             @if (!string.IsNullOrWhiteSpace(item.Result)) { <SiteKeyValueItem Icon="trending-up"
-                                                Label="@(L["legacy_dfea58cad5c4"])">@item.Result</SiteKeyValueItem> }
+                                                Label="@(L["outcome"])">@item.Result</SiteKeyValueItem> }
                                         </SiteKeyValueList>
                                     }
                                     @if (item.Technologies is { Count: > 0 }) { <SiteChipGroup Class="mb-3">@foreach (var technology in item.Technologies) { <SiteChip Label="@technology.Name" Href="@LocalizedPath($"technologies/{technology.Slug}")" /> }</SiteChipGroup> }
                                     <SiteLink Variant="SiteButtonVariant.Outline"
                                         Size="SiteButtonSize.Sm"
                                         Href="@LocalizedUrl(item.Url)"><SiteIcon Name="book-open"
-                                            Size="14" />@(L["legacy_f1d3bdd6b48b"])</SiteLink>
+                                            Size="14" />@(L["read_full_case"])</SiteLink>
                                 </SiteClickableCard>
                             </SiteGridColumn>
                         }
@@ -100,7 +100,7 @@
                     Title="@Field("projectsTitle")"
                     Description="@Field("projectsDescription")"
                     ActionHref="@LocalizedPath("projects")"
-                    ActionLabel="@(L["legacy_825bf44525d5"])">
+                    ActionLabel="@(L["view_all_projects"])">
                     <SiteGrid>
                         @foreach (var item in Snapshot.FeaturedProjects ?? [])
                         {
@@ -135,8 +135,8 @@
     {
         <SiteHero Title="@Field("title")"
             Lead="@Field("lead", Description)"
-            BackHref="@(L["legacy_0607643fd42c"])"
-            BackLabel="@(L["legacy_ddc150008e2f"])">
+            BackHref="@(L[""])"
+            BackLabel="@(L["home"])">
             <ChildContent>
                 @if (!string.IsNullOrWhiteSpace(Field("context"))) { <SiteText>@Field("context")</SiteText> }
                 @if (!string.IsNullOrWhiteSpace(Field("description"))) { <SiteText>@Field("description")</SiteText> }
@@ -144,22 +144,22 @@
         </SiteHero>
         @if (Snapshot?.Chrome.Profile is { } profile)
         {
-            <SiteCard Icon="circle-user" Class="mb-4" Label="@(L["legacy_bda2b99b0c58"])">
+            <SiteCard Icon="circle-user" Class="mb-4" Label="@(L["profile"])">
                 <SiteHeading Level="3" Visual="5">@profile.Name</SiteHeading>
                 <SiteText Variant="SiteTextVariant.Meta">
                     <SiteIcon Name="briefcase"
                         Size="12" />@string.Join(" · ", new[] { profile.Title, profile.Location }.Where(value => !string.IsNullOrWhiteSpace(value)))</SiteText>
                 @if (!string.IsNullOrWhiteSpace(profile.BirthCity) || Age is not null) { <SiteText Variant="SiteTextVariant.Meta">@string.Join(" · ", new[] { Age is null ? null : L["years_old", Age.Value].Value, profile.BirthCity }.Where(value => !string.IsNullOrWhiteSpace(value)))</SiteText> }
                 @if (!string.IsNullOrWhiteSpace(profile.Interests)) { <SiteText Variant="SiteTextVariant.SectionLabel">
-                    <SiteIcon Name="heart" Size="12" />@(L["legacy_b46391ae9f6b"])</SiteText>
+                    <SiteIcon Name="heart" Size="12" />@(L["interests"])</SiteText>
                         <SiteText Variant="SiteTextVariant.Meta">@profile.Interests</SiteText> }
                 @if (!string.IsNullOrWhiteSpace(profile.Learning)) { <SiteText Variant="SiteTextVariant.SectionLabel">
-                    <SiteIcon Name="lightbulb" Size="12" />@(L["legacy_cbc717a597aa"])</SiteText>
+                    <SiteIcon Name="lightbulb" Size="12" />@(L["learning"])</SiteText>
                         <SiteText Variant="SiteTextVariant.Meta">@profile.Learning</SiteText> }
                 @if (PersonalInterestLabels.Count > 0) { <SiteText Variant="SiteTextVariant.SectionLabel">
-                    <SiteIcon Name="star" Size="12" />@(L["legacy_a5728311f54c"])</SiteText>
+                    <SiteIcon Name="star" Size="12" />@(L["personal_interests"])</SiteText>
                         <SiteList Class="list-group-flush"
-                            AriaLabel="@(L["legacy_a5728311f54c"])">@foreach (var interest in PersonalInterestLabels) { <SiteListItem Class="list-group-item">@interest</SiteListItem> }</SiteList> }
+                            AriaLabel="@(L["personal_interests"])">@foreach (var interest in PersonalInterestLabels) { <SiteListItem Class="list-group-item">@interest</SiteListItem> }</SiteList> }
             </SiteCard>
         }
         @if (!string.IsNullOrWhiteSpace(Field("story")))
@@ -178,8 +178,8 @@
                 Id="now"
                 Region="now"
                 HeadingId="about-now-heading"
-                Label="@(L["legacy_66eeac914710"])"
-                Title="@(L["legacy_8cd1130e7c89"])">
+                Label="@(L["update"])"
+                Title="@(L["what_i_m_doing_now"])">
                 <SiteStack Gap="SiteSpace.Md">
                     @foreach (var entry in NowEntries)
                     {
@@ -199,8 +199,8 @@
         {
             <SiteSection Icon="milestone" Region="milestones"
                 HeadingId="about-milestones-heading"
-                Label="@(L["legacy_8017d58f3148"])"
-                Title="@(L["legacy_2b2f367d39cb"])">
+                Label="@(L["milestones"])"
+                Title="@(L["key_milestones"])">
                 <SiteGrid>
                     @foreach (var milestone in ProfileMilestones) { <SiteGridColumn>
                         <SiteCard Icon="calendar" Label="@milestone.Year"
@@ -213,7 +213,7 @@
         <SiteSection Icon="star"
             Region="highlights"
             HeadingId="about-highlights-heading"
-            Label="@(L["legacy_94f205b8bbf6"])"
+            Label="@(L["selected_work"])"
             Title="@(L["about_highlights_title"])">
             <SiteGrid Columns="3"
                 aria-labelledby="about-highlights-heading"
@@ -236,8 +236,8 @@
     {
         <SiteHero Title="@Field("title")"
             Lead="@Description"
-            BackHref="@(L["legacy_0607643fd42c"])"
-            BackLabel="@(L["legacy_ddc150008e2f"])" />
+            BackHref="@(L[""])"
+            BackLabel="@(L["home"])" />
         <SiteSection Region="license"
             HeadingId="license-heading"
             Label="@Field("section_label")"
@@ -261,8 +261,8 @@
     {
         <SiteHero Title="@Field("title")"
             Lead="@Description"
-            BackHref="@(L["legacy_0607643fd42c"])"
-            BackLabel="@(L["legacy_ddc150008e2f"])" />
+            BackHref="@(L[""])"
+            BackLabel="@(L["home"])" />
         <SiteSection Region="follow"
             HeadingId="follow-heading"
             Label="@Field("section_label")"

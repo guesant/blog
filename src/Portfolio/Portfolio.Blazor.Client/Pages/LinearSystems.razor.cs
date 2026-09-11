@@ -74,19 +74,19 @@ public partial class LinearSystems
         {
             "linear-system-2x2" => ToolsL["linear_system_2x2_title"],
             "linear-system-3x3" => ToolsL["linear_system_3x3_title"],
-            _ => L["legacy_e5adcdc57487"],
+            _ => L["linear_systems"],
         };
     private string Description =>
         Slug switch
         {
             "linear-system-2x2" => ToolsL["linear_system_2x2_lead"],
             "linear-system-3x3" => ToolsL["linear_system_3x3_lead"],
-            _ => L["legacy_53a02c988762"],
+            _ => L["linear_systems"],
         };
-    private string InputLabel => L["legacy_660b2237b175"];
-    private string SizeLabel => L["legacy_4e089b1b91af"];
-    private string SubmitLabel => L["legacy_28b6f5bf458b"];
-    private string ErrorLabel => L["legacy_9752b774763e"];
+    private string InputLabel => L["solve_2x2_and_3x3_systems_with_gaussian"];
+    private string SizeLabel => L["augmented_matrix"];
+    private string SubmitLabel => L["dimension"];
+    private string ErrorLabel => L["solve"];
 
     private string RowLabel(int row) => L["row_label", row];
 

@@ -31,30 +31,30 @@ public partial class TextUtilities
     private string Title =>
         Mode switch
         {
-            TextUtilityMode.RemoveLineBreaks => L["legacy_26f5c063dfb7"],
-            TextUtilityMode.TrimWhitespace => L["legacy_3cd3bec34cf7"],
-            TextUtilityMode.RemoveDuplicateLines => L["legacy_c53f803e651d"],
-            TextUtilityMode.RemoveAccents => L["legacy_11f26056ef5c"],
-            TextUtilityMode.Slugify => L["legacy_4d18a93cb1ea"],
-            TextUtilityMode.Repeat => L["legacy_36e2b9b0f669"],
-            _ => L["legacy_d334da01781a"],
+            TextUtilityMode.RemoveLineBreaks => L["line_break_remover"],
+            TextUtilityMode.TrimWhitespace => L["whitespace_trimmer"],
+            TextUtilityMode.RemoveDuplicateLines => L["duplicate_line_remover"],
+            TextUtilityMode.RemoveAccents => L["accent_remover"],
+            TextUtilityMode.Slugify => L["slug_generator"],
+            TextUtilityMode.Repeat => L["text_repeater"],
+            _ => L["text_reverser"],
         };
     private string Description =>
         Mode switch
         {
-            TextUtilityMode.RemoveLineBreaks => L["legacy_546497c60aad"],
-            TextUtilityMode.TrimWhitespace => L["legacy_c8b749a7f2e0"],
-            TextUtilityMode.RemoveDuplicateLines => L["legacy_b1ca8f7136b4"],
-            TextUtilityMode.RemoveAccents => L["legacy_ea960cf22f6f"],
-            TextUtilityMode.Slugify => L["legacy_250dac09ac7f"],
-            TextUtilityMode.Repeat => L["legacy_9eac6c404dd7"],
-            _ => L["legacy_02665766c4a2"],
+            TextUtilityMode.RemoveLineBreaks => L["line_break_remover"],
+            TextUtilityMode.TrimWhitespace => L["whitespace_trimmer"],
+            TextUtilityMode.RemoveDuplicateLines => L["duplicate_line_remover"],
+            TextUtilityMode.RemoveAccents => L["accent_remover"],
+            TextUtilityMode.Slugify => L["slug_generator"],
+            TextUtilityMode.Repeat => L["text_repeater"],
+            _ => L["text_reverser"],
         };
-    private string InputLabel => L["legacy_c4c61716670f"];
-    private string OutputLabel => L["legacy_f2a7eb87e63d"];
-    private string CountLabel => L["legacy_743f2df2b4ac"];
-    private string SubmitLabel => L["legacy_71b7d65336f8"];
-    private string ErrorLabel => L["legacy_213e25a65d3a"];
+    private string InputLabel => L["input"];
+    private string OutputLabel => L["result_label"];
+    private string CountLabel => L["result_label"];
+    private string SubmitLabel => L["result"];
+    private string ErrorLabel => L["transform"];
     private string Input
     {
         get => _input;

@@ -10,7 +10,7 @@ public partial class SiteSidebar
     [Parameter]
     public bool Right { get; set; }
     private static string NavigationLabel => "menu";
-    private string HomeLabel => L["legacy_ddc150008e2f"];
+    private string HomeLabel => L["home"];
     private bool IsHome => RequestPath.TrimEnd('/') == LocalizedPath("home").TrimEnd('/');
     private bool IsAbout => IsRoute("about");
     private bool IsAboutChild => new[] { "portfolio", "resume", "cases", "projects" }.Any(IsRoute);

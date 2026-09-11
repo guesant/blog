@@ -20,18 +20,18 @@ public partial class NormalDistribution
 
     [SupplyParameterFromQuery(Name = "point")]
     private string? QueryPoint { get; set; }
-    private string Action => L["legacy_644041e51dad"];
+    private string Action => L["tools_normal_distribution"];
     private string Title => ToolsL["normal_distribution_title"];
     private string Description => ToolsL["normal_distribution_lead"];
-    private string InputLabel => L["legacy_d9825dc0fc2f"];
-    private string MeanLabel => L["legacy_bd0cc81ce562"];
-    private string DeviationLabel => L["legacy_d2d9f19515f4"];
-    private string PointLabel => L["legacy_df572b7ce334"];
-    private string ProbabilityLabel => L["legacy_e0e1156cc014"];
-    private string DensityLabel => L["legacy_7f8a10f12ea7"];
-    private string ChartLabel => L["legacy_7f3a7db24b8b"];
-    private string SubmitLabel => L["legacy_53519f340509"];
-    private string ErrorLabel => L["legacy_057a56375dd3"];
+    private string InputLabel => L["parameters"];
+    private string MeanLabel => L["mean"];
+    private string DeviationLabel => L["standard_deviation"];
+    private string PointLabel => L["point"];
+    private string ProbabilityLabel => L["p_x_x"];
+    private string DensityLabel => L["density_at_x"];
+    private string ChartLabel => L["normal_distribution_curve"];
+    private string SubmitLabel => L["calculate"];
+    private string ErrorLabel => L["provide_a_valid_mean_positive_standard"];
     private string MeanText
     {
         get => _meanText;
@@ -88,7 +88,7 @@ public partial class NormalDistribution
                     },
                     new SiteLineDataset
                     {
-                        Label = L["legacy_8f16b60ec1da"],
+                        Label = L["selected_point"],
                         Data = Result
                             .Points.Select(
                                 (point, index) =>

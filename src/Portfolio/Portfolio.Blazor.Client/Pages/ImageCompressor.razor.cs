@@ -5,15 +5,15 @@ public partial class ImageCompressor
     private string CanonicalPath => RequestPath;
     private string Title => ToolsL["image_compressor_title"];
     private string Description => ToolsL["image_compressor_lead"];
-    private string FileLabel => L["legacy_6320d8841a37"];
-    private string FormatLabel => L["legacy_e0dd9214dd3f"];
+    private string FileLabel => L["file"];
+    private string FormatLabel => L["format"];
     private static string JpegLabel => "JPEG";
     private static string WebpLabel => "WebP";
-    private string QualityLabel => L["legacy_af8853818301"];
-    private string OriginalSizeLabel => L["legacy_ad7018d0174f"];
-    private string CompressedSizeLabel => L["legacy_265bf169dfcb"];
-    private string ReductionLabel => L["legacy_b9343b30c140"];
-    private string DownloadLabel => L["legacy_c36a12636bbd"];
+    private string QualityLabel => L["quality"];
+    private string OriginalSizeLabel => L["original_size"];
+    private string CompressedSizeLabel => L["compressed_size"];
+    private string ReductionLabel => L["reduction"];
+    private string DownloadLabel => L["download"];
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {

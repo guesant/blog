@@ -34,12 +34,12 @@ public partial class CsvChart
 
     [SupplyParameterFromQuery(Name = "filter")]
     private string? QueryFilter { get; set; }
-    private string Action => L["legacy_024205604324"];
+    private string Action => L["tools_csv_chart"];
     private string Title => ToolsL["csv_chart_title"];
     private string Description => ToolsL["csv_chart_lead"];
-    private string InputLabel => L["legacy_2cb19719b24a"];
-    private string SubmitLabel => L["legacy_cf6c94423239"];
-    private string ErrorLabel => L["legacy_e575de76e132"];
+    private string InputLabel => L["csv_first_row_as_headers"];
+    private string SubmitLabel => L["plot_chart"];
+    private string ErrorLabel => L["provide_at_least_two_numeric_columns_and_two"];
     private string DelimiterLabel => L["csv_chart_delimiter_label"];
     private string ChartTypeLabel => L["csv_chart_type_label"];
     private string XLabel => L["csv_chart_x_label"];

@@ -24,21 +24,21 @@ public partial class CssGradientGenerator
 
     [SupplyParameterFromQuery(Name = "angle")]
     private int? QueryAngle { get; set; }
-    private string Action => L["legacy_969cf84bc236"];
+    private string Action => L["tools_css_gradient_generator"];
     private string Title => ToolsL["css_gradient_generator_title"];
     private string Description => ToolsL["css_gradient_generator_lead"];
-    private string InputLabel => L["legacy_d9825dc0fc2f"];
-    private string TypeLabel => L["legacy_9d755e0e961c"];
+    private string InputLabel => L["parameters"];
+    private string TypeLabel => L["type"];
     private static string LinearLabel => "linear";
     private static string RadialLabel => "radial";
-    private string AngleLabel => L["legacy_8c0c0f7ef16e"];
-    private string ColorLabel => L["legacy_48541bef3bd6"];
-    private string PositionLabel => L["legacy_34b0628a28f6"];
-    private string RemoveLabel => L["legacy_a5257096a74c"];
-    private string AddLabel => L["legacy_9039ea24e5c3"];
-    private string GenerateLabel => L["legacy_cc7df97fb1b2"];
-    private string OutputLabel => L["legacy_1d1c0e33dc3c"];
-    private string CopyLabel => L["legacy_a3b71416a5f3"];
+    private string AngleLabel => L["angle"];
+    private string ColorLabel => L["color"];
+    private string PositionLabel => L["position"];
+    private string RemoveLabel => L["remove"];
+    private string AddLabel => L["add_stop"];
+    private string GenerateLabel => L["generate"];
+    private string OutputLabel => L["output"];
+    private string CopyLabel => L["copy"];
     private string Type
     {
         get => _type;

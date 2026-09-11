@@ -4,8 +4,9 @@ namespace Portfolio.Blazor.Client.Pages;
 
 public partial class Credits
 {
-    private string Title => PageField("title", L["legacy_eb7813cfa4e0"]);
-    private string Description => PageField("description", L["legacy_35a1c8b4f3f9"]);
+    private string Title => PageField("title", L["credits"]);
+    private string Description =>
+        PageField("description", L["people_projects_libraries_and_references_that"]);
     private static string CanonicalPath => LocalizedUrls.Current("/credits");
     private static string Action => CanonicalPath;
 
@@ -35,19 +36,19 @@ public partial class Credits
     }
     private IReadOnlyList<SiteSelectOption> SortOptions =>
         [
-            new("", L["legacy_d878d9136e0e"]),
-            new("desc", L["legacy_77c78d92c603"]),
-            new("asc", L["legacy_07b165cdd970"]),
+            new("", L["sort"]),
+            new("desc", L["default"]),
+            new("asc", L["newest"]),
             new("alpha", "A–Z"),
         ];
 
     private string CategoryLabel(string category) =>
         category.ToLowerInvariant() switch
         {
-            "font" => L["legacy_c56e7c0eec0f"],
-            "reference" => L["legacy_bcbf55423dd0"],
-            "infrastructure" => L["legacy_351f47acccb1"],
-            "library" => L["legacy_cf1488bbaf91"],
+            "font" => L["fonts"],
+            "reference" => L["references"],
+            "infrastructure" => L["infrastructure"],
+            "library" => L["libraries"],
             "tool" => L["credit_category_tools"],
             _ => category,
         };
@@ -80,7 +81,7 @@ public partial class Credits
             [
                 new(
                     "acknowledgements",
-                    L["legacy_ba8eda005076"],
+                    L["agradecimentos"],
                     PagedCredits
                         .Where(item =>
                             item.Category.Equals("reference", StringComparison.OrdinalIgnoreCase)

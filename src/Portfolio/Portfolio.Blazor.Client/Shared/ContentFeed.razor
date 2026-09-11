@@ -8,13 +8,13 @@
 <SitePage Template="@(FixedKind is null ? "home" : "feed")">
     @if (FixedKind is null)
     {
-        <SiteBreadcrumb CurrentLabel="@Text("home_label", L["legacy_ddc150008e2f"])"
+        <SiteBreadcrumb CurrentLabel="@Text("home_label", L["home"])"
             ShowHomeLink="false" />
     }
     else
     {
         <SiteBreadcrumb HomeUrl="@LocalizedUrls.Current("/")"
-            HomeLabel="@(L["legacy_ddc150008e2f"])"
+            HomeLabel="@(L["home"])"
             CurrentLabel="@CrumbLabel(FixedRoute, KindLabel(FixedKind!))" />
     }
 
@@ -25,12 +25,12 @@
         <SiteListingShell HasResults="false"
             CurrentPage="@CurrentPage"
             TotalPages="@PageCount"
-            PaginationLabel="@Text("pagination", L["legacy_ce41390e654d"] )"
-            PreviousLabel="@Text("previous", L["legacy_c3b535ded088"] )"
-            NextLabel="@Text("next", L["legacy_a6c78a6436e2"] )"
+            PaginationLabel="@Text("pagination", L["pagination"] )"
+            PreviousLabel="@Text("previous", L["previous"] )"
+            NextLabel="@Text("next", L["next"] )"
             Href="@(page => QueryUrl(ViewMode, page))">
             <EmptyContent>
-                <SiteEmptyState Message="@(Snapshot is null ? L["legacy_59fa21acd9e0"] : Text("nothing_here_yet", L["legacy_39e15a1b7ac5"]))" />
+                <SiteEmptyState Message="@(Snapshot is null ? L["public_content_is_temporarily_unavailable"] : Text("nothing_here_yet", L["there_is_no_public_content_here_yet"]))" />
             </EmptyContent>
         </SiteListingShell>
     }
@@ -40,64 +40,64 @@
             Summary="@ListingSummary(PagedFeedItems.Count, SortedFeedItems.Count, CurrentPage, PageCount)"
             CurrentPage="@CurrentPage"
             TotalPages="@PageCount"
-            PaginationLabel="@Text("pagination", L["legacy_ce41390e654d"])"
-            PreviousLabel="@Text("previous", L["legacy_c3b535ded088"])"
-            NextLabel="@Text("next", L["legacy_a6c78a6436e2"])"
+            PaginationLabel="@Text("pagination", L["pagination"])"
+            PreviousLabel="@Text("previous", L["previous"])"
+            NextLabel="@Text("next", L["next"])"
             Href="@(page => QueryUrl(ViewMode, page))">
         <FilterContent>
             <SiteListingFilterBar Action="@Action"
-                ApplyLabel="@Text("apply", L["legacy_c975d2551cc4"])"
-                ClearLabel="@Text("clear", L["legacy_5262517729fc"])"
+                ApplyLabel="@Text("apply", L["apply"])"
+                ClearLabel="@Text("clear", L["clear"])"
                 ClearHref="@Action"
                 OnApply="@HandleApply">
                 <PrimaryFields>
                     @if (FixedKind is null)
                     {
                         <SiteFilterSelect Icon="tag"
-                            Label="@Text("filter_category_label", L["legacy_4d729bbc84d4"])"
+                            Label="@Text("filter_category_label", L["category"])"
                             Id="feed-kind-filter"
                             Name="kind"
                             @bind-Value="KindValue"
                             Options="@KindSelectOptions"
-                            Placeholder="@Text("filter_all", L["legacy_f8bcc40c7cea"])"
-                            EmptyText="@(L["legacy_e0c29bb7c5a6"])" />
+                            Placeholder="@Text("filter_all", L["all"])"
+                            EmptyText="@(L["no_category_found"])" />
                     }
                     <SiteFilterSelect Icon="hash"
-                        Label="@Text("filter_topic_short_label", L["legacy_567a7d89cea9"])"
+                        Label="@Text("filter_topic_short_label", L["topic"])"
                         Id="feed-topic-filter"
                         Name="topic"
                         @bind-Value="TopicValue"
                         Options="@TopicSelectOptions"
-                        Placeholder="@Text("filter_all_topics", L["legacy_4d99c9f9761a"])"
-                        EmptyText="@(L["legacy_2cceba119716"])" />
+                        Placeholder="@Text("filter_all_topics", L["all_topics"])"
+                        EmptyText="@(L["no_topic_found"])" />
                     <SiteFilterSelect Icon="arrow-up-down"
-                        Label="@Text("filter_sort_label", L["legacy_6541e97b7c64"])"
+                        Label="@Text("filter_sort_label", L["sort_by"])"
                         Id="feed-sort-filter"
                         Name="sort"
                         @bind-Value="SortValue"
                         Options="@SortSelectOptions"
                         Placeholder="@(L["newest"])"
-                        EmptyText="@(L["legacy_3259c09e8ab3"])" />
+                        EmptyText="@(L["no_option_found"])" />
                 </PrimaryFields>
                 <SearchField>
-                    <SiteSearchField Label="@Text("search_short_label", L["legacy_6bb12bff6f09"])"
+                    <SiteSearchField Label="@Text("search_short_label", L["search"])"
                         Id="feed-search"
                         Name="q"
                         Value="@PendingSearch"
                         ValueChanged="@((string v) => PendingSearch = v)"
-                        Placeholder="@Text("search_placeholder", L["legacy_5cf08e892eb3"])" />
+                        Placeholder="@Text("search_placeholder", L["title_author_or_description"])" />
                 </SearchField>
             </SiteListingFilterBar>
         </FilterContent>
 
         <EmptyContent>
-            <SiteEmptyState Message="@Text("filter_no_results", L["legacy_1422f873bd4b"])" />
+            <SiteEmptyState Message="@Text("filter_no_results", L["no_item_matches_these_filters"])" />
         </EmptyContent>
         <ResultContent>
             @if (FilteredFeedItems.Count > 0)
             {
                 <SiteCardGrid id="view-spacious"
-                    aria-label="@Text("feed_label", L["legacy_6e49eb44fd64"])"
+                    aria-label="@Text("feed_label", L["archive"])"
                     data-layout-region="items">
                     @foreach (var item in PagedFeedItems)
                     {

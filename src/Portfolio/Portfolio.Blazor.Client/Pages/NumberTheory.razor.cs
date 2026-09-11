@@ -20,22 +20,22 @@ public partial class NumberTheory
 
     [SupplyParameterFromQuery(Name = "limit")]
     private string? QueryLimit { get; set; }
-    private string Action => L["legacy_bbd73b253d23"];
+    private string Action => L["tools_number_theory"];
     private string Title => ToolsL["number_theory_title"];
     private string Description => ToolsL["number_theory_lead"];
-    private string InputLabel => L["legacy_d6b96d7e7072"];
-    private string SieveLimitLabel => L["legacy_b86f4c59f284"];
-    private string SubmitLabel => L["legacy_53519f340509"];
-    private string GcdLabel => L["legacy_8f026d3ef580"];
-    private string LcmLabel => L["legacy_65887da7c1fe"];
-    private string PrimeALabel => L["legacy_6f219bd7d136"];
-    private string PrimeBLabel => L["legacy_3033365abd26"];
-    private string FactorsLabel => L["legacy_8fda0e061eec"];
-    private string PrimesLabel => L["legacy_d6a10da41eb8"];
+    private string InputLabel => L["values"];
+    private string SieveLimitLabel => L["sieve_limit"];
+    private string SubmitLabel => L["calculate"];
+    private string GcdLabel => L["gcd"];
+    private string LcmLabel => L["lcm"];
+    private string PrimeALabel => L["a_is_prime"];
+    private string PrimeBLabel => L["b_is_prime"];
+    private string FactorsLabel => L["factors_and_primes"];
+    private string PrimesLabel => L["primes_up_to_the_limit"];
     private string ErrorMessage =>
         Summary.Error == NumberTheoryError.LimitExceeded
-            ? (L["legacy_189527346152"])
-            : (L["legacy_fd687582e207"]);
+            ? (L["the_limit_must_be_between_2_and_100000"])
+            : (L["provide_non_zero_values_for_a_and_b"]);
     private string AText
     {
         get => _aText;
@@ -99,8 +99,7 @@ public partial class NumberTheory
             ? result
             : 0;
 
-    private string BooleanLabel(bool value) =>
-        value ? (L["legacy_28b03f1be88f"]) : (L["legacy_511ca48756c0"]);
+    private string BooleanLabel(bool value) => value ? (L["yes"]) : (L["no"]);
 
     private static string Factorization(IReadOnlyList<int> factors) =>
         factors.Count == 0 ? "—" : string.Join(" × ", factors);

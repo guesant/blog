@@ -9,7 +9,7 @@
 
 <SitePage Template="technology-detail">
     <SiteBreadcrumb HomeUrl="@LocalizedPath("home")"
-        HomeLabel="@(L["legacy_ddc150008e2f"])"
+        HomeLabel="@(L["home"])"
         Links="@BreadcrumbLinks"
         CurrentLabel="@Title" />
 
@@ -41,7 +41,7 @@
             {
                 <SiteSection Region="cases"
                     HeadingId="technology-cases-heading"
-                    Title="@(L["legacy_3dc269cea284"])">
+                    Title="@(L["cases"])">
                     <SiteGrid>
                         @foreach (var item in RelatedCases) { <SiteGridColumn>
                             <SiteClickableCard Href="@LocalizedUrl(item.Url)"
@@ -54,7 +54,7 @@
             {
                 <SiteSection Region="projects"
                     HeadingId="technology-projects-heading"
-                    Title="@(L["legacy_2c505faad45c"])">
+                    Title="@(L["projects"])">
                     <SiteGrid>
                         @foreach (var item in RelatedProjects) { <SiteGridColumn>
                             <SiteClickableCard Href="@LocalizedUrl(item.Url)"
@@ -67,7 +67,7 @@
             {
                 <SiteSection Region="experiments"
                     HeadingId="technology-experiments-heading"
-                    Title="@(L["legacy_83f80c05505d"])">
+                    Title="@(L["experiments"])">
                     <SiteGrid>
                         @foreach (var item in RelatedExperiments) { <SiteGridColumn>
                             <SiteClickableCard Href="@LocalizedUrl(item.Url)"
@@ -80,7 +80,7 @@
             {
                 <SiteSection Region="skills"
                     HeadingId="technology-skills-heading"
-                    Title="@(L["legacy_84a8324696f3"])">
+                    Title="@(L["skills"])">
                     <SiteChipGroup>@foreach (var skill in Technology.ResumeSkills) { <SiteChip Label="@(skill.Name ?? skill.Slug)" Href="@LocalizedUrl(skill.Url ?? $"/topics/{skill.Slug}")" /> }</SiteChipGroup>
                 </SiteSection>
             }

@@ -23,16 +23,16 @@ public partial class Fractions
 
     [SupplyParameterFromQuery(Name = "operation")]
     private string? QueryOperation { get; set; }
-    private string Action => L["legacy_b2a9e5d206d2"];
+    private string Action => L["tools_fractions"];
     private string Title => ToolsL["fractions_title"];
     private string Description => ToolsL["fractions_lead"];
-    private string InputLabel => L["legacy_cf8b4a6ab201"];
-    private string FirstLabel => L["legacy_07724ee75734"];
-    private string SecondLabel => L["legacy_98a24d1219f9"];
-    private string OperationLabel => L["legacy_bcb0412df16b"];
-    private string SubmitLabel => L["legacy_53519f340509"];
-    private string ResultLabel => L["legacy_f99cb3950d4d"];
-    private string ErrorLabel => L["legacy_aef69f874711"];
+    private string InputLabel => L["fractions"];
+    private string FirstLabel => L["first_fraction"];
+    private string SecondLabel => L["second_fraction"];
+    private string OperationLabel => L["operation"];
+    private string SubmitLabel => L["calculate"];
+    private string ResultLabel => L["simplified_result"];
+    private string ErrorLabel => L["use_fractions_as_a_b_and_a_valid_operation"];
     private static IReadOnlyList<SiteSelectOption> OperationOptions =>
         [new("+", "+"), new("-", "−"), new("*", "×"), new("/", "/")];
     private string FirstText

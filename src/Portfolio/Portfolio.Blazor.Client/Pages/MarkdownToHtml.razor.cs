@@ -10,14 +10,14 @@ public partial class MarkdownToHtml
 
     [SupplyParameterFromQuery(Name = "input")]
     private string? QueryInput { get; set; }
-    private string Action => L["legacy_78d25149bfa4"];
+    private string Action => L["tools_markdown_to_html"];
     private string Title => ToolsL["markdown_to_html_title"];
     private string Description => ToolsL["markdown_to_html_lead"];
-    private string MarkdownInputLabel => L["legacy_192b01859ac0"];
-    private string PreviewLabel => L["legacy_3822506f8f59"];
-    private string HtmlOutputLabel => L["legacy_946c9059cd45"];
-    private string ConvertLabel => L["legacy_ae125407093e"];
-    private string CopyLabel => L["legacy_a3b71416a5f3"];
+    private string MarkdownInputLabel => L["markdown_input"];
+    private string PreviewLabel => L["preview"];
+    private string HtmlOutputLabel => L["html_output"];
+    private string ConvertLabel => L["converter"];
+    private string CopyLabel => L["copy"];
     private string Input
     {
         get => _input;

@@ -20,14 +20,14 @@ public partial class ComplexNumberCalculator
 
     [SupplyParameterFromQuery(Name = "operation")]
     private string? QueryOperation { get; set; }
-    private string Action => L["legacy_d6ee3036ba77"];
+    private string Action => L["tools_complex_number_calculator"];
     private string Title => ToolsL["complex_number_calculator_title"];
     private string Description => ToolsL["complex_number_calculator_lead"];
-    private string Note => L["legacy_3d682cdddbc5"];
-    private string InputLabel => L["legacy_6b9251521287"];
-    private string OperationLabel => L["legacy_8092cabe63d1"];
-    private string SubmitLabel => L["legacy_37565a968d31"];
-    private string ErrorLabel => L["legacy_7382c654743c"];
+    private string Note => L["use_forms_such_as_3_4i_3_4i_or_a_real_number"];
+    private string InputLabel => L["complex_numbers"];
+    private string OperationLabel => L["operation"];
+    private string SubmitLabel => L["calculate"];
+    private string ErrorLabel => L["provide_valid_complex_numbers_division_by_zero"];
     private string FirstText
     {
         get => _firstText;

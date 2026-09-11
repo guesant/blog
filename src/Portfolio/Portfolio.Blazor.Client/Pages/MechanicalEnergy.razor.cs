@@ -23,19 +23,19 @@ public partial class MechanicalEnergy
 
     [SupplyParameterFromQuery(Name = "gravity")]
     private string? QueryGravity { get; set; }
-    private string Action => L["legacy_27b819f75f2b"];
+    private string Action => L["tools_mechanical_energy"];
     private string Title => ToolsL["mechanical_energy_title"];
     private string Description => ToolsL["mechanical_energy_lead"];
-    private string InputLabel => L["legacy_d9825dc0fc2f"];
-    private string MassLabel => L["legacy_fa0e1f6defb1"];
-    private string SpeedLabel => L["legacy_4a5532c608d2"];
-    private string HeightLabel => L["legacy_690549a52c2d"];
-    private string GravityLabel => L["legacy_938856c62ea0"];
-    private string KineticLabel => L["legacy_b8b213636098"];
-    private string PotentialLabel => L["legacy_23ff30deaf0c"];
-    private string TotalLabel => L["legacy_4da01120c45a"];
-    private string SubmitLabel => L["legacy_53519f340509"];
-    private string ErrorLabel => L["legacy_f7d82a1d84bd"];
+    private string InputLabel => L["parameters"];
+    private string MassLabel => L["mass_kg"];
+    private string SpeedLabel => L["speed_m_s"];
+    private string HeightLabel => L["height_m"];
+    private string GravityLabel => L["gravity_m_s2"];
+    private string KineticLabel => L["kinetic_energy_j"];
+    private string PotentialLabel => L["potential_energy_j"];
+    private string TotalLabel => L["total_mechanical_energy_j"];
+    private string SubmitLabel => L["calculate"];
+    private string ErrorLabel => L["provide_valid_mass_speed_height_and_gravity"];
     private string MassText
     {
         get => _massText;

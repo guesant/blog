@@ -21,12 +21,11 @@ public partial class DataConverters
         IsJsonToCsv ? (ToolsL["json_to_csv_title"]) : (ToolsL["json_formatter_title"]);
     private string Description =>
         IsJsonToCsv ? (ToolsL["json_to_csv_lead"]) : (ToolsL["json_formatter_lead"]);
-    private string InputLabel => L["legacy_9273dd785105"];
-    private string OutputLabel => L["legacy_f2a7eb87e63d"];
-    private string SubmitLabel =>
-        IsJsonToCsv ? (L["legacy_ae125407093e"]) : (L["legacy_1593ad5197b9"]);
+    private string InputLabel => L["input_json"];
+    private string OutputLabel => L["result_label"];
+    private string SubmitLabel => IsJsonToCsv ? (L["converter"]) : (L["format_action"]);
     private string ErrorLabel =>
-        IsJsonToCsv ? (L["legacy_542fcc3fa57f"]) : (L["legacy_60b04b590d85"]);
+        IsJsonToCsv ? (L["use_a_json_array_containing_objects_only"]) : (L["provide_valid_json"]);
     private string Input
     {
         get => _input;

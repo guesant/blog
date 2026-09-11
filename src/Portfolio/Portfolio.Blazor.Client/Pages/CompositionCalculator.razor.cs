@@ -11,15 +11,15 @@ public partial class CompositionCalculator
 
     [SupplyParameterFromQuery(Name = "formula")]
     private string? QueryFormula { get; set; }
-    private string Action => L["legacy_f82761af13b1"];
+    private string Action => L["tools_composition_calculator"];
     private string Title => ToolsL["composition_calculator_title"];
     private string Description => ToolsL["composition_calculator_lead"];
-    private string Note => L["legacy_ccbeda9455e8"];
-    private string InputLabel => L["legacy_5b6220fefc5c"];
-    private string FormulaLabel => L["legacy_82c24536a3b2"];
-    private string MolarMassLabel => L["legacy_252cc9dd1546"];
-    private string SubmitLabel => L["legacy_37565a968d31"];
-    private string ErrorLabel => L["legacy_34e901c4869b"];
+    private string Note => L["use_formulas_such_as_h2so4_or_ca_oh_2"];
+    private string InputLabel => L["parameters"];
+    private string FormulaLabel => L["formula"];
+    private string MolarMassLabel => L["molar_mass"];
+    private string SubmitLabel => L["calculate"];
+    private string ErrorLabel => L["provide_a_valid_chemical_formula"];
     private string FormulaText
     {
         get => _formulaText;

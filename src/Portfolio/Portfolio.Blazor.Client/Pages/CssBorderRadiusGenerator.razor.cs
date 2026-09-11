@@ -26,18 +26,18 @@ public partial class CssBorderRadiusGenerator
 
     [SupplyParameterFromQuery(Name = "linked")]
     private bool? QueryLinked { get; set; }
-    private string Action => L["legacy_9577c01c0e1b"];
+    private string Action => L["tools_css_border_radius_generator"];
     private string Title => ToolsL["css_border_radius_generator_title"];
     private string Description => ToolsL["css_border_radius_generator_lead"];
-    private string InputLabel => L["legacy_048a8085c44a"];
-    private string LinkedLabel => L["legacy_e5f510defbee"];
-    private string TopLeftLabel => L["legacy_ccda4f7c9e4d"];
-    private string TopRightLabel => L["legacy_f50cda5e602e"];
-    private string BottomRightLabel => L["legacy_57c349086cfa"];
-    private string BottomLeftLabel => L["legacy_b0499ee9817c"];
-    private string GenerateLabel => L["legacy_cc7df97fb1b2"];
-    private string OutputLabel => L["legacy_1d1c0e33dc3c"];
-    private string CopyLabel => L["legacy_a3b71416a5f3"];
+    private string InputLabel => L["corners"];
+    private string LinkedLabel => L["link_all_corners"];
+    private string TopLeftLabel => L["top_left"];
+    private string TopRightLabel => L["top_right"];
+    private string BottomRightLabel => L["bottom_right"];
+    private string BottomLeftLabel => L["bottom_left"];
+    private string GenerateLabel => L["generate"];
+    private string OutputLabel => L["output"];
+    private string CopyLabel => L["copy"];
     private int TopLeft => Parse(_topLeftText);
     private int TopRight => Parse(_topRightText);
     private int BottomRight => Parse(_bottomRightText);

@@ -4,9 +4,9 @@ namespace Portfolio.Blazor.Client.Pages;
 
 public partial class Technologies
 {
-    private string Title => L["legacy_b4e2241909e0"];
-    private string Description => L["legacy_c3e14f9552d3"];
-    private string EmptyLabel => L["legacy_b705eec9e5a6"];
+    private string Title => L["technologies"];
+    private string Description => L["technologies_used_across_projects_cases_and"];
+    private string EmptyLabel => L["no_technologies_available"];
     private string ResultsSummary => L["count_entries", SortedTechnologies.Count];
     private string SeoTitle => PageField("technologies", "title", Title);
     private string SeoDescription => PageField("technologies", "description", Description);
@@ -39,10 +39,10 @@ public partial class Technologies
     }
     private IReadOnlyList<SiteSelectOption> SortOptions =>
         [
-            new("order", L["legacy_d878d9136e0e"]),
-            new("desc", L["legacy_77c78d92c603"]),
-            new("asc", L["legacy_07b165cdd970"]),
-            new("alpha", L["legacy_cc8d79d78bef"]),
+            new("order", L["sort"]),
+            new("desc", L["default"]),
+            new("asc", L["newest"]),
+            new("alpha", L["alphabetical"]),
         ];
     private IReadOnlyList<PublicTechnology> MatchingTechnologies =>
         (Snapshot?.Technologies ?? [])
@@ -91,7 +91,7 @@ public partial class Technologies
     private string LocalizedPath(string url)
     {
         if (url.Equals("home", StringComparison.OrdinalIgnoreCase))
-            return L["legacy_0607643fd42c"];
+            return L[""];
         if (!Uri.TryCreate(url, UriKind.Absolute, out var absolute))
             return url;
         var path = absolute.AbsolutePath;

@@ -9,9 +9,9 @@
 <SeoHead Title="@Title" Description="@Description" CanonicalPath="@CanonicalPath" />
 
 <SitePage Template="resume">
-    <SiteBreadcrumb HomeUrl="@(L["legacy_0607643fd42c"])"
-        HomeLabel="@(L["legacy_ddc150008e2f"])"
-        CurrentLabel="@CrumbLabel("resume", L["legacy_f7556c68e40e"])" />
+    <SiteBreadcrumb HomeUrl="@(L[""])"
+        HomeLabel="@(L["home"])"
+        CurrentLabel="@CrumbLabel("resume", L["resume"])" />
     <SiteHero Title="@(Snapshot?.Chrome.Profile?.Name ?? Title)"
         Lead="@Snapshot?.Chrome.Profile?.Title">
         <ChildContent>
@@ -32,7 +32,7 @@
                             Href="@($"/storage/resume-{locale}.pdf")"
                             target="_blank"
                             rel="noopener"><SiteIcon Name="file-user"
-                                Size="14" />@(L["legacy_01e8c335fb9e"]) (@PdfLabel(locale))<SiteIcon Name="external-link"
+                                Size="14" />@(L["view_resume"]) (@PdfLabel(locale))<SiteIcon Name="external-link"
                                 Size="12"
                                 Class="icon icon-trailing" /></SiteLink>
                     }
@@ -44,30 +44,30 @@
     {
         <SiteSection Icon="file-text" Region="summary"
             HeadingId="resume-summary-heading"
-            Label="@(L["legacy_bda2b99b0c58"])"
-            Title="@(L["legacy_ae8191ae0f53"])"><SiteText>@Field("summary")</SiteText>
+            Label="@(L["profile"])"
+            Title="@(L["a_quick_summary"])"><SiteText>@Field("summary")</SiteText>
             </SiteSection>
     }
     @if (VisibleRows("leadership").Count > 0)
     {
         <SiteSection Icon="users" Region="leadership"
             HeadingId="resume-leadership-heading"
-            Label="@(L["legacy_470bf8aa72bb"])"
-            Title="@(L["legacy_470bf8aa72bb"])">@Rows("leadership", "organization", "role")</SiteSection>
+            Label="@(L["leadership_activities"])"
+            Title="@(L["leadership_activities"])">@Rows("leadership", "organization", "role")</SiteSection>
     }
     @if (VisibleRows("experience").Count > 0)
     {
         <SiteSection Icon="briefcase" Region="experience"
             HeadingId="resume-experience-heading"
-            Label="@(L["legacy_8993804db56b"])"
-            Title="@(L["legacy_951f183af8fe"])">@Rows("experience", "role", "organization")</SiteSection>
+            Label="@(L["experience"])"
+            Title="@(L["work_experience"])">@Rows("experience", "role", "organization")</SiteSection>
     }
     @if (SelectedCases.Count > 0)
     {
         <SiteSection Icon="star" Region="selected-work"
             HeadingId="resume-selected-work-heading"
-            Label="@(L["legacy_94f205b8bbf6"])"
-            Title="@(L["legacy_66c1052a2845"])">
+            Label="@(L["selected_work"])"
+            Title="@(L["work_worth_highlighting"])">
             <SiteGrid>@{ var selectedNumber = 0; }@foreach (var item in SelectedCases) { selectedNumber++; <SiteGridColumn>
                 <SiteClickableCard Label="@SelectedCaseMeta(item, selectedNumber)"
                     Class="h-100"
@@ -82,8 +82,8 @@
     {
         <SiteSection Icon="wrench" Region="skills"
             HeadingId="resume-skills-heading"
-            Label="@(L["legacy_46c1b8b49845"])"
-            Title="@(L["legacy_46c1b8b49845"])">
+            Label="@(L["technical_skills"])"
+            Title="@(L["technical_skills"])">
             <SiteGrid>@foreach (var skill in Skills) { <SiteGridColumn>
                 <SiteCard Icon="wrench" Label="@skill.Name" Class="h-100">
                     <SiteChipGroup>@foreach (var technology in skill.Technologies) { <SiteChip Label="@technology.Name" Href="@LocalizedTechnologyUrl(technology)" /> }</SiteChipGroup>
@@ -95,15 +95,15 @@
     {
         <SiteSection Icon="graduation-cap" Region="education"
             HeadingId="resume-education-heading"
-            Label="@(L["legacy_973379a72edb"])"
-            Title="@(L["legacy_d575647144c5"])">@Rows("education", "institution", "degree")</SiteSection>
+            Label="@(L["education"])"
+            Title="@(L["academic_background"])">@Rows("education", "institution", "degree")</SiteSection>
     }
     @if (Languages.Count > 0)
     {
         <SiteSection Icon="languages" Region="languages"
             HeadingId="resume-languages-heading"
-            Label="@(L["legacy_0b432361f026"])"
-            Title="@(L["legacy_2ac4037fa927"])">
+            Label="@(L["languages"])"
+            Title="@(L["languages_spoken"])">
             <SiteGrid>@foreach (var language in Languages) { <SiteGridColumn>
                 <SiteCard Icon="languages" Label="@language.Proficiency"
                     Class="h-100"><SiteHeading Level="3" Visual="5">@language.Name</SiteHeading>

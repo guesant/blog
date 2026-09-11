@@ -63,23 +63,23 @@ public partial class ExtendedTextTools
             "uwu-speak" => ToolsL["uwu_speak_lead"],
             _ => Title,
         };
-    private string InputLabel => L["legacy_c4c61716670f"];
-    private string ResultLabel => L["legacy_23470bef125e"];
-    private string SubmitLabel => L["legacy_71b7d65336f8"];
+    private string InputLabel => L["input"];
+    private string ResultLabel => L["result"];
+    private string SubmitLabel => L["result"];
     private static string FrequencyTableId => "extended-text-frequency-table";
-    private string ErrorLabel => L["legacy_763c235cb82d"];
-    private string ParagraphLabel => L["legacy_22988b478673"];
-    private string SortModeLabel => L["legacy_7c97aa98a5a8"];
+    private string ErrorLabel => L["word_frequency_pt"];
+    private string ParagraphLabel => L["number_of_paragraphs"];
+    private string SortModeLabel => L["paragraphs_1_20"];
     private IReadOnlyList<SiteSelectOption> SortModeOptions =>
         [new("az", "A–Z"), new("za", "Z–A"), new("numeric", NumericLabel)];
-    private string NumericLabel => L["legacy_4c302e056a19"];
-    private string WordLabel => L["legacy_6e7c875b37ca"];
-    private string CountLabel => L["legacy_52d5977065cc"];
-    private string EmptyLabel => L["legacy_2222e1d3fbe0"];
-    private string YesLabel => L["legacy_861928245c04"];
-    private string CopyLabel => L["legacy_a3b71416a5f3"];
-    private string NoLabel => L["legacy_dce6645d02c7"];
-    private string WordsLabel => L["legacy_6d4afccb94df"];
+    private string NumericLabel => L["sort_order"];
+    private string WordLabel => L["word"];
+    private string CountLabel => L["occurrence_count"];
+    private string EmptyLabel => L["occurrence_count"];
+    private string YesLabel => L["yes_it_is_a_palindrome"];
+    private string CopyLabel => L["copy"];
+    private string NoLabel => L["no_it_is_not_a_palindrome"];
+    private string WordsLabel => L["words"];
     private string ReadingTime
     {
         get

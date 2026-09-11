@@ -9,7 +9,7 @@
 
 <SitePage Template="snippet-detail">
     <SiteBreadcrumb HomeUrl="@LocalizedPath("home")"
-        HomeLabel="@(L["legacy_ddc150008e2f"])"
+        HomeLabel="@(L["home"])"
         Links="@BreadcrumbLinks"
         CurrentLabel="@Title" />
 
@@ -68,7 +68,7 @@
                         Class="mb-4"
                         DataLayoutRegion="snippet-download">
                         <SiteList Class="snippet-file-checklist"
-                            AriaLabel="@(L["legacy_4f259750980f"])">
+                            AriaLabel="@(L["files"])">
                             @foreach (var file in Snippet.Files)
                             {
                                 <SiteListItem Class="list-group-item">
@@ -83,12 +83,12 @@
                         <SiteButton Variant="SiteButtonVariant.Default"
                             Class="align-self-start"
                             Type="SiteButtonType.Submit"><SiteIcon Name="file-archive"
-                                Size="14" />@(L["legacy_c4a51e466e7a"])</SiteButton>
+                                Size="14" />@(L["download_zip"])</SiteButton>
                     </SiteFilterCard>
-                    <SiteText Variant="SiteTextVariant.Meta">@(L["legacy_e20ab2cd7d4f"])</SiteText>
+                    <SiteText Variant="SiteTextVariant.Meta">@(L["select_a_file_to_view_its_contents"])</SiteText>
                     @if (Snippet.ShowHistory)
                     {
-                        <SiteText Variant="SiteTextVariant.Meta">@(L["legacy_cba31b016083"])</SiteText>
+                        <SiteText Variant="SiteTextVariant.Meta">@(L["reload_the_page_with_the_file_you_want_selected"])</SiteText>
                     }
                     @foreach (var file in Snippet.Files)
                     {

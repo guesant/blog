@@ -14,17 +14,17 @@ public partial class NatoPhoneticAlphabet
 
     [SupplyParameterFromQuery(Name = "alphabet")]
     private string? QueryAlphabet { get; set; }
-    private string Action => L["legacy_ce18e663885e"];
+    private string Action => L["tools_nato_phonetic_alphabet"];
     private string Title => ToolsL["nato_phonetic_alphabet_title"];
     private string Description => ToolsL["nato_phonetic_alphabet_lead"];
-    private string AlphabetLabel => L["legacy_ef3fb5024164"];
-    private string NatoLabel => L["legacy_42e94e815b3b"];
-    private string BrazilianLabel => L["legacy_5b0a0fa480c7"];
-    private string GermanLabel => L["legacy_8ee70100fb30"];
-    private string InputLabel => L["legacy_c4c61716670f"];
-    private string OutputLabel => L["legacy_1d1c0e33dc3c"];
-    private string ConvertLabel => L["legacy_ae125407093e"];
-    private string CopyLabel => L["legacy_a3b71416a5f3"];
+    private string AlphabetLabel => L["alphabet"];
+    private string NatoLabel => L["nato_icao_official"];
+    private string BrazilianLabel => L["brazilian_informal"];
+    private string GermanLabel => L["german"];
+    private string InputLabel => L["input"];
+    private string OutputLabel => L["output"];
+    private string ConvertLabel => L["converter"];
+    private string CopyLabel => L["copy"];
     private string Input
     {
         get => _input;

@@ -18,18 +18,18 @@ public partial class GcdLcmCalculator
     [SupplyParameterFromQuery(Name = "count")]
     private int? QueryCount { get; set; }
 
-    private string Action => L["legacy_a9693a3ca819"];
+    private string Action => L["tools_gcd_lcm_calculator"];
     private string Title => ToolsL["gcd_lcm_calculator_title"];
     private string Description => ToolsL["gcd_lcm_calculator_lead"];
-    private string InputLabel => L["legacy_67b743c4b70b"];
-    private string NumbersLabel => L["legacy_67b743c4b70b"];
-    private string CountLabel => L["legacy_67b743c4b70b"];
-    private string GcdLabel => L["legacy_8f026d3ef580"];
-    private string LcmLabel => L["legacy_65887da7c1fe"];
-    private string SubmitLabel => L["legacy_53519f340509"];
+    private string InputLabel => L["numbers"];
+    private string NumbersLabel => L["numbers"];
+    private string CountLabel => L["numbers"];
+    private string GcdLabel => L["gcd"];
+    private string LcmLabel => L["lcm"];
+    private string SubmitLabel => L["calculate"];
     private string AddLabel => L["gcd_lcm_add_label"];
     private string RemoveLabel => L["gcd_lcm_remove_label"];
-    private string InvalidLabel => L["legacy_814b42086ad7"];
+    private string InvalidLabel => L["enter_positive_whole_numbers_only"];
 
     private List<string> Numbers => _numbers;
     private GcdLcmListResult Result => _result;

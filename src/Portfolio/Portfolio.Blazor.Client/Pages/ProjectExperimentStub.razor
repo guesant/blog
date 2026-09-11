@@ -13,24 +13,24 @@
 <SitePage Template="project-detail"
     data-page-state="@(Experiment is null ? "not-found" : "content")">
     <SiteBreadcrumb HomeUrl="@LocalizedPath("home")"
-        HomeLabel="@(L["legacy_ddc150008e2f"])"
+        HomeLabel="@(L["home"])"
         Links="@BreadcrumbLinks"
         CurrentLabel="@Title" />
 
     @if (Snapshot is null)
     {
-        <SiteHero Title="@(L["legacy_44d655649202"])" />
+        <SiteHero Title="@(L["loading_content"])" />
     }
     else if (Experiment is null)
     {
-        <SiteHero Title="@(L["legacy_2a281201e16c"])" Lead="@NotFoundDescription" />
+        <SiteHero Title="@(L["experiment_not_found"])" Lead="@NotFoundDescription" />
     }
     else
     {
         <SiteHero Title="@Experiment.Name"
             Lead="@Experiment.Purpose"
             BackHref="@LocalizedPath("projects")"
-            BackLabel="@(L["legacy_2c505faad45c"])">
+            BackLabel="@(L["projects"])">
             <ChildContent>
                 <PublishedUpdatedMeta PublishedAt="@PublishedAt"
                     UpdatedAt="@Experiment.UpdatedAt" />
@@ -57,7 +57,7 @@
                 Size="SiteButtonSize.Sm"
                 Href="@Experiment.Href"
                 target="_blank"
-                rel="noopener noreferrer">@(L["legacy_79472cc5603f"])</SiteLink>
+                rel="noopener noreferrer">@(L["external_source"])</SiteLink>
         }
 
         @if (!string.IsNullOrWhiteSpace(Experiment.Body)) { <SiteRichText Html="@((MarkupString)MarkdownRenderer.ToHtml(Experiment.Body))"

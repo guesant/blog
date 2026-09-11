@@ -8,20 +8,20 @@
 
 <SitePage Template="technologies-index">
     <SiteBreadcrumb HomeUrl="@LocalizedPath("home")"
-        HomeLabel="@(L["legacy_ddc150008e2f"])"
-        CurrentLabel="@CrumbLabel("technologies", L["legacy_b4e2241909e0"])" />
+        HomeLabel="@(L["home"])"
+        CurrentLabel="@CrumbLabel("technologies", L["technologies"])" />
     @if (Snapshot is null)
     {
         <SiteHero Title="@Title" Lead="@Description" />
         <SiteListingShell HasResults="false"
             CurrentPage="@CurrentPage"
             TotalPages="@PageCount"
-            PaginationLabel="@(L["legacy_ce41390e654d"])"
-            PreviousLabel="@(L["legacy_c3b535ded088"])"
-            NextLabel="@(L["legacy_a6c78a6436e2"])"
+            PaginationLabel="@(L["pagination"])"
+            PreviousLabel="@(L["previous"])"
+            NextLabel="@(L["next"])"
             Href="@(page => QueryUrl(ViewMode, page))">
             <EmptyContent>
-                <SiteEmptyState Message="@(L["legacy_59fa21acd9e0"])" />
+                <SiteEmptyState Message="@(L["public_content_is_temporarily_unavailable"])" />
             </EmptyContent>
         </SiteListingShell>
     }
@@ -34,9 +34,9 @@
             <SiteListingShell HasResults="false"
                 CurrentPage="@CurrentPage"
                 TotalPages="@PageCount"
-                PaginationLabel="@(L["legacy_ce41390e654d"] )"
-                PreviousLabel="@(L["legacy_c3b535ded088"] )"
-                NextLabel="@(L["legacy_a6c78a6436e2"] )"
+                PaginationLabel="@(L["pagination"] )"
+                PreviousLabel="@(L["previous"] )"
+                NextLabel="@(L["next"] )"
                 Href="@(page => QueryUrl(ViewMode, page))">
                 <EmptyContent>
                     <SiteEmptyState Message="@EmptyLabel" />
@@ -49,28 +49,28 @@
                 Summary="@ListingSummary(PagedTechnologies.Count, SortedTechnologies.Count, CurrentPage, PageCount)"
                 CurrentPage="@CurrentPage"
                 TotalPages="@PageCount"
-                PaginationLabel="@(L["legacy_ce41390e654d"])"
-                PreviousLabel="@(L["legacy_c3b535ded088"])"
-                NextLabel="@(L["legacy_a6c78a6436e2"])"
+                PaginationLabel="@(L["pagination"])"
+                PreviousLabel="@(L["previous"])"
+                NextLabel="@(L["next"])"
                 Href="@(page => QueryUrl(page))">
             <FilterContent>
                 <SiteListingFilterBar Action="@Action"
-                    ApplyLabel="@(L["legacy_c975d2551cc4"])"
-                    ClearLabel="@(L["legacy_5262517729fc"])"
+                    ApplyLabel="@(L["apply"])"
+                    ClearLabel="@(L["clear"])"
                     ClearHref="@Action"
                     OnApply="@(() => HandleApply(Action, SortValue, Search, DenseView))">
                     <PrimaryFields>
                         <SiteFilterSelect Icon="arrow-up-down"
-                            Label="@(L["legacy_6541e97b7c64"])"
+                            Label="@(L["sort_by"])"
                             Id="technologies-sort"
                             Name="sort"
                             @bind-Value="SortValue"
                             Options="@SortOptions"
-                            Placeholder="@(L["legacy_d878d9136e0e"])"
-                            EmptyText="@(L["legacy_0bb89437e6cb"])" />
+                            Placeholder="@(L["sort"])"
+                            EmptyText="@(L["default"])" />
                     </PrimaryFields>
                     <SearchField>
-                        <SiteSearchField Label="@(L["legacy_6bb12bff6f09"])"
+                        <SiteSearchField Label="@(L["search"])"
                             Id="technologies-search"
                             Name="q"
                             Value="@Search"

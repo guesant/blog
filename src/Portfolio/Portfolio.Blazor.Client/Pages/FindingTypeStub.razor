@@ -8,7 +8,7 @@
 
 <SitePage Template="finding-list" data-page-state="@(Snapshot is null ? "loading" : "content")">
     <SiteBreadcrumb HomeUrl="@LocalizedPath("home")"
-        HomeLabel="@(L["legacy_ddc150008e2f"])"
+        HomeLabel="@(L["home"])"
         Links="@BreadcrumbLinks"
         CurrentLabel="@Title" />
     <SiteHero Title="@Title" Lead="@Description">
@@ -16,7 +16,7 @@
             <SiteLink Variant="SiteButtonVariant.Outline"
                 Size="SiteButtonSize.IconSm"
                 Href="@FeedUrls.ForKind(FeedUrls.Finding)"
-                aria-label="@(L["legacy_5c38c6662a46"])">
+                aria-label="@(L["back_to_findings_findings"])">
                 <SiteIcon Name="arrow-left" Size="14" />
         </SiteLink>
             <SiteHeading Level="1">@Title</SiteHeading>
@@ -28,12 +28,12 @@
         <SiteListingShell HasResults="false"
             CurrentPage="@CurrentPage"
             TotalPages="@PageCount"
-            PaginationLabel="@(L["legacy_ce41390e654d"] )"
-            PreviousLabel="@(L["legacy_c3b535ded088"] )"
-            NextLabel="@(L["legacy_a6c78a6436e2"] )"
+            PaginationLabel="@(L["pagination"] )"
+            PreviousLabel="@(L["previous"] )"
+            NextLabel="@(L["next"] )"
             Href="@(page => QueryUrl(ViewMode, page))">
             <EmptyContent>
-                <SiteEmptyState Message="@(L["legacy_b6b7e67d43e9"])" />
+                <SiteEmptyState Message="@(L["no_findings_of_this_type_have_been_published"])" />
             </EmptyContent>
         </SiteListingShell>
     }
@@ -42,12 +42,12 @@
         <SiteListingShell HasResults="false"
             CurrentPage="@CurrentPage"
             TotalPages="@PageCount"
-            PaginationLabel="@(L["legacy_ce41390e654d"] )"
-            PreviousLabel="@(L["legacy_c3b535ded088"] )"
-            NextLabel="@(L["legacy_a6c78a6436e2"] )"
+            PaginationLabel="@(L["pagination"] )"
+            PreviousLabel="@(L["previous"] )"
+            NextLabel="@(L["next"] )"
             Href="@(page => QueryUrl(ViewMode, page))">
             <EmptyContent>
-                <SiteEmptyState Message="@(L["legacy_3d93c65d65dc"])" />
+                <SiteEmptyState Message="@(L["this_finding_type_does_not_exist"])" />
             </EmptyContent>
         </SiteListingShell>
     }
@@ -57,9 +57,9 @@
             Summary="@ResultsSummary"
             CurrentPage="@CurrentPage"
             TotalPages="@PageCount"
-            PaginationLabel="@(L["legacy_ce41390e654d"])"
-            PreviousLabel="@(L["legacy_c3b535ded088"])"
-            NextLabel="@(L["legacy_a6c78a6436e2"])"
+            PaginationLabel="@(L["pagination"])"
+            PreviousLabel="@(L["previous"])"
+            NextLabel="@(L["next"])"
             Href="@(page => QueryUrl(ViewMode, page))">
         <FilterContent>
             <SiteFilterCard Action="@Action"
@@ -68,20 +68,20 @@
                 DataLayoutRegion="sort-filter">
             <SiteInput type="hidden" name="view" value="@(DenseView ? "dense" : "spacious")" />
             <SiteFilterSelect Icon="arrow-up-down"
-                Label="@(L["legacy_6541e97b7c64"])"
+                Label="@(L["sort_by"])"
                 Id="finding-type-sort"
                 Name="sort"
                 @bind-Value="SortValue"
                 Options="@SortOptions"
-                Placeholder="@(L["legacy_77c78d92c603"])"
-                EmptyText="@(L["legacy_0bb89437e6cb"])" />
+                Placeholder="@(L["default"])"
+                EmptyText="@(L["default"])" />
             <SiteButton Variant="SiteButtonVariant.Default"
                 Type="SiteButtonType.Submit"><SiteIcon Name="check"
-                    Size="14" />@(L["legacy_c975d2551cc4"])</SiteButton>
+                    Size="14" />@(L["apply"])</SiteButton>
         </SiteFilterCard>
         </FilterContent>
         <EmptyContent>
-            <SiteEmptyState Message="@(L["legacy_0d62244f3da9"])" />
+            <SiteEmptyState Message="@(L["no_findings_of_this_type_have_been_published"])" />
         </EmptyContent>
         <ResultContent>@if (PagedFindings.Count > 0)
         {

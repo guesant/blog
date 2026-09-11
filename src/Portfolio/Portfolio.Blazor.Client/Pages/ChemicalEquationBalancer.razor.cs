@@ -14,15 +14,15 @@ public partial class ChemicalEquationBalancer
 
     [SupplyParameterFromQuery(Name = "equation")]
     private string? QueryEquation { get; set; }
-    private string Action => L["legacy_2ca4c29bb9f9"];
+    private string Action => L["tools_chemical_equation_balancer"];
     private string Title => ToolsL["chemical_equation_balancer_title"];
     private string Description => ToolsL["chemical_equation_balancer_lead"];
-    private string InputLabel => L["legacy_3dbfde4d48d6"];
-    private string TableLabel => L["legacy_90020d6d564f"];
-    private string ElementLabel => L["legacy_9d4c071bfb3b"];
-    private string SubmitLabel => L["legacy_180d6c2be1ef"];
-    private string ErrorLabel => L["legacy_99e8cb3ad9b1"];
-    private string TableId => L["legacy_6102425dbbd6"];
+    private string InputLabel => L["equation_reactants_products"];
+    private string TableLabel => L["atom_count_by_species"];
+    private string ElementLabel => L["element"];
+    private string SubmitLabel => L["balance"];
+    private string ErrorLabel => L["provide_a_valid_equation_such_as_fe_o2_fe2o3"];
+    private string TableId => L["chemical_atoms"];
     private readonly Debouncer _debouncer = new(TimeSpan.FromMilliseconds(300));
     private string EquationText
     {

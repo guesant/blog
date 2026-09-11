@@ -11,9 +11,9 @@
 
 <SitePage Template="cases-index">
     <SiteBreadcrumb HomeUrl="@LocalizedPath("home")"
-        HomeLabel="@(L["legacy_8eec0169bc59"])"
+        HomeLabel="@(L["home"])"
         Links="@BreadcrumbLinks"
-        CurrentLabel="@CrumbLabel("cases", L["legacy_3dc269cea284"])" />
+        CurrentLabel="@CrumbLabel("cases", L["cases"])" />
 
         <SiteHero Title="@SeoTitle"
             Lead="@SeoDescription" />
@@ -23,9 +23,9 @@
         <SiteListingShell HasResults="false"
             CurrentPage="@CurrentPage"
             TotalPages="@PageCount"
-            PaginationLabel="@(L["legacy_79b08b194e08"] )"
-            PreviousLabel="@(L["legacy_e01a927a8e83"] )"
-            NextLabel="@(L["legacy_71e1ccdf2f10"] )"
+            PaginationLabel="@(L["pagination"] )"
+            PreviousLabel="@(L["previous"] )"
+            NextLabel="@(L["next"] )"
             Href="@(page => QueryUrl(ViewMode, page))">
             <EmptyContent>
                 <SiteEmptyState Message="@(Snapshot is null ? UnavailableLabel : EmptyLabel)" />
@@ -38,28 +38,28 @@
             Summary="@ListingSummary(PagedCases.Count, SortedCases.Count, CurrentPage, PageCount)"
             CurrentPage="@CurrentPage"
             TotalPages="@PageCount"
-            PaginationLabel="@(L["legacy_79b08b194e08"])"
-            PreviousLabel="@(L["legacy_e01a927a8e83"])"
-            NextLabel="@(L["legacy_71e1ccdf2f10"])"
+            PaginationLabel="@(L["pagination"])"
+            PreviousLabel="@(L["previous"])"
+            NextLabel="@(L["next"])"
             Href="@(page => QueryUrl(ViewMode, page))">
         <FilterContent>
             <SiteListingFilterBar Action="@Action"
-                    ApplyLabel="@(L["legacy_3d48da040c9d"])"
-                    ClearLabel="@(L["legacy_5262517729fc"])"
+                    ApplyLabel="@(L["apply"])"
+                    ClearLabel="@(L["clear"])"
                     ClearHref="@Action"
                     OnApply="@(() => HandleApply(Action, SortValue, Search, DenseView))">
                     <PrimaryFields>
                         <SiteFilterSelect Icon="arrow-up-down"
-                            Label="@(L["legacy_194006b2e626"])"
+                            Label="@(L["sort"])"
                             Id="cases-sort"
                             Name="sort"
                             @bind-Value="SortValue"
                             Options="@SortOptions"
-                            Placeholder="@(L["legacy_ebe3321e2c21"])"
-                            EmptyText="@(L["legacy_3259c09e8ab3"])" />
+                            Placeholder="@(L["newest"])"
+                            EmptyText="@(L["no_option_found"])" />
                     </PrimaryFields>
                     <SearchField>
-                        <SiteSearchField Label="@(L["legacy_6bb12bff6f09"])"
+                        <SiteSearchField Label="@(L["search"])"
                             Id="cases-search"
                             Name="q"
                             Value="@Search"

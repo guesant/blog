@@ -5,9 +5,9 @@ public partial class ImageFormatConverter
     private string CanonicalPath => RequestPath;
     private string Title => ToolsL["image_format_converter_title"];
     private string Description => ToolsL["image_format_converter_lead"];
-    private string FileLabel => L["legacy_6320d8841a37"];
-    private string FormatLabel => L["legacy_e0dd9214dd3f"];
-    private string DownloadLabel => L["legacy_c36a12636bbd"];
+    private string FileLabel => L["file"];
+    private string FormatLabel => L["format"];
+    private string DownloadLabel => L["download"];
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {

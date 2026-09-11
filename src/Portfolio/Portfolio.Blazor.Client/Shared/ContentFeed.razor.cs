@@ -100,7 +100,7 @@ public partial class ContentFeed
     }
     private IReadOnlyList<SiteSelectOption> KindSelectOptions =>
         [
-            new("all", Text("filter_all", L["legacy_f8bcc40c7cea"]), "layers"),
+            new("all", Text("filter_all", L["all"]), "layers"),
             new("post", KindLabel("post"), KindIcon("post")),
             new("achado", KindLabel("achado"), KindIcon("achado")),
             new("colecao", KindLabel("colecao"), KindIcon("colecao")),
@@ -108,7 +108,7 @@ public partial class ContentFeed
     private IReadOnlyList<SiteSelectOption> TopicSelectOptions =>
         TopicOptions
             .Select(topic => new SiteSelectOption(topic, topic))
-            .Prepend(new SiteSelectOption("", Text("filter_all_topics", L["legacy_4d99c9f9761a"])))
+            .Prepend(new SiteSelectOption("", Text("filter_all_topics", L["all_topics"])))
             .ToArray();
     private string ViewMode =>
         QueryView?.Equals("dense", StringComparison.OrdinalIgnoreCase) == true
@@ -265,9 +265,9 @@ public partial class ContentFeed
     private string KindLabel(string kind) =>
         kind switch
         {
-            "post" => L["legacy_719238d988d9"],
-            "achado" => L["legacy_f3b74f6bb3d7"],
-            "colecao" => L["legacy_66ee9e2e15ee"],
+            "post" => L["writing"],
+            "achado" => L["finding"],
+            "colecao" => L["collection"],
             _ => kind,
         };
 
@@ -315,7 +315,7 @@ public partial class ContentFeed
         return Action + (query.Count > 0 ? "?" + string.Join('&', query) : string.Empty);
     }
 
-    private string LocalizedPath(string path) => L["legacy_0607643fd42c"];
+    private string LocalizedPath(string path) => L[""];
 
     private static string LocalizedUrl(string url)
     {

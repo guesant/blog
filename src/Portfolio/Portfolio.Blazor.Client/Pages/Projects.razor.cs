@@ -41,10 +41,10 @@ public partial class Projects
     }
     private static string Action => LocalizedUrls.Current("/projects");
     private static string CanonicalPath => Action;
-    private string Title => L["legacy_9f8a5148998e"];
-    private string FallbackDescription => L["legacy_4446bebd53aa"];
-    private string EmptyLabel => L["legacy_14c99ed6387a"];
-    private string UnavailableLabel => L["legacy_59fa21acd9e0"];
+    private string Title => L["projects_and_lab"];
+    private string FallbackDescription => L["public_archive_of_software_libraries_and"];
+    private string EmptyLabel => L["no_projects_available"];
+    private string UnavailableLabel => L["public_content_is_temporarily_unavailable"];
     private string SeoTitle => PageField("projects", "title", Title);
     private string SeoDescription => PageField("projects", "description", FallbackDescription);
     private string Sort => QuerySort is "asc" or "alpha" ? QuerySort : "desc";
@@ -63,11 +63,7 @@ public partial class Projects
         set => _experimentSortValue = value is "asc" or "alpha" or "desc" ? value : "desc";
     }
     private IReadOnlyList<SiteSelectOption> SortOptions =>
-        [
-            new("desc", L["legacy_77c78d92c603"]),
-            new("asc", L["legacy_07b165cdd970"]),
-            new("alpha", L["legacy_cc8d79d78bef"]),
-        ];
+        [new("desc", L["default"]), new("asc", L["newest"]), new("alpha", L["alphabetical"])];
     private bool DenseView => string.Equals(QueryView, "dense", StringComparison.OrdinalIgnoreCase);
     private bool ExperimentDenseView =>
         string.Equals(QueryExperimentView, "dense", StringComparison.OrdinalIgnoreCase);
@@ -133,7 +129,7 @@ public partial class Projects
         LocalizedUrls.Current($"/technologies/{technology.Slug}");
 
     private IReadOnlyList<BreadcrumbLink> BreadcrumbLinks =>
-        [new(CrumbLabel("portfolio", L["legacy_5c816876b410"]), LocalizedPath("portfolio"))];
+        [new(CrumbLabel("portfolio", L["portfolio"]), LocalizedPath("portfolio"))];
 
     protected override void OnParametersSet()
     {

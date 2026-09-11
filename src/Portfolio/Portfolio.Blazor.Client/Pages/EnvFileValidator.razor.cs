@@ -13,15 +13,15 @@ public partial class EnvFileValidator
 
     [SupplyParameterFromQuery(Name = "content")]
     private string? QueryContent { get; set; }
-    private string Action => L["legacy_2d6f58ba4827"];
+    private string Action => L["tools_env_file_validator"];
     private string Title => ToolsL["env_file_validator_title"];
     private string Description => ToolsL["env_file_validator_lead"];
-    private string InputLabel => L["legacy_c4c61716670f"];
-    private string IssuesLabel => L["legacy_6bbce1ac767e"];
-    private string NoIssuesLabel => L["legacy_ce032fa503a7"];
-    private string EntriesLabel => L["legacy_7415a41dc0f9"];
-    private string LineLabel => L["legacy_3dcd15b72733"];
-    private string ValidateLabel => L["legacy_3fcad41c9c0d"];
+    private string InputLabel => L["input"];
+    private string IssuesLabel => L["problemas"];
+    private string NoIssuesLabel => L["no_issues_found"];
+    private string EntriesLabel => L["valid_entries"];
+    private string LineLabel => L["line"];
+    private string ValidateLabel => L["validate"];
     private string Content
     {
         get => _content;
@@ -36,9 +36,9 @@ public partial class EnvFileValidator
     private string IssueMessage(EnvIssue issue) =>
         issue.Kind switch
         {
-            "duplicate" => $"{(L["legacy_5d92aac4b2d4"])}: {issue.Key}",
-            "invalid-key" => $"{(L["legacy_ca8bac6ad8c0"])}: {issue.Key}",
-            _ => L["legacy_ef9f0c08caa5"],
+            "duplicate" => $"{(L["duplicate_key"])}: {issue.Key}",
+            "invalid-key" => $"{(L["invalid_key"])}: {issue.Key}",
+            _ => L["malformed_line"],
         };
 
     protected override void OnParametersSet()

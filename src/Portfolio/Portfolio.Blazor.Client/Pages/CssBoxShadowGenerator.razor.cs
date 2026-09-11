@@ -46,18 +46,18 @@ public partial class CssBoxShadowGenerator
     [SupplyParameterFromQuery(Name = "inset")]
     private bool? QueryInset { get; set; }
     private bool _queryInitialized;
-    private string Action => L["legacy_abce337d2698"];
+    private string Action => L["tools_css_box_shadow_generator"];
     private string Title => ToolsL["css_box_shadow_generator_title"];
     private string Description => ToolsL["css_box_shadow_generator_lead"];
     private static string BlurLabel => "blur";
     private static string SpreadLabel => "spread";
-    private string ColorLabel => L["legacy_48541bef3bd6"];
+    private string ColorLabel => L["color"];
     private static string InsetLabel => "inset";
-    private string RemoveLabel => L["legacy_a5257096a74c"];
-    private string AddLabel => L["legacy_0921377e659b"];
-    private string GenerateLabel => L["legacy_cc7df97fb1b2"];
-    private string OutputLabel => L["legacy_1d1c0e33dc3c"];
-    private string CopyLabel => L["legacy_a3b71416a5f3"];
+    private string RemoveLabel => L["remove"];
+    private string AddLabel => L["add_layer"];
+    private string GenerateLabel => L["generate"];
+    private string OutputLabel => L["output"];
+    private string CopyLabel => L["copy"];
     private string CssValue =>
         BoxShadowFormatter.Format(
             Layers.Select(layer => new BoxShadowLayer(

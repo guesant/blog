@@ -18,16 +18,16 @@ public partial class ResistorNetwork
 
     [SupplyParameterFromQuery(Name = "mode")]
     private string? QueryMode { get; set; }
-    private string Action => L["legacy_a10872a86f7d"];
+    private string Action => L["tools_resistor_network"];
     private string Title => ToolsL["resistor_network_title"];
     private string Description => ToolsL["resistor_network_lead"];
-    private string Note => L["legacy_3cb74ef347b2"];
-    private string InputLabel => L["legacy_bdae964b227c"];
-    private string ModeLabel => L["legacy_5446bebbd295"];
-    private string SeriesLabel => L["legacy_764f33d20532"];
-    private string ParallelLabel => L["legacy_df997cffd89b"];
-    private string SubmitLabel => L["legacy_53519f340509"];
-    private string ErrorLabel => L["legacy_7df58ea38277"];
+    private string Note => L["enter_positive_values_separated_by_commas"];
+    private string InputLabel => L["resistors"];
+    private string ModeLabel => L["connection"];
+    private string SeriesLabel => L["series"];
+    private string ParallelLabel => L["parallel"];
+    private string SubmitLabel => L["calculate"];
+    private string ErrorLabel => L["enter_valid_positive_resistors"];
     private string ResistorsText
     {
         get => _resistorsText;

@@ -18,15 +18,15 @@ public partial class RegexTester
 
     [SupplyParameterFromQuery(Name = "input")]
     private string? QueryInput { get; set; }
-    private string Action => L["legacy_312eb91d9fd3"];
+    private string Action => L["tools_regex_tester"];
     private string Title => ToolsL["regex_tester_title"];
     private string Description => ToolsL["regex_tester_lead"];
-    private string PatternLabel => L["legacy_5e995a75d37b"];
-    private string TestStringLabel => L["legacy_7e40ce38ac57"];
-    private string HighlightLabel => L["legacy_b93f00c414ef"];
-    private string MatchesLabel => L["legacy_7de298425b05"];
-    private string InvalidLabel => L["legacy_e5d2fa50a2dd"];
-    private string TestLabel => L["legacy_ff9e12d2239d"];
+    private string PatternLabel => L["regex_pattern"];
+    private string TestStringLabel => L["test_string"];
+    private string HighlightLabel => L["highlight"];
+    private string MatchesLabel => L["matches"];
+    private string InvalidLabel => L["invalid_regex_pattern"];
+    private string TestLabel => L["testar"];
     private static string GlobalLabel => "g";
     private static string IgnoreCaseLabel => "i";
     private static string MultilineLabel => "m";

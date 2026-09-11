@@ -6,16 +6,16 @@ namespace Portfolio.Blazor.Client.Pages;
 public partial class KnowledgeMap
 {
     private PublicKnowledgeGraph? Graph { get; set; }
-    private string Title => L["legacy_34a684f24942"];
-    private string Description => L["legacy_0b5e5b9a5c97"];
-    private string LoadingLabel => L["legacy_4766510b3100"];
-    private string EmptyLabel => L["legacy_561b86366712"];
-    private string VisualizationLabel => L["legacy_b071db3768f3"];
-    private string TextFallbackLabel => L["legacy_fa4d8af51616"];
-    private string RelationsLabel => L["legacy_34bb1362b84e"];
-    private string NoRelationsLabel => L["legacy_1b8728f370cc"];
-    private string NodesLabel => L["legacy_6d8a2f5c1bb2"];
-    private string EdgesLabel => L["legacy_34bb1362b84e"];
+    private string Title => L["knowledge_map"];
+    private string Description => L["a_navigable_map_of_relationships_between_topics"];
+    private string LoadingLabel => L["loading_map"];
+    private string EmptyLabel => L["there_are_no_public_relationships_to_visualize"];
+    private string VisualizationLabel => L["interactive_visualization"];
+    private string TextFallbackLabel => L["text_version"];
+    private string RelationsLabel => L["relations"];
+    private string NoRelationsLabel => L["there_are_no_public_relationships_yet"];
+    private string NodesLabel => L["nodes"];
+    private string EdgesLabel => L["relations"];
     private string LegendLabel => L["knowledge_map_legend_label"];
     private string PanelEmptyLabel => L["knowledge_map_panel_empty_label"];
     private string PanelOpenLabel => L["knowledge_map_panel_open_label"];
@@ -25,7 +25,7 @@ public partial class KnowledgeMap
     private string CollapseViewLabel => L["knowledge_map_collapse_view"];
     private string SeoTitle => PageField("knowledge-map", "title", Title);
     private string SeoDescription => PageField("knowledge-map", "description", Description);
-    private string CanonicalPath => L["legacy_aee5ff166ae8"];
+    private string CanonicalPath => L["knowledge_map_path"];
     private string GraphJson =>
         JsonSerializer.Serialize(
             new
@@ -58,7 +58,7 @@ public partial class KnowledgeMap
             }
         );
     private IReadOnlyList<BreadcrumbLink> BreadcrumbLinks =>
-        [new(CrumbLabel("topics", L["legacy_4ab0be41630a"]), LocalizedUrl("/topics"))];
+        [new(CrumbLabel("topics", L["topics"]), LocalizedUrl("/topics"))];
 
     protected override async Task OnInitializedAsync()
     {

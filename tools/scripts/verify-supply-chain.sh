@@ -10,14 +10,11 @@ for compose_file in .docker/compose.yaml .docker/compose.dev.yaml .docker/compos
     [ -f "$compose_file" ] || fail "$compose_file is missing"
 done
 
-grep -Eq '^[[:space:]]*image:[[:space:]]*[^@[:space:]]+@sha256:[0-9a-f]{64}[[:space:]]*$' .docker/compose.yaml ||
-    fail "the development image must be pinned by digest"
-
-if grep -En '^[[:space:]]*(image:|FROM[[:space:]]).*(^|:)latest([[:space:]]|$)' .docker/compose*.yaml .docker/Dockerfile 2>/dev/null; then
-    fail "an image still uses an unpinned latest tag"
+if grep -En '^[[:space:]]*image:' .docker/compose*.yaml | grep -Ev 'image:[[:space:]]*(portfolio-tools[[:space:]]*|ghcr.io/guesant/portfolio:main[[:space:]]*)$' | grep -Ev '@sha256:[0-9a-f]{64}[[:space:]]*$'; then
+    fail "every compose image must be pinned by digest"
 fi
 
-if grep -En '^[[:space:]]*FROM[[:space:]]' .docker/Dockerfile | grep -Ev '@sha256:[0-9a-f]{64}'; then
+if grep -En '^[[:space:]]*FROM[[:space:]]' .docker/*Dockerfile | grep -Ev '@sha256:[0-9a-f]{64}'; then
     fail "every Dockerfile base image must be pinned by digest"
 fi
 

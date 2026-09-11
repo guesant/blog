@@ -1,5 +1,4 @@
 using System.Collections.Concurrent;
-using System.Data.Common;
 using System.Globalization;
 using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
@@ -9,7 +8,6 @@ using Portfolio.Blazor.Core.Localization;
 using Portfolio.Blazor.Data;
 using Portfolio.Blazor.Data.Providers;
 using Portfolio.Blazor.PublicQueries;
-using static Portfolio.Blazor.SqlReadHelpers;
 
 namespace Portfolio.Blazor;
 
@@ -59,11 +57,8 @@ public sealed partial class PublicSiteContentProvider(
                 if (_snapshots.TryGetValue(locale, out cached) && cached.Fingerprint == fingerprint)
                     return cached.Snapshot;
 
-                using var connection = await database.OpenReadOnlyConnectionAsync(
-                    cancellationToken
-                );
                 await using var context = await contexts.CreateDbContextAsync(cancellationToken);
-                var snapshot = Build(connection, context, locale);
+                var snapshot = Build(context, locale);
                 _snapshots[locale] = new CachedSnapshot(fingerprint, snapshot);
                 return snapshot;
             }
@@ -84,12 +79,11 @@ public sealed partial class PublicSiteContentProvider(
         PublicSiteSnapshot Snapshot
     );
 
-    private PublicSiteSnapshot Build(
-        DbConnection db,
-        PortfolioPublicDbContext context,
-        string locale
-    )
+    private PublicSiteSnapshot Build(PortfolioPublicDbContext context, string locale)
     {
+        var projects = Projects(context, locale);
+        var cases = Cases(context, locale);
+        var writings = Writings(context, locale);
         var site = ChromeQueries.Site(context);
         var siteId = site?.Id ?? 0;
         var profile = ChromeQueries.Profile(context, locale);
@@ -137,9 +131,9 @@ public sealed partial class PublicSiteContentProvider(
             DateTimeOffset.UtcNow.ToString("O"),
             chrome,
             pages,
-            Projects(context, locale),
-            Cases(context, locale),
-            Writings(context, locale),
+            projects,
+            cases,
+            writings,
             Findings(context, locale),
             Collections(context, locale),
             Topics(context, locale),
@@ -147,10 +141,10 @@ public sealed partial class PublicSiteContentProvider(
             Experiments(context, locale),
             Snippets(context, locale),
             Credits(context, locale),
-            Resume(db, context, locale),
-            FeaturedCases(db, context, locale),
-            FeaturedProjects(db, context, locale),
-            FeaturedWritings(db, context, locale),
+            Resume(context, cases, locale),
+            Featured(FeaturedQueries.CaseSlugs(context), cases, item => item.Slug),
+            Featured(FeaturedQueries.ProjectSlugs(context), projects, item => item.Slug),
+            Featured(FeaturedQueries.WritingSlugs(context), writings, item => item.Slug),
             ResumePdfLocales()
         );
     }
@@ -570,186 +564,74 @@ public sealed partial class PublicSiteContentProvider(
             ))
             .ToList();
 
-    private static List<PublicCaseStudy> FeaturedCases(
-        DbConnection db,
-        PortfolioPublicDbContext context,
-        string locale
-    )
+    private static List<T> Featured<T>(IEnumerable<string> slugs, List<T> all, Func<T, string> slug)
     {
-        var all = Cases(context, locale)
-            .ToDictionary(item => item.Slug, StringComparer.OrdinalIgnoreCase);
-        return Rows(
-                db,
-                "select c.slug from pages p join page_featured_case x on x.page_id=p.id join case_studies c on c.id=x.case_study_id where p.slug='portfolio' and c.hidden=false and c.nda=false order by x.\"order\" nulls first limit 3",
-                Array.Empty<(string Name, object Value)>()
-            )
-            .Select(row => all.GetValueOrDefault(Text(row, "slug")))
+        var index = all.ToDictionary(slug, StringComparer.OrdinalIgnoreCase);
+        return slugs
+            .Select(value => index.GetValueOrDefault(value))
             .Where(item => item is not null)
-            .Cast<PublicCaseStudy>()
-            .ToList();
-    }
-
-    private static List<PublicProject> FeaturedProjects(
-        DbConnection db,
-        PortfolioPublicDbContext context,
-        string locale
-    )
-    {
-        var all = Projects(context, locale)
-            .ToDictionary(item => item.Slug, StringComparer.OrdinalIgnoreCase);
-        return Rows(
-                db,
-                "select p.slug from pages x join page_featured_project y on y.page_id=x.id join projects p on p.id=y.project_id where x.slug='portfolio' and p.hidden=false and p.nda=false order by y.\"order\" nulls first limit 3",
-                Array.Empty<(string Name, object Value)>()
-            )
-            .Select(row => all.GetValueOrDefault(Text(row, "slug")))
-            .Where(item => item is not null)
-            .Cast<PublicProject>()
-            .ToList();
-    }
-
-    private static List<PublicWriting> FeaturedWritings(
-        DbConnection db,
-        PortfolioPublicDbContext context,
-        string locale
-    )
-    {
-        var all = Writings(context, locale)
-            .ToDictionary(item => item.Slug, StringComparer.OrdinalIgnoreCase);
-        return Rows(
-                db,
-                "select w.slug from pages x join page_featured_writing y on y.page_id=x.id join writings w on w.id=y.writing_id where x.slug='portfolio' and w.hidden=false order by y.\"order\" nulls first",
-                Array.Empty<(string Name, object Value)>()
-            )
-            .Select(row => all.GetValueOrDefault(Text(row, "slug")))
-            .Where(item => item is not null)
-            .Cast<PublicWriting>()
+            .Cast<T>()
             .ToList();
     }
 
     private static JsonElement Resume(
-        DbConnection db,
         PortfolioPublicDbContext context,
+        List<PublicCaseStudy> cases,
         string locale
     )
     {
-        var row = Row(
-            db,
-            "select coalesce(t.id, en.id) as id, coalesce(t.resume_id, en.resume_id) as resume_id, coalesce(t.summary, en.summary) as summary, coalesce(t.leadership, en.leadership) as leadership, coalesce(t.education, en.education) as education, coalesce(t.certificates, en.certificates) as certificates, coalesce(t.certifications, en.certifications) as certifications, coalesce(t.publications, en.publications) as publications, coalesce(t.recommendations, en.recommendations) as recommendations, coalesce(t.technical_productions, en.technical_productions) as technical_productions, coalesce(t.events, en.events) as events, coalesce(t.awards, en.awards) as awards from resumes r left join resume_translations t on t.resume_id=r.id and t.locale=@locale left join resume_translations en on en.resume_id=r.id and en.locale='en' where t.id is not null or en.id is not null order by r.id nulls first limit 1",
-            ("@locale", locale)
-        );
-        if (row.Count == 0)
+        var row = ResumeQueries.Resume(context, locale);
+        if (row is null)
             return JsonDocument.Parse("{}").RootElement.Clone();
 
-        var fields = row.Where(pair =>
-                pair.Key
-                    is not "id"
-                        and not "resume_id"
-                        and not "locale"
-                        and not "created_at"
-                        and not "updated_at"
-            )
-            .ToDictionary(pair => pair.Key, pair => pair.Value, StringComparer.OrdinalIgnoreCase);
-        foreach (
-            var key in new[]
-            {
-                "leadership",
-                "education",
-                "certificates",
-                "certifications",
-                "publications",
-                "recommendations",
-                "technical_productions",
-                "events",
-                "awards",
-            }
-        )
+        var fields = new Dictionary<string, object?>(StringComparer.OrdinalIgnoreCase)
         {
-            if (
-                fields.TryGetValue(key, out var value)
-                && value is string json
-                && !string.IsNullOrWhiteSpace(json)
-            )
-            {
-                try
-                {
-                    fields[key] = JsonDocument.Parse(json).RootElement.Clone();
-                }
-                catch (JsonException)
-                {
-                    fields[key] = Array.Empty<object>();
-                }
-            }
-        }
+            ["summary"] = row.Summary,
+            ["leadership"] = JsonArray(row.Leadership),
+            ["education"] = JsonArray(row.Education),
+            ["certificates"] = JsonArray(row.Certificates),
+            ["certifications"] = JsonArray(row.Certifications),
+            ["publications"] = JsonArray(row.Publications),
+            ["recommendations"] = JsonArray(row.Recommendations),
+            ["technical_productions"] = JsonArray(row.TechnicalProductions),
+            ["events"] = JsonArray(row.Events),
+            ["awards"] = JsonArray(row.Awards),
+        };
 
-        var profile = Row(
-            db,
-            "select coalesce(t.trajectory, en.trajectory) as trajectory from profiles p left join profile_translations t on t.profile_id=p.id and t.locale=@locale left join profile_translations en on en.profile_id=p.id and en.locale='en' where t.id is not null or en.id is not null order by p.id nulls first limit 1",
-            ("@locale", locale)
-        );
-        if (
-            profile.TryGetValue("trajectory", out var trajectory)
-            && trajectory is string trajectoryJson
-            && !string.IsNullOrWhiteSpace(trajectoryJson)
-        )
-        {
-            try
-            {
-                fields["experience"] = JsonDocument.Parse(trajectoryJson).RootElement.Clone();
-            }
-            catch (JsonException)
-            {
-                fields["experience"] = Array.Empty<object>();
-            }
-        }
+        var trajectory = ChromeQueries.Trajectory(context, locale);
+        if (!string.IsNullOrWhiteSpace(trajectory))
+            fields["experience"] = JsonArray(trajectory);
 
-        var resumeId = Id(row, "resume_id");
-        if (resumeId > 0)
+        if (row.ResumeId > 0)
         {
-            var selectedCases = Rows(
-                    db,
-                    "select c.slug from resume_selected_case x join case_studies c on c.id=x.case_study_id where x.resume_id=@id and c.hidden=false and c.nda=false order by x.\"order\" nulls first",
-                    ("@id", resumeId)
-                )
-                .Select(item =>
-                    Cases(context, locale).FirstOrDefault(value => value.Slug == Text(item, "slug"))
-                )
+            var selectedCases = ResumeQueries
+                .SelectedCaseSlugs(context, row.ResumeId)
+                .Select(slug => cases.FirstOrDefault(value => value.Slug == slug))
                 .Where(value => value is not null)
                 .ToArray();
             fields["selected_cases"] = System.Text.Json.JsonSerializer.SerializeToElement(
                 selectedCases
             );
 
-            var skills = Rows(
-                    db,
-                    "select s.id, t.slug, coalesce(tt.name, en.name) as name from resume_skills s join topics t on t.id=s.topic_id left join topic_translations tt on tt.topic_id=t.id and tt.locale=@locale left join topic_translations en on en.topic_id=t.id and en.locale='en' where s.resume_id=@id order by s.\"order\" nulls first",
-                    ("@id", resumeId),
-                    ("@locale", locale)
-                )
+            var technologies = ResumeQueries
+                .SkillTechnologies(context, row.ResumeId, locale)
+                .ToLookup(item => item.OwnerId);
+            var skills = ResumeQueries
+                .Skills(context, row.ResumeId, locale)
                 .Select(item => new
                 {
-                    name = Text(item, "name", Text(item, "slug")),
-                    technologies = TechnologiesFor(
-                        db,
-                        "resume_skill_technology",
-                        "resume_skill_id",
-                        Id(item, "id"),
-                        locale
-                    ),
+                    name = item.Name ?? item.Slug,
+                    technologies = Technologies(technologies[item.Id]),
                 })
                 .ToArray();
             fields["skills"] = System.Text.Json.JsonSerializer.SerializeToElement(skills);
 
-            var languages = Rows(
-                    db,
-                    "select l.slug, coalesce(lt.name, en.name) as name, x.proficiency from resume_languages x join languages l on l.id=x.language_id left join language_translations lt on lt.language_id=l.id and lt.locale=@locale left join language_translations en on en.language_id=l.id and en.locale='en' where x.resume_id=@id order by x.\"order\" nulls first",
-                    ("@id", resumeId),
-                    ("@locale", locale)
-                )
+            var languages = ResumeQueries
+                .Languages(context, row.ResumeId, locale)
                 .Select(item => new
                 {
-                    name = Text(item, "name", Text(item, "slug")),
-                    proficiency = Text(item, "proficiency"),
+                    name = item.Name ?? item.Slug,
+                    proficiency = Format.Text(item.Proficiency),
                 })
                 .ToArray();
             fields["languages"] = System.Text.Json.JsonSerializer.SerializeToElement(languages);
@@ -758,6 +640,20 @@ public sealed partial class PublicSiteContentProvider(
         return JsonDocument
             .Parse(System.Text.Json.JsonSerializer.Serialize(fields))
             .RootElement.Clone();
+    }
+
+    private static object? JsonArray(string? json)
+    {
+        if (string.IsNullOrWhiteSpace(json))
+            return json;
+        try
+        {
+            return JsonDocument.Parse(json).RootElement.Clone();
+        }
+        catch (JsonException)
+        {
+            return Array.Empty<object>();
+        }
     }
 
     private static JsonElement Json(string value) =>
@@ -875,25 +771,6 @@ public sealed partial class PublicSiteContentProvider(
         return new PublicNavigation(groups, footerLinks, sitemap);
     }
 
-    private static List<PublicTechnology> TechnologiesFor(
-        DbConnection db,
-        string pivot,
-        string key,
-        long id,
-        string locale
-    ) =>
-        Rows(
-                db,
-                $"select t.slug, t.public_id, coalesce(tt.name, en.name) as name from {pivot} p join technologies t on t.id=p.technology_id left join technology_translations tt on tt.technology_id=t.id and tt.locale=@locale left join technology_translations en on en.technology_id=t.id and en.locale='en' where p.{key}=@id order by t.\"order\" nulls first, t.slug nulls first",
-                ("@id", id),
-                ("@locale", locale)
-            )
-            .Select(row => new PublicTechnology(
-                Text(row, "slug"),
-                Text(row, "name", Text(row, "slug"))
-            ))
-            .ToList();
-
     private static Dictionary<string, string?> Values(string json)
     {
         if (string.IsNullOrWhiteSpace(json))
@@ -936,9 +813,6 @@ public sealed partial class PublicSiteContentProvider(
         Message = "Could not read the portfolio SQLite database in read-only mode."
     )]
     private static partial void LogDatabaseReadFailed(ILogger logger, Exception exception);
-
-    private static string Key(Dictionary<string, object?> row) =>
-        PublicRouteKey.Compose(Text(row, "public_id"), Text(row, "slug"));
 
     private static string Route(string route, string slug, string locale)
     {

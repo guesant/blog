@@ -7,6 +7,7 @@ var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
+builder.Services.AddLocalization();
 builder.Services.AddBlazorBlueprintPrimitives();
 builder.Services.AddScoped<Portfolio.Blazor.UI.Foundations.SiteToastService>();
 builder.Services.AddScoped<Portfolio.Blazor.UI.Foundations.SiteDialogService>();

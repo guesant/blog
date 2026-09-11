@@ -8,14 +8,10 @@ artifacts/
 .vs/
 .vscode/
 node_modules
-.pnpm-store
-.config/moon/cache
-tools/quality/.venv
 .github
 .claude
 docs
 LICENSES
 playwright-report
 test-results
-CSharpier/
 .env*

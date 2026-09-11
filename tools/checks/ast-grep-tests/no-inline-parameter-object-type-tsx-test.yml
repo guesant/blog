@@ -1,7 +1,0 @@
-id: no-inline-parameter-object-type-tsx
-valid:
-  - |-
-      type ViewProps = { value: string }; function View(props: ViewProps) { return <span>{props.value}</span>; }
-invalid:
-  - |-
-      function View(props: { value: string }) { return <span>{props.value}</span>; }

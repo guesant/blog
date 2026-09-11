@@ -1,9 +1,0 @@
-id: no-destructured-optional-object-parameters-tsx
-language: Tsx
-severity: error
-message: Funções devem receber um identificador para objetos e desestruturá-lo dentro do corpo.
-
-rule:
-  kind: optional_parameter
-  has:
-    kind: object_pattern

@@ -1,9 +1,0 @@
-id: no-destructured-object-parameters-ts
-valid:
-  - |-
-      function render(props: RenderProps) { return props.value; }
-  - |-
-      test('uses a framework fixture', async ({ page }) => page.goto('/'));
-invalid:
-  - |-
-      function render({ value }: RenderProps) { return value; }

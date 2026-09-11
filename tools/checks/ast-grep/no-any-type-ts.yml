@@ -1,8 +1,0 @@
-id: no-any-type-ts
-language: TypeScript
-severity: error
-message: Não use any; modele o valor com unknown ou um tipo nomeado.
-
-rule:
-  kind: predefined_type
-  regex: '^any$'

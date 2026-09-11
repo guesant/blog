@@ -1,7 +1,0 @@
-id: no-double-type-assertion-tsx
-language: Tsx
-severity: error
-message: Não contorne o sistema de tipos com uma asserção dupla via unknown.
-
-rule:
-  pattern: $VALUE as unknown as $TYPE

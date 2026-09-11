@@ -2,9 +2,6 @@ set shell := ["bash", "-uc"]
 set positional-arguments
 
 
-toolchain_image := "portfolio-toolchain:local"
-workspace := `pwd`
-
 compose := "docker compose -f compose.yaml"
 compose_dev := "docker compose -f compose.yaml -f compose.dev.yaml"
 compose_pg := compose_dev + " -f compose.postgres.yaml"
@@ -216,90 +213,3 @@ audit-all:
     echo ""
     echo "note: just audit-lighthouse is slower and not included here, run it separately"
     exit $overall
-
-# The workspace toolchain: Hermit-pinned tools, Moon, and the shared quality
-# gates that apply to any code in the repository.
-_ensure-docker:
-    @command -v docker >/dev/null 2>&1 || { echo 'Docker is required; install it before using this recipe.' >&2; exit 1; }
-    @docker info >/dev/null 2>&1 || { echo 'Docker is unavailable; start Docker before using this recipe.' >&2; exit 1; }
-
-_ensure-image: _ensure-docker
-    docker build --file .devcontainer/toolchain/Containerfile --target browser --tag {{ toolchain_image }} .
-
-_toolchain *args: _ensure-image
-    command=("$@"); \
-    docker run --rm --init \
-      --env HOME=/var/cache/hermit \
-      --env PNPM_HOME=/var/cache/pnpm/home \
-      --env PLAYWRIGHT_BROWSERS_PATH=/var/cache/playwright \
-      --env TECTONIC_CACHE_DIR=/var/cache/tectonic \
-      --env TECTONIC_BUNDLE=https://data1.fullyjustified.net/tlextras-2022.0r0.tar \
-      --env MOON_CACHE_DIR=/var/cache/moon \
-      --env MOON_TOOLCHAIN_FORCE_GLOBALS=true \
-      --env PORTFOLIO_PDF_COMPILER=/workspace/tools/pdf/compile.sh \
-      --volume "{{ workspace }}:/workspace" \
-      --volume portfolio-hermit:/var/cache/hermit \
-      --volume portfolio-pnpm:/var/cache/pnpm \
-      --volume portfolio-node-modules:/workspace/node_modules \
-      --volume portfolio-moon:/var/cache/moon \
-      --volume portfolio-playwright:/var/cache/playwright \
-      --volume portfolio-tectonic:/var/cache/tectonic \
-      --volume portfolio-quality:/workspace/tools/quality/.venv \
-      --workdir /workspace \
-      {{ toolchain_image }} "${command[@]}"
-
-_toolchain-ports *args: _ensure-image
-    command=("$@"); \
-    docker run --rm --init \
-      --publish 3000:3000 \
-      --publish 127.0.0.1:4001:4001 \
-      --publish 127.0.0.1:9000:9000 \
-      --publish 127.0.0.1:4100:4100 \
-      --env HOME=/var/cache/hermit \
-      --env PNPM_HOME=/var/cache/pnpm/home \
-      --env PLAYWRIGHT_BROWSERS_PATH=/var/cache/playwright \
-      --env TECTONIC_CACHE_DIR=/var/cache/tectonic \
-      --env TECTONIC_BUNDLE=https://data1.fullyjustified.net/tlextras-2022.0r0.tar \
-      --env MOON_CACHE_DIR=/var/cache/moon \
-      --env MOON_TOOLCHAIN_FORCE_GLOBALS=true \
-      --env PORTFOLIO_PDF_COMPILER=/workspace/tools/pdf/compile.sh \
-      --env CHOKIDAR_USEPOLLING=true \
-      --env WATCHPACK_POLLING=true \
-      --volume "{{ workspace }}:/workspace" \
-      --volume portfolio-hermit:/var/cache/hermit \
-      --volume portfolio-pnpm:/var/cache/pnpm \
-      --volume portfolio-node-modules:/workspace/node_modules \
-      --volume portfolio-moon:/var/cache/moon \
-      --volume portfolio-playwright:/var/cache/playwright \
-      --volume portfolio-tectonic:/var/cache/tectonic \
-      --volume portfolio-quality:/workspace/tools/quality/.venv \
-      --workdir /workspace \
-      {{ toolchain_image }} "${command[@]}"
-
-_install:
-    just _toolchain bash -c 'printf "y\ny\n" | script -qefc ".config/hermit/bin/hermit install --quiet moon-2.4.6 node-24.18.0 pnpm-11.17.0" /dev/null && pnpm install --frozen-lockfile'
-
-_install-quality: _install
-    just _toolchain bash -c 'printf "y\ny\n" | script -qefc ".config/hermit/bin/hermit install --quiet actionlint-1.7.12 shellcheck-0.11.0 qlty-0.640.0 zizmor-1.29.0 uv-0.12.1" /dev/null'
-
-_install-pdf: _install
-    just _toolchain bash -c 'printf "y\ny\n" | script -qefc ".config/hermit/bin/hermit install --quiet tectonic-0.16.9 tectonic-bundle-2022.0r0" /dev/null'
-
-workspace-install: _install
-
-workspace-check: _install-quality
-    just _toolchain bash -c 'MOON_TOOLCHAIN_FORCE_GLOBALS=true moon exec ":#check" --on-failure continue'
-
-workspace-format: _install
-    just _toolchain bash -c 'moon run workspace:format'
-
-workspace-ci: workspace-check
-
-workspace-clean: _ensure-docker
-    docker run --rm --volume "{{ workspace }}:/workspace" --workdir /workspace {{ toolchain_image }} bash -c 'rm -rf .config/moon/cache tools/quality/.venv'
-
-workspace-cache-clean: _ensure-docker
-    for volume in portfolio-hermit portfolio-pnpm portfolio-node-modules portfolio-moon portfolio-playwright portfolio-tectonic portfolio-quality; do docker volume inspect "$volume" >/dev/null 2>&1 && docker volume rm "$volume" || true; done
-
-workspace-moon *args: _install
-    just _toolchain bash -c 'moon {{ args }}'

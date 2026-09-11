@@ -1,7 +1,0 @@
-id: no-double-type-assertion-ts
-valid:
-  - |-
-      const value = input as Target;
-invalid:
-  - |-
-      const value = input as unknown as Target;

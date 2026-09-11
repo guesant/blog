@@ -1,7 +1,0 @@
-id: no-complex-parameter-type-ts
-valid:
-  - |-
-      type Listener = (value: string) => void; function subscribe(listener: Listener) { listener('ok'); }
-invalid:
-  - |-
-      function subscribe(listener: (value: string) => void) { listener('invalid'); }

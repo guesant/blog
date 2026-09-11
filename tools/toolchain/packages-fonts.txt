@@ -1,3 +1,0 @@
-fontconfig
-fonts-liberation
-fonts-noto-color-emoji

@@ -5,6 +5,8 @@
 <PageTitle>Admin Login</PageTitle>
 
 <SiteAuthCard Title="Admin Login"
+    BackHref="/"
+    BackLabel="Back to the site"
     Error="@(HasError ? "Google sign-in failed or the account isn't authorized." : null)">
     <SiteForm Method="post"
         Action="/admin/sign-in"

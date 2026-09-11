@@ -5,4 +5,11 @@
         <SiteNotice Tone="SiteTone.Danger">@Error</SiteNotice>
     }
     @ChildContent
+    @if (!string.IsNullOrWhiteSpace(BackHref))
+    {
+        <SiteLink Variant="SiteButtonVariant.Link" Class="site-auth-card-back" Href="@BackHref">
+            <SiteIcon Name="arrow-left" Size="14" />
+            @BackLabel
+        </SiteLink>
+    }
 </div>

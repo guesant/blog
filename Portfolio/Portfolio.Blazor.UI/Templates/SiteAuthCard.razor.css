@@ -9,6 +9,13 @@
     background: var(--site-surface);
 }
 
+.site-auth-card ::deep .site-auth-card-back {
+    display: inline-flex;
+    align-items: center;
+    justify-self: start;
+    gap: var(--site-space-1);
+}
+
 .site-auth-card h1 {
     margin: 0;
     font-size: var(--site-text-2xl);

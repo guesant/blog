@@ -25,5 +25,9 @@ public partial class SiteHero
 
     [Parameter]
     public RenderFragment? ChildContent { get; set; }
+
+    /// <summary>Controls pinned to the right end of the title row, such as page actions.</summary>
+    [Parameter]
+    public RenderFragment? Actions { get; set; }
     private string BackAriaLabel => L["back_to", BackLabel];
 }

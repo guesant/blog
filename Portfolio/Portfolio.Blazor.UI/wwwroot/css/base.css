@@ -138,6 +138,13 @@ textarea:not(.form-control):focus-visible,
     z-index: var(--site-z-raised);
     margin-top: var(--site-space-2);
 }
+.site-dropdown[data-align="end"] .site-dropdown-details[open] > .content-actions-menu-items {
+    right: 0;
+    left: auto;
+}
+.content-actions-menu-items .dropdown-item[href] {
+    text-decoration: none;
+}
 .content-actions-menu-items .dropdown-item {
     width: 100%;
     height: auto;

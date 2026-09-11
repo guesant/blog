@@ -5,7 +5,12 @@
 .site-hero > .hero-title-row > h1 {
     margin: 0;
 }
-.hero-title-row ::deep .site-control {
+.hero-title-row > .hero-actions {
+    flex: 0 0 auto;
+    margin-left: auto;
+    align-self: start;
+}
+.hero-title-row ::deep [data-site-back] {
     flex: 0 0 auto;
     width: var(--site-control-h-sm);
     height: var(--site-control-h-sm);

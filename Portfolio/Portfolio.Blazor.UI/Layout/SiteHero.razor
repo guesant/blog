@@ -23,6 +23,10 @@
         {
             @TitleContent
         }
+        @if (Actions is not null)
+        {
+            <div class="hero-actions">@Actions</div>
+        }
     </div>
     @if (!string.IsNullOrWhiteSpace(Lead))
     {

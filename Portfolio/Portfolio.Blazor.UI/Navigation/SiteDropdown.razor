@@ -1,4 +1,6 @@
-<div class="site-dropdown content-actions-menu" data-slot="dropdown">
+<div class="site-dropdown content-actions-menu"
+    data-slot="dropdown"
+    data-align="@(AlignEnd ? "end" : "start")">
     @if (RendererInfo.IsInteractive)
     {
         <BlazorBlueprint.Primitives.DropdownMenu.BbDropdownMenu>
@@ -6,6 +8,7 @@
                 @ToggleContent
             </BlazorBlueprint.Primitives.DropdownMenu.BbDropdownMenuTrigger>
             <BlazorBlueprint.Primitives.DropdownMenu.BbDropdownMenuContent AdditionalAttributes="@ContentAttributes"
+                Align="@(AlignEnd ? BlazorBlueprint.Primitives.PopoverAlign.End : BlazorBlueprint.Primitives.PopoverAlign.Start)"
                 CloseOnEscape="true">
                 @MenuContent
             </BlazorBlueprint.Primitives.DropdownMenu.BbDropdownMenuContent>

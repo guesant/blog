@@ -11,14 +11,30 @@ public partial class SiteDropdown
     [Parameter]
     public string? ExclusiveGroup { get; set; }
 
-    private Dictionary<string, object> TriggerAttributes { get; } =
-        new()
+    /// <summary>Opens the menu aligned to the trigger's right edge instead of its left edge.</summary>
+    [Parameter]
+    public bool AlignEnd { get; set; }
+
+    /// <summary>Renders the trigger as a small square icon button; the label becomes its aria-label.</summary>
+    [Parameter]
+    public string? IconTriggerLabel { get; set; }
+
+    private Dictionary<string, object> TriggerAttributes
+    {
+        get
         {
-            ["class"] = "site-control",
-            ["data-slot"] = "button",
-            ["data-variant"] = "outline",
-            ["data-size"] = "default",
-        };
+            var attributes = new Dictionary<string, object>
+            {
+                ["class"] = "site-control",
+                ["data-slot"] = "button",
+                ["data-variant"] = "outline",
+                ["data-size"] = IconTriggerLabel is null ? "default" : "icon-sm",
+            };
+            if (IconTriggerLabel is not null)
+                attributes["aria-label"] = IconTriggerLabel;
+            return attributes;
+        }
+    }
 
     private Dictionary<string, object> ContentAttributes { get; } =
         new() { ["class"] = "content-actions-menu-items" };

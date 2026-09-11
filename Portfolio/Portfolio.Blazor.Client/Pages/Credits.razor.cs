@@ -134,11 +134,11 @@ public partial class Credits
                     true
                 ),
                 new(
-                    "inspiration",
-                    CategoryLabel("inspiration"),
+                    "tool",
+                    CategoryLabel("tool"),
                     PagedCredits
                         .Where(item =>
-                            item.Category.Equals("inspiration", StringComparison.OrdinalIgnoreCase)
+                            item.Category.Equals("tool", StringComparison.OrdinalIgnoreCase)
                         )
                         .ToArray(),
                     true

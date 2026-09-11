@@ -151,15 +151,15 @@
                         Size="12" />@string.Join(" · ", new[] { profile.Title, profile.Location }.Where(value => !string.IsNullOrWhiteSpace(value)))</SiteText>
                 @if (!string.IsNullOrWhiteSpace(profile.BirthCity) || Age is not null) { <SiteText Variant="SiteTextVariant.Meta">@string.Join(" · ", new[] { Age is null ? null : L["years_old", Age.Value].Value, profile.BirthCity }.Where(value => !string.IsNullOrWhiteSpace(value)))</SiteText> }
                 @if (!string.IsNullOrWhiteSpace(profile.Interests)) { <SiteText Variant="SiteTextVariant.SectionLabel">
-                    <SiteIcon Name="heart" Size="12" />@(L["legacy_3623ae3856a2"])</SiteText>
+                    <SiteIcon Name="heart" Size="12" />@(L["legacy_b46391ae9f6b"])</SiteText>
                         <SiteText Variant="SiteTextVariant.Meta">@profile.Interests</SiteText> }
                 @if (!string.IsNullOrWhiteSpace(profile.Learning)) { <SiteText Variant="SiteTextVariant.SectionLabel">
-                    <SiteIcon Name="lightbulb" Size="12" />@(L["legacy_b46391ae9f6b"])</SiteText>
+                    <SiteIcon Name="lightbulb" Size="12" />@(L["legacy_cbc717a597aa"])</SiteText>
                         <SiteText Variant="SiteTextVariant.Meta">@profile.Learning</SiteText> }
                 @if (PersonalInterestLabels.Count > 0) { <SiteText Variant="SiteTextVariant.SectionLabel">
-                    <SiteIcon Name="star" Size="12" />@(L["legacy_cbc717a597aa"])</SiteText>
+                    <SiteIcon Name="star" Size="12" />@(L["legacy_a5728311f54c"])</SiteText>
                         <SiteList Class="list-group-flush"
-                            AriaLabel="@(L["legacy_cbc717a597aa"])">@foreach (var interest in PersonalInterestLabels) { <SiteListItem Class="list-group-item">@interest</SiteListItem> }</SiteList> }
+                            AriaLabel="@(L["legacy_a5728311f54c"])">@foreach (var interest in PersonalInterestLabels) { <SiteListItem Class="list-group-item">@interest</SiteListItem> }</SiteList> }
             </SiteCard>
         }
         @if (!string.IsNullOrWhiteSpace(Field("story")))

@@ -1,4 +1,3 @@
-using System.Data.Common;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,22 +8,6 @@ public sealed class SqliteDatabaseProvider(DatabaseOptions options) : IDatabaseP
     public DatabaseProviderKind Kind => DatabaseProviderKind.Sqlite;
 
     public bool IsContentAvailable() => File.Exists(options.SqlitePath);
-
-    public async Task<DbConnection> OpenReadOnlyConnectionAsync(
-        CancellationToken cancellationToken = default
-    )
-    {
-        var connection = new SqliteConnection(
-            new SqliteConnectionStringBuilder
-            {
-                DataSource = options.SqlitePath,
-                Mode = SqliteOpenMode.ReadOnly,
-                Cache = SqliteCacheMode.Shared,
-            }.ToString()
-        );
-        await connection.OpenAsync(cancellationToken);
-        return connection;
-    }
 
     public void ConfigureAdmin(DbContextOptionsBuilder builder)
     {

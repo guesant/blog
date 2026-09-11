@@ -8,44 +8,11 @@ fail() {
 
 repo_root="$(cd "$(dirname "$0")/../.." && pwd)"
 host="$repo_root/Portfolio/Portfolio.Blazor"
-readers="$host/PublicSiteContentProvider.cs $host/PublicMetadataEndpoints.cs $host/Program.cs"
 
-# Every SQL string in a public reader that touches a table with a hidden flag must filter it on the
-# same alias, in the same query. Resources additionally need visibility='public'; projects and case
-# studies additionally need nda=false. Related-content, pivot and lookup queries count too: a hidden item
-# reached through a public one is still a leak.
-rules="projects:hidden=false,nda=false
-case_studies:hidden=false,nda=false
-writings:hidden=false
-resources:hidden=false,visibility='public'
-reference_collections:hidden=false
-experiments:hidden=false
-snippets:hidden=false"
-
-problems=0
-for file in $readers; do
-    grep -noE '"(select|SELECT)[^"]*"' "$file" | while IFS= read -r hit; do
-        line="${hit%%:*}"
-        query="${hit#*:}"
-        printf '%s\n' "$rules" | while IFS=: read -r table conditions; do
-            printf '%s\n' "$query" | grep -oE "(from|join) +$table +[A-Za-z_][A-Za-z0-9_]*" | while read -r _ _ alias; do
-                old_ifs="$IFS"
-                IFS=,
-                for condition in $conditions; do
-                    IFS="$old_ifs"
-                    if ! printf '%s\n' "$query" | grep -qE "\b$alias\.${condition}"; then
-                        echo "${file#"$repo_root"/}:$line $table as $alias lacks $condition"
-                    fi
-                done
-                IFS="$old_ifs"
-            done
-        done
-    done
-done >/tmp/hidden-content-problems
-
-if [ -s /tmp/hidden-content-problems ]; then
-    cat /tmp/hidden-content-problems >&2
-    fail "a public query reads a hidden-capable table without filtering it"
+public_code="$host/PublicSiteContentProvider.cs $host/PublicKnowledgeGraphProvider.cs $host/PublicMetadataEndpoints.cs $(find "$host/PublicQueries" -name '*.cs')"
+# shellcheck disable=SC2086
+if grep -En '"(select|SELECT)[[:space:]]|FromSql|SqlQuery|ExecuteSql|DbConnection|PortfolioAdminDbContext' $public_code; then
+    fail "public readers must query through PortfolioPublicDbContext, never raw SQL or the admin context"
 fi
 
 filters="$host/Data/PublicVisibilityFilters.cs"

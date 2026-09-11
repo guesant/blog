@@ -1,4 +1,3 @@
-using System.Data.Common;
 using Microsoft.EntityFrameworkCore;
 
 namespace Portfolio.Blazor.Data.Providers;
@@ -10,8 +9,6 @@ public interface IDatabaseProvider
     DatabaseProviderKind Kind { get; }
 
     bool IsContentAvailable();
-
-    Task<DbConnection> OpenReadOnlyConnectionAsync(CancellationToken cancellationToken = default);
 
     void ConfigureAdmin(DbContextOptionsBuilder builder);
 

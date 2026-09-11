@@ -1,4 +1,3 @@
-using System.Data.Common;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 
@@ -11,30 +10,16 @@ public sealed class PostgresDatabaseProvider(DatabaseOptions options) : IDatabas
     public bool IsContentAvailable() =>
         !string.IsNullOrWhiteSpace(options.PostgresReadConnectionString);
 
-    // IMPORTANT: the public site must never be able to write. SQLite gets that from the read-only
-    // open mode; here every statement of the session runs inside a read-only transaction, whatever
-    // grants the role happens to have. A SELECT-only role in PORTFOLIO_DB_READ_CONNECTION is the
-    // second layer, not a replacement for this option.
-    public async Task<DbConnection> OpenReadOnlyConnectionAsync(
-        CancellationToken cancellationToken = default
-    )
-    {
-        var connection = new NpgsqlConnection(
-            new NpgsqlConnectionStringBuilder(options.PostgresReadConnectionString)
-            {
-                Options = "-c default_transaction_read_only=on",
-            }.ToString()
-        );
-        await connection.OpenAsync(cancellationToken);
-        return connection;
-    }
-
     public void ConfigureAdmin(DbContextOptionsBuilder builder) =>
         builder.UseNpgsql(
             options.PostgresConnectionString,
             npgsql => npgsql.MigrationsAssembly("Portfolio.Blazor.Database.Postgres")
         );
 
+    // IMPORTANT: the public site must never be able to write. SQLite gets that from the read-only
+    // open mode; here every statement of the session runs inside a read-only transaction, whatever
+    // grants the role happens to have. A SELECT-only role in PORTFOLIO_DB_READ_CONNECTION is the
+    // second layer, not a replacement for this option.
     public void ConfigurePublicRead(DbContextOptionsBuilder builder) =>
         builder.UseNpgsql(
             new NpgsqlConnectionStringBuilder(options.PostgresReadConnectionString)

@@ -25,6 +25,12 @@
     min-width: 0;
     align-items: center;
 }
+.breadcrumb-bar .breadcrumb-item.active {
+    flex: 1 1 auto;
+}
+.breadcrumb-bar .breadcrumb-item.active > .breadcrumb-current {
+    max-width: none;
+}
 .breadcrumb-bar .breadcrumb-item > ::deep .breadcrumb-link,
 .breadcrumb-bar .breadcrumb-item > .breadcrumb-current {
     display: inline-flex;

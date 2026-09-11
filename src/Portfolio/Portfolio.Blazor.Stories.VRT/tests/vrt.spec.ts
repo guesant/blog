@@ -17,10 +17,10 @@ const stories = loadStories().filter((e) => e.type === "story");
 for (const story of stories) {
     test(`${story.title} - ${story.name}`, async ({ page }) => {
         await page.goto(`/iframe.html?id=${encodeURIComponent(story.id)}&viewMode=story`);
-
-        await page.waitForFunction(() => typeof BlazingStory !== "undefined");
-        await page.evaluate(() => BlazingStory.readyView());
-        const root = page.locator(".preview-story-area");
-        await expect(root).toHaveScreenshot(`${story.id}.png`);
+        await page.waitForLoadState("networkidle");
+        await page.waitForFunction(() =>
+            typeof BlazingStory === "undefined" ? false : BlazingStory.readyView().then(() => true),
+        );
+        await expect(page).toHaveScreenshot(`${story.id}.png`);
     });
 }

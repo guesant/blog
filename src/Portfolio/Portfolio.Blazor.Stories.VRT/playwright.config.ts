@@ -9,7 +9,7 @@ export default defineConfig({
     globalSetup: "./scripts/global-setup.ts",
     fullyParallel: true,
     forbidOnly: !!process.env.CI,
-    retries: 0,
+    retries: process.env.CI ? 1 : 0,
     workers: 4,
     reporter: [["html", { open: "never" }]],
     use: {

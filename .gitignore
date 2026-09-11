@@ -7,13 +7,9 @@ node_modules
 /.nuget-cache/
 
 .env*
-!.env.example
 !.env.prod.example
 
 playwright-report
 test-results
-performance-results
 
 **/.DS_Store
-
-/CSharpier/

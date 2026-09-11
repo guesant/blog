@@ -54,7 +54,8 @@ same model with that provider's design-time factory:
     just db-update [sqlite|postgres]
     just schema                          # has-pending-model-changes for both assemblies
 
-Provider-specific mapping lives in `PortfolioAdminDbContext.ApplyProviderMappings`: on
+Provider-specific mapping lives in `PortfolioModel.ApplyProviderMappings`, shared by both
+contexts: on
 PostgreSQL, `DateOnly` columns are native `date` (the lenient text converter is SQLite-only)
 and every `DateTime` is `timestamp without time zone`, because the legacy values are
 wall-clock timestamps with no zone. Do not start writing `DateTime.UtcNow` from the admin
@@ -66,20 +67,36 @@ than that (`reference_collection_translations_reference_collection_id_locale_uni
 "zero differences" claim above is about the SQLite baseline only.
 
 The public cache invalidates by file length and mtime on SQLite and by the
-`content_revisions` row on PostgreSQL; the admin bumps that row after every committed write
+`content_revisions` row on PostgreSQL (read through the public context); the admin bumps that row after every committed write
 through `IDatabaseProvider.SignalContentChangedAsync` (on SQLite the same call is the WAL
 checkpoint). Backups are not the app's job on either engine: copy the SQLite file (the
 `Portfolio.Blazor.Snapshot` CLI does that for dev snapshots) or run `pg_dump` from the host.
 
 `just test-data` runs `Portfolio.Blazor.Data.Tests`: it migrates a fresh SQLite file, seeds it
 with plain SQL, builds the public snapshot and knowledge graph through the real providers,
-and asserts the hidden-content rules and orderings. With `PORTFOLIO_TEST_PG_CONNECTION` set
+and asserts the hidden-content rules, the declared query filters and the orderings. With `PORTFOLIO_TEST_PG_CONNECTION` set
 (`just test-data-postgres`, and the `postgres-smoke` CI job) it does the same against a
 throwaway PostgreSQL database and requires the two JSON outputs to be identical.
+
+## Two contexts
+
+`PortfolioModel.Configure` builds one EF model; two contexts use it.
+
+`PortfolioAdminDbContext` is the admin's read-write context, unfiltered, and the one the
+migrations assemblies target. `PortfolioPublicDbContext` is what the public site reads
+through (`PublicSiteContentProvider`, `PublicKnowledgeGraphProvider` and the LINQ queries
+in `Portfolio/Portfolio.Blazor/PublicQueries/`). It applies `PublicVisibilityFilters` as
+global query filters (`hidden`, `nda`, `visibility = 'public'`, active credits), runs with
+`QueryTrackingBehavior.NoTracking`, throws from `SaveChanges`, and gets its connection from
+`IDatabaseProvider.ConfigurePublicRead`: SQLite opened with `Mode=ReadOnly`, PostgreSQL with
+`default_transaction_read_only=on`. Reaching a filtered parent from a pivot uses an explicit
+`join` on the filtered `DbSet`, never the navigation, so the row disappears instead of
+turning into a left join with nulls. `IgnoreQueryFilters` is forbidden in the runtime by
+`verify-hidden-content.sh`; only the data tests use it, to prove the filters bite.
 
 ## Tables outside the admin CRUD
 
 `content_relations`, `relation_types`, `audit_log` and `audit_requests` are mapped
-so the migrations cover them, but they have no `DbSet` and no admin page. The public
-site reads the first three with raw SQL. `audit_log` is read-only and frozen: nothing
-in this application appends to it.
+so the migrations cover them, but they have no admin page. The first three have a `DbSet`
+only on the public context, which is where the site reads them. `audit_log` is read-only
+and frozen: nothing in this application appends to it.

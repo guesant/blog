@@ -138,13 +138,15 @@ _vrt npm_command:
     #!/usr/bin/env sh
     set -eu
     docker rm -f blazor-stories-vrt >/dev/null 2>&1 || true
-    {{compose_dev}} run -d --rm --name blazor-stories-vrt -p 8081:8081 -e NUGET_PACKAGES=/src/.nuget-cache -e ASPNETCORE_URLS=http://0.0.0.0:8081 web sh -lc 'dotnet run --project src/Portfolio/Portfolio.Blazor.Stories/Portfolio.Blazor.Stories.csproj --configuration Release --no-restore --urls http://0.0.0.0:8081' >/dev/null
+    {{compose_dev}} run -d --rm --name blazor-stories-vrt -p 8081:8081 -e NUGET_PACKAGES=/src/.nuget-cache -e ASPNETCORE_URLS=http://0.0.0.0:8081 web sh -lc 'dotnet run --project src/Portfolio/Portfolio.Blazor.Stories/Portfolio.Blazor.Stories.csproj --configuration Release --no-build --urls http://0.0.0.0:8081' >/dev/null
     trap 'docker rm -f blazor-stories-vrt >/dev/null 2>&1 || true' EXIT
     i=0
     while ! curl -sf http://localhost:8081/ >/dev/null 2>&1; do
         i=$((i + 1))
         if [ "$i" -ge 600 ]; then
             echo "stories server did not start on :8081" >&2
+            docker port blazor-stories-vrt >&2 || true
+            curl -sv http://localhost:8081/ 2>&1 | head -n 20 >&2 || true
             docker logs --tail 50 blazor-stories-vrt >&2 || true
             exit 1
         fi

@@ -60,9 +60,9 @@ public sealed partial class PublicKnowledgeGraphProvider(
                 var nodes = Nodes(db, locale);
                 var index = nodes.ToDictionary(node => node.Id, StringComparer.Ordinal);
                 var edges = new List<PublicGraphEdge>();
-                AddTopicEdges(db, index, edges);
-                AddTechnologyEdges(db, index, edges);
-                AddCollectionEdges(db, index, edges);
+                AddTopicEdges(db, index, edges, locale);
+                AddTechnologyEdges(db, index, edges, locale);
+                AddCollectionEdges(db, index, edges, locale);
                 AddRelationEdges(db, index, edges, locale);
                 var kinds = nodes
                     .Select(node => node.Kind)
@@ -70,7 +70,7 @@ public sealed partial class PublicKnowledgeGraphProvider(
                     .ToDictionary(
                         kind => kind,
                         kind => new PublicGraphKind(
-                            Label(kind),
+                            Label(kind, locale),
                             Colors.TryGetValue(kind, out var color) ? color : "#6b6b6b"
                         )
                     );
@@ -118,9 +118,11 @@ public sealed partial class PublicKnowledgeGraphProvider(
     private void AddTopicEdges(
         PortfolioPublicDbContext db,
         IReadOnlyDictionary<string, PublicGraphNode> index,
-        List<PublicGraphEdge> edges
+        List<PublicGraphEdge> edges,
+        string locale
     )
     {
+        using var culture = CultureScope.Enter(locale);
         foreach (var row in GraphQueries.TopicEdges(db))
         {
             var source = $"{row.TopicableType}:{Format.Id(row.TopicableId)}";
@@ -140,9 +142,11 @@ public sealed partial class PublicKnowledgeGraphProvider(
     private void AddTechnologyEdges(
         PortfolioPublicDbContext db,
         IReadOnlyDictionary<string, PublicGraphNode> index,
-        List<PublicGraphEdge> edges
+        List<PublicGraphEdge> edges,
+        string locale
     )
     {
+        using var culture = CultureScope.Enter(locale);
         foreach (var (kind, rows) in GraphQueries.TechnologyEdges(db))
         {
             foreach (var row in rows)
@@ -160,9 +164,11 @@ public sealed partial class PublicKnowledgeGraphProvider(
     private void AddCollectionEdges(
         PortfolioPublicDbContext db,
         IReadOnlyDictionary<string, PublicGraphNode> index,
-        List<PublicGraphEdge> edges
+        List<PublicGraphEdge> edges,
+        string locale
     )
     {
+        using var culture = CultureScope.Enter(locale);
         foreach (var row in GraphQueries.CollectionEdges(db))
         {
             var source = $"collection:{Format.Id(row.CollectionId)}";
@@ -209,7 +215,11 @@ public sealed partial class PublicKnowledgeGraphProvider(
         }
     }
 
-    private string Label(string kind) => localizer[$"graph_kind_{kind.Replace('-', '_')}"];
+    private string Label(string kind, string locale)
+    {
+        using var culture = CultureScope.Enter(locale);
+        return localizer[$"graph_kind_{kind.Replace('-', '_')}"];
+    }
 
     private static string? Url(string kind, string slug, string locale)
     {

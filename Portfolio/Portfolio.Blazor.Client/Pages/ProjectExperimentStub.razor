@@ -36,6 +36,12 @@
                 <PublishedUpdatedMeta PublishedAt="@PublishedAt"
                     UpdatedAt="@Experiment.UpdatedAt" />
             </ChildContent>
+            <Actions>
+            <ContentActions Title="@Experiment.Name"
+                Url="@CanonicalPath"
+                Body="@(Experiment.Body ?? Experiment.Purpose ?? string.Empty)"
+                ExternalUrl="@Experiment.Href" />
+            </Actions>
         </SiteHero>
 
         @if (Experiment.Technologies is { Count: > 0 })
@@ -57,10 +63,6 @@
 
         @if (!string.IsNullOrWhiteSpace(Experiment.Body)) { <SiteRichText Html="@((MarkupString)MarkdownRenderer.ToHtml(Experiment.Body))"
             Region="content-footer" /> }
-        <ContentActions Title="@Experiment.Name"
-            Url="@CanonicalPath"
-            Body="@(Experiment.Body ?? Experiment.Purpose ?? string.Empty)"
-            ExternalUrl="@Experiment.Href" />
         <ContentHistory ShowHistory="@Experiment.ShowHistory"
             History="@Experiment.History"
             DiffField="body" />

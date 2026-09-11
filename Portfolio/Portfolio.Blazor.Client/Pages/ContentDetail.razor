@@ -36,6 +36,7 @@
             Lead="@Description"
             BackHref="@DetailIndexUrl"
             BackLabel="@DetailIndexLabel">
+            <ChildContent>
             @if (IsWriting)
             {
                 <SiteInline Gap="SiteSpace.Md"
@@ -61,6 +62,13 @@
             {
                 <PublishedUpdatedMeta PublishedAt="@PublishedTime" UpdatedAt="@UpdatedTime" />
             }
+            </ChildContent>
+            <Actions>
+            <ContentActions Title="@Title"
+                Url="@CanonicalPath"
+                Body="@Body"
+                ExternalUrl="@ExternalHref" />
+            </Actions>
         </SiteHero>
 
         @if (TechnologyLinks.Count > 0)
@@ -121,10 +129,6 @@
 
         <SiteRichText Html="@((MarkupString)MarkdownRenderer.ToHtml(Body))"
             Region="content-footer" />
-        <ContentActions Title="@Title"
-            Url="@CanonicalPath"
-            Body="@Body"
-            ExternalUrl="@ExternalHref" />
         <ContentHistory ShowHistory="@ShowHistory" History="@History" DiffField="body" />
         <ContentRelations CurrentUrl="@CanonicalPath" />
         <RelatedContent Items="@Related" />

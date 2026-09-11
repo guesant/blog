@@ -32,8 +32,15 @@
             Lead="@Snippet.Description"
             BackHref="@IndexUrl"
             BackLabel="@BackLabel">
+            <ChildContent>
             <PublishedUpdatedMeta PublishedAt="@Snippet.PublishedAt"
                 UpdatedAt="@Snippet.UpdatedAt" />
+            </ChildContent>
+            <Actions>
+                <ContentActions Title="@Snippet.Title"
+                    Url="@CanonicalPath"
+                    Body="@Snippet.Description" />
+            </Actions>
         </SiteHero>
 
         @if (Snippet.Files is not { Count: > 0 })
@@ -112,12 +119,6 @@
             </SiteGrid>
         }
 
-        @if (!string.IsNullOrWhiteSpace(Snippet.Description))
-        {
-            <ContentActions Title="@Snippet.Title"
-                Url="@CanonicalPath"
-                Body="@Snippet.Description" />
-        }
         <ContentHistory ShowHistory="@(Snippet.ShowHistory)"
             History="@Snippet.History"
             DiffFields="@SnippetHistoryFields" />

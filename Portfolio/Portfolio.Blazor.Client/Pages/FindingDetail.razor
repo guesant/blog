@@ -47,6 +47,9 @@
                 <PublishedUpdatedMeta PublishedAt="@Finding.PublishedDate"
                     UpdatedAt="@Finding.UpdatedDate" />
             </ChildContent>
+            <Actions>
+            <ContentActions Title="@Title" Url="@CanonicalPath" Body="@ActionBody" />
+            </Actions>
         </SiteHero>
 
         @if (Finding.Topics is { Count: > 0 })
@@ -123,7 +126,6 @@
         }
 
         <ContentRelations CurrentUrl="@CanonicalPath" Heading="@ConnectionsLabel" />
-        <ContentActions Title="@Title" Url="@CanonicalPath" Body="@ActionBody" />
 
         <RelatedContent Items="@RelatedFindings" />
     }

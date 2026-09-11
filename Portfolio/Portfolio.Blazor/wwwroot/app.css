@@ -348,8 +348,14 @@ button,
     align-items: center;
     gap: var(--site-space-2);
 }
-.site-content-actions {
-    gap: var(--site-space-2);
+.site-content-actions > .content-actions-primary {
+    border-start-end-radius: 0;
+    border-end-end-radius: 0;
+}
+.site-content-actions > .site-dropdown .site-control {
+    margin-left: calc(-1 * var(--site-border-width));
+    border-start-start-radius: 0;
+    border-end-start-radius: 0;
 }
 .site-relation-group {
     display: grid;

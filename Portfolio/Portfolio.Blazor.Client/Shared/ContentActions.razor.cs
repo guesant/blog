@@ -27,8 +27,8 @@ public partial class ContentActions
             .Replace("&lt;", "<")
             .Replace("&gt;", ">")
             .Trim();
-    private string CopyMenuLabel => L["copy"];
-    private string DownloadMenuLabel => L["download"];
+    private string CopyPageLabel => L["copy_page"];
+    private string MoreActionsLabel => L["more_actions"];
     private string CopyUrlLabel => L["copy_url"];
     private string CopyTextLabel => L["copy_text"];
     private string CopyMarkdownLabel => L["copy_markdown"];

@@ -76,7 +76,16 @@ const CONTENT_ACTIONS_HANDLERS = {
     },
 };
 
+function closeOpenDisclosures(event) {
+    for (const disclosure of document.querySelectorAll("details.site-dropdown-details[open]")) {
+        if (!disclosure.contains(event.target)) {
+            disclosure.open = false;
+        }
+    }
+}
+
 async function handleContentActionsClick(event) {
+    closeOpenDisclosures(event);
     const button = event.target.closest("[data-content-actions-action]");
     if (!button) {
         return;

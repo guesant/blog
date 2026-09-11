@@ -293,6 +293,8 @@
   <data name="qr_code"><value>código QR</value></data>
   <data name="molar_mass_label"><value>massa molar</value></data>
   <data name="credit_category_tools"><value>ferramentas</value></data>
+  <data name="copy_page"><value>copiar página</value></data>
+  <data name="more_actions"><value>mais ações</value></data>
   <data name="years_old"><value>{0} anos</value></data>
   <data name="estimated_time"><value>tempo estimado: {0}min {1}s</value></data>
   <data name="base_auto"><value>automático</value></data>

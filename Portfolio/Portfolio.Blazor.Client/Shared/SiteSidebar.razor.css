@@ -59,9 +59,17 @@
 .site-nav > ul > li {
     display: flex;
     flex-direction: column;
+    gap: var(--site-space-2);
 }
-.site-nav-footer-links .site-nav-sub,
 .site-nav > ul .site-nav-sub {
+    display: grid;
+    gap: var(--site-space-2);
+    margin: 0 0 0 var(--site-space-3);
+    padding: 0 0 0 var(--site-space-3);
+    border-left: var(--site-border-width) solid var(--site-border);
+    list-style: none;
+}
+.site-nav-footer-links .site-nav-sub {
     width: calc(100% - var(--site-space-4));
     gap: var(--site-space-3);
     margin: var(--site-space-3) 0 0 var(--site-space-4);

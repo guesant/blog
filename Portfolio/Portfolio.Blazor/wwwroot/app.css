@@ -8,16 +8,6 @@
 .skip-link:focus {
     transform: translateY(0);
 }
-.container-xxl {
-    width: 100%;
-    padding-inline: var(--site-space-6);
-    margin-inline: auto;
-}
-@media (min-width: 87.5rem) {
-    .container-xxl {
-        max-width: var(--site-container-max);
-    }
-}
 
 /* Utilities: first-party replacement for the generic Bootstrap utility
    classes still used pervasively across the codebase (display, flexbox,

@@ -8,7 +8,14 @@ compose_dev := compose + " -f .docker/compose.dev.yaml"
 docker_run := compose + " run --rm --entrypoint sh web -lc"
 tools_run := compose_dev + " run --rm tools sh -lc"
 
+dotnet_tools_restore := "dotnet tool restore >/dev/null"
+prettier_flags := "--config .config/prettierrc.json --ignore-path .config/prettierignore --ignore-path .gitignore"
+prettier_globs := '"src/Portfolio/Portfolio.Blazor*/**/*.{css,js,ts,html}" "tools/scripts/*.mjs"'
+database_project := "src/Portfolio/Portfolio.Blazor.Database/Portfolio.Blazor.Database.csproj"
+
+
 default: status
+
 
 status:
     {{compose}} ps
@@ -40,11 +47,15 @@ restart:
 logs:
     {{compose}} logs -f web
 
-build:
-    {{docker_run}} 'dotnet build src/Portfolio.Blazor.slnx --configuration Release --no-restore'
+shell:
+    {{compose}} exec web sh
+
 
 restore:
-    {{compose}} run --rm --entrypoint sh web -lc 'dotnet restore src/Portfolio.Blazor.slnx --locked-mode'
+    {{docker_run}} 'dotnet restore src/Portfolio.Blazor.slnx --locked-mode'
+
+build:
+    {{docker_run}} 'dotnet build src/Portfolio.Blazor.slnx --configuration Release --no-restore'
 
 test:
     {{docker_run}} 'dotnet run --project src/Portfolio/Portfolio.Blazor.Core.Tests/Portfolio.Blazor.Core.Tests.csproj --configuration Release --no-build'
@@ -52,25 +63,46 @@ test:
 test-data:
     {{docker_run}} 'dotnet run --project src/Portfolio/Portfolio.Blazor.Data.Tests/Portfolio.Blazor.Data.Tests.csproj --configuration Release --no-build'
 
-check: tools-build format lint comments duplication duplication-razor build test test-data audit schema tokens ui-imports resx-keys hardcoded-text composition verify-stories vrt
+
+check: tools-build \
+    format \
+    lint \
+    comments \
+    duplication \
+    duplication-razor \
+    build \
+    test \
+    test-data \
+    audit \
+    schema \
+    tokens \
+    ui-imports \
+    resx-keys \
+    hardcoded-text \
+    composition \
+    verify-stories \
+    vrt
 
 tools-build:
     {{compose_dev}} build tools
 
 format:
-    {{tools_run}} 'FORMAT_CHECK=1 node tools/scripts/format-razor.mjs && FORMAT_CHECK=1 node tools/scripts/format-razor-attributes.mjs'
-    {{docker_run}} 'dotnet tool restore >/dev/null && HOME=/tmp dotnet csharpier check src/Portfolio'
-    {{tools_run}} 'prettier --config .config/prettierrc.json --ignore-path .config/prettierignore --ignore-path .gitignore --check "src/Portfolio/Portfolio.Blazor*/**/*.{css,js,ts,html}" "tools/scripts/*.mjs"'
+    {{tools_run}} 'FORMAT_CHECK=1 node tools/scripts/format-razor.mjs'
+    {{tools_run}} 'FORMAT_CHECK=1 node tools/scripts/format-razor-attributes.mjs'
+    {{docker_run}} '{{dotnet_tools_restore}} && HOME=/tmp dotnet csharpier check src/Portfolio'
+    {{tools_run}} 'prettier {{prettier_flags}} --check {{prettier_globs}}'
     {{tools_run}} 'shfmt -i 4 -ci -d tools/scripts'
 
 format-fix:
-    {{tools_run}} 'node tools/scripts/format-razor.mjs && node tools/scripts/format-razor-attributes.mjs'
-    {{docker_run}} 'dotnet tool restore >/dev/null && HOME=/tmp dotnet csharpier format src/Portfolio'
-    {{tools_run}} 'prettier --config .config/prettierrc.json --ignore-path .config/prettierignore --ignore-path .gitignore --write "src/Portfolio/Portfolio.Blazor*/**/*.{css,js,ts,html}" "tools/scripts/*.mjs"'
+    {{tools_run}} 'node tools/scripts/format-razor.mjs'
+    {{tools_run}} 'node tools/scripts/format-razor-attributes.mjs'
+    {{docker_run}} '{{dotnet_tools_restore}} && HOME=/tmp dotnet csharpier format src/Portfolio'
+    {{tools_run}} 'prettier {{prettier_flags}} --write {{prettier_globs}}'
     {{tools_run}} 'shfmt -i 4 -ci -w tools/scripts'
 
 lint:
-    {{docker_run}} 'dotnet format src/Portfolio.Blazor.slnx analyzers --verify-no-changes --no-restore --severity warn --verbosity minimal && dotnet build src/Portfolio.Blazor.slnx --configuration Release --no-restore --nologo'
+    {{docker_run}} 'dotnet format src/Portfolio.Blazor.slnx analyzers --verify-no-changes --no-restore --severity warn --verbosity minimal'
+    {{docker_run}} 'dotnet build src/Portfolio.Blazor.slnx --configuration Release --no-restore --nologo'
 
 comments:
     {{docker_run}} 'sh /src/tools/scripts/verify-csharp-comments.sh'
@@ -83,30 +115,6 @@ duplication-razor:
 
 schema:
     {{docker_run}} 'sh /src/tools/scripts/verify-schema.sh'
-
-db-migration name:
-    {{compose_dev}} up -d --wait postgres
-    {{compose_dev}} run --rm -e NUGET_PACKAGES=/src/.nuget-cache --entrypoint sh web -lc 'cd /src && dotnet tool restore >/dev/null && dotnet tool run dotnet-ef migrations add {{name}} --project src/Portfolio/Portfolio.Blazor.Database/Portfolio.Blazor.Database.csproj --startup-project src/Portfolio/Portfolio.Blazor.Database/Portfolio.Blazor.Database.csproj --context PortfolioAdminDbContext'
-
-db-update:
-    {{compose_dev}} up -d --wait postgres
-    {{compose_dev}} run --rm -e NUGET_PACKAGES=/src/.nuget-cache --entrypoint sh web -lc 'cd /src && dotnet tool restore >/dev/null && dotnet tool run dotnet-ef database update --project src/Portfolio/Portfolio.Blazor.Database/Portfolio.Blazor.Database.csproj --startup-project src/Portfolio/Portfolio.Blazor.Database/Portfolio.Blazor.Database.csproj --context PortfolioAdminDbContext'
-
-db-backup:
-    #!/usr/bin/env sh
-    set -eu
-    mkdir -p data/snapshots
-    file="data/snapshots/portfolio-$(date -u +%Y%m%dT%H%M%SZ).dump"
-    {{compose_dev}} exec -T postgres pg_dump -U portfolio -Fc portfolio > "$file"
-    echo "wrote $file"
-
-db-restore file:
-    {{compose_dev}} up -d --wait postgres
-    cat "{{file}}" | {{compose_dev}} exec -T postgres pg_restore -U portfolio -d portfolio --clean --if-exists
-
-db-import-sqlite file:
-    {{compose_dev}} up -d --wait postgres
-    {{compose_dev}} run --rm --entrypoint sh web -lc 'dotnet run --project src/Portfolio/Portfolio.Blazor.Import/Portfolio.Blazor.Import.csproj --configuration Release --no-build -- "{{file}}" "$PORTFOLIO_DB_CONNECTION"'
 
 tokens:
     {{docker_run}} 'sh /src/tools/scripts/verify-design-tokens.sh'
@@ -130,13 +138,43 @@ composition:
     {{docker_run}} 'sh /src/tools/scripts/verify-composition.sh'
 
 audit:
-    {{docker_run}} 'sh /src/tools/scripts/verify-supply-chain.sh && sh /src/tools/scripts/verify-readonly-runtime.sh && sh /src/tools/scripts/verify-admin-guard.sh && sh /src/tools/scripts/verify-hidden-content.sh'
+    {{docker_run}} 'sh /src/tools/scripts/verify-supply-chain.sh'
+    {{docker_run}} 'sh /src/tools/scripts/verify-readonly-runtime.sh'
+    {{docker_run}} 'sh /src/tools/scripts/verify-admin-guard.sh'
+    {{docker_run}} 'sh /src/tools/scripts/verify-hidden-content.sh'
 
-shell:
-    {{compose}} exec web sh
+
+db-migration name:
+    {{compose_dev}} up -d --wait postgres
+    {{compose_dev}} run --rm -e NUGET_PACKAGES=/src/.nuget-cache --entrypoint sh web -lc \
+        '{{dotnet_tools_restore}} && dotnet tool run dotnet-ef migrations add {{name}} --project {{database_project}} --startup-project {{database_project}} --context PortfolioAdminDbContext'
+
+db-update:
+    {{compose_dev}} up -d --wait postgres
+    {{compose_dev}} run --rm -e NUGET_PACKAGES=/src/.nuget-cache --entrypoint sh web -lc \
+        '{{dotnet_tools_restore}} && dotnet tool run dotnet-ef database update --project {{database_project}} --startup-project {{database_project}} --context PortfolioAdminDbContext'
+
+db-backup:
+    #!/usr/bin/env sh
+    set -eu
+    mkdir -p data/snapshots
+    file="data/snapshots/portfolio-$(date -u +%Y%m%dT%H%M%SZ).dump"
+    {{compose_dev}} exec -T postgres pg_dump -U portfolio -Fc portfolio > "$file"
+    echo "wrote $file"
+
+db-restore file:
+    {{compose_dev}} up -d --wait postgres
+    cat "{{file}}" | {{compose_dev}} exec -T postgres pg_restore -U portfolio -d portfolio --clean --if-exists
+
+db-import-sqlite file:
+    {{compose_dev}} up -d --wait postgres
+    {{compose_dev}} run --rm --entrypoint sh web -lc \
+        'dotnet run --project src/Portfolio/Portfolio.Blazor.Import/Portfolio.Blazor.Import.csproj --configuration Release --no-build -- "{{file}}" "$PORTFOLIO_DB_CONNECTION"'
+
 
 stories:
-    {{compose_dev}} run --rm -p 8081:8081 -e NUGET_PACKAGES=/src/.nuget-cache -e ASPNETCORE_URLS=http://0.0.0.0:8081 web sh -lc 'dotnet watch --project src/Portfolio/Portfolio.Blazor.Stories/Portfolio.Blazor.Stories.csproj --no-launch-profile --no-restore --non-interactive --no-hot-reload -- --urls http://0.0.0.0:8081'
+    {{compose_dev}} run --rm -p 8081:8081 -e NUGET_PACKAGES=/src/.nuget-cache -e ASPNETCORE_URLS=http://0.0.0.0:8081 web sh -lc \
+        'dotnet watch --project src/Portfolio/Portfolio.Blazor.Stories/Portfolio.Blazor.Stories.csproj --no-launch-profile --no-restore --non-interactive --no-hot-reload -- --urls http://0.0.0.0:8081'
 
 stories-refresh:
     touch src/Portfolio/Portfolio.Blazor.Stories/_Imports.razor

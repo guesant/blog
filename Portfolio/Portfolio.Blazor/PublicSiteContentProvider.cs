@@ -1,5 +1,4 @@
 using System.Collections.Concurrent;
-using System.Globalization;
 using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
@@ -753,7 +752,7 @@ public sealed partial class PublicSiteContentProvider(
         );
         var groups = sidebarRoots
             .Where(row => row.SidebarGroup != null)
-            .GroupBy(row => row.SidebarGroup!.Value.ToString(CultureInfo.InvariantCulture))
+            .GroupBy(row => row.SidebarGroup!.Value)
             .OrderBy(group => group.Key)
             .Select(group =>
                 sidebarItems

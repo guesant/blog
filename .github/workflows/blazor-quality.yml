@@ -72,3 +72,48 @@ jobs:
       - name: Dump app logs on failure
         if: failure()
         run: docker compose logs --no-color --tail=200 web
+
+  postgres-smoke:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+
+      - name: Run the compose services as the runner user
+        run: |
+          echo "PORTFOLIO_CONTAINER_UID=$(id -u)" >> "$GITHUB_ENV"
+          echo "PORTFOLIO_CONTAINER_GID=$(id -g)" >> "$GITHUB_ENV"
+
+      - name: Create isolated CI content placeholder
+        run: >-
+          docker run --rm --network none
+          --user "$(id -u):$(id -g)"
+          --volume "$PWD:/src"
+          --workdir /src
+          mcr.microsoft.com/dotnet/sdk@sha256:e1fc6e423f543119c406d24e2e687d67c569f18f04a37a8b0005d80ad0dcee80
+          sh -lc 'mkdir -p data/public && : > data/portfolio.sqlite'
+
+      - name: Start PostgreSQL
+        run: docker compose -f compose.yaml -f compose.dev.yaml -f compose.postgres.yaml up -d --wait postgres
+
+      - name: Restore locked NuGet dependencies
+        run: docker compose -f compose.yaml -f compose.dev.yaml -f compose.postgres.yaml run --rm web dotnet restore Portfolio.Blazor.slnx --locked-mode
+
+      - name: Build Blazor solution
+        run: docker compose -f compose.yaml -f compose.dev.yaml -f compose.postgres.yaml run --rm web dotnet build Portfolio.Blazor.slnx --configuration Release --no-restore
+
+      - name: Apply PostgreSQL migrations
+        run: docker compose -f compose.yaml -f compose.dev.yaml -f compose.postgres.yaml run --rm web sh -lc 'dotnet tool restore >/dev/null && dotnet tool run dotnet-ef database update --project Portfolio/Portfolio.Blazor.Database.Postgres/Portfolio.Blazor.Database.Postgres.csproj --startup-project Portfolio/Portfolio.Blazor.Database.Postgres/Portfolio.Blazor.Database.Postgres.csproj --context PortfolioAdminDbContext --configuration Release --no-build'
+
+      - name: Compare the public snapshot across SQLite and PostgreSQL
+        run: docker compose -f compose.yaml -f compose.dev.yaml -f compose.postgres.yaml run --rm web dotnet run --project Portfolio/Portfolio.Blazor.Data.Tests/Portfolio.Blazor.Data.Tests.csproj --configuration Release --no-build
+
+      - name: Start SSR app on PostgreSQL
+        run: docker compose -f compose.yaml -f compose.dev.yaml -f compose.postgres.yaml up -d web
+
+      - name: Verify public route shells on PostgreSQL
+        run: docker compose -f compose.yaml -f compose.dev.yaml -f compose.postgres.yaml exec -T -e ROUTE_SHELL_READY_ATTEMPTS=600 web sh tools/scripts/verify-route-shell.sh
+
+      - name: Dump app logs on failure
+        if: failure()
+        run: docker compose -f compose.yaml -f compose.dev.yaml -f compose.postgres.yaml logs --no-color --tail=200 web postgres

@@ -19,8 +19,30 @@ internal sealed record ResumeSkillTopicRow(
     string? Name
 );
 
+internal sealed record OwnerTopicRow(int OwnerId, string Slug, string PublicId, string? Name);
+
 internal static class TopicQueries
 {
+    internal static List<OwnerTopicRow> TopicsFor(
+        PortfolioPublicDbContext db,
+        string kind,
+        IQueryable<int> ownerIds,
+        string locale
+    ) =>
+        (
+            from x in db.Topicables
+            join t in db.Topics on x.TopicId equals t.Id
+            from tt in db
+                .TopicTranslations.Where(tt => tt.TopicId == t.Id && tt.Locale == locale)
+                .DefaultIfEmpty()
+            from en in db
+                .TopicTranslations.Where(en => en.TopicId == t.Id && en.Locale == "en")
+                .DefaultIfEmpty()
+            where x.TopicableType == kind && ownerIds.Contains(x.TopicableId)
+            orderby x.TopicableId, t.Order, x.Id
+            select new OwnerTopicRow(x.TopicableId, t.Slug, t.PublicId, tt.Name ?? en.Name)
+        ).ToList();
+
     internal static List<TopicRow> Topics(PortfolioPublicDbContext db, string locale) =>
         (
             from t in db.Topics

@@ -139,18 +139,18 @@ public sealed partial class PublicSiteContentProvider(
             pages,
             Projects(context, locale),
             Cases(context, locale),
-            Writings(db, locale),
+            Writings(context, locale),
             Findings(db, locale),
             Collections(db, locale),
             Topics(context, locale),
             Technologies(context, locale),
             Experiments(context, locale),
-            Snippets(db, locale),
+            Snippets(context, locale),
             Credits(context, locale),
             Resume(db, context, locale),
             FeaturedCases(db, context, locale),
             FeaturedProjects(db, context, locale),
-            FeaturedWritings(db, locale),
+            FeaturedWritings(db, context, locale),
             ResumePdfLocales()
         );
     }
@@ -250,34 +250,52 @@ public sealed partial class PublicSiteContentProvider(
             .ToList();
     }
 
-    private static List<PublicWriting> Writings(DbConnection db, string locale) =>
-        Rows(
-                db,
-                "select w.*, coalesce(t.title, en.title) as title, coalesce(t.excerpt, en.excerpt) as excerpt, coalesce(t.reading_time, en.reading_time) as reading_time, coalesce(t.body, en.body) as body from writings w left join writing_translations t on t.writing_id=w.id and t.locale=@locale left join writing_translations en on en.writing_id=w.id and en.locale='en' where w.hidden=false order by w.date_iso desc nulls last",
-                ("@locale", locale)
-            )
+    private static List<PublicWriting> Writings(PortfolioPublicDbContext context, string locale)
+    {
+        var topics = TopicQueries
+            .TopicsFor(context, "writing", context.Writings.Select(w => w.Id), locale)
+            .ToLookup(row => row.OwnerId);
+        var history = HistoryQueries.ForWritings(context, locale).ToLookup(row => row.OwnerId);
+        return WritingQueries
+            .Writings(context, locale)
             .Select(row => new PublicWriting(
-                Text(row, "slug"),
-                Route("writing.show", Key(row), locale),
-                Text(row, "title", Text(row, "slug")),
-                Text(row, "excerpt"),
-                Text(row, "reading_time"),
-                Text(row, "type"),
-                Date(row, "date_iso"),
-                Text(row, "body"),
-                TopicsFor(db, "writing", Id(row, "id"), locale)
+                row.Slug,
+                Route("writing.show", PublicRouteKey.Compose(row.PublicId, row.Slug), locale),
+                row.Title ?? row.Slug,
+                Format.Text(row.Excerpt),
+                Format.Text(row.ReadingTime),
+                row.Type,
+                Format.Date(row.DateIso),
+                Format.Text(row.Body),
+                topics[row.Id]
                     .Select(topic => new PublicTechnology(
                         topic.Slug,
                         topic.Name ?? topic.Slug,
-                        Url: topic.Url
+                        Url: Route(
+                            "topics.show",
+                            PublicRouteKey.Compose(topic.PublicId, topic.Slug),
+                            locale
+                        )
                     ))
                     .ToList(),
-                Bool(row, "show_history"),
-                HistoryFor(db, "App\\Models\\Writing", Id(row, "id"), locale),
-                RelatedWritings(db, Id(row, "id"), locale),
-                Timestamp(row, "updated_at")
+                row.ShowHistory,
+                History(history[row.Id]),
+                WritingQueries
+                    .Related(context, row.Id, locale)
+                    .Select(related => new PublicRelatedContent(
+                        related.Title ?? related.Slug,
+                        Route(
+                            "writing.show",
+                            PublicRouteKey.Compose(related.PublicId, related.Slug),
+                            locale
+                        ),
+                        Format.Date(related.Date)
+                    ))
+                    .ToList(),
+                Format.Timestamp(row.UpdatedAt)
             ))
             .ToList();
+    }
 
     private static List<PublicFinding> Findings(DbConnection db, string locale) =>
         Rows(
@@ -442,36 +460,6 @@ public sealed partial class PublicSiteContentProvider(
             ))
             .ToList();
 
-    private static List<PublicRelatedContent> RelatedWritings(
-        DbConnection db,
-        long id,
-        string locale
-    )
-    {
-        var topic = Rows(
-                db,
-                "select topic_id from topicables where topicable_type='writing' and topicable_id=@id limit 1",
-                ("@id", id)
-            )
-            .FirstOrDefault();
-        if (topic is null)
-            return [];
-        var topicId = Id(topic, "topic_id");
-        return Rows(
-                db,
-                "select w.slug, w.public_id, t.title, w.date_iso from writings w left join writing_translations t on t.writing_id=w.id and t.locale=@locale where w.hidden=false and w.id<>@id and exists (select 1 from topicables link where link.topic_id=@topic and link.topicable_type='writing' and link.topicable_id=w.id) order by w.date_iso desc nulls last limit 3",
-                ("@id", id),
-                ("@topic", topicId),
-                ("@locale", locale)
-            )
-            .Select(row => new PublicRelatedContent(
-                Text(row, "title", Text(row, "slug")),
-                Route("writing.show", Key(row), locale),
-                Date(row, "date_iso")
-            ))
-            .ToList();
-    }
-
     private static List<PublicRelatedContent> RelatedCollections(
         DbConnection db,
         long id,
@@ -486,24 +474,6 @@ public sealed partial class PublicSiteContentProvider(
             .Select(row => new PublicRelatedContent(
                 Text(row, "title", Text(row, "slug")),
                 Route("collections.show", Key(row), locale),
-                Timestamp(row, "published_at")
-            ))
-            .ToList();
-
-    private static List<PublicRelatedContent> RelatedSnippets(
-        DbConnection db,
-        long id,
-        string locale
-    ) =>
-        Rows(
-                db,
-                "select s.slug, s.public_id, t.title, s.published_at from snippets s left join snippet_translations t on t.snippet_id=s.id and t.locale=@locale where s.hidden=false and s.id<>@id order by s.published_at desc nulls last limit 3",
-                ("@id", id),
-                ("@locale", locale)
-            )
-            .Select(row => new PublicRelatedContent(
-                Text(row, "title", Text(row, "slug")),
-                Route("snippets.show", Key(row), locale),
                 Timestamp(row, "published_at")
             ))
             .ToList();
@@ -546,37 +516,40 @@ public sealed partial class PublicSiteContentProvider(
             .ToList();
     }
 
-    private static List<PublicSnippet> Snippets(DbConnection db, string locale) =>
-        Rows(
-                db,
-                "select s.*, coalesce(t.title, en.title) as title, coalesce(t.description, en.description) as description from snippets s left join snippet_translations t on t.snippet_id=s.id and t.locale=@locale left join snippet_translations en on en.snippet_id=s.id and en.locale='en' where s.hidden=false order by s.\"order\" nulls first",
-                ("@locale", locale)
-            )
+    private static List<PublicSnippet> Snippets(PortfolioPublicDbContext context, string locale)
+    {
+        var files = SnippetQueries.Files(context).ToLookup(row => row.SnippetId);
+        var fileHistory = HistoryQueries.ForSnippetFiles(context).ToLookup(row => row.OwnerId);
+        var history = HistoryQueries.ForSnippets(context, locale).ToLookup(row => row.OwnerId);
+        return SnippetQueries
+            .Snippets(context, locale)
             .Select(row => new PublicSnippet(
-                Text(row, "slug"),
-                Route("snippets.show", Key(row), locale),
-                Text(row, "title", Text(row, "slug")),
-                Text(row, "description"),
-                Timestamp(row, "published_at"),
-                Rows(
-                        db,
-                        "select id, path, language, content from snippet_files where snippet_id=@id order by \"order\" nulls first",
-                        ("@id", Id(row, "id"))
-                    )
+                row.Slug,
+                Route("snippets.show", PublicRouteKey.Compose(row.PublicId, row.Slug), locale),
+                row.Title ?? row.Slug,
+                Format.Text(row.Description),
+                Format.Timestamp(row.PublishedAt),
+                files[row.Id]
                     .Select(file => new PublicSnippetFile(
-                        Text(file, "path"),
-                        Text(file, "language"),
-                        Text(file, "content"),
-                        Text(file, "id"),
-                        HistoryFor(db, "App\\Models\\SnippetFile", Id(file, "id"), locale)
+                        file.Path,
+                        Format.Text(file.Language),
+                        file.Content,
+                        Format.Id(file.Id),
+                        History(fileHistory[file.Id])
                     ))
                     .ToList(),
-                Bool(row, "show_history"),
-                HistoryFor(db, "App\\Models\\Snippet", Id(row, "id"), locale),
-                RelatedSnippets(db, Id(row, "id"), locale),
-                Timestamp(row, "updated_at")
+                row.ShowHistory,
+                History(history[row.Id]),
+                Related(
+                    "snippets.show",
+                    SnippetQueries.RelatedRecent(context, row.Id, locale),
+                    () => [],
+                    locale
+                ),
+                Format.Timestamp(row.UpdatedAt)
             ))
             .ToList();
+    }
 
     private static List<PublicCredit> Credits(PortfolioPublicDbContext context, string locale) =>
         CreditQueries
@@ -628,9 +601,13 @@ public sealed partial class PublicSiteContentProvider(
             .ToList();
     }
 
-    private static List<PublicWriting> FeaturedWritings(DbConnection db, string locale)
+    private static List<PublicWriting> FeaturedWritings(
+        DbConnection db,
+        PortfolioPublicDbContext context,
+        string locale
+    )
     {
-        var all = Writings(db, locale)
+        var all = Writings(context, locale)
             .ToDictionary(item => item.Slug, StringComparer.OrdinalIgnoreCase);
         return Rows(
                 db,
@@ -929,55 +906,6 @@ public sealed partial class PublicSiteContentProvider(
                 Route("topics.show", Key(row), locale)
             ))
             .ToList();
-
-    private static List<PublicHistoryEntry> HistoryFor(
-        DbConnection db,
-        string auditableType,
-        long id,
-        string locale
-    )
-    {
-        var translation = auditableType switch
-        {
-            "App\\Models\\Project" => (
-                Type: "App\\Models\\ProjectTranslation",
-                Table: "project_translations",
-                ForeignKey: "project_id"
-            ),
-            "App\\Models\\CaseStudy" => (
-                Type: "App\\Models\\CaseStudyTranslation",
-                Table: "case_study_translations",
-                ForeignKey: "case_study_id"
-            ),
-            "App\\Models\\Writing" => (
-                Type: "App\\Models\\WritingTranslation",
-                Table: "writing_translations",
-                ForeignKey: "writing_id"
-            ),
-            "App\\Models\\Experiment" => (
-                Type: "App\\Models\\ExperimentTranslation",
-                Table: "experiment_translations",
-                ForeignKey: "experiment_id"
-            ),
-            "App\\Models\\Snippet" => (
-                Type: "App\\Models\\SnippetTranslation",
-                Table: "snippet_translations",
-                ForeignKey: "snippet_id"
-            ),
-            _ => (Type: auditableType, Table: string.Empty, ForeignKey: string.Empty),
-        };
-        var query = string.IsNullOrWhiteSpace(translation.Table)
-            ? "select id, created_at, old_values, new_values from audit_log where auditable_type=@type and auditable_id=@id and action='updated' order by created_at nulls first, id nulls first"
-            : $"select id, created_at, old_values, new_values from audit_log where auditable_type=@type and auditable_id in (select id from {translation.Table} where {translation.ForeignKey}=@id and locale=@locale) and action='updated' order by created_at nulls first, id nulls first";
-        return Rows(db, query, ("@type", translation.Type), ("@id", id), ("@locale", locale))
-            .Select(row => new PublicHistoryEntry(
-                Text(row, "id"),
-                Timestamp(row, "created_at", Text(row, "id")),
-                Values(Text(row, "old_values")),
-                Values(Text(row, "new_values"))
-            ))
-            .ToList();
-    }
 
     private static Dictionary<string, string?> Values(string json)
     {

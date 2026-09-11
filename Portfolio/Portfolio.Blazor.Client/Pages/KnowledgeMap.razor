@@ -21,9 +21,7 @@
     else
     {
         <SiteHero Title="@SeoTitle"
-            Lead="@PageField("knowledge-map", "intro", Description)"
-            BackHref="@LocalizedUrl("/topics")"
-            BackLabel="@(L["legacy_4ab0be41630a"])" />
+            Lead="@PageField("knowledge-map", "intro", Description)"/>
         @if (Graph.Nodes.Count == 0) { <SiteEmptyState Message="@EmptyLabel" /> }
         else
         {

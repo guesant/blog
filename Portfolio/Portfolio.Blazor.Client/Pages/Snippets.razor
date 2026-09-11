@@ -28,9 +28,7 @@
     else
     {
         <SiteHero Title="@PageField("title", Title)"
-            Lead="@PageField("description", Description)"
-            BackHref="@(L["legacy_0607643fd42c"])"
-            BackLabel="@(L["legacy_ddc150008e2f"])" />
+            Lead="@PageField("description", Description)"/>
 
             <SiteListingShell HasResults="@(PagedSnippets.Count > 0)"
                 Summary="@ListingSummary(PagedSnippets.Count, SortedSnippets.Count, CurrentPage, PageCount)"

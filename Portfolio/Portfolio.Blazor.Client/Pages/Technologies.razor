@@ -28,9 +28,7 @@
     else
     {
         <SiteHero Title="@PageField("technologies", "title", Title)"
-            Lead="@PageField("technologies", "description", Description)"
-            BackHref="@(L["legacy_0607643fd42c"])"
-            BackLabel="@(L["legacy_ddc150008e2f"])" />
+            Lead="@PageField("technologies", "description", Description)"/>
         @if (Snapshot.Technologies.Count == 0)
         {
             <SiteListingShell HasResults="false"

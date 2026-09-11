@@ -13,9 +13,7 @@
         HomeLabel="@(L["legacy_ddc150008e2f"])"
         CurrentLabel="@Title" />
     <SiteHero Title="@(Snapshot?.Chrome.Profile?.Name ?? Title)"
-        Lead="@Snapshot?.Chrome.Profile?.Title"
-        BackHref="@(L["legacy_0607643fd42c"])"
-        BackLabel="@(L["legacy_ddc150008e2f"])">
+        Lead="@Snapshot?.Chrome.Profile?.Title">
         <ChildContent>
             @if (!string.IsNullOrWhiteSpace(Snapshot?.Chrome.Profile?.Location))
             {

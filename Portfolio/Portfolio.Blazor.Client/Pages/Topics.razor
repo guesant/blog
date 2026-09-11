@@ -29,9 +29,7 @@
     else
     {
         <SiteHero Title="@SeoTitle"
-            Lead="@SeoDescription"
-            BackHref="@LocalizedRoute("home")"
-            BackLabel="@(L["legacy_ddc150008e2f"])" />
+            Lead="@SeoDescription"/>
         @if (Snapshot.Topics.Count == 0)
         {
             <SiteListingShell HasResults="false"

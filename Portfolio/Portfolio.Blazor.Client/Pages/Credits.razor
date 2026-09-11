@@ -11,9 +11,7 @@
         HomeLabel="@(L["legacy_ddc150008e2f"])"
         CurrentLabel="@Title" />
     <SiteHero Title="@Title"
-        Lead="@Description"
-        BackHref="@(L["legacy_0607643fd42c"])"
-        BackLabel="@(L["legacy_ddc150008e2f"])" />
+        Lead="@Description"/>
     @if (Snapshot is null || Snapshot.Credits.Count == 0)
     {
         <SiteListingShell HasResults="false"

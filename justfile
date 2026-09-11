@@ -65,13 +65,13 @@ check: format lint comments duplication duplication-razor build test test-data a
 format:
     docker run --rm --user 1000:1000 -v "${PWD}:/workspace:ro" -w /workspace node@sha256:6642ef280aebc09c4541bee0b15c9f89f0f3f3c247ddee79ae1d37eddfdcbbaa sh -lc 'FORMAT_CHECK=1 node tools/scripts/format-razor.mjs && FORMAT_CHECK=1 node tools/scripts/format-razor-attributes.mjs'
     {{docker_run}} 'dotnet tool restore >/dev/null && HOME=/tmp dotnet csharpier check src/Portfolio'
-    docker run --rm --user 1000:1000 -v "${PWD}:/workspace" -w /workspace node@sha256:6642ef280aebc09c4541bee0b15c9f89f0f3f3c247ddee79ae1d37eddfdcbbaa sh -lc 'npx --yes prettier@3.4.2 --cache --cache-location /tmp/prettier-cache --check "src/Portfolio/Portfolio.Blazor*/**/*.{css,js,ts,html}" "tools/scripts/*.mjs"'
+    docker run --rm --user 1000:1000 -v "${PWD}:/workspace:ro" -w /workspace node@sha256:6642ef280aebc09c4541bee0b15c9f89f0f3f3c247ddee79ae1d37eddfdcbbaa sh -lc 'mkdir -p /tmp/quality-tools && cp tools/quality-tools/package.json tools/quality-tools/package-lock.json /tmp/quality-tools/ && npm ci --prefix /tmp/quality-tools --ignore-scripts --no-audit --no-fund >/dev/null && /tmp/quality-tools/node_modules/.bin/prettier --check "src/Portfolio/Portfolio.Blazor*/**/*.{css,js,ts,html}" "tools/scripts/*.mjs"'
     docker run --rm -v "${PWD}:/workspace:ro" -w /workspace mvdan/shfmt:v3 -i 4 -ci -d tools/scripts
 
 format-fix:
     docker run --rm --user 1000:1000 -v "${PWD}:/workspace" -w /workspace node@sha256:6642ef280aebc09c4541bee0b15c9f89f0f3f3c247ddee79ae1d37eddfdcbbaa sh -lc 'node tools/scripts/format-razor.mjs && node tools/scripts/format-razor-attributes.mjs'
     {{docker_run}} 'dotnet tool restore >/dev/null && HOME=/tmp dotnet csharpier format src/Portfolio'
-    docker run --rm --user 1000:1000 -v "${PWD}:/workspace" -w /workspace node@sha256:6642ef280aebc09c4541bee0b15c9f89f0f3f3c247ddee79ae1d37eddfdcbbaa sh -lc 'npx --yes prettier@3.4.2 --cache --cache-location /tmp/prettier-cache --write "src/Portfolio/Portfolio.Blazor*/**/*.{css,js,ts,html}" "tools/scripts/*.mjs"'
+    docker run --rm --user 1000:1000 -v "${PWD}:/workspace" -w /workspace node@sha256:6642ef280aebc09c4541bee0b15c9f89f0f3f3c247ddee79ae1d37eddfdcbbaa sh -lc 'mkdir -p /tmp/quality-tools && cp tools/quality-tools/package.json tools/quality-tools/package-lock.json /tmp/quality-tools/ && npm ci --prefix /tmp/quality-tools --ignore-scripts --no-audit --no-fund >/dev/null && /tmp/quality-tools/node_modules/.bin/prettier --write "src/Portfolio/Portfolio.Blazor*/**/*.{css,js,ts,html}" "tools/scripts/*.mjs"'
     docker run --rm -v "${PWD}:/workspace" -w /workspace mvdan/shfmt:v3 -i 4 -ci -w tools/scripts
 
 lint:

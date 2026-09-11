@@ -196,23 +196,22 @@ assert_listing_contract() {
     expected_shells="$2"
     page="$(fetch "$route")"
 
-    for marker in 'class="site-listing-shell' 'class="site-listing-summary' 'class="site-listing-filters' 'class="site-listing-toolbar' 'class="site-listing-results' 'class="site-listing-pagination'; do
+    for marker in 'class="site-listing-shell' 'site-listing-summary' 'class="site-listing-filters' 'class="site-listing-toolbar' 'class="site-listing-results' 'class="site-listing-pagination'; do
         count="$(printf '%s' "$page" | grep -o "$marker" | wc -l | tr -d ' ')"
         if [ "$count" -ne "$expected_shells" ]; then
-            echo "structural parity check failed: \${route} contains \${count} occurrences of \${marker}, expected \${expected_shells}" >&2
+            echo "structural parity check failed: ${route} contains ${count} occurrences of ${marker}, expected ${expected_shells}" >&2
             exit 1
         fi
     done
 
-    # IMPORTANT: filters now precede the summary. SiteListingShell puts the count
-    # directly above the results it describes, instead of above the filter card as
-    # the pre-migration markup did.
+    # IMPORTANT: SiteListingShell renders the count inside the pagination row, after the
+    # pager, so the summary is the last listing marker on the page.
     assert_order "$route" \
         'class="site-listing-filters' \
-        'class="site-listing-summary' \
         'class="site-listing-toolbar' \
         'class="site-listing-results' \
-        'class="site-listing-pagination'
+        'class="site-listing-pagination' \
+        'site-listing-summary'
 }
 
 assert_index_order() {
@@ -450,8 +449,8 @@ if [ "$verify_content" = "true" ]; then
     assert_order "/findings/ddia" \
         'class="breadcrumb-bar"' \
         'class="hero' \
-        'data-layout-region="connections"' \
         'data-layout-region="content-actions"' \
+        'data-layout-region="connections"' \
         'data-layout-region="related-content"'
     assert_index_order "/" 'data-layout-region="items"'
     assert_index_order "/technologies" 'data-layout-region="items"'
@@ -459,9 +458,9 @@ if [ "$verify_content" = "true" ]; then
     assert_order "/collections/distributed-systems-starter-kit" \
         'class="breadcrumb-bar"' \
         'class="hero' \
+        'data-layout-region="content-actions"' \
         'data-layout-region="intro"' \
-        'data-layout-region="resource-list"' \
-        'data-layout-region="content-actions"'
+        'data-layout-region="resource-list"'
     assert_order "/topics/ai" \
         'class="breadcrumb-bar"' \
         'class="hero' \

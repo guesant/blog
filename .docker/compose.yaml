@@ -85,17 +85,32 @@ services:
         condition: service_completed_successfully
   stories:
     <<: *sdk
+    build:
+      context: ..
+      dockerfile: .docker/stories.Dockerfile
+    image: portfolio-stories
     profiles:
       - tools
     ports: []
     environment:
-      ASPNETCORE_URLS: http://0.0.0.0:8081
-      PORTFOLIO_DB_CONNECTION: Host=postgres;Database=portfolio;Username=portfolio;Password=portfolio
+      # IMPORTANT: `dotnet run` on a file-based app compiles and then executes a
+      # binary under $HOME; the container's /tmp is a tmpfs mounted noexec, so a
+      # $HOME under /tmp builds fine but fails at exec with "Permission denied".
+      # /src is the writable bind mount, which allows exec.
+      HOME: /src/.dotnet-home
+      TMPDIR: /tmp
       DOTNET_CLI_TELEMETRY_OPTOUT: "1"
       DOTNET_NOLOGO: "true"
       DOTNET_CLI_HOME: /tmp/dotnet
       NUGET_PACKAGES: /tmp/nuget-packages
-    command: dotnet run --project src/Blog/Blog.Blazor.Stories/Blog.Blazor.Stories.csproj --configuration Release --no-build --urls http://0.0.0.0:8081
+    command:
+      - sh
+      - -c
+      - >-
+        mkdir -p /src/.dotnet-home &&
+        dotnet publish src/Blog/Blog.Blazor.Stories/Blog.Blazor.Stories.csproj
+        --configuration Release -o /tmp/stories-publish &&
+        dotnet run tools/scripts/serve-static.cs -- /tmp/stories-publish/wwwroot http://+:8081/
 
 volumes:
   postgres-data:

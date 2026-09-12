@@ -5,6 +5,7 @@ node_modules
 **/obj/
 /artifacts/
 /.nuget-cache/
+/.dotnet-home/
 
 .env*
 !.env.example

@@ -10,7 +10,7 @@ for compose_file in .docker/compose.yaml .docker/compose.dev.yaml; do
     [ -f "$compose_file" ] || fail "$compose_file is missing"
 done
 
-if grep -En '^[[:space:]]*image:' .docker/compose*.yaml | grep -Ev 'image:[[:space:]]*(portfolio-tools[[:space:]]*|ghcr.io/guesant/blog:main[[:space:]]*)$' | grep -Ev '@sha256:[0-9a-f]{64}[[:space:]]*$'; then
+if grep -En '^[[:space:]]*image:' .docker/compose*.yaml | grep -Ev 'image:[[:space:]]*(portfolio-tools[[:space:]]*|portfolio-stories[[:space:]]*|ghcr.io/guesant/blog:main[[:space:]]*)$' | grep -Ev '@sha256:[0-9a-f]{64}[[:space:]]*$'; then
     fail "every compose image must be pinned by digest"
 fi
 

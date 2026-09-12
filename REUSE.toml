@@ -1,7 +1,7 @@
 version = 1
-SPDX-PackageName = "portfolio"
+SPDX-PackageName = "blog"
 SPDX-PackageSupplier = "Gabriel R. Antunes <gabrielrodantunes@gmail.com>"
-SPDX-PackageDownloadLocation = "https://github.com/guesant/portfolio"
+SPDX-PackageDownloadLocation = "https://github.com/guesant/blog"
 
 # Everything else (source code, config, CI workflows, tooling) is MIT.
 [[annotations]]

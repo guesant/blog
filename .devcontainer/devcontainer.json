@@ -1,5 +1,5 @@
 {
-  "name": "portfolio",
+  "name": "blog",
   "dockerComposeFile": [
     "../.docker/compose.yaml",
     "../.docker/compose.dev.yaml"

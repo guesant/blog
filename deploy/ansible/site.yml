@@ -12,6 +12,8 @@
     - k3s
     - cilium
     - cnpg
+    - cert-manager
+    - cnpg-barman-plugin
     - argocd
     - sealed-secrets
     - argocd-image-updater

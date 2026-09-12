@@ -55,4 +55,4 @@ Dali em diante, um `git push` que mude algo em `deploy/gitops` é sincronizado s
 
 ## Pendência
 
-Backup do Postgres em produção. O CNPG já traz o mecanismo (`Cluster.spec.backup`, `ScheduledBackup`), mas só faz sentido apontado para um destino fora do próprio Pi (um bucket S3-compatível); configurar isso fica para quando houver um lugar concreto para gravar.
+Backup do Postgres em produção. A infraestrutura já está pronta: `apps/postgres` referencia o plugin CNPG-I `barman-cloud.cloudnative-pg.io` (via `Cluster.spec.plugins`) com um `ObjectStore` e um `ScheduledBackup` diário, e as roles Ansible `cert-manager`/`cnpg-barman-plugin` instalam os pré-requisitos do plugin. Falta só um bucket S3-compatível de verdade: preencher `destinationPath`/`endpointURL` em `apps/postgres/templates/backup-objectstore.yaml` e gerar o `SealedSecret` real das credenciais (`apps/postgres/templates/backup-credentials-sealedsecret.yaml`, hoje com placeholder), no mesmo fluxo de `kubeseal` já usado abaixo para o túnel cloudflared. Detalhes em `docs/pendencias-e-decisoes.md`.

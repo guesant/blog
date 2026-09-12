@@ -14,6 +14,11 @@ spec:
     initdb:
       database: portfolio
       owner: portfolio
+  plugins:
+    - name: barman-cloud.cloudnative-pg.io
+      isWALArchiver: true
+      parameters:
+        barmanObjectName: postgres-backup
   resources:
     requests:
       cpu: 100m

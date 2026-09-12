@@ -14,8 +14,13 @@ spec:
       labels:
         app.kubernetes.io/name: app
     spec:
+      # IMPORTANT: 1654 is the fixed uid of the "app" user built into
+      # mcr.microsoft.com/dotnet/aspnet; runAsNonRoot alone can't verify a
+      # named, non-numeric image user, so kubelet refuses to start the
+      # container without this.
       securityContext:
         runAsNonRoot: true
+        runAsUser: 1654
       containers:
         - name: app
           image: ghcr.io/guesant/blog:sha-0000000000000000000000000000000000000000

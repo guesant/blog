@@ -10,3 +10,8 @@ gitops_repo_revision: main
 gitops_path: deploy/gitops
 
 argocd_github_webhook_secret: changeme-generate-a-real-secret
+
+# IMPORTANT: troque pelo CIDR/IP real de onde o operador acessa o kubectl
+# externamente; deixar o valor de exemplo abaixo quebra o acesso remoto ao
+# cluster porque a porta 6443 só aceita conexões dessa origem.
+k3s_api_allowed_cidr: 203.0.113.0/24

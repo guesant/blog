@@ -4,6 +4,9 @@
   become: true
   roles:
     - os-prerequisites
+    - unattended_upgrades
+    - sysctl_hardening
+    - auditd
     - ssh_hardening
     - fail2ban
     - k3s

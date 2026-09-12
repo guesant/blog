@@ -15,6 +15,7 @@ deploy/ansible/inventory.ini
 deploy/ansible/group_vars/all.yml
 !deploy/ansible/group_vars/all.example.yml
 deploy/ansible/kubeconfig
+deploy/sealed-secrets-cert.pem
 
 playwright-report
 test-results

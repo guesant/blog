@@ -63,10 +63,6 @@
   register: cilium_apply
   changed_when: "'unchanged' not in cilium_apply.stdout"
 
-# IMPORTANT: applying a changed ConfigMap does not by itself restart the pods
-# reading it; without this, an updated setting (e.g. l7Proxy, routingMode)
-# silently keeps running under the old config until something else restarts
-# the pod.
 - name: Restart Cilium to pick up a changed configuration
   ansible.builtin.command: "{{ item }}"
   loop:

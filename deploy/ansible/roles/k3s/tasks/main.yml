@@ -17,10 +17,6 @@
     mode: "0644"
   register: k3s_config
 
-# IMPORTANT: kube-proxy's iptables rules are not removed just by turning it
-# off in config.yaml; a reboot clears them so Cilium's own replacement is the
-# only thing programming Service routing, avoiding the two fighting over the
-# same rules.
 - name: Reboot if the k3s config changed on an already-installed node
   ansible.builtin.reboot:
     reboot_timeout: 300

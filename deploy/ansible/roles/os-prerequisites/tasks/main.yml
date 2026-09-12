@@ -19,9 +19,6 @@
   ansible.builtin.set_fact:
     k3s_cmdline_file: "{{ (cmdline_candidates.results | selectattr('stat.exists') | map(attribute='item') | first) }}"
 
-# IMPORTANT: k3s (containerd) fails with an opaque "failed to find memory
-# cgroup" error on Raspberry Pi OS unless the memory cgroup controller is
-# turned on at boot, which the distro leaves off by default.
 - name: Enable the memory cgroup controller for containerd
   ansible.builtin.replace:
     path: "{{ k3s_cmdline_file }}"
@@ -40,10 +37,6 @@
   changed_when: false
   failed_when: false
 
-# IMPORTANT: firewalld's default "public" zone only allows ssh and
-# dhcpv6-client; without trusting the pod and service CIDRs, it silently
-# drops traffic from pods to any ClusterIP, including the k3s API server
-# itself, well before Cilium's own routing ever gets a say.
 - name: Trust the pod and service CIDRs in firewalld
   ansible.builtin.command: "firewall-cmd --permanent --zone=trusted --add-source={{ item }}"
   loop:

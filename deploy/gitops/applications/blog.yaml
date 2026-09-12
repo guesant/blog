@@ -8,8 +8,7 @@ spec:
   source:
     repoURL: https://github.com/guesant/blog.git
     targetRevision: main
-    path: deploy/gitops
-    kustomize: {}
+    path: deploy/gitops/apps/blog
   destination:
     server: https://kubernetes.default.svc
     namespace: blog
@@ -17,3 +16,5 @@ spec:
     automated:
       selfHeal: true
       prune: true
+    syncOptions:
+      - CreateNamespace=true

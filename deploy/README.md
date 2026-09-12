@@ -21,29 +21,28 @@ just -f deploy/justfile bootstrap
 
 ## GitOps (`gitops/`)
 
-O que o ArgoCD sincroniza continuamente a partir deste repositório. Namespace `blog`, Kustomize plano (sem Helm, sem overlays). `argocd/application.yaml` e `argocd/image-updater.yaml` não entram na lista de recursos do `kustomization.yaml`: são objetos de controle, aplicados uma única vez pelo Ansible, não parte do estado da aplicação.
+O que o ArgoCD sincroniza continuamente a partir deste repositório, na convenção app-of-apps. `applications/` guarda só os objetos de controle (um `Application` por componente, mais o `image-updater.yaml`), aplicados uma única vez pelo Ansible; cada `Application` aponta para um subdiretório de `apps/` e cria o namespace `blog` no destino sozinha (`syncOptions: CreateNamespace=true`). `apps/blog` e `apps/cloudflared` são charts Helm guarda-chuva que consomem `stakater/application` (vendorizado em `charts/*.tgz`, para o Argo não depender da rede do Pi a cada sync) para gerar Deployment, Service e ConfigMap a partir de `values.yaml`; `apps/postgres` é um chart mínimo, sem dependência, só com a CRD `Cluster` do CloudNativePG.
 
 A connection string do Postgres nunca é escrita neste repositório, nem cifrada: o Deployment da app monta o Secret que o próprio CloudNativePG gera (`postgres-app`) como arquivos, e monta a `PORTFOLIO_DB_CONNECTION` em tempo de execução, dentro do pod.
 
 ### Segredos que faltam gerar
 
-Os dois `sealed-secret.yaml` (um em `app/`, com `PORTFOLIO_ADMIN_GOOGLE_CLIENT_SECRET`; outro em `cloudflared/`, com o `credentials.json` do túnel) não existem ainda neste repositório, porque `kubeseal` só consegue cifrar contra o certificado público do controlador, que só existe depois que o cluster já está de pé. Depois do primeiro `bootstrap`:
+`apps/blog/values.yaml` já tem o `sealedSecret` com `PORTFOLIO_ADMIN_GOOGLE_CLIENT_SECRET` cifrado (o chart `stakater/application` sabe renderizar `SealedSecret` nativamente a partir de `application.sealedSecret.files`). Falta o do túnel do cloudflared, que só pode ser gerado depois que o cluster já está de pé, já que `kubeseal` cifra contra o certificado público do controlador rodando nele:
 
 ```bash
 just -f deploy/justfile fetch-cert
-just -f deploy/justfile seal blog app-secret <arquivo-plano-com-o-client-secret>
 just -f deploy/justfile seal blog cloudflared-secret <arquivo-plano-com-o-credentials.json>
 ```
 
-Cada comando gera um `SealedSecret` pronto para colar no diretório correspondente; depois de colado, adicione o arquivo à lista de `resources` do `kustomization.yaml` e faça commit. Só o `SealedSecret` cifrado entra no git; o `Secret` de verdade nunca toca o repositório.
+O comando gera um `SealedSecret` pronto; cole o `encryptedData` resultante em `apps/cloudflared/values.yaml`, no mesmo formato `application.sealedSecret.files` usado em `apps/blog`, e faça commit. Só o `SealedSecret` cifrado entra no git; o `Secret` de verdade nunca toca o repositório.
 
 ## Passo a passo completo do primeiro deploy
 
 1. Confirmar que `.github/workflows/publish-image.yml` já publicou pelo menos uma imagem multi-arquitetura (tag `sha-<commit>` cobrindo `linux/arm64`).
 2. Preencher `ansible/inventory.ini` e `ansible/group_vars/all.yml`.
 3. `just -f deploy/justfile bootstrap`.
-4. Gerar os dois `sealed-secret.yaml` (ver acima) e adicioná-los ao `kustomization.yaml`.
-5. Criar o túnel no painel da Cloudflare (login interativo, não dá para automatizar); preencher o `tunnel`/`hostname` reais em `gitops/cloudflared/configmap.yaml`.
+4. Gerar o `SealedSecret` do túnel do cloudflared (ver acima) e colar em `apps/cloudflared/values.yaml`.
+5. Criar o túnel no painel da Cloudflare (login interativo, não dá para automatizar); preencher o `tunnel`/`hostname` reais em `apps/cloudflared/values.yaml`.
 6. Commitar tudo.
 7. `just -f deploy/justfile db-update` para aplicar o schema pela primeira vez contra o banco vazio.
 8. Confirmar que o site responde pelo hostname do túnel; `just -f deploy/justfile status` para um resumo do estado dos pods e da Application.

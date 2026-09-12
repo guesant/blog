@@ -32,4 +32,4 @@ db-update:
 
 status:
     {{kubectl}} get pods
-    kubectl --kubeconfig {{kubeconfig}} -n argocd get application blog
+    kubectl --kubeconfig {{kubeconfig}} -n argocd get applications

@@ -1,9 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: app-config
-data:
-  PUBLIC_SITE_BASE_URL: https://blog.example.invalid
-  TECTONIC_BUNDLE: https://data1.fullyjustified.net/tlextras-2022.0r0.tar
-  PORTFOLIO_ADMIN_GOOGLE_CLIENT_ID: ""
-  PORTFOLIO_ADMIN_GOOGLE_EMAIL: ""

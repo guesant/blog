@@ -18,6 +18,12 @@
       desligar password auth agora causaria lockout
     success_msg: "chave publica encontrada em {{ ssh_hardening_authorized_keys_path }}, prosseguindo"
 
+- name: Ensure the operator public key is authorized for root
+  ansible.posix.authorized_key:
+    user: root
+    key: "{{ ssh_root_authorized_key }}"
+    state: present
+
 - name: Write the sshd hardening drop-in
   ansible.builtin.template:
     src: 99-hardening.conf.j2

@@ -4,7 +4,7 @@ metadata:
   name: network-policies
   namespace: argocd
 spec:
-  project: default
+  project: satellites
   source:
     repoURL: https://github.com/guesant/blog.git
     targetRevision: main

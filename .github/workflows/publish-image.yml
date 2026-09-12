@@ -12,6 +12,7 @@ on:
 permissions:
   contents: read
   packages: write
+  id-token: write
 
 concurrency:
   group: publish-image-${{ github.ref }}
@@ -48,13 +49,15 @@ jobs:
             type=raw,value=latest,enable={{is_default_branch}}
 
       - name: Build and push
+        id: build
         uses: docker/build-push-action@53b7df96c91f9c12dcc8a07bcb9ccacbed38856a
         with:
           context: .
           file: .docker/Dockerfile
           platforms: linux/amd64,linux/arm64
           push: true
-          provenance: false
+          provenance: true
+          sbom: true
           build-args: |
             APP_COMMIT_SHA=${{ github.sha }}
             APP_BUILD_TIME=${{ github.event.head_commit.timestamp }}
@@ -62,3 +65,9 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+
+      - name: Install cosign
+        uses: sigstore/cosign-installer@6f9f17788090df1f26f669e9d70d6ae9567deba6
+
+      - name: Sign the published image (keyless via OIDC)
+        run: cosign sign --yes ghcr.io/${{ github.repository }}@${{ steps.build.outputs.digest }}

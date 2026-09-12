@@ -4,7 +4,7 @@ metadata:
   name: postgres
   namespace: argocd
 spec:
-  project: default
+  project: satellites
   source:
     repoURL: https://github.com/guesant/blog.git
     targetRevision: main

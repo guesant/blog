@@ -46,10 +46,11 @@
   changed_when: "'ALREADY_ENABLED' not in firewalld_trust.stderr"
   when: firewalld_state.stdout == "running"
 
-- name: Allow external access to the k3s API port from the operator CIDR
+- name: Allow external access to the k3s API port from the operator CIDRs
   ansible.builtin.command: >-
     firewall-cmd --permanent --zone=public --add-rich-rule='rule family="ipv4"
-    source address="{{ k3s_api_allowed_cidr }}" port protocol="tcp" port="6443" accept'
+    source address="{{ item }}" port protocol="tcp" port="6443" accept'
+  loop: "{{ k3s_api_allowed_cidrs }}"
   register: firewalld_api_port
   changed_when: "'ALREADY_ENABLED' not in firewalld_api_port.stderr"
   when: firewalld_state.stdout == "running"

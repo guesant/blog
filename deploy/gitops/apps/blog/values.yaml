@@ -60,6 +60,12 @@ application:
     containerSecurityContext:
       readOnlyRootFilesystem: false
       runAsNonRoot: true
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+          - ALL
+      seccompProfile:
+        type: RuntimeDefault
   service:
     ports:
       - port: 80

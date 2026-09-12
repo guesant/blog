@@ -1,4 +1,60 @@
 ---
+- name: Check whether firewalld is active
+  ansible.builtin.command: firewall-cmd --state
+  register: cilium_firewalld_state
+  changed_when: false
+  failed_when: false
+
+- name: Check whether the pod and service CIDRs are trusted in firewalld
+  ansible.builtin.command: "firewall-cmd --permanent --zone=trusted --query-source={{ item }}"
+  loop:
+    - 10.42.0.0/16
+    - 10.43.0.0/16
+  register: cilium_firewalld_trust_check
+  changed_when: false
+  failed_when: false
+  when: cilium_firewalld_state.stdout == "running"
+
+- name: Abort if firewalld is active but the pod/service CIDRs are not trusted yet
+  ansible.builtin.assert:
+    that:
+      - cilium_firewalld_trust_check.results | selectattr('rc', 'ne', 0) | list | length == 0
+    fail_msg: >-
+      abortando: firewalld esta ativo mas os CIDRs de pod/service
+      (10.42.0.0/16, 10.43.0.0/16) ainda nao estao confiados na zona trusted;
+      rode a role os-prerequisites antes desta, senao o Cilium sobe sem
+      conseguir rotear trafego de pod
+    success_msg: "firewalld ja confia os CIDRs de pod/service, ou nao esta ativo"
+  when: cilium_firewalld_state.stdout == "running"
+
+- name: Check whether the k3s declarative config already exists
+  ansible.builtin.stat:
+    path: /etc/rancher/k3s/config.yaml
+  register: cilium_k3s_config_file
+
+- name: Abort if the k3s role has not run yet
+  ansible.builtin.assert:
+    that:
+      - cilium_k3s_config_file.stat.exists
+    fail_msg: "abortando: /etc/rancher/k3s/config.yaml nao existe ainda; rode a role k3s antes desta"
+    success_msg: "k3s config encontrado, prosseguindo"
+
+- name: Read the k3s declarative config
+  ansible.builtin.slurp:
+    path: /etc/rancher/k3s/config.yaml
+  register: cilium_k3s_config
+
+- name: Abort if k3s has not disabled its bundled kube-proxy and flannel backend yet
+  ansible.builtin.assert:
+    that:
+      - "'disable-kube-proxy: true' in (cilium_k3s_config.content | b64decode)"
+      - "'flannel-backend: \"none\"' in (cilium_k3s_config.content | b64decode)"
+    fail_msg: >-
+      abortando: /etc/rancher/k3s/config.yaml ainda nao desabilita o
+      kube-proxy/flannel embutidos do k3s; rode a role k3s antes desta, senao
+      o Cilium entra em conflito com o kube-proxy nativo
+    success_msg: "k3s ja esta configurado sem kube-proxy/flannel embutidos"
+
 - name: Check whether Helm is already installed
   ansible.builtin.stat:
     path: /usr/local/bin/helm

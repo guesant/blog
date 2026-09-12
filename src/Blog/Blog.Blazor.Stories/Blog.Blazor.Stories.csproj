@@ -11,7 +11,7 @@
 
   <ItemGroup>
     <PackageReference Include="BlazingStory" Version="1.0.0-preview.91" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="10.0.11" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="10.0.12" />
     <PackageReference Include="BlazorBlueprint.Components" Version="3.16.0" />
     <ProjectReference Include="..\Blog.Blazor.UI\Blog.Blazor.UI.csproj" />
   </ItemGroup>

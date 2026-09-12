@@ -9,8 +9,8 @@
     "snapshots:update": "playwright test --update-snapshots"
   },
   "devDependencies": {
-    "@playwright/test": "1.61.1",
-    "@types/node": "^26.0.0",
-    "typescript": "^5.8.0"
+    "@playwright/test": "1.63.0",
+    "@types/node": "^26.5.0",
+    "typescript": "^5.9.3"
   }
 }

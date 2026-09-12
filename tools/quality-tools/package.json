@@ -7,7 +7,7 @@
     "node": ">=24 <25"
   },
   "devDependencies": {
-    "jscpd": "^5.0.14",
-    "prettier": "^3.4.2"
+    "jscpd": "5.2.0",
+    "prettier": "3.9.6"
   }
 }

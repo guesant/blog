@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/sdk@sha256:e1fc6e423f543119c406d24e2e687d67c569f18f04a37a8b0005d80ad0dcee80 AS build
+FROM mcr.microsoft.com/dotnet/sdk@sha256:2fa828c68761b1b8c23d7662dc134421b9d3b59fe1425fdbc80804e390cdb24d AS build
 WORKDIR /src
 ENV DOTNET_CLI_TELEMETRY_OPTOUT=1 \
     DOTNET_NOLOGO=true \
@@ -14,7 +14,7 @@ RUN dotnet publish src/Blog/Blog.Blazor/Blog.Blazor.csproj \
     --no-restore \
     --output /app/publish
 
-FROM mcr.microsoft.com/dotnet/aspnet@sha256:a4556ed033fa96f984bb7a8d348851cb2d36b1281dd2420070045f664fbb5f94 AS runtime
+FROM mcr.microsoft.com/dotnet/aspnet@sha256:6a94333d37514e385650a3c81a55e5350b67253dbe136e9cf17e499c35606a8c AS runtime
 ARG APP_COMMIT_SHA=""
 ARG APP_BUILD_TIME=""
 WORKDIR /app

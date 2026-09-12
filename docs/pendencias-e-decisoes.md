@@ -72,8 +72,6 @@ Registro único de decisões tomadas (com o porquê) e pendências abertas. Comm
 ## Pendências
 
 - Destino de backup do PostgreSQL de produção: o operador CloudNativePG já traz o mecanismo (`Cluster.spec.backup`, `ScheduledBackup`), mas só faz sentido apontado para fora do próprio Pi (um bucket S3-compatível); configurar isso fica para quando houver um lugar concreto para gravar.
-- A página "agora" existe em `pages` com as seis chaves (`trabalhando`, `construindo`, `estudando`, `lendo`, `ouvindo`, `assistindo`), mas só `estudando` tem texto; os outros cinco cards ficam ocultos até serem preenchidos no admin.
-- A data de nascimento do perfil está vazia, então a linha "N anos" do card de perfil em "sobre" nunca aparece; preencher no admin.
 - Os `SiteClickableCard` remanescentes (casos, projetos e experimentos na página de tecnologia, destaques de casos e projetos na página do portfólio, bloco de conteúdo relacionado) ainda não foram avaliados para virar `SiteFeedCard`.
 - Habilitar "Secret scanning" e "Push protection" nas configurações de segurança do repositório GitHub (Settings > Code security); passo manual único, sem custo para repositório público.
 - Configurar branch protection na `main` exigindo pull request e os checks `blazor-quality`, `publish-image` e `codeql` como status obrigatório antes de merge. Hoje não existe nenhuma proteção (`gh api repos/guesant/blog/branches/main/protection` retorna 404). É o hardening de maior retorno desta lista, mas depende de decisão explícita do dono do repositório sobre o workflow de desenvolvimento (commit direto na `main` vs. sempre por pull request).

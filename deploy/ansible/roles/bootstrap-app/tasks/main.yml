@@ -1,0 +1,22 @@
+---
+- name: Copy the bootstrap Application manifest
+  ansible.builtin.copy:
+    src: "{{ playbook_dir }}/../gitops/argocd/application.yaml"
+    dest: /tmp/application.yaml
+    mode: "0644"
+
+- name: Apply the bootstrap Application
+  ansible.builtin.command: k3s kubectl apply -n argocd -f /tmp/application.yaml
+  register: application_apply
+  changed_when: "'unchanged' not in application_apply.stdout"
+
+- name: Copy the Image Updater configuration
+  ansible.builtin.copy:
+    src: "{{ playbook_dir }}/../gitops/argocd/image-updater.yaml"
+    dest: /tmp/image-updater.yaml
+    mode: "0644"
+
+- name: Apply the Image Updater configuration
+  ansible.builtin.command: k3s kubectl apply -n argocd -f /tmp/image-updater.yaml
+  register: image_updater_config_apply
+  changed_when: "'unchanged' not in image_updater_config_apply.stdout"

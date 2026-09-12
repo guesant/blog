@@ -9,6 +9,12 @@ node_modules
 .env*
 !.env.example
 
+deploy/ansible/inventory.ini
+!deploy/ansible/inventory.example.ini
+deploy/ansible/group_vars/all.yml
+!deploy/ansible/group_vars/all.example.yml
+deploy/ansible/kubeconfig
+
 playwright-report
 test-results
 

@@ -1,0 +1,13 @@
+---
+- name: Bootstrap the k3s cluster
+  hosts: pi
+  become: true
+  roles:
+    - os-prerequisites
+    - k3s
+    - cilium
+    - cnpg
+    - argocd
+    - sealed-secrets
+    - argocd-image-updater
+    - bootstrap-app

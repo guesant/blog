@@ -36,6 +36,10 @@ just -f deploy/justfile seal blog cloudflared-secret <arquivo-plano-com-o-creden
 
 O comando gera um `SealedSecret` pronto; cole o `encryptedData` resultante em `apps/cloudflared/values.yaml`, no mesmo formato `application.sealedSecret.files` usado em `apps/blog`, e faça commit. Só o `SealedSecret` cifrado entra no git; o `Secret` de verdade nunca toca o repositório.
 
+### Webhook do GitHub para o ArgoCD
+
+`apps/cloudflared/values.yaml` já roteia `/api/webhook` para `argocd-server`, e o Ansible já grava o segredo compartilhado em `argocd-secret` (chave `webhook.github.secret`). Falta só registrar o webhook do lado do GitHub, com `just -f deploy/justfile webhook-register <url>`; isso só funciona depois que o túnel Cloudflare existir e a URL pública for conhecida (ver pendência acima). Até lá, o ArgoCD continua sincronizando por polling normal a cada 3 minutos, sem regressão.
+
 ## Passo a passo completo do primeiro deploy
 
 1. Confirmar que `.github/workflows/publish-image.yml` já publicou pelo menos uma imagem multi-arquitetura (tag `sha-<commit>` cobrindo `linux/arm64`).

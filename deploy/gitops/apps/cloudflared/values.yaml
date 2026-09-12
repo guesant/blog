@@ -47,5 +47,8 @@ application:
           credentials-file: /etc/cloudflared/creds/credentials.json
           ingress:
             - hostname: blog.example.invalid
+              path: /api/webhook
+              service: http://argocd-server.argocd.svc.cluster.local:80
+            - hostname: blog.example.invalid
               service: http://app.blog.svc.cluster.local
             - service: http_status:404

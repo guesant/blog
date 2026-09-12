@@ -33,3 +33,10 @@ db-update:
 status:
     {{kubectl}} get pods
     kubectl --kubeconfig {{kubeconfig}} -n argocd get applications
+
+webhook-register url:
+    gh api repos/guesant/blog/hooks -f name=web -f active=true \
+        -f config[url]="{{url}}/api/webhook" \
+        -f config[content_type]=json \
+        -f config[secret]="$ARGOCD_GITHUB_WEBHOOK_SECRET" \
+        -f events[]=push

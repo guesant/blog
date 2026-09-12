@@ -8,3 +8,5 @@ argocd_image_updater_version: v1.3.0
 gitops_repo_url: https://github.com/guesant/blog.git
 gitops_repo_revision: main
 gitops_path: deploy/gitops
+
+argocd_github_webhook_secret: changeme-generate-a-real-secret

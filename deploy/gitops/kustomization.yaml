@@ -6,6 +6,5 @@ resources:
   - app/deployment.yaml
   - app/service.yaml
   - app/configmap.yaml
+  - app/sealed-secret.yaml
   - postgres/cluster.yaml
-  - cloudflared/deployment.yaml
-  - cloudflared/configmap.yaml

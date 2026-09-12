@@ -33,3 +33,26 @@
   ansible.builtin.reboot:
     reboot_timeout: 300
   when: cmdline_update.changed
+
+- name: Check whether firewalld is active
+  ansible.builtin.command: firewall-cmd --state
+  register: firewalld_state
+  changed_when: false
+  failed_when: false
+
+# IMPORTANT: firewalld's default "public" zone only allows ssh and
+# dhcpv6-client; without trusting the pod and service CIDRs, it silently
+# drops traffic from pods to any ClusterIP, including the k3s API server
+# itself, well before Cilium's own routing ever gets a say.
+- name: Trust the pod and service CIDRs in firewalld
+  ansible.builtin.command: "firewall-cmd --permanent --zone=trusted --add-source={{ item }}"
+  loop:
+    - 10.42.0.0/16
+    - 10.43.0.0/16
+  register: firewalld_trust
+  changed_when: "'ALREADY_ENABLED' not in firewalld_trust.stderr"
+  when: firewalld_state.stdout == "running"
+
+- name: Reload firewalld if the trusted sources changed
+  ansible.builtin.command: firewall-cmd --reload
+  when: firewalld_state.stdout == "running" and firewalld_trust.changed

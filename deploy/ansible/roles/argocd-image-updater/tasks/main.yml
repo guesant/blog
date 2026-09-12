@@ -6,7 +6,7 @@
     mode: "0644"
 
 - name: Apply Argo CD Image Updater
-  ansible.builtin.command: k3s kubectl apply -n argocd -f /tmp/argocd-image-updater-install.yaml
+  ansible.builtin.command: k3s kubectl apply --server-side --force-conflicts -n argocd -f /tmp/argocd-image-updater-install.yaml
   register: image_updater_apply
   changed_when: "'unchanged' not in image_updater_apply.stdout"
 

@@ -6,7 +6,7 @@
     mode: "0644"
 
 - name: Apply the Sealed Secrets controller
-  ansible.builtin.command: k3s kubectl apply -f /tmp/sealed-secrets-install.yaml
+  ansible.builtin.command: k3s kubectl apply --server-side --force-conflicts -f /tmp/sealed-secrets-install.yaml
   register: sealed_secrets_apply
   changed_when: "'unchanged' not in sealed_secrets_apply.stdout"
 

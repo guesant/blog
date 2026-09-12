@@ -6,7 +6,7 @@
     mode: "0644"
 
 - name: Apply the CloudNativePG operator
-  ansible.builtin.command: k3s kubectl apply -f /tmp/cnpg-install.yaml
+  ansible.builtin.command: k3s kubectl apply --server-side --force-conflicts -f /tmp/cnpg-install.yaml
   register: cnpg_apply
   changed_when: "'unchanged' not in cnpg_apply.stdout"
 

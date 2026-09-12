@@ -9,6 +9,7 @@ spec:
     repoURL: https://github.com/guesant/blog.git
     targetRevision: main
     path: deploy/gitops
+    kustomize: {}
   destination:
     server: https://kubernetes.default.svc
     namespace: blog

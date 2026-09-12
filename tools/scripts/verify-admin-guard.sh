@@ -7,7 +7,7 @@ fail() {
 }
 
 repo_root="$(cd "$(dirname "$0")/../.." && pwd)"
-host="$repo_root/src/Portfolio/Portfolio.Blazor"
+host="$repo_root/src/Blog/Blog.Blazor"
 
 grep -q 'path.StartsWithSegments("/admin"' "$host/Program.cs" ||
     fail "Program.cs must keep the /admin authentication middleware"

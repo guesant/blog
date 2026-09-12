@@ -1,0 +1,65 @@
+@inherits LocalizedComponentBase
+@page "/tools/gcd-lcm-calculator"
+@page "/pt-BR/tools/gcd-lcm-calculator"
+@using System.Globalization
+@using System.Numerics
+@using Blog.Blazor.Core
+
+<ToolPage Title="@Title" Description="@Description" CanonicalPath="@CanonicalPath">
+    <SiteToolForm Action="@Action" SubmitLabel="@SubmitLabel" AriaLabel="@NumbersLabel">
+        <SiteFormField Label="@NumbersLabel" For="gcd-lcm-0">
+            <SiteList Class="tool-list" AriaLabel="@NumbersLabel">
+                @for (var index = 0; index < Numbers.Count; index++)
+                {
+                    var currentIndex = index;
+                    <SiteListItem Class="tool-list-item">
+                        <SiteInline Gap="SiteSpace.Sm" Wrap="false">
+                            <SiteInput Id="@($"gcd-lcm-{currentIndex}")"
+                                Name="numbers"
+                                Type="number"
+                                min="1"
+                                step="1"
+                                inputmode="numeric"
+                                Value="@GetNumber(currentIndex)"
+                                ValueChanged="@(v => SetNumber(currentIndex, v))" />
+                            @if (RendererInfo.IsInteractive)
+                            {
+                                <SiteButton Variant="SiteButtonVariant.Outline"
+                                    OnClick="() => RemoveRow(currentIndex)"
+                                    Disabled="@(Numbers.Count <= 1)"><SiteIcon Name="trash-2"
+                                        Size="14" />@RemoveLabel</SiteButton>
+                            }
+                        </SiteInline>
+                    </SiteListItem>
+                }
+            </SiteList>
+        </SiteFormField>
+        @if (RendererInfo.IsInteractive)
+        {
+            <SiteButton Variant="SiteButtonVariant.Outline" OnClick="AddRow">
+                <SiteIcon Name="plus" Size="14" />@AddLabel</SiteButton>
+        }
+        else
+        {
+            <SiteFormField Label="@CountLabel" For="gcd-lcm-count">
+                <SiteInput Id="gcd-lcm-count"
+                    Name="count"
+                    Type="number"
+                    min="1"
+                    max="20"
+                    Value="@((Numbers.Count + 1).ToString(CultureInfo.InvariantCulture))" />
+            </SiteFormField>
+        }
+    </SiteToolForm>
+    <SiteLiveRegion Politeness="SiteLivePoliteness.Polite">
+        @if (Result.Error == GcdLcmError.InvalidInput)
+        {
+            <SiteErrorMessage>@InvalidLabel</SiteErrorMessage>
+        }
+
+        <SiteStats>
+            <SiteStatItem Label="@GcdLabel">@Result.Gcd</SiteStatItem>
+            <SiteStatItem Label="@LcmLabel">@Result.Lcm</SiteStatItem>
+        </SiteStats>
+    </SiteLiveRegion>
+</ToolPage>

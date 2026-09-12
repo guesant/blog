@@ -1,0 +1,40 @@
+@inherits LocalizedComponentBase
+@page "/tools/base-converter"
+@page "/pt-BR/tools/base-converter"
+@using Blog.Blazor.Core
+
+<ToolPage Title="@Title" Description="@Description" CanonicalPath="@CanonicalPath">
+    <SiteToolForm Action="@Action"
+        SubmitLabel="@SubmitLabel"
+        Submit="SiteToolFormSubmit.StaticOnly"
+        OnSubmit="Calculate"
+        AriaLabel="@ValueLabel">
+        <SiteFormField Label="@ValueLabel"
+            For="base-value"><SiteInput Id="base-value"
+                Name="value"
+                Value="@ValueText"
+                ValueChanged="@(v => ValueText = v)" /></SiteFormField>
+        <SiteFormField Label="@FromLabel"
+            For="base-from"><SiteInput Id="base-from"
+                Name="from"
+                Type="number"
+                min="2"
+                max="36"
+                Value="@FromText"
+                ValueChanged="@(v => FromText = v)" /></SiteFormField>
+        <SiteFormField Label="@ToLabel"
+            For="base-to"><SiteInput Id="base-to"
+                Name="to"
+                Type="number"
+                min="2"
+                max="36"
+                Value="@ToText"
+                ValueChanged="@(v => ToText = v)" /></SiteFormField>
+    </SiteToolForm>
+    @if (!Result.IsValid) { <SiteErrorMessage>@ErrorLabel</SiteErrorMessage> }
+    else { <SiteLiveRegion Politeness="SiteLivePoliteness.Polite">
+        <SiteStats>
+            <SiteStatItem Label="@ResultLabel">@Result.Output</SiteStatItem>
+        </SiteStats>
+    </SiteLiveRegion> }
+</ToolPage>

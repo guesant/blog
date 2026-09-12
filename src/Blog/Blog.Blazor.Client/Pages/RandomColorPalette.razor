@@ -1,0 +1,47 @@
+@inherits LocalizedComponentBase
+@page "/tools/random-color-palette"
+@page "/pt-BR/tools/random-color-palette"
+@using System.Globalization
+@using Microsoft.JSInterop
+@using Blog.Blazor.Core
+@inject IJSRuntime JS
+
+<ToolPage Title="@Title" Description="@Description" CanonicalPath="@CanonicalPath">
+    <SiteToolForm Action="@Action"
+        SubmitLabel="@GenerateLabel"
+        Submit="SiteToolFormSubmit.Always"
+        OnSubmit="Generate"
+        AriaLabel="@InputLabel">
+        <ChildContent>
+            <SiteFormField For="palette-count"
+                Label="@CountLabel"><SiteInput Id="palette-count"
+                    Name="count"
+                    Type="number"
+                    min="3"
+                    max="10"
+                    Value="@CountText"
+                    ValueChanged="@(v => CountText = v)" /></SiteFormField>
+        </ChildContent>
+        <Actions>
+            @if (RendererInfo.IsInteractive)
+            {
+                <SiteButton Variant="SiteButtonVariant.Default"
+                    @onclick="CopyAllAsync"
+                    Disabled="@(Result.Values.Count == 0)"><SiteIcon Name="copy"
+                        Size="14" />@CopyAllLabel</SiteButton>
+            }
+        </Actions>
+    </SiteToolForm>
+    <SiteLiveRegion Politeness="SiteLivePoliteness.Polite">
+        <SiteCard Class="site-block" Label="@ResultLabel">
+            <SiteList>@foreach (var color in Result.Values) { <SiteListItem Class="list-group-item site-list-row tool-list-item">
+                <SitePreviewBox Style="@($"width:2.5rem;height:2.5rem;flex:none;display:inline-block;background-color:{color}")"
+                    AriaLabel="@color" />
+                <SiteText Variant="SiteTextVariant.Small"
+                    Class="tool-list-value">@color</SiteText>@if (RendererInfo.IsInteractive) { <SiteButton Variant="SiteButtonVariant.Outline"
+                        @onclick="() => CopyAsync(color)">
+                    <SiteIcon Name="copy"
+                        Size="14" />@CopyLabel</SiteButton> }</SiteListItem> }</SiteList>
+        </SiteCard>
+    </SiteLiveRegion>
+</ToolPage>

@@ -1,0 +1,75 @@
+@inherits LocalizedComponentBase
+@implements IDisposable
+@page "/tools/amortization-calculator"
+@page "/pt-BR/tools/amortization-calculator"
+@page "/tools/loan-interest-calculator"
+@page "/pt-BR/tools/loan-interest-calculator"
+@using System.Globalization
+@using Blog.Blazor.Core
+
+<ToolPage Title="@Title" Description="@Description" CanonicalPath="@CanonicalPath">
+    <SiteToolForm Action="@Action"
+        SubmitLabel="@SubmitLabel"
+        Submit="SiteToolFormSubmit.StaticOnly"
+        OnSubmit="HandleSubmit">
+        <SiteFormField Label="@PrincipalLabel" For="amortization-principal">
+            <SiteInput Id="amortization-principal"
+                Name="principal"
+                Type="number"
+                min="0"
+                step="any"
+                Value="@PrincipalText"
+                ValueChanged="@(v => PrincipalText = v)" />
+        </SiteFormField>
+        <SiteFormField Label="@RateLabel" For="amortization-rate">
+            <SiteInput Id="amortization-rate"
+                Name="rate"
+                Type="number"
+                min="0"
+                step="any"
+                Value="@RateText"
+                ValueChanged="@(v => RateText = v)" />
+        </SiteFormField>
+        <SiteFormField Label="@PeriodsLabel" For="amortization-periods">
+            <SiteInput Id="amortization-periods"
+                Name="periods"
+                Type="number"
+                min="1"
+                max="1200"
+                Value="@PeriodsText"
+                ValueChanged="@(v => PeriodsText = v)" />
+        </SiteFormField>
+    </SiteToolForm>
+    @if (!Result.IsValid)
+    {
+        <SiteErrorMessage>@ErrorLabel</SiteErrorMessage>
+    }
+    else
+    {
+        <SiteLiveRegion Politeness="SiteLivePoliteness.Polite">
+            <SiteStats>
+                <SiteStatItem Label="@($"Price · {FirstPaymentLabel}")">@Money(Result.Price.FirstPayment)</SiteStatItem>
+                <SiteStatItem Label="@($"Price · {TotalPaidLabel}")">@Money(Result.Price.TotalPaid)</SiteStatItem>
+                <SiteStatItem Label="@($"Price · {InterestLabel}")">@Money(Result.Price.Interest)</SiteStatItem>
+                <SiteStatItem Label="@($"SAC · {FirstPaymentLabel}")">@Money(Result.Sac.FirstPayment)</SiteStatItem>
+                <SiteStatItem Label="@($"SAC · {TotalPaidLabel}")">@Money(Result.Sac.TotalPaid)</SiteStatItem>
+                <SiteStatItem Label="@($"SAC · {InterestLabel}")">@Money(Result.Sac.Interest)</SiteStatItem>
+            </SiteStats>
+            <SiteCard Class="site-block" Label="@ChartLabel">
+                @if (RendererInfo.IsInteractive)
+                {
+                    <SiteChart ChartJsConfig="@ChartConfig" AriaLabel="@ChartLabel" />
+                }
+                else
+                {
+                    <SiteList Variant="SiteListVariant.Boxed" AriaLabel="@ChartLabel">
+                        @foreach (var point in Result.Schedule.Where((_, index) => index % Math.Max(1, Result.Schedule.Count / 12) == 0))
+                        {
+                            <SiteListItem Class="site-text-list-item">@PeriodLabel @point.Period: Price @Money(point.PriceBalance) · SAC @Money(point.SacBalance)</SiteListItem>
+                        }
+                    </SiteList>
+                }
+            </SiteCard>
+        </SiteLiveRegion>
+    }
+</ToolPage>

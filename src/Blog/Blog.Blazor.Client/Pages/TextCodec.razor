@@ -1,0 +1,64 @@
+@inherits LocalizedComponentBase
+@page "/tools/base64-encoder"
+@page "/pt-BR/tools/base64-encoder"
+@page "/tools/hex-text-codec"
+@page "/pt-BR/tools/hex-text-codec"
+@page "/tools/binary-text-codec"
+@page "/pt-BR/tools/binary-text-codec"
+@page "/tools/html-entity-codec"
+@page "/pt-BR/tools/html-entity-codec"
+@page "/tools/url-encoder"
+@page "/pt-BR/tools/url-encoder"
+@using Blog.Blazor.Core
+
+<ToolPage Title="@Title" Description="@Description" CanonicalPath="@CanonicalPath">
+    <SiteToolForm Action="@Action" Submit="SiteToolFormSubmit.Never" AriaLabel="@InputLabel">
+        <ChildContent>
+            <SiteFormField Label="@InputLabel"
+                For="codec-input"><SiteTextAreaInput Id="codec-input"
+                    Name="input"
+                    Rows="8"
+                    Value="@Input"
+                    ValueChanged="@(v => Input = v)" /></SiteFormField>
+        </ChildContent>
+        <Actions>
+            @if (RendererInfo.IsInteractive)
+            {
+                <SiteFormActions>
+                    <SiteButton Variant="SiteButtonVariant.Default" OnClick="Encode">
+                        <SiteIcon Name="arrow-right-left" Size="14" />@EncodeLabel</SiteButton>
+                            <SiteButton Variant="SiteButtonVariant.Default" OnClick="Decode">
+                                <SiteIcon Name="arrow-right-left"
+                                    Size="14" />@DecodeLabel</SiteButton>
+                            </SiteFormActions>
+            }
+            else
+            {
+                <SiteInput Type="hidden" Name="operation" Value="@Operation" />
+                <SiteFormActions>
+                    <SiteButton Variant="SiteButtonVariant.Default"
+                        name="operation"
+                        value="encode"
+                        Type="SiteButtonType.Submit">
+                        <SiteIcon Name="arrow-right-left" Size="14" />@EncodeLabel</SiteButton>
+                            <SiteButton Variant="SiteButtonVariant.Default"
+                                name="operation"
+                                value="decode"
+                                Type="SiteButtonType.Submit">
+                                <SiteIcon Name="arrow-right-left"
+                                    Size="14" />@DecodeLabel</SiteButton>
+                            </SiteFormActions>
+            }
+        </Actions>
+    </SiteToolForm>
+    @if (!Result.IsValid) { <SiteErrorMessage>@ErrorLabel</SiteErrorMessage> }
+    <SiteLiveRegion Politeness="SiteLivePoliteness.Polite">
+        <SiteCard Class="site-block"
+            Label="@OutputLabel"><SiteOutputField Id="codec-output"
+                Label="@OutputLabel"
+                Value="@Result.Output"
+                Multiline="true"
+                Copyable="true"
+                CopyLabel="@CopyLabel" /></SiteCard>
+    </SiteLiveRegion>
+</ToolPage>

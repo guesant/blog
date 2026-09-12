@@ -1,0 +1,136 @@
+@inherits ContentPageBase
+@page "/projects/{Slug}"
+@page "/pt-BR/projects/{Slug}"
+@page "/cases/{Slug}"
+@page "/pt-BR/cases/{Slug}"
+@page "/writing/{Slug}"
+@page "/pt-BR/writing/{Slug}"
+@using Microsoft.AspNetCore.Components
+@using System.Text.Json
+@using Blog.Blazor.Core
+
+<PageTitle>@Title</PageTitle>
+<SeoHead Title="@Title"
+    Description="@Description"
+    CanonicalPath="@CanonicalPath"
+    OgType="article"
+    PublishedTime="@PublishedTime" />
+
+<SitePage Template="content-detail">
+    <SiteBreadcrumb HomeUrl="@LocalizedPath("home")"
+        HomeLabel="@(L["home"])"
+        Links="@BreadcrumbLinks"
+        CurrentLabel="@Title" />
+
+    @if (Snapshot is null)
+    {
+        <SiteHero Title="@LoadingTitle" Lead="@NotFoundDescription" />
+    }
+    else if (CurrentContent is null)
+    {
+        <SiteHero Title="@NotFoundTitle" Lead="@NotFoundDescription" />
+    }
+    else
+    {
+        <SiteHero Title="@Title"
+            Lead="@Description"
+            BackHref="@DetailIndexUrl"
+            BackLabel="@DetailIndexLabel">
+            <ChildContent>
+            @if (IsWriting)
+            {
+                <SiteInline Gap="SiteSpace.Md"
+                    Class="published-updated-meta"
+                    data-layout-region="published-updated">
+                    @if (!string.IsNullOrWhiteSpace(PublishedTime) || !string.IsNullOrWhiteSpace(ReadingTime))
+                    {
+                        <SiteInline Gap="SiteSpace.Xs">
+                            <SiteIcon Name="clock" Size="16" />
+                            <SiteText Variant="SiteTextVariant.Meta">@JoinMeta(ReadingTime, FormatHumanDate(PublishedTime))</SiteText>
+                        </SiteInline>
+                    }
+                    @if (ShouldShowUpdated)
+                    {
+                        <SiteInline Gap="SiteSpace.Xs">
+                            <SiteIcon Name="pencil" Size="16" />
+                            <SiteText Variant="SiteTextVariant.Meta">@L["updated_on", FormatHumanDate(UpdatedTime)]</SiteText>
+                        </SiteInline>
+                    }
+                </SiteInline>
+            }
+            else
+            {
+                <PublishedUpdatedMeta PublishedAt="@PublishedTime" UpdatedAt="@UpdatedTime" />
+            }
+            </ChildContent>
+            <Actions>
+            <ContentActions Title="@Title"
+                Url="@CanonicalPath"
+                Body="@Body"
+                ExternalUrl="@ExternalHref" />
+            </Actions>
+        </SiteHero>
+
+        @if (TechnologyLinks.Count > 0)
+        {
+            <SiteChipGroup Class="mb-3"
+                data-layout-region="tags">@foreach (var technology in TechnologyLinks) { <SiteChip Label="@technology.Name"
+                    Href="@LocalizedPath($"technologies/{technology.Slug}")" /> }</SiteChipGroup>
+        }
+
+        @if (TopicLinks.Count > 0)
+        {
+            <SiteChipGroup Class="mb-3"
+                data-layout-region="topics">@foreach (var topic in TopicLinks) { <SiteChip Label="@(topic.Name ?? topic.Slug)"
+                    Href="@LocalizedPath($"topics/{topic.Slug}")" /> }</SiteChipGroup>
+        }
+
+        @if (!string.IsNullOrWhiteSpace(ExternalHref))
+        {
+            <SiteLink Class="site-inline-action"
+                data-layout-region="source"
+                Variant="SiteButtonVariant.Outline"
+                Size="SiteButtonSize.Sm"
+                Href="@ExternalHref"
+                target="_blank"
+                rel="noopener noreferrer"><SiteIcon Name="external-link"
+                    Size="14" />@(L["external_source"])</SiteLink>
+        }
+
+        @if (Facts.Count > 0)
+        {
+            <SiteSection Region="facts"
+                HeadingId="content-facts-heading"
+                Title="@(L["fatos"])">
+                <SiteKeyValueList Layout="SiteKeyValueLayout.Columns" Class="mb-0">
+                    @foreach (var fact in Facts)
+                    {
+                        <SiteKeyValueItem Label="@fact.Label"
+                            Icon="@IconFor(fact.Key)">@fact.Value</SiteKeyValueItem>
+                    }
+                </SiteKeyValueList>
+            </SiteSection>
+        }
+
+        @if (Metrics.Count > 0)
+        {
+            <SiteGrid data-layout-region="metrics">
+                @foreach (var metric in Metrics)
+                {
+                    <SiteGridColumn>
+                        <SiteCard Class="h-100">
+                            <SiteText Variant="SiteTextVariant.MetricValue">@metric.Value</SiteText>
+                                <SiteText Variant="SiteTextVariant.MetricLabel">@metric.Label</SiteText>
+                            </SiteCard>
+                    </SiteGridColumn>
+                }
+            </SiteGrid>
+        }
+
+        <SiteRichText Html="@((MarkupString)MarkdownRenderer.ToHtml(Body))"
+            Region="content-footer" />
+        <ContentHistory ShowHistory="@ShowHistory" History="@History" DiffField="body" />
+        <ContentRelations CurrentUrl="@CanonicalPath" />
+        <RelatedContent Items="@Related" />
+    }
+</SitePage>

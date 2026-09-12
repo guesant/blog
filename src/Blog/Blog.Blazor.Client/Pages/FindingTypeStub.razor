@@ -1,0 +1,114 @@
+@inherits ListPageBase
+@page "/findings/types/{Type}"
+@page "/pt-BR/findings/types/{Type}"
+@using Blog.Blazor.Core
+
+<PageTitle>@Title</PageTitle>
+<SeoHead Title="@Title" Description="@Description" CanonicalPath="@CanonicalPath" />
+
+<SitePage Template="finding-list" data-page-state="@(Snapshot is null ? "loading" : "content")">
+    <SiteBreadcrumb HomeUrl="@LocalizedPath("home")"
+        HomeLabel="@(L["home"])"
+        Links="@BreadcrumbLinks"
+        CurrentLabel="@Title" />
+    <SiteHero Title="@Title" Lead="@Description">
+        <TitleContent>
+            <SiteLink Variant="SiteButtonVariant.Outline"
+                Size="SiteButtonSize.IconSm"
+                Href="@FeedUrls.ForKind(FeedUrls.Finding)"
+                aria-label="@(L["back_to_findings_findings"])">
+                <SiteIcon Name="arrow-left" Size="14" />
+        </SiteLink>
+            <SiteHeading Level="1">@Title</SiteHeading>
+        </TitleContent>
+    </SiteHero>
+
+    @if (Snapshot is null)
+    {
+        <SiteListingShell HasResults="false"
+            CurrentPage="@CurrentPage"
+            TotalPages="@PageCount"
+            PaginationLabel="@(L["pagination"] )"
+            PreviousLabel="@(L["previous"] )"
+            NextLabel="@(L["next"] )"
+            Href="@(page => QueryUrl(ViewMode, page))">
+            <EmptyContent>
+                <SiteEmptyState Message="@(L["no_findings_of_this_type_have_been_published"])" />
+            </EmptyContent>
+        </SiteListingShell>
+    }
+    else if (KnownType is null)
+    {
+        <SiteListingShell HasResults="false"
+            CurrentPage="@CurrentPage"
+            TotalPages="@PageCount"
+            PaginationLabel="@(L["pagination"] )"
+            PreviousLabel="@(L["previous"] )"
+            NextLabel="@(L["next"] )"
+            Href="@(page => QueryUrl(ViewMode, page))">
+            <EmptyContent>
+                <SiteEmptyState Message="@(L["this_finding_type_does_not_exist"])" />
+            </EmptyContent>
+        </SiteListingShell>
+    }
+    else
+    {
+        <SiteListingShell HasResults="@(PagedFindings.Count > 0)"
+            Summary="@ResultsSummary"
+            CurrentPage="@CurrentPage"
+            TotalPages="@PageCount"
+            PaginationLabel="@(L["pagination"])"
+            PreviousLabel="@(L["previous"])"
+            NextLabel="@(L["next"])"
+            Href="@(page => QueryUrl(ViewMode, page))">
+        <FilterContent>
+            <SiteFilterCard Action="@Action"
+                FormClass="d-grid gap-3"
+                Class="mb-4"
+                DataLayoutRegion="sort-filter">
+            <SiteInput type="hidden" name="view" value="@(DenseView ? "dense" : "spacious")" />
+            <SiteFilterSelect Icon="arrow-up-down"
+                Label="@(L["sort_by"])"
+                Id="finding-type-sort"
+                Name="sort"
+                @bind-Value="SortValue"
+                Options="@SortOptions"
+                Placeholder="@(L["default"])"
+                EmptyText="@(L["default"])" />
+            <SiteButton Variant="SiteButtonVariant.Default"
+                Type="SiteButtonType.Submit"><SiteIcon Name="check"
+                    Size="14" />@(L["apply"])</SiteButton>
+        </SiteFilterCard>
+        </FilterContent>
+        <EmptyContent>
+            <SiteEmptyState Message="@(L["no_findings_of_this_type_have_been_published"])" />
+        </EmptyContent>
+        <ResultContent>@if (PagedFindings.Count > 0)
+        {
+            <SiteCardGrid id="view-spacious-findings-by-type"
+                aria-label="@Title"
+                data-layout-region="items">
+                @foreach (var finding in PagedFindings)
+                {
+                    <SiteGridColumn>
+                        <SiteFeedCard KindLabel="@Title"
+                            Date="@finding.PublishedDate"
+                            Title="@(finding.Title ?? finding.Slug)"
+                            Href="@LocalizedUrl(finding.Url)"
+                            Preview="@finding.Description"
+                            ViewLabel="@(L["read_more"])">
+                            <MetaItems>
+                                @if (!string.IsNullOrWhiteSpace(finding.Rating)) { <SiteCardMetaItem Icon="star">@finding.Rating</SiteCardMetaItem> }
+                            </MetaItems>
+                            <Tags>
+                                @if (finding.Topics is { Count: > 0 }) { <SiteChipGroup>@foreach (var topic in finding.Topics.Take(3)) { <SiteChip Label="@(topic.Name ?? topic.Slug)" /> }</SiteChipGroup> }
+                            </Tags>
+                        </SiteFeedCard>
+                    </SiteGridColumn>
+                }
+            </SiteCardGrid>
+        }
+        </ResultContent>
+        </SiteListingShell>
+    }
+</SitePage>

@@ -10,8 +10,8 @@ tools_run := compose_dev + " run --rm tools sh -lc"
 
 dotnet_tools_restore := "dotnet tool restore >/dev/null"
 prettier_flags := "--config .config/prettierrc.json --ignore-path .config/prettierignore --ignore-path .gitignore"
-prettier_globs := '"src/Portfolio/Portfolio.Blazor*/**/*.{css,js,ts,html}" "tools/scripts/*.mjs"'
-database_project := "src/Portfolio/Portfolio.Blazor.Database/Portfolio.Blazor.Database.csproj"
+prettier_globs := '"src/Blog/Blog.Blazor*/**/*.{css,js,ts,html}" "tools/scripts/*.mjs"'
+database_project := "src/Blog/Blog.Blazor.Database/Blog.Blazor.Database.csproj"
 
 
 default: status
@@ -52,16 +52,16 @@ shell:
 
 
 restore:
-    {{docker_run}} 'dotnet restore src/Portfolio.Blazor.slnx --locked-mode'
+    {{docker_run}} 'dotnet restore src/Blog.Blazor.slnx --locked-mode'
 
 build:
-    {{docker_run}} 'dotnet build src/Portfolio.Blazor.slnx --configuration Release --no-restore'
+    {{docker_run}} 'dotnet build src/Blog.Blazor.slnx --configuration Release --no-restore'
 
 test:
-    {{docker_run}} 'dotnet run --project src/Portfolio/Portfolio.Blazor.Core.Tests/Portfolio.Blazor.Core.Tests.csproj --configuration Release --no-build'
+    {{docker_run}} 'dotnet run --project src/Blog/Blog.Blazor.Core.Tests/Blog.Blazor.Core.Tests.csproj --configuration Release --no-build'
 
 test-data:
-    {{docker_run}} 'dotnet run --project src/Portfolio/Portfolio.Blazor.Data.Tests/Portfolio.Blazor.Data.Tests.csproj --configuration Release --no-build'
+    {{docker_run}} 'dotnet run --project src/Blog/Blog.Blazor.Data.Tests/Blog.Blazor.Data.Tests.csproj --configuration Release --no-build'
 
 
 check: tools-build \
@@ -89,20 +89,20 @@ tools-build:
 format:
     {{tools_run}} 'FORMAT_CHECK=1 node tools/scripts/format-razor.mjs'
     {{tools_run}} 'FORMAT_CHECK=1 node tools/scripts/format-razor-attributes.mjs'
-    {{docker_run}} '{{dotnet_tools_restore}} && HOME=/tmp dotnet csharpier check src/Portfolio'
+    {{docker_run}} '{{dotnet_tools_restore}} && HOME=/tmp dotnet csharpier check src/Blog'
     {{tools_run}} 'prettier {{prettier_flags}} --check {{prettier_globs}}'
     {{tools_run}} 'shfmt -i 4 -ci -d tools/scripts'
 
 format-fix:
     {{tools_run}} 'node tools/scripts/format-razor.mjs'
     {{tools_run}} 'node tools/scripts/format-razor-attributes.mjs'
-    {{docker_run}} '{{dotnet_tools_restore}} && HOME=/tmp dotnet csharpier format src/Portfolio'
+    {{docker_run}} '{{dotnet_tools_restore}} && HOME=/tmp dotnet csharpier format src/Blog'
     {{tools_run}} 'prettier {{prettier_flags}} --write {{prettier_globs}}'
     {{tools_run}} 'shfmt -i 4 -ci -w tools/scripts'
 
 lint:
-    {{docker_run}} 'dotnet format src/Portfolio.Blazor.slnx analyzers --verify-no-changes --no-restore --severity warn --verbosity minimal'
-    {{docker_run}} 'dotnet build src/Portfolio.Blazor.slnx --configuration Release --no-restore --nologo'
+    {{docker_run}} 'dotnet format src/Blog.Blazor.slnx analyzers --verify-no-changes --no-restore --severity warn --verbosity minimal'
+    {{docker_run}} 'dotnet build src/Blog.Blazor.slnx --configuration Release --no-restore --nologo'
 
 comments:
     {{docker_run}} 'sh /src/tools/scripts/verify-csharp-comments.sh'
@@ -147,12 +147,12 @@ audit:
 db-migration name:
     {{compose_dev}} up -d --wait postgres
     {{compose_dev}} run --rm -e NUGET_PACKAGES=/src/.nuget-cache --entrypoint sh web -lc \
-        '{{dotnet_tools_restore}} && dotnet tool run dotnet-ef migrations add {{name}} --project {{database_project}} --startup-project {{database_project}} --context PortfolioAdminDbContext'
+        '{{dotnet_tools_restore}} && dotnet tool run dotnet-ef migrations add {{name}} --project {{database_project}} --startup-project {{database_project}} --context BlogAdminDbContext'
 
 db-update:
     {{compose_dev}} up -d --wait postgres
     {{compose_dev}} run --rm -e NUGET_PACKAGES=/src/.nuget-cache --entrypoint sh web -lc \
-        '{{dotnet_tools_restore}} && dotnet tool run dotnet-ef database update --project {{database_project}} --startup-project {{database_project}} --context PortfolioAdminDbContext'
+        '{{dotnet_tools_restore}} && dotnet tool run dotnet-ef database update --project {{database_project}} --startup-project {{database_project}} --context BlogAdminDbContext'
 
 db-backup:
     #!/usr/bin/env sh
@@ -168,10 +168,10 @@ db-restore file:
 
 stories:
     {{compose_dev}} run --rm -p 8081:8081 -e NUGET_PACKAGES=/src/.nuget-cache -e ASPNETCORE_URLS=http://0.0.0.0:8081 web sh -lc \
-        'dotnet watch --project src/Portfolio/Portfolio.Blazor.Stories/Portfolio.Blazor.Stories.csproj --no-launch-profile --no-restore --non-interactive --no-hot-reload -- --urls http://0.0.0.0:8081'
+        'dotnet watch --project src/Blog/Blog.Blazor.Stories/Blog.Blazor.Stories.csproj --no-launch-profile --no-restore --non-interactive --no-hot-reload -- --urls http://0.0.0.0:8081'
 
 stories-refresh:
-    touch src/Portfolio/Portfolio.Blazor.Stories/_Imports.razor
+    touch src/Blog/Blog.Blazor.Stories/_Imports.razor
 
 vrt: (_vrt "npm test")
 

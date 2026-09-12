@@ -1,0 +1,23 @@
+namespace Blog.Blazor.UI.Primitives;
+
+public partial class SiteChip
+{
+    /// <summary>Visible chip text.</summary>
+    [Parameter, EditorRequired]
+    public string Label { get; set; } = string.Empty;
+
+    /// <summary>Optional link destination; renders an anchor instead of a span.</summary>
+    [Parameter]
+    public string? Href { get; set; }
+
+    /// <summary>Optional title/tooltip text.</summary>
+    [Parameter]
+    public string? Title { get; set; }
+
+    /// <summary>Extra class applied to the root element.</summary>
+    [Parameter]
+    public string? Class { get; set; }
+
+    private string SpanClass => SiteCss.Join("badge", "site-chip", Class);
+    private string LinkClass => SiteCss.Join("badge", "site-chip", Class);
+}

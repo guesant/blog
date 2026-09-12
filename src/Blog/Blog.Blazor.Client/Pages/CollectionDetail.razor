@@ -1,0 +1,87 @@
+@inherits ContentPageBase
+@page "/collections/{Slug}"
+@page "/pt-BR/collections/{Slug}"
+@using Microsoft.AspNetCore.Components
+@using Blog.Blazor.Core
+
+<PageTitle>@Title</PageTitle>
+<SeoHead Title="@Title" Description="@Description" CanonicalPath="@CanonicalPath" />
+
+<SitePage Template="collection-detail">
+    <SiteBreadcrumb HomeUrl="@LocalizedPath("home")"
+        HomeLabel="@(L["home"])"
+        Links="@BreadcrumbLinks"
+        CurrentLabel="@Title" />
+
+    @if (Snapshot is null)
+    {
+        <SiteHero Title="@LoadingLabel" />
+    }
+    else if (Collection is null)
+    {
+        <SiteHero Title="@NotFoundLabel"
+            Lead="@NotFoundDescription"><ChildContent>
+                <SiteLink Variant="SiteButtonVariant.Outline" Href="@IndexUrl">
+                    <SiteIcon Name="arrow-left" Size="14" />@BackLabel</SiteLink>
+                </ChildContent>
+            </SiteHero>
+    }
+    else
+    {
+        <SiteHero Title="@Collection.Title"
+            Lead="@Collection.Description"
+            BackHref="@IndexUrl"
+            BackLabel="@BackLabel">
+            <ChildContent>
+            <PublishedUpdatedMeta PublishedAt="@Collection.PublishedAt"
+                UpdatedAt="@Collection.UpdatedAt" />
+            </ChildContent>
+            <Actions>
+            <ContentActions Title="@Collection.Title"
+                Url="@CanonicalPath"
+                Body="@(Collection.Intro ?? Collection.Description ?? string.Empty)" />
+            </Actions>
+        </SiteHero>
+
+        @if (!string.IsNullOrWhiteSpace(Collection.Intro))
+        {
+            <SiteRichText Html="@((MarkupString)MarkdownRenderer.ToHtml(Collection.Intro))"
+                Region="intro" />
+        }
+
+        @if (Collection.Resources is not { Count: > 0 })
+        {
+            <SiteEmptyState Message="@EmptyLabel" />
+        }
+        else
+        {
+            <SiteSection Region="resource-list"
+                HeadingId="collection-items-heading"
+                Title="@ItemsLabel">
+                <SiteCardGrid data-layout-region="items">
+                    @foreach (var item in Collection.Resources)
+                    {
+                        <SiteGridColumn>
+                            <SiteFeedCard KindLabel="@TypeName(item.Type)"
+                                Title="@item.Title"
+                                Href="@LocalizedUrl(item.Url)"
+                                Preview="@item.Description"
+                                ViewLabel="@(L["read_more"])">
+                                <MetaItems>
+                                    @if (!string.IsNullOrWhiteSpace(RatingName(item.Rating))) { <SiteCardMetaItem Icon="star">@RatingName(item.Rating)</SiteCardMetaItem> }
+                                    @if (!string.IsNullOrWhiteSpace(item.Note)) { <SiteCardMetaItem Icon="message-square">@item.Note</SiteCardMetaItem> }
+                                </MetaItems>
+                                <Tags>
+                                    @if (item.Topics is { Count: > 0 }) { <SiteChipGroup>@foreach (var topic in item.Topics.Take(3)) { <SiteChip Label="@(topic.Name ?? topic.Slug)" /> }</SiteChipGroup> }
+                                </Tags>
+                            </SiteFeedCard>
+                        </SiteGridColumn>
+                    }
+                </SiteCardGrid>
+            </SiteSection>
+        }
+
+        <ContentRelations CurrentUrl="@CanonicalPath" />
+        <RelatedContent Items="@Collection.Related" />
+    }
+</SitePage>

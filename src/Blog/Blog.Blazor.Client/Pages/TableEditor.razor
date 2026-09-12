@@ -1,0 +1,43 @@
+@inherits LocalizedComponentBase
+@implements IDisposable
+@page "/tools/table-editor"
+@page "/pt-BR/tools/table-editor"
+@using Blog.Blazor.Core
+@using Microsoft.JSInterop
+@inject IJSRuntime JS
+
+<ToolPage Title="@Title" Description="@Description" CanonicalPath="@CanonicalPath">
+    <SiteToolForm Action="@Action"
+        SubmitLabel="@ApplyLabel"
+        Submit="SiteToolFormSubmit.StaticOnly"
+        OnSubmit="ParseInput"
+        AriaLabel="@InputLabel">
+        <SiteFormField Label="@InputLabel"
+            For="table-csv-source"><SiteTextAreaInput Id="table-csv-source"
+                Name="csv"
+                Rows="8"
+                Value="@CsvText"
+                ValueChanged="@(v => CsvText = v)" /></SiteFormField>
+    </SiteToolForm>
+    @if (RendererInfo.IsInteractive)
+    {
+        @if (Rows.Count > 0)
+        {
+            <div id="@SpreadsheetId" class="table-scroll spreadsheet-host" aria-label="@TableLabel">
+            </div>
+            <SiteButton Variant="SiteButtonVariant.Outline"
+                OnClick="ExportSpreadsheet"><SiteIcon Name="file-down"
+                    Size="14" />@ExportLabel</SiteButton>
+        }
+    }
+    else
+    {
+        @if (Rows.Count > 0) { <SiteTable Caption="@TableLabel"
+            TableClass="table table-sm table-striped">
+            <tbody>@foreach (var row in Rows) { <tr>@foreach (var cell in row) { <td>@cell</td> }</tr> }</tbody>
+        </SiteTable>
+        <SiteLink Variant="SiteButtonVariant.Outline"
+            download="table.csv"
+            Href="@CsvDownloadUrl"><SiteIcon Name="file-down" Size="14" />@ExportLabel</SiteLink> }
+    }
+</ToolPage>

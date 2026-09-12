@@ -59,10 +59,8 @@ function allowed(path, text) {
 }
 
 const files = [
-    ...walk(join(root, "src/Portfolio/Portfolio.Blazor.Client")),
-    ...walk(join(root, "src/Portfolio/Portfolio.Blazor.UI")).filter((path) =>
-        path.endsWith(".razor"),
-    ),
+    ...walk(join(root, "src/Blog/Blog.Blazor.Client")),
+    ...walk(join(root, "src/Blog/Blog.Blazor.UI")).filter((path) => path.endsWith(".razor")),
 ].filter((path) => /\.(razor|cs)$/.test(path) && !path.endsWith(".stories.razor"));
 
 const problems = [];

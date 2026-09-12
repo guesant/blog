@@ -1,0 +1,38 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>Blog.Blazor.UI</RootNamespace>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);CS1591</NoWarn>
+    <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="10.0.11" />
+    <PackageReference Include="Microsoft.Extensions.Localization" Version="10.0.11" />
+    <PackageReference Include="BlazorBlueprint.Components" Version="3.16.0" />
+    <ProjectReference Include="..\Blog.Blazor.Core\Blog.Blazor.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="Microsoft.AspNetCore.Components" />
+    <Using Include="System.Globalization" />
+    <Using Include="Microsoft.AspNetCore.Components.Forms" />
+    <Using Include="Microsoft.AspNetCore.Components.Routing" />
+    <Using Include="Microsoft.AspNetCore.Components.Web" />
+    <Using Include="Microsoft.AspNetCore.Components.Web.Virtualization" />
+    <Using Include="Microsoft.JSInterop" />
+    <Using Include="BlazorBlueprint.Primitives.Services" />
+    <Using Include="Blog.Blazor.UI.Foundations" />
+    <Using Include="Blog.Blazor.UI.Primitives" />
+    <Using Include="Blog.Blazor.UI.Forms" />
+    <Using Include="Blog.Blazor.UI.DataDisplay" />
+    <Using Include="Blog.Blazor.UI.Feedback" />
+    <Using Include="Blog.Blazor.UI.Layout" />
+    <Using Include="Blog.Blazor.UI.Navigation" />
+    <Using Include="Blog.Blazor.UI.Composition" />
+    <Using Include="Blog.Blazor.UI.Templates" />
+  </ItemGroup>
+</Project>

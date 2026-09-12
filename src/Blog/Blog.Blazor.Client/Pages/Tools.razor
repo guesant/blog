@@ -1,0 +1,78 @@
+@inherits ListPageBase
+@page "/tools"
+@page "/pt-BR/tools"
+@using Blog.Blazor.Core
+@using Blog.Blazor.Core.Localization
+@using System.Globalization
+
+<PageTitle>@Title</PageTitle>
+<SeoHead Title="@Title" Description="@Description" CanonicalPath="@CanonicalPath" />
+
+<SitePage Template="tools-index">
+    <Breadcrumb>
+        <SiteToolBreadcrumb />
+</Breadcrumb>
+    <ChildContent>
+    <SiteHero Title="@Title" Lead="@Description" />
+
+    <SiteListingShell HasResults="@(PageItems.Count > 0)"
+        Summary="@ListingSummary(PageItems.Count, FilteredItems.Count, Page, TotalPages)"
+        CurrentPage="@Page"
+        TotalPages="@TotalPages"
+        PaginationLabel="@PaginationLabel"
+        PreviousLabel="@PreviousLabel"
+        NextLabel="@NextLabel"
+        Href="@PageUrl">
+        <FilterContent>
+            <SiteListingFilterBar Action="@Action"
+                ApplyLabel="@ApplyLabel"
+                ClearLabel="@ClearLabel"
+                ClearHref="@Action"
+                OnApply="ApplyFilters">
+                <PrimaryFields>
+                    <SiteFilterSelect Icon="tag"
+                        Label="@CategoryLabel"
+                        Id="tools-category"
+                        Name="category"
+                        @bind-Value="Category"
+                        Options="@CategoryOptions"
+                        Placeholder="@AllCategoriesLabel"
+                        EmptyText="@NoCategoryLabel" />
+                </PrimaryFields>
+                <SearchField>
+                    <SiteSearchField Label="@SearchLabel"
+                        Id="tools-search"
+                        Name="q"
+                        Value="@Search"
+                        ValueChanged="@((string value) => Search = value)"
+                        Placeholder="@SearchPlaceholder" />
+                </SearchField>
+            </SiteListingFilterBar>
+        </FilterContent>
+        <EmptyContent>
+            <SiteEmptyState Message="@NoResultsLabel" />
+        </EmptyContent>
+        <ResultContent>
+            <SiteCardGrid id="view-spacious-tools" data-layout-region="items">
+                @foreach (var tool in PageItems)
+                {
+                    <SiteGridColumn>
+                        <SiteFeedCard KindLabel="@tool.Category"
+                            Title="@LocalizedTitle(tool)"
+                            Href="@ToolUrl(tool)"
+                            Preview="@LocalizedDescription(tool)"
+                            ViewLabel="@(L["open"])">
+                            <MetaItems>
+                                @if (tool.IsStub)
+                                {
+                                    <SiteCardMetaItem Icon="construction">@ToolsL["stub"]</SiteCardMetaItem>
+                                }
+                            </MetaItems>
+                        </SiteFeedCard>
+                    </SiteGridColumn>
+                }
+            </SiteCardGrid>
+        </ResultContent>
+    </SiteListingShell>
+</ChildContent>
+</SitePage>

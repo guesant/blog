@@ -1,0 +1,40 @@
+@inherits LocalizedComponentBase
+@page "/tools/contrast-checker"
+@page "/pt-BR/tools/contrast-checker"
+@using Blog.Blazor.Core
+
+<ToolPage Title="@Title" Description="@Description" CanonicalPath="@CanonicalPath">
+    <SiteToolForm Action="@Action" SubmitLabel="@CheckLabel">
+        <SiteFormActions>
+            <SiteFormField For="contrast-fg"
+                Label="@ForegroundLabel"><SiteInput Id="contrast-fg"
+                    Name="foreground"
+                    Type="color"
+                    Value="@Foreground"
+                    ValueChanged="@(value => Foreground = value)" /></SiteFormField>
+            <SiteFormField For="contrast-bg"
+                Label="@BackgroundLabel"><SiteInput Id="contrast-bg"
+                    Name="background"
+                    Type="color"
+                    Value="@Background"
+                    ValueChanged="@(value => Background = value)" /></SiteFormField>
+        </SiteFormActions>
+    </SiteToolForm>
+    <SiteLiveRegion Politeness="SiteLivePoliteness.Polite">
+        <SitePreviewBox Class="tool-contrast-sample"
+            Style="@($"color: {Result.Foreground}; background-color: {Result.Background}")">@SampleText</SitePreviewBox>
+        <SiteStats Grid="true">
+            <SiteStatItem Label="@RatioLabel">@Result.Ratio.ToString("0.00", System.Globalization.CultureInfo.InvariantCulture):1</SiteStatItem>
+        </SiteStats>
+        <SiteBadgeGroup AriaLabel="@BadgesLabel">
+            <SiteBadge Label="@($"{AaNormalLabel}: {Status(Result.Passes(4.5))}")"
+                Class="@BadgeClass(Result.Passes(4.5))" />
+            <SiteBadge Label="@($"{AaLargeLabel}: {Status(Result.Passes(3))}")"
+                Class="@BadgeClass(Result.Passes(3))" />
+            <SiteBadge Label="@($"{AaaNormalLabel}: {Status(Result.Passes(7))}")"
+                Class="@BadgeClass(Result.Passes(7))" />
+            <SiteBadge Label="@($"{AaaLargeLabel}: {Status(Result.Passes(4.5))}")"
+                Class="@BadgeClass(Result.Passes(4.5))" />
+        </SiteBadgeGroup>
+    </SiteLiveRegion>
+</ToolPage>

@@ -1,0 +1,60 @@
+@inherits LocalizedComponentBase
+@page "/tools/css-border-radius-generator"
+@page "/pt-BR/tools/css-border-radius-generator"
+@using Blog.Blazor.Core
+
+<ToolPage Title="@Title" Description="@Description" CanonicalPath="@CanonicalPath">
+    <SiteToolForm Action="@Action" SubmitLabel="@GenerateLabel" AriaLabel="@TopLeftLabel">
+        <SiteFormActions>
+            <SiteCheckbox Label="@LinkedLabel"
+                Name="linked"
+                Value="@Linked"
+                ValueChanged="@(value => Linked = value)"
+                HtmlValue="true" />
+        </SiteFormActions>
+        <SiteFormActions>
+            <SiteFormField For="radius-tl"
+                Label="@TopLeftLabel"><SiteInput Id="radius-tl"
+                    Name="tl"
+                    Type="number"
+                    min="0"
+                    Value="@TopLeftText"
+                    ValueChanged="@(value => TopLeftText = value)" /></SiteFormField>
+            @if (!Linked)
+            {
+                <SiteFormField For="radius-tr"
+                    Label="@TopRightLabel"><SiteInput Id="radius-tr"
+                        Name="tr"
+                        Type="number"
+                        min="0"
+                        Value="@TopRightText"
+                        ValueChanged="@(value => TopRightText = value)" /></SiteFormField>
+                <SiteFormField For="radius-br"
+                    Label="@BottomRightLabel"><SiteInput Id="radius-br"
+                        Name="br"
+                        Type="number"
+                        min="0"
+                        Value="@BottomRightText"
+                        ValueChanged="@(value => BottomRightText = value)" /></SiteFormField>
+                <SiteFormField For="radius-bl"
+                    Label="@BottomLeftLabel"><SiteInput Id="radius-bl"
+                        Name="bl"
+                        Type="number"
+                        min="0"
+                        Value="@BottomLeftText"
+                        ValueChanged="@(value => BottomLeftText = value)" /></SiteFormField>
+            }
+        </SiteFormActions>
+    </SiteToolForm>
+    <SiteLiveRegion Politeness="SiteLivePoliteness.Polite">
+        <SiteStack Class="tool-css-preview-wrap">
+            <SitePreviewBox Class="tool-css-preview"
+                Style="@($"border-radius: {RadiusValue}")"
+                AriaLabel="@(L["border_radius_preview"])" />
+        </SiteStack>
+        <SiteOutputField Id="radius-output"
+            Label="@OutputLabel"
+            Value="@CssValue"
+            CopyLabel="@CopyLabel" />
+    </SiteLiveRegion>
+</ToolPage>

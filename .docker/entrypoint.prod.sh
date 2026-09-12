@@ -6,7 +6,7 @@ if [ -z "${PORTFOLIO_DB_CONNECTION:-}" ]; then
     exit 1
 fi
 
-# The schema is owned by EF Core migrations in Portfolio.Blazor.Database, but
+# The schema is owned by EF Core migrations in Blog.Blazor.Database, but
 # they are never applied here: a deploy must not rewrite schema on its own.
 # Run 'just db-update' deliberately, after a backup taken by the host (the app never
 # copies or dumps its own database).

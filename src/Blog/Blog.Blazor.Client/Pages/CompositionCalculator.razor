@@ -1,0 +1,29 @@
+@inherits LocalizedComponentBase
+@page "/tools/composition-calculator"
+@page "/pt-BR/tools/composition-calculator"
+@using System.Globalization
+@using Blog.Blazor.Core
+
+<ToolPage Title="@Title" Description="@Description" CanonicalPath="@CanonicalPath">
+    <SiteNotice>@Note</SiteNotice>
+    <SiteToolForm Action="@Action"
+        SubmitLabel="@SubmitLabel"
+        Submit="SiteToolFormSubmit.StaticOnly"
+        OnSubmit="Calculate"
+        AriaLabel="@FormulaLabel">
+        <SiteFormField Label="@FormulaLabel" For="composition-formula">
+            <SiteInput Id="composition-formula"
+                Name="formula"
+                Type="text"
+                Value="@FormulaText"
+                ValueChanged="@(value => FormulaText = value)" />
+        </SiteFormField>
+    </SiteToolForm>
+    <SiteLiveRegion Politeness="SiteLivePoliteness.Polite">
+        @if (!Result.IsValid) { <SiteErrorMessage>@ErrorLabel</SiteErrorMessage> }
+        else { <SiteCard Class="site-block"
+            Label="@MolarMassLabel"><SiteText Variant="SiteTextVariant.Body"
+                Class="tool-result-value">@MolarMassLabel = @Format(Result.MolarMass) g/mol · @string.Join(" · ", Result.Composition.Select(element => $"{element.Symbol}: {Format(element.Percentage)}%"))</SiteText>
+                </SiteCard> }
+    </SiteLiveRegion>
+</ToolPage>

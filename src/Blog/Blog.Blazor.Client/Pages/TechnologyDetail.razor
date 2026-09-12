@@ -1,0 +1,90 @@
+@inherits ContentPageBase
+@page "/technologies/{Slug}"
+@page "/pt-BR/technologies/{Slug}"
+@using Microsoft.AspNetCore.Components
+@using Blog.Blazor.Core
+
+<PageTitle>@Title</PageTitle>
+<SeoHead Title="@Title" Description="@Description" CanonicalPath="@CanonicalPath" />
+
+<SitePage Template="technology-detail">
+    <SiteBreadcrumb HomeUrl="@LocalizedPath("home")"
+        HomeLabel="@(L["home"])"
+        Links="@BreadcrumbLinks"
+        CurrentLabel="@Title" />
+
+    @if (Snapshot is null)
+    {
+        <SiteHero Title="@LoadingLabel" />
+    }
+    else if (Technology is null)
+    {
+        <SiteHero Title="@NotFoundLabel"
+            Lead="@NotFoundDescription"><ChildContent>
+                <SiteText>
+                    <SiteLink Variant="SiteButtonVariant.Outline" Href="@IndexUrl">
+                        <SiteIcon Name="arrow-left" Size="14" />@BackLabel</SiteLink>
+                    </SiteText>
+                </ChildContent>
+            </SiteHero>
+    }
+    else
+    {
+        <SiteHero Title="@Title" Lead="@Description" BackHref="@IndexUrl" BackLabel="@BackLabel" />
+        @if (IsEmpty)
+        {
+            <SiteEmptyState Message="@EmptyLabel" />
+        }
+        else
+        {
+            @if (RelatedCases.Count > 0)
+            {
+                <SiteSection Region="cases"
+                    HeadingId="technology-cases-heading"
+                    Title="@(L["cases"])">
+                    <SiteGrid>
+                        @foreach (var item in RelatedCases) { <SiteGridColumn>
+                            <SiteClickableCard Href="@LocalizedUrl(item.Url)"
+                                Title="@item.Title">@if (!string.IsNullOrWhiteSpace(item.Summary)) { <SiteText Variant="SiteTextVariant.Excerpt">@Short(item.Summary)</SiteText> }</SiteClickableCard>
+                        </SiteGridColumn> }
+                    </SiteGrid>
+                </SiteSection>
+            }
+            @if (RelatedProjects.Count > 0)
+            {
+                <SiteSection Region="projects"
+                    HeadingId="technology-projects-heading"
+                    Title="@(L["projects"])">
+                    <SiteGrid>
+                        @foreach (var item in RelatedProjects) { <SiteGridColumn>
+                            <SiteClickableCard Href="@LocalizedUrl(item.Url)"
+                                Title="@item.Name">@if (!string.IsNullOrWhiteSpace(item.Purpose)) { <SiteText Variant="SiteTextVariant.Excerpt">@Short(item.Purpose)</SiteText> }</SiteClickableCard>
+                        </SiteGridColumn> }
+                    </SiteGrid>
+                </SiteSection>
+            }
+            @if (RelatedExperiments.Count > 0)
+            {
+                <SiteSection Region="experiments"
+                    HeadingId="technology-experiments-heading"
+                    Title="@(L["experiments"])">
+                    <SiteGrid>
+                        @foreach (var item in RelatedExperiments) { <SiteGridColumn>
+                            <SiteClickableCard Href="@LocalizedUrl(item.Url)"
+                                Title="@item.Name">@if (!string.IsNullOrWhiteSpace(item.Purpose)) { <SiteText Variant="SiteTextVariant.Excerpt">@Short(item.Purpose)</SiteText> }</SiteClickableCard>
+                        </SiteGridColumn> }
+                    </SiteGrid>
+                </SiteSection>
+            }
+            @if (Technology.ResumeSkills is { Count: > 0 })
+            {
+                <SiteSection Region="skills"
+                    HeadingId="technology-skills-heading"
+                    Title="@(L["skills"])">
+                    <SiteChipGroup>@foreach (var skill in Technology.ResumeSkills) { <SiteChip Label="@(skill.Name ?? skill.Slug)" Href="@LocalizedUrl(skill.Url ?? $"/topics/{skill.Slug}")" /> }</SiteChipGroup>
+                </SiteSection>
+            }
+        }
+        <ContentRelations CurrentUrl="@CanonicalPath" />
+    }
+</SitePage>

@@ -1,0 +1,110 @@
+@page "/admin/pages/create"
+@page "/admin/pages/{Id:int}"
+@using Blog.Blazor.Components.Admin.Shared
+@using Blog.Blazor.Core
+@inherits AdminEditPageBase<Page>
+@layout AdminLayout
+
+<PageTitle>@(IsEditing ? "Edit page" : "New page")</PageTitle>
+
+<SiteFormShell Title="@(IsEditing ? "Edit page" : "New page")"
+    Error="@SaveError"
+    Loading="@IsLoading">
+    <SiteForm EditContext="@_pageEditContext" OnValidSubmit="HandleSaveAsync">
+        <SiteStack Gap="SiteSpace.Lg">
+            <SiteFormField Label="Slug"
+                For="slug"
+                Required="true"
+                HelpText="Used by hardcoded, slug-specific components on the public site. A slug no route recognizes will save fine and simply never render anywhere.">
+                <SiteTextInput Id="slug" @bind-Value="_page.Slug" />
+                <SiteValidationMessage For="@(() => _page.Slug)" />
+            </SiteFormField>
+
+            <SiteFormSection Title="Translations"
+                Description="@($"Fields for page \"{(string.IsNullOrWhiteSpace(_page.Slug) ? "(no slug yet)" : _page.Slug)}\" — known fields are shown as labeled inputs; a slug with no catalog entry falls back to free-form key/value rows.")">
+                <SiteTranslationTabs Locales="@_locales"
+                    ActiveLocale="@_activeLocale"
+                    ActiveLocaleChanged="@((string locale) => _activeLocale = locale)"
+                    IdPrefix="page-translation">
+                    <Panel Context="locale">
+                        @if (locale == "en")
+                        {
+                            <CascadingValue Value="_enEditContext"
+                                TValue="EditContext"
+                                IsFixed="true">
+                                <DataAnnotationsValidator />
+                                <SiteFormField Label="Fields"
+                                    For="fields-en"
+                                    HelpText="Leave blank to skip saving the English translation.">
+                                    <SitePageFieldsInput Id="fields-en"
+                                        Slug="@PageFieldCatalog.SlugFor(_page.Slug)"
+                                        Locale="en"
+                                        Value="@_translationEn.Fields"
+                                        ValueChanged="@(value => _translationEn.Fields = value ?? string.Empty)" />
+                                    <SiteValidationMessage For="@(() => _translationEn.Fields)" />
+                                </SiteFormField>
+                            </CascadingValue>
+                        }
+                        else
+                        {
+                            <CascadingValue Value="_ptEditContext"
+                                TValue="EditContext"
+                                IsFixed="true">
+                                <DataAnnotationsValidator />
+                                <SiteFormField Label="Fields"
+                                    For="fields-pt"
+                                    HelpText="Deixe em branco para não salvar a tradução em português.">
+                                    <SitePageFieldsInput Id="fields-pt"
+                                        Slug="@PageFieldCatalog.SlugFor(_page.Slug)"
+                                        Locale="pt-BR"
+                                        Value="@_translationPtBr.Fields"
+                                        ValueChanged="@(value => _translationPtBr.Fields = value ?? string.Empty)" />
+                                    <SiteValidationMessage For="@(() => _translationPtBr.Fields)" />
+                                </SiteFormField>
+                            </CascadingValue>
+                        }
+                    </Panel>
+                </SiteTranslationTabs>
+            </SiteFormSection>
+
+            @if (IsPortfolioPage)
+            {
+                <SiteFormSection Title="Featured case studies"
+                    Description="Only the &quot;portfolio&quot; page reads these three lists; shown up to 3 on the public site, in this order.">
+                    <SiteEntityChecklist TItem="CaseStudy"
+                        Items="_allCaseStudies"
+                        Key="@(caseStudy => caseStudy.Id)"
+                        Label="@CaseStudyDisplayName"
+                        Selected="_selectedCaseStudyIds"
+                        SelectedChanged="HandleSelectedCaseStudiesChanged"
+                        SearchPlaceholder="Search case studies…"
+                        EmptyText="@(search => $"No case studies match \"{search}\".")" />
+                </SiteFormSection>
+
+                <SiteFormSection Title="Featured projects">
+                    <SiteEntityChecklist TItem="Project"
+                        Items="_allProjects"
+                        Key="@(project => project.Id)"
+                        Label="@ProjectDisplayName"
+                        Selected="_selectedProjectIds"
+                        SelectedChanged="HandleSelectedProjectsChanged"
+                        SearchPlaceholder="Search projects…"
+                        EmptyText="@(search => $"No projects match \"{search}\".")" />
+                </SiteFormSection>
+
+                <SiteFormSection Title="Featured writings">
+                    <SiteEntityChecklist TItem="Writing"
+                        Items="_allWritings"
+                        Key="@(writing => writing.Id)"
+                        Label="@WritingDisplayName"
+                        Selected="_selectedWritingIds"
+                        SelectedChanged="HandleSelectedWritingsChanged"
+                        SearchPlaceholder="Search writings…"
+                        EmptyText="@(search => $"No writings match \"{search}\".")" />
+                </SiteFormSection>
+            }
+        </SiteStack>
+
+        <SiteSaveBar Saving="@IsSaving" CancelHref="/admin/pages" />
+    </SiteForm>
+</SiteFormShell>

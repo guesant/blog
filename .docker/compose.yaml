@@ -95,7 +95,7 @@ services:
       DOTNET_NOLOGO: "true"
       DOTNET_CLI_HOME: /tmp/dotnet
       NUGET_PACKAGES: /tmp/nuget-packages
-    command: dotnet run --project src/Portfolio/Portfolio.Blazor.Stories/Portfolio.Blazor.Stories.csproj --configuration Release --no-build --urls http://0.0.0.0:8081
+    command: dotnet run --project src/Blog/Blog.Blazor.Stories/Blog.Blazor.Stories.csproj --configuration Release --no-build --urls http://0.0.0.0:8081
 
 volumes:
   postgres-data:

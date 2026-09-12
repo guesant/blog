@@ -1,0 +1,70 @@
+@using Blog.Blazor.Core
+@inject IStringLocalizer<SharedResource> L
+
+<SiteInline Gap="SiteSpace.Sm"
+    Justify="@(UseSidebarStyle ? SiteJustify.Start : Justify)"
+    Class="@RootClass">
+    @LeadingContent
+    @foreach (var profile in Profiles)
+    {
+        if (TryGetUri(profile.Url) is Uri uri)
+        {
+            var isEmail = uri.Scheme.Equals("mailto", StringComparison.OrdinalIgnoreCase);
+            <SiteLink Href="@uri.AbsoluteUri"
+                Variant="SiteButtonVariant.Outline"
+                Size="@(Variant == "grid" ? SiteButtonSize.Sm : SiteButtonSize.Default)"
+                Class="@FooterLinkClass(null)"
+                Target="@(isEmail ? null : "_blank")"
+                Rel="@(isEmail ? null : "me noopener")">
+                <SiteIcon Name="@ContactIcon(profile.Platform)"
+                    Size="14"
+                    Class="icon footer-contact-icon" />
+                <SiteNavItemLabel>@(string.IsNullOrWhiteSpace(profile.Label) ? profile.Platform : profile.Label)</SiteNavItemLabel>
+                @if (!isEmail)
+                {
+                    <SiteIcon Name="arrow-up-right" Size="12" Class="icon icon-trailing" />
+                }
+            </SiteLink>
+        }
+    }
+    @if (EmailChallenge is not null || EmailAvailable)
+    {
+        <SiteStack Gap="SiteSpace.Sm" Class="email-reveal" data-protected-email>
+            <SiteButton Variant="SiteButtonVariant.Outline"
+                Class="@(ActionClass("email-reveal-trigger"))"
+                data-protected-email-trigger="true"><SiteIcon Name="mail"
+                    Size="14"
+                    Class="icon" /><SiteNavItemLabel>@EmailLabel</SiteNavItemLabel>
+                    </SiteButton>
+            <SiteButton Variant="SiteButtonVariant.Outline"
+                Disabled="true"
+                Class="@(ActionClass("email-reveal-status"))"
+                data-protected-email-state="working"
+                hidden="true"
+                aria-live="polite"><span class="site-loading-spinner"
+                    aria-hidden="true"></span>
+                        <SiteText Variant="SiteTextVariant.Meta"
+                        Class="visually-hidden">@WorkingLabel</SiteText>
+                        </SiteButton>
+            <SiteInline Gap="SiteSpace.Sm"
+                data-protected-email-state="error"
+                hidden
+                aria-live="polite">@ErrorLabel <SiteButton Variant="SiteButtonVariant.Outline"
+                    Size="SiteButtonSize.Sm"
+                    Class="@(ActionClass("email-reveal-retry"))"
+                    data-protected-email-retry="true"><SiteIcon Name="rotate-cw"
+                        Size="14" />@RetryLabel</SiteButton>
+                    </SiteInline>
+            <SiteLink Href="#"
+                Variant="SiteButtonVariant.Outline"
+                Class="@(ActionClass("email-reveal-revealed"))"
+                data-protected-email-revealed="true"
+                data-protected-email-state="revealed"
+                hidden="true"><SiteIcon Name="mail"
+                    Size="14"
+                    Class="icon" /><SiteNavItemLabel data-protected-email-revealed-text>
+                    </SiteNavItemLabel>
+                    </SiteLink>
+        </SiteStack>
+    }
+</SiteInline>

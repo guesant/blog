@@ -2,7 +2,7 @@ import { readFileSync, writeFileSync, readdirSync, statSync } from "node:fs";
 import { join, basename } from "node:path";
 
 const root = process.cwd();
-const localizationDir = join(root, "src/Portfolio/Portfolio.Blazor.Core/Localization");
+const localizationDir = join(root, "src/Blog/Blog.Blazor.Core/Localization");
 const fix = process.env.FIX === "1";
 const locales = ["", ".pt-BR"];
 const resources = {
@@ -35,7 +35,7 @@ function walk(dir, out = []) {
     return out;
 }
 
-const sources = walk(join(root, "src/Portfolio")).map((path) => ({
+const sources = walk(join(root, "src/Blog")).map((path) => ({
     path: path.slice(root.length + 1),
     text: readFileSync(path, "utf8"),
 }));

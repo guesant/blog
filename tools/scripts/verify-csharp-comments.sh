@@ -1,8 +1,8 @@
 #!/usr/bin/env sh
 set -eu
 
-projects="src/Portfolio/Portfolio.Blazor.Client src/Portfolio/Portfolio.Blazor.Core src/Portfolio/Portfolio.Blazor.Core.Tests src/Portfolio/Portfolio.Blazor.Data.Tests src/Portfolio/Portfolio.Blazor.Sbom src/Portfolio/Portfolio.Blazor src/Portfolio/Portfolio.Blazor.UI"
-[ -d src/Portfolio/Portfolio.Blazor.Stories ] && projects="$projects src/Portfolio/Portfolio.Blazor.Stories"
+projects="src/Blog/Blog.Blazor.Client src/Blog/Blog.Blazor.Core src/Blog/Blog.Blazor.Core.Tests src/Blog/Blog.Blazor.Data.Tests src/Blog/Blog.Blazor.Sbom src/Blog/Blog.Blazor src/Blog/Blog.Blazor.UI"
+[ -d src/Blog/Blog.Blazor.Stories ] && projects="$projects src/Blog/Blog.Blazor.Stories"
 
 matches="$(find $projects -type f \( -name '*.cs' -o -name '*.razor' \) -not -path '*/bin/*' -not -path '*/obj/*' -print0 | xargs -0 awk '
 FNR == 1 { allowed_block = 0; in_block = 0 }
@@ -19,7 +19,7 @@ FNR == 1 { allowed_block = 0; in_block = 0 }
     if (!is_comment) { allowed_block = 0; next }
 
     is_doc_comment = (line ~ /^[[:space:]]*\/\/\//)
-    in_ui = (FILENAME ~ /^src\/Portfolio\/Portfolio\.Blazor\.UI\//)
+    in_ui = (FILENAME ~ /^src\/Blog\/Blog\.Blazor\.UI\//)
     if (in_ui && is_doc_comment) { allowed_block = 0; next }
 
     # A comment block opening with IMPORTANT: records a non-obvious invariant and is
@@ -31,7 +31,7 @@ FNR == 1 { allowed_block = 0; in_block = 0 }
 }' || true)"
 
 if [ -n "$matches" ]; then
-    echo "C# comment check failed; only IMPORTANT-marked invariants and XML docs in Portfolio.Blazor.UI are allowed:" >&2
+    echo "C# comment check failed; only IMPORTANT-marked invariants and XML docs in Blog.Blazor.UI are allowed:" >&2
     printf '%s\n' "$matches" >&2
     exit 1
 fi

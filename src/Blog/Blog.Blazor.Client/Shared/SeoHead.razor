@@ -1,0 +1,62 @@
+@inject IStringLocalizer<SharedResource> L
+@using System.Text.Encodings.Web
+@using System.Text.Json
+@using Blog.Blazor.Core
+@inject NavigationManager Navigation
+
+<HeadContent>
+    <meta name="description" content="@Description" />
+    <meta name="application-name" content="guesant.net" />
+    <meta name="format-detection" content="telephone=no, email=no, address=no" />
+    <meta name="category" content="technology" />
+    <meta name="referrer" content="origin-when-cross-origin" />
+    <meta name="robots" content="index, follow" />
+    <meta name="theme-color" content="#ffffff" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="canonical" href="@AbsoluteUrl(CanonicalPath)" />
+    <link rel="alternate" hreflang="en" href="@AbsoluteUrl(EnglishPath ?? CanonicalPath)" />
+    <link rel="alternate" hreflang="pt-BR" href="@AbsoluteUrl(PortuguesePath ?? CanonicalPath)" />
+    <link rel="alternate"
+        type="application/rss+xml"
+        title="RSS"
+        href="@AbsoluteUrl(L["feed_xml"])" />
+    <link rel="alternate"
+        type="application/atom+xml"
+        title="Atom"
+        href="@AbsoluteUrl(L["atom_xml"])" />
+    <link rel="alternate"
+        type="application/feed+json"
+        title="JSON Feed"
+        href="@AbsoluteUrl(L["feed_json"])" />
+    <meta property="og:title" content="@Title" />
+    <meta property="og:description" content="@Description" />
+    <meta property="og:type" content="@OgType" />
+    <meta property="og:url" content="@AbsoluteUrl(CanonicalPath)" />
+    <meta property="og:site_name" content="guesant.net" />
+    <meta property="og:locale" content="@(L["en_us"])" />
+    <meta property="og:locale:alternate" content="@(L["pt_br"])" />
+    @if (OgImageUrl is not null)
+    {
+        <meta property="og:image" content="@OgImageUrl" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:image:alt" content="@OgImageAlt" />
+    }
+    <meta name="twitter:card"
+        content="@(OgImageUrl is not null ? "summary_large_image" : "summary")" />
+    <meta name="twitter:title" content="@Title" />
+    <meta name="twitter:description" content="@Description" />
+    @if (OgImageUrl is not null)
+    {
+        <meta name="twitter:image" content="@OgImageUrl" />
+    }
+    @if (!string.IsNullOrWhiteSpace(PublishedTime))
+    {
+        <meta property="article:published_time" content="@PublishedTime" />
+        <meta property="article:author" content="@AbsoluteUrl(L["about"])" />
+    }
+    @if (Snapshot?.Chrome.Site.MaintenanceEnabled != true)
+    {
+        <script type="application/ld+json">@((MarkupString)StructuredDataJson())</script>
+    }
+</HeadContent>

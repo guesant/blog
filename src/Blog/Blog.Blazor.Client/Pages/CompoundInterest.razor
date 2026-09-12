@@ -1,0 +1,66 @@
+@inherits LocalizedComponentBase
+@page "/tools/compound-interest"
+@page "/tools/compound-interest-calculator"
+@page "/pt-BR/tools/compound-interest"
+@page "/pt-BR/tools/compound-interest-calculator"
+@using System.Globalization
+@using Blog.Blazor.Core
+
+<ToolPage Title="@Title" Description="@Description" CanonicalPath="@CanonicalPath">
+    <SiteToolForm Action="@Action"
+        SubmitLabel="@SubmitLabel"
+        Submit="SiteToolFormSubmit.StaticOnly"
+        OnSubmit="HandleSubmit"
+        AriaLabel="@PrincipalLabel">
+        <SiteFormField Label="@PrincipalLabel" For="compound-principal">
+            <SiteInput Id="compound-principal"
+                Name="principal"
+                Type="number"
+                min="0"
+                step="any"
+                Value="@PrincipalText"
+                ValueChanged="@(value => PrincipalText = value)" />
+        </SiteFormField>
+        <SiteFormField Label="@RateLabel" For="compound-rate">
+            <SiteInput Id="compound-rate"
+                Name="rate"
+                Type="number"
+                step="any"
+                Value="@RateText"
+                ValueChanged="@(value => RateText = value)" />
+        </SiteFormField>
+        <SiteFormField Label="@PeriodsLabel" For="compound-periods">
+            <SiteInput Id="compound-periods"
+                Name="periods"
+                Type="number"
+                min="1"
+                max="10000"
+                Value="@PeriodsText"
+                ValueChanged="@(value => PeriodsText = value)" />
+        </SiteFormField>
+        <SiteFormField Label="@ContributionLabel" For="compound-contribution">
+            <SiteInput Id="compound-contribution"
+                Name="contribution"
+                Type="number"
+                min="0"
+                step="any"
+                Value="@ContributionText"
+                ValueChanged="@(value => ContributionText = value)" />
+        </SiteFormField>
+    </SiteToolForm>
+
+    <SiteLiveRegion Politeness="SiteLivePoliteness.Polite">
+        @if (!Result.IsValid)
+        {
+            <SiteErrorMessage>@ErrorMessage</SiteErrorMessage>
+        }
+        else
+        {
+            <SiteStats>
+                <SiteStatItem Label="@FutureValueLabel">@Money(Result.FutureValue)</SiteStatItem>
+                <SiteStatItem Label="@ContributedLabel">@Money(Result.TotalContributed)</SiteStatItem>
+                <SiteStatItem Label="@InterestLabel">@Money(Result.InterestEarned)</SiteStatItem>
+            </SiteStats>
+        }
+    </SiteLiveRegion>
+</ToolPage>

@@ -1,0 +1,39 @@
+@inherits LocalizedComponentBase
+@page "/tools/fake-name-generator"
+@page "/pt-BR/tools/fake-name-generator"
+@using System.Globalization
+@using Blog.Blazor.Core
+
+<ToolPage Title="@Title" Description="@Description" CanonicalPath="@CanonicalPath">
+    <SiteToolForm Action="@Action"
+        SubmitLabel="@GenerateLabel"
+        Submit="SiteToolFormSubmit.Always"
+        OnSubmit="Generate"
+        AriaLabel="@CountLabel">
+        <SiteFormField For="fake-name-count"
+            Label="@CountLabel"><SiteInput Id="fake-name-count"
+                Name="count"
+                Type="number"
+                min="1"
+                max="50"
+                Value="@CountText"
+                ValueChanged="@(v => CountText = v)" /></SiteFormField>
+        <SiteFormActions>
+            <SiteCheckbox Label="@UsernameLabel"
+                Name="username"
+                HtmlValue="true"
+                @bind-Value="IncludeUsername" />
+            <SiteCheckbox Label="@EmailLabel"
+                Name="email"
+                HtmlValue="true"
+                @bind-Value="IncludeEmail" />
+        </SiteFormActions>
+    </SiteToolForm>
+    <SiteLiveRegion Politeness="SiteLivePoliteness.Polite">
+        <SiteCard Class="site-block" Label="@ResultLabel">
+            <SiteList>@foreach (var value in Result.Values) { <SiteListItem Class="list-group-item site-list-row d-flex flex-wrap justify-content-between align-items-start tool-list-item">
+                <SiteText Variant="SiteTextVariant.Meta" Class="tool-list-value">@value</SiteText>
+            </SiteListItem> }</SiteList>
+        </SiteCard>
+    </SiteLiveRegion>
+</ToolPage>

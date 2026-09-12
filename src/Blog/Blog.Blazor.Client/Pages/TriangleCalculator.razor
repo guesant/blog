@@ -1,0 +1,38 @@
+@inherits LocalizedComponentBase
+@page "/tools/triangle-calculator"
+@page "/pt-BR/tools/triangle-calculator"
+@using Blog.Blazor.Core
+
+<ToolPage Title="@Title" Description="@Description" CanonicalPath="@CanonicalPath">
+    <SiteToolForm Action="@Action" SubmitLabel="@CalculateLabel" AriaLabel="@Title">
+        <SiteFormActions>
+            <SiteFormField For="triangle-a"
+                Label="a"><SiteNumberInput TValue="double"
+                    Id="triangle-a"
+                    Name="a"
+                    Step="0.1"
+                    Value="@A"
+                    ValueChanged="@(v => A = v)" /></SiteFormField>
+            <SiteFormField For="triangle-b"
+                Label="b"><SiteNumberInput TValue="double"
+                    Id="triangle-b"
+                    Name="b"
+                    Step="0.1"
+                    Value="@B"
+                    ValueChanged="@(v => B = v)" /></SiteFormField>
+            <SiteFormField For="triangle-c"
+                Label="c"><SiteNumberInput TValue="double"
+                    Id="triangle-c"
+                    Name="c"
+                    Step="0.1"
+                    Value="@C"
+                    ValueChanged="@(v => C = v)" /></SiteFormField>
+        </SiteFormActions>
+    </SiteToolForm>
+    <SiteLiveRegion Politeness="SiteLivePoliteness.Polite">
+        @if (!Result.IsValid) { <SiteErrorMessage>@ErrorLabel</SiteErrorMessage> } else { <SiteCard Class="site-block" Label="@Title">
+            <SiteText Variant="SiteTextVariant.MetricValue"
+                Class="tool-result-value">@Result.Summary</SiteText>
+        </SiteCard> }
+    </SiteLiveRegion>
+</ToolPage>

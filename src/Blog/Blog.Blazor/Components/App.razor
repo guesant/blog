@@ -1,0 +1,67 @@
+﻿@using Blog.Blazor.Core
+@using Microsoft.AspNetCore.Http
+@using System.Globalization
+@using Blog.Blazor.Core.Localization
+@using Microsoft.Extensions.Localization
+@inject IPublicSiteContentProvider ContentProvider
+@inject IHttpContextAccessor HttpContextAccessor
+@inject ICultureCatalog Cultures
+@inject IStringLocalizer<SharedResource> L
+
+<!DOCTYPE html>
+<html lang="@DocumentLanguage">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="/" />
+    <link rel="icon" href="/icon.svg" type="image/svg+xml" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <ResourcePreloader />
+    <link rel="stylesheet" href="@Assets["_content/Blog.Blazor.UI/css/tokens.css"]" />
+    <script src="@Assets["_content/Blog.Blazor.UI/js/theme.js"]">
+    </script>
+    <link rel="stylesheet" href="@Assets["_content/Blog.Blazor.UI/css/fonts.css"]" />
+    <link rel="stylesheet"
+        href="@Assets["_content/Blog.Blazor.UI/vendor/icons/lucide/lucide.css"]" />
+    <link rel="stylesheet"
+        href="@Assets["_content/Blog.Blazor.UI/vendor/icons/phosphor/fill.css"]" />
+    <link rel="stylesheet"
+        href="@Assets["_content/Blog.Blazor.UI/vendor/icons/fontawesome/css/fontawesome.css"]" />
+    <link rel="stylesheet"
+        href="@Assets["_content/Blog.Blazor.UI/vendor/icons/fontawesome/css/solid.css"]" />
+    <link rel="stylesheet" href="@Assets["_content/Blog.Blazor.UI/css/blueprint-theme.css"]" />
+    <link rel="stylesheet" href="@Assets["_content/Blog.Blazor.UI/css/base.css"]" />
+    <link rel="stylesheet" href="@Assets["_content/Blog.Blazor.UI/css/forms.css"]" />
+    <link rel="stylesheet" href="@Assets["app.css"]" />
+    <link rel="stylesheet" href="@Assets["Blog.Blazor.styles.css"]" />
+    <ImportMap />
+    <HeadOutlet @rendermode="PageRenderMode" />
+</head>
+
+<body>
+    <a class="skip-link" href="#main-content">@SkipToContentLabel</a>
+    <Blog.Blazor.Client.Routes @rendermode="PageRenderMode" />
+    <script src="@Assets["table-editor.js"]">
+    </script>
+    <script src="@Assets["chart-export.js"]">
+    </script>
+    <script src="@Assets["echarts-tools.js"]">
+    </script>
+<script src="@Assets["knowledge-map.js"]">
+</script>
+<script src="@Assets["protected-email.js"]">
+</script>
+    <script src="@Assets["navigation-behavior.js"]">
+    </script>
+    <script src="@Assets["content-actions.js"]">
+    </script>
+    <script src="@Assets["_content/Blog.Blazor.UI/js/focus-trap.js"]">
+    </script>
+    <script src="@Assets["culture-interop.js"]">
+    </script>
+    <script src="@Assets["_framework/blazor.web.js"]">
+    </script>
+</body>
+
+</html>

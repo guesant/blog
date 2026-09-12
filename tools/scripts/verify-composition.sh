@@ -65,7 +65,7 @@ all_razor_files="$(find "$repo_root" -type f -name '*.razor' -not -path '*/bin/*
 native_scope_files=""
 for f in $all_razor_files; do
     case "$f" in
-        */src/Portfolio/Portfolio.Blazor.UI/* | */src/Portfolio/Portfolio.Blazor.Stories/*) continue ;;
+        */src/Blog/Blog.Blazor.UI/* | */src/Blog/Blog.Blazor.Stories/*) continue ;;
     esac
     native_scope_files="$native_scope_files
 $f"
@@ -119,12 +119,12 @@ hidden="$(hidden_render_logic)"
 matches="$(printf '%s\n%s\n%s\n' "$raw_tags" "$raw_class" "$hidden" | grep -v '^$' || true)"
 
 if [ -n "$matches" ]; then
-    fail "raw structural markup, loose class attribute, or MarkupString/RenderFragment in @code found outside src/Portfolio/Portfolio.Blazor.UI/src/Portfolio/Portfolio.Blazor.Stories:
+    fail "raw structural markup, loose class attribute, or MarkupString/RenderFragment in @code found outside src/Blog/Blog.Blazor.UI/src/Blog/Blog.Blazor.Stories:
 $matches"
 fi
 
-client="$repo_root/src/Portfolio/Portfolio.Blazor.Client"
-ui="$repo_root/src/Portfolio/Portfolio.Blazor.UI"
+client="$repo_root/src/Blog/Blog.Blazor.Client"
+ui="$repo_root/src/Blog/Blog.Blazor.UI"
 home_feed="$client/Shared/ContentFeed.razor"
 
 for page in "$home_feed" "$client"/Pages/Cases.razor "$client"/Pages/Credits.razor "$client"/Pages/Projects.razor "$client"/Pages/Snippets.razor "$client"/Pages/Technologies.razor "$client"/Pages/Topics.razor "$client"/Pages/Tools.razor; do

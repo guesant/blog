@@ -1,0 +1,94 @@
+@inherits LocalizedComponentBase
+@implements IDisposable
+@page "/tools/projectile-motion"
+@page "/pt-BR/tools/projectile-motion"
+@page "/tools/circular-motion"
+@page "/pt-BR/tools/circular-motion"
+@using System.Globalization
+@using Blog.Blazor.Core
+
+<ToolPage Title="@Title" Description="@Description" CanonicalPath="@CanonicalPath">
+    <SiteToolForm Action="@Action"
+        SubmitLabel="@SubmitLabel"
+        Submit="SiteToolFormSubmit.StaticOnly"
+        OnSubmit="Calculate">
+        @if (IsProjectile)
+        {
+            <SiteFormField Label="@SpeedLabel"
+                For="projectile-speed"><SiteInput Id="projectile-speed"
+                    Name="speed"
+                    Type="number"
+                    min="0"
+                    step="any"
+                    Value="@SpeedText"
+                    ValueChanged="@(v => SpeedText = v)" /></SiteFormField>
+            <SiteFormField Label="@AngleLabel"
+                For="projectile-angle"><SiteInput Id="projectile-angle"
+                    Name="angle"
+                    Type="number"
+                    min="0"
+                    max="90"
+                    step="any"
+                    Value="@AngleText"
+                    ValueChanged="@(v => AngleText = v)" /></SiteFormField>
+            <SiteFormField Label="@GravityLabel"
+                For="projectile-gravity"><SiteInput Id="projectile-gravity"
+                    Name="gravity"
+                    Type="number"
+                    min="0"
+                    step="any"
+                    Value="@GravityText"
+                    ValueChanged="@(v => GravityText = v)" /></SiteFormField>
+        }
+        else
+        {
+            <SiteFormField Label="@RadiusLabel"
+                For="circular-radius"><SiteInput Id="circular-radius"
+                    Name="radius"
+                    Type="number"
+                    min="0"
+                    step="any"
+                    Value="@RadiusText"
+                    ValueChanged="@(v => RadiusText = v)" /></SiteFormField>
+            <SiteFormField Label="@SpeedLabel"
+                For="circular-speed"><SiteInput Id="circular-speed"
+                    Name="speed"
+                    Type="number"
+                    min="0"
+                    step="any"
+                    Value="@CircularSpeedText"
+                    ValueChanged="@(v => CircularSpeedText = v)" /></SiteFormField>
+            <SiteFormField Label="@MassLabel"
+                For="circular-mass"><SiteInput Id="circular-mass"
+                    Name="mass"
+                    Type="number"
+                    min="0"
+                    step="any"
+                    Value="@MassText"
+                    ValueChanged="@(v => MassText = v)" /></SiteFormField>
+        }
+    </SiteToolForm>
+    @if (!ResultIsValid) { <SiteErrorMessage>@ErrorLabel</SiteErrorMessage> }
+    else if (IsProjectile)
+    {
+        <SiteLiveRegion Politeness="SiteLivePoliteness.Polite">
+            <SiteStats>
+                <SiteStatItem Label="@RangeLabel">@Format(Projectile.Range) m</SiteStatItem>
+                    <SiteStatItem Label="@HeightLabel">@Format(Projectile.MaximumHeight) m</SiteStatItem>
+                        <SiteStatItem Label="@FlightLabel">@Format(Projectile.FlightTime) s</SiteStatItem>
+                    </SiteStats>
+            @if (RendererInfo.IsInteractive) { <SiteChart ChartJsConfig="@TrajectoryConfig"
+                AriaLabel="@TrajectoryLabel" /> } else { <SiteList Variant="SiteListVariant.Boxed"
+                    AriaLabel="@TrajectoryLabel">@foreach (var point in Projectile.Trajectory.Take(12)) { <SiteListItem Class="site-text-list-item">@Format(point.X) m, @Format(point.Y) m</SiteListItem> }</SiteList> }
+        </SiteLiveRegion>
+    }
+    else
+    {
+        <SiteLiveRegion Politeness="SiteLivePoliteness.Polite">
+            <SiteStats>
+                <SiteStatItem Label="@AngularLabel">@Format(Circular.AngularVelocity) rad/s</SiteStatItem>
+                    <SiteStatItem Label="@PeriodLabel">@Format(Circular.Period) s</SiteStatItem>
+                        <SiteStatItem Label="@AccelerationLabel">@Format(Circular.CentripetalAcceleration) m/s²</SiteStatItem>@if (Circular.Force is not null) { <SiteStatItem Label="@ForceLabel">@Format(Circular.Force.Value) N</SiteStatItem> }</SiteStats>
+        </SiteLiveRegion>
+    }
+</ToolPage>

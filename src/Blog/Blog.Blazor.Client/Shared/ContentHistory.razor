@@ -1,0 +1,60 @@
+@using Blog.Blazor.Core
+@inject IStringLocalizer<SharedResource> L
+@inject NavigationManager Navigation
+
+@if (ShowHistory && History is { Count: > 0 })
+{
+    <SiteSection Region="history"
+        HeadingId="content-history-title"
+        Label="@L["history"]"
+        Title="@L["editorial_history"]"
+        Class="history-section">
+        <SiteForm Mode="SiteFormMode.Static" Method="get" Class="history-compare-form">
+            @if (!string.IsNullOrWhiteSpace(PreserveQueryName) && !string.IsNullOrWhiteSpace(PreserveQueryValue))
+            {
+                <SiteInput Type="hidden" Name="@PreserveQueryName" Value="@PreserveQueryValue" />
+            }
+            <SiteFormField Class="history-compare-field" For="history-from" Label="@L["from"]">
+                <SiteSelect Id="history-from"
+                    Name="compare[]"
+                    Value="@From.Id"
+                    ValueExpression="@(() => From.Id)"
+                    Options="@VersionOptions"
+                    Placeholder="@L["original_version"]"
+                    EmptyText="@L["no_version"]" />
+            </SiteFormField>
+            <SiteFormField Class="history-compare-field" For="history-to" Label="@L["to"]">
+                <SiteSelect Id="history-to"
+                    Name="compare[]"
+                    Value="@To.Id"
+                    ValueExpression="@(() => To.Id)"
+                    Options="@VersionOptions"
+                    Placeholder="@L["latest_version"]"
+                    EmptyText="@L["no_version"]" />
+            </SiteFormField>
+            <SiteButton Variant="SiteButtonVariant.Default"
+                Class="history-compare-submit"
+                Type="SiteButtonType.Submit"><SiteIcon Name="git-compare"
+                    Size="14" />@L["compare"]</SiteButton>
+        </SiteForm>
+        <SiteList Variant="SiteListVariant.Surface"
+            Class="site-history-list"
+            AriaLabel="@L["editorial_history"]"
+            AdditionalAttributes="@HistoryLiveAttributes">
+            @foreach (var change in Changes)
+            {
+                <SiteListItem Class="@("list-group-item " + (change.Kind == "removed" ? "list-group-item-danger" : change.Kind == "added" ? "list-group-item-success" : string.Empty))">
+                    <SiteInline Gap="SiteSpace.None" Align="SiteAlign.Start" Wrap="false">
+                        <SiteBadge Label="@change.Marker" />
+                        <SiteText Variant="SiteTextVariant.Meta"
+                            Class="text-break">@change.Text</SiteText>
+                    </SiteInline>
+                </SiteListItem>
+            }
+            @if (Changes.Count == 0)
+            {
+                <SiteListItem Class="list-group-item text-body-secondary">@L["no_changes"]</SiteListItem>
+            }
+        </SiteList>
+    </SiteSection>
+}

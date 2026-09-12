@@ -1,0 +1,83 @@
+@inherits LocalizedComponentBase
+@implements IDisposable
+@page "/tools/linear-systems"
+@page "/pt-BR/tools/linear-systems"
+@page "/tools/linear-system-2x2"
+@page "/pt-BR/tools/linear-system-2x2"
+@page "/tools/linear-system-3x3"
+@page "/pt-BR/tools/linear-system-3x3"
+@using System.Globalization
+@using Blog.Blazor.Core
+
+<ToolPage Title="@Title" Description="@Description" CanonicalPath="@CanonicalPath">
+    <SiteToolForm Action="@Action"
+        SubmitLabel="@SubmitLabel"
+        Submit="SiteToolFormSubmit.StaticOnly"
+        OnSubmit="Calculate">
+        @if (IsCombined)
+        {
+            <SiteFormField Label="@SizeLabel" For="linear-size">
+                <SiteSelect @bind-Value="SizeText"
+                    Options="@SizeOptions"
+                    Id="linear-size"
+                    Name="size"
+                    Placeholder="@SizeLabel"
+                    EmptyText="@SizeLabel" />
+            </SiteFormField>
+        }
+        @for (var row = 0; row < SystemSize; row++)
+        {
+            var currentRow = row;
+            <SiteInline Class="matrix-row"
+                aria-label="@RowLabel(currentRow + 1)"
+                Gap="SiteSpace.Sm"
+                Wrap="false">
+                @for (var column = 0; column < SystemSize; column++)
+                {
+                    var currentColumn = column;
+                    <SiteInput aria-label="@CoefficientName(currentRow, currentColumn)"
+                        Type="number"
+                        step="any"
+                        Name="@CoefficientName(currentRow, currentColumn)"
+                        Value="@GetCoefficient(currentRow, currentColumn)"
+                        ValueChanged="@(v => SetCoefficient(currentRow, currentColumn, v))" />
+                }
+                <SiteText Variant="SiteTextVariant.Body">=</SiteText>
+                    <SiteInput aria-label="@($"b{currentRow + 1}")"
+                        Type="number"
+                        step="any"
+                        Name="@($"b{currentRow + 1}")"
+                        Value="@GetConstant(currentRow)"
+                        ValueChanged="@(v => SetConstant(currentRow, v))" />
+            </SiteInline>
+        }
+    </SiteToolForm>
+    <SiteLiveRegion Politeness="SiteLivePoliteness.Polite">
+        @if (!Result.IsValid) { <SiteErrorMessage>@ErrorLabel</SiteErrorMessage> }
+        else
+        {
+            var solution = Result.Solution;
+            <SiteStats>
+                @for (var index = 0; index < solution.Length; index++) { var currentIndex = index; <SiteStatItem Label="@($"x{currentIndex + 1}")">@Format(solution[currentIndex])</SiteStatItem> }
+            </SiteStats>
+            @if (SystemSize == 2)
+            {
+                <SiteCard Class="site-block" Label="@ChartLabel">
+                    @if (RendererInfo.IsInteractive)
+                    {
+                        <SiteChart ChartJsConfig="@ChartConfig" AriaLabel="@ChartLabel" />
+                    }
+                    else
+                    {
+                        <SiteList Variant="SiteListVariant.Boxed" AriaLabel="@ChartLabel">
+                            @foreach (var point in Equation1Points.Where((_, index) => index % 8 == 0))
+                            {
+                                <SiteListItem Class="site-text-list-item">@Equation1Label: x = @Format(point.X), y = @Format(point.Y)</SiteListItem>
+                            }
+                        </SiteList>
+                    }
+                </SiteCard>
+            }
+        }
+    </SiteLiveRegion>
+</ToolPage>

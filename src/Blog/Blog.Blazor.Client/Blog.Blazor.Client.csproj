@@ -1,0 +1,52 @@
+<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <NoDefaultLaunchSettingsFile>true</NoDefaultLaunchSettingsFile>
+    <StaticWebAssetProjectMode>Default</StaticWebAssetProjectMode>
+    <BlazorDisableThrowNavigationException>true</BlazorDisableThrowNavigationException>
+    <BlazorWebAssemblyLoadAllGlobalizationData>true</BlazorWebAssemblyLoadAllGlobalizationData>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="BlazorBlueprint.Components" Version="3.16.0" />
+    <PackageReference Include="BlazorBlueprint.Icons.Lucide" Version="2.0.2" />
+    <ProjectReference Include="..\Blog.Blazor.Core\Blog.Blazor.Core.csproj" />
+    <ProjectReference Include="..\Blog.Blazor.UI\Blog.Blazor.UI.csproj" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="10.0.11" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="10.0.11" />
+    <PackageReference Include="Microsoft.Extensions.Localization" Version="10.0.11" />
+    <PackageReference Include="pax.BlazorChartJs" Version="0.9.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="Microsoft.AspNetCore.Components" />
+    <Using Include="System.Globalization" />
+    <Using Include="System.Net.Http.Json" />
+    <Using Include="Microsoft.AspNetCore.Components.Forms" />
+    <Using Include="Microsoft.AspNetCore.Components.Routing" />
+    <Using Include="Microsoft.AspNetCore.Components.Web" />
+    <Using Include="Microsoft.AspNetCore.Components.Web.Virtualization" />
+    <Using Include="Microsoft.JSInterop" />
+    <Using Include="Microsoft.Extensions.Localization" />
+    <Using Include="Blog.Blazor.Client" />
+    <Using Include="Blog.Blazor.Core.Localization" />
+    <Using Include="Blog.Blazor.Client.Layout" />
+    <Using Include="Blog.Blazor.Client.Shared" />
+    <Using Include="Blog.Blazor.UI" />
+    <Using Include="Blog.Blazor.UI.Foundations" />
+    <Using Include="Blog.Blazor.UI.Primitives" />
+    <Using Include="Blog.Blazor.UI.Forms" />
+    <Using Include="Blog.Blazor.UI.Layout" />
+    <Using Include="Blog.Blazor.UI.Navigation" />
+    <Using Include="Blog.Blazor.UI.Templates" />
+    <Using Include="Blog.Blazor.UI.DataDisplay" />
+    <Using Include="Blog.Blazor.UI.Feedback" />
+    <Using Include="Blog.Blazor.UI.Composition" />
+    <Using Include="BlazorBlueprint.Primitives.Services" />
+    <Using Include="BlazorBlueprint.Icons.Lucide.Components" />
+    <Using Include="BlazorBlueprint.Icons.Lucide.Data" />
+    <Using Include="Microsoft.AspNetCore.Components.Web.RenderMode" Static="true" />
+  </ItemGroup>
+</Project>

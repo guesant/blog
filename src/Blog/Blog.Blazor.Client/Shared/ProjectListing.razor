@@ -1,0 +1,76 @@
+@typeparam TItem
+@using Blog.Blazor.Core
+
+<SiteListingShell HasResults="@(Items.Count > 0)"
+    Summary="@Summary"
+    CurrentPage="@CurrentPage"
+    TotalPages="@TotalPages"
+    PaginationLabel="@PaginationLabel"
+    PreviousLabel="@PreviousLabel"
+    NextLabel="@NextLabel"
+    Href="@Href">
+    <FilterContent>
+        <SiteListingFilterBar Action="@Action"
+            ApplyLabel="@ApplyLabel"
+            ClearLabel="@ClearLabel"
+            ClearHref="@ClearHref"
+            OnApply="@OnApply">
+            <PrimaryFields>
+                <SiteFilterSelect Icon="arrow-up-down"
+                    Label="@SortLabel"
+                    Id="@SortId"
+                    Name="@SortName"
+                    Value="@SortValue"
+                    ValueChanged="@SortValueChanged"
+                    Options="@SortOptions"
+                    Placeholder="@SortPlaceholder"
+                    EmptyText="@SortEmptyText" />
+            </PrimaryFields>
+            <SearchField>
+                <SiteSearchField Label="@SearchLabel"
+                    Id="@($"{SortId}-search")"
+                    Name="@SearchName"
+                    Value="@SearchValue"
+                    ValueChanged="@SearchValueChanged"
+                    Placeholder="@SearchPlaceholder" />
+            </SearchField>
+        </SiteListingFilterBar>
+    </FilterContent>
+    <ResultContent>
+        <SiteCardGrid id="@GridId"
+            aria-label="@GridAriaLabel"
+            aria-labelledby="@GridAriaLabelledBy"
+            data-layout-region="items">
+            @foreach (var item in Items)
+            {
+                <SiteGridColumn>
+                    <SiteFeedCard KindLabel="@KindLabel"
+                        Date="@ItemDate(item)"
+                        Title="@ItemTitle(item)"
+                        Href="@ItemHref(item)"
+                        Preview="@ItemPreview(item)"
+                        ViewLabel="@ViewLabel">
+                        <MetaItems>
+                            @if (!string.IsNullOrWhiteSpace(ItemStatusLabel(item)))
+                            {
+                                <SiteCardMetaItem Icon="activity">@ItemStatusLabel(item)</SiteCardMetaItem>
+                            }
+                        </MetaItems>
+                        <Tags>
+                            @if (ItemTechnologies(item) is { Count: > 0 } technologies)
+                            {
+                                <SiteChipGroup>
+                                    @foreach (var technology in technologies)
+                                    {
+                                        <SiteChip Label="@technology.Name"
+                                            Href="@TechnologyUrl(technology)" />
+                                    }
+                                </SiteChipGroup>
+                            }
+                        </Tags>
+                    </SiteFeedCard>
+                </SiteGridColumn>
+            }
+        </SiteCardGrid>
+    </ResultContent>
+</SiteListingShell>

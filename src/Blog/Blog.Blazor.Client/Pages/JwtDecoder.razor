@@ -1,0 +1,30 @@
+@inherits LocalizedComponentBase
+@page "/tools/jwt-decoder"
+@page "/pt-BR/tools/jwt-decoder"
+@using Blog.Blazor.Core
+
+<ToolPage Title="@Title" Description="@Description" CanonicalPath="@CanonicalPath">
+    <SiteNotice>@PrivacyNote</SiteNotice>
+    <SiteToolForm Action="@Action" SubmitLabel="@DecodeLabel" AriaLabel="@InputLabel">
+        <SiteFormField For="jwt-input" Label="@InputLabel">
+            <SiteTextAreaInput Id="jwt-input"
+                Name="token"
+                Rows="6"
+                Value="@Token"
+                ValueChanged="@(v => Token = v)" />
+        </SiteFormField>
+    </SiteToolForm>
+    <SiteLiveRegion Politeness="SiteLivePoliteness.Polite">
+        @if (!Result.IsValid) { <SiteErrorMessage>@InvalidLabel</SiteErrorMessage> }
+        <SiteCard Class="site-block" Label="@HeaderLabel">
+            <SiteFormField For="jwt-header" Label="@HeaderLabel">
+                <SiteTextAreaInput Id="jwt-header" Rows="6" Value="@Result.Header" readonly />
+            </SiteFormField>
+        </SiteCard>
+        <SiteCard Class="site-block" Label="@PayloadLabel">
+            <SiteFormField For="jwt-payload" Label="@PayloadLabel">
+                <SiteTextAreaInput Id="jwt-payload" Rows="8" Value="@Result.Payload" readonly />
+            </SiteFormField>
+        </SiteCard>
+    </SiteLiveRegion>
+</ToolPage>

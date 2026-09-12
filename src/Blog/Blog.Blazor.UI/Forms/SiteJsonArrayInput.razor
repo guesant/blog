@@ -1,0 +1,49 @@
+@using System.Text.Json
+@using Blog.Blazor.UI.Composition
+@using Blog.Blazor.UI.Layout
+
+<div class="site-json-array-input" data-slot="json-array-input" id="@Id">
+    <SiteRepeatableItems TItem="List<SiteJsonArrayInput.FieldValue>"
+                          Items="@_items"
+                          ItemTitle="@GetItemTitle"
+                          AddLabel="@AddLabel"
+                          RemoveLabel="@RemoveLabel"
+                          OnAdd="AddItem"
+                          OnRemove="RemoveItem">
+        <ItemTemplate Context="itemContext">
+            <SiteStack Gap="SiteSpace.Sm">
+                @for (var fieldIndex = 0; fieldIndex < _fields.Count; fieldIndex++)
+                {
+                    var index = itemContext.Index;
+                    var slot = fieldIndex;
+                    var field = _fields[slot];
+                    var row = itemContext.Item[slot];
+                    var fieldId = $"{Id}-{index}-{slot}";
+                    if (field.Kind == FieldKind.Bool)
+                    {
+                        <SiteCheckbox Id="@fieldId"
+                            Label="@field.Key"
+                            Value="@row.Bool"
+                            ValueChanged="@(value => HandleBoolChanged(index, slot, value))" />
+                    }
+                    else if (field.Kind == FieldKind.List)
+                    {
+                        <SiteFormField Label="@field.Key" For="@fieldId">
+                            <SiteStringListInput Id="@fieldId"
+                                Value="@row.Text"
+                                ValueChanged="@(value => HandleTextChanged(index, slot, value ?? string.Empty))" />
+                        </SiteFormField>
+                    }
+                    else
+                    {
+                        <SiteFormField Label="@field.Key" For="@fieldId">
+                            <SiteTextInput Id="@fieldId"
+                                Value="@row.Text"
+                                ValueChanged="@(value => HandleTextChanged(index, slot, value))" />
+                        </SiteFormField>
+                    }
+                }
+            </SiteStack>
+        </ItemTemplate>
+    </SiteRepeatableItems>
+</div>

@@ -1,0 +1,36 @@
+@inherits LocalizedComponentBase
+@page "/tools/fractions"
+@page "/pt-BR/tools/fractions"
+@using Blog.Blazor.Core
+
+<ToolPage Title="@Title" Description="@Description" CanonicalPath="@CanonicalPath">
+    <SiteToolForm Action="@Action"
+        SubmitLabel="@SubmitLabel"
+        Submit="SiteToolFormSubmit.StaticOnly"
+        OnSubmit="Calculate"
+        AriaLabel="@FirstLabel">
+        <SiteFormField Label="@FirstLabel"
+            For="fraction-first"><SiteInput Id="fraction-first"
+                Name="first"
+                Value="@FirstText"
+                ValueChanged="@(v => FirstText = v)" /></SiteFormField>
+        <SiteFormField Label="@OperationLabel"
+            For="fraction-operation"><SiteSelect @bind-Value="OperationText"
+                Options="@OperationOptions"
+                Id="fraction-operation"
+                Name="operation"
+                Placeholder="@OperationLabel"
+                EmptyText="@OperationLabel" /></SiteFormField>
+        <SiteFormField Label="@SecondLabel"
+            For="fraction-second"><SiteInput Id="fraction-second"
+                Name="second"
+                Value="@SecondText"
+                ValueChanged="@(v => SecondText = v)" /></SiteFormField>
+    </SiteToolForm>
+    <SiteLiveRegion Politeness="SiteLivePoliteness.Polite">
+        @if (!Result.IsValid) { <SiteErrorMessage>@ErrorLabel</SiteErrorMessage> }
+        else { <SiteStats>
+            <SiteStatItem Label="@ResultLabel">@Result.Value</SiteStatItem>
+        </SiteStats> }
+    </SiteLiveRegion>
+</ToolPage>

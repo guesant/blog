@@ -1,0 +1,64 @@
+@inherits LocalizedComponentBase
+@page "/tools/ohm-law"
+@page "/tools/ohms-law"
+@page "/pt-BR/tools/ohm-law"
+@page "/pt-BR/tools/ohms-law"
+@using System.Globalization
+@using Blog.Blazor.Core
+
+<ToolPage Title="@Title" Description="@Description" CanonicalPath="@CanonicalPath">
+    <SiteToolForm Action="@Action"
+        SubmitLabel="@SubmitLabel"
+        Submit="SiteToolFormSubmit.StaticOnly"
+        OnSubmit="HandleSubmit"
+        AriaLabel="@InputLabel">
+        <SiteFormField Label="@VoltageLabel"
+            For="ohm-voltage"><SiteInput Id="ohm-voltage"
+                Type="number"
+                min="0"
+                step="any"
+                Name="v"
+                Value="@VoltageText"
+                ValueChanged="@(v => VoltageText = v)" /></SiteFormField>
+        <SiteFormField Label="@CurrentLabel"
+            For="ohm-current"><SiteInput Id="ohm-current"
+                Type="number"
+                min="0"
+                step="any"
+                Name="i"
+                Value="@CurrentText"
+                ValueChanged="@(v => CurrentText = v)" /></SiteFormField>
+        <SiteFormField Label="@ResistanceLabel"
+            For="ohm-resistance"><SiteInput Id="ohm-resistance"
+                Type="number"
+                min="0"
+                step="any"
+                Name="r"
+                Value="@ResistanceText"
+                ValueChanged="@(v => ResistanceText = v)" /></SiteFormField>
+        <SiteFormField Label="@PowerLabel"
+            For="ohm-power"><SiteInput Id="ohm-power"
+                Type="number"
+                min="0"
+                step="any"
+                Name="p"
+                Value="@PowerText"
+                ValueChanged="@(v => PowerText = v)" /></SiteFormField>
+    </SiteToolForm>
+
+    <SiteLiveRegion Politeness="SiteLivePoliteness.Polite">
+        @if (!Result.IsValid)
+        {
+            <SiteErrorMessage>@ErrorMessage</SiteErrorMessage>
+        }
+        else
+        {
+            <SiteStats>
+                <SiteStatItem Label="@VoltageLabel">@Format(Result.Voltage) V</SiteStatItem>
+                <SiteStatItem Label="@CurrentLabel">@Format(Result.Current) A</SiteStatItem>
+                <SiteStatItem Label="@ResistanceLabel">@Format(Result.Resistance) Ω</SiteStatItem>
+                <SiteStatItem Label="@PowerLabel">@Format(Result.Power) W</SiteStatItem>
+            </SiteStats>
+        }
+    </SiteLiveRegion>
+</ToolPage>

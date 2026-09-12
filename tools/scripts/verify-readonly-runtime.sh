@@ -6,34 +6,34 @@ fail() {
     exit 1
 }
 
-if grep -REn 'Database\.Migrate|EnsureCreated|dotnet ef|HasData\(|\.Migrate\(|Seed\(' src/Portfolio/Portfolio.Blazor --include='*.cs' >/tmp/readonly-runtime-matches; then
+if grep -REn 'Database\.Migrate|EnsureCreated|dotnet ef|HasData\(|\.Migrate\(|Seed\(' src/Blog/Blog.Blazor --include='*.cs' >/tmp/readonly-runtime-matches; then
     fail "schema migration or seed code was found in the runtime"
 fi
 
-database_di=src/Portfolio/Portfolio.Blazor/Data/DatabaseServiceCollectionExtensions.cs
+database_di=src/Blog/Blog.Blazor/Data/DatabaseServiceCollectionExtensions.cs
 grep -q 'default_transaction_read_only=on' "$database_di" ||
     fail "the public context must open connections with default_transaction_read_only=on"
-awk '/AddDbContextFactory<PortfolioPublicDbContext>/,/^        \);$/' "$database_di" >/tmp/readonly-public-registration
+awk '/AddDbContextFactory<BlogPublicDbContext>/,/^        \);$/' "$database_di" >/tmp/readonly-public-registration
 grep -q 'default_transaction_read_only=on' /tmp/readonly-public-registration ||
     fail "the public context registration must run read-only transactions"
 if grep -qE 'ReadWrite' /tmp/readonly-public-registration; then
     fail "the public context must not open a read-write connection"
 fi
-if grep -REn 'UseNpgsql|UseSqlite' src/Portfolio/Portfolio.Blazor --include='*.cs' |
+if grep -REn 'UseNpgsql|UseSqlite' src/Blog/Blog.Blazor --include='*.cs' |
     grep -v "$database_di" |
-    grep -v 'Portfolio.Blazor.Database/PortfolioAdminDesignTimeFactory.cs' |
-    grep -v 'Portfolio.Blazor.Data.Tests/'; then
+    grep -v 'Blog.Blazor.Database/BlogAdminDesignTimeFactory.cs' |
+    grep -v 'Blog.Blazor.Data.Tests/'; then
     fail "only the database DI extension and the design-time factory may configure a provider"
 fi
 
-public_context=src/Portfolio/Portfolio.Blazor/Data/PortfolioPublicDbContext.cs
+public_context=src/Blog/Blog.Blazor/Data/BlogPublicDbContext.cs
 grep -q 'QueryTrackingBehavior.NoTracking' "$public_context" || fail "the public context must be no-tracking"
 grep -q 'override int SaveChanges' "$public_context" || fail "the public context must override SaveChanges"
 grep -q 'override Task<int> SaveChangesAsync' "$public_context" || fail "the public context must override SaveChangesAsync"
 if grep -q 'base.SaveChanges' "$public_context"; then
     fail "the public context must not reach the base SaveChanges"
 fi
-public_read_files="$(find src/Portfolio/Portfolio.Blazor/PublicQueries -name '*.cs' 2>/dev/null || true) src/Portfolio/Portfolio.Blazor/PublicSiteContentProvider.cs src/Portfolio/Portfolio.Blazor/PublicKnowledgeGraphProvider.cs"
+public_read_files="$(find src/Blog/Blog.Blazor/PublicQueries -name '*.cs' 2>/dev/null || true) src/Blog/Blog.Blazor/PublicSiteContentProvider.cs src/Blog/Blog.Blazor/PublicKnowledgeGraphProvider.cs"
 # shellcheck disable=SC2086
 if grep -En 'SaveChanges|ExecuteUpdate|ExecuteDelete|\.Update\(|\.AddAsync\(|\.AddRange\(|\.RemoveRange\(' $public_read_files; then
     fail "public read code must not write"

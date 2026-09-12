@@ -1,0 +1,67 @@
+@inherits LocalizedComponentBase
+@page "/tools/periodic-table"
+@page "/pt-BR/tools/periodic-table"
+@using Blog.Blazor.Core
+
+<ToolPage Title="@Title" Description="@Description" CanonicalPath="@CanonicalPath">
+    <SiteToolForm Action="@Action" SubmitLabel="@SearchButton" AriaLabel="@SearchLabel">
+        <SiteFormField For="periodic-search"
+            Label="@SearchLabel"><SiteInput Id="periodic-search"
+                Name="search"
+                autocomplete="off"
+                Value="@Search"
+                ValueChanged="@(v => Search = v)" /></SiteFormField>
+    </SiteToolForm>
+    <SiteCard Class="site-block" Label="@Title">
+        <SiteGrid Class="tool-periodic-grid">
+            @foreach (var row in PeriodicTableReference.Periods)
+            {
+                foreach (var symbol in row)
+                {
+                    if (symbol is null)
+                    {
+                        <SiteText Variant="SiteTextVariant.Meta"
+                            Class="tool-element-cell tool-element-cell--empty"
+                            aria-hidden="true">@string.Empty</SiteText>
+                    }
+                    else
+                    {
+                        var element = Elements[elementBySymbol[symbol]];
+                        <SiteButton Class="tool-element-cell"
+                            data-category="@element.Category"
+                            hidden="@(Search.Length > 0 && !Matches(element))"
+                            @onclick="() => Select(element)"
+                            Variant="SiteButtonVariant.Default"><SiteText Variant="SiteTextVariant.Meta">@element.AtomicNumber</SiteText>
+                                <SiteText Variant="SiteTextVariant.SectionLabel">@element.Symbol</SiteText>
+                                    <SiteText Variant="SiteTextVariant.Meta">@element.Name</SiteText>
+                                </SiteButton>
+                    }
+                }
+            }
+        </SiteGrid>
+        <SiteNotice>@SeriesNote</SiteNotice>
+        <SiteGrid Class="tool-periodic-series">
+            @foreach (var row in PeriodicTableReference.Series)
+            {
+                foreach (var symbol in row)
+                {
+                    var element = Elements[elementBySymbol[symbol]];
+                    <SiteButton Class="tool-element-cell"
+                        data-category="@element.Category"
+                        hidden="@(Search.Length > 0 && !Matches(element))"
+                        @onclick="() => Select(element)"
+                        Variant="SiteButtonVariant.Default">@element.Symbol</SiteButton>
+                }
+            }
+        </SiteGrid>
+    </SiteCard>
+    <SiteStats Grid="true">
+        @if (Selected is not null)
+        {
+            <SiteStatItem Label="@SymbolLabel">@Selected.Symbol</SiteStatItem>
+            <SiteStatItem Label="@NameLabel">@Selected.Name</SiteStatItem>
+            <SiteStatItem Label="@AtomicNumberLabel">@Selected.AtomicNumber</SiteStatItem>
+            <SiteStatItem Label="@CategoryLabel">@Selected.Category</SiteStatItem>
+        }
+    </SiteStats>
+</ToolPage>

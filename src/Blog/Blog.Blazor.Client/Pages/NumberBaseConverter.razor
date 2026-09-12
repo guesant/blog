@@ -1,0 +1,53 @@
+@inherits LocalizedComponentBase
+@page "/tools/number-base-converter"
+@page "/pt-BR/tools/number-base-converter"
+@using Blog.Blazor.Core
+
+<ToolPage Title="@Title" Description="@Description" CanonicalPath="@CanonicalPath">
+    <SiteToolForm Action="@Action" SubmitLabel="@SubmitLabel">
+        <SiteFormField For="number-base-value"
+            Label="@InputLabel"><SiteTextInput Id="number-base-value"
+                Name="value"
+                Value="@Value"
+                ValueChanged="@(v => Value = v)"
+                Placeholder="255, 0xff, 0o377, 0b11111111"
+                AutoComplete="false" /></SiteFormField>
+        @if (RendererInfo.IsInteractive)
+        {
+            <SiteFieldSet Legend="@BaseLabel">
+                <SiteButtonGroup AriaLabel="@BaseLabel">
+                @foreach (var option in BaseOptions) { <SiteButton Variant="@(SelectedBase == option.Value ? SiteButtonVariant.Default : SiteButtonVariant.Secondary)"
+                    OnClick="() => SelectBase(option.Value)"
+                    aria-pressed="@(SelectedBase == option.Value)">@option.Label</SiteButton> }
+            </SiteButtonGroup>
+            </SiteFieldSet>
+        }
+        else
+        {
+            <SiteFormField For="number-base-select" Label="@BaseLabel">
+                <SiteNativeSelect Id="number-base-select" Name="base">
+                @foreach (var option in BaseOptions) { <option value="@option.Value"
+                    selected="@(SelectedBase == option.Value)">@option.Label</option> }
+            </SiteNativeSelect>
+            </SiteFormField>
+        }
+    </SiteToolForm>
+    <SiteLiveRegion Politeness="SiteLivePoliteness.Polite">
+        @if (!Result.IsValid) { <SiteErrorMessage>@ErrorLabel</SiteErrorMessage> }
+        else
+        {
+            <SiteCard Class="site-block" Label="@ResultLabel">
+                <SiteStack Class="tool-results">
+                @foreach (var output in Outputs)
+                {
+                    <SiteOutputField Id="@output.Id"
+                        Label="@output.Label"
+                        Value="@output.Value"
+                        Copyable="@(!string.IsNullOrEmpty(output.Value))"
+                        CopyLabel="@CopyLabel" />
+                }
+            </SiteStack>
+            </SiteCard>
+        }
+    </SiteLiveRegion>
+</ToolPage>

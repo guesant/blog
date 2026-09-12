@@ -1,0 +1,19 @@
+namespace Blog.Blazor.UI.DataDisplay;
+
+public partial class SiteKeyValueList
+{
+    [Parameter]
+    public SiteKeyValueLayout Layout { get; set; } = SiteKeyValueLayout.Stacked;
+
+    [Parameter]
+    public string? Class { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)]
+    public IReadOnlyDictionary<string, object>? AdditionalAttributes { get; set; }
+
+    [Parameter, EditorRequired]
+    public RenderFragment ChildContent { get; set; } = default!;
+
+    private string RootClass => SiteCss.Join("site-key-value-list", Class);
+    private string LayoutToken => Layout == SiteKeyValueLayout.Columns ? "columns" : "stacked";
+}

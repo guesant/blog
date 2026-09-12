@@ -1,0 +1,27 @@
+@inherits LocalizedComponentBase
+@page "/tools/utf8-inspector"
+@page "/pt-BR/tools/utf8-inspector"
+@using Blog.Blazor.Core
+<ToolPage Title="@Title" Description="@Description" CanonicalPath="@CanonicalPath">
+<SiteFormCard Class="site-block">
+    <SiteFormField For="utf8-input"
+        Label="@InputLabel"><SiteTextAreaInput id="utf8-input"
+            Class="tool-textarea"
+            rows="8"
+            @bind-Value="Input" />
+        </SiteFormField>
+</SiteFormCard>
+    <SiteCard Class="site-block" Label="@Title">
+        <SiteStats Grid="true">
+            <SiteStatItem Label="@ByteLabel">@Result.Bytes</SiteStatItem>
+                <SiteStatItem Label="@CharacterLabel">@Result.Characters</SiteStatItem>
+                    <SiteStatItem Label="@CodePointLabel">@Result.CodePoints</SiteStatItem>
+                </SiteStats>
+                    <SiteFormField For="utf8-output"
+                        Label="@BytesLabel"><SiteTextAreaInput id="utf8-output"
+                            Class="tool-textarea"
+                            rows="6"
+                            readonly>@Result.Hex</SiteTextAreaInput>
+                            </SiteFormField>
+                </SiteCard>
+            </ToolPage>

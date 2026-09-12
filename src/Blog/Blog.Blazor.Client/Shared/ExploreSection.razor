@@ -1,0 +1,17 @@
+@inherits LocalizedComponentBase
+@using Blog.Blazor.Core
+@using Blog.Blazor.Core.Localization
+@inject IStringLocalizer<NavigationResource> NavL
+
+<SiteSection Icon="compass"
+    Region="explore"
+    HeadingId="@HeadingId"
+    Label="@(L["explore"])"
+    Title="@(L["explore_more_title"])">
+    <SiteCardGrid Dense="true" aria-labelledby="@HeadingId" data-layout-region="items">
+        @foreach (var tile in Tiles)
+        {
+            <SiteTileLink Icon="@tile.Icon" Label="@tile.Label" Href="@tile.Href" />
+        }
+    </SiteCardGrid>
+</SiteSection>

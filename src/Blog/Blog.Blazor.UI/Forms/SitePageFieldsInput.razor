@@ -1,0 +1,48 @@
+@inherits SiteKnownFieldsRowsInputBase
+@using Blog.Blazor.Core
+
+<div class="site-page-fields-input" data-slot="page-fields-input" id="@RootId">
+    @if (KnownFields.Count > 0)
+    {
+        <SiteStack Gap="SiteSpace.Sm" Class="site-page-fields-known">
+            <SiteText Variant="SiteTextVariant.SectionLabel">@KnownSectionLabel</SiteText>
+            @foreach (var entry in KnownFields)
+            {
+                var key = entry.Key;
+                <SiteFormField Label="@PageFieldCatalog.LocalizedLabel(entry, Locale)"
+                    For="@RowId(key)">
+                    @if (entry.ValueKind == PageFieldValueKind.LongText)
+                    {
+                        <SiteTextAreaInput Id="@RowId(key)"
+                            Rows="6"
+                            Value="@KnownValue(key)"
+                            ValueChanged="@(value => SetKnownValue(key, value))" />
+                    }
+                    else
+                    {
+                        <SiteInput Id="@RowId(key)"
+                            Type="text"
+                            Value="@KnownValue(key)"
+                            ValueChanged="@(value => SetKnownValue(key, value))" />
+                    }
+                </SiteFormField>
+            }
+        </SiteStack>
+    }
+
+    <SiteKeyValueFreeFormRows RootId="@RootId"
+        Rows="@Rows"
+        Indices="@FreeFormIndices"
+        ShowSectionLabel="@(KnownFields.Count > 0)"
+        SectionLabel="@FreeFormSectionLabel"
+        Class="site-page-fields-free"
+        RowClass="site-page-fields-free-row"
+        KeyPlaceholder="@KeyPlaceholder"
+        ValuePlaceholder="@ValuePlaceholder"
+        AddLabel="@AddLabel"
+        RemoveLabel="@RemoveLabel"
+        KeyChanged="@(args => HandleFreeKeyChanged(args.Index, args.Value))"
+        ValueEdited="@(args => HandleFreeValueChanged(args.Index, args.Value))"
+        Removed="@(index => RemoveRow(index))"
+        Added="AddRow" />
+</div>

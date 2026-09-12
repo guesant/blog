@@ -1,0 +1,70 @@
+@inherits LocalizedComponentBase
+@page "/tools/vector-calculator"
+@page "/pt-BR/tools/vector-calculator"
+@using System.Globalization
+@using Blog.Blazor.Core
+
+<ToolPage Title="@Title" Description="@Description" CanonicalPath="@CanonicalPath">
+    <SiteToolForm Action="@Action"
+        SubmitLabel="@SubmitLabel"
+        Submit="SiteToolFormSubmit.StaticOnly"
+        OnSubmit="Calculate"
+        AriaLabel="@InputLabel">
+        <SiteFieldSet Legend="@VectorALabel">
+            <SiteFormField Label="x"
+                For="vector-a-x"><SiteInput Id="vector-a-x"
+                    Name="ax"
+                    Type="number"
+                    step="any"
+                    Value="@AXText"
+                    ValueChanged="@(v => AXText = v)" /></SiteFormField>
+            <SiteFormField Label="y"
+                For="vector-a-y"><SiteInput Id="vector-a-y"
+                    Name="ay"
+                    Type="number"
+                    step="any"
+                    Value="@AYText"
+                    ValueChanged="@(v => AYText = v)" /></SiteFormField>
+            <SiteFormField Label="z"
+                For="vector-a-z"><SiteInput Id="vector-a-z"
+                    Name="az"
+                    Type="number"
+                    step="any"
+                    Value="@AZText"
+                    ValueChanged="@(v => AZText = v)" /></SiteFormField>
+        </SiteFieldSet>
+        <SiteFieldSet Legend="@VectorBLabel">
+            <SiteFormField Label="x"
+                For="vector-b-x"><SiteInput Id="vector-b-x"
+                    Name="bx"
+                    Type="number"
+                    step="any"
+                    Value="@BXText"
+                    ValueChanged="@(v => BXText = v)" /></SiteFormField>
+            <SiteFormField Label="y"
+                For="vector-b-y"><SiteInput Id="vector-b-y"
+                    Name="by"
+                    Type="number"
+                    step="any"
+                    Value="@BYText"
+                    ValueChanged="@(v => BYText = v)" /></SiteFormField>
+            <SiteFormField Label="z"
+                For="vector-b-z"><SiteInput Id="vector-b-z"
+                    Name="bz"
+                    Type="number"
+                    step="any"
+                    Value="@BZText"
+                    ValueChanged="@(v => BZText = v)" /></SiteFormField>
+        </SiteFieldSet>
+    </SiteToolForm>
+    <SiteLiveRegion Politeness="SiteLivePoliteness.Polite">
+        @if (!Result.IsValid) { <SiteErrorMessage>@ErrorLabel</SiteErrorMessage> }
+        else { <SiteStats>
+            <SiteStatItem Label="@DotLabel">@Format(Result.Dot)</SiteStatItem>
+                <SiteStatItem Label="|A|">@Format(Result.MagnitudeA)</SiteStatItem>
+                    <SiteStatItem Label="|B|">@Format(Result.MagnitudeB)</SiteStatItem>
+                        <SiteStatItem Label="@AngleLabel">@(Result.AngleRadians.HasValue ? $"{Format(Result.AngleRadians.Value * 180 / Math.PI)}°" : "indefinido")</SiteStatItem>
+                            <SiteStatItem Label="@CrossLabel">[@string.Join(", ", Result.Cross.Select(Format))]</SiteStatItem>
+                        </SiteStats> }
+    </SiteLiveRegion>
+</ToolPage>

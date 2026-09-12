@@ -34,19 +34,19 @@ jobs:
         run: docker compose up -d --wait postgres
 
       - name: Restore locked NuGet dependencies
-        run: docker compose run --rm web dotnet restore src/Portfolio.Blazor.slnx --locked-mode
+        run: docker compose run --rm web dotnet restore src/Blog.Blazor.slnx --locked-mode
 
       - name: Run the quality gate
         run: just check
 
       - name: Apply PostgreSQL migrations
-        run: docker compose run --rm web sh -lc 'dotnet tool restore >/dev/null && dotnet tool run dotnet-ef database update --project src/Portfolio/Portfolio.Blazor.Database/Portfolio.Blazor.Database.csproj --startup-project src/Portfolio/Portfolio.Blazor.Database/Portfolio.Blazor.Database.csproj --context PortfolioAdminDbContext --configuration Release --no-build'
+        run: docker compose run --rm web sh -lc 'dotnet tool restore >/dev/null && dotnet tool run dotnet-ef database update --project src/Blog/Blog.Blazor.Database/Blog.Blazor.Database.csproj --startup-project src/Blog/Blog.Blazor.Database/Blog.Blazor.Database.csproj --context BlogAdminDbContext --configuration Release --no-build'
 
       - name: Audit NuGet dependencies
-        run: docker compose run --rm web sh -lc 'set -e; for project in src/Portfolio/*/*.csproj; do dotnet list "$project" package --vulnerable --include-transitive; done'
+        run: docker compose run --rm web sh -lc 'set -e; for project in src/Blog/*/*.csproj; do dotnet list "$project" package --vulnerable --include-transitive; done'
 
       - name: Generate NuGet SPDX SBOM
-        run: docker compose run --rm web sh -lc 'set -e; mkdir -p /tmp/blazor-sbom /src/artifacts/sbom; for project in src/Portfolio/*/*.csproj; do dotnet list "$project" package --include-transitive --format json > "/tmp/blazor-sbom/$(basename "$project" .csproj).json"; done; dotnet run --project src/Portfolio/Portfolio.Blazor.Sbom/Portfolio.Blazor.Sbom.csproj --no-restore -- /tmp/blazor-sbom /src/artifacts/sbom/dependencies.spdx.json && test -s /src/artifacts/sbom/dependencies.spdx.json'
+        run: docker compose run --rm web sh -lc 'set -e; mkdir -p /tmp/blazor-sbom /src/artifacts/sbom; for project in src/Blog/*/*.csproj; do dotnet list "$project" package --include-transitive --format json > "/tmp/blazor-sbom/$(basename "$project" .csproj).json"; done; dotnet run --project src/Blog/Blog.Blazor.Sbom/Blog.Blazor.Sbom.csproj --no-restore -- /tmp/blazor-sbom /src/artifacts/sbom/dependencies.spdx.json && test -s /src/artifacts/sbom/dependencies.spdx.json'
 
       - name: Upload SPDX SBOM
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02

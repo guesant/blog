@@ -1,0 +1,22 @@
+namespace Blog.Blazor.UI.Navigation;
+
+public partial class SiteToggleGroup
+{
+    [Parameter, EditorRequired]
+    public string AriaLabel { get; set; } = string.Empty;
+
+    [Parameter]
+    public string? Class { get; set; }
+
+    [Parameter, EditorRequired]
+    public RenderFragment ChildContent { get; set; } = default!;
+
+    [Parameter(CaptureUnmatchedValues = true)]
+    public IReadOnlyDictionary<string, object>? AdditionalAttributes { get; set; }
+
+    private string GroupClass =>
+        string.Join(
+            ' ',
+            new[] { "site-toggle-group", Class }.Where(value => !string.IsNullOrWhiteSpace(value))
+        );
+}

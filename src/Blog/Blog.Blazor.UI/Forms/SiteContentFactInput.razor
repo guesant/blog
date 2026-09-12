@@ -1,0 +1,43 @@
+@inherits SiteKnownFieldsRowsInputBase
+@using Blog.Blazor.Core
+
+<div class="site-content-fact-input" data-slot="content-fact-input" id="@RootId">
+    @if (KnownFields.Count > 0)
+    {
+        <SiteStack Gap="SiteSpace.Sm" Class="site-content-fact-known">
+            <SiteText Variant="SiteTextVariant.SectionLabel">@KnownSectionLabel</SiteText>
+            @foreach (var fact in KnownFields)
+            {
+                var key = fact.Key;
+                <SiteFormField Label="@fact.Label" For="@RowId(key)">
+                    <div class="site-content-fact-field-wrap">
+                        <SiteIcon Name="@fact.Icon"
+                            Size="14"
+                            Class="icon site-content-fact-field-icon" />
+                        <SiteInput Id="@RowId(key)"
+                            Class="site-content-fact-field-input"
+                            Type="@InputType(fact.ValueKind)"
+                            Value="@KnownValue(key)"
+                            ValueChanged="@(value => SetKnownValue(key, value))" />
+                    </div>
+                </SiteFormField>
+            }
+        </SiteStack>
+    }
+
+    <SiteKeyValueFreeFormRows RootId="@RootId"
+        Rows="@Rows"
+        Indices="@FreeFormIndices"
+        ShowSectionLabel="@(KnownFields.Count > 0)"
+        SectionLabel="@FreeFormSectionLabel"
+        Class="site-content-fact-free"
+        RowClass="site-content-fact-free-row"
+        KeyPlaceholder="@KeyPlaceholder"
+        ValuePlaceholder="@ValuePlaceholder"
+        AddLabel="@AddLabel"
+        RemoveLabel="@RemoveLabel"
+        KeyChanged="@(args => HandleFreeKeyChanged(args.Index, args.Value))"
+        ValueEdited="@(args => HandleFreeValueChanged(args.Index, args.Value))"
+        Removed="@(index => RemoveRow(index))"
+        Added="AddRow" />
+</div>

@@ -1,0 +1,20 @@
+@using Blog.Blazor.Core
+@inject IStringLocalizer<SharedResource> L
+
+@if (Items is { Count: > 0 })
+{
+    <SiteSection Region="related-content"
+        HeadingId="related-content-heading"
+        Title="@L["related_content"]">
+        <SiteGrid>
+            @foreach (var item in Items)
+            {
+                <SiteClickableCard Class="related-content-card"
+                    Href="@item.Url"
+                    Title="@item.Title">
+                    @if (!string.IsNullOrWhiteSpace(item.Date)) { <SiteText Variant="SiteTextVariant.Small">@item.Date</SiteText> }
+                </SiteClickableCard>
+            }
+        </SiteGrid>
+    </SiteSection>
+}

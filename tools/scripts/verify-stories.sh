@@ -7,8 +7,8 @@ fail() {
 }
 
 repo_root="$(cd "$(dirname "$0")/../.." && pwd)"
-ui_dir="$repo_root/src/Portfolio/Portfolio.Blazor.UI"
-stories_dir="$repo_root/src/Portfolio/Portfolio.Blazor.Stories/Stories"
+ui_dir="$repo_root/src/Blog/Blog.Blazor.UI"
+stories_dir="$repo_root/src/Blog/Blog.Blazor.Stories/Stories"
 
 missing=""
 count=0
@@ -23,7 +23,7 @@ $component"
 done
 
 if [ "$count" -gt 0 ]; then
-    fail "$count Portfolio.Blazor.UI component(s) have no matching *.stories.razor:$missing"
+    fail "$count Blog.Blazor.UI component(s) have no matching *.stories.razor:$missing"
 fi
 
 echo "Stories checks passed"

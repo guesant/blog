@@ -1,0 +1,14 @@
+@using System.Globalization
+@using Microsoft.Extensions.Localization
+@using Blog.Blazor.Core
+@using Blog.Blazor.Core.Localization
+@inject NavigationManager Navigation
+@inject IStringLocalizer<SharedResource> SharedL
+@inject IStringLocalizer<NavigationResource> NavL
+@inject ICultureCatalog Cultures
+@inject ILocalizedUrlBuilder Urls
+
+<SiteBreadcrumb HomeUrl="@LocalizedPath("/")"
+    HomeLabel="@(SharedL["home"])"
+    Links="@ToolBreadcrumbLinks"
+    CurrentLabel="@ToolBreadcrumbCurrentLabel" />

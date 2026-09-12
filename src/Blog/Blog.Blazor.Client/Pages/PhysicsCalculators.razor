@@ -1,0 +1,196 @@
+@inherits LocalizedComponentBase
+@implements IDisposable
+@page "/tools/kinematics"
+@page "/pt-BR/tools/kinematics"
+@page "/tools/newtons-second-law"
+@page "/pt-BR/tools/newtons-second-law"
+@page "/tools/ideal-gas"
+@page "/pt-BR/tools/ideal-gas"
+@page "/tools/wave-calculator"
+@page "/pt-BR/tools/wave-calculator"
+@using System.Globalization
+@using Blog.Blazor.Core
+
+<ToolPage Title="@Title" Description="@Description" CanonicalPath="@CanonicalPath">
+    <SiteToolForm Action="@Action"
+        SubmitLabel="@SubmitLabel"
+        Submit="SiteToolFormSubmit.StaticOnly"
+        OnSubmit="HandleSubmit">
+        @if (Mode == PhysicsToolMode.Kinematics)
+        {
+            <SiteFormField Label="v₀"
+                For="physics-v0"><SiteInput Id="physics-v0"
+                    Name="v0"
+                    Type="number"
+                    step="any"
+                    Value="@InitialVelocityText"
+                    ValueChanged="@(v => InitialVelocityText = v)" /></SiteFormField>
+            <SiteFormField Label="a"
+                For="physics-a"><SiteInput Id="physics-a"
+                    Name="a"
+                    Type="number"
+                    step="any"
+                    Value="@AccelerationText"
+                    ValueChanged="@(v => AccelerationText = v)" /></SiteFormField>
+            <SiteFormField Label="t"
+                For="physics-t"><SiteInput Id="physics-t"
+                    Name="t"
+                    Type="number"
+                    min="0"
+                    step="any"
+                    Value="@TimeText"
+                    ValueChanged="@(v => TimeText = v)" /></SiteFormField>
+        }
+        else if (Mode == PhysicsToolMode.Newton)
+        {
+            <SiteFormField Label="@(L["mass_kg"])"
+                For="physics-mass"><SiteInput Id="physics-mass"
+                    Name="mass"
+                    Type="number"
+                    min="0"
+                    step="any"
+                    Value="@MassText"
+                    ValueChanged="@(v => MassText = v)" /></SiteFormField>
+            <SiteFormField Label="@(L["acceleration_m_s2"])"
+                For="physics-force-a"><SiteInput Id="physics-force-a"
+                    Name="force_a"
+                    Type="number"
+                    step="any"
+                    Value="@ForceAccelerationText"
+                    ValueChanged="@(v => ForceAccelerationText = v)" /></SiteFormField>
+        }
+        else if (Mode == PhysicsToolMode.IdealGas)
+        {
+            <SiteFormField Label="@(L["pressure_pa"])"
+                For="physics-pressure"><SiteInput Id="physics-pressure"
+                    Name="p"
+                    Type="number"
+                    min="0"
+                    step="any"
+                    Value="@PressureText"
+                    ValueChanged="@(v => PressureText = v)" /></SiteFormField>
+            <SiteFormField Label="@(L["volume_m3"])"
+                For="physics-volume"><SiteInput Id="physics-volume"
+                    Name="v"
+                    Type="number"
+                    min="0"
+                    step="any"
+                    Value="@VolumeText"
+                    ValueChanged="@(v => VolumeText = v)" /></SiteFormField>
+            <SiteFormField Label="@(L["amount_mol"])"
+                For="physics-moles"><SiteInput Id="physics-moles"
+                    Name="n"
+                    Type="number"
+                    min="0"
+                    step="any"
+                    Value="@MolesText"
+                    ValueChanged="@(v => MolesText = v)" /></SiteFormField>
+            <SiteFormField Label="@(L["temperature_k"])"
+                For="physics-temperature"><SiteInput Id="physics-temperature"
+                    Name="temperature"
+                    Type="number"
+                    min="0"
+                    step="any"
+                    Value="@TemperatureText"
+                    ValueChanged="@(v => TemperatureText = v)" /></SiteFormField>
+        }
+        else
+        {
+            <SiteFormField Label="@(L["speed_m_s"])"
+                For="physics-speed"><SiteInput Id="physics-speed"
+                    Name="speed"
+                    Type="number"
+                    min="0"
+                    step="any"
+                    Value="@SpeedText"
+                    ValueChanged="@(v => SpeedText = v)" /></SiteFormField>
+            <SiteFormField Label="@(L["frequency_hz"])"
+                For="physics-frequency"><SiteInput Id="physics-frequency"
+                    Name="frequency"
+                    Type="number"
+                    min="0"
+                    step="any"
+                    Value="@FrequencyText"
+                    ValueChanged="@(v => FrequencyText = v)" /></SiteFormField>
+            <SiteFormField Label="@(L["wavelength_m"])"
+                For="physics-wavelength"><SiteInput Id="physics-wavelength"
+                    Name="wavelength"
+                    Type="number"
+                    min="0"
+                    step="any"
+                    Value="@WavelengthText"
+                    ValueChanged="@(v => WavelengthText = v)" /></SiteFormField>
+        }
+    </SiteToolForm>
+
+    <SiteLiveRegion Politeness="SiteLivePoliteness.Polite">
+        @if (!ResultIsValid)
+        {
+            <SiteErrorMessage>@ErrorLabel</SiteErrorMessage>
+        }
+        else
+        {
+            <SiteStats>
+                @if (Mode == PhysicsToolMode.Kinematics)
+                {
+                    <SiteStatItem Label="@FinalVelocityLabel">@Format(Kinematics.FinalVelocity) m/s</SiteStatItem>
+                    <SiteStatItem Label="@DisplacementLabel">@Format(Kinematics.Displacement) m</SiteStatItem>
+                }
+                else if (Mode == PhysicsToolMode.Newton)
+                {
+                    <SiteStatItem Label="@ForceLabel">@Format(Newton.Force) N</SiteStatItem>
+                }
+                else if (Mode == PhysicsToolMode.IdealGas)
+                {
+                    <SiteStatItem Label="@PressureLabel">@Format(Gas.Pressure) Pa</SiteStatItem>
+                    <SiteStatItem Label="@VolumeLabel">@Format(Gas.Volume) m³</SiteStatItem>
+                    <SiteStatItem Label="@MolesLabel">@Format(Gas.Moles) mol</SiteStatItem>
+                    <SiteStatItem Label="@TemperatureLabel">@Format(Gas.Temperature) K</SiteStatItem>
+                }
+                else
+                {
+                    <SiteStatItem Label="@SpeedLabel">@Format(Wave.Speed) m/s</SiteStatItem>
+                    <SiteStatItem Label="@FrequencyLabel">@Format(Wave.Frequency) Hz</SiteStatItem>
+                    <SiteStatItem Label="@WavelengthLabel">@Format(Wave.Wavelength) m</SiteStatItem>
+                }
+            </SiteStats>
+            @if (Mode == PhysicsToolMode.Kinematics)
+            {
+                <SiteCard Class="site-block" Label="@KinematicsChartLabel">
+                    @if (RendererInfo.IsInteractive)
+                    {
+                        <SiteChart ChartJsConfig="@KinematicsChartConfig"
+                            AriaLabel="@KinematicsChartLabel" />
+                    }
+                    else
+                    {
+                        <SiteList Variant="SiteListVariant.Boxed" AriaLabel="@KinematicsChartLabel">
+                            @foreach (var sample in KinematicsSeries.Where((_, index) => index % 8 == 0))
+                            {
+                                <SiteListItem Class="site-text-list-item">t = @Format(sample.Time) s: s = @Format(sample.Position) m, v = @Format(sample.Velocity) m/s</SiteListItem>
+                            }
+                        </SiteList>
+                    }
+                </SiteCard>
+            }
+            else if (Mode == PhysicsToolMode.Wave)
+            {
+                <SiteCard Class="site-block" Label="@WaveChartLabel">
+                    @if (RendererInfo.IsInteractive)
+                    {
+                        <SiteChart ChartJsConfig="@WaveChartConfig" AriaLabel="@WaveChartLabel" />
+                    }
+                    else
+                    {
+                        <SiteList Variant="SiteListVariant.Boxed" AriaLabel="@WaveChartLabel">
+                            @foreach (var point in WaveSeries.Where((_, index) => index % 8 == 0))
+                            {
+                                <SiteListItem Class="site-text-list-item">x = @Format(point.X) m: y = @Format(point.Y)</SiteListItem>
+                            }
+                        </SiteList>
+                    }
+                </SiteCard>
+            }
+        }
+    </SiteLiveRegion>
+</ToolPage>

@@ -16,7 +16,7 @@ Este arquivo é a fonte da verdade das convenções. `CLAUDE.md` e `GEMINI.md` s
 
 - Zero comentários narrativos em C#, Razor, YAML, TypeScript/JavaScript, CSS e shell. Um comentário só é aceitável em duas situações: é uma diretiva exigida por uma ferramenta, ou carrega informação rara e crítica que não é inferível do código e cuja ausência causaria um erro real no futuro, como um invariante de segurança ou um motivo não óbvio para uma decisão que parece removível.
 - Para a segunda categoria o marcador é `IMPORTANT:`, sem exceção por julgamento caso a caso. O gate `tools/scripts/verify-csharp-comments.sh` impõe isso em `.cs` e `.razor`.
-- Documentação XML (`///`) só em `src/Portfolio/Portfolio.Blazor.UI`, o projeto de componentes; nos demais projetos ela conta como comentário narrativo.
+- Documentação XML (`///`) só em `src/Blog/Blog.Blazor.UI`, o projeto de componentes; nos demais projetos ela conta como comentário narrativo.
 - Diretivas de ferramenta permitidas: `biome-ignore`, `nosemgrep`, `@ts-expect-error`, `@ts-ignore`, `@ts-nocheck`, `istanbul`, `jscpd:ignore-start`/`jscpd:ignore-end`, `zizmor: ignore[...]`, `shellcheck`, `yamllint`.
 - Decisão, justificativa e contexto vão para `docs/pendencias-e-decisoes.md`, nunca inline.
 - O C# de um componente fica em `X.razor.cs` (partial class), nunca em `@code`, salvo quando o bloco contém um template razor (`@<...>`).

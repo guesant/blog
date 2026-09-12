@@ -1,6 +1,6 @@
 # Database schema
 
-The PostgreSQL schema is owned by EF Core migrations in `Portfolio.Blazor.Database`.
+The PostgreSQL schema is owned by EF Core migrations in `Blog.Blazor.Database`.
 The table and column names are snake_case and the indexes carry the naming of the
 Laravel application this content was imported from (`projects_slug_unique` rather
 than `IX_projects_slug`). The model preserves those names deliberately, via
@@ -8,7 +8,7 @@ than `IX_projects_slug`). The model preserves those names deliberately, via
 
 Two conventions are turned off or overridden for the same reason:
 
-- `ForeignKeyIndexConvention` is removed in `PortfolioAdminDbContext.ConfigureConventions`.
+- `ForeignKeyIndexConvention` is removed in `BlogAdminDbContext.ConfigureConventions`.
   EF indexes every foreign key by convention; this database indexes only what it
   declares, and adopting the convention would have added 22 indexes that production
   does not have.
@@ -46,7 +46,7 @@ provider to fall back to. The public readers always open PostgreSQL sessions wit
 provider for the running app.
 
 `DateOnly` columns are native `date` and every `DateTime` is `timestamp without time
-zone` (`PortfolioModel.ApplyColumnTypes`), because the legacy values this schema was
+zone` (`BlogModel.ApplyColumnTypes`), because the legacy values this schema was
 imported from are wall-clock timestamps with no zone. Do not start writing
 `DateTime.UtcNow` from the admin without revisiting that mapping.
 
@@ -60,7 +60,7 @@ context; the admin bumps that row after every committed write through
 `just db-backup` runs `pg_dump -Fc` into `data/snapshots/`, and `just db-restore <file>`
 restores it with `pg_restore --clean --if-exists`.
 
-`just test-data` runs `Portfolio.Blazor.Data.Tests`: it creates a throwaway PostgreSQL
+`just test-data` runs `Blog.Blazor.Data.Tests`: it creates a throwaway PostgreSQL
 database, migrates it, seeds it with plain SQL, builds the public snapshot and knowledge
 graph through the real providers, and asserts the hidden-content rules, the declared
 query filters, the orderings and that the fingerprint refreshes after a signalled write.
@@ -68,7 +68,7 @@ query filters, the orderings and that the fingerprint refreshes after a signalle
 ## The content was imported from SQLite
 
 The site's content was originally in a SQLite database (a Laravel export). It moved to
-PostgreSQL through a one-off importer (`Portfolio.Blazor.Import`, removed after use, see
+PostgreSQL through a one-off importer (`Blog.Blazor.Import`, removed after use, see
 `docs/pendencias-e-decisoes.md`): it copied every table via `COPY ... FROM STDIN (FORMAT
 BINARY)`, without depending on the EF model, so it also carried the tables that have no
 `DbSet` on the admin context. The last SQLite state before the cutover is kept as the
@@ -76,12 +76,12 @@ single backup in `data/snapshots/`.
 
 ## Two contexts
 
-`PortfolioModel.Configure` builds one EF model; two contexts use it.
+`BlogModel.Configure` builds one EF model; two contexts use it.
 
-`PortfolioAdminDbContext` is the admin's read-write context, unfiltered, and the one the
-migrations assemblies target. `PortfolioPublicDbContext` is what the public site reads
+`BlogAdminDbContext` is the admin's read-write context, unfiltered, and the one the
+migrations assemblies target. `BlogPublicDbContext` is what the public site reads
 through (`PublicSiteContentProvider`, `PublicKnowledgeGraphProvider` and the LINQ queries
-in `src/Portfolio/Portfolio.Blazor/PublicQueries/`). It applies `PublicVisibilityFilters` as
+in `src/Blog/Blog.Blazor/PublicQueries/`). It applies `PublicVisibilityFilters` as
 global query filters (`hidden`, `nda`, `visibility = 'public'`, active credits), runs with
 `QueryTrackingBehavior.NoTracking`, throws from `SaveChanges`, and gets a connection opened
 with `default_transaction_read_only=on`. Reaching a filtered parent from a pivot uses an explicit

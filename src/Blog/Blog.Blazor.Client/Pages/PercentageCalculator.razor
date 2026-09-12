@@ -1,0 +1,107 @@
+@inherits LocalizedComponentBase
+@page "/tools/percentage-calculator"
+@page "/pt-BR/tools/percentage-calculator"
+@using System.Globalization
+@using Blog.Blazor.Core
+
+<ToolPage Title="@Title" Description="@Description" CanonicalPath="@CanonicalPath">
+    <SiteToolForm Action="@Action"
+        SubmitLabel="@SubmitLabel"
+        Submit="SiteToolFormSubmit.StaticOnly"
+        OnSubmit="HandleSubmit"
+        AriaLabel="@InputLabel">
+        <SiteHeading Level="2" Visual="6">@OfTitle</SiteHeading>
+        <SiteFormField Label="@OfXLabel"
+            For="percentage-of-x"><SiteInput Id="percentage-of-x"
+                Name="of_x"
+                Type="number"
+                step="any"
+                Value="@OfXText"
+                ValueChanged="@(v => OfXText = v)" /></SiteFormField>
+        <SiteFormField Label="@OfYLabel"
+            For="percentage-of-y"><SiteInput Id="percentage-of-y"
+                Name="of_y"
+                Type="number"
+                step="any"
+                Value="@OfYText"
+                ValueChanged="@(v => OfYText = v)" /></SiteFormField>
+
+        <SiteHeading Level="2" Visual="6">@WhatPctTitle</SiteHeading>
+        <SiteFormField Label="@WhatPctXLabel"
+            For="percentage-what-pct-x"><SiteInput Id="percentage-what-pct-x"
+                Name="wp_x"
+                Type="number"
+                step="any"
+                Value="@WhatPctXText"
+                ValueChanged="@(v => WhatPctXText = v)" /></SiteFormField>
+        <SiteFormField Label="@WhatPctYLabel"
+            For="percentage-what-pct-y"><SiteInput Id="percentage-what-pct-y"
+                Name="wp_y"
+                Type="number"
+                step="any"
+                Value="@WhatPctYText"
+                ValueChanged="@(v => WhatPctYText = v)" /></SiteFormField>
+
+        <SiteHeading Level="2" Visual="6">@OfWhatTitle</SiteHeading>
+        <SiteFormField Label="@OfWhatXLabel"
+            For="percentage-of-what-x"><SiteInput Id="percentage-of-what-x"
+                Name="ow_x"
+                Type="number"
+                step="any"
+                Value="@OfWhatXText"
+                ValueChanged="@(v => OfWhatXText = v)" /></SiteFormField>
+        <SiteFormField Label="@OfWhatYLabel"
+            For="percentage-of-what-y"><SiteInput Id="percentage-of-what-y"
+                Name="ow_y"
+                Type="number"
+                step="any"
+                Value="@OfWhatYText"
+                ValueChanged="@(v => OfWhatYText = v)" /></SiteFormField>
+
+        <SiteHeading Level="2" Visual="6">@ChangeTitle</SiteHeading>
+        <SiteFormField Label="@ChangeFromLabel"
+            For="percentage-change-from"><SiteInput Id="percentage-change-from"
+                Name="ch_from"
+                Type="number"
+                step="any"
+                Value="@ChangeFromText"
+                ValueChanged="@(v => ChangeFromText = v)" /></SiteFormField>
+        <SiteFormField Label="@ChangeToLabel"
+            For="percentage-change-to"><SiteInput Id="percentage-change-to"
+                Name="ch_to"
+                Type="number"
+                step="any"
+                Value="@ChangeToText"
+                ValueChanged="@(v => ChangeToText = v)" /></SiteFormField>
+    </SiteToolForm>
+
+    <SiteLiveRegion Politeness="SiteLivePoliteness.Polite">
+        <SiteCard Class="site-block" Label="@OfTitle">
+            @if (!OfResult.IsValid) { <SiteErrorMessage>@ErrorLabel</SiteErrorMessage> }
+            else { <SiteStats>
+                <SiteStatItem Label="@OfTitle">@FormatOf(OfXText, OfYText, OfResult.Result)</SiteStatItem>
+            </SiteStats> }
+        </SiteCard>
+
+        <SiteCard Class="site-block" Label="@WhatPctTitle">
+            @if (!WhatPctResult.IsValid) { <SiteErrorMessage>@(WhatPctResult.Error == PercentageError.DivisionByZero ? DivisionByZeroLabel : ErrorLabel)</SiteErrorMessage> }
+            else { <SiteStats>
+                <SiteStatItem Label="@WhatPctTitle">@FormatWhatPct(WhatPctResult)</SiteStatItem>
+            </SiteStats> }
+        </SiteCard>
+
+        <SiteCard Class="site-block" Label="@OfWhatTitle">
+            @if (!OfWhatResult.IsValid) { <SiteErrorMessage>@(OfWhatResult.Error == PercentageError.DivisionByZero ? DivisionByZeroLabel : ErrorLabel)</SiteErrorMessage> }
+            else { <SiteStats>
+                <SiteStatItem Label="@OfWhatTitle">@FormatOfWhat(OfWhatResult)</SiteStatItem>
+            </SiteStats> }
+        </SiteCard>
+
+        <SiteCard Class="site-block" Label="@ChangeTitle">
+            @if (!ChangeResult.IsValid) { <SiteErrorMessage>@(ChangeResult.Error == PercentageError.DivisionByZero ? DivisionByZeroLabel : ErrorLabel)</SiteErrorMessage> }
+            else { <SiteStats>
+                <SiteStatItem Label="@ChangeTitle">@FormatChange(ChangeResult)</SiteStatItem>
+            </SiteStats> }
+        </SiteCard>
+    </SiteLiveRegion>
+</ToolPage>

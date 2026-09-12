@@ -1,0 +1,44 @@
+@inherits LocalizedComponentBase
+@page "/tools/sensible-heat"
+@page "/pt-BR/tools/sensible-heat"
+@using System.Globalization
+@using Blog.Blazor.Core
+
+<ToolPage Title="@Title" Description="@Description" CanonicalPath="@CanonicalPath">
+    <SiteNotice>@Note</SiteNotice>
+    <SiteToolForm Action="@Action"
+        SubmitLabel="@SubmitLabel"
+        Submit="SiteToolFormSubmit.StaticOnly"
+        OnSubmit="Calculate"
+        AriaLabel="@InputLabel">
+        <SiteFormField For="heat-mass"
+            Label="m (kg)"><SiteInput Id="heat-mass"
+                Name="mass"
+                Type="number"
+                min="0"
+                step="any"
+                Value="@MassText"
+                ValueChanged="@(v => MassText = v)" /></SiteFormField>
+        <SiteFormField For="heat-specific"
+            Label="c (J/kg·K)"><SiteInput Id="heat-specific"
+                Name="specific"
+                Type="number"
+                min="0"
+                step="any"
+                Value="@SpecificHeatText"
+                ValueChanged="@(v => SpecificHeatText = v)" /></SiteFormField>
+        <SiteFormField For="heat-delta"
+            Label="ΔT (K)"><SiteInput Id="heat-delta"
+                Name="delta"
+                Type="number"
+                step="any"
+                Value="@DeltaTemperatureText"
+                ValueChanged="@(v => DeltaTemperatureText = v)" /></SiteFormField>
+    </SiteToolForm>
+    <SiteLiveRegion Politeness="SiteLivePoliteness.Polite">
+        @if (!Result.IsValid) { <SiteErrorMessage>@ErrorLabel</SiteErrorMessage> } else { <SiteCard Class="site-block" Label="@Title">
+            <SiteText Variant="SiteTextVariant.MetricValue"
+                Class="tool-result-value">Q = @Heat(Result.Heat) J</SiteText>
+        </SiteCard> }
+    </SiteLiveRegion>
+</ToolPage>

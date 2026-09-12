@@ -1,0 +1,39 @@
+@inherits LocalizedComponentBase
+@page "/tools/morse-code-translator"
+@page "/pt-BR/tools/morse-code-translator"
+@using Blog.Blazor.Core
+
+<ToolPage Title="@Title" Description="@Description" CanonicalPath="@CanonicalPath">
+    <SiteToolForm Action="@Action" Submit="SiteToolFormSubmit.Never" AriaLabel="@InputLabel">
+        <SiteFormField Label="@InputLabel" For="morse-input">
+            <SiteTextAreaInput Id="morse-input"
+                Name="input"
+                Rows="4"
+                Value="@Input"
+                ValueChanged="@(v => Input = v)" />
+        </SiteFormField>
+        <SiteFormActions>
+            <SiteButton Variant="SiteButtonVariant.Default"
+                OnClick="ToMorse"
+                Type="@(RendererInfo.IsInteractive ? SiteButtonType.Button : SiteButtonType.Submit)"
+                name="direction"
+                value="encode"><SiteIcon Name="arrow-right-left"
+                    Size="14" />@ToMorseLabel</SiteButton>
+            <SiteButton Variant="SiteButtonVariant.Default"
+                OnClick="ToText"
+                Type="@(RendererInfo.IsInteractive ? SiteButtonType.Button : SiteButtonType.Submit)"
+                name="direction"
+                value="decode"><SiteIcon Name="arrow-right-left"
+                    Size="14" />@ToTextLabel</SiteButton>
+        </SiteFormActions>
+    </SiteToolForm>
+    <SiteLiveRegion Politeness="SiteLivePoliteness.Polite">
+        @if (!Result.IsValid) { <SiteErrorMessage>@ErrorLabel</SiteErrorMessage> }
+        <SiteOutputField Id="morse-output"
+            Label="@OutputLabel"
+            Value="@Result.Output"
+            Multiline="true"
+            Copyable="@(!string.IsNullOrEmpty(Result.Output))"
+            CopyLabel="@CopyLabel" />
+    </SiteLiveRegion>
+</ToolPage>

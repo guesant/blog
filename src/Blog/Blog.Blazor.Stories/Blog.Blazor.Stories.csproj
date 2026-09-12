@@ -1,0 +1,44 @@
+<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <InvariantGlobalization>true</InvariantGlobalization>
+    <DebugType>none</DebugType>
+    <WasmDebugLevel>0</WasmDebugLevel>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="BlazingStory" Version="1.0.0-preview.91" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="10.0.11" />
+    <PackageReference Include="BlazorBlueprint.Components" Version="3.16.0" />
+    <ProjectReference Include="..\Blog.Blazor.UI\Blog.Blazor.UI.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="Microsoft.AspNetCore.Components" />
+    <Using Include="System.Net.Http.Json" />
+    <Using Include="Microsoft.AspNetCore.Components.Forms" />
+    <Using Include="Microsoft.AspNetCore.Components.Routing" />
+    <Using Include="Microsoft.AspNetCore.Components.Web" />
+    <Using Include="Microsoft.AspNetCore.Components.Web.Virtualization" />
+    <Using Include="Microsoft.AspNetCore.Components.WebAssembly.Http" />
+    <Using Include="Microsoft.JSInterop" />
+    <Using Include="BlazingStory.Components" />
+    <Using Include="BlazingStory.Components.Layouts" />
+    <Using Include="BlazingStory.Configurations" />
+    <Using Include="BlazingStory.Types" />
+    <Using Include="Blog.Blazor.Stories" />
+    <Using Include="Blog.Blazor.Stories.Stories" />
+    <Using Include="BlazorBlueprint.Primitives.Services" />
+    <Using Include="Blog.Blazor.UI.Foundations" />
+    <Using Include="Blog.Blazor.UI.Primitives" />
+    <Using Include="Blog.Blazor.UI.Forms" />
+    <Using Include="Blog.Blazor.UI.DataDisplay" />
+    <Using Include="Blog.Blazor.UI.Feedback" />
+    <Using Include="Blog.Blazor.UI.Layout" />
+    <Using Include="Blog.Blazor.UI.Navigation" />
+    <Using Include="Blog.Blazor.UI.Composition" />
+    <Using Include="Blog.Blazor.UI.Templates" />
+  </ItemGroup>
+</Project>

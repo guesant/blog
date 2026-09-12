@@ -8,20 +8,20 @@
     "css"
   ],
   "path": [
-    "../src/Portfolio/Portfolio.Blazor.Client",
-    "../src/Portfolio/Portfolio.Blazor.Core",
-    "../src/Portfolio/Portfolio.Blazor.Core.Tests",
-    "../src/Portfolio/Portfolio.Blazor.Data.Tests",
-    "../src/Portfolio/Portfolio.Blazor.Sbom",
-    "../src/Portfolio/Portfolio.Blazor",
-    "../src/Portfolio/Portfolio.Blazor.UI"
+    "../src/Blog/Blog.Blazor.Client",
+    "../src/Blog/Blog.Blazor.Core",
+    "../src/Blog/Blog.Blazor.Core.Tests",
+    "../src/Blog/Blog.Blazor.Data.Tests",
+    "../src/Blog/Blog.Blazor.Sbom",
+    "../src/Blog/Blog.Blazor",
+    "../src/Blog/Blog.Blazor.UI"
   ],
   "ignore": [
     "**/bin/**",
     "**/obj/**",
     "**/*.stories.razor",
-    "**/Portfolio.Blazor.Database/**",
-    "**/Portfolio.Blazor.Data.Tests/Seed.cs"
+    "**/Blog.Blazor.Database/**",
+    "**/Blog.Blazor.Data.Tests/Seed.cs"
   ],
   "ignoreCase": true,
   "reporters": [

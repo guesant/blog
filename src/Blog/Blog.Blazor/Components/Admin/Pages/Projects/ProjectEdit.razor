@@ -1,0 +1,202 @@
+@page "/admin/projects/create"
+@page "/admin/projects/{Id:int}"
+@using System.Globalization
+@using Blog.Blazor.Components.Admin.Shared
+@inherits AdminEditPageBase<Project>
+@layout AdminLayout
+
+<PageTitle>@(IsEditing ? "Edit project" : "New project")</PageTitle>
+
+<SiteFormShell Title="@(IsEditing ? "Edit project" : "New project")"
+    Error="@SaveError"
+    Loading="@IsLoading">
+    <SiteForm EditContext="@_projectEditContext" OnValidSubmit="HandleSaveAsync">
+        <SiteStack Gap="SiteSpace.Lg">
+            <SiteFormField Label="Slug"
+                For="slug"
+                Required="true"
+                HelpText="Used in the public project URL.">
+                <SiteTextInput Id="slug" @bind-Value="_project.Slug" />
+                <SiteValidationMessage For="@(() => _project.Slug)" />
+            </SiteFormField>
+
+
+            <SiteFormField Label="Href"
+                For="href"
+                HelpText="External link override, if this project points elsewhere.">
+                <SiteTextInput Id="href"
+                    Value="@(_project.Href ?? string.Empty)"
+                    ValueChanged="@(value => _project.Href = string.IsNullOrWhiteSpace(value) ? null : value)" />
+            </SiteFormField>
+
+            <SiteFormField Label="Published at"
+                For="published-at"
+                HelpText="Leave empty if not yet published.">
+                <SiteDateInput Id="published-at" @bind-Value="_project.PublishedAt" />
+            </SiteFormField>
+
+            <SiteInline Gap="SiteSpace.Lg">
+                <SiteCheckbox Label="Hidden" @bind-Value="_project.Hidden" />
+                <SiteCheckbox Label="NDA" @bind-Value="_project.Nda" />
+                <SiteCheckbox Label="External" @bind-Value="_project.External" />
+                <SiteCheckbox Label="Show history" @bind-Value="_project.ShowHistory" />
+            </SiteInline>
+
+            <SiteFormSection Title="Translations">
+                <SiteTranslationTabs Locales="@_locales"
+                    ActiveLocale="@_activeLocale"
+                    ActiveLocaleChanged="@((string locale) => _activeLocale = locale)"
+                    IdPrefix="project-translation">
+                    <Panel Context="locale">
+                        @if (locale == "en")
+                        {
+                            <CascadingValue Value="_enEditContext"
+                                TValue="EditContext"
+                                IsFixed="true">
+                                <DataAnnotationsValidator />
+                                <SiteFormField Label="Name"
+                                    For="name-en"
+                                    HelpText="Leave blank to skip saving the English translation.">
+                                    <SiteTextInput Id="name-en" @bind-Value="_translationEn.Name" />
+                                </SiteFormField>
+
+                                <SiteFormField Label="Purpose" For="purpose-en">
+                                    <SiteTextInput Id="purpose-en"
+                                        @bind-Value="_translationEn.Purpose" />
+                                </SiteFormField>
+
+                                <SiteFormField Label="Problem" For="problem-en">
+                                    <SiteTextAreaInput Id="problem-en"
+                                        Rows="3"
+                                        Value="@(_translationEn.Problem ?? string.Empty)"
+                                        ValueChanged="@(value => _translationEn.Problem = NullIfBlank(value))" />
+                                </SiteFormField>
+
+                                <SiteFormField Label="Current focus" For="current-focus-en">
+                                    <SiteTextInput Id="current-focus-en"
+                                        Value="@(_translationEn.CurrentFocus ?? string.Empty)"
+                                        ValueChanged="@(value => _translationEn.CurrentFocus = NullIfBlank(value))" />
+                                </SiteFormField>
+
+                                <SiteFormField Label="Status" For="status-en">
+                                    <SiteTextInput Id="status-en"
+                                        Value="@(_translationEn.Status ?? string.Empty)"
+                                        ValueChanged="@(value => _translationEn.Status = NullIfBlank(value))" />
+                                </SiteFormField>
+
+                                <SiteFormField Label="Metrics"
+                                    For="metrics-en"
+                                    HelpText="One entry per metric, with a label and a value, e.g. label &quot;users&quot; / value &quot;10k&quot;. Leave empty if not applicable.">
+                                    <SiteJsonArrayInput Id="metrics-en"
+                                        Fields="@MetricFields"
+                                        Value="@(_translationEn.Metrics ?? string.Empty)"
+                                        ValueChanged="@(value => _translationEn.Metrics = NullIfBlank(value))" />
+                                    <SiteValidationMessage For="@(() => _translationEn.Metrics)" />
+                                </SiteFormField>
+
+                                <SiteFormField Label="SEO"
+                                    For="seo-en"
+                                    HelpText="Standard meta fields for this page; add any extra tag under other fields. Leave empty if not applicable.">
+                                    <SitePageFieldsInput Id="seo-en"
+                                        Slug="PageFieldSlug.Seo"
+                                        Locale="en"
+                                        Value="@(_translationEn.Seo ?? string.Empty)"
+                                        ValueChanged="@(value => _translationEn.Seo = NullIfBlank(value))" />
+                                    <SiteValidationMessage For="@(() => _translationEn.Seo)" />
+                                </SiteFormField>
+
+                                <SiteFormField Label="Body (Markdown)" For="body-en">
+                                    <SiteMarkdownSplitEditor Id="body-en"
+                                        Rows="12"
+                                        Value="@(_translationEn.Body ?? string.Empty)"
+                                        ValueChanged="@(value => _translationEn.Body = NullIfBlank(value))"
+                                        Render="MarkdownRenderer.ToHtml" />
+                                </SiteFormField>
+                            </CascadingValue>
+                        }
+                        else
+                        {
+                            <CascadingValue Value="_ptEditContext"
+                                TValue="EditContext"
+                                IsFixed="true">
+                                <DataAnnotationsValidator />
+                                <SiteFormField Label="Nome"
+                                    For="name-pt"
+                                    HelpText="Deixe em branco para não salvar a tradução em português.">
+                                    <SiteTextInput Id="name-pt"
+                                        @bind-Value="_translationPtBr.Name" />
+                                </SiteFormField>
+
+                                <SiteFormField Label="Propósito" For="purpose-pt">
+                                    <SiteTextInput Id="purpose-pt"
+                                        @bind-Value="_translationPtBr.Purpose" />
+                                </SiteFormField>
+
+                                <SiteFormField Label="Problema" For="problem-pt">
+                                    <SiteTextAreaInput Id="problem-pt"
+                                        Rows="3"
+                                        Value="@(_translationPtBr.Problem ?? string.Empty)"
+                                        ValueChanged="@(value => _translationPtBr.Problem = NullIfBlank(value))" />
+                                </SiteFormField>
+
+                                <SiteFormField Label="Foco atual" For="current-focus-pt">
+                                    <SiteTextInput Id="current-focus-pt"
+                                        Value="@(_translationPtBr.CurrentFocus ?? string.Empty)"
+                                        ValueChanged="@(value => _translationPtBr.CurrentFocus = NullIfBlank(value))" />
+                                </SiteFormField>
+
+                                <SiteFormField Label="Status" For="status-pt">
+                                    <SiteTextInput Id="status-pt"
+                                        Value="@(_translationPtBr.Status ?? string.Empty)"
+                                        ValueChanged="@(value => _translationPtBr.Status = NullIfBlank(value))" />
+                                </SiteFormField>
+
+                                <SiteFormField Label="Métricas"
+                                    For="metrics-pt"
+                                    HelpText="Um item por métrica, com um rótulo e um valor, ex.: rótulo &quot;usuários&quot; / valor &quot;10k&quot;. Deixe vazio se não for aplicável.">
+                                    <SiteJsonArrayInput Id="metrics-pt"
+                                        Fields="@MetricFields"
+                                        Value="@(_translationPtBr.Metrics ?? string.Empty)"
+                                        ValueChanged="@(value => _translationPtBr.Metrics = NullIfBlank(value))" />
+                                    <SiteValidationMessage For="@(() => _translationPtBr.Metrics)" />
+                                </SiteFormField>
+
+                                <SiteFormField Label="SEO"
+                                    For="seo-pt"
+                                    HelpText="Campos meta padrão desta página; tags extras entram em outros campos. Deixe vazio se não for aplicável.">
+                                    <SitePageFieldsInput Id="seo-pt"
+                                        Slug="PageFieldSlug.Seo"
+                                        Locale="pt-BR"
+                                        Value="@(_translationPtBr.Seo ?? string.Empty)"
+                                        ValueChanged="@(value => _translationPtBr.Seo = NullIfBlank(value))" />
+                                    <SiteValidationMessage For="@(() => _translationPtBr.Seo)" />
+                                </SiteFormField>
+
+                                <SiteFormField Label="Corpo (Markdown)" For="body-pt">
+                                    <SiteMarkdownSplitEditor Id="body-pt"
+                                        Rows="12"
+                                        Value="@(_translationPtBr.Body ?? string.Empty)"
+                                        ValueChanged="@(value => _translationPtBr.Body = NullIfBlank(value))"
+                                        Render="MarkdownRenderer.ToHtml" />
+                                </SiteFormField>
+                            </CascadingValue>
+                        }
+                    </Panel>
+                </SiteTranslationTabs>
+            </SiteFormSection>
+
+            <SiteFormSection Title="Technologies">
+                <SiteEntityChecklist TItem="Technology"
+                    Items="_allTechnologies"
+                    Key="@(technology => technology.Id)"
+                    Label="@TechnologyDisplayName"
+                    Selected="_selectedTechnologyIds"
+                    SelectedChanged="HandleSelectedTechnologiesChanged"
+                    SearchPlaceholder="Search technologies…"
+                    EmptyText="@(search => $"No technologies match \"{search}\".")" />
+            </SiteFormSection>
+        </SiteStack>
+
+        <SiteSaveBar Saving="@IsSaving" CancelHref="/admin/projects" />
+    </SiteForm>
+</SiteFormShell>

@@ -8,8 +8,8 @@ ENV DOTNET_CLI_TELEMETRY_OPTOUT=1 \
 # even solution-wide, silently drops _framework/blazor.web.js from the published static web
 # assets manifest (a runtime 404 with no build error), so the restore layer is not cached.
 COPY . .
-RUN dotnet restore src/Portfolio.Blazor.slnx --locked-mode
-RUN dotnet publish src/Portfolio/Portfolio.Blazor/Portfolio.Blazor.csproj \
+RUN dotnet restore src/Blog.Blazor.slnx --locked-mode
+RUN dotnet publish src/Blog/Blog.Blazor/Blog.Blazor.csproj \
     --configuration Release \
     --no-restore \
     --output /app/publish
@@ -31,7 +31,7 @@ RUN chmod 0555 /app/scripts/run-with-tectonic.sh /app/entrypoint.prod.sh
 ENV ASPNETCORE_ENVIRONMENT=Production \
     ASPNETCORE_URLS=http://0.0.0.0:8080 \
     PORTFOLIO_RUN_PUBLISHED=1 \
-    PORTFOLIO_APP_DLL=/app/Portfolio.Blazor.dll \
+    PORTFOLIO_APP_DLL=/app/Blog.Blazor.dll \
     PORTFOLIO_PUBLIC_ASSET_ROOT=/data/public \
     PORTFOLIO_RESUME_PDF_ROOT=/data/resume-cache \
     TECTONIC_BUNDLE=https://data1.fullyjustified.net/tlextras-2022.0r0.tar \

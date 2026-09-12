@@ -1,0 +1,53 @@
+@inherits LocalizedComponentBase
+@page "/tools/query-string-parser"
+@page "/pt-BR/tools/query-string-parser"
+@using Blog.Blazor.Core
+
+<ToolPage Title="@Title" Description="@Description" CanonicalPath="@CanonicalPath">
+    <SiteToolForm Action="@Action" SubmitLabel="@ParseLabel" AriaLabel="@ParseLabel">
+        <SiteFormField For="query-input"
+            Label="@ParseLabel"><SiteTextAreaInput Id="query-input"
+                Name="query"
+                Rows="3"
+                placeholder="https://example.com/path?foo=bar&baz=qux"
+                Value="@ParseInput"
+                ValueChanged="@(v => ParseInput = v)" /></SiteFormField>
+    </SiteToolForm>
+    <SiteLiveRegion Politeness="SiteLivePoliteness.Polite">
+        <SiteCard Class="site-block">
+            <SiteHeading Level="2" Id="parsed-heading">@ParseLabel</SiteHeading>
+                <SiteList>@foreach (var parameter in Parsed.Parameters) { <SiteListItem Class="list-group-item site-list-row tool-list-item">
+                    <SiteText Variant="SiteTextVariant.Meta"
+                        Class="tool-list-value">@parameter.Key</SiteText>
+                        <SiteText Variant="SiteTextVariant.Meta">@parameter.Value</SiteText>
+                    </SiteListItem> }</SiteList>
+        </SiteCard>
+    </SiteLiveRegion>
+    @if (RendererInfo.IsInteractive)
+    {
+        <SiteCard Class="site-block">
+            <SiteHeading Level="2"
+                Id="build-heading">@BuildLabel</SiteHeading>@foreach (var row in Rows) { <SiteInline Class="tool-output-row">
+                <SiteInput placeholder="@KeyPlaceholder"
+                    Value="@row.Key"
+                    OnInput="eventArgs => UpdateKey(row, eventArgs)" />
+                <SiteInput placeholder="@ValuePlaceholder"
+                    Value="@row.Value"
+                    OnInput="eventArgs => UpdateValue(row, eventArgs)" />
+                <SiteButton Variant="SiteButtonVariant.Default"
+                    @onclick="() => RemoveRow(row)"
+                    Disabled="@(Rows.Count == 1)">
+                    <SiteIcon Name="trash-2" Size="14" />@RemoveLabel</SiteButton>
+                </SiteInline> }<SiteFormActions>
+                    <SiteButton Variant="SiteButtonVariant.Default" @onclick="AddRow">
+                        <SiteIcon Name="plus" Size="14" />@AddLabel</SiteButton>
+                    </SiteFormActions>
+            <SiteFormField For="query-output"
+                Label="@OutputLabel"><SiteTextAreaInput Id="query-output"
+                    readonly
+                    Rows="3"
+                    Value="@BuiltQuery" />
+                </SiteFormField>
+        </SiteCard>
+    }
+</ToolPage>

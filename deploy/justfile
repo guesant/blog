@@ -1,19 +1,6 @@
 set shell := ["bash", "-uc"]
 
-kubeconfig := "ansible/kubeconfig"
-kubectl := "kubectl --kubeconfig " + kubeconfig + " -n blog"
-
-bootstrap:
-    ansible-playbook -i ansible/inventory.ini ansible/site.yml
-
-kubeconfig:
-    echo "export KUBECONFIG={{justfile_directory()}}/{{kubeconfig}}"
-
-fetch-cert:
-    kubeseal --kubeconfig {{kubeconfig}} --fetch-cert > sealed-secrets-cert.pem
-
-seal namespace name plain_file:
-    kubeseal --cert sealed-secrets-cert.pem --namespace {{namespace}} --name {{name}} < {{plain_file}}
+kubectl := "kubectl -n blog"
 
 db-update:
     #!/usr/bin/env bash
@@ -32,7 +19,7 @@ db-update:
 
 status:
     {{kubectl}} get pods
-    kubectl --kubeconfig {{kubeconfig}} -n argocd get applications
+    kubectl -n argocd get application blog-satellite
 
 webhook-register url:
     gh api repos/guesant/blog/hooks -f name=web -f active=true \

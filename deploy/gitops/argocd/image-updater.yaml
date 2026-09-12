@@ -12,5 +12,5 @@ spec:
         - alias: blog
           imageName: ghcr.io/guesant/blog
           commonUpdateSettings:
-            updateStrategy: digest
+            updateStrategy: newest-build
             allowTags: regexp:^sha-[0-9a-f]{40}$

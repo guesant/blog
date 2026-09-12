@@ -4,6 +4,8 @@
   become: true
   roles:
     - os-prerequisites
+    - ssh_hardening
+    - fail2ban
     - k3s
     - cilium
     - cnpg

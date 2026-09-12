@@ -6,15 +6,17 @@
     <SiteSection Region="related-content"
         HeadingId="related-content-heading"
         Title="@L["related_content"]">
-        <SiteGrid>
+        <SiteCardGrid aria-labelledby="related-content-heading" data-layout-region="items">
             @foreach (var item in Items)
             {
-                <SiteClickableCard Class="related-content-card"
-                    Href="@item.Url"
-                    Title="@item.Title">
-                    @if (!string.IsNullOrWhiteSpace(item.Date)) { <SiteText Variant="SiteTextVariant.Small">@item.Date</SiteText> }
-                </SiteClickableCard>
+                <SiteGridColumn>
+                    <SiteFeedCard KindLabel="@(L["kind_related"])"
+                        Date="@item.Date"
+                        Title="@item.Title"
+                        Href="@item.Url"
+                        ViewLabel="@(L["read_more"])" />
+                </SiteGridColumn>
             }
-        </SiteGrid>
+        </SiteCardGrid>
     </SiteSection>
 }

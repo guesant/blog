@@ -55,9 +55,6 @@ public partial class TechnologyDetail
     private IReadOnlyList<BreadcrumbLink> BreadcrumbLinks =>
         [new(CrumbLabel("technologies", L["technologies"]), IndexUrl)];
 
-    private static string Short(string value) =>
-        value.Length > 150 ? value[..150].TrimEnd() + "…" : value;
-
     private string LocalizedPath(string path) =>
         path.Equals("home", StringComparison.OrdinalIgnoreCase)
             ? (L[""])

@@ -101,23 +101,25 @@
                     Description="@Field("projectsDescription")"
                     ActionHref="@LocalizedPath("projects")"
                     ActionLabel="@(L["view_all_projects"])">
-                    <SiteGrid>
+                    <SiteCardGrid aria-labelledby="projects-heading" data-layout-region="items">
                         @foreach (var item in Snapshot.FeaturedProjects ?? [])
                         {
                             <SiteGridColumn>
-                                <SiteClickableCard Icon="folder-git-2" Label="@($"project · {item.Status}")"
-                                    Class="h-100"
-                                    Href="@LocalizedUrl(item.Url)"
+                                <SiteFeedCard KindLabel="@(L["kind_project"])"
                                     Title="@item.Name"
-                                    TitleClass="h5"
-                                    HeadingLevel="3">
-                                    @if (!string.IsNullOrWhiteSpace(item.Purpose)) { <SiteText Variant="SiteTextVariant.Meta">@item.Purpose</SiteText> }
-                                    @if (!string.IsNullOrWhiteSpace(item.Problem)) { <SiteText Variant="SiteTextVariant.Meta">@item.Problem</SiteText> }
-                                    @if (item.Technologies is { Count: > 0 }) { <SiteChipGroup>@foreach (var technology in item.Technologies) { <SiteChip Label="@technology.Name" Href="@LocalizedPath($"technologies/{technology.Slug}")" /> }</SiteChipGroup> }
-                                </SiteClickableCard>
+                                    Href="@LocalizedUrl(item.Url)"
+                                    Preview="@ProjectPreview(item)"
+                                    ViewLabel="@(L["read_more"])">
+                                    <MetaItems>
+                                        @if (!string.IsNullOrWhiteSpace(item.Status)) { <SiteCardMetaItem Icon="activity">@item.Status</SiteCardMetaItem> }
+                                    </MetaItems>
+                                    <Tags>
+                                        @if (item.Technologies is { Count: > 0 }) { <SiteChipGroup>@foreach (var technology in item.Technologies) { <SiteChip Label="@technology.Name" Href="@LocalizedPath($"technologies/{technology.Slug}")" /> }</SiteChipGroup> }
+                                    </Tags>
+                                </SiteFeedCard>
                             </SiteGridColumn>
                         }
-                    </SiteGrid>
+                    </SiteCardGrid>
                     @if (Snapshot.Experiments is { Count: > 0 } && !string.IsNullOrWhiteSpace(Field("experimentsSummary")))
                     {
                         <SiteText Variant="SiteTextVariant.Small">

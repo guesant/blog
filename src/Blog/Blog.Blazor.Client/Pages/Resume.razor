@@ -68,14 +68,18 @@
             HeadingId="resume-selected-work-heading"
             Label="@(L["selected_work"])"
             Title="@(L["work_worth_highlighting"])">
-            <SiteGrid>@{ var selectedNumber = 0; }@foreach (var item in SelectedCases) { selectedNumber++; <SiteGridColumn>
-                <SiteClickableCard Label="@SelectedCaseMeta(item, selectedNumber)"
-                    Class="h-100"
-                    Href="@item.Url"
+            <SiteCardGrid aria-labelledby="resume-selected-work-heading"
+                data-layout-region="items">@{ var selectedNumber = 0; }@foreach (var item in SelectedCases) { selectedNumber++; <SiteGridColumn>
+                <SiteFeedCard KindLabel="@(L["kind_case"])"
                     Title="@item.Title"
-                    TitleClass="h5"
-                    HeadingLevel="3">@if (!string.IsNullOrWhiteSpace(item.Summary)) { <SiteText Variant="SiteTextVariant.Excerpt">@item.Summary</SiteText> }</SiteClickableCard>
-            </SiteGridColumn> }</SiteGrid>
+                    Href="@item.Url"
+                    Preview="@item.Summary"
+                    ViewLabel="@(L["read_more"])">
+                    <MetaItems>
+                        <SiteCardMetaItem Icon="star">@SelectedCaseMeta(item, selectedNumber)</SiteCardMetaItem>
+                    </MetaItems>
+                </SiteFeedCard>
+            </SiteGridColumn> }</SiteCardGrid>
         </SiteSection>
     }
     @if (Skills.Count > 0)

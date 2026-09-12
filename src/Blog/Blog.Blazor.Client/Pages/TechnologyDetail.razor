@@ -42,12 +42,16 @@
                 <SiteSection Region="cases"
                     HeadingId="technology-cases-heading"
                     Title="@(L["cases"])">
-                    <SiteGrid>
+                    <SiteCardGrid aria-labelledby="technology-cases-heading"
+                        data-layout-region="items">
                         @foreach (var item in RelatedCases) { <SiteGridColumn>
-                            <SiteClickableCard Href="@LocalizedUrl(item.Url)"
-                                Title="@item.Title">@if (!string.IsNullOrWhiteSpace(item.Summary)) { <SiteText Variant="SiteTextVariant.Excerpt">@Short(item.Summary)</SiteText> }</SiteClickableCard>
+                            <SiteFeedCard KindLabel="@(L["kind_case"])"
+                                Title="@item.Title"
+                                Href="@LocalizedUrl(item.Url)"
+                                Preview="@item.Summary"
+                                ViewLabel="@(L["read_more"])" />
                         </SiteGridColumn> }
-                    </SiteGrid>
+                    </SiteCardGrid>
                 </SiteSection>
             }
             @if (RelatedProjects.Count > 0)
@@ -55,12 +59,16 @@
                 <SiteSection Region="projects"
                     HeadingId="technology-projects-heading"
                     Title="@(L["projects"])">
-                    <SiteGrid>
+                    <SiteCardGrid aria-labelledby="technology-projects-heading"
+                        data-layout-region="items">
                         @foreach (var item in RelatedProjects) { <SiteGridColumn>
-                            <SiteClickableCard Href="@LocalizedUrl(item.Url)"
-                                Title="@item.Name">@if (!string.IsNullOrWhiteSpace(item.Purpose)) { <SiteText Variant="SiteTextVariant.Excerpt">@Short(item.Purpose)</SiteText> }</SiteClickableCard>
+                            <SiteFeedCard KindLabel="@(L["kind_project"])"
+                                Title="@item.Name"
+                                Href="@LocalizedUrl(item.Url)"
+                                Preview="@item.Purpose"
+                                ViewLabel="@(L["read_more"])" />
                         </SiteGridColumn> }
-                    </SiteGrid>
+                    </SiteCardGrid>
                 </SiteSection>
             }
             @if (RelatedExperiments.Count > 0)
@@ -68,12 +76,16 @@
                 <SiteSection Region="experiments"
                     HeadingId="technology-experiments-heading"
                     Title="@(L["experiments"])">
-                    <SiteGrid>
+                    <SiteCardGrid aria-labelledby="technology-experiments-heading"
+                        data-layout-region="items">
                         @foreach (var item in RelatedExperiments) { <SiteGridColumn>
-                            <SiteClickableCard Href="@LocalizedUrl(item.Url)"
-                                Title="@item.Name">@if (!string.IsNullOrWhiteSpace(item.Purpose)) { <SiteText Variant="SiteTextVariant.Excerpt">@Short(item.Purpose)</SiteText> }</SiteClickableCard>
+                            <SiteFeedCard KindLabel="@(L["kind_experiment"])"
+                                Title="@item.Name"
+                                Href="@LocalizedUrl(item.Url)"
+                                Preview="@item.Purpose"
+                                ViewLabel="@(L["read_more"])" />
                         </SiteGridColumn> }
-                    </SiteGrid>
+                    </SiteCardGrid>
                 </SiteSection>
             }
             @if (Technology.ResumeSkills is { Count: > 0 })

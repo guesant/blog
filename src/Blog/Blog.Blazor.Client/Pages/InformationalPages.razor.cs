@@ -82,6 +82,15 @@ public partial class InformationalPages
                 )
                 .ToArray();
 
+    private static string? ProjectPreview(PublicProject item)
+    {
+        var parts = new[] { item.Purpose, item.Problem }
+            .Where(part => !string.IsNullOrWhiteSpace(part))
+            .Select(part => part!.Trim());
+        var preview = string.Join(" ", parts);
+        return string.IsNullOrWhiteSpace(preview) ? null : preview;
+    }
+
     private sealed record Highlight(string Icon, string Title, string Description, string Href);
 
     private IReadOnlyList<Highlight> Highlights =>

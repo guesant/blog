@@ -30,6 +30,7 @@
   <data name="kind_case"><value>estudo de caso</value></data>
   <data name="kind_project"><value>projeto</value></data>
   <data name="kind_experiment"><value>experimento</value></data>
+  <data name="kind_related"><value>relacionado</value></data>
   <data name="open"><value>abrir</value></data>
   <data name="content"><value>conteúdo</value></data>
   <data name="explore_more_title"><value>outras formas de explorar</value></data>

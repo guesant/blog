@@ -19,7 +19,7 @@ db-update:
 
 status:
     {{kubectl}} get pods
-    kubectl -n argocd get application blog-satellite
+    kubectl -n argocd get application blog cloudflared network-policies postgres
 
 webhook-register url:
     gh api repos/guesant/blog/hooks -f name=web -f active=true \

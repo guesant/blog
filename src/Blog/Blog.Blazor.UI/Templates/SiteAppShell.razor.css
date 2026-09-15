@@ -6,6 +6,9 @@
     min-height: 0;
     overflow: hidden;
 }
+.page-shell.page-shell-no-right {
+    grid-template-columns: var(--site-nav-width) minmax(0, 1fr);
+}
 .page-layout {
     display: contents;
 }

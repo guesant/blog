@@ -15,7 +15,7 @@ else
     <BbPortalHost />
     <SiteToastHost />
     <SiteConfirmDialog />
-    <SiteAppShell>
+    <SiteAppShell SidebarRight="@RightSidebarFragment">
         <Brand>
             <SiteLink Class="site-nav-brand text-decoration-none"
                 Href="@LocalizedPath("home")">guesant.net</SiteLink>
@@ -33,9 +33,6 @@ else
         <SidebarLeft>
             <SiteSidebar Snapshot="@Snapshot" />
         </SidebarLeft>
-        <SidebarRight>
-            <SiteSidebar Snapshot="@Snapshot" Right="true" />
-        </SidebarRight>
         <Footer>
             <SiteFooter Snapshot="@Snapshot" />
         </Footer>
@@ -45,4 +42,9 @@ else
             </CascadingValue>
         </ChildContent>
     </SiteAppShell>
+}
+
+@code {
+    private RenderFragment? RightSidebarFragment =>
+        ShowRightSidebar ? @<SiteSidebar Snapshot="@Snapshot" Right="true" /> : null;
 }

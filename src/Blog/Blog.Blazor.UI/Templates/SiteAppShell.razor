@@ -1,4 +1,5 @@
-<div class="page-shell" data-layout-template="sidebar-wrapper-aside">
+<div class="page-shell @(SidebarRight is null ? "page-shell-no-right" : null)"
+    data-layout-template="sidebar-wrapper-aside">
     <header class="site-nav-topbar">
         @Brand
         @Toggle

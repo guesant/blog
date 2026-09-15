@@ -1127,6 +1127,7 @@ if (
     || emptyVisibility.Topics
     || emptyVisibility.Collections
     || emptyVisibility.Snippets
+    || emptyVisibility.RightSidebar
 )
     throw new InvalidOperationException("an empty snapshot must have no visible sidebar routes");
 
@@ -1190,6 +1191,27 @@ var contactWithProfile = BuildVisibilitySnapshot(
 );
 if (!PublicVisibilityRules.Compute(contactWithProfile).Contact)
     throw new InvalidOperationException("contact must become visible with a usable profile url");
+if (!PublicVisibilityRules.Compute(contactWithProfile).RightSidebar)
+    throw new InvalidOperationException(
+        "the right sidebar must become visible once a contact channel is published"
+    );
+
+var buildSourceWithoutSha = BuildVisibilitySnapshot(
+    sourceRepositoryUrl: "https://git.example.test/portfolio"
+);
+if (PublicVisibilityRules.Compute(buildSourceWithoutSha).RightSidebar)
+    throw new InvalidOperationException(
+        "the right sidebar must stay hidden without a commit sha alongside the source url"
+    );
+
+var buildSourceWithShaAndUrl = BuildVisibilitySnapshot(
+    commitSha: "abc1234",
+    sourceRepositoryUrl: "https://git.example.test/portfolio"
+);
+if (!PublicVisibilityRules.Compute(buildSourceWithShaAndUrl).RightSidebar)
+    throw new InvalidOperationException(
+        "the right sidebar must become visible once build source and commit sha are published"
+    );
 
 var aboutWithProfile = BuildVisibilitySnapshot(
     profile: new PublicProfile("Ada", "Engineer", "Remote", "Bio")
@@ -1264,15 +1286,24 @@ static PublicSiteSnapshot BuildVisibilitySnapshot(
     bool contactAvailable = false,
     PublicProtectedEmailChallenge? protectedEmail = null,
     List<PublicContactProfile>? contactProfiles = null,
-    JsonElement? resume = null
+    JsonElement? resume = null,
+    string? commitSha = null,
+    string? sourceRepositoryUrl = null
 )
 {
     var chrome = new PublicChrome(
-        new PublicSite(null, null, null, contactAvailable, contactProfiles, protectedEmail),
+        new PublicSite(
+            null,
+            null,
+            sourceRepositoryUrl,
+            contactAvailable,
+            contactProfiles,
+            protectedEmail
+        ),
         profile,
         "some rights reserved",
         new PublicNavigation([], []),
-        new PublicBuild(null, null),
+        new PublicBuild(commitSha, null),
         PublicVisibility.None
     );
     return new PublicSiteSnapshot(

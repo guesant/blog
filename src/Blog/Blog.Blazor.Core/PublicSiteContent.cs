@@ -332,7 +332,8 @@ public sealed record PublicVisibility(
     [property: JsonPropertyName("findings")] bool Findings,
     [property: JsonPropertyName("topics")] bool Topics,
     [property: JsonPropertyName("collections")] bool Collections,
-    [property: JsonPropertyName("snippets")] bool Snippets
+    [property: JsonPropertyName("snippets")] bool Snippets,
+    [property: JsonPropertyName("right_sidebar")] bool RightSidebar
 )
 {
     public static readonly PublicVisibility None = new(
@@ -349,7 +350,8 @@ public sealed record PublicVisibility(
         Findings: false,
         Topics: false,
         Collections: false,
-        Snippets: false
+        Snippets: false,
+        RightSidebar: false
     );
 }
 

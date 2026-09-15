@@ -5,6 +5,7 @@ namespace Blog.Blazor.Client.Layout;
 public partial class MainLayout
 {
     private PublicSiteSnapshot? Snapshot { get; set; }
+    private bool ShowRightSidebar => Snapshot?.Chrome.Visibility.RightSidebar == true;
     private System.Globalization.CultureInfo CurrentCulture =>
         Cultures.Normalize(System.Globalization.CultureInfo.CurrentUICulture.Name);
 

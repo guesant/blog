@@ -45,8 +45,16 @@ public static class PublicVisibilityRules
             Findings: snapshot.Findings.Count > 0,
             Topics: snapshot.Topics.Count > 0,
             Collections: snapshot.Collections.Count > 0,
-            Snippets: snapshot.Snippets.Count > 0
+            Snippets: snapshot.Snippets.Count > 0,
+            RightSidebar: HasRightSidebarContent(snapshot)
         );
+
+    public static bool HasRightSidebarContent(PublicSiteSnapshot snapshot) =>
+        HasContact(snapshot)
+        || HasLicense(snapshot)
+        || HasCredits(snapshot)
+        || HasFollow(snapshot)
+        || HasBuildSource(snapshot);
 
     public static bool HasCases(PublicSiteSnapshot snapshot) => snapshot.Cases.Count > 0;
 
@@ -123,6 +131,15 @@ public static class PublicVisibilityRules
     private static string? SafeContactUrl(string? value) =>
         Uri.TryCreate(value, UriKind.Absolute, out var uri)
         && uri.Scheme is "http" or "https" or "mailto"
+            ? uri.AbsoluteUri
+            : null;
+
+    private static bool HasBuildSource(PublicSiteSnapshot snapshot) =>
+        !string.IsNullOrWhiteSpace(snapshot.Chrome.Build.CommitSha)
+        && SafeExternalUrl(snapshot.Chrome.Site.SourceRepositoryUrl) is not null;
+
+    private static string? SafeExternalUrl(string? value) =>
+        Uri.TryCreate(value, UriKind.Absolute, out var uri) && uri.Scheme is "http" or "https"
             ? uri.AbsoluteUri
             : null;
 }

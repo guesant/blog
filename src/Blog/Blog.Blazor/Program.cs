@@ -14,6 +14,7 @@ using Microsoft.EntityFrameworkCore;
 using pax.BlazorChartJs;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Configuration.AddKeyPerFile("/secrets/app", optional: true);
 
 builder
     .Services.AddRazorComponents()

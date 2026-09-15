@@ -114,10 +114,11 @@ public sealed partial class PublicSiteContentProvider(
                 ),
             Copyright(context, siteId, profile?.Name ?? Format.Text(site?.ShortName), locale),
             Navigation(context, locale),
-            new PublicBuild(_commitSha, _buildTime)
+            new PublicBuild(_commitSha, _buildTime),
+            PublicVisibility.None
         );
 
-        return new PublicSiteSnapshot(
+        var draft = new PublicSiteSnapshot(
             1,
             locale,
             DateTimeOffset.UtcNow.ToString("O"),
@@ -139,6 +140,11 @@ public sealed partial class PublicSiteContentProvider(
             Featured(FeaturedQueries.WritingSlugs(context), writings, item => item.Slug),
             ResumePdfLocales()
         );
+
+        return draft with
+        {
+            Chrome = draft.Chrome with { Visibility = PublicVisibilityRules.Compute(draft) },
+        };
     }
 
     public async Task<PublicProtectedEmailChallenge?> CreateEmailChallengeAsync(

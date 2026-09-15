@@ -235,6 +235,20 @@ static void AssertContent(HarvestResult result)
         result.Snapshots["pt-BR"].Projects[0].Name == "Projeto Publico",
         "pt-BR translations must win over the en fallback"
     );
+
+    var visibility = en.Chrome.Visibility;
+    Check(visibility.About, "about must be visible when a profile is published");
+    Check(visibility.Resume, "resume must be visible when the resume has a summary");
+    Check(visibility.Portfolio, "portfolio must be visible with featured cases and projects");
+    Check(visibility.Cases, "cases must be visible when public case studies exist");
+    Check(visibility.Contact, "contact must be visible with usable contact profiles");
+    Check(visibility.Credits, "credits must be visible with an active credit entry");
+    Check(visibility.Writing, "writing must be visible with public writings");
+    Check(visibility.Findings, "findings must be visible with public findings");
+    Check(visibility.Collections, "collections must be visible with a public collection");
+    Check(visibility.Feed, "the feed must be visible once writings publish items");
+    Check(!visibility.License, "license must stay hidden without any license page content");
+    Check(!visibility.Follow, "follow must stay hidden without any follow page content");
 }
 
 static string Normalize(string json) =>

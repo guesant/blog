@@ -54,9 +54,7 @@ public partial class InformationalPages
             _ => Field("description"),
         };
     private bool HasPortfolioWork =>
-        Snapshot?.FeaturedCases is { Count: > 0 }
-        || Snapshot?.FeaturedProjects is { Count: > 0 }
-        || Snapshot?.Experiments is { Count: > 0 };
+        Snapshot is not null && PublicVisibilityRules.HasPortfolio(Snapshot);
     private string? PortfolioWorkTarget =>
         Snapshot?.FeaturedCases is { Count: > 0 } ? "#work"
         : HasPortfolioWork ? "#projects"

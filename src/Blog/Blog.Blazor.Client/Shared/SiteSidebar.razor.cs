@@ -15,6 +15,19 @@ public partial class SiteSidebar
     private bool IsAbout => IsRoute("about");
     private bool IsAboutChild => new[] { "portfolio", "resume", "cases", "projects" }.Any(IsRoute);
     private static IReadOnlyList<string> AboutChildren => ["resume", "portfolio", "cases"];
+    private bool ShowAboutBlock => Snapshot?.Chrome.Visibility.About == true;
+    private IReadOnlyList<string> VisibleAboutChildren =>
+        ShowAboutBlock ? AboutChildren.Where(HasAboutChildContent).ToArray() : [];
+
+    private bool HasAboutChildContent(string route) =>
+        Snapshot?.Chrome.Visibility is { } visibility
+        && route switch
+        {
+            "resume" => visibility.Resume,
+            "portfolio" => visibility.Portfolio,
+            "cases" => visibility.Cases,
+            _ => false,
+        };
 
     private string NavLabel(string route) =>
         Lower(
@@ -65,11 +78,11 @@ public partial class SiteSidebar
     private bool HasContent(string route) =>
         LastSegment(route) switch
         {
-            "snippets" => Snapshot?.Snippets.Count > 0,
-            "collections" => Snapshot?.Collections.Count > 0,
-            "topics" => Snapshot?.Topics.Count > 0,
-            "writing" => Snapshot?.Writings.Count > 0,
-            "findings" => Snapshot?.Findings.Count > 0,
+            "snippets" => Snapshot?.Chrome.Visibility.Snippets == true,
+            "collections" => Snapshot?.Chrome.Visibility.Collections == true,
+            "topics" => Snapshot?.Chrome.Visibility.Topics == true,
+            "writing" => Snapshot?.Chrome.Visibility.Writing == true,
+            "findings" => Snapshot?.Chrome.Visibility.Findings == true,
             _ => true,
         };
 

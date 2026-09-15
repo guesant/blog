@@ -246,31 +246,14 @@ public static class PublicMetadataEndpoints
     {
         if (snapshot is null)
             return [];
-        var items = snapshot
-            .Writings.Select(item => new FeedItem(
-                item.Title,
-                item.Excerpt,
-                item.Date,
-                AbsoluteUrl(Localize(item.Url, locale))
+        var items = PublicFeedContent
+            .Entries(snapshot)
+            .Select(entry => new FeedItem(
+                entry.Title,
+                entry.Excerpt,
+                entry.RawDate,
+                AbsoluteUrl(Localize(entry.RelativeUrl, locale))
             ))
-            .Concat(
-                snapshot
-                    .Findings.Where(item => !string.IsNullOrWhiteSpace(item.Title))
-                    .Select(item => new FeedItem(
-                        item.Title!,
-                        item.PersonalNote ?? item.ReasonFound ?? item.Description,
-                        item.FoundDate ?? item.PublishedDate,
-                        AbsoluteUrl(Localize(item.Url, locale))
-                    ))
-            )
-            .Concat(
-                snapshot.Collections.Select(item => new FeedItem(
-                    item.Title,
-                    item.Description,
-                    item.CreatedAt,
-                    AbsoluteUrl(Localize(item.Url, locale))
-                ))
-            )
             .Select(item => item with { Date = ParseDate(item.RawDate) })
             .OrderByDescending(item => item.Date ?? DateTimeOffset.MinValue)
             .Take(30)

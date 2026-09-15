@@ -1,5 +1,6 @@
 using System.Globalization;
 using System.Resources;
+using System.Text.Json;
 using Blog.Blazor.Core;
 using Blog.Blazor.Core.Localization;
 
@@ -1109,7 +1110,194 @@ if (utf8.Bytes != 9 || utf8.CodePoints != 5 || utf8.Hex != "4f 6c c3 a1 20 f0 9f
     throw new InvalidOperationException("UTF-8 inspector check failed");
 }
 
+var emptySnapshot = BuildVisibilitySnapshot();
+var emptyVisibility = PublicVisibilityRules.Compute(emptySnapshot);
+if (
+    emptyVisibility.About
+    || emptyVisibility.Resume
+    || emptyVisibility.Portfolio
+    || emptyVisibility.Cases
+    || emptyVisibility.Contact
+    || emptyVisibility.License
+    || emptyVisibility.Credits
+    || emptyVisibility.Follow
+    || emptyVisibility.Feed
+    || emptyVisibility.Writing
+    || emptyVisibility.Findings
+    || emptyVisibility.Topics
+    || emptyVisibility.Collections
+    || emptyVisibility.Snippets
+)
+    throw new InvalidOperationException("an empty snapshot must have no visible sidebar routes");
+
+var feedFromWriting = BuildVisibilitySnapshot(
+    writings: [new PublicWriting("post", "/writing/post", "Post", null, null, null, "2026-01-01")]
+);
+if (!PublicVisibilityRules.Compute(feedFromWriting).Feed)
+    throw new InvalidOperationException("a writing must make the feed visible");
+
+var feedFromUntitledFinding = BuildVisibilitySnapshot(
+    findings:
+    [
+        new PublicFinding(
+            "book",
+            "/findings/book",
+            "book",
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+        ),
+    ]
+);
+if (PublicVisibilityRules.Compute(feedFromUntitledFinding).Feed)
+    throw new InvalidOperationException("a finding without a title must not count toward the feed");
+
+var contactWithoutAvailability = BuildVisibilitySnapshot(
+    contactAvailable: false,
+    contactProfiles: [new PublicContactProfile("github", "GitHub", "https://github.test/me")]
+);
+if (PublicVisibilityRules.Compute(contactWithoutAvailability).Contact)
+    throw new InvalidOperationException(
+        "contact must stay hidden while the site marks it unavailable"
+    );
+
+var contactWithInvalidProfile = BuildVisibilitySnapshot(
+    contactAvailable: true,
+    contactProfiles: [new PublicContactProfile("github", "GitHub", "not-a-url")]
+);
+if (PublicVisibilityRules.Compute(contactWithInvalidProfile).Contact)
+    throw new InvalidOperationException(
+        "contact must stay hidden without a usable profile url or email"
+    );
+
+var contactWithProfile = BuildVisibilitySnapshot(
+    contactAvailable: true,
+    contactProfiles: [new PublicContactProfile("github", "GitHub", "https://github.test/me")]
+);
+if (!PublicVisibilityRules.Compute(contactWithProfile).Contact)
+    throw new InvalidOperationException("contact must become visible with a usable profile url");
+
+var aboutWithProfile = BuildVisibilitySnapshot(
+    profile: new PublicProfile("Ada", "Engineer", "Remote", "Bio")
+);
+if (!PublicVisibilityRules.Compute(aboutWithProfile).About)
+    throw new InvalidOperationException("about must become visible once a profile exists");
+
+var resumeWithoutContent = BuildVisibilitySnapshot(resume: JsonDocument.Parse("{}").RootElement);
+if (PublicVisibilityRules.Compute(resumeWithoutContent).Resume)
+    throw new InvalidOperationException("resume must stay hidden without any resume content");
+
+var resumeWithSummary = BuildVisibilitySnapshot(
+    resume: JsonDocument.Parse("""{"summary":"A quick summary"}""").RootElement
+);
+if (!PublicVisibilityRules.Compute(resumeWithSummary).Resume)
+    throw new InvalidOperationException("resume must become visible once a summary is published");
+
+var portfolioWithFeaturedCase = BuildVisibilitySnapshot(
+    featuredCases: [new PublicCaseStudy("case", "/cases/case", "Case", null, null, null, false)]
+);
+if (!PublicVisibilityRules.Compute(portfolioWithFeaturedCase).Portfolio)
+    throw new InvalidOperationException("portfolio must become visible with a featured case");
+
+var licenseWithBody = BuildVisibilitySnapshot(pages: PagesWith("license", ("code_body", "MIT")));
+if (!PublicVisibilityRules.Compute(licenseWithBody).License)
+    throw new InvalidOperationException(
+        "license must become visible once a body field is published"
+    );
+
+var followWithTitle = BuildVisibilitySnapshot(pages: PagesWith("follow", ("rss_title", "RSS")));
+if (!PublicVisibilityRules.Compute(followWithTitle).Follow)
+    throw new InvalidOperationException(
+        "follow must become visible once an entry title is published"
+    );
+
+var casesAndCredits = BuildVisibilitySnapshot(
+    cases: [new PublicCaseStudy("case", "/cases/case", "Case", null, null, null, false)],
+    credits: [new PublicCredit("library", "Library", null, null)]
+);
+var casesAndCreditsVisibility = PublicVisibilityRules.Compute(casesAndCredits);
+if (!casesAndCreditsVisibility.Cases || !casesAndCreditsVisibility.Credits)
+    throw new InvalidOperationException("cases and credits must become visible once published");
+
 Console.WriteLine("Blog.Blazor.Core checks passed.");
+
+static Dictionary<string, JsonElement> PagesWith(
+    string slug,
+    params (string Name, string Value)[] fields
+)
+{
+    var fieldsJson = string.Join(
+        ',',
+        fields.Select(field => $"\"{field.Name}\":\"{field.Value}\"")
+    );
+    return new Dictionary<string, JsonElement>(StringComparer.OrdinalIgnoreCase)
+    {
+        [slug] = JsonDocument.Parse($"{{{fieldsJson}}}").RootElement,
+    };
+}
+
+static PublicSiteSnapshot BuildVisibilitySnapshot(
+    PublicProfile? profile = null,
+    Dictionary<string, JsonElement>? pages = null,
+    List<PublicCaseStudy>? cases = null,
+    List<PublicCredit>? credits = null,
+    List<PublicWriting>? writings = null,
+    List<PublicFinding>? findings = null,
+    List<PublicCollection>? collections = null,
+    List<PublicCaseStudy>? featuredCases = null,
+    List<PublicProject>? featuredProjects = null,
+    List<PublicExperiment>? experiments = null,
+    bool contactAvailable = false,
+    PublicProtectedEmailChallenge? protectedEmail = null,
+    List<PublicContactProfile>? contactProfiles = null,
+    JsonElement? resume = null
+)
+{
+    var chrome = new PublicChrome(
+        new PublicSite(null, null, null, contactAvailable, contactProfiles, protectedEmail),
+        profile,
+        "some rights reserved",
+        new PublicNavigation([], []),
+        new PublicBuild(null, null),
+        PublicVisibility.None
+    );
+    return new PublicSiteSnapshot(
+        1,
+        "en",
+        "2026-01-01T00:00:00Z",
+        chrome,
+        pages ?? new Dictionary<string, JsonElement>(StringComparer.OrdinalIgnoreCase),
+        [],
+        cases ?? [],
+        writings ?? [],
+        findings ?? [],
+        collections ?? [],
+        [],
+        [],
+        experiments ?? [],
+        [],
+        credits ?? [],
+        resume ?? JsonDocument.Parse("{}").RootElement,
+        featuredCases,
+        featuredProjects,
+        null,
+        null
+    );
+}
 
 static void AssertStatistics(string text, TextStatistics expected)
 {

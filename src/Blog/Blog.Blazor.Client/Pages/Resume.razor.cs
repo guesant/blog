@@ -12,28 +12,12 @@ public partial class Resume
     private JsonElement ResumeData => Snapshot?.Resume ?? default;
     private IReadOnlyList<string> ResumePdfLocales => Snapshot?.ResumePdfLocales ?? [];
 
-    private string Field(string name)
-    {
-        if (
-            ResumeData.ValueKind != JsonValueKind.Object
-            || !ResumeData.TryGetProperty(name, out var value)
-            || value.ValueKind != JsonValueKind.String
-        )
-            return string.Empty;
-        return value.GetString() ?? string.Empty;
-    }
+    private string Field(string name) => ResumeContent.Field(ResumeData, name);
 
-    private string PageField(string name, string fallback)
-    {
-        if (
-            Snapshot?.Pages.TryGetValue("resume", out var page) != true
-            || page.ValueKind != JsonValueKind.Object
-            || !page.TryGetProperty(name, out var value)
-            || value.ValueKind != JsonValueKind.String
-        )
-            return fallback;
-        return value.GetString() ?? fallback;
-    }
+    private string PageField(string name, string fallback) =>
+        Snapshot is null
+            ? fallback
+            : PublicContentFields.PageField(Snapshot, "resume", name, fallback);
 
     private IReadOnlyList<PublicCaseStudy> SelectedCases =>
         ReadArray("selected_cases")
@@ -46,20 +30,10 @@ public partial class Resume
         ReadArray("languages").Select(value => new ResumeLanguage(value)).ToArray();
 
     private IReadOnlyList<JsonElement> ReadArray(string name) =>
-        ResumeData.ValueKind == JsonValueKind.Object
-        && ResumeData.TryGetProperty(name, out var value)
-        && value.ValueKind == JsonValueKind.Array
-            ? value.EnumerateArray().ToArray()
-            : [];
+        ResumeContent.ReadArray(ResumeData, name);
 
     private IReadOnlyList<JsonElement> VisibleRows(string name) =>
-        ReadArray(name)
-            .Where(IsVisibleResumeEntry)
-            .Where(row =>
-                !name.Equals("experience", StringComparison.OrdinalIgnoreCase)
-                || IsIncludedInResume(row)
-            )
-            .ToArray();
+        ResumeContent.VisibleRows(ResumeData, name);
 
     private RenderFragment Rows(string name, string titleKey, string subtitleKey) =>
         builder =>
@@ -115,31 +89,11 @@ public partial class Resume
             )
         );
 
-    private static bool IsVisibleResumeEntry(JsonElement value) =>
-        !value.TryGetProperty("hidden", out var hidden) || hidden.ValueKind != JsonValueKind.True;
-
-    private static bool IsIncludedInResume(JsonElement value) =>
-        value.TryGetProperty("includeInResume", out var included)
-        && included.ValueKind == JsonValueKind.True;
-
     private static string StringValue(JsonElement value, string key) =>
-        value.ValueKind == JsonValueKind.Object
-        && value.TryGetProperty(key, out var field)
-        && field.ValueKind == JsonValueKind.String
-            ? field.GetString() ?? string.Empty
-            : string.Empty;
+        ResumeContent.StringValue(value, key);
 
     private static IReadOnlyList<string> StringArray(JsonElement value, string key) =>
-        value.ValueKind == JsonValueKind.Object
-        && value.TryGetProperty(key, out var field)
-        && field.ValueKind == JsonValueKind.Array
-            ? field
-                .EnumerateArray()
-                .Where(item => item.ValueKind == JsonValueKind.String)
-                .Select(item => item.GetString() ?? string.Empty)
-                .Where(item => !string.IsNullOrWhiteSpace(item))
-                .ToArray()
-            : [];
+        ResumeContent.StringArray(value, key);
 
     private static string? SafeUrl(string? value) =>
         Uri.TryCreate(value, UriKind.Absolute, out var uri) && uri.Scheme is "http" or "https"

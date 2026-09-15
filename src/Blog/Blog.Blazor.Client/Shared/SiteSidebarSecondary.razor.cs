@@ -8,19 +8,28 @@ public partial class SiteSidebarSecondary
     public PublicSiteSnapshot? Snapshot { get; set; }
     private string ConnectLabel => L["connect"];
     private string UpdatesLabel => L["updates"];
+    private bool ShowConnect => Snapshot?.Chrome.Visibility.Contact == true;
+    private bool ShowFollowLink => Snapshot?.Chrome.Visibility.Follow == true;
+    private bool ShowFeeds => ShowFollowLink && Snapshot?.Chrome.Visibility.Feed == true;
+    private bool ShowUpdates => ShowFollowLink || ShowFeeds;
 
-    private (string Route, string Label)? FollowLink =>
-        Snapshot
-            ?.Chrome.Navigation.FooterLinks.Where(item =>
-                item.Route.Trim('/')
-                    .Split('/', StringSplitOptions.RemoveEmptyEntries)
-                    .LastOrDefault() == "follow"
-            )
-            .Select(item =>
-                ((string Route, string Label)?)
-                    ("follow", (item.Label ?? "follow").ToLowerInvariant())
-            )
-            .FirstOrDefault();
+    private string FollowLabel
+    {
+        get
+        {
+            var footerLabel = Snapshot
+                ?.Chrome.Navigation.FooterLinks.FirstOrDefault(item =>
+                    LastSegment(item.Route) == "follow"
+                )
+                ?.Label;
+            if (!string.IsNullOrWhiteSpace(footerLabel))
+                return footerLabel.ToLowerInvariant();
+
+            return Snapshot is null
+                ? string.Empty
+                : PublicContentFields.PageField(Snapshot, "follow", "title").ToLowerInvariant();
+        }
+    }
 
     private IReadOnlyList<(string Href, string Icon, string Label)> Feeds =>
         [(L["feed_xml"], "rss", "RSS"), (L["atom_xml"], "rss", "Atom")];
@@ -29,11 +38,22 @@ public partial class SiteSidebarSecondary
     private string SourceLabel => L["source"];
 
     private IReadOnlyList<(string Route, string Icon, string Label)> LegalLinks =>
-        [
-            ("license", "file-text", L["license"]),
-            ("credits", "award", L["credits"]),
-            ("contact", "message-circle", L["report_issue"]),
-        ];
+        new (string Route, string Icon, string Label, bool Visible)[]
+        {
+            ("license", "file-text", L["license"], Snapshot?.Chrome.Visibility.License == true),
+            ("credits", "award", L["credits"], Snapshot?.Chrome.Visibility.Credits == true),
+            (
+                "contact",
+                "message-circle",
+                L["report_issue"],
+                Snapshot?.Chrome.Visibility.Contact == true
+            ),
+        }
+            .Where(link => link.Visible)
+            .Select(link => (link.Route, link.Icon, link.Label))
+            .ToArray();
+
+    private bool ShowLegal => LegalLinks.Count > 0;
 
     private string? BuildSha =>
         string.IsNullOrWhiteSpace(Snapshot?.Chrome.Build.CommitSha)
@@ -53,6 +73,10 @@ public partial class SiteSidebarSecondary
             path.Equals("home", StringComparison.OrdinalIgnoreCase) ? "/" : path,
             Cultures.FromPath(RequestPath).Name
         );
+
+    private static string LastSegment(string route) =>
+        route.Trim('/').Split('/', StringSplitOptions.RemoveEmptyEntries).LastOrDefault()
+        ?? string.Empty;
 
     private static string? SafeExternalUrl(string? value) =>
         Uri.TryCreate(value, UriKind.Absolute, out var uri) && uri.Scheme is "http" or "https"

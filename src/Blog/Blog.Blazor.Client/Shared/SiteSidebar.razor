@@ -46,29 +46,35 @@
                 </SiteNavGroup>
             }
         </nav>
-        <SiteNavDivider />
-        <ul>
-            <li>
-                <SiteNavLink Class="@(IsAboutChild ? "is-active-parent" : null)"
-                    Href="@LocalizedPath("about")"
-                    AriaCurrent="@(IsAbout ? "page" : null)">
-                    <SidebarNavIcon Route="about" Active="@IsAbout" />
-                    <SiteNavItemLabel>@NavLabel("about")</SiteNavItemLabel>
-                </SiteNavLink>
-                <ul class="site-nav-sub">
-                    @foreach (var route in AboutChildren)
+        @if (ShowAboutBlock)
+        {
+            <SiteNavDivider />
+            <ul>
+                <li>
+                    <SiteNavLink Class="@(IsAboutChild ? "is-active-parent" : null)"
+                        Href="@LocalizedPath("about")"
+                        AriaCurrent="@(IsAbout ? "page" : null)">
+                        <SidebarNavIcon Route="about" Active="@IsAbout" />
+                        <SiteNavItemLabel>@NavLabel("about")</SiteNavItemLabel>
+                    </SiteNavLink>
+                    @if (VisibleAboutChildren.Count > 0)
                     {
-                        <li>
-                            <SiteNavLink Href="@LocalizedPath(route)"
-                                AriaCurrent="@(IsRoute(route) ? "page" : null)">
-                                <SidebarNavIcon Route="@route" Active="@IsRoute(route)" />
-                                <SiteNavItemLabel>@NavLabel(route)</SiteNavItemLabel>
-                            </SiteNavLink>
-                        </li>
+                        <ul class="site-nav-sub">
+                            @foreach (var route in VisibleAboutChildren)
+                            {
+                                <li>
+                                    <SiteNavLink Href="@LocalizedPath(route)"
+                                        AriaCurrent="@(IsRoute(route) ? "page" : null)">
+                                        <SidebarNavIcon Route="@route" Active="@IsRoute(route)" />
+                                        <SiteNavItemLabel>@NavLabel(route)</SiteNavItemLabel>
+                                    </SiteNavLink>
+                                </li>
+                            }
+                        </ul>
                     }
-                </ul>
-            </li>
-        </ul>
+                </li>
+            </ul>
+        }
         <SiteNavDivider />
         <ul>
             <li>

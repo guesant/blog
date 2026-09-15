@@ -314,8 +314,44 @@ public sealed record PublicChrome(
     [property: JsonPropertyName("profile")] PublicProfile? Profile,
     [property: JsonPropertyName("copyright")] string Copyright,
     [property: JsonPropertyName("navigation")] PublicNavigation Navigation,
-    [property: JsonPropertyName("build")] PublicBuild Build
+    [property: JsonPropertyName("build")] PublicBuild Build,
+    [property: JsonPropertyName("visibility")] PublicVisibility Visibility
 );
+
+public sealed record PublicVisibility(
+    [property: JsonPropertyName("about")] bool About,
+    [property: JsonPropertyName("resume")] bool Resume,
+    [property: JsonPropertyName("portfolio")] bool Portfolio,
+    [property: JsonPropertyName("cases")] bool Cases,
+    [property: JsonPropertyName("contact")] bool Contact,
+    [property: JsonPropertyName("license")] bool License,
+    [property: JsonPropertyName("credits")] bool Credits,
+    [property: JsonPropertyName("follow")] bool Follow,
+    [property: JsonPropertyName("feed")] bool Feed,
+    [property: JsonPropertyName("writing")] bool Writing,
+    [property: JsonPropertyName("findings")] bool Findings,
+    [property: JsonPropertyName("topics")] bool Topics,
+    [property: JsonPropertyName("collections")] bool Collections,
+    [property: JsonPropertyName("snippets")] bool Snippets
+)
+{
+    public static readonly PublicVisibility None = new(
+        About: false,
+        Resume: false,
+        Portfolio: false,
+        Cases: false,
+        Contact: false,
+        License: false,
+        Credits: false,
+        Follow: false,
+        Feed: false,
+        Writing: false,
+        Findings: false,
+        Topics: false,
+        Collections: false,
+        Snippets: false
+    );
+}
 
 public sealed record PublicSite(
     [property: JsonPropertyName("short_name")] string? ShortName,

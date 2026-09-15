@@ -5,70 +5,82 @@
 @inject ILocalizedUrlBuilder Urls
 
 <div class="site-sidebar-secondary">
-    <section class="site-sidebar-section" aria-labelledby="right-sidebar-connect-heading">
-        <SiteText Variant="SiteTextVariant.SectionLabel"
-            Class="site-nav-group-label"
-            id="right-sidebar-connect-heading">@ConnectLabel</SiteText>
-        <ul>
-            <li>
-                <SiteNavLink Href="@LocalizedPath("contact")">
-                    <SiteIcon Name="mail" Size="14" Class="icon footer-contact-icon" />
-                    <SiteNavItemLabel>@ContactPageLabel</SiteNavItemLabel>
-                </SiteNavLink>
-            </li>
-        </ul>
-        <SiteStack Gap="SiteSpace.Sm" Class="site-nav-sub">
-            <ContactChannels Profiles="@(Snapshot?.Chrome.Site.ContactProfiles ?? [])"
-                EmailChallenge="@Snapshot?.Chrome.Site.ProtectedEmail"
-                EmailAvailable="@(Snapshot?.Chrome.Site.ContactAvailable == true)"
-                UseSidebarStyle="true" />
-        </SiteStack>
-    </section>
-
-    <section class="site-sidebar-section" aria-labelledby="right-sidebar-legal-heading">
-        <SiteText Variant="SiteTextVariant.SectionLabel"
-            Class="site-nav-group-label"
-            id="right-sidebar-legal-heading">@LegalLabel</SiteText>
-        <ul>
-            @foreach (var link in LegalLinks)
-            {
-                <li>
-                    <SiteNavLink Href="@LocalizedPath(link.Route)">
-                        <SiteIcon Name="@link.Icon" Size="14" />
-                        <SiteNavItemLabel>@link.Label</SiteNavItemLabel>
-                    </SiteNavLink>
-                </li>
-            }
-        </ul>
-    </section>
-
-    <section class="site-sidebar-section" aria-labelledby="right-sidebar-updates-heading">
-        <SiteText Variant="SiteTextVariant.SectionLabel"
-            Class="site-nav-group-label"
-            id="right-sidebar-updates-heading">@UpdatesLabel</SiteText>
-        @if (FollowLink is { } follow)
-        {
+    @if (ShowConnect)
+    {
+        <section class="site-sidebar-section" aria-labelledby="right-sidebar-connect-heading">
+            <SiteText Variant="SiteTextVariant.SectionLabel"
+                Class="site-nav-group-label"
+                id="right-sidebar-connect-heading">@ConnectLabel</SiteText>
             <ul>
                 <li>
-                    <SiteNavLink Href="@LocalizedPath(follow.Route)">
-                        <SiteIcon Name="bell" Size="14" />
-                        <SiteNavItemLabel>@follow.Label</SiteNavItemLabel>
+                    <SiteNavLink Href="@LocalizedPath("contact")">
+                        <SiteIcon Name="mail" Size="14" Class="icon footer-contact-icon" />
+                        <SiteNavItemLabel>@ContactPageLabel</SiteNavItemLabel>
                     </SiteNavLink>
                 </li>
             </ul>
-        }
-        <ul class="site-nav-sub">
-            @foreach (var feed in Feeds)
+            <SiteStack Gap="SiteSpace.Sm" Class="site-nav-sub">
+                <ContactChannels Profiles="@(Snapshot?.Chrome.Site.ContactProfiles ?? [])"
+                    EmailChallenge="@Snapshot?.Chrome.Site.ProtectedEmail"
+                    EmailAvailable="@(Snapshot?.Chrome.Site.ContactAvailable == true)"
+                    UseSidebarStyle="true" />
+            </SiteStack>
+        </section>
+    }
+
+    @if (ShowLegal)
+    {
+        <section class="site-sidebar-section" aria-labelledby="right-sidebar-legal-heading">
+            <SiteText Variant="SiteTextVariant.SectionLabel"
+                Class="site-nav-group-label"
+                id="right-sidebar-legal-heading">@LegalLabel</SiteText>
+            <ul>
+                @foreach (var link in LegalLinks)
+                {
+                    <li>
+                        <SiteNavLink Href="@LocalizedPath(link.Route)">
+                            <SiteIcon Name="@link.Icon" Size="14" />
+                            <SiteNavItemLabel>@link.Label</SiteNavItemLabel>
+                        </SiteNavLink>
+                    </li>
+                }
+            </ul>
+        </section>
+    }
+
+    @if (ShowUpdates)
+    {
+        <section class="site-sidebar-section" aria-labelledby="right-sidebar-updates-heading">
+            <SiteText Variant="SiteTextVariant.SectionLabel"
+                Class="site-nav-group-label"
+                id="right-sidebar-updates-heading">@UpdatesLabel</SiteText>
+            @if (ShowFollowLink)
             {
-                <li>
-                    <SiteNavLink Href="@feed.Href" Target="_blank" Rel="noopener">
-                        <SiteIcon Name="@feed.Icon" Size="14" />
-                        <SiteNavItemLabel>@feed.Label</SiteNavItemLabel>
-                    </SiteNavLink>
-                </li>
+                <ul>
+                    <li>
+                        <SiteNavLink Href="@LocalizedPath("follow")">
+                            <SiteIcon Name="bell" Size="14" />
+                            <SiteNavItemLabel>@FollowLabel</SiteNavItemLabel>
+                        </SiteNavLink>
+                    </li>
+                </ul>
             }
-        </ul>
-    </section>
+            @if (ShowFeeds)
+            {
+                <ul class="site-nav-sub">
+                    @foreach (var feed in Feeds)
+                    {
+                        <li>
+                            <SiteNavLink Href="@feed.Href" Target="_blank" Rel="noopener">
+                                <SiteIcon Name="@feed.Icon" Size="14" />
+                                <SiteNavItemLabel>@feed.Label</SiteNavItemLabel>
+                            </SiteNavLink>
+                        </li>
+                    }
+                </ul>
+            }
+        </section>
+    }
 
     @if (BuildUrl is string buildUrl && BuildSha is string sha)
     {

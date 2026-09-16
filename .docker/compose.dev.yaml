@@ -10,13 +10,14 @@ services:
       NUGET_PACKAGES: "/src/.nuget-cache"
       # Overridable from a .env file at the repo root (Docker Compose only
       # auto-loads a file literally named .env, never .env.local) so a real
-      # Google OAuth client can be tested in dev; falls back to a
-      # non-empty placeholder otherwise, since Program.cs registers the
-      # Google auth scheme whenever these are non-empty and an empty
-      # ClientId throws on every request rather than just on login.
-      PORTFOLIO_ADMIN_GOOGLE_CLIENT_ID: "${PORTFOLIO_ADMIN_GOOGLE_CLIENT_ID:-dev-placeholder}"
-      PORTFOLIO_ADMIN_GOOGLE_CLIENT_SECRET: "${PORTFOLIO_ADMIN_GOOGLE_CLIENT_SECRET:-dev-placeholder}"
-      PORTFOLIO_ADMIN_GOOGLE_EMAIL: "${PORTFOLIO_ADMIN_GOOGLE_EMAIL:-}"
+      # Keycloak client can be tested in dev; empty by default, so
+      # Program.cs skips the OpenID Connect scheme and the site runs
+      # without a login, since the handler validates its options on every
+      # request rather than just on login.
+      PORTFOLIO_ADMIN_OIDC_AUTHORITY: "${PORTFOLIO_ADMIN_OIDC_AUTHORITY:-}"
+      PORTFOLIO_ADMIN_OIDC_CLIENT_ID: "${PORTFOLIO_ADMIN_OIDC_CLIENT_ID:-}"
+      PORTFOLIO_ADMIN_OIDC_CLIENT_SECRET: "${PORTFOLIO_ADMIN_OIDC_CLIENT_SECRET:-}"
+      PORTFOLIO_ADMIN_OIDC_GROUP: "${PORTFOLIO_ADMIN_OIDC_GROUP:-admins}"
     command: sh -lc 'dotnet restore src/Blog.Blazor.slnx --locked-mode && exec sh ./tools/scripts/run-with-tectonic.sh'
   tools:
     build:

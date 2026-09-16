@@ -4,6 +4,7 @@ Registro único de decisões tomadas (com o porquê) e pendências abertas. Comm
 
 ## Decisões
 
+- Login do `/admin` passa a ser OpenID Connect contra o realm `homelab` do Keycloak, e não mais Google direto (2026-09-16). O Google continua sendo o provedor de identidade, mas só o Keycloak fala com ele; o blog recebe `PORTFOLIO_ADMIN_OIDC_AUTHORITY`, `_CLIENT_ID`, `_CLIENT_SECRET` e `_GROUP` (padrão `admins`) e só aceita quem chega com esse grupo no claim `groups`. O esquema continua opcional: sem as três primeiras variáveis o site sobe sem login, como antes com o Google, porque a validação das opções do handler roda em toda requisição e derrubaria o site inteiro. O `sign-out` agora encerra também a sessão no Keycloak (`/signout-callback-oidc`), e o `sign-in` usa PKCE. Os valores de produção vêm do `hl-infrastructure` (ConfigMap para os públicos, `SopsSecret` `app-secret` para o segredo), e o client `blog` do realm é declarado pelo OpenTofu lá.
 - Rotas públicas de detalhe usam `{publicId}-{slug}`: o id de 6 hex identifica o item e o slug é decorativo, então renomear um slug não quebra links; slugs antigos continuam resolvendo.
 - `/writing`, `/findings` e `/collections` são o feed da home com o tipo fixado pela rota, para que "limpar filtros" mantenha o visitante na seção escolhida.
 - CSharpier é o único formatador de C#; `dotnet format whitespace` saiu das receitas por brigar com ele (blocos de uma linha e `for` aninhados).

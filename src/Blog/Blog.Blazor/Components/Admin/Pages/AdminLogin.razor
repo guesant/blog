@@ -7,7 +7,7 @@
 <SiteAuthCard Title="Admin Login"
     BackHref="/"
     BackLabel="Back to the site"
-    Error="@(HasError ? "Google sign-in failed or the account isn't authorized." : null)">
+    Error="@(HasError ? "Sign-in failed or the account isn't authorized." : null)">
     <SiteForm Method="post"
         Action="/admin/sign-in"
         Mode="SiteFormMode.Static"
@@ -17,6 +17,6 @@
         <SiteInput type="hidden" name="returnUrl" value="@ReturnUrl" />
         <SiteButton Variant="SiteButtonVariant.Default"
             Type="SiteButtonType.Submit"><SiteIcon Name="log-in"
-                Size="14" />Continue with Google</SiteButton>
+                Size="14" />Continue with SSO</SiteButton>
     </SiteForm>
 </SiteAuthCard>

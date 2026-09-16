@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Google;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 
 namespace Blog.Blazor.Auth;
 
@@ -27,7 +27,7 @@ public static class AdminAuthEndpoints
         if (!await TryValidateAntiforgeryAsync(context, antiforgery))
             return Results.BadRequest();
 
-        if (await schemeProvider.GetSchemeAsync(GoogleDefaults.AuthenticationScheme) is null)
+        if (await schemeProvider.GetSchemeAsync(OpenIdConnectDefaults.AuthenticationScheme) is null)
             return Results.LocalRedirect("/admin/login?error=1");
 
         var form = await context.Request.ReadFormAsync();
@@ -36,20 +36,30 @@ public static class AdminAuthEndpoints
 
         return Results.Challenge(
             new AuthenticationProperties { RedirectUri = target },
-            [GoogleDefaults.AuthenticationScheme]
+            [OpenIdConnectDefaults.AuthenticationScheme]
         );
     }
 
     private static async Task<IResult> HandleLogoutAsync(
         HttpContext context,
-        IAntiforgery antiforgery
+        IAntiforgery antiforgery,
+        IAuthenticationSchemeProvider schemeProvider
     )
     {
         if (!await TryValidateAntiforgeryAsync(context, antiforgery))
             return Results.BadRequest();
 
-        await context.SignOutAsync(SchemeName);
-        return Results.LocalRedirect("/admin/login");
+        var properties = new AuthenticationProperties { RedirectUri = "/admin/login" };
+        if (await schemeProvider.GetSchemeAsync(OpenIdConnectDefaults.AuthenticationScheme) is null)
+        {
+            await context.SignOutAsync(SchemeName, properties);
+            return Results.LocalRedirect("/admin/login");
+        }
+
+        return Results.SignOut(
+            properties,
+            [SchemeName, OpenIdConnectDefaults.AuthenticationScheme]
+        );
     }
 
     private static async Task<bool> TryValidateAntiforgeryAsync(

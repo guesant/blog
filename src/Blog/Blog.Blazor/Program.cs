@@ -7,10 +7,11 @@ using Blog.Blazor.Components;
 using Blog.Blazor.Core;
 using Blog.Blazor.Core.Localization;
 using Blog.Blazor.Data;
-using Microsoft.AspNetCore.Authentication.Google;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using pax.BlazorChartJs;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -87,10 +88,13 @@ builder.Services.AddChartJs(options =>
     options.ChartJsLocation = "/vendor/chartjs/chart.esm-shim.js"
 );
 
-var googleClientId = builder.Configuration["PORTFOLIO_ADMIN_GOOGLE_CLIENT_ID"];
-var googleClientSecret = builder.Configuration["PORTFOLIO_ADMIN_GOOGLE_CLIENT_SECRET"];
-var googleConfigured =
-    !string.IsNullOrEmpty(googleClientId) && !string.IsNullOrEmpty(googleClientSecret);
+var oidcAuthority = builder.Configuration["PORTFOLIO_ADMIN_OIDC_AUTHORITY"];
+var oidcClientId = builder.Configuration["PORTFOLIO_ADMIN_OIDC_CLIENT_ID"];
+var oidcClientSecret = builder.Configuration["PORTFOLIO_ADMIN_OIDC_CLIENT_SECRET"];
+var oidcConfigured =
+    !string.IsNullOrEmpty(oidcAuthority)
+    && !string.IsNullOrEmpty(oidcClientId)
+    && !string.IsNullOrEmpty(oidcClientSecret);
 
 var authenticationBuilder = builder
     .Services.AddAuthentication(AdminAuthEndpoints.SchemeName)
@@ -114,33 +118,40 @@ var authenticationBuilder = builder
         }
     );
 
-// IMPORTANT: AddGoogle's options validation runs on every request through the auth
-// middleware, not just when the Google scheme is challenged — an empty ClientId throws
-// a 500 sitewide. Only register the scheme once real credentials are configured, so the
-// site keeps running before the Google Cloud Console OAuth client is set up.
-if (googleConfigured)
+// IMPORTANT: the OpenID Connect handler validates its options on every request through
+// the auth middleware, not just when the scheme is challenged, and an empty Authority or
+// ClientId throws a 500 sitewide. Only register the scheme once the realm is configured,
+// so the site keeps running before the Keycloak client exists.
+if (oidcConfigured)
 {
-    authenticationBuilder.AddGoogle(
-        GoogleDefaults.AuthenticationScheme,
+    authenticationBuilder.AddOpenIdConnect(
+        OpenIdConnectDefaults.AuthenticationScheme,
         options =>
         {
-            options.ClientId = googleClientId!;
-            options.ClientSecret = googleClientSecret!;
+            options.Authority = oidcAuthority;
+            options.ClientId = oidcClientId;
+            options.ClientSecret = oidcClientSecret;
+            options.ResponseType = OpenIdConnectResponseType.Code;
+            options.UsePkce = true;
             options.SignInScheme = AdminAuthEndpoints.SchemeName;
+            options.SaveTokens = false;
+            options.MapInboundClaims = false;
+            options.TokenValidationParameters.NameClaimType = "preferred_username";
+            options.TokenValidationParameters.RoleClaimType = "groups";
+            options.Scope.Clear();
+            options.Scope.Add("openid");
+            options.Scope.Add("profile");
+            options.Scope.Add("email");
+            options.Scope.Add("groups");
             options.Events.OnTicketReceived = context =>
             {
-                var allowedEmail =
+                var requiredGroup =
                     context.HttpContext.RequestServices.GetRequiredService<IConfiguration>()[
-                        "PORTFOLIO_ADMIN_GOOGLE_EMAIL"
-                    ];
-                var email = context
-                    .Principal?.FindFirst(System.Security.Claims.ClaimTypes.Email)
-                    ?.Value;
+                        "PORTFOLIO_ADMIN_OIDC_GROUP"
+                    ]
+                    ?? "admins";
 
-                if (
-                    string.IsNullOrEmpty(allowedEmail)
-                    || !string.Equals(email, allowedEmail, StringComparison.OrdinalIgnoreCase)
-                )
+                if (context.Principal?.HasClaim("groups", requiredGroup) != true)
                 {
                     context.HandleResponse();
                     context.Response.Redirect("/admin/login?error=1");

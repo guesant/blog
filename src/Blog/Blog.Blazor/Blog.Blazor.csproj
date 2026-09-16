@@ -15,7 +15,10 @@
       Include="Microsoft.AspNetCore.Components.WebAssembly.Server"
       Version="10.0.12"
     />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="10.0.12" />
+    <PackageReference
+      Include="Microsoft.AspNetCore.Authentication.OpenIdConnect"
+      Version="10.0.12"
+    />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.3" />
     <!-- Npgsql.EntityFrameworkCore.PostgreSQL 10.0.3 depends on EF Core 10.0.4; pinned
          explicitly to the 10.0.12 the rest of the SDK ships, matching Microsoft.EntityFrameworkCore.Design

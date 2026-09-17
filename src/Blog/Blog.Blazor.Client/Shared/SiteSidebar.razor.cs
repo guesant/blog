@@ -72,9 +72,12 @@ public partial class SiteSidebar
     private string GroupLabel(string route) =>
         LastSegment(route) switch
         {
-            "writing" or "findings" or "topics" or "collections" or "knowledge-map" => NavL[
-                "group_content"
-            ],
+            "writing"
+            or "findings"
+            or "topics"
+            or "collections"
+            or "knowledge-map"
+            or "technologies" => NavL["group_content"],
             _ => NavL["group_tools"],
         };
 

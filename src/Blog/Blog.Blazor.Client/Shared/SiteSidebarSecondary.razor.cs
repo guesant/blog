@@ -16,8 +16,8 @@ public partial class SiteSidebarSecondary
     private string UpdatesLabel => L["updates"];
     private bool ShowConnect => Snapshot?.Chrome.Visibility.Contact == true;
     private bool ShowFollowLink => Snapshot?.Chrome.Visibility.Follow == true;
-    private bool ShowFeeds => ShowFollowLink && Snapshot?.Chrome.Visibility.Feed == true;
-    private bool ShowUpdates => ShowFollowLink || ShowFeeds;
+    private bool ShowFeeds => ShowFollowLink;
+    private bool ShowUpdates => ShowFollowLink;
 
     private string FollowLabel
     {

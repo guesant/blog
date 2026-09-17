@@ -22,5 +22,7 @@ internal static class PublicVisibilityFilters
         modelBuilder.Entity<Topic>().HasQueryFilter(topic => !topic.Hidden);
         modelBuilder.Entity<Profile>().HasQueryFilter(profile => !profile.Hidden);
         modelBuilder.Entity<Resume>().HasQueryFilter(resume => !resume.Hidden);
+        modelBuilder.Entity<Technology>().HasQueryFilter(technology => !technology.Hidden);
+        modelBuilder.Entity<Page>().HasQueryFilter(page => !page.Hidden);
     }
 }

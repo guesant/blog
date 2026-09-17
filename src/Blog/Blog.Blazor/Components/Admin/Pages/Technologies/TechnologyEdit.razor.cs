@@ -117,6 +117,7 @@ public partial class TechnologyEdit
     {
         target.Slug = source.Slug;
         target.Order = source.Order;
+        target.Hidden = source.Hidden;
         target.Code = source.Code;
     }
 

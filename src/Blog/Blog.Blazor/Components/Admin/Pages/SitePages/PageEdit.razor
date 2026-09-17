@@ -20,6 +20,8 @@
                 <SiteValidationMessage For="@(() => _page.Slug)" />
             </SiteFormField>
 
+            <SiteCheckbox Label="Hidden" @bind-Value="_page.Hidden" />
+
             <SiteFormSection Title="Translations"
                 Description="@($"Fields for page \"{(string.IsNullOrWhiteSpace(_page.Slug) ? "(no slug yet)" : _page.Slug)}\" — known fields are shown as labeled inputs; a slug with no catalog entry falls back to free-form key/value rows.")">
                 <SiteTranslationTabs Locales="@_locales"

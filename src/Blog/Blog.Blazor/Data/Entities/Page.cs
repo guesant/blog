@@ -14,6 +14,8 @@ public sealed class Page
     [Required(ErrorMessage = "Slug is required.")]
     public string Slug { get; set; } = string.Empty;
 
+    public bool Hidden { get; set; }
+
     public DateTime? CreatedAt { get; set; }
     public DateTime? UpdatedAt { get; set; }
 

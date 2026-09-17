@@ -26,6 +26,8 @@
                     ValueChanged="@(value => _technology.Code = NullIfBlank(value))" />
             </SiteFormField>
 
+            <SiteCheckbox Label="Hidden" @bind-Value="_technology.Hidden" />
+
 
             <SiteFormSection Title="Translations">
                 <SiteTranslationTabs Locales="@_locales"

@@ -10,6 +10,7 @@ public sealed class Technology
     public string Slug { get; set; } = string.Empty;
     public string PublicId { get; set; } = string.Empty;
     public int Order { get; set; }
+    public bool Hidden { get; set; }
     public string? Code { get; set; }
     public string? Logo { get; set; }
     public DateTime? CreatedAt { get; set; }

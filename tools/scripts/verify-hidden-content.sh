@@ -16,12 +16,12 @@ if grep -En '"(select|SELECT)[[:space:]]|FromSql|SqlQuery|ExecuteSql|DbConnectio
 fi
 
 filters="$host/Data/PublicVisibilityFilters.cs"
-[ "$(grep -c 'HasQueryFilter' "$filters")" -eq 11 ] || fail "PublicVisibilityFilters must declare exactly eleven query filters"
+[ "$(grep -c 'HasQueryFilter' "$filters")" -eq 13 ] || fail "PublicVisibilityFilters must declare exactly thirteen query filters"
 grep -q 'Entity<Project>().HasQueryFilter(project => !project.Hidden && !project.Nda)' "$filters" || fail "projects must be filtered on hidden and nda"
 grep -q 'HasQueryFilter(caseStudy => !caseStudy.Hidden && !caseStudy.Nda)' "$filters" || fail "case studies must be filtered on hidden and nda"
 grep -q 'HasQueryFilter(resource => !resource.Hidden && resource.Visibility == "public")' "$filters" || fail "resources must be filtered on hidden and public visibility"
 grep -q 'HasQueryFilter(credit => credit.Active)' "$filters" || fail "credits must be filtered on active"
-for entity in Writing Experiment Snippet ReferenceCollection Topic Profile Resume; do
+for entity in Writing Experiment Snippet ReferenceCollection Topic Profile Resume Technology Page; do
     grep -A1 "Entity<$entity>()" "$filters" | grep -q 'Hidden' || fail "$entity must be filtered on hidden"
 done
 grep -q 'PublicVisibilityFilters.Apply(modelBuilder)' "$host/Data/BlogPublicDbContext.cs" || fail "the public context must apply the visibility filters"

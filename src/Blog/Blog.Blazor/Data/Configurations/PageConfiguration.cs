@@ -12,6 +12,7 @@ public sealed class PageConfiguration : IEntityTypeConfiguration<Page>
         builder.HasKey(page => page.Id);
         builder.Property(page => page.Id).HasColumnName("id");
         builder.Property(page => page.Slug).HasColumnName("slug").IsRequired();
+        builder.Property(page => page.Hidden).HasColumnName("hidden").HasDefaultValue(false);
         builder.Property(page => page.CreatedAt).HasColumnName("created_at");
         builder.Property(page => page.UpdatedAt).HasColumnName("updated_at");
         builder.HasIndex(page => page.Slug).IsUnique().HasDatabaseName("pages_slug_unique");

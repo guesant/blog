@@ -346,6 +346,7 @@ public partial class PageEdit
     private static void ApplyPageFields(Page target, Page source)
     {
         target.Slug = source.Slug;
+        target.Hidden = source.Hidden;
     }
 
     private static void ApplyTranslation(

@@ -22,6 +22,10 @@ public sealed class TechnologyConfiguration : IEntityTypeConfiguration<Technolog
             .IsUnique()
             .HasDatabaseName("technologies_public_id_unique");
         builder.Property(technology => technology.Order).HasColumnName("order");
+        builder
+            .Property(technology => technology.Hidden)
+            .HasColumnName("hidden")
+            .HasDefaultValue(false);
         builder.Property(technology => technology.Code).HasColumnName("code");
         builder.Property(technology => technology.Logo).HasColumnName("logo");
         builder.Property(technology => technology.CreatedAt).HasColumnName("created_at");

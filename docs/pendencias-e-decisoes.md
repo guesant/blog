@@ -1,6 +1,6 @@
 # Pendências e decisões
 
-Registro único de decisões tomadas (com o porquê) e pendências abertas. Commits carregam só o título; o contexto vive aqui.
+Registro único de decisões tomadas (com o porquê). Commits carregam só o título; o contexto vive aqui. Pendências abertas ficam em `PENDENCIAS.local.md`, fora do git.
 
 ## Decisões
 
@@ -98,8 +98,4 @@ Registro único de decisões tomadas (com o porquê) e pendências abertas. Comm
 
 ## Pendências
 
-- Ligar `policyAuditMode: false` no Cilium depois de escrever `NetworkPolicy` para os namespaces de sistema (`argocd`, `cnpg-system`, `cert-manager`, `sealed-secrets`, `kube-system`), baseado no que o Hubble (`hubble observe --verdict DENIED`, ou consultando o Relay) mostrar como tráfego real necessário durante o período de observação. Enquanto o audit mode estiver ligado, o cluster continua funcionalmente igual a antes (nada é bloqueado), então não há pressa, mas também não há proteção de verdade ainda fora do namespace `blog`.
-- Preencher o backup real do PostgreSQL de produção: a infraestrutura declarativa já está pronta (ver decisão acima), falta só um bucket S3-compatível de verdade (nome, endpoint, região) e as credenciais reais. Quando existir, editar `destinationPath`/`endpointURL` em `argocd/apps/satellites/blog/postgres/templates/backup-objectstore.yaml` no `hl-infrastructure`, montar um `Secret` plano local com as chaves `ACCESS_KEY_ID`/`ACCESS_SECRET_KEY`, cifrar com `kubeseal` (mesmo fluxo de `fetch-cert`/`seal` do `justfile` do `hl-infrastructure`, já documentado em `deploy/README.md`) e colar o `encryptedData` resultante em `backup-credentials-sealedsecret.yaml`, no mesmo repositório.
-- Declarar `ignoreDifferences` na `Application` `postgres` do `hl-infrastructure` para os campos que o webhook do operador CNPG preenche por padrão no `Cluster` (afinidade, `probes`, `replicationSlots` e outros), e só então ligar `syncPolicy.automated` nela; hoje ela fica em sincronização manual por causa desse ruído de comparação (ver decisão de 2026-09-13 acima).
-- Gerar de verdade o `SealedSecret` do túnel Cloudflare (`cloudflared-secret`): o `Deployment` do cloudflared monta esse secret, mas ele nunca foi selado com um token real, então os pods do cloudflared ficam presos em `ContainerCreating`.
-- Rotas de detalhe como `/writing/<slug-inexistente>`, `/findings/...`, `/collections/...` e `/topics/...` hoje respondem HTTP 200 com uma mensagem de "não encontrado" em vez de um 404 de verdade. A sidebar agora só linka para o que tem conteúdo publicado (ver decisão de 2026-09-15 acima), mas a rota em si continua acessível por URL direta sem o status correto; ajustar isso é um trabalho separado de roteamento/status code, não de visibilidade de navegação.
+Pendências abertas ficam em `PENDENCIAS.local.md`, fora do git (mesmo padrão do `hl-infrastructure`), já que mudam rápido e não são decisão arquitetural.

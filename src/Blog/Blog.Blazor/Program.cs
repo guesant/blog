@@ -135,7 +135,12 @@ if (oidcConfigured)
             options.ResponseType = OpenIdConnectResponseType.Code;
             options.UsePkce = true;
             options.SignInScheme = AdminAuthEndpoints.SchemeName;
-            options.SaveTokens = false;
+            // IMPORTANT: Keycloak's end-session endpoint requires id_token_hint whenever a
+            // post_logout_redirect_uri is sent, and the OIDC handler can only attach it at
+            // sign-out time if the id_token was persisted at sign-in. SaveTokens = false left
+            // it unavailable, so RP-initiated logout failed with "Missing parameters:
+            // id_token_hint" instead of clearing the Keycloak session.
+            options.SaveTokens = true;
             options.MapInboundClaims = false;
             options.TokenValidationParameters.NameClaimType = "preferred_username";
             options.TokenValidationParameters.RoleClaimType = "groups";

@@ -601,7 +601,7 @@ static void MapLegacyRoutes(WebApplication app)
     MapRedirect(app, "/contato", "/contact");
     MapRedirect(app, "/curriculo", "/resume");
     MapRedirect(app, "/achados", "/findings");
-    MapRedirect(app, "/achados/tipos/{type}", "/findings/types/{type}");
+    MapRedirect(app, "/achados/tipos/{type}", "/findings");
     MapRedirect(app, "/achados/{slug}", "/findings/{slug}");
     MapRedirect(app, "/topicos", "/topics");
     MapRedirect(app, "/topicos/{slug}", "/topics/{slug}");

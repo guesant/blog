@@ -18,11 +18,11 @@ done
 for route in \
     / /about /portfolio /license /follow /resume /contact /credits /knowledge-map \
     /projects /projects/example /projects/experiments/example /cases /cases/example /writing/example \
-    /findings/example /findings/types/book /collections/example \
+    /findings/example /collections/example \
     /topics /topics/example /technologies /technologies/example /snippets /snippets/example /tools \
     /pt-BR/ /pt-BR/about /pt-BR/portfolio /pt-BR/license /pt-BR/follow /pt-BR/resume /pt-BR/contact /pt-BR/credits /pt-BR/knowledge-map \
     /pt-BR/projects /pt-BR/projects/example /pt-BR/projects/experiments/example /pt-BR/cases /pt-BR/cases/example /pt-BR/writing/example \
-    /pt-BR/findings/example /pt-BR/findings/types/book /pt-BR/collections/example \
+    /pt-BR/findings/example /pt-BR/collections/example \
     /pt-BR/topics /pt-BR/topics/example /pt-BR/technologies /pt-BR/technologies/example /pt-BR/snippets /pt-BR/snippets/example /pt-BR/tools; do
     page="$(wget -qO- "${base_url}${route}")"
     for marker in 'id="main-content" tabindex="-1"' 'class="breadcrumb-bar"' 'class="site-footer'; do

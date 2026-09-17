@@ -122,13 +122,11 @@ public partial class SeoHead
             path.StartsWith("/writing/", StringComparison.OrdinalIgnoreCase)
             || path.StartsWith("/cases/", StringComparison.OrdinalIgnoreCase)
             || path.StartsWith("/findings/", StringComparison.OrdinalIgnoreCase)
-                && !path.StartsWith("/findings/types/", StringComparison.OrdinalIgnoreCase)
         )
             return "Article";
         if (
             path.Equals("/cases", StringComparison.OrdinalIgnoreCase)
             || path.Equals("/projects", StringComparison.OrdinalIgnoreCase)
-            || path.StartsWith("/findings/types/", StringComparison.OrdinalIgnoreCase)
             || path.StartsWith("/collections/", StringComparison.OrdinalIgnoreCase)
             || path.Equals("/topics", StringComparison.OrdinalIgnoreCase)
             || path.StartsWith("/topics/", StringComparison.OrdinalIgnoreCase)

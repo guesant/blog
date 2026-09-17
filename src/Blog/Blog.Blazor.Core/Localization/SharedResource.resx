@@ -231,8 +231,6 @@
   <data name="end_date"><value>end date</value></data>
   <data name="row_label"><value>row {0}</value></data>
   <data name="selected_case_label"><value>selected case {0:00}</value></data>
-  <data name="classified_findings"><value>findings classified as {0}.</value></data>
-  <data name="showing_findings"><value>showing {0} of {1} findings</value></data>
   <data name="browse_technology"><value>Browse cases, projects and experiments using {0}.</value></data>
   <data name="browse_topic"><value>Browse findings and writing related to {0}.</value></data>
   <data name="count_entries"><value>{0} entries</value></data>
@@ -693,7 +691,6 @@
   <data name="subjects_connecting_writing_and_references"><value>subjects connecting writing and references.</value></data>
   <data name="estimate_how_much_an_amount_must_keep_up_with"><value>estimate how much an amount must keep up with inflation over time.</value></data>
   <data name="find"><value>find</value></data>
-  <data name="no_findings_of_this_type_have_been_published"><value>no findings of this type have been published.</value></data>
   <data name="why_it_was_saved"><value>why it was saved</value></data>
   <data name="kinematics"><value>kinematics</value></data>
   <data name="voltage"><value>voltage</value></data>
@@ -769,7 +766,6 @@
   <data name="brazilian_informal"><value>Brazilian (informal)</value></data>
   <data name="pressure_pa"><value>pressure (Pa)</value></data>
   <data name="min"><value>min</value></data>
-  <data name="back_to_findings_findings"><value>back to findings: findings</value></data>
   <data name="title_author_or_description"><value>title, author, or description</value></data>
   <data name="duplicate_key"><value>duplicate key</value></data>
   <data name="tools_query_string_parser"><value>/tools/query-string-parser</value></data>
@@ -887,7 +883,6 @@
   <data name="enter_positive_values_separated_by_commas"><value>Enter positive values separated by commas, spaces, or semicolons.</value></data>
   <data name="whitespace_trimmer"><value>whitespace trimmer</value></data>
   <data name="user_agent"><value>user-agent</value></data>
-  <data name="this_finding_type_does_not_exist"><value>this finding type does not exist.</value></data>
   <data name="cases"><value>cases</value></data>
   <data name="enter_a_valid_integer_timestamp"><value>enter a valid integer timestamp.</value></data>
   <data name="force"><value>force</value></data>

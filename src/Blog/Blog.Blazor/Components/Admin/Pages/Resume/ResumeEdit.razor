@@ -11,6 +11,8 @@
 <SiteFormShell Title="Resume" Error="@SaveError" Loading="@IsLoading">
     <SiteForm EditContext="@_resumeEditContext" OnValidSubmit="HandleSaveAsync">
         <SiteStack Gap="SiteSpace.Lg">
+            <SiteCheckbox Label="Hidden" @bind-Value="_resume.Hidden" />
+
             <SiteFormSection Title="Translations">
                 <SiteTranslationTabs Locales="@_locales"
                     ActiveLocale="@_activeLocale"

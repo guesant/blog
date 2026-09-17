@@ -3,6 +3,7 @@ using System;
 using Blog.Blazor.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Blog.Blazor.Database.Migrations
 {
     [DbContext(typeof(BlogAdminDbContext))]
-    partial class BlogAdminDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260917000053_AddHiddenToTopicsProfilesResumes")]
+    partial class AddHiddenToTopicsProfilesResumes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

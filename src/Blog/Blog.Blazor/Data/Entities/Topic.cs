@@ -10,6 +10,7 @@ public sealed class Topic
     public string Slug { get; set; } = string.Empty;
     public string PublicId { get; set; } = string.Empty;
     public int Order { get; set; }
+    public bool Hidden { get; set; }
     public string Kind { get; set; } = "topic";
     public int? ParentId { get; set; }
     public DateTime? CreatedAt { get; set; }

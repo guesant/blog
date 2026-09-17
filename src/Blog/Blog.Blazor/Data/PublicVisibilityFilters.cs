@@ -19,5 +19,8 @@ internal static class PublicVisibilityFilters
             .Entity<Resource>()
             .HasQueryFilter(resource => !resource.Hidden && resource.Visibility == "public");
         modelBuilder.Entity<CreditEntry>().HasQueryFilter(credit => credit.Active);
+        modelBuilder.Entity<Topic>().HasQueryFilter(topic => !topic.Hidden);
+        modelBuilder.Entity<Profile>().HasQueryFilter(profile => !profile.Hidden);
+        modelBuilder.Entity<Resume>().HasQueryFilter(resume => !resume.Hidden);
     }
 }

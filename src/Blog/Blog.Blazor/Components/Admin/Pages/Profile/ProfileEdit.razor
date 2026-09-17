@@ -19,6 +19,8 @@
                 <SiteDateInput Id="birth-date" @bind-Value="_profile.BirthDate" />
             </SiteFormField>
 
+            <SiteCheckbox Label="Hidden" @bind-Value="_profile.Hidden" />
+
             <SiteFormSection Title="Translations">
                 <SiteTranslationTabs Locales="@_locales"
                     ActiveLocale="@_activeLocale"

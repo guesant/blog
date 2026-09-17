@@ -56,6 +56,9 @@ else
                 <SiteColumn TItem="Topic" Header="Kind">
                     <Cell Context="topic">@topic.Kind</Cell>
                 </SiteColumn>
+                <SiteColumn TItem="Topic" Header="Status">
+                    <Cell Context="topic">@if (topic.Hidden) { <SiteBadge Label="Hidden" /> }</Cell>
+                </SiteColumn>
             </Columns>
             <Actions Context="topic">
                 <SiteInline Gap="SiteSpace.Sm">

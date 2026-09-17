@@ -3,6 +3,7 @@ namespace Blog.Blazor.Data.Entities;
 public sealed class Resume
 {
     public int Id { get; set; }
+    public bool Hidden { get; set; }
     public DateTime? CreatedAt { get; set; }
     public DateTime? UpdatedAt { get; set; }
 

@@ -18,6 +18,8 @@
                 <SiteValidationMessage For="@(() => _topic.Slug)" />
             </SiteFormField>
 
+            <SiteCheckbox Label="Hidden" @bind-Value="_topic.Hidden" />
+
 
             <SiteFormSection Title="Translations">
                 <SiteTranslationTabs Locales="@_locales"

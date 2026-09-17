@@ -9,6 +9,7 @@ public sealed class ResumeConfiguration : IEntityTypeConfiguration<Resume>
     public void Configure(EntityTypeBuilder<Resume> builder)
     {
         builder.ToTable("resumes");
+        builder.Property(resume => resume.Hidden).HasColumnName("hidden").HasDefaultValue(false);
         builder.HasKey(resume => resume.Id);
         builder.Property(resume => resume.Id).HasColumnName("id");
         builder.Property(resume => resume.CreatedAt).HasColumnName("created_at");

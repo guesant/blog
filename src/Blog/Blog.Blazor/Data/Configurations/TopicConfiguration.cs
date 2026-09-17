@@ -22,6 +22,7 @@ public sealed class TopicConfiguration : IEntityTypeConfiguration<Topic>
             .IsUnique()
             .HasDatabaseName("topics_public_id_unique");
         builder.Property(topic => topic.Order).HasColumnName("order");
+        builder.Property(topic => topic.Hidden).HasColumnName("hidden").HasDefaultValue(false);
         builder
             .Property(topic => topic.Kind)
             .HasColumnName("kind")

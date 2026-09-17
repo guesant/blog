@@ -82,6 +82,7 @@ public partial class ProfileEdit
 
         profile.Name = _profile.Name;
         profile.BirthDate = _profile.BirthDate;
+        profile.Hidden = _profile.Hidden;
 
         ApplyTranslation(profile, "en", _translationEn);
         ApplyTranslation(profile, "pt-BR", _translationPtBr);

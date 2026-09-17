@@ -342,6 +342,7 @@ public partial class ResumeEdit
             .Include(candidate => candidate.SelectedCases)
             .FirstAsync(candidate => candidate.Id == _resume.Id);
 
+        resume.Hidden = _resume.Hidden;
         ApplyTranslation(resume, "en", _translationEn);
         ApplyTranslation(resume, "pt-BR", _translationPtBr);
 

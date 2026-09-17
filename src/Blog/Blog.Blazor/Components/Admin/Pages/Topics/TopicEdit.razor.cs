@@ -117,6 +117,7 @@ public partial class TopicEdit
     {
         target.Slug = source.Slug;
         target.Order = source.Order;
+        target.Hidden = source.Hidden;
     }
 
     private static void ApplyTranslation(

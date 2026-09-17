@@ -13,6 +13,7 @@ public sealed class ProfileConfiguration : IEntityTypeConfiguration<Profile>
         builder.Property(profile => profile.Id).HasColumnName("id");
         builder.Property(profile => profile.Name).HasColumnName("name");
         builder.Property(profile => profile.BirthDate).HasColumnName("birth_date");
+        builder.Property(profile => profile.Hidden).HasColumnName("hidden").HasDefaultValue(false);
         builder.Property(profile => profile.CreatedAt).HasColumnName("created_at");
         builder.Property(profile => profile.UpdatedAt).HasColumnName("updated_at");
 

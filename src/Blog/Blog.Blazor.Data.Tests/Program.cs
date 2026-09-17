@@ -236,6 +236,11 @@ static void AssertContent(HarvestResult result)
         "pt-BR translations must win over the en fallback"
     );
 
+    Check(
+        en.Topics.All(topic => topic.Slug != "hidden-topic"),
+        "hidden topics must be dropped from the snapshot"
+    );
+
     var visibility = en.Chrome.Visibility;
     Check(visibility.About, "about must be visible when a profile is published");
     Check(visibility.Resume, "resume must be visible when the resume has a summary");

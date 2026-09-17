@@ -21,6 +21,7 @@ public partial class SidebarNavIcon
             "topic" or "topics" => "layout-list",
             "collection" or "collections" => "archive",
             "knowledge-map" or "knowledge_map" or "map" => "git-branch",
+            "technology" or "technologies" => "cpu",
             "snippet" or "snippets" => "copy",
             "tool" or "tools" => "wrench",
             "about" => "user",

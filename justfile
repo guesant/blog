@@ -66,7 +66,9 @@ test-data:
     {{docker_run}} 'dotnet run --project src/Blog/Blog.Blazor.Data.Tests/Blog.Blazor.Data.Tests.csproj --configuration Release --no-build'
 
 
-check: tools-build \
+check: check-core check-data check-ui
+
+check-core: tools-build \
     format \
     lint \
     comments \
@@ -74,9 +76,15 @@ check: tools-build \
     duplication-razor \
     build \
     test \
+    audit
+
+check-data: tools-build \
+    build \
     test-data \
-    audit \
-    schema \
+    schema
+
+check-ui: tools-build \
+    build \
     tokens \
     ui-imports \
     resx-keys \
@@ -86,7 +94,7 @@ check: tools-build \
     vrt
 
 tools-build:
-    {{compose_dev}} build tools
+    test -n "${PORTFOLIO_TOOLS_PREBUILT:-}" || {{compose_dev}} build tools
 
 format:
     {{tools_run}} 'FORMAT_CHECK=1 node tools/scripts/format-razor.mjs'

@@ -15,16 +15,90 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: blazor-quality-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
 jobs:
-  docker-quality:
+  changes:
     runs-on: ubuntu-24.04
-    env:
-      COMPOSE_FILE: .docker/compose.yaml
+    outputs:
+      all: ${{ github.event_name != 'pull_request' }}
+      ui: ${{ steps.filter.outputs.ui }}
+      data: ${{ steps.filter.outputs.data }}
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           persist-credentials: false
+
+      - name: Detect which areas changed
+        id: filter
+        uses: dorny/paths-filter@ceb8a2b8f2d89434be7ff52d3de7ec3738c5cc9d
+        with:
+          filters: |
+            ui:
+              - src/Blog/Blog.Blazor.UI/**
+              - src/Blog/Blog.Blazor.Client/**
+              - src/Blog/Blog.Blazor.Stories/**
+              - src/Blog/Blog.Blazor.Stories.VRT/**
+              - src/Blog/Blog.Blazor.Core/Localization/**
+              - "src/**/*.razor"
+              - "src/**/*.razor.css"
+              - "src/**/*.resx"
+              - tools/scripts/**
+              - tools/checks/**
+              - .docker/stories.Dockerfile
+              - .docker/compose.yaml
+              - justfile
+            data:
+              - src/Blog/Blog.Blazor/Data/**
+              - src/Blog/Blog.Blazor.Database/**
+              - src/Blog/Blog.Blazor.Data.Tests/**
+              - .docker/compose.yaml
+              - justfile
+
+  docker-quality:
+    runs-on: ubuntu-24.04
+    needs: changes
+    env:
+      COMPOSE_FILE: .docker/compose.yaml
+      PORTFOLIO_TOOLS_PREBUILT: "1"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+
+      - name: Set up buildx
+        uses: docker/setup-buildx-action@37fe631027851001ddb9b187196cc803df7f5f0e
+
+      - name: Build the tools image with the Actions layer cache
+        run: >-
+          docker buildx build --file .docker/tools.Dockerfile
+          --cache-from type=gha,scope=tools --cache-to type=gha,mode=max,scope=tools
+          --load --tag portfolio-tools .
+
+      - name: Build the stories image with the Actions layer cache
+        if: needs.changes.outputs.all == 'true' || needs.changes.outputs.ui == 'true'
+        run: >-
+          docker buildx build --file .docker/stories.Dockerfile
+          --cache-from type=gha,scope=stories --cache-to type=gha,mode=max,scope=stories
+          --load --tag portfolio-stories .
+
+      - name: Restore the NuGet packages
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
+        with:
+          path: .cache/nuget
+          key: nuget-${{ hashFiles('**/packages.lock.json') }}
+          restore-keys: nuget-
+
+      - name: Restore the VRT node modules
+        if: needs.changes.outputs.all == 'true' || needs.changes.outputs.ui == 'true'
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
+        with:
+          path: src/Blog/Blog.Blazor.Stories.VRT/node_modules
+          key: vrt-node-modules-${{ hashFiles('src/Blog/Blog.Blazor.Stories.VRT/package-lock.json') }}
 
       - name: Run the compose services as the runner user
         run: |
@@ -43,11 +117,29 @@ jobs:
       - name: Start PostgreSQL
         run: docker compose up -d --wait postgres
 
+      - name: Seed the NuGet volume from the cache
+        run: |
+          mkdir -p .cache/nuget
+          docker compose up -d nuget-cache-init 2>/dev/null || true
+          docker run --rm -v portfolio_nuget-cache:/volume -v "$PWD/.cache/nuget":/cache alpine:3.22@sha256:14358309a308569c32bdc37e2e0e9694be33a9d99e68afb0f5ff33cc1f695dce sh -c 'cp -a /cache/. /volume/ 2>/dev/null || true'
+
       - name: Restore locked NuGet dependencies
         run: docker compose run --rm web dotnet restore src/Blog.Blazor.slnx --locked-mode
 
-      - name: Run the quality gate
-        run: just check
+      - name: Run the core quality gate
+        run: just check-core
+
+      - name: Run the data quality gate
+        if: needs.changes.outputs.all == 'true' || needs.changes.outputs.data == 'true'
+        run: just check-data
+
+      - name: Run the UI quality gate
+        if: needs.changes.outputs.all == 'true' || needs.changes.outputs.ui == 'true'
+        run: just check-ui
+
+      - name: Copy the NuGet volume back to the cache
+        if: always()
+        run: docker run --rm -v portfolio_nuget-cache:/volume -v "$PWD/.cache/nuget":/cache alpine:3.22@sha256:14358309a308569c32bdc37e2e0e9694be33a9d99e68afb0f5ff33cc1f695dce sh -c 'cp -a /volume/. /cache/'
 
       - name: Apply PostgreSQL migrations
         run: docker compose run --rm web sh -lc 'dotnet tool restore >/dev/null && dotnet tool run dotnet-ef database update --project src/Blog/Blog.Blazor.Database/Blog.Blazor.Database.csproj --startup-project src/Blog/Blog.Blazor.Database/Blog.Blazor.Database.csproj --context BlogAdminDbContext --configuration Release --no-build'

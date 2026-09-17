@@ -21,6 +21,7 @@ builder.Services.AddScoped(_ => new HttpClient
 });
 builder.Services.AddScoped<IPublicSiteContentProvider, BrowserPublicSiteContentProvider>();
 builder.Services.AddScoped<IPublicKnowledgeGraphProvider, BrowserPublicKnowledgeGraphProvider>();
+builder.Services.AddScoped<INotFoundResponder, BrowserNotFoundResponder>();
 builder.Services.AddChartJs(options =>
     options.ChartJsLocation = "/vendor/chartjs/chart.esm-shim.js"
 );

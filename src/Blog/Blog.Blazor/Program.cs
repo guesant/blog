@@ -25,6 +25,7 @@ builder.Services.AddBlazorBlueprintPrimitives();
 builder.Services.AddScoped<Blog.Blazor.UI.Foundations.SiteToastService>();
 builder.Services.AddScoped<Blog.Blazor.UI.Foundations.SiteDialogService>();
 builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<INotFoundResponder, HttpContextNotFoundResponder>();
 builder.Services.AddLocalization();
 builder.Services.AddSingleton<ICultureCatalog, CultureCatalog>();
 builder.Services.AddSingleton<ILocalizedUrlBuilder, LocalizedUrlBuilder>();

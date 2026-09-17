@@ -10,6 +10,7 @@ public partial class CollectionDetail
         Snapshot?.Collections.FirstOrDefault(item =>
             PublicRouteKey.Matches(item.Url, item.Slug, Slug)
         );
+    protected override bool IsNotFound => Collection is null;
     private string Title => Collection?.Title ?? Slug;
     private string Description => Collection?.Description ?? NotFoundDescription;
     private string CanonicalPath => Collection?.Url ?? RequestPath;

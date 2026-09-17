@@ -8,6 +8,7 @@ public partial class TopicDetail
     public string Slug { get; set; } = string.Empty;
     private PublicTopic? Topic =>
         Snapshot?.Topics.FirstOrDefault(item => PublicRouteKey.Matches(item.Url, item.Slug, Slug));
+    protected override bool IsNotFound => Topic is null;
     private IReadOnlyList<PublicWriting> Writings =>
         Snapshot
             ?.Writings.Where(item =>

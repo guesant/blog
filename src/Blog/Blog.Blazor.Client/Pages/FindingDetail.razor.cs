@@ -11,6 +11,7 @@ public partial class FindingDetail
         Snapshot?.Findings.FirstOrDefault(item =>
             PublicRouteKey.Matches(item.Url, item.Slug, Slug)
         );
+    protected override bool IsNotFound => Finding is null;
     private string Eyebrow => L["finding"];
     private string TypeEyebrow =>
         $"{TypeName(Finding?.Type)}{(string.IsNullOrWhiteSpace(Finding?.Rating) ? string.Empty : $" · {RatingName(Finding!.Rating)}")}";

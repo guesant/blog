@@ -8,10 +8,19 @@ public abstract class ContentPageBase : LocalizedComponentBase
     [Inject]
     protected IPublicSiteContentProvider ContentProvider { get; set; } = default!;
 
+    [Inject]
+    protected INotFoundResponder NotFoundResponder { get; set; } = default!;
+
     protected PublicSiteSnapshot? Snapshot { get; private set; }
 
-    protected override async Task OnInitializedAsync() =>
+    protected virtual bool IsNotFound => false;
+
+    protected override async Task OnInitializedAsync()
+    {
         Snapshot = await ContentProvider.GetAsync(CurrentLocale);
+        if (IsNotFound)
+            NotFoundResponder.MarkNotFound();
+    }
 
     protected string CrumbLabel(string route, string fallback)
     {

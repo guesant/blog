@@ -29,6 +29,7 @@ public partial class ContentDetail
             )
             : null;
     private object? CurrentContent => Project ?? (object?)CaseStudy ?? Writing;
+    protected override bool IsNotFound => CurrentContent is null;
     private bool ShowHistory =>
         Project?.ShowHistory == true
         || CaseStudy?.ShowHistory == true

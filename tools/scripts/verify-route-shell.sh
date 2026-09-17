@@ -24,7 +24,7 @@ for route in \
     /pt-BR/projects /pt-BR/projects/example /pt-BR/projects/experiments/example /pt-BR/cases /pt-BR/cases/example /pt-BR/writing/example \
     /pt-BR/findings/example /pt-BR/collections/example \
     /pt-BR/topics /pt-BR/topics/example /pt-BR/technologies /pt-BR/technologies/example /pt-BR/snippets /pt-BR/snippets/example /pt-BR/tools; do
-    page="$(wget -qO- "${base_url}${route}")"
+    page="$(wget -qO- --content-on-error "${base_url}${route}" || true)"
     for marker in 'id="main-content" tabindex="-1"' 'class="breadcrumb-bar"' 'class="site-footer'; do
         case "$page" in
             *"$marker"*) ;;

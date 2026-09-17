@@ -28,7 +28,7 @@
     }
     else
     {
-        <SiteHero Title="@Title" Lead="@Description" BackHref="@IndexUrl" BackLabel="@BackLabel" />
+        <SiteHero Title="@Title" Lead="@Description" />
         @if (Writings.Count == 0 && Findings.Count == 0)
         {
             <SiteEmptyState Message="@EmptyLabel" />

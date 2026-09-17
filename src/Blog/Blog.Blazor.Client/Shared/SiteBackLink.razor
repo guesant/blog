@@ -1,0 +1,14 @@
+@inherits LocalizedComponentBase
+
+@if (!string.IsNullOrWhiteSpace(Href))
+{
+    <SiteTooltip Text="@AriaLabel">
+        <SiteLink Variant="SiteButtonVariant.Outline"
+            Size="SiteButtonSize.IconSm"
+            Href="@Href"
+            Class="site-back-link"
+            data-site-back
+            aria-label="@AriaLabel"><SiteIcon Name="arrow-left" Size="14" />
+        </SiteLink>
+    </SiteTooltip>
+}

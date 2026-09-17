@@ -14,8 +14,11 @@
     }
     else
     {
-        <SiteLink Class="site-nav-brand text-decoration-none"
-            Href="@LocalizedPath("home")">guesant.net</SiteLink>
+        <SiteInline Gap="SiteSpace.Sm" Class="site-nav-brand-row">
+            <SiteBackLink Href="@BackHref" Label="@BackLabel" />
+            <SiteLink Class="site-nav-brand text-decoration-none"
+                Href="@LocalizedPath("home")">guesant.net</SiteLink>
+        </SiteInline>
         <SiteNavDivider />
         <nav class="site-nav-links" aria-label="@NavigationLabel">
             <ul>

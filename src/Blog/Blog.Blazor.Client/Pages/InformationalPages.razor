@@ -24,9 +24,7 @@
     @if (Kind == PageKind.Portfolio)
     {
         <SiteHero Title="@(Snapshot?.Chrome.Profile?.Name ?? "guesant.net")"
-            Lead="@Field("heroExperience", Description)"
-            BackHref="@(L[""])"
-            BackLabel="@(L["home"])">
+            Lead="@Field("heroExperience", Description)">
             <ChildContent>
                 @if (!string.IsNullOrWhiteSpace(Field("heroCurrentFocus"))) { <SiteText>@Field("heroCurrentFocus")</SiteText> }
                 <SiteFormActions>
@@ -136,9 +134,7 @@
     else if (Kind == PageKind.About)
     {
         <SiteHero Title="@Field("title")"
-            Lead="@Field("lead", Description)"
-            BackHref="@(L[""])"
-            BackLabel="@(L["home"])">
+            Lead="@Field("lead", Description)">
             <ChildContent>
                 @if (!string.IsNullOrWhiteSpace(Field("context"))) { <SiteText>@Field("context")</SiteText> }
                 @if (!string.IsNullOrWhiteSpace(Field("description"))) { <SiteText>@Field("description")</SiteText> }
@@ -237,9 +233,7 @@
     else if (Kind == PageKind.License)
     {
         <SiteHero Title="@Field("title")"
-            Lead="@Description"
-            BackHref="@(L[""])"
-            BackLabel="@(L["home"])" />
+            Lead="@Description" />
         <SiteSection Region="license"
             HeadingId="license-heading"
             Label="@Field("section_label")"
@@ -262,9 +256,7 @@
     else
     {
         <SiteHero Title="@Field("title")"
-            Lead="@Description"
-            BackHref="@(L[""])"
-            BackLabel="@(L["home"])" />
+            Lead="@Description" />
         <SiteSection Region="follow"
             HeadingId="follow-heading"
             Label="@Field("section_label")"

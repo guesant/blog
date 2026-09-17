@@ -9,6 +9,12 @@ public partial class SiteSidebar
 
     [Parameter]
     public bool Right { get; set; }
+
+    [Parameter]
+    public string? BackHref { get; set; }
+
+    [Parameter]
+    public string BackLabel { get; set; } = string.Empty;
     private static string NavigationLabel => "menu";
     private string HomeLabel => L["home"];
     private bool IsHome => RequestPath.TrimEnd('/') == LocalizedPath("home").TrimEnd('/');

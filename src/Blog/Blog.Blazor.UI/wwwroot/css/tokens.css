@@ -171,7 +171,7 @@
     --site-info: light-dark(#087990, #7cd2e8);
     --site-info-bg: light-dark(#cff4fc, #12303a);
 
-    --site-shadow-offcanvas: 0.5rem 0 1rem light-dark(rgb(0 0 0 / 8%), rgb(0 0 0 / 45%));
+    --site-shadow-offcanvas: -0.5rem 0 1rem light-dark(rgb(0 0 0 / 8%), rgb(0 0 0 / 45%));
     --site-focus-shadow: 0 0 0 0.2rem color-mix(in srgb, var(--site-primary) 14%, transparent);
     --site-focus-border: color-mix(in srgb, var(--site-primary) 50%, var(--site-surface));
     --site-backdrop: light-dark(rgb(0 0 0 / 55%), rgb(0 0 0 / 65%));

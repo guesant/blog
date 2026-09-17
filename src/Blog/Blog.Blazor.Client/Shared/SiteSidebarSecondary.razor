@@ -7,10 +7,10 @@
 <div class="site-sidebar-secondary">
     @if (ShowConnect)
     {
-        <section class="site-sidebar-section" aria-labelledby="right-sidebar-connect-heading">
+        <section class="site-sidebar-section" aria-labelledby="@HeadingId("connect")">
             <SiteText Variant="SiteTextVariant.SectionLabel"
                 Class="site-nav-group-label"
-                id="right-sidebar-connect-heading">@ConnectLabel</SiteText>
+                id="@HeadingId("connect")">@ConnectLabel</SiteText>
             <ul>
                 <li>
                     <SiteNavLink Href="@LocalizedPath("contact")">
@@ -30,10 +30,10 @@
 
     @if (ShowLegal)
     {
-        <section class="site-sidebar-section" aria-labelledby="right-sidebar-legal-heading">
+        <section class="site-sidebar-section" aria-labelledby="@HeadingId("legal")">
             <SiteText Variant="SiteTextVariant.SectionLabel"
                 Class="site-nav-group-label"
-                id="right-sidebar-legal-heading">@LegalLabel</SiteText>
+                id="@HeadingId("legal")">@LegalLabel</SiteText>
             <ul>
                 @foreach (var link in LegalLinks)
                 {
@@ -50,10 +50,10 @@
 
     @if (ShowUpdates)
     {
-        <section class="site-sidebar-section" aria-labelledby="right-sidebar-updates-heading">
+        <section class="site-sidebar-section" aria-labelledby="@HeadingId("updates")">
             <SiteText Variant="SiteTextVariant.SectionLabel"
                 Class="site-nav-group-label"
-                id="right-sidebar-updates-heading">@UpdatesLabel</SiteText>
+                id="@HeadingId("updates")">@UpdatesLabel</SiteText>
             @if (ShowFollowLink)
             {
                 <ul>
@@ -84,10 +84,10 @@
 
     @if (BuildUrl is string buildUrl && BuildSha is string sha)
     {
-        <section class="site-sidebar-section" aria-labelledby="right-sidebar-source-heading">
+        <section class="site-sidebar-section" aria-labelledby="@HeadingId("source")">
             <SiteText Variant="SiteTextVariant.SectionLabel"
                 Class="site-nav-group-label"
-                id="right-sidebar-source-heading">@SourceLabel</SiteText>
+                id="@HeadingId("source")">@SourceLabel</SiteText>
             <SiteNavLink Href="@buildUrl"
                 Class="footer-build-action"
                 Target="_blank"

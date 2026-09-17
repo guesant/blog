@@ -128,19 +128,34 @@
     display: flex;
 }
 
+.site-nav-secondary-mobile {
+    display: flex;
+    flex-direction: column;
+    gap: var(--site-space-6);
+}
+.site-nav-secondary-mobile ::deep a {
+    text-transform: lowercase;
+}
+.site-nav-secondary-mobile ::deep .footer-build-action {
+    display: flex;
+}
+
 @media (max-width: 47.99875rem) {
     .site-nav-offcanvas .site-nav {
         height: auto;
         flex: 0 0 auto;
         overflow: visible;
+        border-right: 0;
     }
     .site-nav-offcanvas .site-sidebar-right {
-        border-top: var(--site-border-width) solid var(--site-border-strong);
-        border-left: 0;
+        display: none;
     }
 }
 
 @media (min-width: 48rem) {
+    .site-nav-secondary-mobile {
+        display: none;
+    }
     .site-nav {
         gap: var(--site-space-6);
         padding: var(--site-space-4);

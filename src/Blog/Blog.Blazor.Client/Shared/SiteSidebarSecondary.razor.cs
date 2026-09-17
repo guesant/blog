@@ -6,6 +6,12 @@ public partial class SiteSidebarSecondary
 {
     [Parameter]
     public PublicSiteSnapshot? Snapshot { get; set; }
+
+    [Parameter]
+    public string IdPrefix { get; set; } = "right-sidebar";
+
+    private string HeadingId(string section) => $"{IdPrefix}-{section}-heading";
+
     private string ConnectLabel => L["connect"];
     private string UpdatesLabel => L["updates"];
     private bool ShowConnect => Snapshot?.Chrome.Visibility.Contact == true;

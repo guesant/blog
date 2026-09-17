@@ -103,7 +103,7 @@
         display: flex;
         flex-direction: column;
         position: fixed;
-        inset: 0 auto 0 0;
+        inset: 0 0 0 auto;
         z-index: var(--site-z-offcanvas);
         width: min(var(--site-offcanvas-w), var(--site-offcanvas-max));
         height: 100dvh;

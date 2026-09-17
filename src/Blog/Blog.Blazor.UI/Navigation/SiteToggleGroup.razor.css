@@ -4,6 +4,8 @@
     gap: 0;
 }
 .site-toggle-group ::deep .site-toggle-link {
+    position: relative;
+    z-index: 0;
     flex: 1 1 0;
     min-width: 0;
     justify-content: center;
@@ -22,6 +24,7 @@
     border-bottom-right-radius: var(--site-radius);
 }
 .site-toggle-group ::deep .site-toggle-link.active {
+    z-index: 1;
     color: var(--site-primary);
     background-color: var(--site-accent-bg);
     border-color: var(--site-accent-border);

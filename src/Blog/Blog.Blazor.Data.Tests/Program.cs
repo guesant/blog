@@ -241,6 +241,48 @@ static void AssertContent(HarvestResult result)
         "hidden topics must be dropped from the snapshot"
     );
 
+    var rust = en.Topics.Single(topic => topic.Slug == "rust");
+    Check(rust.ParentSlug == "programming", "the rust topic must point at its parent slug");
+    var programming = en.Topics.Single(topic => topic.Slug == "programming");
+    Check(
+        programming.Children?.Any(child => child.Slug == "rust") == true,
+        "the programming topic must list rust as a child"
+    );
+    var orphan = en.Topics.Single(topic => topic.Slug == "orphan-of-hidden");
+    Check(
+        orphan.ParentSlug is null,
+        "a topic whose parent is hidden must become a root in the public snapshot"
+    );
+
+    var popularRepo = en.Findings.Single(item => item.Slug == "popular-repo");
+    var popularVideo = en.Findings.Single(item => item.Slug == "popular-video");
+    Check(
+        popularRepo.Popularity is { Rank: 0.95, Kind: "github-stars" },
+        "popular-repo must round-trip its popularity rank and kind"
+    );
+    Check(
+        popularVideo.Popularity is { Rank: 0.8, Kind: "youtube-views" },
+        "popular-video must round-trip its popularity rank and kind"
+    );
+    var byRankDesc = en
+        .Findings.Where(item => item.Popularity is not null)
+        .OrderByDescending(item => item.Popularity!.Rank)
+        .ToList();
+    Check(
+        byRankDesc[0].Slug == "popular-repo" && byRankDesc[1].Slug == "popular-video",
+        "ordering findings by popularity rank must put the higher rank first"
+    );
+
+    Check(
+        en.FeaturedFindings?.Any(item => item.Slug == "featured-repo") == true,
+        "featured_findings must include the seeded featured resource"
+    );
+    Check(
+        en.FeaturedFindings?.All(item => !item.Slug.StartsWith("hidden-", StringComparison.Ordinal))
+            == true,
+        "featured_findings must not leak hidden resources"
+    );
+
     var visibility = en.Chrome.Visibility;
     Check(visibility.About, "about must be visible when a profile is published");
     Check(visibility.Resume, "resume must be visible when the resume has a summary");

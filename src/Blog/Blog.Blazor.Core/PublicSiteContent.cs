@@ -82,6 +82,7 @@ public sealed record PublicSiteSnapshot(
     [property: JsonPropertyName("featured_cases")] List<PublicCaseStudy>? FeaturedCases = null,
     [property: JsonPropertyName("featured_projects")] List<PublicProject>? FeaturedProjects = null,
     [property: JsonPropertyName("featured_writings")] List<PublicWriting>? FeaturedWritings = null,
+    [property: JsonPropertyName("featured_findings")] List<PublicFinding>? FeaturedFindings = null,
     [property: JsonPropertyName("resume_pdf_locales")] List<string>? ResumePdfLocales = null
 )
 {
@@ -180,13 +181,25 @@ public sealed record PublicFinding(
     [property: JsonPropertyName("attribution_topics")] List<PublicTopic>? AttributionTopics,
     [property: JsonPropertyName("links")] List<PublicFindingLink>? Links,
     [property: JsonPropertyName("identifiers")] List<PublicIdentifier>? Identifiers,
-    [property: JsonPropertyName("related")] List<PublicRelatedContent>? Related = null
+    [property: JsonPropertyName("related")] List<PublicRelatedContent>? Related = null,
+    [property: JsonPropertyName("popularity")] PublicPopularity? Popularity = null,
+    [property: JsonPropertyName("featured")] bool Featured = false,
+    [property: JsonPropertyName("featured_order")] int? FeaturedOrder = null
+);
+
+public sealed record PublicPopularity(
+    [property: JsonPropertyName("value")] long Value,
+    [property: JsonPropertyName("kind")] string Kind,
+    [property: JsonPropertyName("rank")] double Rank
 );
 
 public sealed record PublicTopic(
     [property: JsonPropertyName("slug")] string Slug,
     [property: JsonPropertyName("name")] string? Name,
-    [property: JsonPropertyName("url")] string? Url = null
+    [property: JsonPropertyName("url")] string? Url = null,
+    [property: JsonPropertyName("parent")] string? ParentSlug = null,
+    [property: JsonPropertyName("kind")] string? Kind = null,
+    [property: JsonPropertyName("children")] List<PublicTopic>? Children = null
 );
 
 public sealed record PublicFindingLink(

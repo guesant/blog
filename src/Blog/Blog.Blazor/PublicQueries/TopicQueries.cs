@@ -2,7 +2,14 @@ using Blog.Blazor.Data;
 
 namespace Blog.Blazor.PublicQueries;
 
-internal sealed record TopicRow(int Id, string Slug, string PublicId, string? Name);
+internal sealed record TopicRow(
+    int Id,
+    string Slug,
+    string PublicId,
+    string? Name,
+    int? ParentId,
+    string Kind
+);
 
 internal sealed record TechnologyRow(
     int Id,
@@ -53,7 +60,7 @@ internal static class TopicQueries
                 .TopicTranslations.Where(en => en.TopicId == t.Id && en.Locale == "en")
                 .DefaultIfEmpty()
             orderby t.Order, t.Id
-            select new TopicRow(t.Id, t.Slug, t.PublicId, tt.Name ?? en.Name)
+            select new TopicRow(t.Id, t.Slug, t.PublicId, tt.Name ?? en.Name, t.ParentId, t.Kind)
         ).ToList();
 
     internal static List<TechnologyRow> Technologies(BlogPublicDbContext db, string locale) =>

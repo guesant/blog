@@ -19,7 +19,12 @@ internal sealed record FindingRow(
     string? AlternativeTitle,
     string? Description,
     string? PersonalNote,
-    string? ReasonFound
+    string? ReasonFound,
+    long? PopularityValue,
+    string? PopularityKind,
+    double? PopularityRank,
+    bool Featured,
+    int? FeaturedOrder
 );
 
 internal sealed record FindingLinkRow(
@@ -72,7 +77,12 @@ internal static class FindingQueries
                 t.AlternativeTitle ?? en.AlternativeTitle,
                 t.Description ?? en.Description,
                 t.PersonalNote ?? en.PersonalNote,
-                t.ReasonFound ?? en.ReasonFound
+                t.ReasonFound ?? en.ReasonFound,
+                r.PopularityValue,
+                r.PopularityKind,
+                r.PopularityRank,
+                r.Featured,
+                r.FeaturedOrder
             )
         ).ToList();
 

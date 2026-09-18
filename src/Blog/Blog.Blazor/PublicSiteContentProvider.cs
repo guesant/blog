@@ -118,8 +118,9 @@ public sealed partial class PublicSiteContentProvider(
             PublicVisibility.None
         );
 
+        var findings = Findings(context, locale);
         var draft = new PublicSiteSnapshot(
-            1,
+            2,
             locale,
             DateTimeOffset.UtcNow.ToString("O"),
             chrome,
@@ -127,7 +128,7 @@ public sealed partial class PublicSiteContentProvider(
             projects,
             cases,
             writings,
-            Findings(context, locale),
+            findings,
             Collections(context, locale),
             Topics(context, locale),
             Technologies(context, locale),
@@ -138,6 +139,7 @@ public sealed partial class PublicSiteContentProvider(
             Featured(FeaturedQueries.CaseSlugs(context), cases, item => item.Slug),
             Featured(FeaturedQueries.ProjectSlugs(context), projects, item => item.Slug),
             Featured(FeaturedQueries.WritingSlugs(context), writings, item => item.Slug),
+            FeaturedFindings(findings),
             ResumePdfLocales()
         );
 
@@ -333,10 +335,25 @@ public sealed partial class PublicSiteContentProvider(
                 identifiers[row.Id]
                     .Select(identifier => new PublicIdentifier(identifier.Kind, identifier.Value))
                     .ToList(),
-                RelatedFindings(context, row.Id, row.Type, locale)
+                RelatedFindings(context, row.Id, row.Type, locale),
+                row.PopularityValue is { } value
+                && row.PopularityKind is { } kind
+                && row.PopularityRank is { } rank
+                    ? new PublicPopularity(value, kind, rank)
+                    : null,
+                row.Featured,
+                row.FeaturedOrder
             ))
             .ToList();
     }
+
+    private static List<PublicFinding> FeaturedFindings(List<PublicFinding> findings) =>
+        findings
+            .Where(finding => finding.Featured)
+            .OrderBy(finding => finding.FeaturedOrder ?? int.MaxValue)
+            .ThenByDescending(finding => finding.Popularity?.Rank ?? double.MinValue)
+            .ThenByDescending(finding => finding.PublishedDate)
+            .ToList();
 
     private static List<PublicRelatedContent> RelatedFindings(
         BlogPublicDbContext context,
@@ -409,11 +426,29 @@ public sealed partial class PublicSiteContentProvider(
             .ToList();
     }
 
-    private static List<PublicTopic> Topics(BlogPublicDbContext context, string locale) =>
-        TopicQueries
-            .Topics(context, locale)
-            .Select(row => Topic(row.Slug, row.PublicId, row.Name, locale))
+    private static List<PublicTopic> Topics(BlogPublicDbContext context, string locale)
+    {
+        var rows = TopicQueries.Topics(context, locale);
+        var byId = rows.ToDictionary(row => row.Id);
+        var childrenByParent = rows.Where(row =>
+                row.ParentId is { } parentId && byId.ContainsKey(parentId)
+            )
+            .ToLookup(row => row.ParentId!.Value);
+
+        return rows.Select(row => new PublicTopic(
+                row.Slug,
+                row.Name ?? row.Slug,
+                Route("topics.show", PublicRouteKey.Compose(row.PublicId, row.Slug), locale),
+                row.ParentId is { } parentId && byId.TryGetValue(parentId, out var parent)
+                    ? parent.Slug
+                    : null,
+                row.Kind,
+                childrenByParent[row.Id]
+                    .Select(child => Topic(child.Slug, child.PublicId, child.Name, locale))
+                    .ToList()
+            ))
             .ToList();
+    }
 
     private static List<PublicTechnology> Technologies(BlogPublicDbContext context, string locale)
     {

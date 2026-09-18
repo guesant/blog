@@ -308,14 +308,13 @@ app.MapGet("/health", () => Results.Ok(new { status = "ok" }));
 // temporarily-unavailable state, right after every rolling deploy.
 app.MapGet(
     "/health/ready",
-    async (IDbContextFactory<BlogPublicDbContext> contexts, CancellationToken cancellationToken) =>
+    async (ContentRevisionTracker revisions, CancellationToken cancellationToken) =>
     {
         using var timeout = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
         timeout.CancelAfter(TimeSpan.FromSeconds(2));
         try
         {
-            await using var context = await contexts.CreateDbContextAsync(timeout.Token);
-            await context.Database.ExecuteSqlRawAsync("select 1", timeout.Token);
+            await revisions.ReadFingerprintAsync(timeout.Token);
             return Results.Ok(new { status = "ok" });
         }
         catch (Exception exception)

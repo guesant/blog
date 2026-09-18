@@ -13,7 +13,6 @@ node_run := "docker run --rm -v " + justfile_directory() + ":/workspace -w /work
 dotnet_tools_restore := "dotnet tool restore >/dev/null"
 prettier_flags := "--config .config/prettierrc.json --ignore-path .config/prettierignore --ignore-path .gitignore"
 prettier_globs := '"src/Blog/Blog.Blazor*/**/*.{css,js,ts,html}" "tools/scripts/*.mjs"'
-database_project := "src/Blog/Blog.Blazor.Database/Blog.Blazor.Database.csproj"
 actionlint_image := `grep -oE "rhysd/actionlint:[0-9.]+" .github/workflows/lint-actions.yml | head -1`
 zizmor_version := `grep -oE 'version: "[0-9.]+"' .github/workflows/lint-actions.yml | grep -oE "[0-9.]+" | head -1`
 
@@ -162,14 +161,12 @@ audit:
 db-migration name:
     {{compose_dev}} up -d --wait postgres
     just db-backup
-    {{compose_dev}} run --rm -e NUGET_PACKAGES=/src/.nuget-cache --entrypoint sh web -lc \
-        '{{dotnet_tools_restore}} && dotnet tool run dotnet-ef migrations add {{name}} --project {{database_project}} --startup-project {{database_project}} --context BlogAdminDbContext'
+    {{compose_dev}} run --rm laravel php artisan make:migration {{name}}
 
 db-update:
     {{compose_dev}} up -d --wait postgres
     just db-backup
-    {{compose_dev}} run --rm -e NUGET_PACKAGES=/src/.nuget-cache --entrypoint sh web -lc \
-        '{{dotnet_tools_restore}} && dotnet tool run dotnet-ef database update --project {{database_project}} --startup-project {{database_project}} --context BlogAdminDbContext'
+    {{compose_dev}} run --rm laravel php artisan migrate --force
 
 db-backup:
     #!/usr/bin/env sh

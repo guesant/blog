@@ -15,7 +15,7 @@ Sobe em <http://localhost:8080>. `just check` roda os portões de qualidade, `ju
 
 ## Deploy
 
-Push em `main` roda os portões e publica a imagem em `ghcr.io/guesant/blog`. Como a imagem é orquestrada (Docker, Podman, k8s) fica fora do repositório: basta apontar `PORTFOLIO_DB_CONNECTION` para um PostgreSQL já migrado. Migração de banco nunca roda no start do processo web: a imagem traz o bundle de migrações em `/app/migrate`, que o deploy executa como passo próprio antes do rollout (no cluster, um Job `PreSync` do Argo CD); localmente é `just db-update`, com backup antes.
+Push em `main` roda os portões e publica a imagem em `ghcr.io/guesant/blog`. Como a imagem é orquestrada (Docker, Podman, k8s) fica fora do repositório: basta apontar as variáveis do Laravel para um PostgreSQL já migrado. Migração de banco nunca roda no start do processo web: o deploy executa `php artisan migrate --force` como passo próprio antes do rollout (no cluster, um Job `PreSync` do Argo CD); localmente é `just db-update`, com backup antes.
 
 ## Mais
 

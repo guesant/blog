@@ -4,7 +4,7 @@ Estado contínuo via GitOps (ArgoCD) para rodar o blog num cluster k3s homelab. 
 
 ## O que fica aqui
 
-Este `deploy/` guarda só ferramentas locais úteis para operar o deploy a partir da máquina do operador: `db-update` faz um dump completo do Postgres real fora do repositório e fora do Git antes de aplicar uma migração via port-forward (contingência; no fluxo normal o Job `PreSync` do Argo CD roda o bundle `/app/migrate` da própria imagem antes de cada rollout), `status` resume o estado dos pods e das `Application`s do blog no cluster, e `webhook-register` registra o webhook do GitHub que acelera a sincronização do Argo. Nenhum deles declara infraestrutura; todos assumem que o cluster e as `Application`s já existem, geridos pelo hl-infrastructure.
+Este `deploy/` guarda só ferramentas locais úteis para operar o deploy a partir da máquina do operador: `db-update` faz um dump completo do Postgres real fora do repositório e fora do Git antes de aplicar `php artisan migrate --force` via port-forward (contingência; no fluxo normal o Job `PreSync` do Argo CD executa a migração da imagem antes de cada rollout), `status` resume o estado dos pods e das `Application`s do blog no cluster, e `webhook-register` registra o webhook do GitHub que acelera a sincronização do Argo. Nenhum deles declara infraestrutura; todos assumem que o cluster e as `Application`s já existem, geridos pelo hl-infrastructure.
 
 `db-update` exige `PORTFOLIO_PRODUCTION_BACKUP_DIR` apontando para um diretório persistente fora deste checkout. A receita recusa rodar sem essa variável, identifica o pod primário do CNPG, salva um dump custom format e só então abre o port-forward para a migração.
 
@@ -23,7 +23,7 @@ Cole o resultado cifrado no arquivo correspondente dentro de `argocd/apps/satell
 
 1. Confirmar que o workflow de publicação de imagem já publicou pelo menos uma imagem para arm64.
 2. Bootstrap do cluster e consolidação dos objetos do Argo: seguir o README do hl-infrastructure.
-3. Nada a fazer para o schema: o primeiro sync do Argo CD roda o Job de migração com o bundle da imagem contra o banco vazio. `just -f deploy/justfile db-update` fica como contingência para aplicar uma migração à mão a partir da máquina do operador.
+3. Nada a fazer para o schema: o primeiro sync do Argo CD roda o Job de migração da imagem contra o banco vazio. `just -f deploy/justfile db-update` fica como contingência para aplicar uma migração à mão a partir da máquina do operador.
 4. Confirmar que o site responde pelo hostname do túnel; `just -f deploy/justfile status` para um resumo do estado dos pods e das `Application`s do blog.
 
-Dali em diante, uma imagem nova publicada é detectada pelo Kargo e promovida sozinha, e cada rollout começa pelo Job de migração, então uma migração nova entra junto com a imagem que precisa dela.
+Dali em diante, uma imagem nova publicada é detectada pelo Kargo e promovida sozinha, e cada rollout começa pelo Job de migração, então uma migração nova entra junto com a imagem que precisa dela. Durante a transição, o Job aceita tanto a imagem legada com `/app/migrate` quanto a imagem Laravel com `artisan migrate --force`.

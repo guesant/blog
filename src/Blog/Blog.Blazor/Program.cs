@@ -303,6 +303,31 @@ app.UseRateLimiter();
 
 app.MapGet("/health", () => Results.Ok(new { status = "ok" }));
 
+// IMPORTANT: readiness must fail while the pool cannot reach Postgres, or the Service starts
+// routing real traffic to a pod whose first content read throws and shows the visitor the
+// temporarily-unavailable state, right after every rolling deploy.
+app.MapGet(
+    "/health/ready",
+    async (
+        IDbContextFactory<BlogPublicDbContext> contexts,
+        CancellationToken cancellationToken
+    ) =>
+    {
+        using var timeout = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+        timeout.CancelAfter(TimeSpan.FromSeconds(2));
+        try
+        {
+            await using var context = await contexts.CreateDbContextAsync(timeout.Token);
+            await context.Database.ExecuteSqlRawAsync("select 1", timeout.Token);
+            return Results.Ok(new { status = "ok" });
+        }
+        catch (Exception exception) when (ContentRevisionTracker.IsReadFailure(exception) || exception is OperationCanceledException)
+        {
+            return Results.StatusCode(StatusCodes.Status503ServiceUnavailable);
+        }
+    }
+);
+
 app.MapGet(
     "/Culture/Set",
     (string? culture, string? redirectUri, HttpContext context, ICultureCatalog cultures) =>

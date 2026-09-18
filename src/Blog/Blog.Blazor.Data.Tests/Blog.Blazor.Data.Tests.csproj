@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.3" />
     <ProjectReference Include="..\Blog.Blazor\Blog.Blazor.csproj" />
     <ProjectReference Include="..\Blog.Blazor.Database\Blog.Blazor.Database.csproj" />
   </ItemGroup>

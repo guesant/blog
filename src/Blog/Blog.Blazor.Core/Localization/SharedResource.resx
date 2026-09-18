@@ -15,7 +15,6 @@
   <data name="credits"><value>credits</value></data>
   <data name="report_issue"><value>report an issue</value></data>
   <data name="contact_page"><value>contact</value></data>
-  <data name="some_rights_reserved"><value>some rights reserved.</value></data>
   <data name="language"><value>language</value></data>
   <data name="theme"><value>theme</value></data>
   <data name="theme_system"><value>system</value></data>
@@ -76,9 +75,6 @@
   <data name="newest"><value>newest</value></data>
   <data name="oldest"><value>oldest</value></data>
   <data name="alphabetical"><value>alphabetical</value></data>
-  <data name="graph_has_topic"><value>has topic</value></data>
-  <data name="graph_uses"><value>uses</value></data>
-  <data name="graph_contains"><value>contains</value></data>
   <data name="graph_kind_topic"><value>topics</value></data>
   <data name="graph_kind_technology"><value>technologies</value></data>
   <data name="graph_kind_project"><value>projects</value></data>
@@ -245,7 +241,6 @@
   <data name="use_regex"><value>use regex</value></data>
   <data name="text_tools"><value>text tools</value></data>
   <data name="no_elements"><value>no elements.</value></data>
-  <data name="redirecting_to_login"><value>redirecting to login…</value></data>
   <data name="border_radius_preview"><value>border radius preview</value></data>
   <data name="box_shadow_preview"><value>box shadow preview</value></data>
   <data name="gradient_preview"><value>gradient preview</value></data>

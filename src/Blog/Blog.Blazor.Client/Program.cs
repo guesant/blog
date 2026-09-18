@@ -4,7 +4,6 @@ using Blog.Blazor.Client;
 using Blog.Blazor.Core;
 using Blog.Blazor.Core.Localization;
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.JSInterop;
 using pax.BlazorChartJs;
@@ -13,8 +12,6 @@ var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.Services.AddLocalization();
 builder.Services.AddSingleton<ICultureCatalog, CultureCatalog>();
 builder.Services.AddSingleton<ILocalizedUrlBuilder, LocalizedUrlBuilder>();
-builder.Services.AddAuthorizationCore();
-builder.Services.AddScoped<AuthenticationStateProvider, AnonymousAuthenticationStateProvider>();
 builder.Services.AddScoped(_ => new HttpClient
 {
     BaseAddress = new Uri(builder.HostEnvironment.BaseAddress),

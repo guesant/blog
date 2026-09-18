@@ -7,38 +7,21 @@ fail() {
 }
 
 repo_root="$(cd "$(dirname "$0")/../.." && pwd)"
+client="$repo_root/src/Blog/Blog.Blazor.Client"
 host="$repo_root/src/Blog/Blog.Blazor"
 
-public_code="$host/PublicSiteContentProvider.cs $host/PublicKnowledgeGraphProvider.cs $host/PublicMetadataEndpoints.cs $(find "$host/PublicQueries" -name '*.cs')"
-# shellcheck disable=SC2086
-if grep -En '"(select|SELECT)[[:space:]]|FromSql|SqlQuery|ExecuteSql|DbConnection|BlogAdminDbContext' $public_code; then
-    fail "public readers must query through BlogPublicDbContext, never raw SQL or the admin context"
+test ! -e "$host/PublicSiteContentProvider.cs" || fail "the EF public site provider must be removed"
+test ! -e "$host/PublicKnowledgeGraphProvider.cs" || fail "the EF knowledge graph provider must be removed"
+test ! -d "$host/PublicQueries" || fail "the EF public query layer must be removed"
+
+if grep -REn 'IDbContextFactory|Blog(Admin|Public)DbContext|IgnoreQueryFilters' "$client" \
+    --include='*.cs' --include='*.razor'; then
+    fail "the browser client must read public content through the API contract"
 fi
 
-filters="$host/Data/PublicVisibilityFilters.cs"
-[ "$(grep -c 'HasQueryFilter' "$filters")" -eq 13 ] || fail "PublicVisibilityFilters must declare exactly thirteen query filters"
-grep -q 'Entity<Project>().HasQueryFilter(project => !project.Hidden && !project.Nda)' "$filters" || fail "projects must be filtered on hidden and nda"
-grep -q 'HasQueryFilter(caseStudy => !caseStudy.Hidden && !caseStudy.Nda)' "$filters" || fail "case studies must be filtered on hidden and nda"
-grep -q 'HasQueryFilter(resource => !resource.Hidden && resource.Visibility == "public")' "$filters" || fail "resources must be filtered on hidden and public visibility"
-grep -q 'HasQueryFilter(credit => credit.Active)' "$filters" || fail "credits must be filtered on active"
-for entity in Writing Experiment Snippet ReferenceCollection Topic Profile Resume Technology Page; do
-    grep -A1 "Entity<$entity>()" "$filters" | grep -q 'Hidden' || fail "$entity must be filtered on hidden"
-done
-grep -q 'PublicVisibilityFilters.Apply(modelBuilder)' "$host/Data/BlogPublicDbContext.cs" || fail "the public context must apply the visibility filters"
-if grep -REn 'IgnoreQueryFilters' "$host" --include='*.cs' --include='*.razor'; then
-    fail "IgnoreQueryFilters is forbidden in the runtime"
-fi
-if grep -RlE 'BlogPublicDbContext' "$host" --include='*.cs' --include='*.razor' | grep -vE '/(Data/|PublicQueries/|PublicSiteContentProvider\.cs|PublicKnowledgeGraphProvider\.cs)'; then
-    fail "BlogPublicDbContext may only be used by the public readers and the data layer"
-fi
-
-graph="$host/PublicKnowledgeGraphProvider.cs"
-grep -q 'index.ContainsKey(source) && index.ContainsKey(target)' "$graph" || fail "knowledge graph edges must be dropped when either endpoint is not a public node"
-
-for file in "$repo_root"/src/Blog/Blog.Blazor.Client/Pages/*.razor "$repo_root"/src/Blog/Blog.Blazor.Client/Shared/*.razor; do
-    if grep -qE 'IDbContextFactory|BlogAdminDbContext|BlogPublicDbContext' "$file"; then
-        fail "$file must read public content through the snapshot, never the admin DbContext"
-    fi
-done
+grep -q 'LaravelPublicSiteContentProvider' "$host/Program.cs" ||
+    fail "the server must use the Laravel public site provider"
+grep -q 'LaravelPublicKnowledgeGraphProvider' "$host/Program.cs" ||
+    fail "the server must use the Laravel knowledge graph provider"
 
 echo "Hidden content checks passed"

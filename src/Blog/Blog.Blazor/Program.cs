@@ -1,19 +1,15 @@
 using System.Globalization;
 using System.IO.Compression;
+using System.Text.Json;
 using System.Threading.RateLimiting;
 using BlazorBlueprint.Primitives.Extensions;
 using Blog.Blazor;
-using Blog.Blazor.Auth;
 using Blog.Blazor.Components;
 using Blog.Blazor.Core;
 using Blog.Blazor.Core.Localization;
-using Blog.Blazor.Data;
-using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.ResponseCompression;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using pax.BlazorChartJs;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -44,7 +40,6 @@ builder.Services.Configure<BrotliCompressionProviderOptions>(options =>
 builder.Services.Configure<GzipCompressionProviderOptions>(options =>
     options.Level = CompressionLevel.Fastest
 );
-builder.Services.AddSingleton<ProtectedEmailChallengeService>();
 builder.Services.AddSingleton<PublicSiteSnapshotPayloadCache>();
 builder.Services.AddRateLimiter(options =>
 {
@@ -92,7 +87,18 @@ builder.Services.AddRateLimiter(options =>
     );
 });
 
-builder.Services.AddBlogDatabase(builder.Configuration);
+var contentApiUrl =
+    builder.Configuration["PORTFOLIO_CONTENT_API_URL"] ?? "http://laravel:8000/api/v1";
+builder.Services.AddHttpClient(
+    "laravel-content",
+    client =>
+    {
+        client.BaseAddress = new Uri($"{contentApiUrl.TrimEnd('/')}/");
+        client.Timeout = TimeSpan.FromSeconds(15);
+    }
+);
+builder.Services.AddSingleton<IPublicSiteContentProvider, LaravelPublicSiteContentProvider>();
+builder.Services.AddSingleton<IPublicKnowledgeGraphProvider, LaravelPublicKnowledgeGraphProvider>();
 builder.Services.AddSingleton<ResumePdfGenerationService>();
 builder.Services.AddSingleton<IResumePdfService>(services =>
     services.GetRequiredService<ResumePdfGenerationService>()
@@ -104,93 +110,11 @@ builder.Services.AddChartJs(options =>
     options.ChartJsLocation = "/vendor/chartjs/chart.esm-shim.js"
 );
 
-var oidcAuthority = builder.Configuration["PORTFOLIO_ADMIN_OIDC_AUTHORITY"];
-var oidcClientId = builder.Configuration["PORTFOLIO_ADMIN_OIDC_CLIENT_ID"];
-var oidcClientSecret = builder.Configuration["PORTFOLIO_ADMIN_OIDC_CLIENT_SECRET"];
-var oidcConfigured =
-    !string.IsNullOrEmpty(oidcAuthority)
-    && !string.IsNullOrEmpty(oidcClientId)
-    && !string.IsNullOrEmpty(oidcClientSecret);
-
-var authenticationBuilder = builder
-    .Services.AddAuthentication(AdminAuthEndpoints.SchemeName)
-    .AddCookie(
-        AdminAuthEndpoints.SchemeName,
-        options =>
-        {
-            options.LoginPath = "/admin/login";
-            options.ExpireTimeSpan = TimeSpan.FromDays(14);
-            options.SlidingExpiration = true;
-            // IMPORTANT: forced to Always outside Development so the admin session cookie
-            // always carries Secure once ForwardedHeadersMiddleware (below) has restored the
-            // real client scheme. SameAsRequest alone was tried and observed to still omit
-            // Secure on a scheme-corrected request; Always plus the forwarded-scheme fix is
-            // the combination confirmed to work. Kept off in Development because there is no
-            // proxy there, so IsHttps never becomes true and Always would throw instead of
-            // just omitting the flag.
-            options.Cookie.SecurePolicy = builder.Environment.IsDevelopment()
-                ? CookieSecurePolicy.SameAsRequest
-                : CookieSecurePolicy.Always;
-        }
-    );
-
-// IMPORTANT: the OpenID Connect handler validates its options on every request through
-// the auth middleware, not just when the scheme is challenged, and an empty Authority or
-// ClientId throws a 500 sitewide. Only register the scheme once the realm is configured,
-// so the site keeps running before the Keycloak client exists.
-if (oidcConfigured)
-{
-    authenticationBuilder.AddOpenIdConnect(
-        OpenIdConnectDefaults.AuthenticationScheme,
-        options =>
-        {
-            options.Authority = oidcAuthority;
-            options.ClientId = oidcClientId;
-            options.ClientSecret = oidcClientSecret;
-            options.ResponseType = OpenIdConnectResponseType.Code;
-            options.UsePkce = true;
-            options.SignInScheme = AdminAuthEndpoints.SchemeName;
-            // IMPORTANT: Keycloak's end-session endpoint requires id_token_hint whenever a
-            // post_logout_redirect_uri is sent, and the OIDC handler can only attach it at
-            // sign-out time if the id_token was persisted at sign-in. SaveTokens = false left
-            // it unavailable, so RP-initiated logout failed with "Missing parameters:
-            // id_token_hint" instead of clearing the Keycloak session.
-            options.SaveTokens = true;
-            options.MapInboundClaims = false;
-            options.TokenValidationParameters.NameClaimType = "preferred_username";
-            options.TokenValidationParameters.RoleClaimType = "groups";
-            options.Scope.Clear();
-            options.Scope.Add("openid");
-            options.Scope.Add("profile");
-            options.Scope.Add("email");
-            options.Scope.Add("groups");
-            options.Events.OnTicketReceived = context =>
-            {
-                var requiredGroup =
-                    context.HttpContext.RequestServices.GetRequiredService<IConfiguration>()[
-                        "PORTFOLIO_ADMIN_OIDC_GROUP"
-                    ]
-                    ?? "admins";
-
-                if (context.Principal?.HasClaim("groups", requiredGroup) != true)
-                {
-                    context.HandleResponse();
-                    context.Response.Redirect("/admin/login?error=1");
-                }
-
-                return Task.CompletedTask;
-            };
-        }
-    );
-}
-
-builder.Services.AddAuthorization();
 builder.Services.AddAntiforgery(options =>
     options.Cookie.SecurePolicy = builder.Environment.IsDevelopment()
         ? CookieSecurePolicy.SameAsRequest
         : CookieSecurePolicy.Always
 );
-builder.Services.AddCascadingAuthenticationState();
 
 var app = builder.Build();
 
@@ -272,55 +196,38 @@ else
     app.UseExceptionHandler("/Error", createScopeForErrors: true);
 }
 app.UseStatusCodePagesWithReExecute("/not-found", createScopeForStatusCodePages: true);
-app.UseAuthentication();
-app.UseAuthorization();
-
-// IMPORTANT: defense in depth for the admin area. Razor components are guarded by [Authorize]
-// (Admin/_Imports.razor) and endpoints by their own policies, but a future page or endpoint
-// that forgets either would silently become public. This middleware makes every /admin path
-// private by construction; the only anonymous exceptions are the login flow endpoints, and
-// tools/scripts/verify-admin-guard.sh fails the build if this block or the attributes disappear.
-app.Use(
-    async (context, next) =>
-    {
-        var path = context.Request.Path;
-        if (
-            path.StartsWithSegments("/admin", StringComparison.OrdinalIgnoreCase)
-            && !AdminAuthEndpoints.IsAnonymousAdminPath(path)
-            && context.User.Identity?.IsAuthenticated != true
-        )
-        {
-            context.Response.Redirect(
-                $"/admin/login?returnUrl={Uri.EscapeDataString(path + context.Request.QueryString)}"
-            );
-            return;
-        }
-        await next();
-    }
-);
 app.UseAntiforgery();
 app.UseRateLimiter();
 
 app.MapGet("/health", () => Results.Ok(new { status = "ok" }));
 
-// IMPORTANT: readiness must fail while the pool cannot reach Postgres, or the Service starts
-// routing real traffic to a pod whose first content read throws and shows the visitor the
-// temporarily-unavailable state, right after every rolling deploy.
+// IMPORTANT: readiness must fail while Laravel cannot serve public content, or the Service starts
+// routing real traffic to a pod whose first content read throws right after every rolling deploy.
 app.MapGet(
     "/health/ready",
-    async (ContentRevisionTracker revisions, CancellationToken cancellationToken) =>
+    async (IPublicSiteContentProvider contentProvider, CancellationToken cancellationToken) =>
     {
         using var timeout = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
         timeout.CancelAfter(TimeSpan.FromSeconds(2));
         try
         {
-            await revisions.ReadFingerprintAsync(timeout.Token);
-            return Results.Ok(new { status = "ok" });
+            var snapshot = await contentProvider.GetAsync(
+                CultureCatalog.DefaultCultureName,
+                timeout.Token
+            );
+            return snapshot is null
+                ? Results.StatusCode(StatusCodes.Status503ServiceUnavailable)
+                : Results.Ok(new { status = "ok" });
         }
-        catch (Exception exception)
-            when (ContentRevisionTracker.IsReadFailure(exception)
-                || exception is OperationCanceledException
-            )
+        catch (HttpRequestException)
+        {
+            return Results.StatusCode(StatusCodes.Status503ServiceUnavailable);
+        }
+        catch (JsonException)
+        {
+            return Results.StatusCode(StatusCodes.Status503ServiceUnavailable);
+        }
+        catch (OperationCanceledException)
         {
             return Results.StatusCode(StatusCodes.Status503ServiceUnavailable);
         }
@@ -521,7 +428,6 @@ app.MapGet(
     )
     .RequireRateLimiting("public-api");
 PublicMetadataEndpoints.Map(app);
-AdminAuthEndpoints.Map(app);
 MapLegacyRoutes(app);
 app.MapRazorComponents<App>()
     .AddInteractiveWebAssemblyRenderMode()

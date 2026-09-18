@@ -15,7 +15,6 @@
   <data name="credits"><value>créditos</value></data>
   <data name="report_issue"><value>relatar um problema</value></data>
   <data name="contact_page"><value>contato</value></data>
-  <data name="some_rights_reserved"><value>alguns direitos reservados.</value></data>
   <data name="language"><value>idioma</value></data>
   <data name="theme"><value>tema</value></data>
   <data name="theme_system"><value>sistema</value></data>
@@ -76,9 +75,6 @@
   <data name="newest"><value>mais recentes</value></data>
   <data name="oldest"><value>mais antigos</value></data>
   <data name="alphabetical"><value>alfabético</value></data>
-  <data name="graph_has_topic"><value>tem tópico</value></data>
-  <data name="graph_uses"><value>usa</value></data>
-  <data name="graph_contains"><value>contém</value></data>
   <data name="graph_kind_topic"><value>tópicos</value></data>
   <data name="graph_kind_technology"><value>tecnologias</value></data>
   <data name="graph_kind_project"><value>projetos</value></data>
@@ -245,7 +241,6 @@
   <data name="use_regex"><value>usar regex</value></data>
   <data name="text_tools"><value>ferramentas de texto</value></data>
   <data name="no_elements"><value>nenhum elemento.</value></data>
-  <data name="redirecting_to_login"><value>redirecionando para o login…</value></data>
   <data name="border_radius_preview"><value>pré-visualização do border radius</value></data>
   <data name="box_shadow_preview"><value>pré-visualização da sombra</value></data>
   <data name="gradient_preview"><value>pré-visualização do gradiente</value></data>

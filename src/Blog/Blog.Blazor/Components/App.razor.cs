@@ -15,12 +15,6 @@ public partial class App
         get
         {
             var path = new Uri(Navigation.Uri).AbsolutePath;
-            var isAdminRoute =
-                path.StartsWith("/admin", StringComparison.OrdinalIgnoreCase)
-                && !path.Equals("/admin/login", StringComparison.OrdinalIgnoreCase);
-            if (isAdminRoute)
-                return InteractiveServer;
-
             var unlocalizedPath = path.StartsWith("/pt-BR", StringComparison.OrdinalIgnoreCase)
                 ? path[6..]
                 : path;

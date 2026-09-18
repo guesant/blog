@@ -1,23 +1,11 @@
 @using System.Reflection
-@using Microsoft.AspNetCore.Components.Authorization
 @inject NavigationManager Navigation
 
-<CascadingAuthenticationState>
-    <Router AppAssembly="typeof(Program).Assembly"
-        AdditionalAssemblies="AdminHostAssembly"
-        NotFoundPage="typeof(Pages.NotFound)">
-        <Found Context="routeData">
-            @* A URL change must create a fresh page instance. Several editorial routes
-               intentionally share one component, and keeping that instance alive lets
-               an older async load overwrite the newly selected route. *@
-            <AuthorizeRouteView @key="Navigation.Uri"
-                RouteData="routeData"
-                DefaultLayout="typeof(Layout.MainLayout)">
-                <NotAuthorized>
-                    <RedirectToAdminLogin />
-                </NotAuthorized>
-            </AuthorizeRouteView>
-            <FocusOnNavigate RouteData="routeData" Selector="h1" />
-        </Found>
-    </Router>
-</CascadingAuthenticationState>
+<Router AppAssembly="typeof(Program).Assembly" NotFoundPage="typeof(Pages.NotFound)">
+    <Found Context="routeData">
+        <RouteView @key="Navigation.Uri"
+            RouteData="routeData"
+            DefaultLayout="typeof(Layout.MainLayout)" />
+        <FocusOnNavigate RouteData="routeData" Selector="h1" />
+    </Found>
+</Router>

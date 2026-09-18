@@ -42,6 +42,17 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class PublicSiteApiController extends Controller
 {
+    public function protectedEmailChallenge(Request $request): JsonResponse|Response
+    {
+        if ((new SiteSettingsQuery)->find()?->maintenance_enabled) {
+            return response()->json(['error' => 'maintenance'], 503)->header('Retry-After', (string) 3600);
+        }
+
+        return response()->json((new SiteChromeQuery)->build(
+            Locale::normalize($request->query('locale'))
+        )['emailChallenge']);
+    }
+
     public function knowledgeMap(Request $request): JsonResponse
     {
         if ((new SiteSettingsQuery)->find()?->maintenance_enabled) {

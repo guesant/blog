@@ -2,39 +2,18 @@
 set -eu
 
 fail() {
-    echo "Admin guard check failed: $1" >&2
+    echo "Admin removal check failed: $1" >&2
     exit 1
 }
 
 repo_root="$(cd "$(dirname "$0")/../.." && pwd)"
 host="$repo_root/src/Blog/Blog.Blazor"
 
-grep -q 'path.StartsWithSegments("/admin"' "$host/Program.cs" ||
-    fail "Program.cs must keep the /admin authentication middleware"
-grep -q 'IsAnonymousAdminPath' "$host/Program.cs" ||
-    fail "the /admin middleware must consult AdminAuthEndpoints.IsAnonymousAdminPath"
-grep -q '^@attribute \[Authorize\]' "$host/Components/Admin/_Imports.razor" ||
-    fail "Components/Admin/_Imports.razor must apply [Authorize] to every admin component"
+test ! -d "$host/Components/Admin" || fail "Blazor admin components must be removed"
+test ! -f "$host/Auth/AdminAuthEndpoints.cs" || fail "Blazor admin authentication must be removed"
+if grep -R -nE 'AdminAuthEndpoints|PORTFOLIO_ADMIN_OIDC|@page "/admin' "$host" \
+    --include='*.cs' --include='*.razor' --include='*.csproj'; then
+    fail "Blazor must not retain admin routes or authentication"
+fi
 
-for file in $(grep -rl '@page "/admin' "$host/Components/Admin" --include='*.razor'); do
-    case "$file" in
-        */AdminLogin.razor)
-            grep -q '\[AllowAnonymous\]' "$file" || fail "AdminLogin.razor must opt out with [AllowAnonymous]"
-            ;;
-        *)
-            if grep -q 'AllowAnonymous' "$file"; then
-                fail "$file must not opt out of [Authorize]"
-            fi
-            ;;
-    esac
-done
-
-anonymous_endpoints="$(find "$host" -name '*.cs' -not -path '*/obj/*' -not -path '*/bin/*' -exec grep -hoE 'Map(Get|Post|Put|Delete|Patch)\("/admin[^"]*"' {} + | sed -E 's/.*\("([^"]*)"/\1/' | sort -u)"
-for endpoint in $anonymous_endpoints; do
-    case "$endpoint" in
-        /admin/sign-in | /admin/sign-out) ;;
-        *) fail "minimal API endpoint $endpoint under /admin is not in the anonymous allowlist; the middleware still protects it, but list it explicitly if it is meant to be public" ;;
-    esac
-done
-
-echo "Admin guard checks passed"
+echo "Blazor admin removal checks passed"

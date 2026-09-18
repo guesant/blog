@@ -118,6 +118,7 @@ services:
     environment:
       ASPNETCORE_ENVIRONMENT: Development
       ASPNETCORE_URLS: http://0.0.0.0:8080
+      PORTFOLIO_CONTENT_API_URL: http://laravel:8000/api/v1
       PORTFOLIO_DB_CONNECTION: Host=postgres;Database=portfolio;Username=portfolio;Password=portfolio
       PORTFOLIO_TEST_PG_CONNECTION: Host=postgres;Database=postgres;Username=portfolio;Password=portfolio
       PORTFOLIO_PUBLIC_ASSET_ROOT: /data/public
@@ -143,6 +144,8 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+      laravel:
+        condition: service_started
       resume-cache-init:
         condition: service_completed_successfully
       nuget-cache-init:

@@ -148,6 +148,9 @@
     line-height: var(--site-leading-tight);
     text-decoration: none;
 }
+.site-nav-brand-row > .site-nav-brand {
+    translate: 0 calc(-1 * var(--site-space-1));
+}
 .nav-item-label {
     min-width: 0;
     overflow: hidden;

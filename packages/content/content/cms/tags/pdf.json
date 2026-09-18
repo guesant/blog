@@ -1,0 +1,5 @@
+{
+  "slug": "pdf",
+  "order": 3,
+  "translations": { "en": { "name": "PDF" }, "ptBR": { "name": "PDF" } }
+}

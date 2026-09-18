@@ -1,0 +1,35 @@
+{
+  "slug": "home-lab",
+  "hidden": true,
+  "order": 2,
+  "href": "https://github.com/guesant/home-lab",
+  "external": true,
+  "technologies": [
+    {
+      "item": "content/cms/technologies/proxmox-ce.json"
+    },
+    {
+      "item": "content/cms/technologies/pfsense-ce.json"
+    },
+    {
+      "item": "content/cms/technologies/k3s.json"
+    },
+    {
+      "item": "content/cms/technologies/linux.json"
+    }
+  ],
+  "translations": {
+    "en": {
+      "name": "Home lab",
+      "purpose": "An ongoing personal infrastructure lab where I investigate the layers around an application in practice: virtual machines, segmented networks, VPNs, firewalls, containers, Kubernetes, identity and observability.",
+      "status": "Investigation · ongoing · repository content to update",
+      "body": "This entry is intentionally kept as a CMS draft for now. The current lab has evolved beyond what the older public repository documents, and I do not want the portfolio to imply that the repository is a complete or reproducible description of the current environment. The public Infrastructure & Cluster Notebook documents individual investigations more accurately while this broader lab record catches up."
+    },
+    "ptBR": {
+      "name": "Home lab",
+      "purpose": "Laboratório pessoal de infraestrutura em andamento onde investigo, na prática, as camadas ao redor de uma aplicação: máquinas virtuais, redes segmentadas, VPNs, firewalls, containers, Kubernetes, identidade e observabilidade.",
+      "status": "Investigação · em andamento · repositório a atualizar",
+      "body": "Esta entrada fica intencionalmente como rascunho no CMS por enquanto. O laboratório atual evoluiu além do que o repositório público mais antigo documenta, e não quero que o portfólio sugira que aquele repositório é uma descrição completa ou reproduzível do ambiente atual. O Infrastructure & Cluster Notebook público registra investigações individuais com mais precisão enquanto este registro mais amplo do laboratório é atualizado."
+    }
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "slug": "fishing-booking",
+  "hidden": false,
+  "order": 6,
+  "visual": "process",
+  "technologies": [{ "item": "content/cms/technologies/php.json" }],
+  "translations": {
+    "en": {
+      "title": "Fishing Booking",
+      "status": "Freelance · handoff completed",
+      "meta": "Legacy maintenance · PHP · Feb–Sep 2024",
+      "summary": "I joined an existing PHP product during a team transition and helped keep the system moving while ownership was changing.",
+      "context": "The application was already running in production, with unfinished work and operational responsibilities that had to move away from the previous team without stopping maintenance.",
+      "role": "Working with Vitor Daniel Silva Mello, I helped understand the legacy codebase, migrate infrastructure, finish a partially implemented competition module and handle security-related fixes and general maintenance.",
+      "result": "When our availability became incompatible with the project's needs, we handed the system over to another team instead of leaving the client without continuity. It was an early experience of entering, maintaining and responsibly exiting someone else's production system.",
+      "body": "The useful part of this case is not a greenfield architecture. We received an application that already had users, history, unfinished implementation and assumptions made by another team. The first job was therefore understanding enough of the existing system to change it safely.\n\nMy work with Vitor crossed application and operational boundaries: moving infrastructure, keeping general maintenance going, completing a competition module that was already partially built and addressing security-related issues.\n\nThe ending is part of the case too. By September our other commitments meant we could not provide the level of continuity the project needed. We handed the system to another team and left enough context for the work to continue."
+    },
+    "ptBR": {
+      "title": "Fishing Booking",
+      "status": "Freelance · repasse concluído",
+      "meta": "Manutenção de legado · PHP · fev–set/2024",
+      "summary": "Entrei em um produto PHP já existente durante uma transição de equipe e ajudei a manter a evolução do sistema enquanto a responsabilidade mudava de mãos.",
+      "context": "A aplicação já estava em produção, com trabalho parcialmente concluído e responsabilidades operacionais que precisavam sair da equipe anterior sem interromper a manutenção.",
+      "role": "Atuando com Vitor Daniel Silva Mello, ajudei a compreender o legado, migrar a infraestrutura, concluir um módulo de competição parcialmente implementado e tratar correções relacionadas à segurança e manutenção geral.",
+      "result": "Quando nossa disponibilidade deixou de ser compatível com a necessidade do projeto, fizemos o repasse para outra equipe em vez de deixar o cliente sem continuidade. Foi uma das primeiras experiências em que entrei, mantive e saí de forma responsável de um sistema de produção criado por outra equipe.",
+      "body": "O ponto útil desse case não é uma arquitetura greenfield. Recebemos uma aplicação que já tinha usuários, histórico, implementação inacabada e premissas feitas por outra equipe. O primeiro trabalho era, portanto, entender o sistema existente o suficiente para conseguir alterá-lo com segurança.\n\nMeu trabalho com o Vitor atravessou aplicação e operação: migração de infraestrutura, manutenção geral, conclusão de um módulo de competição que já estava parcialmente construído e tratamento de questões relacionadas à segurança.\n\nO fim também faz parte do case. Em setembro, nossos outros compromissos fizeram com que não conseguíssemos oferecer o nível de continuidade que o projeto precisava. Fizemos o repasse para outra equipe e deixamos contexto suficiente para que o trabalho continuasse."
+    }
+  }
+}

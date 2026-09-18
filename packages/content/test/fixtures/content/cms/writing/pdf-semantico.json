@@ -1,0 +1,32 @@
+{
+  "slug": "pdf-semantico",
+  "dateISO": "2026-07-18",
+  "typeCategory": "content/cms/categories/article.json",
+  "subjectCategory": "content/cms/categories/data.json",
+  "tags": [
+    {
+      "item": "content/cms/tags/pdf.json"
+    },
+    {
+      "item": "content/cms/tags/parsing.json"
+    }
+  ],
+  "translations": {
+    "en": {
+      "title": "Interpreting PDFs semantically: from visual cropping to parsing",
+      "type": "Article",
+      "subject": "Data",
+      "excerpt": "How to turn semi-structured documents into usable data while preserving spatial context.",
+      "readingTime": "10 min read",
+      "body": "An investigation into preserving spatial context when transforming semi-structured documents into usable data.\n\nThe central idea is to stop treating visual cropping as the final product.\n\nThe result is a smaller, more verifiable and useful solution for people who need to query data later.\n"
+    },
+    "ptBR": {
+      "title": "Interpretando PDFs semanticamente: do recorte visual ao parsing",
+      "type": "Artigo",
+      "subject": "Dados",
+      "excerpt": "Como transformar documentos semiestruturados em dados utilizáveis preservando o contexto espacial.",
+      "readingTime": "10 min de leitura",
+      "body": "Uma investigação sobre preservar contexto espacial ao transformar documentos semiestruturados em dados utilizáveis.\n\nA ideia central é não tratar o recorte visual como produto final.\n\nO resultado é uma solução menor, verificável e útil para consultar dados depois.\n"
+    }
+  }
+}

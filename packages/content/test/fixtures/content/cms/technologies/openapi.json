@@ -1,0 +1,6 @@
+{
+  "slug": "openapi",
+  "order": 13,
+  "logo": "openapiinitiative",
+  "translations": { "en": { "name": "OpenAPI" }, "ptBR": { "name": "OpenAPI" } }
+}

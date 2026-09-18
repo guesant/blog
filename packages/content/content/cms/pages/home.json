@@ -1,0 +1,69 @@
+{
+  "featuredCases": [
+    { "item": "content/cms/cases/central-de-vagas.json" },
+    { "item": "content/cms/cases/ladesa.json" },
+    { "item": "content/cms/cases/fabricjs-object-fit.json" }
+  ],
+  "featuredProjects": [
+    { "item": "content/cms/projects/infrastructure-and-cluster-notebook.json" },
+    { "item": "content/cms/projects/ava-pro.json" },
+    { "item": "content/cms/projects/ya-time-marker.json" }
+  ],
+  "featuredWriting": [
+    { "item": "content/cms/writing/pdf-semantico.json" },
+    { "item": "content/cms/writing/rrule.json" },
+    { "item": "content/cms/writing/parcel-pnpm.json" }
+  ],
+  "translations": {
+    "en": {
+      "heroIdentity": "SOFTWARE DEVELOPER · BRAZIL",
+      "heroExperience": "I work with software development. My path includes web applications, integrations, public-sector software in production, open-source projects and internal systems.",
+      "heroCurrentFocus": "Right now I am studying Go and infrastructure in a personal lab while continuing to work on applications and open-source projects.",
+      "availableLabel": "Available for software development opportunities",
+      "unavailableLabel": "Currently focused on ongoing work",
+      "workEyebrow": "Selected work",
+      "workTitle": "Selected work",
+      "workDescription": "Systems I built or helped evolve, from the context and my contribution to what happened once they left the codebase and reached real use.",
+      "projectsEyebrow": "Personal projects",
+      "projectsTitle": "Projects and investigations",
+      "projectsDescription": "A small selection from a larger archive, limited to projects and investigations with enough implementation or technical evidence to stand on their own.",
+      "experimentsSummary": "{count} documented studies on build tools, graphics, desktop and platform engineering.",
+      "experienceEyebrow": "Experience",
+      "experienceTitle": "Professional experience",
+      "experienceDescription": "My path includes academic projects, public-sector software in production, freelance work and private-sector systems.",
+      "currentlyExploringLabel": "CURRENTLY EXPLORING",
+      "recurringTechnologiesLabel": "RECURRING TECHNOLOGIES",
+      "writingEyebrow": "Writing",
+      "writingTitle": "Notes and records",
+      "writingDescription": "Technical notes, investigations and records of what I learn while building and understanding systems.",
+      "contactEyebrow": "CONTACT",
+      "contactTitle": "Contact",
+      "contactDescription": "I’m available to talk about software development, technical projects and professional opportunities."
+    },
+    "ptBR": {
+      "heroIdentity": "DESENVOLVEDOR DE SOFTWARE · BRASIL",
+      "heroExperience": "Trabalho com desenvolvimento de software. Minha trajetória passa por aplicações web, integrações, software público em produção, projetos open source e sistemas internos.",
+      "heroCurrentFocus": "Atualmente estudo Go e infraestrutura em um laboratório próprio, enquanto continuo trabalhando em aplicações e projetos open source.",
+      "availableLabel": "Disponível para oportunidades",
+      "unavailableLabel": "Focado em trabalhos em andamento no momento",
+      "workEyebrow": "Trabalhos",
+      "workTitle": "Trabalhos selecionados",
+      "workDescription": "Sistemas que construí ou ajudei a evoluir, do contexto e da minha participação ao que aconteceu quando saíram do código e chegaram ao uso real.",
+      "projectsEyebrow": "Projetos pessoais",
+      "projectsTitle": "Projetos e investigações",
+      "projectsDescription": "Uma seleção pequena de um arquivo maior, limitada a projetos e investigações com implementação ou evidência técnica suficiente para se sustentarem por conta própria.",
+      "experimentsSummary": "{count} estudos documentados sobre ferramentas de build, gráficos, desktop e engenharia de plataforma.",
+      "experienceEyebrow": "Experiência",
+      "experienceTitle": "Experiência profissional",
+      "experienceDescription": "Minha trajetória passa por projetos acadêmicos, software público em produção, freelances e sistemas no setor privado.",
+      "currentlyExploringLabel": "EXPLORANDO ATUALMENTE",
+      "recurringTechnologiesLabel": "TECNOLOGIAS RECORRENTES",
+      "writingEyebrow": "Escritos",
+      "writingTitle": "Notas e registros",
+      "writingDescription": "Notas técnicas, investigações e registros do que aprendo construindo e entendendo sistemas.",
+      "contactEyebrow": "CONTATO",
+      "contactTitle": "Contato",
+      "contactDescription": "Estou disponível para conversar sobre desenvolvimento de software, projetos técnicos e oportunidades profissionais."
+    }
+  }
+}

@@ -1,0 +1,5 @@
+{
+  "slug": "windows",
+  "order": 104,
+  "translations": { "en": { "name": "Windows" }, "ptBR": { "name": "Windows" } }
+}

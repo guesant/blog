@@ -1,0 +1,6 @@
+{
+  "slug": "dotnet",
+  "order": 121,
+  "logo": "dotnet",
+  "translations": { "en": { "name": ".NET" }, "ptBR": { "name": ".NET" } }
+}

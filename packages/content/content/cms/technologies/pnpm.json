@@ -1,0 +1,6 @@
+{
+  "slug": "pnpm",
+  "order": 25,
+  "logo": "pnpm",
+  "translations": { "en": { "name": "pnpm" }, "ptBR": { "name": "pnpm" } }
+}

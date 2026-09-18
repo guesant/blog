@@ -1,0 +1,5 @@
+{
+  "slug": "ai",
+  "order": 100,
+  "translations": { "en": { "name": "AI" }, "ptBR": { "name": "IA" } }
+}

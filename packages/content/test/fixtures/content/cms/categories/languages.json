@@ -1,0 +1,6 @@
+{
+  "slug": "languages",
+  "order": 1,
+  "kind": "skill",
+  "translations": { "en": { "name": "Languages" }, "ptBR": { "name": "Linguagens" } }
+}

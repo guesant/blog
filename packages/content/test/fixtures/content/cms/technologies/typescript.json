@@ -1,0 +1,6 @@
+{
+  "slug": "typescript",
+  "order": 1,
+  "logo": "typescript",
+  "translations": { "en": { "name": "TypeScript" }, "ptBR": { "name": "TypeScript" } }
+}

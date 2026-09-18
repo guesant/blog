@@ -1,0 +1,74 @@
+set shell := ["bash", "-uc"]
+set positional-arguments
+
+default:
+    @just --list
+
+build:
+    docker compose build
+
+up: build
+    docker compose up -d
+
+down:
+    docker compose down
+
+restart: down up
+
+logs *args:
+    docker compose logs -f "$@"
+
+shell:
+    docker compose exec app bash
+
+shell-node:
+    docker compose exec node bash
+
+install:
+    docker compose run --rm app composer install
+    docker compose run --rm node npm ci --ignore-scripts
+
+artisan *args:
+    docker compose exec app php artisan "$@"
+
+composer *args:
+    docker compose exec app composer "$@"
+
+npm *args:
+    docker compose exec node npm "$@"
+
+test *args:
+    docker compose exec app php -d memory_limit=512M vendor/bin/phpunit --configuration phpunit.xml "$@"
+
+supply-chain:
+    docker compose exec node sh scripts/verify-supply-chain.sh
+    docker compose exec node npm audit --omit=dev --audit-level=high --ignore-scripts
+    docker compose exec app composer audit --locked --no-interaction
+
+sbom:
+    docker compose run --rm node node scripts/generate-sbom.mjs
+
+migrate *args:
+    docker compose exec app php artisan migrate "$@"
+
+fresh:
+    @echo "Destructive database reset is disabled. Use a disposable test database instead." >&2
+    @exit 1
+
+tinker:
+    docker compose exec app php artisan tinker
+
+import-legacy *args:
+    docker compose exec app php artisan portfolio:import-legacy "$@"
+
+validate-import:
+    docker compose exec app php artisan portfolio:validate-import
+
+resume-pdf *args:
+    docker compose exec app php artisan portfolio:generate-resume-pdf "$@"
+
+backup-db *args:
+    docker compose exec app php artisan portfolio:backup-database "$@"
+
+restore-db *args:
+    docker compose exec app php artisan portfolio:restore-database "$@"

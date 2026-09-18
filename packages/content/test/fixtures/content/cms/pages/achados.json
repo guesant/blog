@@ -1,0 +1,14 @@
+{
+  "translations": {
+    "en": {
+      "eyebrow": "Findings",
+      "title": "Things I've found",
+      "description": "A personal, curated catalog of external references — books, papers, repos, videos, and more. Saving something here doesn't mean I've read it, watched it, or recommend it, unless a rating says otherwise."
+    },
+    "ptBR": {
+      "eyebrow": "Achados",
+      "title": "Coisas que encontrei",
+      "description": "Um catálogo pessoal e curado de referências externas — livros, papers, repositórios, vídeos e mais. Salvar algo aqui não significa que eu li, assisti ou recomendo, a menos que uma avaliação diga o contrário."
+    }
+  }
+}

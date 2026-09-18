@@ -1,0 +1,29 @@
+$schema: 'https://moonrepo.dev/schemas/project.json'
+
+language: typescript
+layer: tool
+tags: [search]
+dependsOn: [content]
+toolchains:
+  default: node
+
+tasks:
+  test:
+    command: 'node --test test/**/*.test.ts'
+    inputs: ['src/**/*', 'test/**/*', 'package.json', 'tsconfig.json']
+    tags: [test, check]
+  generate:
+    command: 'node src/generate.mts --output-dir ../next-app/public'
+    inputs: ['src/**/*', 'package.json', 'tsconfig.json', '/packages/content/content/**/*']
+    outputs: ['/packages/next-app/public/achados-search-index.*.json']
+    tags: [build, generate]
+  dev:
+    command: 'node src/generate.mts --watch --output-dir ../next-app/public'
+    preset: server
+    options:
+      persistent: true
+    tags: [dev]
+  cms:
+    extends: dev
+    tags: [dev]
+

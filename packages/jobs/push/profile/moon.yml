@@ -1,0 +1,19 @@
+$schema: 'https://moonrepo.dev/schemas/project.json'
+
+language: typescript
+layer: tool
+tags: [job, heavy]
+dependsOn: [content]
+toolchains:
+  default: node
+
+tasks:
+  test:
+    command: 'node --test test/**/*.test.ts'
+    tags: [test, check]
+  generate:
+    command: 'node src/generate.mts'
+    options:
+      cache: false
+    tags: [job, heavy]
+

@@ -1,0 +1,29 @@
+{
+  "slug": "rrule",
+  "hidden": true,
+  "dateISO": "2026-06-14",
+  "typeCategory": "content/cms/categories/note.json",
+  "subjectCategory": "content/cms/categories/backend.json",
+  "tags": [
+    { "item": "content/cms/tags/rrule.json" },
+    { "item": "content/cms/tags/recurrence.json" }
+  ],
+  "translations": {
+    "en": {
+      "title": "RRule is the recurrence syntax, not the calendar domain",
+      "type": "Note",
+      "subject": "Backend",
+      "excerpt": "Implementing recurring academic-calendar events meant deciding how dates are normalized, occurrences are expanded, durations are preserved, invalid rules degrade and unbounded recurrence is contained.",
+      "readingTime": "6 min read",
+      "body": "I used RRule in Ladesa while working on calendar scheduling and occurrence queries. The library solved an important part of the problem — parsing and expanding a recurrence rule — but the pull request made the boundary clear: a recurrence specification does not decide how the rest of an application's calendar should behave.\n\nThe query receives a date range and persisted schedule items. Non-repeating items can pass through directly; repeating items have to be expanded into occurrences inside that range. The implementation normalizes date-only strings to explicit midnight UTC before expansion, because allowing the runtime to interpret an underspecified date implicitly makes timezone behavior part of the bug surface. For each occurrence, the original event duration is preserved by calculating the difference between the stored start and end and applying it to the generated start date.\n\nRecurrence also needs containment. An RRULE can describe a very large or effectively unbounded sequence, while an API request needs a finite amount of work. The implementation therefore limits expansion to 1,000 occurrences per schedule item in one query and emits a warning when the generated set is larger. Invalid recurrence text is handled as degraded data rather than allowing a parsing error to take down the entire occurrence query: the original item is returned and the failure is logged.\n\nThose decisions are outside the recurrence grammar itself. So are permission checks, conflict validation between resources such as classes/people/environments, rules for all-day events and validation that an end date does not precede its start. The same merged calendar change touched those concerns and added tests around them.\n\nThat is the distinction I keep from this work: standards are useful because they give a shared representation, but they do not remove domain decisions. RRule can tell the system which dates belong to a recurrence. The application still has to decide what an occurrence means, how much expansion is safe, which timezone assumptions are valid, what conflicts are forbidden and what should happen when persisted rules are malformed."
+    },
+    "ptBR": {
+      "title": "RRule é a sintaxe da recorrência, não o domínio do calendário",
+      "type": "Nota",
+      "subject": "Backend",
+      "excerpt": "Implementar eventos recorrentes em um calendário acadêmico exigiu decidir como normalizar datas, expandir ocorrências, preservar duração, degradar regras inválidas e conter recorrências sem limite prático.",
+      "readingTime": "6 min de leitura",
+      "body": "Usei RRule no Ladesa enquanto trabalhava em agendamentos de calendário e consultas de ocorrências. A biblioteca resolvia uma parte importante do problema — interpretar e expandir uma regra de recorrência —, mas o próprio PR deixou clara a fronteira: uma especificação de recorrência não decide como o restante do calendário da aplicação deve se comportar.\n\nA consulta recebe um intervalo de datas e agendamentos persistidos. Itens sem repetição podem passar diretamente; itens recorrentes precisam ser expandidos em ocorrências dentro daquele intervalo. A implementação normaliza strings contendo apenas data para meia-noite UTC explícita antes da expansão, porque deixar o runtime interpretar uma data subespecificada implicitamente transforma timezone em parte da superfície de bugs. Para cada ocorrência, a duração original é preservada calculando a diferença entre início e fim armazenados e reaplicando essa duração sobre a nova data inicial.\n\nRecorrência também precisa de contenção. Uma RRULE pode descrever uma sequência enorme ou praticamente ilimitada, enquanto uma requisição de API precisa ter trabalho finito. A implementação limita a expansão a 1.000 ocorrências por agendamento em uma consulta e registra aviso quando a sequência gerada é maior. Uma regra de recorrência inválida é tratada como dado degradado, em vez de permitir que um erro de parsing derrube toda a consulta: o agendamento original é devolvido e a falha é registrada.\n\nEssas decisões estão fora da gramática de recorrência. O mesmo vale para permissões, validação de conflitos entre recursos como turmas/perfis/ambientes, semântica de eventos de dia inteiro e a regra de que a data final não pode anteceder a inicial. A mesma mudança incorporada no calendário atravessou essas preocupações e adicionou testes para elas.\n\nA distinção que guardo desse trabalho é esta: padrões são úteis porque fornecem uma representação compartilhada, mas não eliminam decisões de domínio. O RRule consegue dizer ao sistema quais datas pertencem a uma recorrência. A aplicação ainda precisa decidir o que uma ocorrência significa, quanta expansão é segura, quais premissas de timezone são válidas, quais conflitos são proibidos e o que fazer quando regras persistidas estão malformadas."
+    }
+  }
+}

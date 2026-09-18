@@ -1,0 +1,26 @@
+{
+  "slug": "outro-bun",
+  "hidden": false,
+  "order": 12,
+  "href": "https://github.com/guesant/outro-bun",
+  "external": true,
+  "technologies": [
+    { "item": "content/cms/technologies/bun.json" },
+    { "item": "content/cms/technologies/typescript.json" },
+    { "item": "content/cms/technologies/docker.json" }
+  ],
+  "translations": {
+    "en": {
+      "name": "Outro Bun",
+      "purpose": "A one-off Bun/TypeScript tool that turned a graduation-song spreadsheet export into an automated download and media-processing workflow using yt-dlp and FFmpeg.",
+      "status": "Completed one-off automation · archive · 2023",
+      "body": "Outro Bun was deliberately small and practical. It accepted a CSV exported from the graduation-song spreadsheet, used the links and optional start/end information in that data, and automated media preparation with yt-dlp and FFmpeg. The repository also contains a containerized development path around Bun and the media tools.\n\nIt remains visible because it completed a concrete workflow and has inspectable implementation; the status makes clear that it was a one-off automation rather than a maintained product."
+    },
+    "ptBR": {
+      "name": "Outro Bun",
+      "purpose": "Ferramenta pontual em Bun/TypeScript que transformava a exportação da planilha de músicas da colação de grau em um fluxo automatizado de download e processamento de mídia com yt-dlp e FFmpeg.",
+      "status": "Automação pontual concluída · arquivo · 2023",
+      "body": "O Outro Bun era propositalmente pequeno e prático. Ele recebia um CSV exportado da planilha de músicas da colação, usava os links e informações opcionais de início/fim presentes nesses dados e automatizava a preparação das mídias com yt-dlp e FFmpeg. O repositório também contém um caminho de desenvolvimento em container reunindo Bun e as ferramentas de mídia.\n\nEle continua visível porque concluiu um fluxo concreto e possui implementação inspecionável; o status deixa claro que foi uma automação pontual, não um produto mantido."
+    }
+  }
+}

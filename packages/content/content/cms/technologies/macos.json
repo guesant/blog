@@ -1,0 +1,6 @@
+{
+  "slug": "macos",
+  "order": 103,
+  "logo": "macos",
+  "translations": { "en": { "name": "macOS" }, "ptBR": { "name": "macOS" } }
+}

@@ -1,0 +1,5 @@
+{
+  "slug": "rrule",
+  "order": 32,
+  "translations": { "en": { "name": "RRule" }, "ptBR": { "name": "RRule" } }
+}

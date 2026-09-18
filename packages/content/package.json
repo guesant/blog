@@ -1,0 +1,33 @@
+{
+  "name": "@portfolio/content",
+  "version": "0.1.0",
+  "private": true,
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    "./server": "./src/server.ts",
+    "./types": "./src/types.ts",
+    "./editing": "./src/editing.ts",
+    "./editing-static": "./src/editing-static.ts",
+    "./maintenance": "./src/maintenance.ts",
+    "./regeneration": "./src/regeneration.ts",
+    "./runtime": "./src/runtime.ts",
+    "./protected-email": "./src/domain/protected-email/index.ts",
+    "./protected-email/create": "./src/domain/protected-email/create.server.ts"
+  },
+  "dependencies": {
+    "@tinacms/mdx": "^2.1.11",
+    "hash-wasm": "^4.11.0",
+    "next-intl": "^4.13.4",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "tinacms": "^3.11.0"
+  },
+  "devDependencies": {
+    "@tinacms/cli": "^2.5.6",
+    "@types/node": "^26.2.0",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.4",
+    "typescript": "^7.0.2"
+  }
+}

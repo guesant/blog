@@ -1,0 +1,20 @@
+{
+  "slug": "arco-relogio",
+  "hidden": true,
+  "order": 2,
+  "href": "https://github.com/guesant/arco-relogio-csharp",
+  "external": true,
+  "technologies": [{ "item": "content/cms/technologies/c-sharp.json" }],
+  "translations": {
+    "en": {
+      "name": "Clock-hand angles in C#",
+      "purpose": "A small 2022 C# algorithm exercise for calculating both arcs formed by the hands of a 12-hour clock while accounting for continuous hour-hand movement.",
+      "body": "This belongs in the experiments collection rather than the project archive. It is a compact algorithm study from the period when C# was part of my formal programming work at IFRO, not a product or reusable library. Keeping it hidden preserves the artifact without giving a small exercise the same weight as the projects that followed."
+    },
+    "ptBR": {
+      "name": "Ângulos dos ponteiros em C#",
+      "purpose": "Pequeno exercício algorítmico de 2022 em C# para calcular os dois arcos formados pelos ponteiros de um relógio de 12 horas, considerando o movimento contínuo do ponteiro das horas.",
+      "body": "Este item faz sentido na coleção de experimentos, não no arquivo de projetos. É um estudo algorítmico compacto do período em que C# fazia parte da minha formação em programação no IFRO, não um produto nem uma biblioteca reutilizável. Mantê-lo oculto preserva o artefato sem dar a um exercício pequeno o mesmo peso dos projetos que vieram depois."
+    }
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "slug": "gnu-bash",
+  "order": 107,
+  "logo": "gnubash",
+  "translations": { "en": { "name": "GNU Bash" }, "ptBR": { "name": "GNU Bash" } }
+}

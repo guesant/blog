@@ -1,0 +1,6 @@
+{
+  "slug": "ecmascript",
+  "order": 10,
+  "kind": "skill",
+  "translations": { "en": { "name": "ECMAScript" }, "ptBR": { "name": "ECMAScript" } }
+}

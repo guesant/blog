@@ -1,0 +1,6 @@
+{
+  "slug": "gitlab-ci",
+  "order": 115,
+  "logo": "gitlab",
+  "translations": { "en": { "name": "GitLab CI" }, "ptBR": { "name": "GitLab CI" } }
+}

@@ -1,0 +1,6 @@
+{
+  "slug": "trajectory",
+  "order": 101,
+  "kind": "writing-subject",
+  "translations": { "en": { "name": "Trajectory" }, "ptBR": { "name": "Trajetória" } }
+}

@@ -1,0 +1,41 @@
+{
+  "slug": "sipec",
+  "order": 3,
+  "visual": "process",
+  "technologies": [
+    {
+      "item": "content/cms/technologies/openapi.json"
+    },
+    {
+      "item": "content/cms/technologies/graphql.json"
+    },
+    {
+      "item": "content/cms/technologies/monorepos.json"
+    },
+    {
+      "item": "content/cms/technologies/typescript.json"
+    }
+  ],
+  "translations": {
+    "en": {
+      "title": "SIPEC",
+      "status": "Complete / discontinued",
+      "meta": "Contracts and processing · 2022–2023",
+      "summary": "Built the institutional surveys and forms platform, with a page-based editor and traceable response collection.",
+      "context": "Institutional forms, access control and integrity between frontend and backend.",
+      "role": "Full stack development with generated OpenAPI/GraphQL types and clients, plus shared schemas.",
+      "result": "Moved from several repositories to a monorepo, which put an end to contract drift between frontend and backend.",
+      "body": ""
+    },
+    "ptBR": {
+      "title": "SIPEC",
+      "status": "Concluído · descontinuado",
+      "meta": "Formulários e processamento · 2022–2023",
+      "summary": "Construí a plataforma institucional de formulários, com editor baseado em páginas e coleta rastreável de respostas.",
+      "context": "Formulários institucionais, controle de acesso e integridade entre frontend e backend.",
+      "role": "Desenvolvimento full stack com tipos e clientes gerados a partir de OpenAPI e GraphQL.",
+      "result": "Saiu de múltiplos repositórios para um monorepo, o que acabou com a divergência de contratos entre frontend e backend.",
+      "body": ""
+    }
+  }
+}

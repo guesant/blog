@@ -1,0 +1,8 @@
+{
+  "slug": "software-architecture",
+  "order": 2,
+  "translations": {
+    "en": { "name": "Software architecture" },
+    "ptBR": { "name": "Arquitetura de software" }
+  }
+}

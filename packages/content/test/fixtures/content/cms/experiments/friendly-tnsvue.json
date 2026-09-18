@@ -1,0 +1,29 @@
+{
+  "slug": "friendly-tnsvue",
+  "order": 5,
+  "href": "https://www.npmjs.com/package/@friendly-tnsvue/cli",
+  "external": true,
+  "technologies": [
+    {
+      "item": "content/cms/technologies/vue.json"
+    },
+    {
+      "item": "content/cms/technologies/native-script.json"
+    },
+    {
+      "item": "content/cms/technologies/npm.json"
+    }
+  ],
+  "translations": {
+    "en": {
+      "name": "friendly-tnsvue",
+      "purpose": "An npm-published monorepo for migrating Vue projects to NativeScript.",
+      "body": ""
+    },
+    "ptBR": {
+      "name": "friendly-tnsvue",
+      "purpose": "Monorepo publicado no npm para migrar projetos Vue para NativeScript.",
+      "body": ""
+    }
+  }
+}

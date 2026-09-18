@@ -1,0 +1,5 @@
+{
+  "slug": "pouchdb",
+  "order": 27,
+  "translations": { "en": { "name": "PouchDB" }, "ptBR": { "name": "PouchDB" } }
+}

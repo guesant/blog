@@ -1,0 +1,41 @@
+{
+  "slug": "central-de-vagas",
+  "order": 1,
+  "visual": "queue",
+  "technologies": [
+    {
+      "item": "content/cms/technologies/nestjs.json"
+    },
+    {
+      "item": "content/cms/technologies/postgresql.json"
+    },
+    {
+      "item": "content/cms/technologies/docker-swarm.json"
+    },
+    {
+      "item": "content/cms/technologies/govbr.json"
+    }
+  ],
+  "translations": {
+    "en": {
+      "title": "Central de Vagas em Creches",
+      "status": "Featured case study",
+      "meta": "Municipal education · IFRO · 2024–2025",
+      "summary": "Worked as a scholarship developer on the team that built the public platform for applications, interviews and waiting lists at municipal childcare centers.",
+      "context": "Administrative rules, different user roles and a need for transparency throughout the process.",
+      "role": "Worked on the backend, public portal, dashboard and reports, and helped with rollout, alongside other developers and the project coordinator.",
+      "result": "Deployed and in use by municipal public-sector teams.",
+      "body": ""
+    },
+    "ptBR": {
+      "title": "Central de Vagas em Creches",
+      "status": "Projeto em destaque",
+      "meta": "Educação municipal · IFRO · 2024–2025",
+      "summary": "Colaborei, como bolsista, no time que construiu a plataforma pública de inscrições, entrevistas e listas de espera de creches municipais.",
+      "context": "Regras administrativas, diferentes perfis de usuário e necessidade de transparência em todo o processo.",
+      "role": "Atuei no backend, no portal público, no painel e nos relatórios, e apoiei a implantação, junto de outros desenvolvedores e do coordenador do projeto.",
+      "result": "Implantado e em uso por equipes do serviço público municipal.",
+      "body": ""
+    }
+  }
+}

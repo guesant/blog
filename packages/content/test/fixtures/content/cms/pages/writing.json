@@ -1,0 +1,14 @@
+{
+  "translations": {
+    "en": {
+      "eyebrow": "Writing",
+      "title": "Writing and notes",
+      "description": "Notes on what I build — technical decisions, dead ends and what I learn while solving real problems."
+    },
+    "ptBR": {
+      "eyebrow": "Escritos",
+      "title": "Escritos e notas",
+      "description": "Notas sobre o que eu construo — decisões técnicas, becos sem saída e o que aprendo resolvendo problemas reais."
+    }
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "slug": "english",
+  "order": 1,
+  "code": "en",
+  "translations": { "en": { "name": "English" }, "ptBR": { "name": "Inglês" } }
+}

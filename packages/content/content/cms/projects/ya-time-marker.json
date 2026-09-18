@@ -1,0 +1,26 @@
+{
+  "slug": "ya-time-marker",
+  "hidden": false,
+  "order": 11,
+  "href": "https://github.com/guesant/yatimemarker-ionic",
+  "external": true,
+  "technologies": [
+    { "item": "content/cms/technologies/react.json" },
+    { "item": "content/cms/technologies/pouchdb.json" },
+    { "item": "content/cms/technologies/redux.json" }
+  ],
+  "translations": {
+    "en": {
+      "name": "Ya Time Marker",
+      "purpose": "A 2021 Ionic/React PWA for marking and searching time records while keeping the user's history on the device, with import, export and deletion under the user's control.",
+      "status": "Published PWA · archive · 2021",
+      "body": "Ya Time Marker is an older application, but its README makes one part of it unexpectedly relevant to my current work: official versions explicitly did not collect or report user data, stored usage/history locally and allowed the user to import, export and delete that data. The project used Ionic/React with PouchDB and was distributed as a PWA.\n\nI was not using the current vocabulary or architecture of Meu Caderno in 2021, so I do not present Ya Time Marker as the same design carried forward unchanged. It is useful as historical evidence that local data, portability and avoiding unnecessary collection already mattered to me before I later made those principles explicit in a larger local-first project."
+    },
+    "ptBR": {
+      "name": "Ya Time Marker",
+      "purpose": "PWA de 2021 em Ionic/React para registrar e pesquisar marcações de tempo mantendo o histórico no dispositivo, com importação, exportação e exclusão sob controle do usuário.",
+      "status": "PWA publicada · arquivo · 2021",
+      "body": "O Ya Time Marker é uma aplicação antiga, mas o README preserva uma parte que ficou especialmente relevante para meus projetos atuais: as versões oficiais declaravam explicitamente que não coletavam nem reportavam dados do usuário, mantinham uso/histórico localmente e permitiam importar, exportar e excluir esses dados. O projeto usava Ionic/React com PouchDB e era distribuído como PWA.\n\nEm 2021 eu não usava o vocabulário nem a arquitetura atuais do Meu Caderno, então não apresento o Ya Time Marker como se fosse o mesmo desenho simplesmente continuado. Ele é útil como evidência histórica de que dados locais, portabilidade e evitar coleta desnecessária já apareciam nas minhas decisões antes de eu transformar esses princípios em algo explícito num projeto local-first maior."
+    }
+  }
+}

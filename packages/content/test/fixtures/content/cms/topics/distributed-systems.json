@@ -1,0 +1,8 @@
+{
+  "slug": "distributed-systems",
+  "order": 1,
+  "translations": {
+    "en": { "name": "Distributed systems" },
+    "ptBR": { "name": "Sistemas distribuídos" }
+  }
+}

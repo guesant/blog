@@ -1,0 +1,9 @@
+{
+  "slug": "software-development",
+  "order": 100,
+  "kind": "writing-subject",
+  "translations": {
+    "en": { "name": "Software development" },
+    "ptBR": { "name": "Desenvolvimento de software" }
+  }
+}

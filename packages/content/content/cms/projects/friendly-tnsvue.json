@@ -1,0 +1,26 @@
+{
+  "slug": "friendly-tnsvue",
+  "hidden": true,
+  "order": 9,
+  "href": "https://github.com/guesant/friendly-tnsvue-v1",
+  "external": true,
+  "technologies": [
+    { "item": "content/cms/technologies/typescript.json" },
+    { "item": "content/cms/technologies/vue.json" },
+    { "item": "content/cms/technologies/cli.json" }
+  ],
+  "translations": {
+    "en": {
+      "name": "Friendly TNSVue",
+      "purpose": "A 2019 proof of concept for automating parts of the migration from Vue projects to NativeScript-Vue through a CLI, migration service and reusable migration models.",
+      "status": "POC · archive · 2019",
+      "body": "Friendly TNSVue was an early experiment in treating source migration as a programmable transformation rather than a manual rewrite. The archived v1 repository is organized as a Lerna monorepo with three published scoped packages: a CLI, a migration service and migration-model presets. The command-line flow was designed to run inside a Vue project and apply migration rules toward NativeScript-Vue.\n\nThe project was exploratory and was never a complete general-purpose migration product. Its historical value is preserved in the CMS, but under the current maturity rule it stays out of the public selected-project list because it remained a proof of concept rather than a completed tool/product."
+    },
+    "ptBR": {
+      "name": "Friendly TNSVue",
+      "purpose": "Proof of concept de 2019 para automatizar partes da migração de projetos Vue para NativeScript-Vue por meio de uma CLI, um serviço de migração e modelos reutilizáveis.",
+      "status": "POC · arquivo · 2019",
+      "body": "O Friendly TNSVue foi um experimento antigo de tratar migração de código como transformação programável, em vez de uma reescrita inteiramente manual. O repositório v1 arquivado está organizado como monorepo com Lerna e três pacotes publicados com escopo: uma CLI, um serviço de migração e presets/modelos de migração. O fluxo de linha de comando era pensado para rodar dentro de um projeto Vue e aplicar regras de transformação em direção ao NativeScript-Vue.\n\nO valor histórico fica preservado no CMS, mas, pelo critério atual de maturidade, ele sai da seleção pública de projetos porque permaneceu uma prova de conceito, não uma ferramenta/produto concluído."
+    }
+  }
+}

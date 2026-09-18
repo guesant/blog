@@ -1,0 +1,244 @@
+{
+  "name": "Gabriel Antunes",
+  "birthDate": "",
+  "translations": {
+    "en": {
+      "title": "Software developer",
+      "location": "Rondônia, Brazil · remote",
+      "birthCity": "Ji-Paraná, Rondônia, Brazil",
+      "description": "I work with software development. My experience includes web applications, integrations, public-sector software in production, open-source projects, internal systems and infrastructure work around applications.",
+      "interests": "Software architecture, integrations, data, Linux, infrastructure, web platforms, computing internals and the way information moves across system boundaries.",
+      "learning": "I am currently studying Go and using a homelab and a public infrastructure notebook to go deeper into networking, virtualization, containers, identity, orchestration and observability. This continues infrastructure work I had already touched in collaborative projects rather than starting as a separate specialization.",
+      "personalInterests": [
+        "Geopolitics, music and films.",
+        "Understanding computing and science even when a topic has no immediate product outcome.",
+        "Building and investigating things independently."
+      ],
+      "trajectory": [
+        {
+          "role": "Software developer",
+          "organization": "Private company",
+          "period": "2025–2026",
+          "highlights": [
+            "Worked on internal production software, including maintenance, backend changes and integrations."
+          ],
+          "includeInResume": true,
+          "hidden": false
+        },
+        {
+          "role": "Software developer in an academic/open-source project",
+          "organization": "SISGHA / Ladesa — IFRO",
+          "period": "2023–2026 · in different phases",
+          "highlights": [
+            "Contributed from early academic CRUD/UI and timetable rules through cluster/infrastructure work and later substantial application/domain changes.",
+            "Merged work includes API/domain refactors, resilience and health checks, transactional batch operations, calendar recurrence, Kubernetes/ingress maintenance and timetable-generator restructuring."
+          ],
+          "includeInResume": true,
+          "hidden": false
+        },
+        {
+          "role": "Freelance developer",
+          "organization": "Fujiwara Advogados",
+          "period": "2025",
+          "highlights": [
+            "Implemented a custom WordPress theme and content structure with Secure Custom Fields for the first version of the firm's website.",
+            "Handled the technical delivery, including VPS and domain/DNS setup, working from a design developed in collaboration with Anna Isabela Bianchini Pontusckha."
+          ],
+          "includeInResume": true,
+          "hidden": false
+        },
+        {
+          "role": "Scholarship software developer",
+          "organization": "Central de Vagas em Creches — IFRO",
+          "period": "2024–2025",
+          "highlights": [
+            "Worked across frontend and backend, including authentication, waiting-list generation, feature development, refactoring and bug fixes.",
+            "Stayed involved after implementation through rollout, support and user training for a system that reached production."
+          ],
+          "includeInResume": true,
+          "hidden": false
+        },
+        {
+          "role": "Freelance developer",
+          "organization": "Fishing Booking",
+          "period": "Feb–Sep 2024",
+          "highlights": [
+            "Joined an existing PHP application during a team transition, helping understand and maintain the legacy system.",
+            "Worked on infrastructure migration, completion of a competition module and security fixes before handing the project to another team."
+          ],
+          "includeInResume": true,
+          "hidden": false
+        }
+      ],
+      "milestones": [
+        {
+          "year": "Childhood",
+          "title": "Computers before programming",
+          "description": "My uncle worked with computer maintenance and radio internet. Watching him install networks, format computers and troubleshoot machines made technology concrete to me long before I knew how to code.",
+          "hidden": false
+        },
+        {
+          "year": "2017–2020",
+          "title": "Learning by experimenting",
+          "description": "I moved through Windows customization, Linux distributions, video editing and the web, learning HTML, CSS, JavaScript and PHP. I practiced programming and logic on SoloLearn, took Origamid courses and started publishing experiments on JipaCoding. In 2019 I was also sending patches upstream; merged work included pwa-icon-generator, extenso.js and Vue-related projects while I was building my own POCs such as Friendly TNSVue.",
+          "hidden": false
+        },
+        {
+          "year": "2021",
+          "title": "IFRO, fundamentals and the first academic project",
+          "description": "I entered the technical program in Informatics already familiar with programming and Linux, then revisited fundamentals with C# in the first programming/logic classes. In PROINFE's initial phase I studied NestJS and Keycloak and took part in meetings and analysis before there was much implementation.",
+          "hidden": false
+        },
+        {
+          "year": "2022",
+          "title": "Projects used beyond my own computer",
+          "description": "I worked full stack on an institutional surveys platform and evolved the IFRO schedule viewer from PDF cropping into extraction, normalized data and a React interface. I also attended the National Science and Technology Week in Brasília and kept deepening the browser-scraping experiments that would later connect to AVA Pro and paid work.",
+          "hidden": false
+        },
+        {
+          "year": "2023",
+          "title": "From displaying schedules to their domain",
+          "description": "The personal schedule viewer led me toward SISGHA/Ladesa, where early merged work included academic CRUD/UI and timetable-generator constraints. I also contributed an upstream Nuxt Auth fix after tracing a sign-in failure to different client-side and SSR behavior.",
+          "hidden": false
+        },
+        {
+          "year": "2024–2025",
+          "title": "Production, legacy systems and infrastructure",
+          "description": "Central de Vagas and freelance work expanded my responsibilities into maintenance, legacy code, support, training and delivery to real users. In collaborative IFRO projects I also worked with Kubernetes deployments, ingress, cluster maintenance and Helm-based deployment, so infrastructure was already entering my work before the current homelab phase.",
+          "hidden": false
+        },
+        {
+          "year": "2025–2026",
+          "title": "Private-sector systems",
+          "description": "I worked as a software developer on internal production systems at a private company.",
+          "hidden": false
+        },
+        {
+          "year": "2026",
+          "title": "Open source, local-first software and deeper infrastructure study",
+          "description": "I returned to application and scheduling work in Ladesa with substantial merged contributions, started shaping Meu Caderno as a local-first study application, continued maintaining open-source work and began documenting infrastructure investigations more deliberately through a homelab and public engineering notebook while studying Go.",
+          "hidden": false
+        }
+      ]
+    },
+    "ptBR": {
+      "title": "Desenvolvedor de software",
+      "location": "Rondônia, Brasil · remoto",
+      "birthCity": "Ji-Paraná, Rondônia, Brasil",
+      "description": "Trabalho com desenvolvimento de software. Minha experiência inclui aplicações web, integrações, software público em produção, projetos open source, sistemas internos e infraestrutura ao redor de aplicações.",
+      "interests": "Arquitetura de software, integrações, dados, Linux, infraestrutura, plataformas web, internals de computação e a forma como a informação atravessa fronteiras entre sistemas.",
+      "learning": "Atualmente estudo Go e uso um homelab e um caderno público de infraestrutura para aprofundar redes, virtualização, containers, identidade, orquestração e observabilidade. Isso continua trabalhos de infraestrutura com os quais eu já tinha tido contato em projetos colaborativos, em vez de começar como uma especialização separada.",
+      "personalInterests": [
+        "Geopolítica, música e filmes.",
+        "Entender computação e ciência mesmo quando um assunto não tem resultado imediato de produto.",
+        "Construir e investigar coisas de forma independente."
+      ],
+      "trajectory": [
+        {
+          "role": "Desenvolvedor de software",
+          "organization": "Empresa privada",
+          "period": "2025–2026",
+          "highlights": [
+            "Atuei em software interno em produção, incluindo manutenção, mudanças de backend e integrações."
+          ],
+          "includeInResume": true,
+          "hidden": false
+        },
+        {
+          "role": "Desenvolvedor de software em projeto acadêmico/open source",
+          "organization": "SISGHA / Ladesa — IFRO",
+          "period": "2023–2026 · em diferentes fases",
+          "highlights": [
+            "Contribuí desde CRUDs/interface acadêmica e regras de horários até infraestrutura de cluster e, posteriormente, mudanças substanciais de aplicação/domínio.",
+            "Entre as mudanças incorporadas estão refatorações de API/domínio, resiliência e health checks, operações batch transacionais, recorrência de calendário, manutenção de Kubernetes/ingress e reorganização do gerador de horários."
+          ],
+          "includeInResume": true,
+          "hidden": false
+        },
+        {
+          "role": "Desenvolvedor freelancer",
+          "organization": "Fujiwara Advogados",
+          "period": "2025",
+          "highlights": [
+            "Implementei um tema WordPress personalizado e a estrutura de conteúdo com Secure Custom Fields para a primeira versão do site do escritório.",
+            "Cuidei da entrega técnica, incluindo VPS e configuração de domínio/DNS, a partir de um design desenvolvido em colaboração com Anna Isabela Bianchini Pontusckha."
+          ],
+          "includeInResume": true,
+          "hidden": false
+        },
+        {
+          "role": "Bolsista em desenvolvimento de software",
+          "organization": "Central de Vagas em Creches — IFRO",
+          "period": "2024–2025",
+          "highlights": [
+            "Atuei em frontend e backend, incluindo autenticação, geração da fila, desenvolvimento de funcionalidades, refatorações e correções de bugs.",
+            "Continuei envolvido depois da implementação, participando da implantação, suporte e treinamento de usuários de um sistema que chegou à produção."
+          ],
+          "includeInResume": true,
+          "hidden": false
+        },
+        {
+          "role": "Desenvolvedor freelancer",
+          "organization": "Fishing Booking",
+          "period": "02/2024–09/2024",
+          "highlights": [
+            "Entrei em uma aplicação PHP existente durante uma transição de equipe, ajudando a compreender e manter o sistema legado.",
+            "Atuei na migração de infraestrutura, na conclusão de um módulo de competição e em correções de segurança antes do repasse para outra equipe."
+          ],
+          "includeInResume": true,
+          "hidden": false
+        }
+      ],
+      "milestones": [
+        {
+          "year": "Infância",
+          "title": "Computadores antes da programação",
+          "description": "Meu tio trabalhava com manutenção de computadores e internet via rádio. Acompanhar instalação de redes, formatação e manutenção tornou tecnologia algo concreto para mim muito antes de eu saber programar.",
+          "hidden": false
+        },
+        {
+          "year": "2017–2020",
+          "title": "Aprendendo pela experimentação",
+          "description": "Passei por personalização do Windows, distribuições Linux, edição de vídeo e web, aprendendo HTML, CSS, JavaScript e PHP. Praticava programação e lógica no SoloLearn, fiz cursos da Origamid e comecei a publicar experimentos no JipaCoding. Em 2019 também enviava patches upstream; entre trabalhos incorporados estavam pwa-icon-generator, extenso.js e projetos relacionados a Vue, enquanto eu construía POCs próprios como o Friendly TNSVue.",
+          "hidden": false
+        },
+        {
+          "year": "2021",
+          "title": "IFRO, fundamentos e o primeiro projeto acadêmico",
+          "description": "Entrei no curso técnico em Informática já familiarizado com programação e Linux e revisitei fundamentos usando C# nas primeiras disciplinas de programação/lógica. Na fase inicial do PROINFE, estudei NestJS e Keycloak e participei de reuniões e análise antes de haver muita implementação.",
+          "hidden": false
+        },
+        {
+          "year": "2022",
+          "title": "Projetos usados além do meu computador",
+          "description": "Atuei full stack em uma plataforma institucional de pesquisas e evoluí o visualizador de horários do IFRO do recorte de PDF para extração, dados normalizados e uma interface React. Também participei da Semana Nacional de Ciência e Tecnologia em Brasília e continuei aprofundando os experimentos de scraping no navegador que depois se conectariam ao AVA Pro e a trabalho pago.",
+          "hidden": false
+        },
+        {
+          "year": "2023",
+          "title": "Da exibição de horários ao domínio que os produz",
+          "description": "O visualizador pessoal de horários me levou ao SISGHA/Ladesa, onde os primeiros trabalhos incorporados incluíram CRUDs/interface acadêmica e restrições no gerador. Também contribuí upstream com uma correção no Nuxt Auth depois de rastrear uma falha de login a comportamentos diferentes entre cliente e SSR.",
+          "hidden": false
+        },
+        {
+          "year": "2024–2025",
+          "title": "Produção, legado e infraestrutura",
+          "description": "A Central de Vagas e os freelances ampliaram minhas responsabilidades para manutenção, legado, suporte, treinamento e entrega para usuários reais. Em projetos colaborativos do IFRO também trabalhei com deployments Kubernetes, ingress, manutenção de cluster e deploy via Helm, então infraestrutura já aparecia no meu trabalho antes da fase atual do homelab.",
+          "hidden": false
+        },
+        {
+          "year": "2025–2026",
+          "title": "Sistemas no setor privado",
+          "description": "Atuei como desenvolvedor em sistemas internos de produção de uma empresa privada.",
+          "hidden": false
+        },
+        {
+          "year": "2026",
+          "title": "Open source, software local-first e aprofundamento em infraestrutura",
+          "description": "Voltei ao trabalho de aplicação e horários no Ladesa com contribuições substanciais incorporadas, comecei a estruturar o Meu Caderno como aplicação de estudos local-first, continuei mantendo trabalho open source e passei a documentar investigações de infraestrutura de forma mais deliberada por meio do homelab e de um caderno público de engenharia enquanto estudo Go.",
+          "hidden": false
+        }
+      ]
+    }
+  }
+}

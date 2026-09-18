@@ -1,0 +1,14 @@
+{
+  "translations": {
+    "en": {
+      "eyebrow": "Work",
+      "title": "Cases and professional projects",
+      "description": "Stories from systems I worked on: the context, my contribution, technical decisions, what happened in real use and what I learned along the way."
+    },
+    "ptBR": {
+      "eyebrow": "Trabalho",
+      "title": "Cases e projetos profissionais",
+      "description": "Histórias de sistemas em que trabalhei: o contexto, minha participação, decisões técnicas, o que aconteceu no uso real e o que aprendi no caminho."
+    }
+  }
+}

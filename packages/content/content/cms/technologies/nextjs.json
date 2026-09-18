@@ -1,0 +1,6 @@
+{
+  "slug": "nextjs",
+  "order": 5,
+  "logo": "nextdotjs",
+  "translations": { "en": { "name": "Next.js" }, "ptBR": { "name": "Next.js" } }
+}

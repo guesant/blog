@@ -1,0 +1,31 @@
+{
+  "slug": "ava-pro",
+  "order": 3,
+  "href": "https://github.com/guesant/ava-pro",
+  "external": true,
+  "technologies": [
+    {
+      "item": "content/cms/technologies/typescript.json"
+    },
+    {
+      "item": "content/cms/technologies/react.json"
+    },
+    {
+      "item": "content/cms/technologies/webextensions.json"
+    }
+  ],
+  "translations": {
+    "en": {
+      "name": "AVA Pro",
+      "purpose": "A browser extension that improves Moodle platforms with search, organization and notifications.",
+      "status": "Published",
+      "body": ""
+    },
+    "ptBR": {
+      "name": "AVA Pro",
+      "purpose": "Extensão de navegador que melhora plataformas Moodle com busca, organização e notificações.",
+      "status": "Publicado",
+      "body": ""
+    }
+  }
+}

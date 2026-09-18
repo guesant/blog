@@ -1,0 +1,31 @@
+{
+  "slug": "ya-time-marker",
+  "order": 4,
+  "href": "https://github.com/guesant/yatimemarker-ionic",
+  "external": true,
+  "technologies": [
+    {
+      "item": "content/cms/technologies/react.json"
+    },
+    {
+      "item": "content/cms/technologies/pouchdb.json"
+    },
+    {
+      "item": "content/cms/technologies/redux.json"
+    }
+  ],
+  "translations": {
+    "en": {
+      "name": "Ya Time Marker",
+      "purpose": "A local-first time marker with import, export and search, distributed as a PWA.",
+      "status": "Published",
+      "body": ""
+    },
+    "ptBR": {
+      "name": "Ya Time Marker",
+      "purpose": "Marcador de tempo local-first com importação, exportação e busca, distribuído como PWA.",
+      "status": "Publicado",
+      "body": ""
+    }
+  }
+}

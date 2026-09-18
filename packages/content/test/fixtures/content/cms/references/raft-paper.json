@@ -1,0 +1,47 @@
+{
+  "slug": "raft-paper",
+  "order": 2,
+  "type": "paper",
+  "language": "content/cms/languages/english.json",
+  "authors": "Diego Ongaro, John Ousterhout",
+  "publishedDateISO": "2014-05-01",
+  "foundDateISO": "2024-02-01",
+  "consumptionState": "completed",
+  "rating": "recommended",
+  "editorialState": "published",
+  "visibility": "public",
+  "topics": [
+    { "item": "content/cms/topics/distributed-systems.json" },
+    { "item": "content/cms/topics/consensus.json" }
+  ],
+  "links": [
+    {
+      "url": "https://raft.github.io/raft.pdf",
+      "label": "Paper PDF",
+      "platform": "raft.github.io",
+      "purpose": "reading",
+      "isPrimary": true,
+      "isFree": true
+    }
+  ],
+  "identifiers": [{ "kind": "doi", "value": "10.1145/2723872.2723884" }],
+  "relations": [],
+  "paper": {
+    "conference": "USENIX ATC",
+    "year": "2014"
+  },
+  "translations": {
+    "en": {
+      "title": "In Search of an Understandable Consensus Algorithm",
+      "description": "The original Raft paper, designed to be easier to reason about than Paxos.",
+      "personalNote": "",
+      "reasonFound": "Wanted the primary source after reading second-hand explanations of Raft."
+    },
+    "ptBR": {
+      "title": "In Search of an Understandable Consensus Algorithm",
+      "description": "O artigo original do Raft, projetado para ser mais fácil de entender que o Paxos.",
+      "personalNote": "",
+      "reasonFound": "Queria a fonte primária depois de ler explicações de segunda mão sobre o Raft."
+    }
+  }
+}

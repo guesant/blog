@@ -1,0 +1,6 @@
+{
+  "slug": "tools",
+  "order": 6,
+  "kind": "skill",
+  "translations": { "en": { "name": "Tools" }, "ptBR": { "name": "Ferramentas" } }
+}

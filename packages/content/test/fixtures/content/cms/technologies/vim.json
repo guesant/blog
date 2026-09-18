@@ -1,0 +1,6 @@
+{
+  "slug": "vim",
+  "order": 106,
+  "logo": "vim",
+  "translations": { "en": { "name": "Vim" }, "ptBR": { "name": "Vim" } }
+}

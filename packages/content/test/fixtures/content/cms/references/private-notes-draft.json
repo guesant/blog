@@ -1,0 +1,45 @@
+{
+  "slug": "private-notes-draft",
+  "order": 6,
+  "type": "site",
+  "language": "content/cms/languages/english.json",
+  "consumptionState": "exploring",
+  "rating": "not-rated",
+  "editorialState": "draft",
+  "visibility": "private",
+  "topics": [],
+  "links": [
+    {
+      "url": "https://example.com/private-draft",
+      "label": "Draft link",
+      "platform": "example.com",
+      "purpose": "reading",
+      "isPrimary": true,
+      "isFree": true
+    }
+  ],
+  "identifiers": [],
+  "relations": [
+    {
+      "relationType": "cites",
+      "target": "content/cms/references/raft-paper.json",
+      "note": "Should never surface publicly: the source is a private draft.",
+      "status": "verified",
+      "visibility": "public"
+    }
+  ],
+  "translations": {
+    "en": {
+      "title": "Untitled draft, not ready to share",
+      "description": "A placeholder entry kept private while still being reviewed.",
+      "personalNote": "",
+      "reasonFound": ""
+    },
+    "ptBR": {
+      "title": "Rascunho sem título, ainda não pronto para compartilhar",
+      "description": "Um item provisório mantido privado enquanto ainda está em revisão.",
+      "personalNote": "",
+      "reasonFound": ""
+    }
+  }
+}

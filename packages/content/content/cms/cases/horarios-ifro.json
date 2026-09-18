@@ -1,0 +1,34 @@
+{
+  "slug": "horarios-ifro",
+  "hidden": false,
+  "order": 2,
+  "visual": "process",
+  "technologies": [
+    { "item": "content/cms/technologies/typescript.json" },
+    { "item": "content/cms/technologies/pdfjs.json" },
+    { "item": "content/cms/technologies/react.json" },
+    { "item": "content/cms/technologies/sqlite.json" }
+  ],
+  "translations": {
+    "en": {
+      "title": "IFRO Ji-Paraná Schedules",
+      "status": "Personal project used at the campus",
+      "meta": "PDF extraction · normalized data · React · 2022",
+      "summary": "I built a tool that turned the campus's weekly schedule PDFs into information students could browse by class and teacher. What began as a cropping shortcut later became structured data, a separate interface and eventually a bridge into the much harder problem of generating and managing academic schedules.",
+      "context": "Schedules arrived as a large PDF, which made finding one class or teacher unnecessarily slow. The first version simply cropped the right region of the document from mapped coordinates. Later I wanted the schedule to become actual structured data instead of remaining an image of a table.",
+      "role": "I evolved the project from coordinate-based cropping to PDF.js extraction and parsing. The public history later separates the work into an extractor package, a TypeScript data service backed by SQLite/TypeORM and a React application. My commits span the extractor/data repositories and the application, including weekly data updates and interface work.",
+      "result": "The tool gained adoption among students at the campus and became one of my first projects whose usefulness I could observe directly through other people's everyday use. It also changed the question I was asking: after improving how a finished schedule was consumed, I learned about SISGHA/Ladesa and the institutional work of producing and managing those schedules under constraints. I began contributing there in 2023.",
+      "body": "The first implementation attacked the shortest path to the pain point: map the class region in the PDF and return a cropped image. That worked, but the document was still the source of truth and the application could not reason about the schedule.\n\nThe next iterations extracted text with PDF.js and normalized the unstructured table-like content. Public repositories later separated extraction, a data service that persisted normalized information with SQLite, and a React/TypeScript application with MUI, React Query, virtualization and client-side search. The architecture was not the starting point; it emerged as the problem and my understanding of it grew.\n\nThat evolution exposed another boundary. Displaying a published schedule was only the last step of a larger process. Once I learned about SISGHA, I moved from a personal viewer into a collaborative system concerned with academic entities, scheduling rules and timetable generation itself. The two projects are therefore different in ownership and scope, but they are connected in my trajectory: Horários taught me to turn an awkward document into usable data; SISGHA/Ladesa exposed the domain that existed before the PDF was generated."
+    },
+    "ptBR": {
+      "title": "Horários do IFRO Ji-Paraná",
+      "status": "Projeto pessoal usado no campus",
+      "meta": "Extração de PDF · dados normalizados · React · 2022",
+      "summary": "Criei uma ferramenta que transformava os PDFs semanais de horários do campus em informações consultáveis por turma e professor. O que começou como um atalho de recorte depois virou dado estruturado, uma interface separada e, por fim, uma ponte para o problema muito mais difícil de gerar e administrar horários acadêmicos.",
+      "context": "Os horários chegavam em um PDF grande, o que tornava desnecessariamente demorado encontrar uma turma ou professor. A primeira versão simplesmente recortava a região correta do documento a partir de coordenadas mapeadas. Depois eu quis transformar o horário em dado estruturado de verdade, em vez de continuar tratando-o como imagem de uma tabela.",
+      "role": "Evoluí o projeto do recorte por coordenadas para extração e parsing com PDF.js. O histórico público depois separa o trabalho em um pacote de extratores, um serviço de dados em TypeScript apoiado em SQLite/TypeORM e uma aplicação React. Meus commits atravessam os repositórios de extração/dados e a aplicação, incluindo atualizações semanais e trabalho de interface.",
+      "result": "A ferramenta ganhou adoção entre estudantes do campus e se tornou um dos primeiros projetos em que pude observar diretamente a utilidade do software no cotidiano de outras pessoas. Ela também mudou a pergunta que eu estava fazendo: depois de melhorar como um horário pronto era consumido, conheci o SISGHA/Ladesa e o trabalho institucional de produzir e administrar esses horários sob várias restrições. Comecei a contribuir ali em 2023.",
+      "body": "A primeira implementação atacava o caminho mais curto até o incômodo: mapear a região da turma no PDF e devolver uma imagem recortada. Funcionava, mas o documento continuava sendo a fonte de verdade e a aplicação não conseguia raciocinar sobre o horário.\n\nAs iterações seguintes extraíram texto com PDF.js e normalizaram o conteúdo que vinha como uma tabela apenas visualmente estruturada. Os repositórios públicos depois separaram extração, um serviço de dados que persistia informações normalizadas em SQLite e uma aplicação React/TypeScript com MUI, React Query, virtualização e busca no cliente. A arquitetura não foi o ponto de partida; ela apareceu conforme o problema e a minha compreensão dele cresceram.\n\nEssa evolução expôs outra fronteira. Exibir um horário publicado era apenas a etapa final de um processo maior. Quando conheci o SISGHA, passei de um visualizador pessoal para um sistema colaborativo preocupado com entidades acadêmicas, regras de horário e a própria geração da grade. Os dois trabalhos têm propriedade e escopo diferentes, mas estão conectados na minha trajetória: Horários me ensinou a transformar um documento incômodo em dados utilizáveis; SISGHA/Ladesa expôs o domínio que existia antes de o PDF ser gerado."
+    }
+  }
+}

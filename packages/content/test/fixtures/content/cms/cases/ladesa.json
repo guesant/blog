@@ -1,0 +1,41 @@
+{
+  "slug": "ladesa",
+  "order": 2,
+  "visual": "architecture",
+  "technologies": [
+    {
+      "item": "content/cms/technologies/nestjs.json"
+    },
+    {
+      "item": "content/cms/technologies/cqrs.json"
+    },
+    {
+      "item": "content/cms/technologies/rrule.json"
+    },
+    {
+      "item": "content/cms/technologies/hexagonal-architecture.json"
+    }
+  ],
+  "translations": {
+    "en": {
+      "title": "Ladesa",
+      "status": "In progress",
+      "meta": "Architecture and academic domain · 2023–present",
+      "summary": "Built the backend for a modular academic platform, splitting the domain between the API and asynchronous processing.",
+      "context": "A complex academic domain — calendars, event recurrence and batch operations.",
+      "role": "Hexagonal architecture and CQRS, recurrence modelling and transactional journal creation.",
+      "result": "A foundation that holds: API and Worker as separate services, resilient to partial failures.",
+      "body": ""
+    },
+    "ptBR": {
+      "title": "Ladesa",
+      "status": "Em andamento",
+      "meta": "Arquitetura e domínio acadêmico · 2023–presente",
+      "summary": "Construí o backend de uma plataforma acadêmica modular, separando o domínio entre API e processamento assíncrono.",
+      "context": "Um domínio acadêmico com calendários, recorrência de eventos e operações em lote.",
+      "role": "Arquitetura hexagonal e CQRS, modelagem de recorrência e criação transacional de diários.",
+      "result": "Base que se sustenta: API e Worker como serviços separados, preparados para falhas parciais.",
+      "body": ""
+    }
+  }
+}

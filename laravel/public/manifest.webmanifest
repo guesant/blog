@@ -1,0 +1,17 @@
+{
+    "name": "guesant.net — Gabriel R. Antunes, Software developer",
+    "short_name": "guesant.net",
+    "description": "Gabriel R. Antunes' portfolio: software development, public-sector and internal systems, open-source contributions, integrations and infrastructure work around applications.",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#F7F9FC",
+    "theme_color": "#173A63",
+    "icons": [
+        {
+            "src": "/icon.svg",
+            "sizes": "any",
+            "type": "image/svg+xml",
+            "purpose": "any"
+        }
+    ]
+}

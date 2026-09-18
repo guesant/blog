@@ -1,0 +1,29 @@
+{
+  "slug": "anp-historico",
+  "hidden": true,
+  "order": 2,
+  "href": "https://github.com/guesant/anp-historico",
+  "external": true,
+  "technologies": [
+    {
+      "item": "content/cms/technologies/go.json"
+    },
+    {
+      "item": "content/cms/technologies/cli.json"
+    }
+  ],
+  "translations": {
+    "en": {
+      "name": "ANP Historical Data",
+      "purpose": "A Go validation project for collecting, reading and normalizing public historical fuel-price data from ANP/Gov.br sources.",
+      "status": "Validation · Go · incomplete",
+      "body": "This repository is still small and does not have the documentation or product surface I would require before presenting it as a finished CLI. Its value in the portfolio is narrower: it records part of my current Go study through a concrete data-ingestion problem, with code separated around source access, reading and normalization. I keep it hidden for now rather than describing an unfinished validation as a published tool."
+    },
+    "ptBR": {
+      "name": "Dados Históricos da ANP",
+      "purpose": "Validação em Go para coletar, ler e normalizar dados públicos históricos de preços de combustíveis a partir de fontes da ANP/Gov.br.",
+      "status": "Validação · Go · incompleto",
+      "body": "O repositório ainda é pequeno e não tem a documentação nem a superfície de produto que eu exigiria antes de apresentá-lo como uma CLI concluída. O valor dele no portfólio é mais estreito: registra parte do meu estudo atual de Go por meio de um problema concreto de ingestão de dados, com código separado em torno de acesso à fonte, leitura e normalização. Por enquanto mantenho oculto, em vez de descrever uma validação incompleta como ferramenta publicada."
+    }
+  }
+}

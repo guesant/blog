@@ -1,0 +1,35 @@
+{
+  "slug": "unispec",
+  "order": 1,
+  "href": "https://github.com/guesant/unispec",
+  "external": true,
+  "technologies": [
+    {
+      "item": "content/cms/technologies/typescript.json"
+    },
+    {
+      "item": "content/cms/technologies/nx.json"
+    },
+    {
+      "item": "content/cms/technologies/pnpm.json"
+    }
+  ],
+  "translations": {
+    "en": {
+      "name": "unispec",
+      "purpose": "Specify once, reuse everywhere: drivers generate OpenAPI, GraphQL, NestJS and C#/.NET.",
+      "problem": "Reduce duplication between schemas, documentation and validation rules.",
+      "currentFocus": "Contract generation and integrations with TypeScript tooling.",
+      "status": "In development",
+      "body": ""
+    },
+    "ptBR": {
+      "name": "unispec",
+      "purpose": "Uma especificação única para gerar contratos compatíveis com OpenAPI, GraphQL, NestJS e C#/.NET.",
+      "problem": "Reduzir duplicação entre schemas, documentação e regras de validação.",
+      "currentFocus": "Geração de contratos e integrações com ferramentas TypeScript.",
+      "status": "Em desenvolvimento",
+      "body": ""
+    }
+  }
+}

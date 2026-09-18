@@ -1,0 +1,6 @@
+{
+  "slug": "gnu",
+  "order": 101,
+  "logo": "gnu",
+  "translations": { "en": { "name": "GNU" }, "ptBR": { "name": "GNU" } }
+}

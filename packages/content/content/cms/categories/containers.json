@@ -1,0 +1,6 @@
+{
+  "slug": "containers",
+  "order": 7,
+  "kind": "skill",
+  "translations": { "en": { "name": "Containers" }, "ptBR": { "name": "Contêineres" } }
+}

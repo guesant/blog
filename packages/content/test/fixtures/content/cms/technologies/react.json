@@ -1,0 +1,6 @@
+{
+  "slug": "react",
+  "order": 6,
+  "logo": "react",
+  "translations": { "en": { "name": "React" }, "ptBR": { "name": "React" } }
+}

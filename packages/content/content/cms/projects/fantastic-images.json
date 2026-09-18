@@ -1,0 +1,25 @@
+{
+  "slug": "fantastic-images",
+  "hidden": true,
+  "order": 7,
+  "href": "https://github.com/guesant/fantastic-images",
+  "external": true,
+  "technologies": [
+    { "item": "content/cms/technologies/typescript.json" },
+    { "item": "content/cms/technologies/fabricjs.json" }
+  ],
+  "translations": {
+    "en": {
+      "name": "Fantastic Images",
+      "purpose": "An older TypeScript/Fabric.js exploration for describing image templates and rendering generated compositions on canvas.",
+      "status": "Technical exploration · archive · 2020–2021",
+      "body": "Fantastic Images grew out of a broader line of template-editor experiments, including a Fabric.js core, Vue/PWA and later React editor work, Node-oriented paths and the later `@fantastic-images/*` packages. It remains useful as development history and as context for the later, narrower `fabricjs-object-fit` library. Under the current maturity rule, however, the broad exploration itself stays out of the public selected-project list."
+    },
+    "ptBR": {
+      "name": "Fantastic Images",
+      "purpose": "Exploração antiga em TypeScript/Fabric.js para descrever templates de imagem e renderizar composições geradas em canvas.",
+      "status": "Ensaio técnico · arquivo · 2020–2021",
+      "body": "O Fantastic Images nasceu de uma linha mais ampla de experimentos com editor de templates, incluindo core em Fabric.js, editor Vue/PWA e depois React, caminhos voltados a Node e os pacotes posteriores `@fantastic-images/*`. Ele continua útil como histórico de desenvolvimento e como contexto para a biblioteca posterior e mais específica `fabricjs-object-fit`. Pelo critério atual de maturidade, porém, a exploração ampla fica fora da seleção pública de projetos."
+    }
+  }
+}

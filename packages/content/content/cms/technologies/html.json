@@ -1,0 +1,6 @@
+{
+  "slug": "html",
+  "order": 119,
+  "logo": "html5",
+  "translations": { "en": { "name": "HTML" }, "ptBR": { "name": "HTML" } }
+}

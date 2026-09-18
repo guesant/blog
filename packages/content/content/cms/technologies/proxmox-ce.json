@@ -1,0 +1,6 @@
+{
+  "slug": "proxmox-ce",
+  "order": 111,
+  "logo": "proxmox",
+  "translations": { "en": { "name": "Proxmox CE" }, "ptBR": { "name": "Proxmox CE" } }
+}

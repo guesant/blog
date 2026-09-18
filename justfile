@@ -7,6 +7,8 @@ compose := "docker compose" + env_file + " -f .docker/compose.yaml"
 compose_dev := compose + " -f .docker/compose.dev.yaml"
 docker_run := compose + " run --rm --entrypoint sh web -lc"
 tools_run := compose_dev + " run --rm tools sh -lc"
+node_image := "node:24.18-bookworm-slim"
+node_run := "docker run --rm -v " + justfile_directory() + ":/workspace -w /workspace " + node_image + " sh -lc"
 
 dotnet_tools_restore := "dotnet tool restore >/dev/null"
 prettier_flags := "--config .config/prettierrc.json --ignore-path .config/prettierignore --ignore-path .gitignore"
@@ -69,7 +71,7 @@ popularity-refresh *args:
     {{docker_run}} 'dotnet run --project src/Blog/Blog.Blazor.Popularity/Blog.Blazor.Popularity.csproj --configuration Release --no-build -- {{args}}'
 
 
-check: check-core check-data check-ui
+check: check-core check-data check-ui laravel-check frontend-check
 
 check-core: tools-build \
     format \
@@ -159,11 +161,13 @@ audit:
 
 db-migration name:
     {{compose_dev}} up -d --wait postgres
+    just db-backup
     {{compose_dev}} run --rm -e NUGET_PACKAGES=/src/.nuget-cache --entrypoint sh web -lc \
         '{{dotnet_tools_restore}} && dotnet tool run dotnet-ef migrations add {{name}} --project {{database_project}} --startup-project {{database_project}} --context BlogAdminDbContext'
 
 db-update:
     {{compose_dev}} up -d --wait postgres
+    just db-backup
     {{compose_dev}} run --rm -e NUGET_PACKAGES=/src/.nuget-cache --entrypoint sh web -lc \
         '{{dotnet_tools_restore}} && dotnet tool run dotnet-ef database update --project {{database_project}} --startup-project {{database_project}} --context BlogAdminDbContext'
 
@@ -178,6 +182,24 @@ db-backup:
 db-restore file:
     {{compose_dev}} up -d --wait postgres
     cat "{{file}}" | {{compose_dev}} exec -T postgres pg_restore -U portfolio -d portfolio --clean --if-exists
+
+laravel-check:
+    {{compose_dev}} run --rm laravel php artisan migrate:status
+    {{compose_dev}} run --rm laravel ./vendor/bin/pint --test
+    {{compose_dev}} run --rm laravel php artisan test
+
+frontend-install:
+    {{node_run}} 'corepack pnpm install --frozen-lockfile --ignore-scripts'
+
+frontend-check: frontend-install
+    {{node_run}} 'corepack pnpm --filter @portfolio/content exec tsc --noEmit'
+    {{node_run}} 'corepack pnpm --filter portfolio exec tsc --noEmit'
+
+next:
+    {{compose_dev}} up -d next
+
+next-logs:
+    {{compose_dev}} logs -f --tail=100 next
 
 stories:
     {{compose_dev}} run --rm -p 8081:8081 -e NUGET_PACKAGES=/src/.nuget-cache -e ASPNETCORE_URLS=http://0.0.0.0:8081 web sh -lc \

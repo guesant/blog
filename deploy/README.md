@@ -4,7 +4,9 @@ Estado contínuo via GitOps (ArgoCD) para rodar o blog num cluster k3s homelab. 
 
 ## O que fica aqui
 
-Este `deploy/` guarda só ferramentas locais úteis para operar o deploy a partir da máquina do operador: `db-update` aplica uma migração de schema contra o Postgres real via port-forward (contingência; no fluxo normal o Job `PreSync` do Argo CD roda o bundle `/app/migrate` da própria imagem antes de cada rollout), `status` resume o estado dos pods e das `Application`s do blog no cluster, e `webhook-register` registra o webhook do GitHub que acelera a sincronização do Argo. Nenhum deles declara infraestrutura; todos assumem que o cluster e as `Application`s já existem, geridos pelo hl-infrastructure.
+Este `deploy/` guarda só ferramentas locais úteis para operar o deploy a partir da máquina do operador: `db-update` faz um dump completo do Postgres real fora do repositório e fora do Git antes de aplicar uma migração via port-forward (contingência; no fluxo normal o Job `PreSync` do Argo CD roda o bundle `/app/migrate` da própria imagem antes de cada rollout), `status` resume o estado dos pods e das `Application`s do blog no cluster, e `webhook-register` registra o webhook do GitHub que acelera a sincronização do Argo. Nenhum deles declara infraestrutura; todos assumem que o cluster e as `Application`s já existem, geridos pelo hl-infrastructure.
+
+`db-update` exige `PORTFOLIO_PRODUCTION_BACKUP_DIR` apontando para um diretório persistente fora deste checkout. A receita recusa rodar sem essa variável, identifica o pod primário do CNPG, salva um dump custom format e só então abre o port-forward para a migração.
 
 ## Gerar ou trocar um segredo
 

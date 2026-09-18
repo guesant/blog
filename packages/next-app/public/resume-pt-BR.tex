@@ -1,0 +1,131 @@
+% Adaptado de https://github.com/celiobjunior/resume-template (resumes/pt-br/curriculo.tex).
+% Copyright © 2025 Celio B Junior. Licenciado sob a Apache License, Version 2.0
+% (http://www.apache.org/licenses/LICENSE-2.0). Ver LICENSES/Apache-2.0.txt.
+\documentclass[a4paper,10pt]{article}
+
+\usepackage{fontspec}
+\setmainfont{lmroman10-regular.otf}[
+    BoldFont = lmroman10-bold.otf,
+    ItalicFont = lmroman10-italic.otf,
+    BoldItalicFont = lmroman10-bolditalic.otf
+]
+\usepackage[portuguese]{babel}
+
+\usepackage{geometry}
+\usepackage{parskip}
+\usepackage[expansion=false]{microtype}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage{array}
+\usepackage{tabularx}
+
+\usepackage{hyperref}
+
+\geometry{top=1.5cm, bottom=1.5cm, left=1.5cm, right=1.5cm}
+\setcounter{secnumdepth}{0}
+\setlist[itemize]{
+    leftmargin=0.75em,
+    itemsep=0.2em,
+    topsep=0.25em,
+    parsep=0em,
+    partopsep=0em
+}
+
+\pagestyle{empty}
+
+\hypersetup{
+    pdftitle={Currículo Gabriel Antunes},
+    pdfauthor={Gabriel Antunes},
+    colorlinks=true,
+    linkcolor=black,
+    urlcolor=black,
+    citecolor=black,
+    bookmarksdepth=2
+}
+
+\titleformat{\section}
+{\Large\bfseries}
+{}
+{0em}
+{}
+[\titlerule\vspace{0.5ex}]
+\titleformat{\subsection}
+{\normalsize\bfseries}
+{}
+{0em}
+{}
+\titlespacing*{\subsection}{0pt}{0.35em}{0.15em}
+
+\newcounter{cventry}
+\newcommand{\cventry}[4]{%
+    \refstepcounter{cventry}%
+    \phantomsection%
+    \pdfbookmark[2]{#1}{cventry-\thecventry}%
+    \noindent\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}X >{\raggedleft\arraybackslash}X@{}}
+    \textbf{#1} & #2 \\
+    \textit{#3} & \textit{#4} \\
+    \end{tabularx}
+}
+
+\begin{document}
+
+\begin{center}
+    {\LARGE \textbf{Gabriel Antunes}}
+    \\ [0.1cm]
+    Rondônia, Brasil · remoto
+    {\textbullet}
+    \href{mailto:gabrielrodantunes@gmail.com}{gabrielrodantunes@gmail.com}
+    {\textbullet}
+    \href{https://linkedin.com/in/gabrielrodantunes}{LinkedIn}
+    {\textbullet}
+    \href{https://github.com/guesant}{GitHub}
+    {\textbullet}
+    \href{http://lattes.cnpq.br/5981427817317311}{Lattes}
+    {\textbullet}
+    \href{https://orcid.org/0009-0009-0221-943X}{ORCID}
+    {\textbullet}
+    \href{https://www.instagram.com/briel_rodriguess}{www.instagram.com/briel\_rodriguess}
+    {\textbullet}
+    \href{https://gitlab.com/guesant}{gitlab.com/guesant}
+\end{center}
+
+\section{Perfil}
+    Desenvolvedor de software que resolve problema de ponta a ponta: entendo o contexto e as restrições, investigo até a causa real e entrego sistemas que aguentam o uso, de backend e integrações a infraestrutura.
+
+
+
+\section{Trabalhos selecionados}
+    
+
+\section{Habilidades}
+    \begin{itemize}
+                \item \textbf{Sistemas operacionais:} GNU, Linux, macOS, Windows
+        \item \textbf{Ferramentas:} Git, Vim, GNU Bash
+        \item \textbf{Contêineres:} Docker
+        \item \textbf{Clusters:} Kubernetes, Helm, K3s, Proxmox CE, Portainer CE, pfSense CE
+        \item \textbf{DevOps e CI/CD:} GitHub Actions, GitLab CI, Azure Pipelines
+        \item \textbf{ECMAScript:} Bun, Node.js, TypeScript, JavaScript
+        \item \textbf{Front-end:} HTML, CSS, Next.js, React, Vue, WebExtensions
+        \item \textbf{.NET:} .NET, C\#
+        \item \textbf{php:} PHP, Yii, WordPress
+        \item \textbf{IDEs e editores de código:} VS Code, WebStorm
+        \item \textbf{Dados e plataforma:} PostgreSQL, SQLite, Prisma
+        \item \textbf{Integrações e arquitetura:} OpenAPI, GraphQL, REST, Monorepos
+    \end{itemize}
+
+
+
+
+
+
+
+
+% ------
+
+\section{Idiomas}
+    \begin{itemize}
+        \item Português (Brasil) (Nativo)
+        \item Inglês
+    \end{itemize}
+
+\end{document}

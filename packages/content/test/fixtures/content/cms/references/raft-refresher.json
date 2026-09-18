@@ -1,0 +1,56 @@
+{
+  "slug": "raft-refresher",
+  "order": 3,
+  "type": "video",
+  "language": "content/cms/languages/english.json",
+  "organizations": "Software Engineering Explained",
+  "publishedDateISO": "2021-09-15",
+  "foundDateISO": "2024-02-03",
+  "consumptionState": "completed",
+  "rating": "interesting",
+  "editorialState": "published",
+  "visibility": "public",
+  "topics": [
+    { "item": "content/cms/topics/distributed-systems.json" },
+    { "item": "content/cms/topics/consensus.json" }
+  ],
+  "links": [
+    {
+      "url": "https://www.youtube.com/watch?v=example-raft-refresher",
+      "label": "Watch on YouTube",
+      "platform": "youtube",
+      "purpose": "viewing",
+      "isPrimary": true,
+      "isFree": true
+    }
+  ],
+  "identifiers": [{ "kind": "youtube", "value": "example-raft-refresher" }],
+  "relations": [
+    {
+      "relationType": "explains",
+      "target": "content/cms/references/raft-paper.json",
+      "note": "Walks through leader election and log replication with diagrams.",
+      "status": "verified",
+      "visibility": "public"
+    }
+  ],
+  "video": {
+    "channel": "Software Engineering Explained",
+    "duration": "18:42",
+    "youtubeId": "example-raft-refresher"
+  },
+  "translations": {
+    "en": {
+      "title": "Raft Consensus, Visually Explained",
+      "description": "A diagram-driven walkthrough of the Raft consensus algorithm.",
+      "personalNote": "",
+      "reasonFound": "Good refresher before implementing a toy Raft node."
+    },
+    "ptBR": {
+      "title": "Consenso Raft, Explicado Visualmente",
+      "description": "Uma explicação do algoritmo de consenso Raft guiada por diagramas.",
+      "personalNote": "",
+      "reasonFound": "Bom refresco antes de implementar um nó Raft de brinquedo."
+    }
+  }
+}

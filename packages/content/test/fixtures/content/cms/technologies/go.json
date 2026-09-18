@@ -1,0 +1,6 @@
+{
+  "slug": "go",
+  "order": 2,
+  "logo": "go",
+  "translations": { "en": { "name": "Go" }, "ptBR": { "name": "Go" } }
+}

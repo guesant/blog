@@ -1,0 +1,6 @@
+{
+  "slug": "javascript",
+  "order": 118,
+  "logo": "javascript",
+  "translations": { "en": { "name": "JavaScript" }, "ptBR": { "name": "JavaScript" } }
+}

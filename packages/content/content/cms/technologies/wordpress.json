@@ -1,0 +1,6 @@
+{
+  "slug": "wordpress",
+  "order": 7,
+  "logo": "wordpress",
+  "translations": { "en": { "name": "WordPress" }, "ptBR": { "name": "WordPress" } }
+}

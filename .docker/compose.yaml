@@ -16,6 +16,70 @@ services:
       interval: 5s
       timeout: 3s
       retries: 12
+  laravel: &laravel
+    build:
+      context: ../laravel
+      dockerfile: docker/app.Dockerfile
+    working_dir: /app
+    volumes:
+      - ../laravel:/app
+      - resume-pdf-cache:/data/resume-cache:ro
+      - laravel-composer-cache:/composer-cache
+    environment:
+      APP_ENV: local
+      APP_KEY: ${PORTFOLIO_LARAVEL_APP_KEY:-base64:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=}
+      APP_URL: http://localhost:8001
+      DB_CONNECTION: pgsql
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_DATABASE: portfolio
+      DB_USERNAME: portfolio
+      DB_PASSWORD: portfolio
+      CACHE_STORE: database
+      SESSION_DRIVER: database
+      QUEUE_CONNECTION: database
+      COMPOSER_CACHE_DIR: /composer-cache
+      PORTFOLIO_RESUME_PDF_ROOT: /data/resume-cache
+    ports:
+      - "8001:8000"
+    command: php artisan serve --no-reload --host=0.0.0.0 --port=8000
+    depends_on:
+      postgres:
+        condition: service_healthy
+  laravel-worker:
+    <<: *laravel
+    ports: []
+    command: php artisan queue:work --sleep=3 --tries=3 --max-time=3600
+  laravel-scheduler:
+    <<: *laravel
+    ports: []
+    command: php artisan schedule:work
+  next:
+    image: node@sha256:235600a8101ab264e117b1768e925532262668dc9b581ef1dd7d96ced463b8e7
+    working_dir: /workspace
+    user: "${PORTFOLIO_CONTAINER_UID:-1000}:${PORTFOLIO_CONTAINER_GID:-1000}"
+    volumes:
+      - ..:/workspace
+      - next-node-modules:/workspace/node_modules
+    environment:
+      PORTFOLIO_CONTENT_API_URL: http://laravel:8000/api/v1/public-site
+      NEXT_PUBLIC_SITE_URL: http://localhost:3000
+      HOME: /tmp
+    ports:
+      - "3000:3000"
+    command: sh -lc 'corepack pnpm install --frozen-lockfile --ignore-scripts && corepack pnpm --filter portfolio exec next dev --hostname 0.0.0.0'
+    depends_on:
+      laravel:
+        condition: service_started
+      next-node-modules-init:
+        condition: service_completed_successfully
+  next-node-modules-init:
+    image: node@sha256:235600a8101ab264e117b1768e925532262668dc9b581ef1dd7d96ced463b8e7
+    user: "0:0"
+    volumes:
+      - next-node-modules:/workspace/node_modules
+    command: sh -lc 'mkdir -p /workspace/node_modules && chown -R ${PORTFOLIO_CONTAINER_UID:-1000}:${PORTFOLIO_CONTAINER_GID:-1000} /workspace/node_modules'
+    restart: "no"
   resume-cache-init:
     image: mcr.microsoft.com/dotnet/sdk@sha256:2fa828c68761b1b8c23d7662dc134421b9d3b59fe1425fdbc80804e390cdb24d
     user: "0:0"
@@ -116,3 +180,5 @@ volumes:
   postgres-data:
   nuget-cache:
   resume-pdf-cache:
+  laravel-composer-cache:
+  next-node-modules:

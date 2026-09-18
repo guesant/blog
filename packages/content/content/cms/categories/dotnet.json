@@ -1,0 +1,6 @@
+{
+  "slug": "dotnet",
+  "order": 12,
+  "kind": "skill",
+  "translations": { "en": { "name": ".NET" }, "ptBR": { "name": ".NET" } }
+}

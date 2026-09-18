@@ -1,0 +1,5 @@
+{
+  "slug": "pdfjs",
+  "order": 18,
+  "translations": { "en": { "name": "PDF.js" }, "ptBR": { "name": "PDF.js" } }
+}

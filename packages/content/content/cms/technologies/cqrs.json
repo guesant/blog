@@ -1,0 +1,5 @@
+{
+  "slug": "cqrs",
+  "order": 39,
+  "translations": { "en": { "name": "CQRS" }, "ptBR": { "name": "CQRS" } }
+}

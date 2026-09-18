@@ -1,0 +1,6 @@
+{
+  "slug": "note",
+  "order": 11,
+  "kind": "writing-type",
+  "translations": { "en": { "name": "Note" }, "ptBR": { "name": "Nota" } }
+}

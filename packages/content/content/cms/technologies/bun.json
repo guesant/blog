@@ -1,0 +1,6 @@
+{
+  "slug": "bun",
+  "order": 23,
+  "logo": "bun",
+  "translations": { "en": { "name": "Bun" }, "ptBR": { "name": "Bun" } }
+}

@@ -1,0 +1,8 @@
+{
+  "slug": "consensus",
+  "order": 3,
+  "translations": {
+    "en": { "name": "Consensus algorithms" },
+    "ptBR": { "name": "Algoritmos de consenso" }
+  }
+}

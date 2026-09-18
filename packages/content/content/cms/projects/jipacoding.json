@@ -1,0 +1,22 @@
+{
+  "slug": "jipacoding",
+  "hidden": true,
+  "order": 6,
+  "href": "https://www.youtube.com/@jipacoding",
+  "external": true,
+  "technologies": [],
+  "translations": {
+    "en": {
+      "name": "JipaCoding",
+      "purpose": "A public video archive that preserves different phases of my technical learning, from early PHP/CSS/JavaScript experiments to algorithms, image generation, browser extensions, automation and infrastructure.",
+      "status": "Technical archive · 2018–present",
+      "body": "JipaCoding remains useful as longitudinal evidence and as a source that connects several historical artifacts, but it is not itself a software project. Under the current maturity and classification rule it stays in the CMS/editorial inventory instead of occupying a slot in the public selected-project list."
+    },
+    "ptBR": {
+      "name": "JipaCoding",
+      "purpose": "Arquivo público de vídeos que preserva diferentes fases do meu aprendizado técnico, dos primeiros experimentos com PHP/CSS/JavaScript a algoritmos, geração de imagens, extensões de navegador, automação e infraestrutura.",
+      "status": "Arquivo técnico · 2018–presente",
+      "body": "O JipaCoding continua útil como evidência longitudinal e como fonte que conecta vários artefatos históricos, mas não é em si um projeto de software. Pelo critério atual de maturidade e classificação, ele fica no CMS/inventário editorial em vez de ocupar espaço na seleção pública de projetos."
+    }
+  }
+}

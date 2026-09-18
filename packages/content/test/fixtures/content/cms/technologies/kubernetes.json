@@ -1,0 +1,6 @@
+{
+  "slug": "kubernetes",
+  "order": 108,
+  "logo": "kubernetes",
+  "translations": { "en": { "name": "Kubernetes" }, "ptBR": { "name": "Kubernetes" } }
+}

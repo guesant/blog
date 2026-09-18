@@ -1,0 +1,6 @@
+{
+  "slug": "prisma",
+  "order": 12,
+  "logo": "prisma",
+  "translations": { "en": { "name": "Prisma" }, "ptBR": { "name": "Prisma" } }
+}

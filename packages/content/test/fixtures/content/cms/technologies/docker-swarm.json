@@ -1,0 +1,6 @@
+{
+  "slug": "docker-swarm",
+  "order": 30,
+  "logo": "docker",
+  "translations": { "en": { "name": "Docker Swarm" }, "ptBR": { "name": "Docker Swarm" } }
+}

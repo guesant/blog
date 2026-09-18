@@ -1,0 +1,6 @@
+{
+  "slug": "git",
+  "order": 105,
+  "logo": "git",
+  "translations": { "en": { "name": "Git" }, "ptBR": { "name": "Git" } }
+}

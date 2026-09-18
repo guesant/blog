@@ -1,0 +1,5 @@
+{
+  "slug": "vscode",
+  "order": 123,
+  "translations": { "en": { "name": "VS Code" }, "ptBR": { "name": "VS Code" } }
+}

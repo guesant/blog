@@ -1,4 +1,6 @@
 node_modules
+**/*.tsbuildinfo
+**/.next/
 
 # .NET/Blazor build outputs
 **/bin/
@@ -17,3 +19,5 @@ test-results
 **/.DS_Store
 
 /CSharpier/
+
+.pnpm-store

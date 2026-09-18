@@ -1,0 +1,9 @@
+{
+  "slug": "ides-code-editors",
+  "order": 13,
+  "kind": "skill",
+  "translations": {
+    "en": { "name": "IDEs and code editors" },
+    "ptBR": { "name": "IDEs e editores de código" }
+  }
+}

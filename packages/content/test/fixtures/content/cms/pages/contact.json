@@ -1,0 +1,14 @@
+{
+  "translations": {
+    "en": {
+      "eyebrow": "Let's talk",
+      "title": "Let's talk: a problem, a project or a role.",
+      "description": "I’m available to talk about technical problems that need solving, projects related to my work, and roles that match what I do."
+    },
+    "ptBR": {
+      "eyebrow": "Vamos conversar",
+      "title": "Vamos conversar: um problema, um projeto ou uma vaga.",
+      "description": "Estou disponível para conversar sobre problemas técnicos que precisam ser resolvidos, projetos relacionados ao meu trabalho e vagas que combinam com o que eu faço."
+    }
+  }
+}

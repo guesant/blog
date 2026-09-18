@@ -1,0 +1,12 @@
+{
+  "translations": {
+    "en": {
+      "title": "Résumé",
+      "description": "Professional experience, selected work and technical skills."
+    },
+    "ptBR": {
+      "title": "Currículo",
+      "description": "Experiência profissional, projetos selecionados e habilidades técnicas."
+    }
+  }
+}

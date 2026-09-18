@@ -1,0 +1,32 @@
+{
+  "slug": "rrule",
+  "dateISO": "2026-06-14",
+  "typeCategory": "content/cms/categories/note.json",
+  "subjectCategory": "content/cms/categories/backend.json",
+  "tags": [
+    {
+      "item": "content/cms/tags/rrule.json"
+    },
+    {
+      "item": "content/cms/tags/recurrence.json"
+    }
+  ],
+  "translations": {
+    "en": {
+      "title": "Event recurrence with RRule: what the specification does not tell you",
+      "type": "Note",
+      "subject": "Backend",
+      "excerpt": "Academic calendars reveal exceptions, time zones and contradictions hidden in recurrence rules.",
+      "readingTime": "6 min read",
+      "body": "Modelling recurrence is more than repeating an event at a frequency.\n\nThe specification helps, but domain decisions remain the system’s responsibility.\n\nThe best implementation made the rules visible and testable.\n"
+    },
+    "ptBR": {
+      "title": "Recorrência de eventos com RRule: o que a especificação não conta",
+      "type": "Nota",
+      "subject": "Backend",
+      "excerpt": "Calendários acadêmicos revelam exceções, fusos e contradições escondidas nas regras de recorrência.",
+      "readingTime": "6 min de leitura",
+      "body": "Modelar recorrência é mais do que repetir um evento em uma frequência.\n\nA especificação ajuda, mas decisões de domínio continuam sendo responsabilidade do sistema.\n\nA melhor implementação tornou as regras visíveis e testáveis.\n"
+    }
+  }
+}

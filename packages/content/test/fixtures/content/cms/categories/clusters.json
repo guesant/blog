@@ -1,0 +1,6 @@
+{
+  "slug": "clusters",
+  "order": 8,
+  "kind": "skill",
+  "translations": { "en": { "name": "Clusters" }, "ptBR": { "name": "Clusters" } }
+}

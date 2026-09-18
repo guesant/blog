@@ -1,0 +1,6 @@
+{
+  "slug": "backend-web",
+  "order": 2,
+  "kind": "skill",
+  "translations": { "en": { "name": "Backend and web" }, "ptBR": { "name": "Backend e web" } }
+}

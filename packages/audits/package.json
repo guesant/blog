@@ -1,0 +1,13 @@
+{
+  "name": "@portfolio/audits",
+  "version": "0.1.0",
+  "private": true,
+  "license": "MIT",
+  "devDependencies": {
+    "@axe-core/playwright": "4.12.1",
+    "@lhci/cli": "0.15.1",
+    "@playwright/test": "1.62.1",
+    "@types/node": "^26.2.0",
+    "typescript": "5.9.3"
+  }
+}

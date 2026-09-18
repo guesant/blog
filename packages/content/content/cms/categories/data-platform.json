@@ -1,0 +1,9 @@
+{
+  "slug": "data-platform",
+  "order": 3,
+  "kind": "skill",
+  "translations": {
+    "en": { "name": "Data and platform" },
+    "ptBR": { "name": "Dados e plataforma" }
+  }
+}

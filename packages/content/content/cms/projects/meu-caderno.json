@@ -1,0 +1,27 @@
+{
+  "slug": "meu-caderno",
+  "hidden": true,
+  "order": 1,
+  "href": "https://github.com/meu-caderno/caderno",
+  "external": true,
+  "technologies": [
+    { "item": "content/cms/technologies/typescript.json" },
+    { "item": "content/cms/technologies/vue.json" },
+    { "item": "content/cms/technologies/bun.json" },
+    { "item": "content/cms/technologies/nx.json" }
+  ],
+  "translations": {
+    "en": {
+      "name": "Meu Caderno",
+      "purpose": "An early-stage open-source local-first study application for organizing subjects, courses, learning projects, activities, grades, attendance, materials and accumulated knowledge without making a server mandatory.",
+      "status": "Early-stage project · MVP · local-first PWA",
+      "body": "Meu Caderno is an early-stage personal project where product decisions and software architecture meet. The project is designed around offline-first use, user-owned local data, optional synchronization, progressive disclosure and avoiding lock-in. A project constitution makes those principles explicit, including reversibility, consent and limits around automated or AI-assisted behavior.\n\nThe current codebase is a Bun/Nx monorepo. The UI-independent core already contains typed domain models and Zod schemas for contexts, profiles, library, notebooks, activities and federation, alongside persistence/federation structures and adapters; the application is a Nuxt/Vue PWA designed to run without a mandatory backend. The delivery pipeline also reflects the same concern for control and verifiability, with GitHub Pages deployment, CodeQL, dependency automation, workflow linting/security checks and build attestations. The application is still at MVP/early-development stage, so this record remains hidden from the public project selection until the product surface is substantial enough to represent completed work rather than architectural direction.\n\nThis is not the first time local data and user control appeared in one of my projects. Ya Time Marker, a small PWA I published in 2021, already kept its usage history on the device and explicitly supported importing, exporting and deleting the user's data without collecting it centrally. I do not treat the two applications as one continuous architecture, but the older project makes the current local-first principles less disconnected from the rest of my history: the vocabulary became more deliberate; the concern itself is older."
+    },
+    "ptBR": {
+      "name": "Meu Caderno",
+      "purpose": "Aplicação open source e local-first em fase inicial para organizar disciplinas, cursos, projetos de aprendizado, atividades, notas, frequência, materiais e conhecimento acumulado sem tornar um servidor obrigatório.",
+      "status": "Projeto em fase inicial · MVP · PWA local-first",
+      "body": "O Meu Caderno é um projeto pessoal em fase inicial em que decisões de produto e arquitetura de software se encontram. O projeto é pensado a partir de uso offline, dados locais controlados pelo usuário, sincronização opcional, divulgação progressiva de complexidade e ausência de lock-in. Uma constituição do projeto explicita esses princípios, incluindo reversibilidade, consentimento e limites para comportamentos automatizados ou assistidos por IA.\n\nO código atual está organizado como monorepo com Bun e Nx. O core independente da interface já contém modelos de domínio tipados e schemas Zod para contextos, perfis, biblioteca, cadernos, atividades e federação, além de estruturas de persistência/federação e adaptadores; a aplicação é uma PWA em Nuxt/Vue projetada para funcionar sem backend obrigatório. A entrega também segue a preocupação com controle e verificabilidade, com deploy no GitHub Pages, CodeQL, automação de dependências, validações de segurança dos workflows e atestações de build. A aplicação ainda está em estágio de MVP/desenvolvimento inicial, por isso este registro permanece oculto da seleção pública de projetos até que a superfície do produto seja substancial o suficiente para representar trabalho concluído, e não principalmente direção arquitetural.\n\nEsta não é a primeira vez que dados locais e controle do usuário aparecem em um projeto meu. O Ya Time Marker, uma PWA pequena que publiquei em 2021, já mantinha o histórico de uso no dispositivo e declarava explicitamente suporte a importar, exportar e excluir os dados sem coletá-los centralmente. Não trato as duas aplicações como se compartilhassem uma arquitetura contínua, mas o projeto antigo deixa os princípios local-first atuais menos desconectados do restante da minha trajetória: o vocabulário ficou mais deliberado; a preocupação é mais antiga."
+    }
+  }
+}

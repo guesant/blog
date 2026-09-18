@@ -1,0 +1,5 @@
+{
+  "slug": "playwright",
+  "order": 21,
+  "translations": { "en": { "name": "Playwright" }, "ptBR": { "name": "Playwright" } }
+}

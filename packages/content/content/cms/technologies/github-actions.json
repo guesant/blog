@@ -1,0 +1,6 @@
+{
+  "slug": "github-actions",
+  "order": 114,
+  "logo": "githubactions",
+  "translations": { "en": { "name": "GitHub Actions" }, "ptBR": { "name": "GitHub Actions" } }
+}

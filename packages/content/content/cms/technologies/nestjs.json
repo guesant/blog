@@ -1,0 +1,6 @@
+{
+  "slug": "nestjs",
+  "order": 17,
+  "logo": "nestjs",
+  "translations": { "en": { "name": "NestJS" }, "ptBR": { "name": "NestJS" } }
+}

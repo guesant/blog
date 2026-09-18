@@ -1,0 +1,66 @@
+$schema: 'https://moonrepo.dev/schemas/project.json'
+
+language: typescript
+layer: application
+tags: [next, app]
+dependsOn: [content, resume-pdf, search-index]
+toolchains:
+  default: node
+
+tasks:
+  typegen:
+    command: 'next typegen'
+    inputs: ['app/**/*', 'next.config.*', 'tsconfig.json', '/.config/moon/**/*.yml']
+    outputs: ['.next/types/**/*', '.next/dev/types/**/*']
+    tags: [check, generate]
+  build:
+    command: 'next build'
+    deps: ['resume-pdf:generate', 'search-index:generate']
+    inputs:
+      - 'app/**/*'
+      - 'components/**/*'
+      - 'lib/**/*'
+      - 'public/**/*'
+      - 'next.config.*'
+      - 'next-env.d.ts'
+      - 'package.json'
+      - 'tsconfig.json'
+      - '/biome.json'
+      - '/.config/moon/**/*.yml'
+    outputs:
+      - '.next/**/*'
+      - '!.next/cache'
+      - '!.next/cache/**/*'
+      - '!.next/standalone'
+      - '!.next/standalone/**/*'
+    tags: [build]
+  discover-routes:
+    command: 'node scripts/ci/discover-routes.mts'
+    inputs: ['app/**/*', 'scripts/ci/discover-routes.mts', '/packages/content/content/**/*']
+    outputs: ['scripts/ci/audited-routes.json']
+    tags: [generate]
+  standalone:
+    command: 'bash ../../tools/next/standalone.sh'
+    deps: [build, discover-routes]
+    inputs: ['.next/**/*', 'next.config.*', 'scripts/ci/discover-routes.mts', '/tools/next/standalone.sh']
+    outputs:
+      - '.next/standalone/packages/next-app/server.js'
+      - '.next/standalone/packages/next-app/.next/static/**/*'
+      - '.next/standalone/packages/next-app/public/**/*'
+      - '.next/static/**/*'
+    options:
+      cache: false
+    tags: [build]
+  dev:
+    command: 'next dev --hostname 0.0.0.0'
+    preset: server
+    options:
+      persistent: true
+    tags: [dev]
+  start:
+    command: 'next start --hostname 0.0.0.0'
+    preset: server
+    options:
+      persistent: true
+    deps: [standalone]
+    tags: [serve]

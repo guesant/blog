@@ -1,0 +1,30 @@
+{
+  "slug": "ia-no-desenvolvimento",
+  "hidden": true,
+  "dateISO": "2026-08-15",
+  "typeCategory": "content/cms/categories/article.json",
+  "subjectCategory": "content/cms/categories/software-development.json",
+  "tags": [
+    {
+      "item": "content/cms/tags/ai.json"
+    }
+  ],
+  "translations": {
+    "en": {
+      "title": "AI changed how I develop software, not why I care about it",
+      "type": "Article",
+      "subject": "Software development",
+      "excerpt": "I learned to program before generative AI was part of the workflow. Today I use it heavily, but I still see architecture, constraints, business rules and quality criteria as engineering decisions rather than prompts.",
+      "readingTime": "5 min read",
+      "body": "I learned programming in a period when getting a small application working usually meant spending much more time reading documentation, following tutorials, doing logic exercises and debugging without a model generating the next implementation for me. I do not think that makes the old process morally better, but it shaped how I relate to code: I had to build enough internal references to notice when something did not make sense.\n\nGenerative AI is now an unavoidable and very useful part of my workflow. I use it for research, debugging, comparing approaches, understanding unfamiliar systems and implementing code. Used well, it can compress hours of mechanical work and make it practical to explore areas that would otherwise take much longer to enter.\n\nThe part I do not want to outsource is judgment. A model can generate an architecture, but it does not own the cost of operating it. It can implement a rule, but it does not decide whether the rule represents the business correctly. It can produce tests, abstractions and infrastructure, but someone still has to define what quality means for that system and verify the result.\n\nFor me, using AI well means giving it constraints rather than asking it to replace them: the architecture I am aiming for, the security model, the cost I can accept, the rules the system must preserve and the trade-offs I am willing to make. The more capable the tool becomes, the more useful it is to know what I want from it and why.\n\nThat is also why I do not want to build a professional identity around being a person who writes code faster than AI. Software was interesting to me before code generation became cheap because I liked systems, information, automation and understanding how things connected. Those interests survive changes in the way code itself is produced."
+    },
+    "ptBR": {
+      "title": "A IA mudou como eu desenvolvo software, não por que software me interessa",
+      "type": "Artigo",
+      "subject": "Desenvolvimento de software",
+      "excerpt": "Aprendi a programar antes de IA generativa fazer parte do fluxo de desenvolvimento. Hoje uso bastante, mas continuo tratando arquitetura, restrições, regras de negócio e critérios de qualidade como decisões de engenharia, não como prompts.",
+      "readingTime": "5 min de leitura",
+      "body": "Aprendi programação em uma época em que fazer uma aplicação pequena funcionar normalmente significava passar muito mais tempo lendo documentação, seguindo tutoriais, fazendo exercícios de lógica e depurando sem um modelo gerando a próxima implementação para mim. Não acho que isso torne o processo antigo moralmente melhor, mas ele moldou minha relação com código: eu precisei construir referências internas suficientes para perceber quando alguma coisa não fazia sentido.\n\nA IA generativa hoje é uma parte inevitável e muito útil do meu fluxo. Uso para pesquisa, diagnóstico de problemas, comparação de abordagens, entendimento de sistemas que ainda não conheço e implementação de código. Quando bem utilizada, ela comprime horas de trabalho mecânico e torna viável explorar áreas que levariam muito mais tempo para entrar.\n\nA parte que eu não quero terceirizar é o julgamento. Um modelo pode gerar uma arquitetura, mas não assume o custo de operá-la. Pode implementar uma regra, mas não decide se aquela regra representa corretamente o negócio. Pode produzir testes, abstrações e infraestrutura, mas alguém ainda precisa definir o que qualidade significa naquele sistema e verificar o resultado.\n\nPara mim, usar IA bem é condicioná-la às restrições em vez de pedir que ela substitua essas restrições: a arquitetura que quero seguir, o modelo de segurança, o custo aceitável, as regras que o sistema precisa preservar e os trade-offs que estou disposto a fazer. Quanto mais capaz a ferramenta se torna, mais útil é saber o que quero dela e por quê.\n\nÉ também por isso que não quero construir uma identidade profissional em torno de ser uma pessoa que escreve código mais rápido do que a IA. Software já me interessava antes de gerar código ficar barato porque eu gostava de sistemas, informação, automação e de entender como as coisas se conectavam. Esses interesses continuam existindo mesmo quando a forma de produzir código muda."
+    }
+  }
+}

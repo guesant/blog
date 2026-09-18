@@ -1,0 +1,6 @@
+{
+  "slug": "npm",
+  "order": 36,
+  "logo": "npm",
+  "translations": { "en": { "name": "npm" }, "ptBR": { "name": "npm" } }
+}

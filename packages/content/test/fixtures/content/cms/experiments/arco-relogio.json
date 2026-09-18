@@ -1,0 +1,23 @@
+{
+  "slug": "arco-relogio",
+  "order": 2,
+  "href": "https://github.com/guesant/arco-relogio-csharp",
+  "external": true,
+  "technologies": [
+    {
+      "item": "content/cms/technologies/c-sharp.json"
+    }
+  ],
+  "translations": {
+    "en": {
+      "name": "Clock-hand angles in C#",
+      "purpose": "Calculates angles between clock hands while accounting for continuous hour movement.",
+      "body": ""
+    },
+    "ptBR": {
+      "name": "Ângulos dos ponteiros em C#",
+      "purpose": "Calcula ângulos entre ponteiros considerando o movimento contínuo das horas.",
+      "body": ""
+    }
+  }
+}

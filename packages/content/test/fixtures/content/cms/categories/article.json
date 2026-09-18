@@ -1,0 +1,6 @@
+{
+  "slug": "article",
+  "order": 10,
+  "kind": "writing-type",
+  "translations": { "en": { "name": "Article" }, "ptBR": { "name": "Artigo" } }
+}

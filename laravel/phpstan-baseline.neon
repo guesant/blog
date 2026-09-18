@@ -1,0 +1,53 @@
+parameters:
+	ignoreErrors:
+		# $pivot is genuinely present at runtime (Eloquent hydrates it on every
+		# row loaded through a BelongsToMany::withPivot() relation), but
+		# Illuminate\Database\Eloquent\Relations\Pivot itself declares no
+		# properties, so accessing a pivot column (here: `order`) is unresolvable
+		# to Larastan without a dedicated Pivot subclass wired via
+		# ->using(CustomPivot::class) on each of these four relations
+		# (Page::featuredCases/featuredProjects/featuredWritings,
+		# ReferenceCollection::resources). That's a real structural change
+		# (new Pivot model classes + relation wiring), not a one-line fix, so
+		# it's left out of scope for this lint pass rather than rushed.
+		-
+			message: '#^Access to an undefined property App\\Models\\CaseStudy\:\:\$pivot\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Pages/ManageResume.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\CaseStudy\:\:\$pivot\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Pages/Pages/EditPage.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Project\:\:\$pivot\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Pages/Pages/EditPage.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Writing\:\:\$pivot\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Pages/Pages/EditPage.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Resource\:\:\$pivot\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Filament/Resources/ReferenceCollections/Pages/EditReferenceCollection.php
+
+		# Real rule (env() should only be read from config/*.php so cached
+		# config keeps working), but the fix means adding a `tectonic.bundle`
+		# key to config/services.php and switching this call site to
+		# config('tectonic.bundle') — this task is scoped to app/ plus the two
+		# phpstan config files, so touching config/ is out of scope here.
+		# Left as a known, real follow-up rather than silently ignored.
+		-
+			message: '#^Called ''env'' outside of the config directory which returns null when the config is cached, use ''config''\.$#'
+			identifier: larastan.noEnvCallsOutsideOfConfig
+			count: 1
+			path: app/Support/ResumePdf/DocumentRenderer.php

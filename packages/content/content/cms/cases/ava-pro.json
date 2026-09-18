@@ -1,0 +1,33 @@
+{
+  "slug": "ava-pro",
+  "hidden": false,
+  "order": 8,
+  "visual": "process",
+  "technologies": [
+    { "item": "content/cms/technologies/typescript.json" },
+    { "item": "content/cms/technologies/react.json" },
+    { "item": "content/cms/technologies/webextensions.json" }
+  ],
+  "translations": {
+    "en": {
+      "title": "AVA Pro — Moodle inside a browser extension",
+      "status": "Personal project · archive",
+      "meta": "Web Extensions · authenticated web application integration · 2021–2022",
+      "summary": "AVA Pro grew from my web-scraping experiments into a browser extension that interacted with Moodle as an authenticated application: courses, search and pinning, login flows, chats and background checks for new messages.",
+      "context": "My earlier scraping experiments mostly dealt with information already present in HTML. Moodle was more interesting because useful information belonged to an authenticated application with its own requests, sessions and dynamic flows. The goal was not to copy a page into an extension; it was to make selected parts of the learning environment usable from the browser UI.",
+      "role": "I built the extension and explored how to obtain and present Moodle data across static page content and application-driven flows. The resulting project surfaced enrolled courses, supported search and pinned courses, automated parts of login, exposed chat browsing/conversation and checked for new messages in the background.",
+      "result": "The repository stopped active development in 2022, so I treat it as an archive rather than a maintained Moodle product. It remains one of the personal projects I value most because it changed how I thought about web automation: from selecting DOM nodes to understanding a running application, its authenticated state and the information exchanged between its parts.",
+      "body": "AVA Pro sits in the middle of a longer learning path. A simple browser-scraping demonstration first showed me that a page could be treated as a data source. I later recorded my own scraping experiment with public IFPR notices. Those examples were largely static: the information I wanted was already in the document.\n\nMoodle pushed the idea further. Courses, login state, conversations and new messages are not just a static document. Building them into an extension required me to treat the website as an application and understand where its information came from and how authenticated flows behaved. The extension could list and search enrolled courses, keep selected courses pinned, automate parts of access, browse and send chat messages and perform background checks for new messages.\n\nI do not present AVA Pro as a polished extension that should be installed today. Its dependencies, the Moodle versions it targeted and browser-extension APIs belong to a particular period. The useful part of the case is the transition in reasoning: the browser stopped being only a renderer of pages and became a place where I could observe and connect independent software flows. That same interest later reappeared in paid scraping, API integrations and the infrastructure work around applications."
+    },
+    "ptBR": {
+      "title": "AVA Pro — Moodle dentro de uma extensão de navegador",
+      "status": "Projeto pessoal · arquivo",
+      "meta": "Web Extensions · integração com aplicação web autenticada · 2021–2022",
+      "summary": "O AVA Pro nasceu dos meus experimentos com web scraping e virou uma extensão que interagia com o Moodle como aplicação autenticada: disciplinas, busca e fixação, fluxos de login, chats e verificações em segundo plano por novas mensagens.",
+      "context": "Meus experimentos anteriores de scraping lidavam principalmente com informações que já estavam presentes no HTML. O Moodle era mais interessante porque boa parte da informação útil pertencia a uma aplicação autenticada, com requisições, sessão e fluxos dinâmicos próprios. A intenção não era copiar uma página para dentro da extensão; era tornar partes selecionadas do ambiente de ensino utilizáveis a partir da interface do navegador.",
+      "role": "Construí a extensão e explorei como obter e apresentar dados do Moodle atravessando conteúdo estático da página e fluxos conduzidos pela própria aplicação. O projeto resultante mostrava disciplinas em que o usuário estava inscrito, permitia busca e cursos fixados, automatizava partes do login, expunha consulta/conversa em chats e verificava novas mensagens em segundo plano.",
+      "result": "O repositório deixou de receber desenvolvimento ativo em 2022, então trato o projeto como arquivo e não como produto Moodle mantido hoje. Ele continua sendo um dos projetos pessoais que mais valorizo porque mudou a forma como eu pensava automação web: de selecionar nós do DOM para entender uma aplicação em execução, seu estado autenticado e a informação trocada entre suas partes.",
+      "body": "O AVA Pro está no meio de uma linha maior de aprendizado. Uma demonstração simples de scraping no navegador primeiro me mostrou que uma página podia ser tratada como fonte de dados. Depois registrei meu próprio experimento extraindo editais públicos do IFPR. Esses exemplos eram majoritariamente estáticos: a informação que eu queria já estava no documento.\n\nO Moodle levou a ideia adiante. Disciplinas, estado de login, conversas e novas mensagens não são apenas um documento estático. Levar isso para uma extensão exigiu tratar o site como aplicação e entender de onde vinham suas informações e como os fluxos autenticados se comportavam. A extensão podia listar e buscar disciplinas, manter cursos selecionados fixados, automatizar partes do acesso, consultar e enviar mensagens de chat e verificar novas mensagens em segundo plano.\n\nNão apresento o AVA Pro como uma extensão polida que alguém deva instalar hoje. Suas dependências, as versões do Moodle que ele mirava e as APIs de extensão pertencem a um período específico. O que continua útil no case é a mudança de raciocínio: o navegador deixou de ser apenas um renderizador de páginas e passou a ser um lugar onde eu podia observar e conectar fluxos independentes de software. Esse mesmo interesse depois reapareceu em scraping pago, integrações de API e no trabalho de infraestrutura ao redor das aplicações."
+    }
+  }
+}

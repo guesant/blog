@@ -1,0 +1,6 @@
+{
+  "slug": "vue",
+  "order": 37,
+  "logo": "vuedotjs",
+  "translations": { "en": { "name": "Vue" }, "ptBR": { "name": "Vue" } }
+}

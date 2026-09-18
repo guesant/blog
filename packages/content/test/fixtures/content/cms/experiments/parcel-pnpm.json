@@ -1,0 +1,26 @@
+{
+  "slug": "parcel-pnpm",
+  "order": 1,
+  "href": "https://github.com/guesant/parcel-resolver-pnpm",
+  "external": true,
+  "technologies": [
+    {
+      "item": "content/cms/technologies/parcel.json"
+    },
+    {
+      "item": "content/cms/technologies/pnpm.json"
+    }
+  ],
+  "translations": {
+    "en": {
+      "name": "Parcel × pnpm",
+      "purpose": "An investigation into the conflict between Parcel’s resolver and pnpm symbolic links.",
+      "body": ""
+    },
+    "ptBR": {
+      "name": "Parcel × pnpm",
+      "purpose": "Investigação do conflito entre o resolvedor do Parcel e os links simbólicos do pnpm.",
+      "body": ""
+    }
+  }
+}

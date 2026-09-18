@@ -1,0 +1,92 @@
+{
+  "name": "Gabriel Antunes",
+  "birthDate": "",
+  "translations": {
+    "en": {
+      "title": "Solutions developer",
+      "location": "Rondônia, Brazil · remote",
+      "birthCity": "Ji-Paraná, Rondônia, Brazil",
+      "description": "I solve problems with systems, data and tools.",
+      "interests": "I dig into systems, architecture, data, Linux and tools for developers.",
+      "learning": "I study computing, art, literature and mathematics. Different angles help me see a problem whole.",
+      "personalInterests": [
+        "Coffee and code.",
+        "Geopolitics, music and films.",
+        "Learning how computing and science work internally and how to build things independently."
+      ],
+      "trajectory": [
+        {
+          "role": "Developer scholarship recipient",
+          "organization": "Central de Vagas em Creches — IFRO",
+          "period": "2024–2025",
+          "highlights": [
+            "Worked on the backend, public portal, dashboard and reports alongside other developers, under the project coordinator.",
+            "Stayed with it through rollout, until municipal public-sector teams were running on it."
+          ]
+        },
+        {
+          "role": "Backend developer · open source",
+          "organization": "Ladesa",
+          "period": "2023–present",
+          "highlights": [
+            "Structured the academic domain with hexagonal architecture and CQRS, keeping business rules independent of infrastructure.",
+            "Worked out recurrence modelling and transactional journal creation, so a partial failure never leaves the data inconsistent."
+          ]
+        },
+        {
+          "role": "Freelance developer",
+          "organization": "FishingBooking · Fugiwara Advogados",
+          "period": "2024",
+          "highlights": [
+            "Delivered a theme, content types and filters built to fit an institutional portal rather than force it into a template.",
+            "Containerized the environment and automated deployment, taking releases out of a manual process."
+          ]
+        }
+      ],
+      "milestones": []
+    },
+    "ptBR": {
+      "title": "Desenvolvedor de soluções",
+      "location": "Rondônia, Brasil · remoto",
+      "birthCity": "Ji-Paraná, Rondônia, Brasil",
+      "description": "Resolvo problemas com sistemas, dados e ferramentas.",
+      "interests": "Me aprofundo em sistemas distribuídos, arquitetura de software, bancos de dados, Linux e ferramentas para desenvolvimento.",
+      "learning": "Estudo computação, arte, literatura e matemática. Ângulos diferentes ajudam a enxergar o problema inteiro.",
+      "personalInterests": [
+        "Café e código.",
+        "Geopolítica, música e filmes.",
+        "Aprender como a computação e a ciência funcionam por dentro e como construir coisas de forma independente."
+      ],
+      "trajectory": [
+        {
+          "role": "Bolsista em desenvolvimento de software",
+          "organization": "Central de Vagas em Creches — IFRO",
+          "period": "2024–2025",
+          "highlights": [
+            "Atuei no backend, no portal público, no painel e nos relatórios, junto de outros desenvolvedores e sob a coordenação do projeto.",
+            "Acompanhei até a implantação, quando equipes do serviço público municipal passaram a operar no sistema."
+          ]
+        },
+        {
+          "role": "Desenvolvedor backend em projeto open source",
+          "organization": "Ladesa",
+          "period": "2023–presente",
+          "highlights": [
+            "Estruturei o domínio acadêmico com arquitetura hexagonal e CQRS, mantendo as regras de negócio independentes da infraestrutura.",
+            "Resolvi a modelagem de recorrência e a criação transacional de diários, para que uma falha parcial nunca deixe os dados inconsistentes."
+          ]
+        },
+        {
+          "role": "Desenvolvedor freelancer",
+          "organization": "FishingBooking · Fugiwara Advogados",
+          "period": "2024",
+          "highlights": [
+            "Entreguei tema, tipos de conteúdo e filtros sob medida para o portal institucional, em vez de forçá-lo dentro de um modelo pronto.",
+            "Conteinerizei o ambiente e automatizei a implantação, tirando as publicações do processo manual."
+          ]
+        }
+      ],
+      "milestones": []
+    }
+  }
+}

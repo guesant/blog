@@ -1,0 +1,14 @@
+{
+  "translations": {
+    "en": {
+      "eyebrow": "Work",
+      "title": "Professional projects",
+      "description": "Each one documented the same way: the problem that existed, the decisions I made, what changed afterwards."
+    },
+    "ptBR": {
+      "eyebrow": "Trabalho",
+      "title": "Projetos profissionais",
+      "description": "Cada um documentado do mesmo jeito: que problema existia, o que eu decidi, o que mudou depois."
+    }
+  }
+}

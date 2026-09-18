@@ -404,6 +404,14 @@
   <data name="tools_find_and_replace"><value>/pt-BR/tools/find-and-replace</value></data>
   <data name="tools_robots_txt_generator"><value>/pt-BR/tools/robots-txt-generator</value></data>
   <data name="points"><value>pontos</value></data>
+  <data name="most_popular"><value>mais populares</value></data>
+  <data name="featured"><value>destaque</value></data>
+  <data name="highlights"><value>destaques</value></data>
+  <data name="subcategories"><value>subcategorias</value></data>
+  <data name="filter_type_label"><value>tipo</value></data>
+  <data name="stars"><value>estrelas</value></data>
+  <data name="views"><value>visualizações</value></data>
+  <data name="count_findings_in_category"><value>{0} achados nesta categoria</value></data>
   <data name="inflation_per_period"><value>inflação por período (%)</value></data>
   <data name="occurrence_count"><value>ocorrências</value></data>
   <data name="decimal"><value>decimal</value></data>
@@ -530,6 +538,8 @@
   <data name="use_a_number_between_1_000_000_000_000_and_1"><value>use um número entre -1.000.000.000.000 e 1.000.000.000.000.</value></data>
   <data name="nodes"><value>nós</value></data>
   <data name="film"><value>filme</value></data>
+  <data name="game"><value>jogo</value></data>
+  <data name="entertainment"><value>entretenimento</value></data>
   <data name="archive"><value>arquivo</value></data>
   <data name="this_address_does_not_match_a_public_technology"><value>este endereço não corresponde a uma tecnologia pública.</value></data>
   <data name="a_is_prime"><value>a é primo</value></data>

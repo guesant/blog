@@ -70,6 +70,17 @@
                         Options="@TopicSelectOptions"
                         Placeholder="@Text("filter_all_topics", L["all_topics"])"
                         EmptyText="@(L["no_topic_found"])" />
+                    @if (ShowTypeFilter)
+                    {
+                        <SiteFilterSelect Icon="tag"
+                            Label="@(L["filter_type_label"])"
+                            Id="feed-type-filter"
+                            Name="type"
+                            @bind-Value="TypeValue"
+                            Options="@TypeSelectOptions"
+                            Placeholder="@Text("filter_all", L["all"])"
+                            EmptyText="@(L["no_category_found"])" />
+                    }
                     <SiteFilterSelect Icon="arrow-up-down"
                         Label="@Text("filter_sort_label", L["sort_by"])"
                         Id="feed-sort-filter"
@@ -112,10 +123,19 @@
                                 ViewLabel="@(L["read_more"])"
                                 ExternalUrl="@item.ExternalUrl"
                                 ExternalLabel="@(string.IsNullOrWhiteSpace(item.ExternalLabel) ? null : $"via {item.ExternalLabel}")">
+                                <MetaItems>
+                                    @if (item.Kind == "achado" && !string.IsNullOrWhiteSpace(item.FindingType))
+                                    {
+                                        <SiteCardMetaItem Icon="@FindingTypeCatalog.Icon(item.FindingType)">@FindingTypeCatalog.Label(item.FindingType, L)</SiteCardMetaItem>
+                                    }
+                                    @if (!string.IsNullOrWhiteSpace(item.PopularityLabel)) { <SiteCardMetaItem Icon="star">@item.PopularityLabel</SiteCardMetaItem> }
+                                </MetaItems>
                                 <Tags>
-                                    @if (item.Topics.Count > 0)
+                                    @if (item.Featured || item.Topics.Count > 0)
                                     {
                                         <SiteChipGroup>
+                                            @if (item.Featured) { <SiteBadge Label="@(L["featured"])"
+                                                Tone="SiteTone.Info" /> }
                                             @foreach (var topic in item.Topics)
                                             {
                                                 <SiteChip Label="@topic.Name"

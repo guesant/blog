@@ -23,6 +23,16 @@ public partial class Topics
 
     [SupplyParameterFromQuery(Name = "q")]
     private string? QuerySearch { get; set; }
+
+    [SupplyParameterFromQuery(Name = "parent")]
+    private string? QueryParent { get; set; }
+
+    private PublicTopic? ParentTopic =>
+        string.IsNullOrWhiteSpace(QueryParent)
+            ? null
+            : Snapshot?.Topics.FirstOrDefault(item =>
+                item.Slug.Equals(QueryParent, StringComparison.OrdinalIgnoreCase)
+            );
     private string _search = string.Empty;
     private string Search
     {
@@ -45,6 +55,15 @@ public partial class Topics
         ];
     private IReadOnlyList<PublicTopic> MatchingTopics =>
         (Snapshot?.Topics ?? [])
+            .Where(item =>
+                ParentTopic is null
+                    ? item.ParentSlug is null
+                    : item.ParentSlug != null
+                        && item.ParentSlug.Equals(
+                            ParentTopic.Slug,
+                            StringComparison.OrdinalIgnoreCase
+                        )
+            )
             .Where(item => MatchesSearch(QuerySearch, item.Name, item.Slug))
             .ToArray();
     private IReadOnlyList<PublicTopic> SortedTopics =>

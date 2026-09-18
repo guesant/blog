@@ -69,20 +69,29 @@ public partial class ContentFeed
         FixedKind ?? (string.IsNullOrWhiteSpace(QueryKind) ? "all" : QueryKind!.Trim());
     private string ActiveTopic => QueryTopic?.Trim() ?? string.Empty;
     private string ActiveSearch => QuerySearch?.Trim() ?? string.Empty;
-    private string ActiveSort => QuerySort is "asc" or "alpha" ? QuerySort : "desc";
+    private string ActiveSort => QuerySort is "asc" or "alpha" or "popular" ? QuerySort : "desc";
+    private string ActiveType =>
+        FindingTypeCatalog.Types.Contains(QueryType, StringComparer.OrdinalIgnoreCase)
+            ? QueryType!.Trim()
+            : string.Empty;
+
+    [Parameter]
+    public string? QueryType { get; set; }
     private string _kindValue = "all";
     private string _topicValue = string.Empty;
     private string _sortValue = "desc";
+    private string _typeValue = string.Empty;
     private string SortValue
     {
         get => _sortValue;
-        set => _sortValue = value is "asc" or "alpha" ? value : "desc";
+        set => _sortValue = value is "asc" or "alpha" or "popular" ? value : "desc";
     }
     private IReadOnlyList<SiteSelectOption> SortSelectOptions =>
         [
             new("desc", L["newest"], "arrow-down-wide-narrow"),
             new("asc", L["oldest"], "arrow-up-narrow-wide"),
             new("alpha", L["alphabetical"], "arrow-down-a-z"),
+            new("popular", L["most_popular"], "flame"),
         ];
     private string PendingSearch { get; set; } = string.Empty;
     private string KindValue
@@ -98,6 +107,20 @@ public partial class ContentFeed
                 ? value
                 : string.Empty;
     }
+    private string TypeValue
+    {
+        get => _typeValue;
+        set =>
+            _typeValue = FindingTypeCatalog.Types.Contains(value, StringComparer.OrdinalIgnoreCase)
+                ? value
+                : string.Empty;
+    }
+    private bool ShowTypeFilter => FixedKind == FeedUrls.Finding;
+    private IReadOnlyList<SiteSelectOption> TypeSelectOptions =>
+        FindingTypeCatalog
+            .Types.Select(type => new SiteSelectOption(type, FindingTypeCatalog.Label(type, L)))
+            .Prepend(new SiteSelectOption("", Text("filter_all", L["all"])))
+            .ToArray();
     private IReadOnlyList<SiteSelectOption> KindSelectOptions =>
         [
             new("all", Text("filter_all", L["all"]), "layers"),
@@ -147,7 +170,11 @@ public partial class ContentFeed
                     item.Topics?.Where(topic => !string.IsNullOrWhiteSpace(topic.Name))
                         .Select(topic => new TopicLink(topic.Name!, topic.Url))
                         .ToArray()
-                        ?? []
+                        ?? [],
+                    null,
+                    null,
+                    false,
+                    null
                 ))
                 .Concat(
                     Snapshot.Findings.Select(item => new FeedEntry(
@@ -164,7 +191,11 @@ public partial class ContentFeed
                         item.Topics?.Where(topic => !string.IsNullOrWhiteSpace(topic.Name))
                             .Select(topic => new TopicLink(topic.Name!, topic.Url))
                             .ToArray()
-                            ?? []
+                            ?? [],
+                        item.Type,
+                        item.Popularity?.Rank,
+                        item.Featured,
+                        PopularityFormat.Label(item.Popularity, L)
                     ))
                 )
                 .Concat(
@@ -177,12 +208,19 @@ public partial class ContentFeed
                         null,
                         null,
                         null,
-                        []
+                        [],
+                        null,
+                        null,
+                        false,
+                        null
                     ))
                 )
                 .OrderByDescending(item => item.Date, StringComparer.Ordinal)
                 .ThenBy(item => item.Title, StringComparer.OrdinalIgnoreCase)
                 .ToArray();
+
+    private IReadOnlyList<string> TopicFilterNames =>
+        TopicTree.SubtreeSlugAndNameSet(Snapshot?.Topics, ActiveTopic);
 
     private IReadOnlyList<FeedEntry> FilteredFeedItems =>
         AllFeedItems
@@ -193,7 +231,14 @@ public partial class ContentFeed
             .Where(item =>
                 string.IsNullOrWhiteSpace(ActiveTopic)
                 || item.Topics.Any(topic =>
-                    topic.Name.Equals(ActiveTopic, StringComparison.OrdinalIgnoreCase)
+                    TopicFilterNames.Contains(topic.Name, StringComparer.OrdinalIgnoreCase)
+                )
+            )
+            .Where(item =>
+                string.IsNullOrWhiteSpace(ActiveType)
+                || (item.FindingType ?? string.Empty).Equals(
+                    ActiveType,
+                    StringComparison.OrdinalIgnoreCase
                 )
             )
             .Where(MatchesSearch)
@@ -208,6 +253,11 @@ public partial class ContentFeed
                 .ToArray(),
             "alpha" => FilteredFeedItems
                 .OrderBy(item => item.Title, StringComparer.OrdinalIgnoreCase)
+                .ToArray(),
+            "popular" => FilteredFeedItems
+                .OrderBy(item => item.PopularityRank is null ? 1 : 0)
+                .ThenByDescending(item => item.PopularityRank)
+                .ThenByDescending(item => item.Date, StringComparer.Ordinal)
                 .ToArray(),
             _ => FilteredFeedItems,
         };
@@ -234,6 +284,7 @@ public partial class ContentFeed
         KindValue = ActiveKind;
         TopicValue = ActiveTopic;
         SortValue = ActiveSort;
+        TypeValue = ActiveType;
         PendingSearch = ActiveSearch;
     }
 
@@ -244,6 +295,8 @@ public partial class ContentFeed
             query.Add($"kind={Uri.EscapeDataString(KindValue)}");
         if (!string.IsNullOrWhiteSpace(TopicValue))
             query.Add($"topic={Uri.EscapeDataString(TopicValue)}");
+        if (ShowTypeFilter && !string.IsNullOrWhiteSpace(TypeValue))
+            query.Add($"type={Uri.EscapeDataString(TypeValue)}");
         if (!string.IsNullOrWhiteSpace(PendingSearch))
             query.Add($"q={Uri.EscapeDataString(PendingSearch)}");
         if (!SortValue.Equals("desc", StringComparison.OrdinalIgnoreCase))
@@ -304,6 +357,8 @@ public partial class ContentFeed
             query.Add($"kind={Uri.EscapeDataString(ActiveKind)}");
         if (!string.IsNullOrWhiteSpace(ActiveTopic))
             query.Add($"topic={Uri.EscapeDataString(ActiveTopic)}");
+        if (ShowTypeFilter && !string.IsNullOrWhiteSpace(ActiveType))
+            query.Add($"type={Uri.EscapeDataString(ActiveType)}");
         if (!string.IsNullOrWhiteSpace(ActiveSearch))
             query.Add($"q={Uri.EscapeDataString(ActiveSearch)}");
         if (!ActiveSort.Equals("desc", StringComparison.OrdinalIgnoreCase))
@@ -332,7 +387,11 @@ public partial class ContentFeed
         string? ReadingTime,
         string? ExternalUrl,
         string? ExternalLabel,
-        IReadOnlyList<TopicLink> Topics
+        IReadOnlyList<TopicLink> Topics,
+        string? FindingType,
+        double? PopularityRank,
+        bool Featured,
+        string? PopularityLabel
     );
 
     private sealed record TopicLink(string Name, string? Url);

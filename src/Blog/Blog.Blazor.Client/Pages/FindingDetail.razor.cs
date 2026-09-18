@@ -1,10 +1,13 @@
 using System.Text.Json;
+using Blog.Blazor.Client.Shared;
 using Blog.Blazor.Core;
 
 namespace Blog.Blazor.Client.Pages;
 
 public partial class FindingDetail
 {
+    private const int MaxAncestorDepth = 8;
+
     [Parameter]
     public string Slug { get; set; } = string.Empty;
     private PublicFinding? Finding =>
@@ -35,8 +38,24 @@ public partial class FindingDetail
     private string BackLabel => L["back_to_findings"];
     private static string IndexUrl => FeedUrls.ForKind(FeedUrls.Finding);
     private IReadOnlyList<PublicRelatedContent> RelatedFindings => Finding?.Related ?? [];
+    private PublicTopic? FirstTopic =>
+        Finding?.Topics?.Count > 0
+            ? Snapshot?.Topics.FirstOrDefault(item =>
+                item.Slug.Equals(Finding!.Topics![0].Slug, StringComparison.OrdinalIgnoreCase)
+            )
+            : null;
+    private IReadOnlyList<PublicTopic> TopicAncestry =>
+        FirstTopic is null
+            ? []
+            : [.. TopicTree.Ancestors(Snapshot?.Topics, FirstTopic, MaxAncestorDepth), FirstTopic];
     private IReadOnlyList<BreadcrumbLink> BreadcrumbLinks =>
-        [new(CrumbLabel("findings", L["findings"]), IndexUrl)];
+        [
+            new(CrumbLabel("findings", L["findings"]), IndexUrl),
+            .. TopicAncestry.Select(item => new BreadcrumbLink(
+                item.Name ?? item.Slug,
+                LocalizedUrl(item.Url ?? $"/topics/{item.Slug}")
+            )),
+        ];
     private string ActionBody =>
         string.Join(
             "\n\n",
@@ -52,26 +71,7 @@ public partial class FindingDetail
         );
 
     private string TypeName(string? value) =>
-        string.IsNullOrWhiteSpace(value)
-            ? Eyebrow
-            : value switch
-            {
-                "book" => L["book"],
-                "article" => L["article"],
-                "paper" => "paper",
-                "repo" => L["repository"],
-                "site" => L["site"],
-                "docs" => L["documentation"],
-                "tool" => L["tool"],
-                "course" => L["course"],
-                "video" => L["video"],
-                "playlist" => "playlist",
-                "channel" => L["channel"],
-                "podcast" => "podcast",
-                "film" => L["film"],
-                "other" => L["other"],
-                _ => value,
-            };
+        string.IsNullOrWhiteSpace(value) ? Eyebrow : FindingTypeCatalog.Label(value, L);
 
     private string RatingName(string value) =>
         value switch

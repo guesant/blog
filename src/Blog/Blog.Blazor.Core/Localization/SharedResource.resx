@@ -404,6 +404,14 @@
   <data name="tools_find_and_replace"><value>/tools/find-and-replace</value></data>
   <data name="tools_robots_txt_generator"><value>/tools/robots-txt-generator</value></data>
   <data name="points"><value>points</value></data>
+  <data name="most_popular"><value>most popular</value></data>
+  <data name="featured"><value>featured</value></data>
+  <data name="highlights"><value>highlights</value></data>
+  <data name="subcategories"><value>subcategories</value></data>
+  <data name="filter_type_label"><value>type</value></data>
+  <data name="stars"><value>stars</value></data>
+  <data name="views"><value>views</value></data>
+  <data name="count_findings_in_category"><value>{0} findings in this category</value></data>
   <data name="inflation_per_period"><value>inflation per period (%)</value></data>
   <data name="occurrence_count"><value>count</value></data>
   <data name="decimal"><value>decimal</value></data>
@@ -530,6 +538,8 @@
   <data name="use_a_number_between_1_000_000_000_000_and_1"><value>use a number between -1,000,000,000,000 and 1,000,000,000,000.</value></data>
   <data name="nodes"><value>nodes</value></data>
   <data name="film"><value>film</value></data>
+  <data name="game"><value>game</value></data>
+  <data name="entertainment"><value>entertainment</value></data>
   <data name="archive"><value>archive</value></data>
   <data name="this_address_does_not_match_a_public_technology"><value>this address does not match a public technology.</value></data>
   <data name="a_is_prime"><value>a is prime</value></data>

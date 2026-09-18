@@ -127,10 +127,10 @@ client="$repo_root/src/Blog/Blog.Blazor.Client"
 ui="$repo_root/src/Blog/Blog.Blazor.UI"
 home_feed="$client/Shared/ContentFeed.razor"
 
-for page in "$home_feed" "$client"/Pages/Cases.razor "$client"/Pages/Credits.razor "$client"/Pages/Projects.razor "$client"/Pages/Snippets.razor "$client"/Pages/Technologies.razor "$client"/Pages/Topics.razor "$client"/Pages/Tools.razor; do
+for page in "$home_feed" "$client"/Pages/Cases.razor "$client"/Pages/Credits.razor "$client"/Pages/Projects.razor "$client"/Pages/Snippets.razor "$client"/Pages/Technologies.razor "$client"/Pages/Topics.razor "$client"/Pages/Tools.razor "$client"/Pages/TopicDetail.razor; do
     grep -Eq '<SiteListingShell\b' "$page" || fail "${page#"$repo_root"/} must render its listing through SiteListingShell"
 done
-for page in "$home_feed" "$client"/Pages/Topics.razor "$client"/Pages/Snippets.razor "$client"/Pages/Tools.razor; do
+for page in "$home_feed" "$client"/Pages/Topics.razor "$client"/Pages/Snippets.razor "$client"/Pages/Tools.razor "$client"/Pages/TopicDetail.razor; do
     grep -Eq '<FilterContent>' "$page" || fail "${page#"$repo_root"/} must expose its filters through the listing shell"
 done
 if grep -REn '<Site(ListHeader|Pagination)\b' "$client/Pages" 2>/dev/null; then
@@ -149,7 +149,7 @@ renders_site_card() {
     done
     return 1
 }
-for page in "$home_feed" "$client"/Pages/Cases.razor "$client"/Pages/Projects.razor "$client"/Pages/Snippets.razor "$client"/Pages/Technologies.razor "$client"/Pages/Topics.razor "$client"/Pages/Tools.razor; do
+for page in "$home_feed" "$client"/Pages/Cases.razor "$client"/Pages/Projects.razor "$client"/Pages/Snippets.razor "$client"/Pages/Technologies.razor "$client"/Pages/Topics.razor "$client"/Pages/Tools.razor "$client"/Pages/TopicDetail.razor; do
     renders_site_card "$page" || fail "${page#"$repo_root"/} must render entity listings through SiteFeedCard or SiteClickableCard"
 done
 

@@ -90,7 +90,20 @@
                             <SiteFeedCard KindLabel="@(L["kind_topic"])"
                                 Title="@(topic.Name ?? topic.Slug)"
                                 Href="@LocalizedUrl(topic.Url)"
-                                ViewLabel="@(L["explore"])" />
+                                ViewLabel="@(L["explore"])">
+                                <Tags>
+                                    @if (topic.Children is { Count: > 0 })
+                                    {
+                                        <SiteChipGroup>
+                                            @foreach (var child in topic.Children)
+                                            {
+                                                <SiteChip Label="@(child.Name ?? child.Slug)"
+                                                    Href="@LocalizedUrl(child.Url)" />
+                                            }
+                                        </SiteChipGroup>
+                                    }
+                                </Tags>
+                            </SiteFeedCard>
                         </SiteGridColumn>
                     }
                 </SiteCardGrid>

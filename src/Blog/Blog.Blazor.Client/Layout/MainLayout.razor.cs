@@ -50,8 +50,36 @@ public partial class MainLayout
             },
         };
 
-    protected override async Task OnInitializedAsync() =>
-        Snapshot = await ContentProvider.GetAsync(
-            CultureCatalog.NormalizeName(CultureInfo.CurrentUICulture.Name)
-        );
+    private PersistingComponentStateSubscription _persistingSubscription;
+
+    // IMPORTANT: without this, the snapshot the server already read during static prerendering is
+    // thrown away the moment the WebAssembly runtime boots and re-runs this same lifecycle: both
+    // sidebars go blank/stub for as long as the browser-side re-fetch takes, on every page load.
+    protected override async Task OnInitializedAsync()
+    {
+        var locale = CultureCatalog.NormalizeName(CultureInfo.CurrentUICulture.Name);
+        var stateKey = $"{nameof(MainLayout)}:{locale}";
+        if (PersistentState.TryTakeFromJson<PublicSiteSnapshot>(stateKey, out var restored))
+        {
+            Snapshot = restored;
+        }
+        else
+        {
+            Snapshot = await ContentProvider.GetAsync(locale);
+            _persistingSubscription = PersistentState.RegisterOnPersisting(
+                () =>
+                {
+                    PersistentState.PersistAsJson(stateKey, Snapshot);
+                    return Task.CompletedTask;
+                },
+                RenderMode.InteractiveWebAssembly
+            );
+        }
+    }
+
+    public void Dispose()
+    {
+        _persistingSubscription.Dispose();
+        GC.SuppressFinalize(this);
+    }
 }

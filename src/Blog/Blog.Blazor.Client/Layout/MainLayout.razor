@@ -6,6 +6,8 @@
 @inject ILocalizedUrlBuilder Urls
 @inject IPublicSiteContentProvider ContentProvider
 @inject NavigationManager Navigation
+@inject PersistentComponentState PersistentState
+@implements IDisposable
 
 @if (Snapshot?.Chrome.Site.MaintenanceEnabled == true)
 {

@@ -1,3 +1,4 @@
+using System.Globalization;
 using Microsoft.AspNetCore.Authorization;
 
 namespace Blog.Blazor.Components.Admin.Pages.Topics;
@@ -17,6 +18,7 @@ public partial class TopicEdit
     private TopicTranslation _translationEn = new() { Locale = "en" };
     private TopicTranslation _translationPtBr = new() { Locale = "pt-BR" };
     private string _activeLocale = "en";
+    private List<Topic> _allTopics = [];
 
     private EditContext _topicEditContext = default!;
     private EditContext _enEditContext = default!;
@@ -26,8 +28,74 @@ public partial class TopicEdit
     protected override string EntityLabel => "topic";
     protected override string ListRoute => "/admin/topics";
 
+    private string ParentIdValue
+    {
+        get => _topic.ParentId?.ToString(CultureInfo.InvariantCulture) ?? string.Empty;
+        set => _topic.ParentId = ParseNullableId(value);
+    }
+
+    private IReadOnlyList<SiteSelectOption> ParentOptions
+    {
+        get
+        {
+            var excluded = ComputeSelfAndDescendantIds(_topic.Id, _allTopics);
+            return _allTopics
+                .Where(topic => !excluded.Contains(topic.Id))
+                .OrderBy(topic => topic.Order)
+                .ThenBy(topic => topic.Id)
+                .Select(topic => new SiteSelectOption(
+                    topic.Id.ToString(CultureInfo.InvariantCulture),
+                    TopicDisplayName(topic)
+                ))
+                .ToArray();
+        }
+    }
+
+    private static string TopicDisplayName(Topic topic) =>
+        TranslationLookup.Resolve(
+            topic.Translations,
+            translation => translation.Locale,
+            translation => translation.Name,
+            "en"
+        ) ?? topic.Slug;
+
+    private static int? ParseNullableId(string value) =>
+        string.IsNullOrWhiteSpace(value) ? null : int.Parse(value, CultureInfo.InvariantCulture);
+
+    private static HashSet<int> ComputeSelfAndDescendantIds(int topicId, List<Topic> allTopics)
+    {
+        var result = new HashSet<int> { topicId };
+        var visited = new HashSet<int> { topicId };
+        var pending = new Queue<int>();
+        pending.Enqueue(topicId);
+
+        while (pending.Count > 0)
+        {
+            var currentId = pending.Dequeue();
+            foreach (var child in allTopics.Where(topic => topic.ParentId == currentId))
+            {
+                if (!visited.Add(child.Id))
+                {
+                    continue;
+                }
+
+                result.Add(child.Id);
+                pending.Enqueue(child.Id);
+            }
+        }
+
+        return result;
+    }
+
     protected override async Task LoadAsync(BlogAdminDbContext dbContext)
     {
+        _allTopics = await dbContext
+            .Topics.Include(topic => topic.Translations)
+            .AsNoTracking()
+            .OrderBy(topic => topic.Order)
+            .ThenBy(topic => topic.Id)
+            .ToListAsync();
+
         if (Id is int id)
         {
             var topic = await dbContext
@@ -71,6 +139,15 @@ public partial class TopicEdit
         if (!englishHasContent && !portugueseHasContent)
         {
             SaveError = "Provide a name in at least one language.";
+            return Task.FromResult(false);
+        }
+
+        if (
+            _topic.ParentId is int parentId
+            && ComputeSelfAndDescendantIds(_topic.Id, _allTopics).Contains(parentId)
+        )
+        {
+            SaveError = "A topic cannot be its own parent or descendant.";
             return Task.FromResult(false);
         }
 
@@ -118,6 +195,7 @@ public partial class TopicEdit
         target.Slug = source.Slug;
         target.Order = source.Order;
         target.Hidden = source.Hidden;
+        target.ParentId = source.ParentId;
     }
 
     private static void ApplyTranslation(

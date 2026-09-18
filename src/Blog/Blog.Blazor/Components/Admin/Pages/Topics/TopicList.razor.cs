@@ -30,4 +30,15 @@ public partial class TopicList
 
     protected override string DeleteConfirmDescription(Topic entity) =>
         "This permanently removes the topic and its translations. This cannot be undone.";
+
+    protected string ParentDisplayName(Topic topic)
+    {
+        if (topic.ParentId is not int parentId)
+        {
+            return "-";
+        }
+
+        var parent = Items.FirstOrDefault(candidate => candidate.Id == parentId);
+        return parent is null ? "-" : DisplayTitle(parent);
+    }
 }

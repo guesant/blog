@@ -105,6 +105,33 @@
 
             <SiteCheckbox Label="Hidden" @bind-Value="_resource.Hidden" />
 
+            <SiteCheckbox Label="Featured" @bind-Value="_resource.Featured" />
+
+            <SiteFormField Label="Featured order"
+                For="featured-order"
+                HelpText="Lower numbers show first among featured findings. Leave empty for no explicit order.">
+                <SiteNumberInput Id="featured-order"
+                    TValue="int?"
+                    Value="@_resource.FeaturedOrder"
+                    ValueChanged="@(value => _resource.FeaturedOrder = value)" />
+            </SiteFormField>
+
+            <SiteFormSection Title="Popularity"
+                Description="Captured offline by the popularity refresh tool. Read-only here.">
+                <SiteOutputField Id="popularity-source"
+                    Label="Popularity source"
+                    Value="@(_resource.PopularityKind ?? "-")" />
+                <SiteOutputField Id="popularity-value"
+                    Label="Popularity value"
+                    Value="@(_resource.PopularityValue?.ToString(CultureInfo.InvariantCulture) ?? "-")" />
+                <SiteOutputField Id="popularity-rank"
+                    Label="Popularity rank"
+                    Value="@(_resource.PopularityRank?.ToString("0.###", CultureInfo.InvariantCulture) ?? "-")" />
+                <SiteOutputField Id="popularity-refreshed-at"
+                    Label="Last refreshed"
+                    Value="@(_resource.PopularityRefreshedAt?.ToString("u", CultureInfo.InvariantCulture) ?? "-")" />
+            </SiteFormSection>
+
             <SiteFormSection Title="Translations">
                 <SiteTranslationTabs Locales="@_locales"
                     ActiveLocale="@_activeLocale"

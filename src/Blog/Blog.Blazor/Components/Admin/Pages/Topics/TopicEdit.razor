@@ -18,6 +18,16 @@
                 <SiteValidationMessage For="@(() => _topic.Slug)" />
             </SiteFormField>
 
+            <SiteFormField Label="Parent"
+                For="parent"
+                HelpText="Nesting this topic under another turns the parent into a category.">
+                <SiteSelect Id="parent"
+                    @bind-Value="ParentIdValue"
+                    Options="ParentOptions"
+                    Clearable="true"
+                    Placeholder="No parent" />
+            </SiteFormField>
+
             <SiteCheckbox Label="Hidden" @bind-Value="_topic.Hidden" />
 
 

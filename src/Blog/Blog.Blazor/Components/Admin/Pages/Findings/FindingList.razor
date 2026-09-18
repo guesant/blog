@@ -61,7 +61,18 @@ else
                     <Cell Context="resource">@(resource.Rating ?? "·")</Cell>
                 </SiteColumn>
                 <SiteColumn TItem="Resource"
-                    Header="Status"><Cell Context="resource">@if (resource.Hidden) { <SiteBadge Label="Hidden" /> }</Cell>
+                    Header="Status"><Cell Context="resource">
+                        <SiteInline Gap="SiteSpace.Sm">
+                            @if (resource.Hidden)
+                            {
+                                <SiteBadge Label="Hidden" />
+                            }
+                            @if (resource.Featured)
+                            {
+                                <SiteBadge Label="Featured" />
+                            }
+                        </SiteInline>
+                    </Cell>
                     </SiteColumn>
                 <SiteColumn TItem="Resource"
                     Header="Published"><Cell Context="resource">@(resource.PublishedDateIso?.ToString("yyyy-MM-dd") ?? "·")</Cell>

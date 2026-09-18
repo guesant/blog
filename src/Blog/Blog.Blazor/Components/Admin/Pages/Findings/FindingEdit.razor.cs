@@ -70,6 +70,8 @@ public partial class FindingEdit
         new SiteSelectOption("channel", "Channel"),
         new SiteSelectOption("podcast", "Podcast"),
         new SiteSelectOption("film", "Film"),
+        new SiteSelectOption("game", "Game"),
+        new SiteSelectOption("entertainment", "Entertainment"),
         new SiteSelectOption("other", "Other"),
     ];
 
@@ -440,6 +442,8 @@ public partial class FindingEdit
         target.EditorialState = source.EditorialState;
         target.Visibility = source.Visibility;
         target.TypeDetails = source.TypeDetails;
+        target.Featured = source.Featured;
+        target.FeaturedOrder = source.FeaturedOrder;
     }
 
     private static void ApplyTranslation(

@@ -65,6 +65,9 @@ test:
 test-data:
     {{docker_run}} 'dotnet run --project src/Blog/Blog.Blazor.Data.Tests/Blog.Blazor.Data.Tests.csproj --configuration Release --no-build'
 
+popularity-refresh *args:
+    {{docker_run}} 'dotnet run --project src/Blog/Blog.Blazor.Popularity/Blog.Blazor.Popularity.csproj --configuration Release --no-build -- {{args}}'
+
 
 check: check-core check-data check-ui
 

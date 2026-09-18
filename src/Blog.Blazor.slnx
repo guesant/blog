@@ -9,6 +9,7 @@
   <Project Path="Blog/Blog.Blazor.Core/Blog.Blazor.Core.csproj" />
   <Project Path="Blog/Blog.Blazor.Database/Blog.Blazor.Database.csproj" />
   <Project Path="Blog/Blog.Blazor.Data.Tests/Blog.Blazor.Data.Tests.csproj" />
+  <Project Path="Blog/Blog.Blazor.Popularity/Blog.Blazor.Popularity.csproj" />
   <Project Path="Blog/Blog.Blazor.Sbom/Blog.Blazor.Sbom.csproj" />
   <Project Path="Blog/Blog.Blazor.Stories/Blog.Blazor.Stories.csproj" />
   <Project Path="Blog/Blog.Blazor.UI/Blog.Blazor.UI.csproj" />

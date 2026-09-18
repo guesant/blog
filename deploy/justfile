@@ -17,6 +17,21 @@ db-update:
     docker compose -f .docker/compose.yaml run --rm --entrypoint sh -e PORTFOLIO_DB_CONNECTION="$connection" web -lc \
         'dotnet tool restore >/dev/null && dotnet tool run dotnet-ef database update --project src/Blog/Blog.Blazor.Database --startup-project src/Blog/Blog.Blazor.Database --context BlogAdminDbContext'
 
+popularity-refresh *args:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    {{kubectl}} port-forward svc/postgres-rw 5432:5432 &
+    forward_pid=$!
+    trap 'kill $forward_pid' EXIT
+    sleep 2
+    db_user=$({{kubectl}} get secret postgres-app -o jsonpath='{.data.user}' | base64 -d)
+    db_password=$({{kubectl}} get secret postgres-app -o jsonpath='{.data.password}' | base64 -d)
+    db_name=$({{kubectl}} get secret postgres-app -o jsonpath='{.data.dbname}' | base64 -d)
+    connection="Host=localhost;Port=5432;Database=$db_name;Username=$db_user;Password=$db_password"
+    cd ../
+    docker compose -f .docker/compose.yaml run --rm --entrypoint sh -e PORTFOLIO_DB_CONNECTION="$connection" -e GITHUB_TOKEN="${GITHUB_TOKEN:-}" web -lc \
+        'dotnet run --project src/Blog/Blog.Blazor.Popularity/Blog.Blazor.Popularity.csproj --configuration Release -- {{args}}'
+
 status:
     {{kubectl}} get pods
     kubectl -n argocd get application blog cloudflared network-policies postgres

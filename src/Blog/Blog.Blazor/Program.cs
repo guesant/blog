@@ -45,6 +45,7 @@ builder.Services.Configure<GzipCompressionProviderOptions>(options =>
     options.Level = CompressionLevel.Fastest
 );
 builder.Services.AddSingleton<ProtectedEmailChallengeService>();
+builder.Services.AddSingleton<PublicSiteSnapshotPayloadCache>();
 builder.Services.AddRateLimiter(options =>
 {
     options.AddPolicy(
@@ -205,8 +206,8 @@ var forwardedHeadersOptions = new ForwardedHeadersOptions
 forwardedHeadersOptions.KnownIPNetworks.Clear();
 forwardedHeadersOptions.KnownProxies.Clear();
 app.UseForwardedHeaders(forwardedHeadersOptions);
-
 app.UseResponseCompression();
+
 if (!app.Environment.IsDevelopment())
 {
     app.UseHsts();
@@ -370,14 +371,36 @@ app.MapStaticAssets();
 app.MapGet(
     "/_content/public-site",
     async (
-        IPublicSiteContentProvider contentProvider,
+        PublicSiteSnapshotPayloadCache payloads,
+        HttpContext context,
         string? locale,
         CancellationToken cancellationToken
     ) =>
     {
         var supportedLocale = CultureCatalog.NormalizeName(locale);
-        var snapshot = await contentProvider.GetAsync(supportedLocale, cancellationToken);
-        return snapshot is null ? Results.NotFound() : Results.Ok(snapshot);
+        var payload = await payloads.GetAsync(supportedLocale, cancellationToken);
+        if (payload is null)
+            return Results.NotFound();
+
+        var headers = context.Response.GetTypedHeaders();
+        headers.ETag = new Microsoft.Net.Http.Headers.EntityTagHeaderValue(payload.ETag);
+        headers.CacheControl = new Microsoft.Net.Http.Headers.CacheControlHeaderValue
+        {
+            NoCache = true,
+            Public = true,
+        };
+        context.Response.Headers.Vary = "Accept-Encoding";
+        if (
+            context.Request.GetTypedHeaders().IfNoneMatch is { Count: > 0 } candidates
+            && candidates.Any(candidate =>
+                candidate.Compare(headers.ETag, useStrongComparison: false)
+            )
+        )
+        {
+            return Results.StatusCode(StatusCodes.Status304NotModified);
+        }
+
+        return Results.Bytes(payload.Body, "application/json; charset=utf-8");
     }
 );
 app.MapGet(

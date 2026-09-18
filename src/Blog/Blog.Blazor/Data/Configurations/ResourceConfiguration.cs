@@ -37,6 +37,17 @@ public sealed class ResourceConfiguration : IEntityTypeConfiguration<Resource>
         builder.Property(resource => resource.EditorialState).HasColumnName("editorial_state");
         builder.Property(resource => resource.Visibility).HasColumnName("visibility");
         builder.Property(resource => resource.TypeDetails).HasColumnName("type_details");
+        builder.Property(resource => resource.PopularityValue).HasColumnName("popularity_value");
+        builder.Property(resource => resource.PopularityKind).HasColumnName("popularity_kind");
+        builder.Property(resource => resource.PopularityRank).HasColumnName("popularity_rank");
+        builder
+            .Property(resource => resource.PopularityRefreshedAt)
+            .HasColumnName("popularity_refreshed_at");
+        builder
+            .Property(resource => resource.Featured)
+            .HasColumnName("featured")
+            .HasDefaultValue(false);
+        builder.Property(resource => resource.FeaturedOrder).HasColumnName("featured_order");
         builder.Property(resource => resource.CreatedAt).HasColumnName("created_at");
         builder.Property(resource => resource.UpdatedAt).HasColumnName("updated_at");
         builder

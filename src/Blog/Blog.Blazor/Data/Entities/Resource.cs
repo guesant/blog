@@ -34,6 +34,13 @@ public sealed class Resource
     [JsonOrEmpty]
     public string? TypeDetails { get; set; }
 
+    public long? PopularityValue { get; set; }
+    public string? PopularityKind { get; set; }
+    public double? PopularityRank { get; set; }
+    public DateTime? PopularityRefreshedAt { get; set; }
+    public bool Featured { get; set; }
+    public int? FeaturedOrder { get; set; }
+
     public DateTime? CreatedAt { get; set; }
     public DateTime? UpdatedAt { get; set; }
 

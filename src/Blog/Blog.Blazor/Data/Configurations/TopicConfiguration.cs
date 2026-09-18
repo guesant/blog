@@ -32,6 +32,7 @@ public sealed class TopicConfiguration : IEntityTypeConfiguration<Topic>
         builder.Property(topic => topic.CreatedAt).HasColumnName("created_at");
         builder.Property(topic => topic.UpdatedAt).HasColumnName("updated_at");
         builder.HasIndex(topic => topic.Slug).IsUnique().HasDatabaseName("topics_slug_unique");
+        builder.HasIndex(topic => topic.ParentId).HasDatabaseName("topics_parent_id_index");
 
         builder
             .HasOne<Topic>()

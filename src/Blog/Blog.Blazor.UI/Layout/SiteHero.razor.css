@@ -5,10 +5,10 @@
 .site-hero > .hero-title-row > h1 {
     margin: 0;
 }
-.hero-title-row > .hero-actions {
-    flex: 0 0 auto;
-    margin-left: auto;
-    align-self: start;
+.site-hero > .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--site-space-2);
 }
 .site-page-title {
     font-family: var(--site-font-family);

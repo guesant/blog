@@ -1,4 +1,5 @@
 using System.Globalization;
+using System.IO.Compression;
 using System.Threading.RateLimiting;
 using BlazorBlueprint.Primitives.Extensions;
 using Blog.Blazor;
@@ -10,6 +11,7 @@ using Blog.Blazor.Data;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using pax.BlazorChartJs;
@@ -30,6 +32,18 @@ builder.Services.AddLocalization();
 builder.Services.AddSingleton<ICultureCatalog, CultureCatalog>();
 builder.Services.AddSingleton<ILocalizedUrlBuilder, LocalizedUrlBuilder>();
 builder.Services.AddMemoryCache();
+builder.Services.AddResponseCompression(options =>
+{
+    options.EnableForHttps = true;
+    options.Providers.Add<BrotliCompressionProvider>();
+    options.Providers.Add<GzipCompressionProvider>();
+});
+builder.Services.Configure<BrotliCompressionProviderOptions>(options =>
+    options.Level = CompressionLevel.Fastest
+);
+builder.Services.Configure<GzipCompressionProviderOptions>(options =>
+    options.Level = CompressionLevel.Fastest
+);
 builder.Services.AddSingleton<ProtectedEmailChallengeService>();
 builder.Services.AddRateLimiter(options =>
 {
@@ -192,6 +206,7 @@ forwardedHeadersOptions.KnownIPNetworks.Clear();
 forwardedHeadersOptions.KnownProxies.Clear();
 app.UseForwardedHeaders(forwardedHeadersOptions);
 
+app.UseResponseCompression();
 if (!app.Environment.IsDevelopment())
 {
     app.UseHsts();

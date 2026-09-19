@@ -41,6 +41,7 @@ import {
   Podcast,
   ScrollText,
   Search,
+  Rss,
   ShoppingCart,
   SlidersHorizontal,
   Sparkles,
@@ -75,6 +76,7 @@ export type IconName =
   | 'copy'
   | 'check'
   | 'search'
+  | 'rss'
   | 'filter'
   | 'layout-grid'
   | 'pen-line'
@@ -137,6 +139,7 @@ const icons: Record<IconName, ComponentType<LucideProps>> = {
   copy: Copy,
   check: Check,
   search: Search,
+  rss: Rss,
   filter: SlidersHorizontal,
   'layout-grid': LayoutGrid,
   'pen-line': PenLine,

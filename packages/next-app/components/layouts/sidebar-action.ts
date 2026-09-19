@@ -4,8 +4,8 @@ export const sidebarActionSx = {
   height: '2rem',
   minHeight: '2rem',
   justifyContent: 'flex-start',
-  px: 1,
-  py: 0,
+  paddingInline: 'var(--site-space-3)',
+  paddingBlock: 'var(--site-space-1)',
   border: 'var(--site-border-width) solid',
   borderColor: 'divider',
   borderRadius: 'var(--site-radius)',
@@ -14,6 +14,10 @@ export const sidebarActionSx = {
   fontWeight: 500,
   lineHeight: 'var(--site-leading-normal)',
   textAlign: 'left',
+  '& .MuiButton-startIcon': {
+    marginLeft: 0,
+    marginRight: 'var(--site-space-2)',
+  },
   '&:hover': {
     color: 'secondary.main',
     bgcolor: 'action.hover',

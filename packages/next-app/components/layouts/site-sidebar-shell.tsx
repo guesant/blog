@@ -46,10 +46,11 @@ function isAboutRoute(route: string) {
   return ['about', 'now', 'portfolio', 'cases', 'projects', 'resume'].includes(routeSegment(route));
 }
 
-function iconForRoute(route: string): IconName {
+function iconForRoute(route: string): IconName | undefined {
+  if (route === '/') {
+    return 'home';
+  }
   switch (routeSegment(route)) {
-    case 'home':
-      return 'home';
     case 'about':
       return 'user';
     case 'resume':
@@ -77,8 +78,16 @@ function iconForRoute(route: string): IconName {
       return 'layout-grid';
     case 'now':
       return 'clock';
+    case 'contact':
+      return 'mail';
+    case 'license':
+      return 'scroll-text';
+    case 'credits':
+      return 'bookmark';
+    case 'follow':
+      return 'rss';
     default:
-      return 'arrow';
+      return undefined;
   }
 }
 
@@ -116,12 +125,13 @@ function SidebarLink(props: {
   const { item, pathname, locale, onNavigate } = props;
   const route = internalRoute(item.route, locale);
   const active = activeRoute(pathname, route);
+  const icon = iconForRoute(route);
   return (
     <Button
       component={LocaleLink}
       href={route}
       onClick={onNavigate}
-      startIcon={<Icon name={iconForRoute(route)} size={14} />}
+      startIcon={icon ? <Icon name={icon} size={14} /> : undefined}
       aria-current={active ? 'page' : undefined}
       sx={[
         sidebarActionSx,

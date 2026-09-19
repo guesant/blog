@@ -40,7 +40,7 @@ const theme = createTheme({
     },
   },
   spacing: (factor: number) => `calc(var(--site-space-2) * ${factor})`,
-  shape: { borderRadius: 'var(--site-radius)' },
+  shape: { borderRadius: 4 },
   typography: {
     fontFamily: 'var(--font-sans), Arial, sans-serif',
     h1: {
@@ -64,7 +64,12 @@ const theme = createTheme({
     h5: { fontSize: 'var(--site-text-body)', fontWeight: 600, lineHeight: 'var(--site-leading-tight)' },
     h6: { fontSize: 'var(--site-text-sm)', fontWeight: 600, lineHeight: 'var(--site-leading-tight)' },
     button: { textTransform: 'none', fontSize: 'var(--site-text-action)', fontWeight: 500, lineHeight: 'var(--site-leading-normal)' },
-    overline: { fontSize: '0.7rem', lineHeight: 1.4, letterSpacing: '0.1em', fontWeight: 700 },
+    overline: {
+      fontSize: 'var(--site-text-xs)',
+      lineHeight: 'var(--site-leading-normal)',
+      letterSpacing: 'var(--site-letter-label)',
+      fontWeight: 600,
+    },
     caption: { fontSize: 'var(--site-text-sm)', lineHeight: 'var(--site-leading-normal)' },
     body1: { fontSize: 'var(--site-text-body)', lineHeight: 'var(--site-leading-relaxed)' },
     body2: { fontSize: 'var(--site-text-sm)', lineHeight: 'var(--site-leading-normal)' },
@@ -183,10 +188,14 @@ const theme = createTheme({
     MuiButton: {
       defaultProps: { disableElevation: true },
       styleOverrides: {
-        root: { borderRadius: 'var(--site-radius)', padding: '0 var(--site-space-3)', minHeight: '2.25rem' },
-        sizeSmall: { padding: '0 var(--site-space-2)', minHeight: '2rem' },
-        sizeLarge: { padding: '0 var(--site-space-4)', minHeight: '2.5rem' },
-        text: { padding: '0 var(--site-space-2)' },
+        root: {
+          borderRadius: 'var(--site-radius)',
+          padding: 'var(--site-space-2) var(--site-space-3)',
+          minHeight: '2.25rem',
+        },
+        sizeSmall: { padding: 'var(--site-space-1) var(--site-space-2)', minHeight: '2rem' },
+        sizeLarge: { padding: 'var(--site-space-3) var(--site-space-4)', minHeight: '2.5rem' },
+        text: { padding: 'var(--site-space-1) var(--site-space-2)' },
       },
     },
     MuiLink: {
@@ -221,30 +230,30 @@ const theme = createTheme({
     MuiMenu: {
       styleOverrides: {
         paper: {
-          marginTop: '0.375rem',
-          border: '1px solid #D8E0E9',
-          borderRadius: '0.5rem',
+          marginTop: 'var(--site-space-2)',
+          border: 'var(--site-border-width) solid #D8E0E9',
+          borderRadius: 'var(--site-radius-lg)',
           boxShadow: '0 0.75rem 1.75rem rgba(16,42,70,.1)',
         },
-        list: { padding: '0.375rem' },
+        list: { padding: 'var(--site-space-1)' },
       },
     },
     MuiMenuItem: {
       styleOverrides: {
         root: {
-          fontSize: '0.875rem',
-          borderRadius: '0.375rem',
-          padding: '0.5rem 0.75rem',
+          fontSize: 'var(--site-text-sm)',
+          borderRadius: 'var(--site-radius-lg)',
+          padding: 'var(--site-space-2) var(--site-space-3)',
         },
       },
     },
     MuiListSubheader: {
       styleOverrides: {
         root: {
-          fontSize: '0.7rem',
-          lineHeight: 1.4,
-          letterSpacing: '0.1em',
-          fontWeight: 700,
+          fontSize: 'var(--site-text-xs)',
+          lineHeight: 'var(--site-leading-normal)',
+          letterSpacing: 'var(--site-letter-label)',
+          fontWeight: 600,
           textTransform: 'uppercase',
           color: '#5D6978',
           backgroundColor: 'transparent',

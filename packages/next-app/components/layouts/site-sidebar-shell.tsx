@@ -21,6 +21,7 @@ import { Icon, type IconName } from '../primitives/icon';
 import { LayoutStack as Stack } from '../primitives/layout-stack';
 import { ProfileIcon } from '../primitives/profile-icon';
 import { externalProfileLabel } from '../../content/external-profiles';
+import { sidebarActionSx } from './sidebar-action';
 
 type SiteSidebarShellProps = {
   children: ReactNode;
@@ -122,24 +123,18 @@ function SidebarLink(props: {
       onClick={onNavigate}
       startIcon={<Icon name={iconForRoute(route)} size={14} />}
       aria-current={active ? 'page' : undefined}
-      sx={{
-        width: '100%',
-        justifyContent: 'flex-start',
-        minHeight: '2rem',
-        px: 1,
-        border: 'var(--site-border-width) solid',
-        borderColor: active ? '#86b7fe' : 'divider',
-        borderRadius: 'var(--site-radius)',
-        color: active ? 'text.primary' : 'text.secondary',
-        bgcolor: active ? 'action.selected' : 'transparent',
-        fontSize: 'var(--site-text-action)',
-        fontWeight: 500,
-        textAlign: 'left',
-        '&:hover': {
-          bgcolor: active ? 'action.selected' : 'action.hover',
-          borderColor: 'secondary.main',
+      sx={[
+        sidebarActionSx,
+        {
+          color: active ? 'text.primary' : 'text.secondary',
+          bgcolor: active ? 'action.selected' : 'transparent',
+          borderColor: active ? '#86b7fe' : 'divider',
+          '&:hover': {
+            bgcolor: active ? 'action.selected' : 'action.hover',
+            borderColor: 'secondary.main',
+          },
         },
-      }}
+      ]}
     >
       {item.label.toLowerCase()}
     </Button>
@@ -165,7 +160,7 @@ function SidebarGroup(props: {
       <Typography variant="overline" color="text.secondary" sx={{ px: 1 }}>
         {label}
       </Typography>
-      <Stack sx={{ gap: 0.25, mt: 0.5 }}>
+      <Stack sx={{ gap: 1, mt: 0.5 }}>
         {visibleItems.map((item) => (
           <SidebarLink
             key={item.route}
@@ -266,7 +261,7 @@ function LeftSidebar(props: {
               locale={locale}
               onNavigate={onNavigate}
             />
-            <Stack sx={{ gap: 0.25, ml: 2.5, pl: 1, borderLeft: 1, borderColor: 'divider' }}>
+            <Stack sx={{ gap: 1, ml: 1.5, pl: 1.5, borderLeft: 'var(--site-border-width) solid', borderColor: 'divider' }}>
               {aboutItems.map((item) => (
                 <SidebarLink
                   key={item.route}
@@ -314,7 +309,7 @@ function RightSidebar(props: {
               locale={locale}
               onNavigate={onNavigate}
             />
-            <Stack sx={{ gap: 0.75, ml: 2.5, pl: 1, borderLeft: 1, borderColor: 'divider' }}>
+            <Stack sx={{ gap: 1, ml: 1.5, pl: 1.5, borderLeft: 'var(--site-border-width) solid', borderColor: 'divider' }}>
               {site.contact.profiles.map((item) => (
                 <Button
                   key={item.url}
@@ -323,7 +318,7 @@ function RightSidebar(props: {
                   target="_blank"
                   rel="noopener noreferrer"
                   startIcon={<ProfileIcon platform={item.platform} size={14} />}
-                  sx={{ justifyContent: 'flex-start', color: 'text.secondary', px: 1 }}
+                  sx={sidebarActionSx}
                 >
                   {externalProfileLabel(item, tExternalProfiles)}
                 </Button>
@@ -332,9 +327,7 @@ function RightSidebar(props: {
                 <ProtectedEmail
                   challenge={site.contact.emailChallenge}
                   label={t('contact')}
-                  color="text.secondary"
-                  typographyVariant="body2"
-                  sx={{ fontWeight: 400, justifyContent: 'flex-start', px: 1 }}
+                  variant="sidebar"
                 />
               )}
             </Stack>
@@ -360,7 +353,7 @@ function RightSidebar(props: {
         )}
         {buildUrl && (
           <SidebarSection label={t('source')}>
-            <Button component="a" href={buildUrl} target="_blank" rel="noopener noreferrer" sx={{ justifyContent: 'flex-start', color: 'text.secondary', px: 1 }}>
+            <Button component="a" href={buildUrl} target="_blank" rel="noopener noreferrer" sx={sidebarActionSx}>
               <Icon name="evolution" size={14} />
               <Box component="span" sx={{ ml: 1 }}>build {buildSha}</Box>
             </Button>
@@ -377,7 +370,7 @@ function SidebarSection(props: { label: string; children: ReactNode }) {
       <Typography variant="overline" color="text.secondary" sx={{ display: 'block', mb: 0.75 }}>
         {props.label}
       </Typography>
-      <Stack sx={{ gap: 0.25 }}>{props.children}</Stack>
+      <Stack sx={{ gap: 1 }}>{props.children}</Stack>
     </Box>
   );
 }

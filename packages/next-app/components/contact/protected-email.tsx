@@ -16,10 +16,11 @@ import type { Ref } from 'react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Icon } from '../primitives/icon';
 import { normalizeSx } from '../primitives/sx';
+import { sidebarActionSx } from '../layouts/sidebar-action';
 import type { ProtectedEmailWorkerResponse } from './protected-email.worker';
 
 type RevealState = 'idle' | 'working' | 'revealed' | 'error';
-type RevealVariant = 'button' | 'inline';
+type RevealVariant = 'button' | 'inline' | 'sidebar';
 type Translate = ReturnType<typeof useTranslations>;
 
 function useMountedRef() {
@@ -201,7 +202,7 @@ function RevealPanel(revealPanelProps: RevealPanelProps) {
   const busy = state === 'working';
 
   return (
-    <Box sx={{ display: 'inline-flex', flexDirection: 'column', gap: 0.5, alignItems: 'start' }}>
+    <Box sx={{ display: 'inline-flex', flexDirection: 'column', gap: 'var(--site-space-2)', alignItems: 'start' }}>
       <RevealTrigger
         busy={busy}
         variant={variant}
@@ -235,7 +236,7 @@ type RevealTriggerProps = {
 function RevealTrigger(revealTriggerProps: RevealTriggerProps) {
   const { busy, variant, color, underline, typographyVariant, sx, label, onReveal } =
     revealTriggerProps;
-  const icon = <Icon name="mail" size={variant === 'button' ? 18 : 16} />;
+  const icon = <Icon name="mail" size={variant === 'button' ? 18 : 14} />;
 
   if (variant === 'button') {
     return (
@@ -253,11 +254,27 @@ function RevealTrigger(revealTriggerProps: RevealTriggerProps) {
     );
   }
 
+  if (variant === 'sidebar') {
+    return (
+      <Button
+        type="button"
+        onClick={onReveal}
+        disabled={busy}
+        variant="outlined"
+        size="small"
+        startIcon={icon}
+        sx={[sidebarActionSx, ...normalizeSx(sx)]}
+      >
+        {label}
+      </Button>
+    );
+  }
+
   const styles: SxProps<Theme> = [
     {
       display: 'inline-flex',
       alignItems: 'center',
-      gap: 0.75,
+      gap: 'var(--site-space-2)',
       border: 0,
       background: 'none',
       cursor: busy ? 'progress' : 'pointer',
@@ -318,8 +335,24 @@ function RevealedEmail(revealedEmailProps: RevealedEmailProps) {
     );
   }
 
+  if (variant === 'sidebar') {
+    return (
+      <Button
+        ref={ref}
+        component="a"
+        href={`mailto:${email}`}
+        variant="outlined"
+        size="small"
+        startIcon={<Icon name="mail" size={14} />}
+        sx={sidebarActionSx}
+      >
+        {text}
+      </Button>
+    );
+  }
+
   const styles: SxProps<Theme> = [
-    { display: 'inline-flex', alignItems: 'center', gap: 0.75, fontWeight: 600 },
+    { display: 'inline-flex', alignItems: 'center', gap: 'var(--site-space-2)', fontWeight: 600 },
     ...normalizeSx(sx),
   ];
 
@@ -379,7 +412,7 @@ function RevealDialogRevealed(revealDialogRevealedProps: RevealDialogRevealedPro
       <Link
         href={`mailto:${email}`}
         underline="none"
-        sx={{ display: 'inline-flex', alignItems: 'center', gap: 0.75, fontWeight: 600 }}
+        sx={{ display: 'inline-flex', alignItems: 'center', gap: 'var(--site-space-2)', fontWeight: 600 }}
       >
         <Icon name="mail" size={16} />
         {email}

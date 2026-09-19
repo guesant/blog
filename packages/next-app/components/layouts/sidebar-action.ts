@@ -1,0 +1,22 @@
+export const sidebarActionSx = {
+  width: '100%',
+  minWidth: 0,
+  height: '2rem',
+  minHeight: '2rem',
+  justifyContent: 'flex-start',
+  px: 1,
+  py: 0,
+  border: 'var(--site-border-width) solid',
+  borderColor: 'divider',
+  borderRadius: 'var(--site-radius)',
+  color: 'text.secondary',
+  fontSize: 'var(--site-text-action)',
+  fontWeight: 500,
+  lineHeight: 'var(--site-leading-normal)',
+  textAlign: 'left',
+  '&:hover': {
+    color: 'secondary.main',
+    bgcolor: 'action.hover',
+    borderColor: 'secondary.main',
+  },
+} as const;

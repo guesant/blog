@@ -36,7 +36,11 @@
         "license": "License",
         "credits": "Credits",
         "reportIssue": "Report an issue",
-        "source": "Source"
+        "source": "Source",
+        "preferences": "Preferences",
+        "language": "Language",
+        "lightTheme": "Light theme",
+        "darkTheme": "Dark theme"
       },
       "ExternalProfiles": {
         "linkedin": "LinkedIn",
@@ -393,7 +397,11 @@
         "license": "Licença",
         "credits": "Créditos",
         "reportIssue": "Relatar um problema",
-        "source": "Código-fonte"
+        "source": "Código-fonte",
+        "preferences": "Preferências",
+        "language": "Idioma",
+        "lightTheme": "Tema claro",
+        "darkTheme": "Tema escuro"
       },
       "ExternalProfiles": {
         "linkedin": "LinkedIn",

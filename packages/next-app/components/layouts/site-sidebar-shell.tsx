@@ -14,14 +14,15 @@ import type {
   SiteText,
 } from '@portfolio/content/types';
 import { useLocale, useTranslations } from 'next-intl';
-import { type ElementType, type ReactNode, useState } from 'react';
+import { type ElementType, type ReactNode, useEffect, useState } from 'react';
 import { Link as LocaleLink, usePathname } from '../../i18n/navigation';
+import { routing } from '../../i18n/routing';
 import { ProtectedEmail } from '../contact/protected-email';
 import { Icon, type IconName } from '../primitives/icon';
 import { LayoutStack as Stack } from '../primitives/layout-stack';
 import { ProfileIcon } from '../primitives/profile-icon';
 import { externalProfileLabel } from '../../content/external-profiles';
-import { sidebarActionSx, sidebarSubnavSx } from './sidebar-action';
+import { sidebarActionSx, sidebarChoiceSx, sidebarSubnavSx } from './sidebar-action';
 
 type SiteSidebarShellProps = {
   children: ReactNode;
@@ -289,6 +290,75 @@ function SidebarGroup(props: {
   );
 }
 
+type ThemeMode = 'light' | 'dark';
+
+function SidebarThemeButton(props: { t: ReturnType<typeof useTranslations> }) {
+  const { t } = props;
+  const [mode, setMode] = useState<ThemeMode>('light');
+
+  function applyTheme(nextMode: ThemeMode) {
+    document.documentElement.dataset.theme = nextMode;
+    window.localStorage.setItem('site-theme', nextMode);
+    setMode(nextMode);
+  }
+
+  useEffect(() => {
+    const stored = window.localStorage.getItem('site-theme');
+    const initialMode: ThemeMode =
+      stored === 'light' || stored === 'dark'
+        ? stored
+        : window.matchMedia('(prefers-color-scheme: dark)').matches
+          ? 'dark'
+          : 'light';
+    document.documentElement.dataset.theme = initialMode;
+    setMode(initialMode);
+  }, []);
+
+  return (
+    <Button
+      type="button"
+      startIcon={<Icon name={mode === 'dark' ? 'sun' : 'moon'} size={14} />}
+      aria-pressed={mode === 'dark'}
+      onClick={() => applyTheme(mode === 'dark' ? 'light' : 'dark')}
+      sx={sidebarActionSx}
+    >
+      {mode === 'dark' ? t('lightTheme') : t('darkTheme')}
+    </Button>
+  );
+}
+
+function SidebarPreferences(props: { pathname: string; locale: string; t: ReturnType<typeof useTranslations> }) {
+  const { pathname, locale, t } = props;
+  return (
+    <SidebarSection label={t('preferences')}>
+      <Box
+        role="group"
+        aria-label={t('language')}
+        sx={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
+          gap: 'var(--site-space-2)',
+        }}
+      >
+        {routing.locales.map((item) => (
+          <Button
+            key={item}
+            component={LocaleLink}
+            href={pathname}
+            locale={item}
+            scroll={false}
+            aria-current={locale === item ? 'page' : undefined}
+            sx={sidebarChoiceSx}
+          >
+            {item === 'en' ? 'EN' : 'PT-BR'}
+          </Button>
+        ))}
+      </Box>
+      <SidebarThemeButton t={t} />
+    </SidebarSection>
+  );
+}
+
 function LeftSidebar(props: {
   site: SiteText;
   pathname: string;
@@ -380,6 +450,7 @@ function LeftSidebar(props: {
             onNavigate={onNavigate}
           />
         )}
+        <SidebarPreferences pathname={pathname} locale={locale} t={t} />
       </Stack>
     </Box>
   );

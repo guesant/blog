@@ -34,6 +34,7 @@ import {
   Mail,
   Menu,
   MessagesSquare,
+  Moon,
   MoreHorizontal,
   Newspaper,
   PenLine,
@@ -47,6 +48,7 @@ import {
   Sparkles,
   Star,
   StarOff,
+  Sun,
   Tag,
   Tv,
   User,
@@ -111,7 +113,9 @@ export type IconName =
   | 'play-circle'
   | 'languages'
   | 'messages-square'
-  | 'building';
+  | 'building'
+  | 'moon'
+  | 'sun';
 
 type IconProps = {
   name: IconName;
@@ -175,6 +179,8 @@ const icons: Record<IconName, ComponentType<LucideProps>> = {
   languages: Languages,
   'messages-square': MessagesSquare,
   building: Building2,
+  moon: Moon,
+  sun: Sun,
 };
 
 export function Icon(iconProps: IconProps) {

@@ -35,3 +35,11 @@ export const sidebarSubnavSx = {
   borderLeft: 'var(--site-border-width) solid',
   borderColor: 'divider',
 } as const;
+
+export const sidebarChoiceSx = [
+  sidebarActionSx,
+  {
+    justifyContent: 'center',
+    paddingInline: 'var(--site-space-2)',
+  },
+] as const;

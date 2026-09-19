@@ -264,11 +264,7 @@ function SidebarGroup(props: {
     <Box>
       <Divider sx={{ mt: 0, mb: 'var(--site-space-6)' }} />
       {label && (
-        <Typography
-          variant="overline"
-          color="text.secondary"
-          sx={{ px: 'var(--site-space-2)' }}
-        >
+        <Typography variant="overline" color="text.secondary">
           {label}
         </Typography>
       )}

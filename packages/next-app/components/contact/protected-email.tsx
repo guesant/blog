@@ -244,10 +244,10 @@ function RevealTrigger(revealTriggerProps: RevealTriggerProps) {
         type="button"
         onClick={onReveal}
         disabled={busy}
-        variant="contained"
+        variant="outlined"
         size="medium"
         startIcon={icon}
-        sx={{ minHeight: 44, px: 2.25, whiteSpace: 'nowrap' }}
+        sx={[{ whiteSpace: 'nowrap' }, ...normalizeSx(sx)]}
       >
         {label}
       </Button>
@@ -325,10 +325,10 @@ function RevealedEmail(revealedEmailProps: RevealedEmailProps) {
         ref={ref}
         component="a"
         href={`mailto:${email}`}
-        variant="contained"
+        variant="outlined"
         size="medium"
         startIcon={<Icon name="mail" size={18} />}
-        sx={{ minHeight: 44, px: 2.25, whiteSpace: 'nowrap' }}
+        sx={[{ whiteSpace: 'nowrap' }, ...normalizeSx(sx)]}
       >
         {text}
       </Button>

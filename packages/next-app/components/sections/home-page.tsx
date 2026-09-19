@@ -310,13 +310,10 @@ export function HomeContactSection(props: HomeContactSectionProps) {
         }}
       >
         <Box>
-          <Eyebrow editableProps={getEditableProps(pageSource, 'contactEyebrow')}>
-            {page.contactEyebrow}
-          </Eyebrow>
           <Typography
             variant="h2"
             {...getEditableProps(pageSource, 'contactTitle')}
-            sx={{ mt: 1.5, maxWidth: '20ch' }}
+            sx={{ maxWidth: '20ch' }}
           >
             {page.contactTitle}
           </Typography>

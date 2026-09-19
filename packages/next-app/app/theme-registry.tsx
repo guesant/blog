@@ -198,6 +198,7 @@ const theme = createTheme({
       },
     },
     MuiButtonBase: {
+      defaultProps: { disableRipple: true },
       styleOverrides: {
         root: {
           '&.Mui-focusVisible': {

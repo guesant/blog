@@ -152,7 +152,7 @@ export function RandomStringGenerator() {
               {results.map((value, index) => (
                 <Paper key={`${value}-${index}`} variant="outlined" sx={{ p: 1.5 }}>
                   <Typography
-                    sx={{ fontFamily: 'var(--font-martian-mono)', overflowWrap: 'anywhere' }}
+                    sx={{ fontFamily: 'var(--site-font-mono)', overflowWrap: 'anywhere' }}
                   >
                     {value}
                   </Typography>

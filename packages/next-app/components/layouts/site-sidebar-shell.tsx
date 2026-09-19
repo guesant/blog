@@ -353,7 +353,7 @@ function LeftSidebar(props: {
               <Icon name="arrow-left" size={15} />
             </IconButton>
           )}
-          <Link component={LocaleLink} href="/" underline="none" color="text.primary">
+          <Link component={LocaleLink} href="/" underline="none" color="text.primary" sx={{ fontFamily: 'var(--site-font-logo)' }}>
             guesant.net
           </Link>
         </Box>
@@ -535,7 +535,7 @@ export function SiteSidebarShell(props: SiteSidebarShellProps) {
             borderColor: 'divider',
           }}
         >
-          <Link component={LocaleLink} href="/" underline="none" color="text.primary">
+          <Link component={LocaleLink} href="/" underline="none" color="text.primary" sx={{ fontFamily: 'var(--site-font-logo)' }}>
             guesant.net
           </Link>
           <Button

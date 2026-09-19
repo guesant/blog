@@ -1,5 +1,7 @@
 :root {
   --font-sans: "DM Sans Variable";
-  --font-mono: "Martian Mono Variable";
+  --font-action: "Exo 2 Variable";
+  --font-logo: "Exo 2 Variable";
+  --font-mono: "IBM Plex Mono";
   --font-serif: "Source Serif 4 Variable";
 }

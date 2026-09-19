@@ -140,11 +140,11 @@
       "translations": {
         "en": {
           "name": "Google Fonts",
-          "description": "Catalog for the DM Sans, Martian Mono, and Source Serif 4 typefaces, self-hosted via next/font."
+          "description": "Catalog for the DM Sans, Exo 2, IBM Plex Mono, and Source Serif 4 typefaces, self-hosted by the application."
         },
         "ptBR": {
           "name": "Google Fonts",
-          "description": "Catálogo das fontes DM Sans, Martian Mono e Source Serif 4, auto-hospedadas via next/font."
+          "description": "Catálogo das fontes DM Sans, Exo 2, IBM Plex Mono e Source Serif 4, hospedadas pela aplicação."
         }
       }
     },

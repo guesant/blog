@@ -2,6 +2,8 @@
     color-scheme: light dark;
 
     --site-font-family: var(--font-sans), ui-sans-serif, "Segoe UI", Roboto, Arial, sans-serif;
+    --site-font-action: var(--font-action), var(--site-font-family);
+    --site-font-logo: var(--font-logo), var(--site-font-family);
     --site-font-mono: var(--font-mono), ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 
     --site-space-px: 0.0625rem;

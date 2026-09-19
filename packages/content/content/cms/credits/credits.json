@@ -150,11 +150,11 @@
       "translations": {
         "en": {
           "name": "Fontsource",
-          "description": "Packages the DM Sans, Martian Mono and Source Serif 4 variable fonts used by the application."
+          "description": "Packages the DM Sans, Exo 2, IBM Plex Mono and Source Serif 4 fonts used by the application."
         },
         "ptBR": {
           "name": "Fontsource",
-          "description": "Empacota as fontes variáveis DM Sans, Martian Mono e Source Serif 4 usadas pela aplicação."
+          "description": "Empacota as fontes DM Sans, Exo 2, IBM Plex Mono e Source Serif 4 usadas pela aplicação."
         }
       }
     },

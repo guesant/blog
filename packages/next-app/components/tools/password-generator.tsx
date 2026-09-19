@@ -148,7 +148,7 @@ export function PasswordGenerator() {
               label={t('password')}
               value={result.value}
               slotProps={{ input: { readOnly: true } }}
-              sx={{ '& input': { fontFamily: 'var(--font-martian-mono)' } }}
+              sx={{ '& input': { fontFamily: 'var(--site-font-mono)' } }}
             />
             <Stack spacing={1.5} sx={{ mt: 2 }}>
               <LinearProgress

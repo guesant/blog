@@ -28,7 +28,7 @@ export function BrandMonogram(brandMonogramProps: BrandMonogramProps) {
         borderColor: 'divider',
         bgcolor: 'rgba(234,242,250,.5)',
         color: 'text.secondary',
-        fontFamily: 'var(--font-mono)',
+        fontFamily: 'var(--site-font-logo)',
         fontSize: `${Math.round(size * 0.4)}px`,
         fontWeight: 500,
         letterSpacing: '-.02em',

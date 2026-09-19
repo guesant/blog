@@ -82,7 +82,13 @@ const theme = createTheme({
     h4: { fontSize: 'var(--site-text-lg)', fontWeight: 'var(--site-weight-semibold)', lineHeight: 'var(--site-leading-tight)' },
     h5: { fontSize: 'var(--site-text-body)', fontWeight: 'var(--site-weight-semibold)', lineHeight: 'var(--site-leading-tight)' },
     h6: { fontSize: 'var(--site-text-sm)', fontWeight: 'var(--site-weight-semibold)', lineHeight: 'var(--site-leading-tight)' },
-    button: { textTransform: 'none', fontSize: 'var(--site-text-action)', fontWeight: 'var(--site-weight-medium)', lineHeight: 'var(--site-leading-normal)' },
+    button: {
+      textTransform: 'none',
+      fontFamily: 'var(--site-font-action)',
+      fontSize: 'var(--site-text-action)',
+      fontWeight: 'var(--site-weight-medium)',
+      lineHeight: 'var(--site-leading-normal)',
+    },
     overline: {
       fontSize: 'var(--site-text-xs)',
       lineHeight: 'var(--site-leading-normal)',
@@ -213,6 +219,7 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           borderRadius: 'var(--site-radius)',
+          fontFamily: 'var(--site-font-action)',
           padding: 'var(--site-action-py) var(--site-action-px)',
           minHeight: 'var(--site-control-h)',
           '& .MuiButton-startIcon': {
@@ -257,9 +264,11 @@ const theme = createTheme({
           minHeight: 'var(--site-control-h)',
           borderRadius: 'var(--site-radius)',
           backgroundColor: 'var(--site-surface)',
+          fontFamily: 'var(--site-font-action)',
           fontSize: 'var(--site-text-form)',
           lineHeight: 'var(--site-leading-normal)',
           '& .MuiOutlinedInput-input': {
+            fontFamily: 'var(--site-font-action)',
             padding: 'var(--site-inset-control)',
           },
           '&.MuiInputBase-sizeSmall': {
@@ -282,6 +291,7 @@ const theme = createTheme({
     MuiFormLabel: {
       styleOverrides: {
         root: {
+          fontFamily: 'var(--site-font-action)',
           fontSize: 'var(--site-text-xs)',
           lineHeight: 'var(--site-leading-normal)',
           letterSpacing: 'var(--site-letter-label)',

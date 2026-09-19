@@ -163,6 +163,7 @@ function HeaderBrand(props: HeaderBrandProps) {
       href="/"
       sx={{
         color: 'text.primary',
+        fontFamily: 'var(--site-font-logo)',
         textDecoration: 'none',
         display: 'inline-flex',
         width: 'max-content',
@@ -181,6 +182,7 @@ function HeaderBrand(props: HeaderBrandProps) {
           placeItems: 'center',
           bgcolor: 'text.primary',
           color: 'background.default',
+          fontFamily: 'var(--site-font-logo)',
           fontSize: '.7rem',
           fontWeight: 700,
           letterSpacing: '-.04em',
@@ -191,7 +193,7 @@ function HeaderBrand(props: HeaderBrandProps) {
       <Box>
         <Typography
           {...getEditableProps(profileRaw, 'name')}
-          sx={{ fontWeight: 700, lineHeight: 1.05, letterSpacing: '-.02em' }}
+          sx={{ fontFamily: 'var(--site-font-logo)', fontWeight: 700, lineHeight: 1.05, letterSpacing: '-.02em' }}
         >
           {profile.name}
         </Typography>

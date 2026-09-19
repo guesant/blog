@@ -1,8 +1,8 @@
 export const sidebarActionSx = {
   width: '100%',
   minWidth: 0,
-  height: '2rem',
-  minHeight: '2rem',
+  height: 'var(--site-control-h-sm)',
+  minHeight: 'var(--site-control-h-sm)',
   justifyContent: 'flex-start',
   paddingInline: 'var(--site-space-3)',
   paddingBlock: 'var(--site-space-1)',

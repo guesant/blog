@@ -14,7 +14,7 @@ import type {
   SiteText,
 } from '@portfolio/content/types';
 import { useLocale, useTranslations } from 'next-intl';
-import { type ReactNode, useState } from 'react';
+import { type ElementType, type ReactNode, useState } from 'react';
 import { Link as LocaleLink, usePathname } from '../../i18n/navigation';
 import { ProtectedEmail } from '../contact/protected-email';
 import { Icon, type IconName } from '../primitives/icon';
@@ -116,6 +116,62 @@ function activeRoute(pathname: string, route: string) {
   return pathname === route || (route !== '/' && pathname.startsWith(`${route}/`));
 }
 
+function navigationItem(route: string, label: string): NavigationItem {
+  return { route, label, children: [] };
+}
+
+function SidebarAction(props: {
+  label: ReactNode;
+  icon?: ReactNode;
+  endIcon?: ReactNode;
+  href: string;
+  component: ElementType;
+  target?: string;
+  rel?: string;
+  onClick?: () => void;
+  active?: boolean;
+  ariaCurrent?: 'page';
+}) {
+  const {
+    label,
+    icon,
+    endIcon,
+    href,
+    component,
+    target,
+    rel,
+    onClick,
+    active = false,
+    ariaCurrent,
+  } = props;
+  return (
+    <Button
+      component={component}
+      href={href}
+      onClick={onClick}
+      target={target}
+      rel={rel}
+      startIcon={icon}
+      endIcon={endIcon}
+      aria-current={ariaCurrent}
+      sx={[
+        sidebarActionSx,
+        {
+          color: active ? 'text.primary' : 'text.secondary',
+          bgcolor: active ? 'action.selected' : 'transparent',
+          borderColor: active ? 'secondary.main' : 'divider',
+          '&:hover': {
+            bgcolor: active ? 'action.selected' : 'action.hover',
+            borderColor: 'secondary.main',
+          },
+        },
+      ]}
+    >
+      {label}
+    </Button>
+  );
+}
+
 function SidebarLink(props: {
   item: NavigationItem;
   pathname: string;
@@ -127,28 +183,33 @@ function SidebarLink(props: {
   const active = activeRoute(pathname, route);
   const icon = iconForRoute(route);
   return (
-    <Button
+    <SidebarAction
       component={LocaleLink}
       href={route}
       onClick={onNavigate}
-      startIcon={icon ? <Icon name={icon} size={14} /> : undefined}
-      aria-current={active ? 'page' : undefined}
-      sx={[
-        sidebarActionSx,
-        {
-          color: active ? 'text.primary' : 'text.secondary',
-          bgcolor: active ? 'action.selected' : 'transparent',
-          borderColor: active ? '#86b7fe' : 'divider',
-          '&:hover': {
-            bgcolor: active ? 'action.selected' : 'action.hover',
-            borderColor: 'secondary.main',
-          },
-        },
-      ]}
-    >
-      {item.label.toLowerCase()}
-    </Button>
+      icon={icon ? <Icon name={icon} size={14} /> : undefined}
+      active={active}
+      ariaCurrent={active ? 'page' : undefined}
+      label={item.label.toLowerCase()}
+    />
   );
+}
+
+function SidebarLinkList(props: {
+  items: NavigationItem[];
+  pathname: string;
+  locale: string;
+  onNavigate?: () => void;
+}) {
+  return props.items.map((item) => (
+    <SidebarLink
+      key={item.route}
+      item={item}
+      pathname={props.pathname}
+      locale={props.locale}
+      onNavigate={props.onNavigate}
+    />
+  ));
 }
 
 function SidebarNavItem(props: {
@@ -297,8 +358,8 @@ function LeftSidebar(props: {
           </Link>
         </Box>
         <Divider />
-        <SidebarLink
-          item={{ route: '/', label: tNav('home'), children: [] }}
+        <SidebarLinkList
+          items={[navigationItem('/', tNav('home'))]}
           pathname={pathname}
           locale={locale}
           onNavigate={onNavigate}
@@ -342,6 +403,11 @@ function RightSidebar(props: {
   const showContact = visibility?.contact ?? site.contact.available;
   const showLegal = visibility?.license || visibility?.credits || showContact;
   const showUpdates = visibility?.follow;
+  const legalItems = [
+    visibility?.license ? navigationItem('/license', t('license')) : undefined,
+    visibility?.credits ? navigationItem('/credits', t('credits')) : undefined,
+    showContact ? navigationItem('/contact', t('reportIssue')) : undefined,
+  ].filter((item): item is NavigationItem => item !== undefined);
   const buildSha = site.build?.commitSha?.slice(0, 7);
   const buildUrl = buildSha && site.sourceRepositoryUrl
     ? `${site.sourceRepositoryUrl.replace(/\/$/, '')}/commit/${site.build?.commitSha}`
@@ -360,17 +426,15 @@ function RightSidebar(props: {
             />
             <Stack sx={sidebarSubnavSx}>
               {site.contact.profiles.map((item) => (
-                <Button
+                <SidebarAction
                   key={item.url}
                   component="a"
                   href={item.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  startIcon={<ProfileIcon platform={item.platform} size={14} />}
-                  sx={sidebarActionSx}
-                >
-                  {externalProfileLabel(item, tExternalProfiles)}
-                </Button>
+                  icon={<ProfileIcon platform={item.platform} size={14} />}
+                  label={externalProfileLabel(item, tExternalProfiles)}
+                />
               ))}
               {site.contact.hasEmail && (
                 <ProtectedEmail
@@ -384,28 +448,35 @@ function RightSidebar(props: {
         )}
         {showLegal && (
           <SidebarSection label={t('legal')}>
-            {visibility?.license && (
-              <SidebarLink item={{ route: '/license', label: t('license'), children: [] }} pathname={props.pathname} locale={locale} onNavigate={onNavigate} />
-            )}
-            {visibility?.credits && (
-              <SidebarLink item={{ route: '/credits', label: t('credits'), children: [] }} pathname={props.pathname} locale={locale} onNavigate={onNavigate} />
-            )}
-            {showContact && (
-              <SidebarLink item={{ route: '/contact', label: t('reportIssue'), children: [] }} pathname={props.pathname} locale={locale} onNavigate={onNavigate} />
-            )}
+            <SidebarLinkList
+              items={legalItems}
+              pathname={props.pathname}
+              locale={locale}
+              onNavigate={onNavigate}
+            />
           </SidebarSection>
         )}
         {showUpdates && (
           <SidebarSection label={t('updates')}>
-            <SidebarLink item={{ route: '/follow', label: t('follow'), children: [] }} pathname={props.pathname} locale={locale} onNavigate={onNavigate} />
+            <SidebarLinkList
+              items={[navigationItem('/follow', t('follow'))]}
+              pathname={props.pathname}
+              locale={locale}
+              onNavigate={onNavigate}
+            />
           </SidebarSection>
         )}
         {buildUrl && (
           <SidebarSection label={t('source')}>
-            <Button component="a" href={buildUrl} target="_blank" rel="noopener noreferrer" sx={sidebarActionSx}>
-              <Icon name="evolution" size={14} />
-              <Box component="span" sx={{ ml: 1 }}>build {buildSha}</Box>
-            </Button>
+            <SidebarAction
+              component="a"
+              href={buildUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              icon={<Icon name="evolution" size={14} />}
+              label={`build ${buildSha}`}
+              endIcon={<Icon name="external" size={12} />}
+            />
           </SidebarSection>
         )}
       </Stack>
@@ -416,10 +487,10 @@ function RightSidebar(props: {
 function SidebarSection(props: { label: string; children: ReactNode }) {
   return (
     <Box>
-      <Typography variant="overline" color="text.secondary" sx={{ display: 'block', mb: 0.75 }}>
+      <Typography variant="overline" color="text.secondary" sx={{ display: 'block' }}>
         {props.label}
       </Typography>
-      <Stack sx={{ gap: 1 }}>{props.children}</Stack>
+      <Stack sx={{ gap: 'var(--site-space-2)' }}>{props.children}</Stack>
     </Box>
   );
 }

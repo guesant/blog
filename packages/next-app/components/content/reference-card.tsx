@@ -30,7 +30,7 @@ const cardSx = {
 } as const;
 
 const metaSx = { display: 'flex', alignItems: 'center', gap: 1 } as const;
-const titleSx = { mt: 1, fontSize: '1.15rem', transition: 'color .2s' } as const;
+const titleSx = { mt: 1, fontSize: 'var(--site-text-2xl)', transition: 'color .2s' } as const;
 const descriptionSx = { mt: 1.25, fontSize: '.9rem', maxWidth: '48ch' } as const;
 const topicsSx = { mt: 'auto', pt: 2, display: 'flex', flexWrap: 'wrap', gap: 0.75 } as const;
 

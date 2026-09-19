@@ -2,6 +2,7 @@ import { getProfile, getResume, getSiteText } from '@portfolio/content/server';
 import '@fontsource-variable/dm-sans';
 import '@fontsource-variable/martian-mono';
 import '@fontsource-variable/source-serif-4';
+import '../tokens.css';
 import type { Metadata, Viewport } from 'next';
 import { notFound } from 'next/navigation';
 import { hasLocale, NextIntlClientProvider } from 'next-intl';

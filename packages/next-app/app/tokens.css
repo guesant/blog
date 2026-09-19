@@ -1,0 +1,26 @@
+:root {
+  --site-space-1: 0.2rem;
+  --site-space-2: 0.4rem;
+  --site-space-3: 0.6rem;
+  --site-space-4: 0.8rem;
+  --site-space-5: 1rem;
+  --site-space-6: 1.2rem;
+  --site-space-7: 1.4rem;
+  --site-space-8: 1.6rem;
+  --site-space-10: 2rem;
+  --site-space-12: 2.4rem;
+  --site-space-16: 3.2rem;
+  --site-text-xs: 0.6875rem;
+  --site-text-sm: 0.8125rem;
+  --site-text-action: 0.875rem;
+  --site-text-body: 0.875rem;
+  --site-text-lg: 1rem;
+  --site-text-xl: 1.125rem;
+  --site-text-2xl: 1.375rem;
+  --site-text-3xl: 1.75rem;
+  --site-leading-tight: 1.25;
+  --site-leading-normal: 1.5;
+  --site-leading-relaxed: 1.625;
+  --site-radius: 0.25rem;
+  --site-border-width: 0.0625rem;
+}

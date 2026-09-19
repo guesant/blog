@@ -448,7 +448,7 @@ export function HomeHero(props: HomeHeroProps) {
         <Typography
           variant="h1"
           {...getEditableProps(profileRaw, 'name')}
-          sx={{ mt: 2, fontSize: { xs: '2.65rem', md: '3rem' }, maxWidth: '14ch' }}
+          sx={{ mt: 2, fontSize: 'var(--site-text-3xl)', maxWidth: '14ch' }}
         >
           {profile.name}
         </Typography>
@@ -465,7 +465,7 @@ export function HomeHero(props: HomeHeroProps) {
             mt: 3.5,
             maxWidth: '43ch',
             fontFamily: 'var(--font-serif)',
-            fontSize: { xs: '1.55rem', md: '1.75rem' },
+            fontSize: 'var(--site-text-2xl)',
             fontWeight: 600,
             letterSpacing: '-.022em',
             lineHeight: 1.25,

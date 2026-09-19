@@ -155,7 +155,7 @@ function FeedCard(props: { entry: FeedEntry; locale: string; t: (key: string) =>
         className="content-feed-title"
         component="h2"
         variant="h3"
-        sx={{ mt: 1, fontSize: '1.15rem', transition: 'color .2s' }}
+        sx={{ mt: 1, fontSize: 'var(--site-text-2xl)', transition: 'color .2s' }}
       >
         {entry.title}
       </Typography>

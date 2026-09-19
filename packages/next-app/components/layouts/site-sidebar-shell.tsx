@@ -125,13 +125,20 @@ function SidebarLink(props: {
       sx={{
         width: '100%',
         justifyContent: 'flex-start',
-        minHeight: 36,
-        px: 1.25,
+        minHeight: '2rem',
+        px: 1,
+        border: 'var(--site-border-width) solid',
+        borderColor: active ? '#86b7fe' : 'divider',
+        borderRadius: 'var(--site-radius)',
         color: active ? 'text.primary' : 'text.secondary',
         bgcolor: active ? 'action.selected' : 'transparent',
-        fontSize: '0.875rem',
+        fontSize: 'var(--site-text-action)',
+        fontWeight: 500,
         textAlign: 'left',
-        '&:hover': { bgcolor: active ? 'action.selected' : 'action.hover' },
+        '&:hover': {
+          bgcolor: active ? 'action.selected' : 'action.hover',
+          borderColor: 'secondary.main',
+        },
       }}
     >
       {item.label.toLowerCase()}
@@ -154,8 +161,8 @@ function SidebarGroup(props: {
   }
   return (
     <Box>
-      <Divider sx={{ my: 1.5 }} />
-      <Typography variant="overline" color="text.secondary" sx={{ px: 1.25 }}>
+      <Divider sx={{ my: 3 }} />
+      <Typography variant="overline" color="text.secondary" sx={{ px: 1 }}>
         {label}
       </Typography>
       <Stack sx={{ gap: 0.25, mt: 0.5 }}>
@@ -221,8 +228,8 @@ function LeftSidebar(props: {
 
   return (
     <Box component="nav" aria-label={t('navigation')} sx={{ p: 2, minWidth: 0 }}>
-      <Stack sx={{ gap: 1 }}>
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, minHeight: 36 }}>
+      <Stack sx={{ gap: 3 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, minHeight: '2rem' }}>
           {backHref && (
             <IconButton component={LocaleLink} href={backHref} aria-label={backLabel} size="small">
               <Icon name="arrow-left" size={15} />
@@ -252,7 +259,7 @@ function LeftSidebar(props: {
         ))}
         {aboutVisible && aboutItems.length > 0 && (
           <Box>
-            <Divider sx={{ my: 1.5 }} />
+            <Divider sx={{ my: 3 }} />
             <SidebarLink
               item={{ route: '/about', label: tNav('about'), children: [] }}
               pathname={pathname}
@@ -297,7 +304,7 @@ function RightSidebar(props: {
     : undefined;
 
   return (
-    <Box component="aside" sx={{ p: 2, minWidth: 0 }}>
+    <Box component="aside" sx={{ p: 3, minWidth: 0 }}>
       <Stack sx={{ gap: 3 }}>
         {showContact && (
           <SidebarSection label={t('connect')}>
@@ -398,7 +405,7 @@ export function SiteSidebarShell(props: SiteSidebarShellProps) {
         bgcolor: 'background.default',
       }}
     >
-      <Box sx={{ display: { xs: 'none', md: 'block' }, borderRight: 1, borderColor: 'divider' }}>
+      <Box sx={{ display: { xs: 'none', md: 'block' }, borderRight: 'var(--site-border-width) solid', borderColor: '#d4d4d4' }}>
         <Box sx={{ position: 'sticky', top: 0, height: '100dvh', overflowY: 'auto' }}>
           <LeftSidebar site={site} pathname={pathname} locale={locale} />
         </Box>
@@ -438,7 +445,7 @@ export function SiteSidebarShell(props: SiteSidebarShellProps) {
         </Box>
       </Box>
       {showRight && (
-        <Box sx={{ display: { xs: 'none', md: 'block' }, borderLeft: 1, borderColor: 'divider' }}>
+        <Box sx={{ display: { xs: 'none', md: 'block' }, borderLeft: 'var(--site-border-width) solid', borderColor: '#d4d4d4' }}>
           <Box sx={{ position: 'sticky', top: 0, height: '100dvh', overflowY: 'auto' }}>
             <RightSidebar site={site} profile={profile} pathname={pathname} locale={locale} />
           </Box>

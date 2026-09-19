@@ -38,7 +38,7 @@ export function PageHeader(props: PageHeaderProps) {
       <Typography
         variant="h1"
         {...editableProps?.title}
-        sx={{ fontSize: { xs: '2.5rem', md: '3rem' }, maxWidth: '20ch' }}
+        sx={{ fontSize: 'var(--site-text-3xl)', maxWidth: '20ch' }}
       >
         {title}
       </Typography>
@@ -112,7 +112,7 @@ export function DetailHeader(props: DetailHeaderProps) {
       <Typography
         variant="h1"
         {...editableProps?.title}
-        sx={{ mt: 1.5, fontSize: { xs: '2.5rem', md: '3.25rem' }, maxWidth: '20ch' }}
+        sx={{ mt: 1.5, fontSize: 'var(--site-text-3xl)', maxWidth: '20ch' }}
       >
         {title}
       </Typography>

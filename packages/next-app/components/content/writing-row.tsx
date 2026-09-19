@@ -30,7 +30,7 @@ const titleSx = {
   mb: 1,
   maxWidth: '34ch',
   transition: 'color .2s',
-  fontSize: { xs: '1.2rem', md: '1.4rem' },
+  fontSize: 'var(--site-text-2xl)',
 } as const;
 
 const excerptSx = { maxWidth: '52ch' } as const;

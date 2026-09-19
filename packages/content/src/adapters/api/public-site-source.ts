@@ -8,6 +8,7 @@ import type {
   SiteText,
   TechnologyBadge,
 } from '../../domain/types.ts';
+import type { ProtectedEmailChallenge } from '../../domain/protected-email/types.ts';
 import type { ContentCollection, ContentLocale } from '../tina/filesystem-source.ts';
 import interfaceDocument from '../../../content/cms/settings/interface.json';
 
@@ -28,14 +29,46 @@ type Snapshot = RecordValue & {
 };
 
 const snapshots = new Map<ContentLocale, Promise<Snapshot>>();
+const emailChallenges = new Map<ContentLocale, Promise<ProtectedEmailChallenge | undefined>>();
 
 export function normalizeLocale(locale?: string): ContentLocale {
   return locale === 'pt-BR' ? 'pt-BR' : 'en';
 }
 
+function apiBaseUrl(): string {
+  const configured = process.env.PORTFOLIO_CONTENT_API_URL;
+  return (configured ?? 'http://laravel:8000/api/v1/public-site').replace(/\/public-site\/?$/, '');
+}
+
 function apiUrl(locale: ContentLocale): string {
-  const base = process.env.PORTFOLIO_CONTENT_API_URL ?? 'http://laravel:8000/api/v1/public-site';
-  return `${base}?locale=${encodeURIComponent(locale)}`;
+  return `${apiBaseUrl()}/public-site?locale=${encodeURIComponent(locale)}`;
+}
+
+function challengeUrl(): string {
+  return `${apiBaseUrl()}/protected-email/challenge`;
+}
+
+async function getEmailChallenge(locale: ContentLocale): Promise<ProtectedEmailChallenge | undefined> {
+  const cached = emailChallenges.get(locale);
+  if (cached) {
+    return cached;
+  }
+
+  const request = fetch(challengeUrl(), {
+    method: 'POST',
+    next: { revalidate: 60, tags: [`protected-email:${locale}`] },
+  } as RequestInit)
+    .then(async (response) => {
+      if (!response.ok) {
+        return undefined;
+      }
+
+      return (await response.json()) as ProtectedEmailChallenge;
+    })
+    .catch(() => undefined);
+
+  emailChallenges.set(locale, request);
+  return request;
 }
 
 async function getSnapshot(locale?: string): Promise<Snapshot> {
@@ -268,6 +301,10 @@ export async function getContactEmail(): Promise<string> {
 export async function getLocalizedSiteText(locale?: string): Promise<SiteText> {
   const snapshot = await getSnapshot(locale);
   const site = snapshot.chrome.site ?? {};
+  const normalized = normalizeLocale(locale);
+  const emailChallenge =
+    site.protected_email ??
+    (site.contact_available ? await getEmailChallenge(normalized) : undefined);
   return {
     shortName: site.short_name ?? '',
     portfolioUrl: site.portfolio_url ?? '',
@@ -279,7 +316,8 @@ export async function getLocalizedSiteText(locale?: string): Promise<SiteText> {
       description: site.maintenance_description ?? '',
     },
     contact: {
-      hasEmail: site.protected_email !== null,
+      hasEmail: emailChallenge !== undefined,
+      emailChallenge,
       profiles: site.contact_profiles ?? [],
       available: site.contact_available ?? false,
     },

@@ -238,6 +238,22 @@
         "contact": {
           "email": "Send an email"
         },
+        "toolsPasswordGenerator": {
+          "eyebrow": "Tool",
+          "title": "Password generator",
+          "description": "Generate strong, random passwords using your browser's cryptographic random number generator.",
+          "length": "Length",
+          "uppercase": "Uppercase",
+          "lowercase": "Lowercase",
+          "numbers": "Numbers",
+          "symbols": "Symbols",
+          "generate": "Generate",
+          "password": "Password",
+          "estimatedEntropy": "estimated entropy bits",
+          "copy": "Copy",
+          "copied": "Copied",
+          "noCharset": "Select at least one character set."
+        },
         "resume": {
           "profile": "Profile",
           "leadership": "Leadership activities",
@@ -531,6 +547,22 @@
         },
         "contact": {
           "email": "Enviar um e-mail"
+        },
+        "toolsPasswordGenerator": {
+          "eyebrow": "Ferramenta",
+          "title": "Gerador de senhas",
+          "description": "Gere senhas fortes e aleatórias usando o gerador criptográfico de números aleatórios do navegador.",
+          "length": "Tamanho",
+          "uppercase": "Maiúsculas",
+          "lowercase": "Minúsculas",
+          "numbers": "Números",
+          "symbols": "Símbolos",
+          "generate": "Gerar",
+          "password": "Senha",
+          "estimatedEntropy": "bits de entropia estimados",
+          "copy": "Copiar",
+          "copied": "Copiado",
+          "noCharset": "Selecione pelo menos um conjunto de caracteres."
         },
         "resume": {
           "profile": "Perfil",

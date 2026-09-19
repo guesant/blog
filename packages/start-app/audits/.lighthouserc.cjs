@@ -4,7 +4,7 @@ const { chromium } = require('@playwright/test');
 
 const origin = 'http://localhost:3000';
 
-const manifestPath = path.join(__dirname, '../start-app/scripts/ci/audited-routes.json');
+const manifestPath = path.join(__dirname, '../scripts/ci/audited-routes.json');
 
 function readRoutes() {
   try {
@@ -35,7 +35,7 @@ module.exports = {
     collect: {
       chromePath: process.env.CHROME_PATH ?? chromium.executablePath(),
       numberOfRuns: 3,
-      startServerCommand: 'corepack pnpm --dir ../start-app start',
+      startServerCommand: 'corepack pnpm --dir .. start',
       startServerReadyPattern: 'Listening on',
       startServerReadyTimeout: 120000,
       url,

@@ -1,6 +1,9 @@
 node_modules
 **/*.tsbuildinfo
 **/.next/
+**/dist/
+
+packages/start-app/public/*-search-index*.json
 
 # .NET/Blazor build outputs
 **/bin/

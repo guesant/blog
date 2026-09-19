@@ -6,7 +6,8 @@
   "license": "MIT",
   "scripts": {
     "dev": "vite dev",
-    "build": "vite build && tsc --noEmit",
+    "build": "node search-index/src/generate.mts --output-dir public && vite build && tsc --noEmit",
+    "search-index": "node search-index/src/generate.mts --output-dir public",
     "preview": "vite preview",
     "start": "./node_modules/.bin/srvx --prod -s dist/client dist/server/server.js"
   },
@@ -19,12 +20,12 @@
     "@fontsource-variable/source-serif-4": "5.3.0",
     "@fontsource/ibm-plex-mono": "5.3.0",
     "@mui/material": "^9.2.0",
-    "@portfolio/content": "workspace:*",
     "@tanstack/react-query": "^5.102.0",
     "@tanstack/react-router": "1.170.35",
     "@tanstack/react-router-ssr-query": "1.167.2",
     "@tanstack/react-start": "1.168.52",
     "@xyflow/react": "^12.3.6",
+    "hash-wasm": "^4.11.0",
     "dagre": "^0.8.5",
     "lucide-react": "^1.28.0",
     "minisearch": "^7.1.2",
@@ -36,6 +37,9 @@
     "srvx": "0.11.22"
   },
   "devDependencies": {
+    "@axe-core/playwright": "4.12.1",
+    "@lhci/cli": "0.15.1",
+    "@playwright/test": "1.62.1",
     "@types/dagre": "^0.7.52",
     "@types/node": "^26.2.0",
     "@types/nprogress": "^0.2.3",

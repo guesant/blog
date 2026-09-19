@@ -9,7 +9,7 @@ import {
   getReferenceCollections,
   getReferences,
   getTopics,
-} from '../../../content/src/server.ts';
+} from '../../content-runtime/src/server.ts';
 
 function optionValue(option: string): string | undefined {
   const index = process.argv.indexOf(option);

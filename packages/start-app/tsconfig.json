@@ -16,7 +16,14 @@
     "jsx": "react-jsx",
     "incremental": true,
     "paths": {
-      "@/*": ["./*"]
+      "@/*": ["./*"],
+      "@portfolio/content/protected-email": [
+        "./content-runtime/src/domain/protected-email/index.ts"
+      ],
+      "@portfolio/content/protected-email/create": [
+        "./content-runtime/src/domain/protected-email/create.server.ts"
+      ],
+      "@portfolio/content/*": ["./content-runtime/src/*"]
     }
   },
   "include": [
@@ -34,5 +41,5 @@
     "**/*.ts",
     "**/*.tsx"
   ],
-  "exclude": ["node_modules", "app/[locale]", "app/og"]
+  "exclude": ["node_modules", ".next", "dist", "app/[locale]", "app/og"]
 }

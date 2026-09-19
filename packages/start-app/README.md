@@ -26,7 +26,7 @@ The development address is [http://localhost:3000](http://localhost:3000).
 Laravel is the single source of truth for published content. The application consumes its localized
 snapshot through TanStack Start server functions and does not include an editorial admin or CMS runtime.
 The versioned JSON documents remain available to local generation tools and tests under
-`../content/content/cms`.
+`content-runtime/content/cms`.
 
 Localization is field-based: each
 page, case study, project, experiment, post, profile and résumé document contains `translations.en`
@@ -90,7 +90,7 @@ presentation should differ from its visible title and description. Canonical URL
 Open Graph type, publication dates and authorship remain application-generated so they cannot drift
 from the actual route or document.
 
-The production command is intentionally just `pnpm build`.
+The production command is intentionally just `corepack pnpm build` from this directory.
 
 ## Production metadata
 

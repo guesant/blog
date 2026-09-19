@@ -57,11 +57,11 @@ services:
     command: php artisan schedule:work
   start:
     image: node@sha256:235600a8101ab264e117b1768e925532262668dc9b581ef1dd7d96ced463b8e7
-    working_dir: /workspace
+    working_dir: /workspace/packages/start-app
     user: "${PORTFOLIO_CONTAINER_UID:-1000}:${PORTFOLIO_CONTAINER_GID:-1000}"
     volumes:
       - ..:/workspace
-      - start-node-modules:/workspace/node_modules
+      - start-node-modules:/workspace/packages/start-app/node_modules
     environment:
       PORTFOLIO_CONTENT_API_URL: http://laravel:8000/api/v1/public-site
       PORTFOLIO_PUBLIC_API_URL: /api/v1
@@ -69,7 +69,7 @@ services:
       HOME: /tmp
     ports:
       - "3000:3000"
-    command: sh -lc 'corepack pnpm install --frozen-lockfile --ignore-scripts && corepack pnpm --filter portfolio dev -- --host 0.0.0.0'
+    command: sh -lc 'corepack pnpm install --frozen-lockfile --ignore-scripts && corepack pnpm dev -- --host 0.0.0.0'
     depends_on:
       laravel:
         condition: service_started
@@ -79,8 +79,8 @@ services:
     image: node@sha256:235600a8101ab264e117b1768e925532262668dc9b581ef1dd7d96ced463b8e7
     user: "0:0"
     volumes:
-      - start-node-modules:/workspace/node_modules
-    command: sh -lc 'mkdir -p /workspace/node_modules && chown -R ${PORTFOLIO_CONTAINER_UID:-1000}:${PORTFOLIO_CONTAINER_GID:-1000} /workspace/node_modules'
+      - start-node-modules:/workspace/packages/start-app/node_modules
+    command: sh -lc 'mkdir -p /workspace/packages/start-app/node_modules && chown -R ${PORTFOLIO_CONTAINER_UID:-1000}:${PORTFOLIO_CONTAINER_GID:-1000} /workspace/packages/start-app/node_modules'
     restart: "no"
   resume-cache-init:
     image: mcr.microsoft.com/dotnet/sdk@sha256:2fa828c68761b1b8c23d7662dc134421b9d3b59fe1425fdbc80804e390cdb24d

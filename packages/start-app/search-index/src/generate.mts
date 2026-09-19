@@ -2,7 +2,7 @@ import { mkdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import MiniSearch from 'minisearch';
-import { runRegenerationCli } from '../../content/src/regeneration.ts';
+import { runRegenerationCli } from '../../content-runtime/src/regeneration.ts';
 import { createSearchRuntime, type SearchReference } from './search-runtime.ts';
 
 function optionValue(option: string) {
@@ -10,7 +10,7 @@ function optionValue(option: string) {
   return index === -1 ? undefined : process.argv[index + 1];
 }
 
-const contentDir = fileURLToPath(new URL('../../content/content/cms/', import.meta.url));
+const contentDir = fileURLToPath(new URL('../../content-runtime/content/cms/', import.meta.url));
 const publicDir = path.resolve(process.cwd(), optionValue('--output-dir') ?? 'public');
 const searchRuntime = createSearchRuntime(contentDir);
 

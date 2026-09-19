@@ -3,8 +3,8 @@ import {
   getProfile,
   getResume,
   getSiteText,
-} from '../../../../content/src/server.ts';
-import type { Profile, ResumeContent, SiteText } from '../../../../content/src/types.ts';
+} from '../../../content-runtime/src/server.ts';
+import type { Profile, ResumeContent, SiteText } from '../../../content-runtime/src/types.ts';
 
 export type ProfileReadmeSource = {
   profile: Profile;

@@ -3,14 +3,12 @@ $schema: 'https://moonrepo.dev/schemas/project.json'
 language: typescript
 layer: application
 tags: [tanstack-start, app]
-dependsOn: [content, search-index]
 toolchains:
   default: node
 
 tasks:
   build:
     command: 'pnpm build'
-    deps: ['search-index:generate']
     inputs:
       - 'src/**/*'
       - 'components/**/*'
@@ -28,7 +26,7 @@ tasks:
     tags: [build]
   discover-routes:
     command: 'node scripts/ci/discover-routes.mts'
-    inputs: ['src/**/*', 'scripts/ci/discover-routes.mts', '/packages/content/content/**/*']
+    inputs: ['src/**/*', 'scripts/ci/discover-routes.mts', 'content-runtime/content/**/*']
     outputs: ['scripts/ci/audited-routes.json']
     tags: [generate]
   dev:

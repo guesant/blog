@@ -186,11 +186,10 @@ laravel-check:
     {{compose_dev}} run --rm laravel php artisan test
 
 frontend-install:
-    {{node_run}} 'corepack pnpm install --frozen-lockfile --ignore-scripts'
+    {{node_run}} 'cd packages/start-app && corepack pnpm install --frozen-lockfile --ignore-scripts'
 
 frontend-check: frontend-install
-    {{node_run}} 'corepack pnpm --filter @portfolio/content exec tsc --noEmit'
-    {{node_run}} 'corepack pnpm --filter portfolio exec tsc --noEmit'
+    {{node_run}} 'cd packages/start-app && corepack pnpm exec tsc --noEmit'
 
 start:
     {{compose_dev}} up -d start

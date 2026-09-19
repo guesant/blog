@@ -54,6 +54,7 @@ const securityHeaders = [
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
+  allowedDevOrigins: isProduction ? [] : ['100.120.22.123'],
   transpilePackages: ['@portfolio/content'],
   output: 'standalone',
   outputFileTracingRoot: path.join(import.meta.dirname, '../..'),

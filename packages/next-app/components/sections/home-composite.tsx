@@ -44,6 +44,7 @@ export function HomeComposite(props: HomeCompositeProps) {
         findings={findings}
         collections={collections}
         copy={{ title: page.heroIdentity, description: page.heroExperience }}
+        showHeader={false}
         action="/"
       />
       <HomeContactSection

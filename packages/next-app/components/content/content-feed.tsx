@@ -42,6 +42,7 @@ type ContentFeedProps = {
   findings: Reference[];
   collections: ReferenceCollection[];
   copy: FeedPageCopy;
+  showHeader?: boolean;
   fixedKind?: FeedKind;
   action: string;
   initialKind?: string;
@@ -181,6 +182,7 @@ export function ContentFeed(props: ContentFeedProps) {
     findings,
     collections,
     copy,
+    showHeader = true,
     fixedKind,
     action,
     initialKind = 'all',
@@ -241,22 +243,31 @@ export function ContentFeed(props: ContentFeedProps) {
   }
 
   return (
-    <Box component="section" sx={{ width: '100%', py: { xs: 8, md: 10 } }}>
-      <Box component="header" sx={{ maxWidth: '46rem', mb: { xs: 5, md: 7 } }}>
-        {copy.eyebrow && (
-          <Typography variant="overline" color="text.secondary" sx={{ display: 'block', mb: 1.5 }}>
-            {copy.eyebrow}
+    <Box
+      component="section"
+      sx={{
+        width: '100%',
+        py: { xs: 8, md: 10 },
+        ...(!showHeader && { borderTop: 1, borderColor: 'divider' }),
+      }}
+    >
+      {showHeader && (
+        <Box component="header" sx={{ maxWidth: '46rem', mb: { xs: 5, md: 7 } }}>
+          {copy.eyebrow && (
+            <Typography variant="overline" color="text.secondary" sx={{ display: 'block', mb: 1.5 }}>
+              {copy.eyebrow}
+            </Typography>
+          )}
+          <Typography variant="h1" sx={{ fontSize: { xs: '2.5rem', md: '3rem' }, maxWidth: '20ch' }}>
+            {copy.title}
           </Typography>
-        )}
-        <Typography variant="h1" sx={{ fontSize: { xs: '2.5rem', md: '3rem' }, maxWidth: '20ch' }}>
-          {copy.title}
-        </Typography>
-        {copy.description && (
-          <Typography color="text.secondary" sx={{ maxWidth: '60ch', mt: 2 }}>
-            {copy.description}
-          </Typography>
-        )}
-      </Box>
+          {copy.description && (
+            <Typography color="text.secondary" sx={{ maxWidth: '60ch', mt: 2 }}>
+              {copy.description}
+            </Typography>
+          )}
+        </Box>
+      )}
       <Box component="form" onSubmit={applyFilters} sx={{ mb: 4 }}>
         <Stack direction={{ xs: 'column', md: 'row' }} spacing={1.5}>
           {!fixedKind && (

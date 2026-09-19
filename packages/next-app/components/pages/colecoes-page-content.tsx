@@ -20,7 +20,7 @@ type CollectionRowProps = { collection: ReferenceCollection };
 function CollectionRow(props: CollectionRowProps) {
   const { collection } = props;
   return (
-    <NavLink href={`/colecoes/${collection.slug}`} underline="none" color="inherit" sx={rowSx}>
+    <NavLink href={`/collections/${collection.slug}`} underline="none" color="inherit" sx={rowSx}>
       <Typography
         className="collection-title"
         variant="subtitle2"

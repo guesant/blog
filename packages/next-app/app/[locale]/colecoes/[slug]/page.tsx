@@ -19,7 +19,7 @@ export async function generateMetadata(props: SlugRouteProps): Promise<Metadata>
   return collection
     ? createPageMetadata({
         locale,
-        pathname: `/colecoes/${collection.slug}`,
+        pathname: `/collections/${collection.slug}`,
         title: collection.title,
         description: collection.description,
         seo: collection.seo,

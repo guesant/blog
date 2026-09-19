@@ -425,6 +425,40 @@ type MaintenanceContent = {
   description: string;
 };
 
+export type NavigationItem = {
+  route: string;
+  label: string;
+  children: NavigationItem[];
+};
+
+export type SiteNavigation = {
+  sidebar: NavigationItem[][];
+  footerLinks: NavigationItem[];
+  sitemap: NavigationItem[];
+};
+
+export type SiteVisibility = {
+  about: boolean;
+  resume: boolean;
+  portfolio: boolean;
+  cases: boolean;
+  contact: boolean;
+  license: boolean;
+  credits: boolean;
+  follow: boolean;
+  feed: boolean;
+  writing: boolean;
+  findings: boolean;
+  topics: boolean;
+  collections: boolean;
+  snippets: boolean;
+  rightSidebar: boolean;
+};
+
+export type SiteBuild = {
+  commitSha?: string;
+};
+
 export type SiteText = EditableContent &
   WithSeo & {
     shortName: string;
@@ -433,6 +467,10 @@ export type SiteText = EditableContent &
     maintenanceEnabled: boolean;
     maintenance: MaintenanceContent;
     contact: ContactInformation;
+    sourceRepositoryUrl?: string;
+    navigation?: SiteNavigation;
+    visibility?: SiteVisibility;
+    build?: SiteBuild;
   };
 
 export type InterfaceMessage = string | { [key: string]: InterfaceMessage };

@@ -1,10 +1,8 @@
 import Box from '@mui/material/Box';
-import Container from '@mui/material/Container';
 import { getNavigationAvailability, getProfile, getSiteText } from '@portfolio/content/server';
 import { getLocale, getTranslations } from 'next-intl/server';
-import { SiteHeader } from '../navigation/site-header';
 import { PageTransition } from '../primitives/page-transition';
-import { SiteFooter } from './site-footer';
+import { SiteSidebarShell } from './site-sidebar-shell';
 
 type SiteShellProps = { children: React.ReactNode };
 
@@ -19,7 +17,7 @@ export async function SiteShell(props: SiteShellProps) {
   ]);
 
   return (
-    <Box sx={{ minHeight: '100vh', color: 'text.primary', bgcolor: 'background.default' }}>
+    <Box sx={{ color: 'text.primary' }}>
       <Box
         component="a"
         href="#main-content"
@@ -42,17 +40,11 @@ export async function SiteShell(props: SiteShellProps) {
       >
         {t('skipToContent')}
       </Box>
-      <SiteHeader profile={profile} site={site} availability={availability} />
-      <Container
-        maxWidth="lg"
-        component="main"
-        id="main-content"
-        tabIndex={-1}
-        sx={{ px: { xs: 3, md: 5 } }}
-      >
-        <PageTransition>{children}</PageTransition>
-        <SiteFooter site={site} profile={profile} availability={availability} />
-      </Container>
+      <SiteSidebarShell profile={profile} site={site} availability={availability}>
+        <Box id="main-content" tabIndex={-1}>
+          <PageTransition>{children}</PageTransition>
+        </Box>
+      </SiteSidebarShell>
     </Box>
   );
 }

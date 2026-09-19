@@ -16,7 +16,7 @@ export async function generateMetadata(props: LocaleRouteProps): Promise<Metadat
   ]);
   return createPageMetadata({
     locale,
-    pathname: '/colecoes',
+    pathname: '/collections',
     title: t('indexTitle'),
     description: t('indexDescription'),
     index: collections.length > 0,

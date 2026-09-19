@@ -1,11 +1,13 @@
 import type {
   CreditsContent,
   InterfaceMessages,
+  NavigationItem,
   Profile,
   Reference,
   ReferenceCollection,
   ResumeContent,
   SiteText,
+  SiteVisibility,
   TechnologyBadge,
 } from '../../domain/types.ts';
 import type { ProtectedEmailChallenge } from '../../domain/protected-email/types.ts';
@@ -46,6 +48,36 @@ function apiUrl(locale: ContentLocale): string {
 
 function challengeUrl(): string {
   return `${apiBaseUrl()}/protected-email/challenge`;
+}
+
+function navigationItem(item: RecordValue): NavigationItem {
+  return {
+    route: item.route ?? '',
+    label: item.label ?? '',
+    children: Array.isArray(item.children)
+      ? item.children.map((child: RecordValue) => navigationItem(child))
+      : [],
+  };
+}
+
+function siteVisibility(value: RecordValue): SiteVisibility {
+  return {
+    about: value.about === true,
+    resume: value.resume === true,
+    portfolio: value.portfolio === true,
+    cases: value.cases === true,
+    contact: value.contact === true,
+    license: value.license === true,
+    credits: value.credits === true,
+    follow: value.follow === true,
+    feed: value.feed === true,
+    writing: value.writing === true,
+    findings: value.findings === true,
+    topics: value.topics === true,
+    collections: value.collections === true,
+    snippets: value.snippets === true,
+    rightSidebar: value.right_sidebar === true,
+  };
 }
 
 async function getEmailChallenge(locale: ContentLocale): Promise<ProtectedEmailChallenge | undefined> {
@@ -308,6 +340,7 @@ export async function getLocalizedSiteText(locale?: string): Promise<SiteText> {
   return {
     shortName: site.short_name ?? '',
     portfolioUrl: site.portfolio_url ?? '',
+    sourceRepositoryUrl: site.source_repository_url ?? '',
     copyrightTemplate: snapshot.chrome.copyright ?? '',
     maintenanceEnabled: site.maintenance_enabled ?? false,
     maintenance: {
@@ -320,6 +353,21 @@ export async function getLocalizedSiteText(locale?: string): Promise<SiteText> {
       emailChallenge,
       profiles: site.contact_profiles ?? [],
       available: site.contact_available ?? false,
+    },
+    navigation: {
+      sidebar: (snapshot.chrome.navigation?.sidebar ?? []).map((group: RecordValue[]) =>
+        group.map((item) => navigationItem(item)),
+      ),
+      footerLinks: (snapshot.chrome.navigation?.footer_links ?? []).map((item: RecordValue) =>
+        navigationItem(item),
+      ),
+      sitemap: (snapshot.chrome.navigation?.sitemap ?? []).map((item: RecordValue) =>
+        navigationItem(item),
+      ),
+    },
+    visibility: siteVisibility(snapshot.chrome.visibility ?? {}),
+    build: {
+      commitSha: snapshot.chrome.build?.commit_sha ?? undefined,
     },
     seo: site.seo ?? undefined,
   };

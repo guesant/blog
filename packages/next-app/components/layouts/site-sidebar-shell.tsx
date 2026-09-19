@@ -166,7 +166,7 @@ function SidebarGroup(props: {
   }
   return (
     <Box>
-      <Divider sx={{ my: 3 }} />
+      <Divider sx={{ mt: 0, mb: 'var(--site-space-6)' }} />
       <Typography variant="overline" color="text.secondary" sx={{ px: 1 }}>
         {label}
       </Typography>
@@ -264,7 +264,7 @@ function LeftSidebar(props: {
         ))}
         {aboutVisible && aboutItems.length > 0 && (
           <Box>
-            <Divider sx={{ my: 3 }} />
+            <Divider sx={{ mt: 0, mb: 'var(--site-space-6)' }} />
             <SidebarLink
               item={{ route: '/about', label: tNav('about'), children: [] }}
               pathname={pathname}

@@ -254,6 +254,20 @@
           "copied": "Copied",
           "noCharset": "Select at least one character set."
         },
+        "toolsRandomStringGenerator": {
+          "eyebrow": "Tool",
+          "title": "Random string generator",
+          "description": "Generate cryptographically secure random strings from the selected character sets.",
+          "length": "Length",
+          "count": "How many",
+          "lowercase": "Lowercase",
+          "uppercase": "Uppercase",
+          "numbers": "Numbers",
+          "symbols": "Symbols",
+          "generate": "Generate",
+          "results": "Results",
+          "noCharset": "Select at least one character set."
+        },
         "resume": {
           "profile": "Profile",
           "leadership": "Leadership activities",
@@ -562,6 +576,20 @@
           "estimatedEntropy": "bits de entropia estimados",
           "copy": "Copiar",
           "copied": "Copiado",
+          "noCharset": "Selecione pelo menos um conjunto de caracteres."
+        },
+        "toolsRandomStringGenerator": {
+          "eyebrow": "Ferramenta",
+          "title": "Gerador de strings aleatórias",
+          "description": "Gere strings aleatórias criptograficamente seguras a partir dos conjuntos escolhidos.",
+          "length": "Tamanho",
+          "count": "Quantidade",
+          "lowercase": "Minúsculas",
+          "uppercase": "Maiúsculas",
+          "numbers": "Números",
+          "symbols": "Símbolos",
+          "generate": "Gerar",
+          "results": "Resultados",
           "noCharset": "Selecione pelo menos um conjunto de caracteres."
         },
         "resume": {

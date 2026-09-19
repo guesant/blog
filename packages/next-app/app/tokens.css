@@ -25,4 +25,5 @@
   --site-radius: 0.25rem;
   --site-radius-lg: 0.375rem;
   --site-border-width: 0.0625rem;
+  --site-content-max: 40rem;
 }

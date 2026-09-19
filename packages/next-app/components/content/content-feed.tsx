@@ -138,15 +138,14 @@ function FeedCard(props: { entry: FeedEntry; locale: string; t: (key: string) =>
       underline="none"
       color="inherit"
       sx={{
-        minHeight: '15rem',
-        p: 3,
+        padding: 'var(--site-space-4) var(--site-space-5)',
         display: 'flex',
         flexDirection: 'column',
         borderColor: 'divider',
         '&:hover .content-feed-title': { color: 'secondary.main' },
       }}
     >
-      <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>
+      <Stack direction="row" sx={{ alignItems: 'center', gap: 'var(--site-space-3)' }}>
         <Typography variant="overline" color="secondary">
           {kindLabel}
         </Typography>
@@ -156,14 +155,22 @@ function FeedCard(props: { entry: FeedEntry; locale: string; t: (key: string) =>
         className="content-feed-title"
         component="h2"
         variant="h3"
-        sx={{ mt: 1, fontSize: 'var(--site-text-2xl)', transition: 'color .2s' }}
+        sx={{ mt: 'var(--site-space-2)', transition: 'color .2s' }}
       >
         {entry.title}
       </Typography>
-      <Typography color="text.secondary" sx={{ mt: 1.25, fontSize: '.9rem' }}>
+      <Typography color="text.secondary" sx={{ mt: 'var(--site-space-3)' }}>
         {entry.preview}
       </Typography>
-      <Box sx={{ mt: 'auto', pt: 2, display: 'flex', flexWrap: 'wrap', gap: 0.75 }}>
+      <Box
+        sx={{
+          mt: 'auto',
+          pt: 'var(--site-space-4)',
+          display: 'flex',
+          flexWrap: 'wrap',
+          gap: 'var(--site-space-2)',
+        }}
+      >
         {entry.findingType && (
           <Chip label={t(`types.${toMessageKey(entry.findingType)}`)} size="small" />
         )}
@@ -247,29 +254,39 @@ export function ContentFeed(props: ContentFeedProps) {
       component="section"
       sx={{
         width: '100%',
-        py: { xs: 8, md: 10 },
+        paddingBlock: 'var(--site-space-6)',
         ...(!showHeader && { borderTop: 1, borderColor: 'divider' }),
       }}
     >
       {showHeader && (
-        <Box component="header" sx={{ maxWidth: '46rem', mb: { xs: 5, md: 7 } }}>
+        <Box
+          component="header"
+          sx={{ maxWidth: 'var(--site-content-max)', mb: 'var(--site-space-6)' }}
+        >
           {copy.eyebrow && (
-            <Typography variant="overline" color="text.secondary" sx={{ display: 'block', mb: 1.5 }}>
+            <Typography
+              variant="overline"
+              color="text.secondary"
+              sx={{ display: 'block', mb: 'var(--site-space-2)' }}
+            >
               {copy.eyebrow}
             </Typography>
           )}
-          <Typography variant="h1" sx={{ fontSize: { xs: '2.5rem', md: '3rem' }, maxWidth: '20ch' }}>
+          <Typography variant="h1" sx={{ maxWidth: '20ch' }}>
             {copy.title}
           </Typography>
           {copy.description && (
-            <Typography color="text.secondary" sx={{ maxWidth: '60ch', mt: 2 }}>
+            <Typography color="text.secondary" sx={{ maxWidth: '60ch', mt: 'var(--site-space-3)' }}>
               {copy.description}
             </Typography>
           )}
         </Box>
       )}
-      <Box component="form" onSubmit={applyFilters} sx={{ mb: 4 }}>
-        <Stack direction={{ xs: 'column', md: 'row' }} spacing={1.5}>
+      <Box component="form" onSubmit={applyFilters} sx={{ mb: 'var(--site-space-4)' }}>
+        <Stack
+          direction={{ xs: 'column', md: 'row' }}
+          sx={{ gap: { xs: 'var(--site-space-2)', md: 'var(--site-space-3)' } }}
+        >
           {!fixedKind && (
             <FormControl size="small" sx={{ minWidth: 150 }}>
               <InputLabel>{tNav('content')}</InputLabel>
@@ -311,12 +328,25 @@ export function ContentFeed(props: ContentFeedProps) {
       {visibleEntries.length === 0 ? (
         <Typography color="text.secondary">{tPages('noResults')}</Typography>
       ) : (
-        <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, minmax(0, 1fr))', lg: 'repeat(3, minmax(0, 1fr))' }, gap: 2 }}>
+        <Box
+          sx={{
+            display: 'grid',
+            gridTemplateColumns: {
+              xs: '1fr',
+              sm: 'repeat(2, minmax(0, 1fr))',
+              lg: 'repeat(3, minmax(0, 1fr))',
+            },
+            gap: 'var(--site-space-6)',
+          }}
+        >
           {visibleEntries.map((entry) => <FeedCard key={`${entry.kind}-${entry.slug}`} entry={entry} locale={locale} t={tPages} />)}
         </Box>
       )}
       {pageCount > 1 && (
-        <Stack direction="row" spacing={1} sx={{ mt: 4, justifyContent: 'center' }}>
+        <Stack
+          direction="row"
+          sx={{ mt: 'var(--site-space-6)', gap: 'var(--site-space-2)', justifyContent: 'center' }}
+        >
           {Array.from({ length: pageCount }, (_, index) => index + 1).map((value) => (
             <Button key={value} href={`${action}?page=${value}`} variant={value === page ? 'contained' : 'outlined'}>
               {value}

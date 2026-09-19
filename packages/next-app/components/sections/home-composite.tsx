@@ -16,6 +16,7 @@ type HomeCompositeProps = {
 export function HomeComposite(props: HomeCompositeProps) {
   const { content, writings, findings, collections } = props;
   const t = useTranslations('Home');
+  const tFeed = useTranslations('Pages.home');
   const tExternalProfiles = useTranslations('ExternalProfiles');
   const { content: page, source: pageSource } = useEditableContent(content.page);
   const {
@@ -43,8 +44,7 @@ export function HomeComposite(props: HomeCompositeProps) {
         writings={writings}
         findings={findings}
         collections={collections}
-        copy={{ title: page.heroIdentity, description: page.heroExperience }}
-        showHeader={false}
+        copy={{ title: tFeed('title'), description: tFeed('description') }}
         action="/"
       />
       <HomeContactSection

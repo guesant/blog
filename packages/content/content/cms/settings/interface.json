@@ -116,6 +116,10 @@
         "readFullCase": "View project"
       },
       "Pages": {
+        "home": {
+          "title": "guesant.net",
+          "description": "tools, writing, findings, and selected work."
+        },
         "cases": {
           "back": "All professional projects",
           "detailPrefix": "Project",
@@ -469,6 +473,10 @@
         "readFullCase": "Ver projeto"
       },
       "Pages": {
+        "home": {
+          "title": "guesant.net",
+          "description": "ferramentas, escritos, achados e trabalhos selecionados."
+        },
         "cases": {
           "back": "Todos os projetos profissionais",
           "detailPrefix": "Projeto",

@@ -8,18 +8,16 @@ import { getEditableProps, useEditableContent } from '@portfolio/content/editing
 import type { HomePageContent } from '@portfolio/content/types';
 import { useTranslations } from 'next-intl';
 import type { ReactNode } from 'react';
-import { externalProfileLabel } from '../../content/external-profiles';
 import { Link as LocaleLink } from '../../i18n/navigation';
+import { ContactProfileGrid } from '../contact/contact-profile-grid';
 import { ProtectedEmail } from '../contact/protected-email';
 import { CaseShowcase } from '../content/case-showcase';
 import { ProjectCard } from '../content/project-card';
 import { SectionHeading } from '../content/section-heading';
 import { TechnologyMarquee } from '../content/technology-marquee';
 import { WritingRow } from '../content/writing-row';
-import { ExternalLink } from '../primitives/external-link';
 import { Icon } from '../primitives/icon';
 import { LayoutStack as Stack } from '../primitives/layout-stack';
-import { ProfileIcon } from '../primitives/profile-icon';
 import { ScrollReveal } from '../primitives/scroll-reveal';
 import { TechnicalGrid } from '../primitives/technical-grid';
 
@@ -331,33 +329,22 @@ export function HomeContactSection(props: HomeContactSectionProps) {
           >
             {page.contactDescription}
           </Typography>
-          <Stack direction="row" sx={{ gap: 3, alignItems: 'center', flexWrap: 'wrap' }}>
+          <Stack sx={{ gap: 'var(--site-space-3)', minWidth: 0 }}>
             {hasEmail && (
               <ProtectedEmail
                 challenge={site.contact.emailChallenge}
                 label={t('contactEmailButton')}
-                color="text.primary"
-                underline="none"
+                variant="button"
               />
             )}
-            {site.contact.profiles.map((profile, index) => (
-              <ExternalLink
-                key={profile.url}
-                href={profile.url}
-                {...getEditableProps(index === 0 ? contactSource : undefined, 'profiles')}
-                underline="none"
-                color="text.primary"
-                sx={{
-                  display: 'inline-flex',
-                  gap: 0.75,
-                  alignItems: 'center',
-                  fontWeight: 600,
-                }}
-              >
-                <ProfileIcon platform={profile.platform} size={16} />
-                {externalProfileLabel(profile, tExternalProfiles)}
-              </ExternalLink>
-            ))}
+            {site.contact.profiles.length > 0 && (
+              <Box {...getEditableProps(contactSource, 'profiles')}>
+                <ContactProfileGrid
+                  profiles={site.contact.profiles}
+                  tExternalProfiles={tExternalProfiles}
+                />
+              </Box>
+            )}
           </Stack>
         </Box>
       </Box>

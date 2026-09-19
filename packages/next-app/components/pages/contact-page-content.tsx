@@ -1,17 +1,15 @@
 'use client';
 
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { getEditableProps, useEditableContent } from '@portfolio/content/editing';
 import type { PageIntroduction, SiteText } from '@portfolio/content/types';
 import { useTranslations } from 'next-intl';
-import { externalProfileLabel } from '../../content/external-profiles';
+import { ContactProfileGrid } from '../contact/contact-profile-grid';
 import { ProtectedEmail } from '../contact/protected-email';
 import { EmptyState } from '../content/empty-state';
 import { PageHeader } from '../content/page-header';
 import { LayoutStack as Stack } from '../primitives/layout-stack';
-import { ProfileIcon } from '../primitives/profile-icon';
 
 type ContactSource = Record<string, unknown>;
 type ContactDetailsProps = {
@@ -66,39 +64,11 @@ function ContactDetails(props: ContactDetailsProps) {
           </Box>
         )}
         {site.contact.profiles.length > 0 && (
-          <Box
-            {...getEditableProps(contactSource, 'profiles')}
-            sx={{
-              display: 'grid',
-              gridTemplateColumns: {
-                xs: 'minmax(0, 1fr)',
-                sm: 'repeat(2, minmax(0, 1fr))',
-                lg: 'repeat(3, minmax(0, 1fr))',
-              },
-              gap: 1.5,
-            }}
-          >
-            {site.contact.profiles.map((profile) => (
-              <Button
-                key={profile.url}
-                component="a"
-                href={profile.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                variant="outlined"
-                size="medium"
-                startIcon={<ProfileIcon platform={profile.platform} size={17} />}
-                sx={{
-                  minWidth: 0,
-                  minHeight: 44,
-                  px: 2,
-                  justifyContent: 'center',
-                  whiteSpace: 'nowrap',
-                }}
-              >
-                {externalProfileLabel(profile, tExternalProfiles)}
-              </Button>
-            ))}
+          <Box {...getEditableProps(contactSource, 'profiles')}>
+            <ContactProfileGrid
+              profiles={site.contact.profiles}
+              tExternalProfiles={tExternalProfiles}
+            />
           </Box>
         )}
       </Stack>

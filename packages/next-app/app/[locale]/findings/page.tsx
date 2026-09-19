@@ -1,10 +1,9 @@
-import { getAchadosPageCopy, getReferences } from '@portfolio/content/server';
+import { getAchadosPageCopy, getLatestNotes, getReferenceCollections, getReferences } from '@portfolio/content/server';
 import type { Metadata } from 'next';
 import { setRequestLocale } from 'next-intl/server';
 import type { LocaleRouteProps } from '@/app/[locale]/route-params';
-import { PageLayout } from '@/components/layouts/page-layout';
 import { SiteShell } from '@/components/layouts/site-shell';
-import { AchadosPageContent } from '@/components/pages/achados-page-content';
+import { ContentFeed } from '@/components/content/content-feed';
 import { createPageMetadata } from '@/content/seo';
 
 export async function generateMetadata(props: LocaleRouteProps): Promise<Metadata> {
@@ -28,9 +27,14 @@ export default async function AchadosPage(props: LocaleRouteProps) {
   const [references, page] = await Promise.all([getReferences(locale), getAchadosPageCopy(locale)]);
   return (
     <SiteShell>
-      <PageLayout>
-        <AchadosPageContent page={page} references={references} />
-      </PageLayout>
+      <ContentFeed
+        writings={await getLatestNotes(locale)}
+        findings={references}
+        collections={await getReferenceCollections(locale)}
+        copy={page}
+        fixedKind="achado"
+        action="/findings"
+      />
     </SiteShell>
   );
 }

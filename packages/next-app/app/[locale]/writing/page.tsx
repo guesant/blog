@@ -1,10 +1,9 @@
-import { getLatestNotes, getWritingPageCopy } from '@portfolio/content/server';
+import { getLatestNotes, getReferenceCollections, getReferences, getWritingPageCopy } from '@portfolio/content/server';
 import type { Metadata } from 'next';
 import { setRequestLocale } from 'next-intl/server';
 import type { LocaleRouteProps } from '@/app/[locale]/route-params';
-import { PageLayout } from '@/components/layouts/page-layout';
 import { SiteShell } from '@/components/layouts/site-shell';
-import { WritingPageContent } from '@/components/pages/writing-page-content';
+import { ContentFeed } from '@/components/content/content-feed';
 import { createPageMetadata } from '@/content/seo';
 
 export async function generateMetadata(props: LocaleRouteProps): Promise<Metadata> {
@@ -28,9 +27,14 @@ export default async function WritingsPage(props: LocaleRouteProps) {
   const [writings, page] = await Promise.all([getLatestNotes(locale), getWritingPageCopy(locale)]);
   return (
     <SiteShell>
-      <PageLayout>
-        <WritingPageContent page={page} writings={writings} />
-      </PageLayout>
+      <ContentFeed
+        writings={writings}
+        findings={await getReferences(locale)}
+        collections={await getReferenceCollections(locale)}
+        copy={page}
+        fixedKind="post"
+        action="/writing"
+      />
     </SiteShell>
   );
 }

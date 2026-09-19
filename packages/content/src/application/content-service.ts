@@ -193,6 +193,10 @@ export async function getWritingPageCopy(locale?: string): Promise<PageIntroduct
   return getLocalizedPage<PageIntroduction>('writing', locale);
 }
 
+export async function getCollectionsPageCopy(locale?: string): Promise<PageIntroduction> {
+  return getLocalizedPage<PageIntroduction>('collections', locale);
+}
+
 export async function getContactPageCopy(locale?: string): Promise<PageIntroduction> {
   return getLocalizedPage<PageIntroduction>('contact', locale);
 }

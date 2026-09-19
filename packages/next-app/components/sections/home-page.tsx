@@ -290,7 +290,7 @@ type HomeContactSectionProps = {
   tExternalProfiles: ReturnType<typeof useTranslations>;
 };
 
-function HomeContactSection(props: HomeContactSectionProps) {
+export function HomeContactSection(props: HomeContactSectionProps) {
   const { page, pageSource, site, contactSource, showContact, hasEmail, t, tExternalProfiles } =
     props;
   if (!showContact) {
@@ -419,7 +419,7 @@ type HomeHeroProps = {
   t: ReturnType<typeof useTranslations>;
 };
 
-function HomeHero(props: HomeHeroProps) {
+export function HomeHero(props: HomeHeroProps) {
   const { page, pageSource, profile, profileRaw, contactSource, showContact, workTarget, t } =
     props;
   return (
@@ -451,6 +451,12 @@ function HomeHero(props: HomeHeroProps) {
           sx={{ mt: 2, fontSize: { xs: '2.65rem', md: '3rem' }, maxWidth: '14ch' }}
         >
           {profile.name}
+        </Typography>
+        <Typography sx={{ mt: 1, fontWeight: 600, color: 'primary.main' }}>
+          {profile.title}
+        </Typography>
+        <Typography color="text.secondary" sx={{ mt: 0.5 }}>
+          {profile.location}
         </Typography>
         <Typography
           component="p"

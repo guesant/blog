@@ -11,6 +11,25 @@ import { ContextualCursor } from '../components/primitives/contextual-cursor';
 const grainTexture =
   'url("data:image/svg+xml,%3Csvg viewBox=%270 0 180 180%27 xmlns=%27http://www.w3.org/2000/svg%27%3E%3Cfilter id=%27noise%27%3E%3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%27.72%27 numOctaves=%273%27 stitchTiles=%27stitch%27/%3E%3C/filter%3E%3Crect width=%27100%25%27 height=%27100%25%27 filter=%27url(%23noise)%27 opacity=%27.9%27/%3E%3C/svg%3E")';
 
+const spacingTokens: Record<number, string> = {
+  0: '0',
+  0.5: 'var(--site-space-1)',
+  1: 'var(--site-space-2)',
+  1.5: 'var(--site-space-3)',
+  2: 'var(--site-space-4)',
+  2.5: 'var(--site-space-5)',
+  3: 'var(--site-space-6)',
+  3.5: 'var(--site-space-7)',
+  4: 'var(--site-space-8)',
+  5: 'var(--site-space-10)',
+  6: 'var(--site-space-12)',
+  8: 'var(--site-space-16)',
+};
+
+function siteSpacing(factor: number) {
+  return spacingTokens[factor] ?? `calc(var(--site-space-2) * ${factor})`;
+}
+
 const theme = createTheme({
   palette: {
     mode: 'light',
@@ -39,36 +58,36 @@ const theme = createTheme({
       focus: 'rgba(29,95,167,.18)',
     },
   },
-  spacing: (factor: number) => `calc(var(--site-space-2) * ${factor})`,
+  spacing: siteSpacing,
   shape: { borderRadius: 4 },
   typography: {
-    fontFamily: 'var(--font-sans), Arial, sans-serif',
+    fontFamily: 'var(--site-font-family)',
     h1: {
       fontSize: 'var(--site-text-3xl)',
-      fontWeight: 700,
-      letterSpacing: '-0.01em',
+      fontWeight: 'var(--site-weight-bold)',
+      letterSpacing: 'var(--site-letter-heading)',
       lineHeight: 'var(--site-leading-tight)',
     },
     h2: {
       fontSize: 'var(--site-text-2xl)',
-      fontWeight: 700,
-      letterSpacing: '-0.01em',
+      fontWeight: 'var(--site-weight-bold)',
+      letterSpacing: 'var(--site-letter-heading)',
       lineHeight: 'var(--site-leading-tight)',
     },
     h3: {
       fontSize: 'var(--site-text-xl)',
-      fontWeight: 600,
+      fontWeight: 'var(--site-weight-semibold)',
       lineHeight: 'var(--site-leading-tight)',
     },
-    h4: { fontSize: 'var(--site-text-lg)', fontWeight: 600, lineHeight: 'var(--site-leading-tight)' },
-    h5: { fontSize: 'var(--site-text-body)', fontWeight: 600, lineHeight: 'var(--site-leading-tight)' },
-    h6: { fontSize: 'var(--site-text-sm)', fontWeight: 600, lineHeight: 'var(--site-leading-tight)' },
-    button: { textTransform: 'none', fontSize: 'var(--site-text-action)', fontWeight: 500, lineHeight: 'var(--site-leading-normal)' },
+    h4: { fontSize: 'var(--site-text-lg)', fontWeight: 'var(--site-weight-semibold)', lineHeight: 'var(--site-leading-tight)' },
+    h5: { fontSize: 'var(--site-text-body)', fontWeight: 'var(--site-weight-semibold)', lineHeight: 'var(--site-leading-tight)' },
+    h6: { fontSize: 'var(--site-text-sm)', fontWeight: 'var(--site-weight-semibold)', lineHeight: 'var(--site-leading-tight)' },
+    button: { textTransform: 'none', fontSize: 'var(--site-text-action)', fontWeight: 'var(--site-weight-medium)', lineHeight: 'var(--site-leading-normal)' },
     overline: {
       fontSize: 'var(--site-text-xs)',
       lineHeight: 'var(--site-leading-normal)',
       letterSpacing: 'var(--site-letter-label)',
-      fontWeight: 600,
+      fontWeight: 'var(--site-weight-semibold)',
     },
     caption: { fontSize: 'var(--site-text-sm)', lineHeight: 'var(--site-leading-normal)' },
     body1: { fontSize: 'var(--site-text-body)', lineHeight: 'var(--site-leading-relaxed)' },
@@ -78,6 +97,9 @@ const theme = createTheme({
     MuiCssBaseline: {
       styleOverrides: {
         body: {
+          fontFamily: 'var(--site-font-family)',
+          fontSize: 'var(--site-text-body)',
+          lineHeight: 'var(--site-leading-relaxed)',
           overflowX: 'hidden',
           overflowWrap: 'break-word',
           backgroundImage: [
@@ -190,50 +212,96 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           borderRadius: 'var(--site-radius)',
-          padding: 'var(--site-space-2) var(--site-space-3)',
-          minHeight: '2.25rem',
+          padding: 'var(--site-action-py) var(--site-action-px)',
+          minHeight: 'var(--site-control-h)',
+          '& .MuiButton-startIcon': {
+            marginLeft: 0,
+            marginRight: 'var(--site-space-2)',
+          },
+          '& .MuiButton-endIcon': {
+            marginRight: 0,
+            marginLeft: 'var(--site-space-2)',
+          },
         },
-        sizeSmall: { padding: 'var(--site-space-1) var(--site-space-2)', minHeight: '2rem' },
-        sizeLarge: { padding: 'var(--site-space-3) var(--site-space-4)', minHeight: '2.5rem' },
-        text: { padding: 'var(--site-space-1) var(--site-space-2)' },
+        sizeSmall: {
+          padding: 'var(--site-action-py) var(--site-action-px)',
+          minHeight: 'var(--site-control-h-sm)',
+        },
+        sizeLarge: {
+          padding: 'var(--site-action-py) var(--site-action-px)',
+          minHeight: 'var(--site-control-h-lg)',
+        },
+        text: { padding: 'var(--site-action-py) var(--site-action-px)' },
       },
     },
     MuiLink: {
       defaultProps: { color: 'secondary' },
-      styleOverrides: { root: { textUnderlineOffset: '0.2em' } },
+      styleOverrides: { root: { textUnderlineOffset: 'var(--site-space-1)' } },
     },
-    MuiChip: { styleOverrides: { root: { borderRadius: '0.375rem', fontWeight: 500 } } },
+    MuiChip: {
+      styleOverrides: {
+        root: {
+          borderRadius: 'var(--site-radius)',
+          padding: 'var(--site-action-py) var(--site-action-px)',
+          fontSize: 'var(--site-text-sm)',
+          fontWeight: 'var(--site-weight-medium)',
+          lineHeight: 'var(--site-leading-normal)',
+        },
+        label: { padding: 0 },
+      },
+    },
     MuiOutlinedInput: {
       styleOverrides: {
         root: {
-          borderRadius: '0.5rem',
-          backgroundColor: '#FFFFFF',
-          '& .MuiOutlinedInput-notchedOutline': { borderColor: '#D8E0E9' },
-          '&:hover .MuiOutlinedInput-notchedOutline': { borderColor: '#1D5FA7' },
+          minHeight: 'var(--site-control-h)',
+          borderRadius: 'var(--site-radius)',
+          backgroundColor: 'var(--site-surface)',
+          fontSize: 'var(--site-text-form)',
+          lineHeight: 'var(--site-leading-normal)',
+          '& .MuiOutlinedInput-input': {
+            padding: 'var(--site-inset-control)',
+          },
+          '&.MuiInputBase-sizeSmall': {
+            minHeight: 'var(--site-control-h-sm)',
+          },
+          '& .MuiOutlinedInput-notchedOutline': {
+            borderColor: 'var(--site-border-strong)',
+            borderWidth: 'var(--site-border-width)',
+          },
+          '&:hover .MuiOutlinedInput-notchedOutline': {
+            borderColor: 'var(--site-primary)',
+          },
           '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-            borderColor: '#1D5FA7',
-            borderWidth: '1px',
+            borderColor: 'var(--site-primary)',
+            borderWidth: 'var(--site-border-width)',
           },
         },
       },
     },
     MuiFormLabel: {
       styleOverrides: {
-        root: { '&.Mui-focused': { color: '#1D5FA7' } },
+        root: {
+          fontSize: 'var(--site-text-xs)',
+          lineHeight: 'var(--site-leading-normal)',
+          letterSpacing: 'var(--site-letter-label)',
+          '&.Mui-focused': { color: 'var(--site-primary)' },
+        },
       },
     },
     MuiCard: {
       defaultProps: { elevation: 0, variant: 'outlined' },
-      styleOverrides: { root: { borderColor: '#D8E0E9', borderRadius: '0.5rem' } },
+      styleOverrides: {
+        root: { borderColor: 'var(--site-border)', borderRadius: 'var(--site-radius)' },
+      },
     },
     MuiPaper: { styleOverrides: { root: { backgroundImage: 'none' } } },
     MuiMenu: {
       styleOverrides: {
         paper: {
           marginTop: 'var(--site-space-2)',
-          border: 'var(--site-border-width) solid #D8E0E9',
+          border: 'var(--site-border-width) solid var(--site-border)',
           borderRadius: 'var(--site-radius-lg)',
-          boxShadow: '0 0.75rem 1.75rem rgba(16,42,70,.1)',
+          boxShadow: 'var(--site-shadow-popover)',
         },
         list: { padding: 'var(--site-space-1)' },
       },
@@ -243,7 +311,9 @@ const theme = createTheme({
         root: {
           fontSize: 'var(--site-text-sm)',
           borderRadius: 'var(--site-radius-lg)',
-          padding: 'var(--site-space-2) var(--site-space-3)',
+          padding: 'var(--site-inset-control)',
+          minHeight: 'var(--site-control-h-sm)',
+          lineHeight: 'var(--site-leading-normal)',
         },
       },
     },
@@ -253,11 +323,11 @@ const theme = createTheme({
           fontSize: 'var(--site-text-xs)',
           lineHeight: 'var(--site-leading-normal)',
           letterSpacing: 'var(--site-letter-label)',
-          fontWeight: 600,
+          fontWeight: 'var(--site-weight-semibold)',
           textTransform: 'uppercase',
-          color: '#5D6978',
+          color: 'var(--site-text-secondary)',
           backgroundColor: 'transparent',
-          padding: '0.5rem 0.75rem 0.25rem',
+          padding: 'var(--site-space-2) var(--site-space-3) var(--site-space-1)',
         },
       },
     },

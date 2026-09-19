@@ -39,8 +39,10 @@
         "source": "Source",
         "preferences": "Preferences",
         "language": "Language",
-        "lightTheme": "Light theme",
-        "darkTheme": "Dark theme"
+        "theme": "Theme",
+        "systemTheme": "System",
+        "lightTheme": "Light",
+        "darkTheme": "Dark"
       },
       "ExternalProfiles": {
         "linkedin": "LinkedIn",
@@ -400,8 +402,10 @@
         "source": "Código-fonte",
         "preferences": "Preferências",
         "language": "Idioma",
-        "lightTheme": "Tema claro",
-        "darkTheme": "Tema escuro"
+        "theme": "Tema",
+        "systemTheme": "Sistema",
+        "lightTheme": "Claro",
+        "darkTheme": "Escuro"
       },
       "ExternalProfiles": {
         "linkedin": "LinkedIn",

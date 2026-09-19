@@ -2,16 +2,7 @@ import type { ProtectedEmailChallenge } from './protected-email/types.ts';
 
 export type RichTextContent = Record<string, unknown>;
 
-export type ContentEditingState = {
-  query: string;
-  variables: { relativePath: string };
-  data: Record<string, unknown>;
-  root: string;
-};
-
-export type EditableContent = {
-  _contentEditing?: ContentEditingState;
-};
+export type EditableContent = {};
 
 export type SeoMetadata = {
   title?: string;

@@ -11,8 +11,8 @@ export function getEditableProps(_source?: unknown, _field?: string | string[]):
 }
 
 export function useEditableContent<T extends object>(staticContent: EditableStaticContent<T>) {
-  const fields: ContentFields = { ...staticContent };
+  const fields = { ...staticContent } as ContentFields;
   return { content: staticContent, source: fields, raw: fields };
 }
 
-export { ContentRichText } from './adapters/tina/rich-text.tsx';
+export { ContentRichText } from './adapters/filesystem/rich-text.tsx';

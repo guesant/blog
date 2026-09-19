@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->middleware('throttle:public-api')->group(function () {
     Route::get('/public-site', [PublicSiteApiController::class, 'index']);
+    Route::get('/resume/{locale}.pdf', [PublicSiteApiController::class, 'resumePdf']);
     Route::get('/public/knowledge-map', [PublicSiteApiController::class, 'knowledgeMap']);
     Route::post('/protected-email/challenge', [PublicSiteApiController::class, 'protectedEmailChallenge']);
     Route::get('/findings', [FindingApiController::class, 'index']);

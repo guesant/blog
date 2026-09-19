@@ -62,12 +62,6 @@ test('renders the public README deterministically from the English canonical sou
       interests: 'Systems and developer tools.',
       learning: 'Computing and mathematics.',
       personalInterests: ['Coffee and code.'],
-      _contentEditing: {
-        query: 'secret',
-        variables: { relativePath: 'profile.json' },
-        data: {},
-        root: 'profile',
-      },
     },
     resume: {
       ...source.resume,

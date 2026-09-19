@@ -61,16 +61,16 @@
       }
     },
     {
-      "url": "https://nextjs.org/",
+      "url": "https://tanstack.com/start",
       "category": "infrastructure",
       "translations": {
         "en": {
-          "name": "Next.js",
-          "description": "Framework of the public web application in packages/next-app."
+          "name": "TanStack Start",
+          "description": "Framework of the public web application in packages/start-app."
         },
         "ptBR": {
-          "name": "Next.js",
-          "description": "Framework da aplicação web pública em packages/next-app."
+          "name": "TanStack Start",
+          "description": "Framework da aplicação web pública em packages/start-app."
         }
       }
     },
@@ -80,11 +80,11 @@
       "translations": {
         "en": {
           "name": "React",
-          "description": "UI runtime used by the Next.js application and content-editing integration."
+          "description": "UI runtime used by the TanStack Start application and content-editing integration."
         },
         "ptBR": {
           "name": "React",
-          "description": "Runtime de UI usado pela aplicação Next.js e pela integração de edição de conteúdo."
+          "description": "Runtime de UI usado pela aplicação TanStack Start e pela integração de edição de conteúdo."
         }
       }
     },
@@ -99,34 +99,6 @@
         "ptBR": {
           "name": "Material UI",
           "description": "Base de componentes e tema usada pela aplicação pública."
-        }
-      }
-    },
-    {
-      "url": "https://tina.io/",
-      "category": "infrastructure",
-      "translations": {
-        "en": {
-          "name": "TinaCMS",
-          "description": "Editing interface and schema layer for the versioned content stored with the repository."
-        },
-        "ptBR": {
-          "name": "TinaCMS",
-          "description": "Interface de edição e camada de schema do conteúdo versionado junto ao repositório."
-        }
-      }
-    },
-    {
-      "url": "https://next-intl.dev/",
-      "category": "infrastructure",
-      "translations": {
-        "en": {
-          "name": "next-intl",
-          "description": "Internationalization layer for the Portuguese and English site variants."
-        },
-        "ptBR": {
-          "name": "next-intl",
-          "description": "Camada de internacionalização das versões em português e inglês do site."
         }
       }
     },
@@ -318,11 +290,11 @@
       "translations": {
         "en": {
           "name": "Vercel",
-          "description": "Production hosting and deployment target for the public Next.js application."
+          "description": "Production hosting and deployment target for the public application."
         },
         "ptBR": {
           "name": "Vercel",
-          "description": "Hospedagem e destino de deploy em produção da aplicação pública em Next.js."
+          "description": "Hospedagem e destino de deploy em produção da aplicação pública."
         }
       }
     },

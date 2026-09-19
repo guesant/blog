@@ -10,8 +10,10 @@ import {
   getLocalizedSiteText,
   listTechnologies,
   normalizeLocale,
+  withPublicSiteSnapshot,
   getContactEmail as readContactEmail,
 } from '../adapters/api/public-site-source.ts';
+export { withPublicSiteSnapshot };
 import { relationTypes } from '../domain/relation-types.ts';
 import type {
   AboutPageCopy,

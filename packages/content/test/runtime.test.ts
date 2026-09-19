@@ -6,7 +6,7 @@ import { createContentRuntime } from '../src/runtime.ts';
 const contentRoot = path.resolve('test/fixtures/content/cms');
 const runtime = createContentRuntime(contentRoot);
 
-test('reads the PDF content without the Tina adapter', async () => {
+test('reads the PDF content from the shared source', async () => {
   const [english, portuguese] = await Promise.all([
     runtime.getResumePageContent('en'),
     runtime.getResumePageContent('pt-BR'),

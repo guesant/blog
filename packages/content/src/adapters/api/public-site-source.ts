@@ -10,8 +10,9 @@ import type {
   SiteVisibility,
   TechnologyBadge,
 } from '../../domain/types.ts';
+import { AsyncLocalStorage } from 'node:async_hooks';
 import type { ProtectedEmailChallenge } from '../../domain/protected-email/types.ts';
-import type { ContentCollection, ContentLocale } from '../tina/filesystem-source.ts';
+import type { ContentCollection, ContentLocale } from '../filesystem/filesystem-source.ts';
 import interfaceDocument from '../../../content/cms/settings/interface.json';
 
 type RecordValue = Record<string, any>;
@@ -30,8 +31,12 @@ type Snapshot = RecordValue & {
   credits: RecordValue[];
 };
 
-const snapshots = new Map<ContentLocale, Promise<Snapshot>>();
-const emailChallenges = new Map<ContentLocale, Promise<ProtectedEmailChallenge | undefined>>();
+type SnapshotContext = { locale: ContentLocale; snapshot: Snapshot };
+type SnapshotRequest = { expiresAt: number; promise: Promise<Snapshot> };
+
+const snapshotContext = new AsyncLocalStorage<SnapshotContext>();
+const snapshotRequests = new Map<ContentLocale, SnapshotRequest>();
+const snapshotRequestTtlMs = 1000;
 
 export function normalizeLocale(locale?: string): ContentLocale {
   return locale === 'pt-BR' ? 'pt-BR' : 'en';
@@ -80,16 +85,8 @@ function siteVisibility(value: RecordValue): SiteVisibility {
   };
 }
 
-async function getEmailChallenge(locale: ContentLocale): Promise<ProtectedEmailChallenge | undefined> {
-  const cached = emailChallenges.get(locale);
-  if (cached) {
-    return cached;
-  }
-
-  const request = fetch(challengeUrl(), {
-    method: 'POST',
-    next: { revalidate: 60, tags: [`protected-email:${locale}`] },
-  } as RequestInit)
+async function getEmailChallenge(): Promise<ProtectedEmailChallenge | undefined> {
+  return fetch(challengeUrl(), { method: 'POST' })
     .then(async (response) => {
       if (!response.ok) {
         return undefined;
@@ -99,29 +96,49 @@ async function getEmailChallenge(locale: ContentLocale): Promise<ProtectedEmailC
     })
     .catch(() => undefined);
 
-  emailChallenges.set(locale, request);
-  return request;
 }
 
-async function getSnapshot(locale?: string): Promise<Snapshot> {
-  const normalized = normalizeLocale(locale);
-  const cached = snapshots.get(normalized);
-  if (cached) {
-    return cached;
+async function fetchSnapshot(locale: ContentLocale): Promise<Snapshot> {
+  const now = Date.now();
+  const current = snapshotRequests.get(locale);
+  if (current && current.expiresAt > now) {
+    return current.promise;
   }
 
-  const request = fetch(apiUrl(normalized), {
-    next: { revalidate: 60, tags: [`public-site:${normalized}`] },
-  } as RequestInit).then(async (response) => {
+  const promise = fetch(apiUrl(locale)).then(async (response) => {
     if (!response.ok) {
       throw new Error(`Public site API returned ${response.status}`);
     }
 
     return (await response.json()) as Snapshot;
   });
+  const request = { expiresAt: now + snapshotRequestTtlMs, promise };
+  snapshotRequests.set(locale, request);
+  promise.catch(() => {
+    if (snapshotRequests.get(locale) === request) {
+      snapshotRequests.delete(locale);
+    }
+  });
+  return promise;
 
-  snapshots.set(normalized, request);
-  return request;
+}
+
+async function getSnapshot(locale?: string): Promise<Snapshot> {
+  const normalized = normalizeLocale(locale);
+  const current = snapshotContext.getStore();
+  if (current?.locale === normalized) {
+    return current.snapshot;
+  }
+  return fetchSnapshot(normalized);
+}
+
+export async function withPublicSiteSnapshot<T>(
+  locale: string | undefined,
+  callback: () => Promise<T>,
+): Promise<T> {
+  const normalized = normalizeLocale(locale);
+  const snapshot = await fetchSnapshot(normalized);
+  return snapshotContext.run({ locale: normalized, snapshot }, callback);
 }
 
 function slugFromKey(value: unknown): string {
@@ -336,7 +353,7 @@ export async function getLocalizedSiteText(locale?: string): Promise<SiteText> {
   const normalized = normalizeLocale(locale);
   const emailChallenge =
     site.protected_email ??
-    (site.contact_available ? await getEmailChallenge(normalized) : undefined);
+    (site.contact_available ? await getEmailChallenge() : undefined);
   return {
     shortName: site.short_name ?? '',
     portfolioUrl: site.portfolio_url ?? '',

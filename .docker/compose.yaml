@@ -40,6 +40,7 @@ services:
       QUEUE_CONNECTION: database
       COMPOSER_CACHE_DIR: /composer-cache
       PORTFOLIO_RESUME_PDF_ROOT: /data/resume-cache
+      TECTONIC_BUNDLE: https://data1.fullyjustified.net/tlextras-2022.0r0.tar
     ports:
       - "8001:8000"
     command: php artisan serve --no-reload --host=0.0.0.0 --port=8000
@@ -54,30 +55,31 @@ services:
     <<: *laravel
     ports: []
     command: php artisan schedule:work
-  next:
+  start:
     image: node@sha256:235600a8101ab264e117b1768e925532262668dc9b581ef1dd7d96ced463b8e7
     working_dir: /workspace
     user: "${PORTFOLIO_CONTAINER_UID:-1000}:${PORTFOLIO_CONTAINER_GID:-1000}"
     volumes:
       - ..:/workspace
-      - next-node-modules:/workspace/node_modules
+      - start-node-modules:/workspace/node_modules
     environment:
       PORTFOLIO_CONTENT_API_URL: http://laravel:8000/api/v1/public-site
-      NEXT_PUBLIC_SITE_URL: http://localhost:3000
+      PORTFOLIO_PUBLIC_API_URL: /api/v1
+      SITE_URL: http://localhost:3000
       HOME: /tmp
     ports:
       - "3000:3000"
-    command: sh -lc 'corepack pnpm install --frozen-lockfile --ignore-scripts && corepack pnpm --filter portfolio exec next dev --hostname 0.0.0.0'
+    command: sh -lc 'corepack pnpm install --frozen-lockfile --ignore-scripts && corepack pnpm --filter portfolio dev -- --host 0.0.0.0'
     depends_on:
       laravel:
         condition: service_started
-      next-node-modules-init:
+      start-node-modules-init:
         condition: service_completed_successfully
-  next-node-modules-init:
+  start-node-modules-init:
     image: node@sha256:235600a8101ab264e117b1768e925532262668dc9b581ef1dd7d96ced463b8e7
     user: "0:0"
     volumes:
-      - next-node-modules:/workspace/node_modules
+      - start-node-modules:/workspace/node_modules
     command: sh -lc 'mkdir -p /workspace/node_modules && chown -R ${PORTFOLIO_CONTAINER_UID:-1000}:${PORTFOLIO_CONTAINER_GID:-1000} /workspace/node_modules'
     restart: "no"
   resume-cache-init:
@@ -184,4 +186,4 @@ volumes:
   nuget-cache:
   resume-pdf-cache:
   laravel-composer-cache:
-  next-node-modules:
+  start-node-modules:

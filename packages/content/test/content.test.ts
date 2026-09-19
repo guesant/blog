@@ -4,7 +4,7 @@ import {
   normalizeLocale,
   withContentDefaults,
   withoutHiddenItems,
-} from '../src/adapters/tina/filesystem-source.ts';
+} from '../src/adapters/filesystem/filesystem-source.ts';
 import {
   getCaseBySlug,
   getCases,
@@ -60,7 +60,7 @@ test('validates slugs and handles missing documents', async () => {
   assert.equal(await getCaseBySlug('does-not-exist'), undefined);
 });
 
-test('orders documents, resolves references, and provides editing envelopes', async () => {
+test('orders documents and resolves references', async () => {
   const cases = await getCases('en');
   assert.deepEqual(
     cases.map((item) => item.order),
@@ -69,11 +69,6 @@ test('orders documents, resolves references, and provides editing envelopes', as
   assert.ok(cases.every((item) => item.technologies.every((technology) => technology.length > 0)));
 
   const caseStudy = cases[0];
-  assert.ok(caseStudy?._contentEditing);
-  assert.equal(caseStudy?._contentEditing?.root, 'caseStudy');
-  assert.ok(caseStudy?._contentEditing?.query);
-  assert.ok(caseStudy?._contentEditing?.variables);
-
   const writing = await getWritingBySlug('rrule', 'pt-BR');
   assert.ok(writing?.type);
   assert.ok(writing?.subject);
@@ -251,11 +246,4 @@ test('excludes relations that point at or come from a non-public reference', asy
   assert.ok(
     !raftPaper?.relations.some((relation) => relation.targetSlug === 'private-notes-draft'),
   );
-});
-
-test('strips non-public relations from the live-editing payload, not just the rendered view', async () => {
-  const ddia = await getReferenceBySlug('ddia', 'en');
-  const data = ddia?._contentEditing?.data as { resource?: { relations?: unknown[] } } | undefined;
-  assert.ok(Array.isArray(data?.resource?.relations));
-  assert.ok(!JSON.stringify(data?.resource?.relations).includes('private-notes-draft'));
 });

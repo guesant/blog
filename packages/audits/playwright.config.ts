@@ -31,7 +31,7 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: `HOSTNAME=0.0.0.0 ${process.execPath} ../next-app/.next/standalone/packages/next-app/server.js`,
+    command: `HOSTNAME=0.0.0.0 ${process.execPath} ../start-app/dist/server/server.js`,
     url: baseURL,
     reuseExistingServer: false,
     timeout: 120_000,

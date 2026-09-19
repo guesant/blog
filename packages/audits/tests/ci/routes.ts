@@ -8,7 +8,7 @@ export type AuditedRoute = {
 
 type RouteManifest = { routes: string[] };
 
-const manifestPath = path.join(process.cwd(), '../next-app/scripts/ci/audited-routes.json');
+const manifestPath = path.join(process.cwd(), '../start-app/scripts/ci/audited-routes.json');
 
 function readManifest(): RouteManifest {
   try {

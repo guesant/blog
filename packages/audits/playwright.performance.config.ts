@@ -23,7 +23,7 @@ export default defineConfig({
   },
   webServer: {
     ...baseConfig.webServer,
-    command: `HOSTNAME=0.0.0.0 PORT=${performancePort} ${process.execPath} ../next-app/.next/standalone/packages/next-app/server.js`,
+    command: `HOSTNAME=0.0.0.0 PORT=${performancePort} ${process.execPath} ../start-app/dist/server/server.js`,
     url: performanceBaseURL,
   },
 });

@@ -6,7 +6,7 @@ import { searchIndexFields, searchIndexStoreFields } from '../src/generate.mts';
 
 const clientSource = readFileSync(
   fileURLToPath(
-    new URL('../../next-app/components/content/search-and-filter-bar.tsx', import.meta.url),
+    new URL('../../start-app/components/content/search-and-filter-bar.tsx', import.meta.url),
   ),
   'utf8',
 );

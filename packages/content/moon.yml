@@ -11,20 +11,5 @@ tasks:
     command: 'node --test test/**/*.test.ts'
     env:
       PORTFOLIO_CONTENT_ROOT: 'test/fixtures/content/cms'
-    inputs: ['src/**/*', 'test/**/*', 'admin-server.mjs', 'package.json', 'tsconfig.json']
+    inputs: ['src/**/*', 'test/**/*', 'package.json', 'tsconfig.json']
     tags: [test, check]
-  cms:
-    command: 'TINA_PUBLIC_IS_LOCAL=true tinacms dev --port 4001 --datalayer-port 9000 --noTelemetry'
-    preset: server
-    options:
-      persistent: true
-      cache: false
-    tags: [dev]
-  cms-admin:
-    command: 'node admin-server.mjs'
-    preset: server
-    options:
-      persistent: true
-      cache: false
-    tags: [dev]
-

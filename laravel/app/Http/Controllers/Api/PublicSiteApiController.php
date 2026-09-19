@@ -42,6 +42,23 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class PublicSiteApiController extends Controller
 {
+    public function resumePdf(string $locale): Response
+    {
+        if (! in_array($locale, ['en', 'pt-BR'], true)) {
+            abort(404);
+        }
+
+        $path = storage_path("app/public/resume-{$locale}.pdf");
+        if (! is_file($path)) {
+            abort(404);
+        }
+
+        return response()->file($path, [
+            'Cache-Control' => 'public, max-age=3600',
+            'Content-Type' => 'application/pdf',
+        ]);
+    }
+
     public function protectedEmailChallenge(Request $request): JsonResponse|Response
     {
         if ((new SiteSettingsQuery)->find()?->maintenance_enabled) {

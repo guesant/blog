@@ -192,11 +192,11 @@ frontend-check: frontend-install
     {{node_run}} 'corepack pnpm --filter @portfolio/content exec tsc --noEmit'
     {{node_run}} 'corepack pnpm --filter portfolio exec tsc --noEmit'
 
-next:
-    {{compose_dev}} up -d next
+start:
+    {{compose_dev}} up -d start
 
-next-logs:
-    {{compose_dev}} logs -f --tail=100 next
+start-logs:
+    {{compose_dev}} logs -f --tail=100 start
 
 stories:
     {{compose_dev}} run --rm -p 8081:8081 -e NUGET_PACKAGES=/src/.nuget-cache -e ASPNETCORE_URLS=http://0.0.0.0:8081 web sh -lc \

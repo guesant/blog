@@ -21,7 +21,7 @@ import { Icon, type IconName } from '../primitives/icon';
 import { LayoutStack as Stack } from '../primitives/layout-stack';
 import { ProfileIcon } from '../primitives/profile-icon';
 import { externalProfileLabel } from '../../content/external-profiles';
-import { sidebarActionSx } from './sidebar-action';
+import { sidebarActionSx, sidebarSubnavSx } from './sidebar-action';
 
 type SiteSidebarShellProps = {
   children: ReactNode;
@@ -151,8 +151,43 @@ function SidebarLink(props: {
   );
 }
 
+function SidebarNavItem(props: {
+  item: NavigationItem;
+  pathname: string;
+  locale: string;
+  site: SiteText;
+  onNavigate?: () => void;
+}) {
+  const { item, pathname, locale, site, onNavigate } = props;
+  const visibleChildren = item.children.filter((child) => visibleRoute(child.route, site));
+  return (
+    <Box>
+      <SidebarLink
+        item={item}
+        pathname={pathname}
+        locale={locale}
+        onNavigate={onNavigate}
+      />
+      {visibleChildren.length > 0 && (
+        <Stack sx={sidebarSubnavSx}>
+          {visibleChildren.map((child) => (
+            <SidebarNavItem
+              key={child.route}
+              item={child}
+              pathname={pathname}
+              locale={locale}
+              site={site}
+              onNavigate={onNavigate}
+            />
+          ))}
+        </Stack>
+      )}
+    </Box>
+  );
+}
+
 function SidebarGroup(props: {
-  label: string;
+  label?: string;
   items: NavigationItem[];
   pathname: string;
   locale: string;
@@ -167,16 +202,28 @@ function SidebarGroup(props: {
   return (
     <Box>
       <Divider sx={{ mt: 0, mb: 'var(--site-space-6)' }} />
-      <Typography variant="overline" color="text.secondary" sx={{ px: 1 }}>
-        {label}
-      </Typography>
-      <Stack sx={{ gap: 1, mt: 0.5 }}>
+      {label && (
+        <Typography
+          variant="overline"
+          color="text.secondary"
+          sx={{ px: 'var(--site-space-2)' }}
+        >
+          {label}
+        </Typography>
+      )}
+      <Stack
+        sx={{
+          gap: 'var(--site-space-2)',
+          mt: label ? 'var(--site-space-1)' : 0,
+        }}
+      >
         {visibleItems.map((item) => (
-          <SidebarLink
+          <SidebarNavItem
             key={item.route}
             item={item}
             pathname={pathname}
             locale={locale}
+            site={site}
             onNavigate={onNavigate}
           />
         ))}
@@ -214,6 +261,11 @@ function LeftSidebar(props: {
       },
     )
     .filter((item) => visibleAboutRoutes.includes(routeSegment(item.route)));
+  const aboutItem: NavigationItem = {
+    route: '/about',
+    label: tNav('about'),
+    children: aboutItems,
+  };
   const routeSegments = pathname.split('/').filter(Boolean);
   const backHref =
     pathname === '/' ? undefined : routeSegments.length > 1 ? `/${routeSegments[0]}` : '/';
@@ -263,26 +315,13 @@ function LeftSidebar(props: {
           />
         ))}
         {aboutVisible && aboutItems.length > 0 && (
-          <Box>
-            <Divider sx={{ mt: 0, mb: 'var(--site-space-6)' }} />
-            <SidebarLink
-              item={{ route: '/about', label: tNav('about'), children: [] }}
-              pathname={pathname}
-              locale={locale}
-              onNavigate={onNavigate}
-            />
-            <Stack sx={{ gap: 1, ml: 1.5, pl: 1.5, borderLeft: 'var(--site-border-width) solid', borderColor: 'divider' }}>
-              {aboutItems.map((item) => (
-                <SidebarLink
-                  key={item.route}
-                  item={item}
-                  pathname={pathname}
-                  locale={locale}
-                  onNavigate={onNavigate}
-                />
-              ))}
-            </Stack>
-          </Box>
+          <SidebarGroup
+            items={[aboutItem]}
+            pathname={pathname}
+            locale={locale}
+            site={site}
+            onNavigate={onNavigate}
+          />
         )}
       </Stack>
     </Box>
@@ -319,7 +358,7 @@ function RightSidebar(props: {
               locale={locale}
               onNavigate={onNavigate}
             />
-            <Stack sx={{ gap: 1, ml: 1.5, pl: 1.5, borderLeft: 'var(--site-border-width) solid', borderColor: 'divider' }}>
+            <Stack sx={sidebarSubnavSx}>
               {site.contact.profiles.map((item) => (
                 <Button
                   key={item.url}

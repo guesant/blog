@@ -24,3 +24,14 @@ export const sidebarActionSx = {
     borderColor: 'secondary.main',
   },
 } as const;
+
+export const sidebarSubnavSx = {
+  display: 'flex',
+  flexDirection: 'column',
+  gap: 'var(--site-space-3)',
+  mt: 'var(--site-space-3)',
+  ml: 'var(--site-space-3)',
+  pl: 'var(--site-space-3)',
+  borderLeft: 'var(--site-border-width) solid',
+  borderColor: 'divider',
+} as const;

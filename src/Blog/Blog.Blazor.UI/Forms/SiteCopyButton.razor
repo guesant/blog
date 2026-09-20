@@ -1,9 +1,0 @@
-@if (RendererInfo.IsInteractive)
-{
-    <SiteTooltip Text="@ResolvedTooltipText">
-        <SiteButton Variant="SiteButtonVariant.Outline"
-            Size="@Size"
-            OnClick="HandleCopyAsync">@(_copied ? CopiedLabel : Label)</SiteButton>
-    </SiteTooltip>
-    <span class="visually-hidden" aria-live="polite">@(_copied ? CopiedLabel : "")</span>
-}

@@ -1,6 +1,0 @@
-{
-  "slug": "docker",
-  "order": 11,
-  "logo": "docker",
-  "translations": { "en": { "name": "Docker" }, "ptBR": { "name": "Docker" } }
-}

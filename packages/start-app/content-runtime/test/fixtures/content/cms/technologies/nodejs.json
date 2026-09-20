@@ -1,6 +1,0 @@
-{
-  "slug": "nodejs",
-  "order": 117,
-  "logo": "nodedotjs",
-  "translations": { "en": { "name": "Node.js" }, "ptBR": { "name": "Node.js" } }
-}

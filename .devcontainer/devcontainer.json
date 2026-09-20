@@ -1,23 +1,16 @@
 {
-  "name": "blog",
+  "name": "portfolio",
   "dockerComposeFile": [
     "../.docker/compose.yaml",
     "../.docker/compose.dev.yaml"
   ],
-  "service": "web",
-  "workspaceFolder": "/src",
+  "service": "start",
+  "workspaceFolder": "/workspace/src/public-app",
   "shutdownAction": "stopCompose",
-  "overrideCommand": true,
-  "forwardPorts": [
-    8080,
-    8081
-  ],
+  "forwardPorts": [3000, 8001],
   "customizations": {
     "vscode": {
-      "extensions": [
-        "ms-dotnettools.csdevkit",
-        "csharpier.csharpier-vscode"
-      ]
+      "extensions": []
     }
   }
 }

@@ -1,6 +1,0 @@
-{
-  "slug": "devops-cicd",
-  "order": 9,
-  "kind": "skill",
-  "translations": { "en": { "name": "DevOps and CI/CD" }, "ptBR": { "name": "DevOps e CI/CD" } }
-}

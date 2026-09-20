@@ -1,19 +1,26 @@
-name: lint-actions
+name: quality
 
 on:
   push:
-    paths:
-      - .github/workflows/**
+    paths-ignore:
+      - .deploy/**
+      - docs/**
+      - "**/*.md"
   pull_request:
-    paths:
-      - .github/workflows/**
-  workflow_dispatch:
+    paths-ignore:
+      - .deploy/**
+      - docs/**
+      - "**/*.md"
 
 permissions:
   contents: read
 
+concurrency:
+  group: quality-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
 jobs:
-  lint:
+  check:
     runs-on: ubuntu-24.04
     steps:
       - name: Checkout
@@ -24,5 +31,5 @@ jobs:
       - name: Install just
         run: sudo apt-get update && sudo apt-get install --yes --no-install-recommends just
 
-      - name: Lint workflows
-        run: just lint-actions
+      - name: Run the repository gate
+        run: just check

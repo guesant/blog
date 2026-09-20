@@ -5,3 +5,6 @@
 **/wwwroot/lib/**
 package-lock.json
 **/playwright-report/**
+**/dist/**
+**/routeTree.gen.ts
+**/public/**

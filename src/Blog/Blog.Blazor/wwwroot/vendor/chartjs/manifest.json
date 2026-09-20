@@ -1,8 +1,0 @@
-{
-  "name": "chart.js",
-  "version": "4.5.1",
-  "asset": "chart.umd.min.js",
-  "sha256": "48444a82d4edcb5bec0f1965faacdde18d9c17db3063d042abada2f705c9f54a",
-  "license": "MIT",
-  "source": "https://www.npmjs.com/package/chart.js"
-}

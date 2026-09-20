@@ -1,6 +1,0 @@
-{
-  "slug": "postgresql",
-  "order": 9,
-  "logo": "postgresql",
-  "translations": { "en": { "name": "PostgreSQL" }, "ptBR": { "name": "PostgreSQL" } }
-}

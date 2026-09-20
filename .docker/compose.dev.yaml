@@ -1,18 +1,9 @@
 services:
-  web:
-    environment:
-      PORTFOLIO_WATCH: "1"
-      DOTNET_USE_POLLING_FILE_WATCHER: "1"
-      DOTNET_WATCH_SUPPRESS_LAUNCH_BROWSER: "1"
-      # /tmp/nuget-packages is baked read-only into the image for the
-      # originally-vendored packages; anything added later (e.g. via
-      # `dotnet add package`) needs a writable cache instead.
-      NUGET_PACKAGES: "/src/.nuget-cache"
-    command: sh -lc 'dotnet restore src/Blog.Blazor.slnx --locked-mode && exec sh ./tools/scripts/run-with-tectonic.sh'
   tools:
     build:
       context: ..
-      dockerfile: .docker/tools.Dockerfile
+      dockerfile: .tools/docker/Dockerfile
+      target: tools
     image: portfolio-tools
     profiles:
       - tools
@@ -29,20 +20,4 @@ services:
       - /tmp:uid=${PORTFOLIO_CONTAINER_UID:-1000},gid=${PORTFOLIO_CONTAINER_GID:-1000},mode=1777
     environment:
       HOME: /tmp
-    command: ["true"]
-  playwright:
-    image: mcr.microsoft.com/playwright@sha256:eff16c30e6f3f4af0a03fa4b706120d5e9b0891c344a27d64559aff5900a4a27
-    profiles:
-      - tools
-    user: "${PORTFOLIO_CONTAINER_UID:-1000}:${PORTFOLIO_CONTAINER_GID:-1000}"
-    cap_drop:
-      - ALL
-    security_opt:
-      - no-new-privileges:true
-    working_dir: /workspace
-    volumes:
-      - ../src/Blog/Blog.Blazor.Stories.VRT:/workspace
-    environment:
-      HOME: /tmp
-      VRT_BASE_URL: http://stories:8081
     command: ["true"]

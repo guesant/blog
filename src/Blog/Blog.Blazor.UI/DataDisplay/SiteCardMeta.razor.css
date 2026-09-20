@@ -1,6 +1,0 @@
-.card-meta {
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    gap: var(--site-space-1);
-}

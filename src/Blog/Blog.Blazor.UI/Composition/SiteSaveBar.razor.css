@@ -1,7 +1,0 @@
-.site-save-bar-sticky {
-    position: sticky;
-    bottom: 0;
-    padding-block: var(--site-space-4);
-    background: var(--site-surface);
-    border-top: var(--site-border-width) solid var(--site-border-strong);
-}

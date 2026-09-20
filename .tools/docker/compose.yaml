@@ -1,0 +1,163 @@
+name: portfolio-tools
+
+services:
+  tools:
+    build:
+      context: ../..
+      dockerfile: .tools/docker/Dockerfile
+      target: tools
+    image: portfolio-tools
+    working_dir: /workspace
+    user: "${PORTFOLIO_CONTAINER_UID:-1000}:${PORTFOLIO_CONTAINER_GID:-1000}"
+    read_only: true
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    volumes:
+      - ../..:/workspace
+    tmpfs:
+      - /tmp:uid=${PORTFOLIO_CONTAINER_UID:-1000},gid=${PORTFOLIO_CONTAINER_GID:-1000},mode=1777
+    environment:
+      HOME: /tmp
+    command: ["true"]
+
+  ast-grep:
+    build:
+      context: ../..
+      dockerfile: .tools/docker/Dockerfile
+      target: ast-grep
+    image: portfolio-tools-ast-grep
+    working_dir: /workspace
+    volumes:
+      - ../..:/workspace:ro
+
+  jscpd:
+    build:
+      context: ../..
+      dockerfile: .tools/docker/Dockerfile
+      target: jscpd
+    image: portfolio-tools-jscpd
+    working_dir: /workspace
+    volumes:
+      - ../..:/workspace:ro
+
+  lizard:
+    build:
+      context: ../..
+      dockerfile: .tools/docker/Dockerfile
+      target: lizard
+    image: portfolio-tools-lizard
+    working_dir: /workspace
+    volumes:
+      - ../..:/workspace:ro
+
+  yamllint:
+    build:
+      context: ../..
+      dockerfile: .tools/docker/Dockerfile
+      target: yamllint
+    image: portfolio-tools-yamllint
+    working_dir: /workspace
+    volumes:
+      - ../..:/workspace:ro
+
+  shellcheck:
+    build:
+      context: ../..
+      dockerfile: .tools/docker/Dockerfile
+      target: shellcheck
+    image: portfolio-tools-shellcheck
+    working_dir: /workspace
+    volumes:
+      - ../..:/workspace:ro
+
+  actionlint:
+    build:
+      context: ../..
+      dockerfile: .tools/docker/Dockerfile
+      target: actionlint
+    image: portfolio-tools-actionlint
+    working_dir: /workspace
+    volumes:
+      - ../..:/workspace:ro
+
+  zizmor:
+    build:
+      context: ../..
+      dockerfile: .tools/docker/Dockerfile
+      target: zizmor
+    image: portfolio-tools-zizmor
+    working_dir: /workspace
+    volumes:
+      - ../..:/workspace:ro
+
+  hadolint:
+    build:
+      context: ../..
+      dockerfile: .tools/docker/Dockerfile
+      target: hadolint
+    image: portfolio-tools-hadolint
+    working_dir: /workspace
+    volumes:
+      - ../..:/workspace:ro
+
+  gitleaks:
+    build:
+      context: ../..
+      dockerfile: .tools/docker/Dockerfile
+      target: gitleaks
+    image: portfolio-tools-gitleaks
+    working_dir: /workspace
+    volumes:
+      - ../..:/workspace:ro
+
+  osv-scanner:
+    build:
+      context: ../..
+      dockerfile: .tools/docker/Dockerfile
+      target: osv-scanner
+    image: portfolio-tools-osv-scanner
+    working_dir: /workspace
+    volumes:
+      - ../..:/workspace:ro
+
+  trivy:
+    build:
+      context: ../..
+      dockerfile: .tools/docker/Dockerfile
+      target: trivy
+    image: portfolio-tools-trivy
+    working_dir: /workspace
+    volumes:
+      - ../..:/workspace:ro
+
+  semgrep:
+    build:
+      context: ../..
+      dockerfile: .tools/docker/Dockerfile
+      target: semgrep
+    image: portfolio-tools-semgrep
+    working_dir: /workspace
+    volumes:
+      - ../..:/workspace:ro
+
+  qlty:
+    build:
+      context: ../..
+      dockerfile: .tools/docker/Dockerfile
+      target: qlty
+    image: portfolio-tools-qlty
+    working_dir: /workspace
+    volumes:
+      - ../..:/workspace:ro
+
+  scorecard:
+    build:
+      context: ../..
+      dockerfile: .tools/docker/Dockerfile
+      target: scorecard
+    image: portfolio-tools-scorecard
+    working_dir: /workspace
+    volumes:
+      - ../..:/workspace:ro

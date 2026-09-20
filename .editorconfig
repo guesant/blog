@@ -34,11 +34,3 @@ dotnet_diagnostic.CA1861.severity = suggestion
 dotnet_diagnostic.CA1859.severity = suggestion
 dotnet_diagnostic.CA1869.severity = suggestion
 dotnet_diagnostic.CA5350.severity = suggestion
-
-[*.razor]
-indent_style = space
-indent_size = 4
-
-[src/Blog/Blog.Blazor.Stories/**/*.stories.razor.cs]
-# IMPORTANT: Razor names the class of X.stories.razor "X_stories"; the partial class must match.
-dotnet_diagnostic.CA1707.severity = none

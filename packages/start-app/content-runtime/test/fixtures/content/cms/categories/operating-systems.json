@@ -1,9 +1,0 @@
-{
-  "slug": "operating-systems",
-  "order": 5,
-  "kind": "skill",
-  "translations": {
-    "en": { "name": "Operating systems" },
-    "ptBR": { "name": "Sistemas operacionais" }
-  }
-}

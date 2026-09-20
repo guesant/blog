@@ -1,5 +1,0 @@
-.site-key-value-item > dt {
-    display: flex;
-    align-items: center;
-    gap: var(--site-gap-inline);
-}

@@ -1,9 +1,0 @@
-{
-  "slug": "portuguese-brazil",
-  "order": 2,
-  "code": "pt-BR",
-  "translations": {
-    "en": { "name": "Portuguese (Brazil)" },
-    "ptBR": { "name": "Português (Brasil)" }
-  }
-}

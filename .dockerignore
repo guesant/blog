@@ -2,5 +2,9 @@
 **/bin
 **/obj
 **/node_modules
+**/dist
+**/.next
+**/.tanstack
+.pnpm-store
 artifacts
 data

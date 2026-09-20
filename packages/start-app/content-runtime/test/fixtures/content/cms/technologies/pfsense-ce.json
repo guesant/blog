@@ -1,6 +1,0 @@
-{
-  "slug": "pfsense-ce",
-  "order": 113,
-  "logo": "pfsense",
-  "translations": { "en": { "name": "pfSense CE" }, "ptBR": { "name": "pfSense CE" } }
-}

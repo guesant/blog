@@ -1,4 +1,0 @@
-# Resource keys built at runtime: a plain line is a key prefix (L[$"prefix{value}"]); a line starting with ^ is a regex.
-color_rule_
-graph_kind_
-^[a-z0-9_]+_(title|summary)$

@@ -8,6 +8,11 @@ artifacts/
 .vs/
 .vscode/
 node_modules
+**/node_modules/
+**/dist/
+**/.next/
+**/.tanstack/
+.pnpm-store/
 .github
 .claude
 docs

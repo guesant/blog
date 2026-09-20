@@ -1,9 +1,0 @@
-{
-  "slug": "integrations-architecture",
-  "order": 4,
-  "kind": "skill",
-  "translations": {
-    "en": { "name": "Integrations and architecture" },
-    "ptBR": { "name": "Integrações e arquitetura" }
-  }
-}

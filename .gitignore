@@ -3,9 +3,7 @@ node_modules
 **/.next/
 **/dist/
 
-packages/start-app/public/*-search-index*.json
-
-# .NET/Blazor build outputs
+# Build outputs
 **/bin/
 **/obj/
 /artifacts/
@@ -24,3 +22,6 @@ test-results
 /CSharpier/
 
 .pnpm-store
+
+# Local migration worklists
+/*.local.md

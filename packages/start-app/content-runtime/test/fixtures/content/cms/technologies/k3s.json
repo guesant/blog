@@ -1,6 +1,0 @@
-{
-  "slug": "k3s",
-  "order": 110,
-  "logo": "k3s",
-  "translations": { "en": { "name": "K3s" }, "ptBR": { "name": "K3s" } }
-}

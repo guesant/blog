@@ -1,0 +1,23 @@
+name: Push profile README
+description: Generate a profile README from the public Laravel content API
+inputs:
+  api-url:
+    description: Public Laravel API URL for the public-site snapshot
+    required: true
+  locale:
+    description: Locale used for the generated profile
+    required: false
+    default: en
+  output:
+    description: Output path relative to GITHUB_WORKSPACE
+    required: false
+    default: README.md
+  email:
+    description: Optional email to include in the generated README
+    required: false
+  api-token:
+    description: Optional bearer token for protected API deployments
+    required: false
+runs:
+  using: node24
+  main: index.mjs

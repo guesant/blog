@@ -1,6 +1,0 @@
-{
-  "slug": "backend",
-  "order": 20,
-  "kind": "writing-subject",
-  "translations": { "en": { "name": "Backend" }, "ptBR": { "name": "Backend" } }
-}

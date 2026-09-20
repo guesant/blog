@@ -1,6 +1,0 @@
-{
-  "slug": "php",
-  "order": 3,
-  "logo": "php",
-  "translations": { "en": { "name": "PHP" }, "ptBR": { "name": "PHP" } }
-}

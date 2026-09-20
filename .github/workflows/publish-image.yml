@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths-ignore:
-      - deploy/**
+      - .deploy/**
       - docs/**
       - "**/*.md"
 
@@ -105,8 +105,8 @@ jobs:
         id: build
         uses: docker/build-push-action@53b7df96c91f9c12dcc8a07bcb9ccacbed38856a
         with:
-          context: ./laravel
-          file: ./laravel/docker/app.prod.Dockerfile
+          context: ./src/laravel
+          file: ./src/laravel/docker/app.prod.Dockerfile
           platforms: linux/arm64
           push: true
           provenance: true

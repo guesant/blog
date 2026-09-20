@@ -1,8 +1,0 @@
-{
-  "slug": "hexagonal-architecture",
-  "order": 40,
-  "translations": {
-    "en": { "name": "Hexagonal Architecture" },
-    "ptBR": { "name": "Arquitetura Hexagonal" }
-  }
-}

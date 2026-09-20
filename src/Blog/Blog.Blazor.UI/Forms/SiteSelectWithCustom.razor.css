@@ -1,5 +1,0 @@
-.site-select-with-custom {
-    display: grid;
-    gap: var(--site-space-2);
-    min-width: 0;
-}

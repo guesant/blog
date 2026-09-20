@@ -1,75 +1,33 @@
-FROM mcr.microsoft.com/dotnet/sdk@sha256:2fa828c68761b1b8c23d7662dc134421b9d3b59fe1425fdbc80804e390cdb24d AS build
-WORKDIR /src
-ENV DOTNET_CLI_TELEMETRY_OPTOUT=1 \
-    DOTNET_NOLOGO=true \
-    NUGET_PACKAGES=/tmp/nuget-packages
+FROM node:24.20.0-bookworm-slim@sha256:ba849c60be29959425b8734d57b8b4b7d56f98edd9504c9af091d5281095a71e AS dependencies
+WORKDIR /app
+ENV COREPACK_HOME=/tmp/corepack
+COPY src/public-app/package.json src/public-app/pnpm-lock.yaml src/public-app/pnpm-workspace.yaml ./
+RUN corepack enable && corepack pnpm install --frozen-lockfile --prod --ignore-scripts
 
-# IMPORTANT: restore only after the full source copy. Restoring from a csproj-only layer,
-# even solution-wide, silently drops _framework/blazor.web.js from the published static web
-# assets manifest (a runtime 404 with no build error), so the restore layer is not cached.
-COPY . .
-RUN dotnet restore src/Blog.Blazor.slnx --locked-mode
-RUN dotnet publish src/Blog/Blog.Blazor/Blog.Blazor.csproj \
-    --configuration Release \
-    --no-restore \
-    --output /app/publish
+FROM node:24.20.0-bookworm-slim@sha256:ba849c60be29959425b8734d57b8b4b7d56f98edd9504c9af091d5281095a71e AS build
+WORKDIR /app
+ENV COREPACK_HOME=/tmp/corepack
+COPY src/public-app/package.json src/public-app/pnpm-lock.yaml src/public-app/pnpm-workspace.yaml ./
+RUN corepack enable && corepack pnpm install --frozen-lockfile --ignore-scripts
+COPY src/public-app ./
+RUN corepack pnpm build
 
-# IMPORTANT: dotnet-ef first builds Blog.Blazor.Database without a runtime identifier and then
-# publishes the bundle with one; Blog.Blazor (a web exe reached by project reference) ends up
-# with an apphost and runtimeconfig in both output paths, the publish stops on NETSDK1152 and
-# the single-file bundler refuses two entries named Blog.Blazor. The bundle never runs that
-# exe, so this stage, and only this stage, asks Blog.Blazor.csproj to skip its apphost
-# (BlogMigrationsBundle) and turns the duplicate check off, through MSBuild properties read
-# from the environment.
-FROM mcr.microsoft.com/dotnet/sdk@sha256:2fa828c68761b1b8c23d7662dc134421b9d3b59fe1425fdbc80804e390cdb24d AS migrations
-WORKDIR /src
-ENV DOTNET_CLI_TELEMETRY_OPTOUT=1 \
-    DOTNET_NOLOGO=true \
-    NUGET_PACKAGES=/tmp/nuget-packages \
-    BlogMigrationsBundle=true \
-    ErrorOnDuplicatePublishOutputFiles=false
-COPY . .
-RUN dotnet restore src/Blog.Blazor.slnx --locked-mode \
-    && dotnet tool restore \
-    && dotnet tool run dotnet-ef migrations bundle \
-    --project src/Blog/Blog.Blazor.Database \
-    --startup-project src/Blog/Blog.Blazor.Database \
-    --context BlogAdminDbContext \
-    --configuration Release \
-    --output /app/migrate \
-    --force
-
-FROM mcr.microsoft.com/dotnet/aspnet@sha256:6a94333d37514e385650a3c81a55e5350b67253dbe136e9cf17e499c35606a8c AS runtime
+FROM node:24.20.0-bookworm-slim@sha256:ba849c60be29959425b8734d57b8b4b7d56f98edd9504c9af091d5281095a71e AS runtime
 ARG APP_COMMIT_SHA=""
 ARG APP_BUILD_TIME=""
 WORKDIR /app
-RUN apt-get update \
-    && apt-get install --yes --no-install-recommends curl \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
-RUN mkdir -p /data/public /data/resume-cache \
-    && chown -R app:app /data
-COPY --from=build --chown=app:app /app/publish ./
-COPY --from=migrations --chown=app:app /app/migrate /app/migrate
-COPY --chown=app:app tools/scripts/run-with-tectonic.sh /app/scripts/run-with-tectonic.sh
-COPY --chown=app:app .docker/entrypoint.prod.sh /app/entrypoint.prod.sh
-RUN chmod 0555 /app/scripts/run-with-tectonic.sh /app/entrypoint.prod.sh
-ENV ASPNETCORE_ENVIRONMENT=Production \
-    ASPNETCORE_URLS=http://0.0.0.0:8080 \
-    PORTFOLIO_RUN_PUBLISHED=1 \
-    PORTFOLIO_APP_DLL=/app/Blog.Blazor.dll \
-    PORTFOLIO_PUBLIC_ASSET_ROOT=/data/public \
-    PORTFOLIO_RESUME_PDF_ROOT=/data/resume-cache \
-    TECTONIC_BUNDLE=https://data1.fullyjustified.net/tlextras-2022.0r0.tar \
-    TECTONIC_ONLY_CACHED=true \
-    HOME=/data/resume-cache \
-    XDG_CACHE_HOME=/data/resume-cache/.cache \
+ENV NODE_ENV=production \
+    HOST=0.0.0.0 \
+    PORT=3000 \
     APP_COMMIT_SHA=$APP_COMMIT_SHA \
-    APP_BUILD_TIME=$APP_BUILD_TIME \
-    DOTNET_CLI_TELEMETRY_OPTOUT=1 \
-    DOTNET_NOLOGO=true
-USER app
-EXPOSE 8080
-HEALTHCHECK --interval=10s --timeout=3s --start-period=15s --retries=6 \
-    CMD curl --fail --silent http://127.0.0.1:8080/health >/dev/null || exit 1
-ENTRYPOINT ["/app/entrypoint.prod.sh"]
+    APP_BUILD_TIME=$APP_BUILD_TIME
+COPY --from=dependencies /app/node_modules ./node_modules
+COPY --from=build /app/dist ./dist
+COPY --chown=node:node .docker/entrypoint.prod.sh /usr/local/bin/entrypoint.prod.sh
+RUN chmod 0555 /usr/local/bin/entrypoint.prod.sh
+USER node
+EXPOSE 3000
+HEALTHCHECK --interval=10s --timeout=3s --start-period=10s --retries=6 \
+    CMD node -e "fetch('http://127.0.0.1:3000/pt-BR').then((response) => process.exit(response.ok ? 0 : 1)).catch(() => process.exit(1))"
+ENTRYPOINT ["/usr/local/bin/entrypoint.prod.sh"]
+CMD ["./node_modules/.bin/srvx", "--prod", "-s", "dist/client", "dist/server/server.js"]

@@ -1,6 +1,0 @@
-{
-  "slug": "sqlite",
-  "order": 10,
-  "logo": "sqlite",
-  "translations": { "en": { "name": "SQLite" }, "ptBR": { "name": "SQLite" } }
-}

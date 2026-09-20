@@ -18,11 +18,11 @@ services:
       retries: 12
   laravel: &laravel
     build:
-      context: ../laravel
+      context: ../src/laravel
       dockerfile: docker/app.Dockerfile
     working_dir: /app
     volumes:
-      - ../laravel:/app
+      - ../src/laravel:/app
       - resume-pdf-cache:/data/resume-cache:ro
       - laravel-composer-cache:/composer-cache
     environment:
@@ -50,18 +50,18 @@ services:
   laravel-worker:
     <<: *laravel
     ports: []
-    command: php artisan queue:work --sleep=3 --tries=3 --max-time=3600
+    command: php artisan queue:work --queue=default,open-graph --sleep=3 --tries=3 --max-time=3600
   laravel-scheduler:
     <<: *laravel
     ports: []
     command: php artisan schedule:work
   start:
     image: node@sha256:235600a8101ab264e117b1768e925532262668dc9b581ef1dd7d96ced463b8e7
-    working_dir: /workspace/packages/start-app
+    working_dir: /workspace/src/public-app
     user: "${PORTFOLIO_CONTAINER_UID:-1000}:${PORTFOLIO_CONTAINER_GID:-1000}"
     volumes:
       - ..:/workspace
-      - start-node-modules:/workspace/packages/start-app/node_modules
+      - start-node-modules:/workspace/src/public-app/node_modules
     environment:
       PORTFOLIO_CONTENT_API_URL: http://laravel:8000/api/v1/public-site
       PORTFOLIO_PUBLIC_API_URL: /api/v1
@@ -79,111 +79,24 @@ services:
     image: node@sha256:235600a8101ab264e117b1768e925532262668dc9b581ef1dd7d96ced463b8e7
     user: "0:0"
     volumes:
-      - start-node-modules:/workspace/packages/start-app/node_modules
-    command: sh -lc 'mkdir -p /workspace/packages/start-app/node_modules && chown -R ${PORTFOLIO_CONTAINER_UID:-1000}:${PORTFOLIO_CONTAINER_GID:-1000} /workspace/packages/start-app/node_modules'
+      - start-node-modules:/workspace/src/public-app/node_modules
+    command: >-
+      sh -lc 'mkdir -p /workspace/src/public-app/node_modules && chown -R
+      ${PORTFOLIO_CONTAINER_UID:-1000}:${PORTFOLIO_CONTAINER_GID:-1000}
+      /workspace/src/public-app/node_modules'
     restart: "no"
   resume-cache-init:
-    image: mcr.microsoft.com/dotnet/sdk@sha256:2fa828c68761b1b8c23d7662dc134421b9d3b59fe1425fdbc80804e390cdb24d
+    image: node@sha256:235600a8101ab264e117b1768e925532262668dc9b581ef1dd7d96ced463b8e7
     user: "0:0"
     volumes:
       - resume-pdf-cache:/data/resume-cache
-    command: sh -lc 'mkdir -p /data/resume-cache && chown -R ${PORTFOLIO_CONTAINER_UID:-1000}:${PORTFOLIO_CONTAINER_GID:-1000} /data/resume-cache'
+    command: >-
+      sh -lc 'mkdir -p /data/resume-cache && chown -R
+      ${PORTFOLIO_CONTAINER_UID:-1000}:${PORTFOLIO_CONTAINER_GID:-1000}
+      /data/resume-cache'
     restart: "no"
-  nuget-cache-init:
-    image: mcr.microsoft.com/dotnet/sdk@sha256:2fa828c68761b1b8c23d7662dc134421b9d3b59fe1425fdbc80804e390cdb24d
-    user: "0:0"
-    volumes:
-      - nuget-cache:/tmp/nuget-packages
-    command: sh -lc 'mkdir -p /tmp/nuget-packages && chown -R ${PORTFOLIO_CONTAINER_UID:-1000}:${PORTFOLIO_CONTAINER_GID:-1000} /tmp/nuget-packages'
-    restart: "no"
-  web: &sdk
-    image: mcr.microsoft.com/dotnet/sdk@sha256:2fa828c68761b1b8c23d7662dc134421b9d3b59fe1425fdbc80804e390cdb24d
-    user: "${PORTFOLIO_CONTAINER_UID:-1000}:${PORTFOLIO_CONTAINER_GID:-1000}"
-    read_only: true
-    cap_drop:
-      - ALL
-    security_opt:
-      - no-new-privileges:true
-    working_dir: /src
-    volumes:
-      - ..:/src
-      - type: bind
-        source: ${PORTFOLIO_PUBLIC_ASSET_PATH:-../data/public}
-        target: /data/public
-        read_only: true
-        bind:
-          create_host_path: false
-      - resume-pdf-cache:/data/resume-cache
-      - nuget-cache:/tmp/nuget-packages
-    tmpfs:
-      - /tmp:uid=${PORTFOLIO_CONTAINER_UID:-1000},gid=${PORTFOLIO_CONTAINER_GID:-1000},mode=1777
-    environment:
-      ASPNETCORE_ENVIRONMENT: Development
-      ASPNETCORE_URLS: http://0.0.0.0:8080
-      PORTFOLIO_CONTENT_API_URL: http://laravel:8000/api/v1
-      PORTFOLIO_DB_CONNECTION: Host=postgres;Database=portfolio;Username=portfolio;Password=portfolio
-      PORTFOLIO_TEST_PG_CONNECTION: Host=postgres;Database=postgres;Username=portfolio;Password=portfolio
-      PORTFOLIO_PUBLIC_ASSET_ROOT: /data/public
-      PORTFOLIO_RESUME_PDF_ROOT: /data/resume-cache
-      TECTONIC_BUNDLE: https://data1.fullyjustified.net/tlextras-2022.0r0.tar
-      TECTONIC_ONLY_CACHED: "true"
-      HOME: /data/resume-cache
-      XDG_CACHE_HOME: /data/resume-cache/.cache
-      PUBLIC_SITE_BASE_URL: http://localhost:8080
-      DOTNET_CLI_TELEMETRY_OPTOUT: "1"
-      DOTNET_NOLOGO: "true"
-      DOTNET_CLI_HOME: /tmp/dotnet
-      NUGET_PACKAGES: /tmp/nuget-packages
-    ports:
-      - "8080:8080"
-    healthcheck:
-      test: ["CMD-SHELL", "curl --fail --silent http://127.0.0.1:8080/health >/dev/null || exit 1"]
-      interval: 10s
-      timeout: 3s
-      retries: 6
-      start_period: 15s
-    command: sh ./tools/scripts/run-with-tectonic.sh
-    depends_on:
-      postgres:
-        condition: service_healthy
-      laravel:
-        condition: service_started
-      resume-cache-init:
-        condition: service_completed_successfully
-      nuget-cache-init:
-        condition: service_completed_successfully
-  stories:
-    <<: *sdk
-    build:
-      context: ..
-      dockerfile: .docker/stories.Dockerfile
-    image: portfolio-stories
-    profiles:
-      - tools
-    ports: []
-    environment:
-      # IMPORTANT: `dotnet run` on a file-based app compiles and then executes a
-      # binary under $HOME; the container's /tmp is a tmpfs mounted noexec, so a
-      # $HOME under /tmp builds fine but fails at exec with "Permission denied".
-      # /src is the writable bind mount, which allows exec.
-      HOME: /src/.dotnet-home
-      TMPDIR: /tmp
-      DOTNET_CLI_TELEMETRY_OPTOUT: "1"
-      DOTNET_NOLOGO: "true"
-      DOTNET_CLI_HOME: /tmp/dotnet
-      NUGET_PACKAGES: /tmp/nuget-packages
-    command:
-      - sh
-      - -c
-      - >-
-        mkdir -p /src/.dotnet-home &&
-        dotnet publish src/Blog/Blog.Blazor.Stories/Blog.Blazor.Stories.csproj
-        --configuration Release -o /tmp/stories-publish &&
-        dotnet run tools/scripts/serve-static.cs -- /tmp/stories-publish/wwwroot http://+:8081/
-
 volumes:
   postgres-data:
-  nuget-cache:
   resume-pdf-cache:
   laravel-composer-cache:
   start-node-modules:

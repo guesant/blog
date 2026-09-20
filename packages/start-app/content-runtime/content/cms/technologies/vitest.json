@@ -1,6 +1,0 @@
-{
-  "slug": "vitest",
-  "order": 20,
-  "logo": "vitest",
-  "translations": { "en": { "name": "Vitest" }, "ptBR": { "name": "Vitest" } }
-}

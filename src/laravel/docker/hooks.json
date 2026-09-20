@@ -1,0 +1,32 @@
+[
+  {
+    "id": "deploy",
+    "execute-command": "/repo/scripts/deploy.sh",
+    "command-working-directory": "/repo",
+    "response-message": "Deploy triggered\n",
+    "trigger-rule": {
+      "and": [
+        {
+          "match": {
+            "type": "value",
+            "value": "{{ getenv "WEBHOOK_SECRET" }}",
+            "parameter": {
+              "source": "header",
+              "name": "X-Gitlab-Token"
+            }
+          }
+        },
+        {
+          "match": {
+            "type": "value",
+            "value": "refs/heads/main",
+            "parameter": {
+              "source": "payload",
+              "name": "ref"
+            }
+          }
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,38 @@
+name: quality
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  docker-quality:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+
+      - name: Validate compose files
+        run: docker compose config --quiet && docker compose -f docker-compose.prod.yml config --quiet
+
+      - name: Validate pinned dependencies and images
+        run: docker compose run --rm node sh scripts/verify-supply-chain.sh
+
+      - name: Install JavaScript dependencies without lifecycle scripts
+        run: docker compose run --rm node npm ci --ignore-scripts
+
+      - name: Build JavaScript assets
+        run: docker compose run --rm node npm run build
+
+      - name: Generate lockfile SBOM
+        env:
+          SOURCE_DATE_EPOCH: 0
+        run: docker compose run --rm node node scripts/generate-sbom.mjs
+
+      - name: Audit JavaScript dependencies
+        run: docker compose run --rm node npm audit --omit=dev --audit-level=high --ignore-scripts
+
+      - name: Build application and run Laravel tests
+        run: docker compose run --rm --entrypoint sh app -lc 'composer audit --locked --no-interaction && php -d memory_limit=512M vendor/bin/phpunit --configuration phpunit.xml'

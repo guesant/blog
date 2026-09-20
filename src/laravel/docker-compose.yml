@@ -1,0 +1,54 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: docker/app.Dockerfile
+    # The image carries the production bootstrap entrypoint. Development must
+    # not back up, migrate, cache, or otherwise mutate the persistent database
+    # merely because the app container is restarted.
+    entrypoint: []
+    working_dir: /app
+    volumes:
+      - .:/app
+      - laravel-vendor:/app/vendor
+      - ../migration-snapshot:/migration-snapshot:ro
+      - composer-cache:/composer-cache
+      - tectonic-cache:/root/.cache/tectonic
+      - portfolio-resume-pdf-cache:/data/resume-cache:ro
+    networks:
+      - default
+      - portfolio
+    environment:
+      COMPOSER_CACHE_DIR: /composer-cache
+      APP_CONFIG_CACHE: /tmp/portfolio-dev-config.php
+      TECTONIC_BUNDLE: https://data1.fullyjustified.net/tlextras-2022.0r0.tar
+    ports:
+      - "8000:8000"
+    command: php artisan serve --no-reload --host=0.0.0.0 --port=8000
+
+  node:
+    build:
+      context: .
+      dockerfile: docker/node.Dockerfile
+    image: portfolio-laravel-node
+    working_dir: /app
+    volumes:
+      - .:/app
+      - node-modules:/app/node_modules
+    ports:
+      - "5173:5173"
+    command: npm run dev
+
+volumes:
+  composer-cache:
+  laravel-vendor:
+  node-modules:
+  tectonic-cache:
+  portfolio-resume-pdf-cache:
+    external: true
+    name: portfolio_resume-pdf-cache
+
+networks:
+  portfolio:
+    external: true
+    name: portfolio_default

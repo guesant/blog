@@ -32,6 +32,7 @@ services:
     working_dir: /app
     volumes:
       - ../src/laravel:/app
+      - laravel-vendor:/app/vendor
       - resume-pdf-cache:/data/resume-cache:ro
       - laravel-composer-cache:/composer-cache
     environment:
@@ -128,4 +129,5 @@ volumes:
   postgres-data:
   resume-pdf-cache:
   laravel-composer-cache:
+  laravel-vendor:
   start-node-modules:

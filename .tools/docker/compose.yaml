@@ -22,6 +22,19 @@ services:
       HOME: /tmp
     command: ["true"]
 
+  openapi-ts:
+    build:
+      context: ../..
+      dockerfile: .tools/docker/openapi-ts.Dockerfile
+    image: portfolio-tools-openapi-ts
+    working_dir: /workspace/src/public-app
+    volumes:
+      - ../..:/workspace
+    tmpfs:
+      - /tmp
+    environment:
+      HOME: /tmp
+
   ast-grep:
     build:
       context: ../..
@@ -38,6 +51,16 @@ services:
       dockerfile: .tools/docker/Dockerfile
       target: jscpd
     image: portfolio-tools-jscpd
+    working_dir: /workspace
+    volumes:
+      - ../..:/workspace:ro
+
+  lychee:
+    build:
+      context: ../..
+      dockerfile: .tools/docker/Dockerfile
+      target: lychee
+    image: portfolio-tools-lychee
     working_dir: /workspace
     volumes:
       - ../..:/workspace:ro
@@ -151,6 +174,13 @@ services:
     working_dir: /workspace
     volumes:
       - ../..:/workspace:ro
+      - type: tmpfs
+        target: /workspace/.qlty
+      - ../../.qlty/qlty.toml:/workspace/.qlty/qlty.toml:ro
+    tmpfs:
+      - /tmp
+    environment:
+      HOME: /tmp
 
   scorecard:
     build:
@@ -158,6 +188,7 @@ services:
       dockerfile: .tools/docker/Dockerfile
       target: scorecard
     image: portfolio-tools-scorecard
+    platform: linux/amd64
     working_dir: /workspace
     volumes:
       - ../..:/workspace:ro

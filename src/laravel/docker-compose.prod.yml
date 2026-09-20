@@ -1,0 +1,65 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: docker/app.prod.Dockerfile
+    restart: unless-stopped
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    env_file:
+      - .env
+    environment:
+      # Keep startup fail-closed if the persistent SQLite volume is missing.
+      # Set this only for a deliberate first bootstrap, then remove it.
+      DATABASE_ALLOW_EMPTY_BOOTSTRAP: ${DATABASE_ALLOW_EMPTY_BOOTSTRAP:-false}
+      DATABASE_BACKUP_KEEP: ${DATABASE_BACKUP_KEEP:-10}
+    volumes:
+      - app-database:/app/database
+      - app-storage:/app/storage/app
+      - app-logs:/app/storage/logs
+    healthcheck:
+      test: ["CMD", "php", "artisan", "about"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+
+  # Receives the GitLab push webhook (X-Gitlab-Token verified) and runs
+  # scripts/deploy.sh. Needs the host Docker socket to run `docker compose`
+  # itself — that's root-equivalent access to the host, scoped only by the
+  # Cloudflare Tunnel route + token check in front of it. See the cutover
+  # plan addendum for the accepted trade-off and how to harden it further
+  # (docker-socket-proxy) if that's ever worth it.
+  webhook:
+    build:
+      context: .
+      dockerfile: docker/webhook.Dockerfile
+    restart: unless-stopped
+    environment:
+      WEBHOOK_SECRET: ${WEBHOOK_SECRET}
+    volumes:
+      - .:/repo
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  cloudflared:
+    build:
+      context: .
+      dockerfile: docker/cloudflared.Dockerfile
+    image: portfolio-laravel-cloudflared
+    restart: unless-stopped
+    command: tunnel run
+    environment:
+      TUNNEL_TOKEN: ${CLOUDFLARE_TUNNEL_TOKEN}
+    depends_on:
+      - app
+      - webhook
+
+volumes:
+  app-database:
+  app-storage:
+  app-logs:

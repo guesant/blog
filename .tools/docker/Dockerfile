@@ -17,6 +17,9 @@ FROM ${NODE_IMAGE} AS jscpd
 RUN npm install --global --no-audit --no-fund jscpd@5.2.0
 ENTRYPOINT ["jscpd"]
 
+FROM lycheeverse/lychee:0.24.2@sha256:e2d19e57cf6ab037026f20b8e449a1f30d9d7f81eef4194763aab2eab20bd28d AS lychee
+ENTRYPOINT ["lychee"]
+
 FROM python:3.13-slim@sha256:e2a5fce94bd761967528a12f16d707c2613e1522f3f2d77fa45766f45962547f AS lizard
 RUN pip install --no-cache-dir lizard==1.18.0
 ENTRYPOINT ["lizard"]
@@ -41,7 +44,7 @@ FROM zricethezav/gitleaks:v8.30.1@sha256:c00b6bd0aeb3071cbcb79009cb16a60dd9e0a7c
 ENTRYPOINT ["gitleaks"]
 
 FROM ghcr.io/google/osv-scanner:v2.5.1@sha256:8108ae94eadea5a02c9bec6e646909d5b790b44bd62d7f5b7f0b1d6d0ffc7734 AS osv-scanner
-ENTRYPOINT ["osv-scanner"]
+ENTRYPOINT ["/osv-scanner"]
 
 FROM aquasec/trivy:0.74.0@sha256:62b1e65e8869bc4b4c6aa4fa2b21595256c7c2f6018a9d9ad61caf87187c1969 AS trivy
 ENTRYPOINT ["trivy"]
@@ -53,4 +56,4 @@ FROM ghcr.io/qltysh/qlty:main@sha256:14886acf71ad4957af7fe8ac1060c955d28df8ef8e7
 ENTRYPOINT ["qlty"]
 
 FROM ghcr.io/ossf/scorecard:v5.4.0@sha256:546c3f019eb24974abda92004a9003e4059a10e9ee13b1c3ab40d29f4f32f764 AS scorecard
-ENTRYPOINT ["scorecard"]
+ENTRYPOINT ["/scorecard"]

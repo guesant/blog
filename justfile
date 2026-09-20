@@ -141,7 +141,7 @@ audit: frontend-build frontend-install
     {{tools_run}} 'sh /workspace/.tools/scripts/verify-supply-chain.sh'
 
 tools-build:
-    test -n "${PORTFOLIO_TOOLS_PREBUILT:-}" || {{tools_compose}} build tools ast-grep jscpd lychee lizard yamllint shellcheck actionlint zizmor hadolint gitleaks osv-scanner trivy semgrep qlty scorecard
+    test -n "${PORTFOLIO_TOOLS_PREBUILT:-}" || {{tools_compose}} build tools openapi-ts ast-grep jscpd lychee lizard yamllint shellcheck actionlint zizmor hadolint gitleaks osv-scanner trivy semgrep qlty scorecard
 
 db-migration name:
     {{compose}} up --build -d --wait postgres

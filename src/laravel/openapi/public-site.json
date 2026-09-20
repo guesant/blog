@@ -1,0 +1,480 @@
+{
+  "openapi": "3.1.1",
+  "info": {
+    "title": "Portfolio public API",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://laravel:8000/api/v1"
+    }
+  ],
+  "paths": {
+    "/public-site": {
+      "get": {
+        "operationId": "getPublicSite",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Locale"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Public site snapshot",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PublicSiteSnapshot"
+                }
+              }
+            }
+          },
+          "503": {
+            "$ref": "#/components/responses/Maintenance"
+          }
+        }
+      }
+    },
+    "/findings": {
+      "get": {
+        "operationId": "listFindings",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Locale"
+          },
+          {
+            "$ref": "#/components/parameters/SearchQuery"
+          },
+          {
+            "$ref": "#/components/parameters/Page"
+          },
+          {
+            "$ref": "#/components/parameters/PerPage"
+          },
+          {
+            "$ref": "#/components/parameters/Type"
+          },
+          {
+            "$ref": "#/components/parameters/Topic"
+          },
+          {
+            "$ref": "#/components/parameters/Rating"
+          },
+          {
+            "$ref": "#/components/parameters/ConsumptionState"
+          },
+          {
+            "$ref": "#/components/parameters/Year"
+          },
+          {
+            "$ref": "#/components/parameters/FreeOnly"
+          },
+          {
+            "$ref": "#/components/parameters/Sort"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Public findings",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FindingListResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "$ref": "#/components/responses/Maintenance"
+          }
+        }
+      }
+    },
+    "/findings/{slug}": {
+      "get": {
+        "operationId": "getFinding",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Slug"
+          },
+          {
+            "$ref": "#/components/parameters/Locale"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Public finding",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Finding"
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "503": {
+            "$ref": "#/components/responses/Maintenance"
+          }
+        }
+      }
+    },
+    "/public/knowledge-map": {
+      "get": {
+        "operationId": "getKnowledgeMap",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Locale"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Public knowledge map",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonObject"
+                }
+              }
+            }
+          },
+          "503": {
+            "$ref": "#/components/responses/Maintenance"
+          }
+        }
+      }
+    },
+    "/protected-email/challenge": {
+      "post": {
+        "operationId": "createProtectedEmailChallenge",
+        "responses": {
+          "200": {
+            "description": "Protected email challenge",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonObject"
+                }
+              }
+            }
+          },
+          "503": {
+            "$ref": "#/components/responses/Maintenance"
+          }
+        }
+      }
+    },
+    "/resume/{locale}.pdf": {
+      "get": {
+        "operationId": "getResumePdf",
+        "parameters": [
+          {
+            "name": "locale",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": ["en", "pt-BR"]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Resume PDF",
+            "content": {
+              "application/pdf": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "parameters": {
+      "Locale": {
+        "name": "locale",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "string",
+          "enum": ["en", "pt-BR"],
+          "default": "en"
+        }
+      },
+      "Slug": {
+        "name": "slug",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "SearchQuery": {
+        "name": "q",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "Page": {
+        "name": "page",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "integer",
+          "minimum": 1,
+          "default": 1
+        }
+      },
+      "PerPage": {
+        "name": "per_page",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100,
+          "default": 20
+        }
+      },
+      "Type": {
+        "name": "type",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "Topic": {
+        "name": "topic",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "Rating": {
+        "name": "rating",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "ConsumptionState": {
+        "name": "consumption_state",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "Year": {
+        "name": "year",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "integer"
+        }
+      },
+      "FreeOnly": {
+        "name": "free_only",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "boolean"
+        }
+      },
+      "Sort": {
+        "name": "sort",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "string",
+          "enum": ["asc", "desc", "alpha", "popular"]
+        }
+      }
+    },
+    "responses": {
+      "Maintenance": {
+        "description": "Public site is in maintenance",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/JsonObject"
+            }
+          }
+        }
+      },
+      "NotFound": {
+        "description": "Resource not found",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/JsonObject"
+            }
+          }
+        }
+      }
+    },
+    "schemas": {
+      "JsonValue": {
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/JsonObject"
+          },
+          {
+            "type": "array",
+            "items": {}
+          },
+          {
+            "type": "string"
+          },
+          {
+            "type": "number"
+          },
+          {
+            "type": "boolean"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "JsonObject": {
+        "type": "object",
+        "additionalProperties": true
+      },
+      "PublicSiteSnapshot": {
+        "type": "object",
+        "required": ["interface"],
+        "properties": {
+          "interface": {
+            "$ref": "#/components/schemas/JsonObject"
+          }
+        },
+        "additionalProperties": true
+      },
+      "FindingListResponse": {
+        "type": "object",
+        "required": ["data", "meta"],
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Finding"
+            }
+          },
+          "meta": {
+            "$ref": "#/components/schemas/FindingListMeta"
+          }
+        }
+      },
+      "OpenGraphMetadata": {
+        "type": "object",
+        "properties": {
+          "title": { "type": "string" },
+          "description": { "type": "string" },
+          "image": { "type": "string", "format": "uri" },
+          "site_name": { "type": "string" },
+          "type": { "type": "string" },
+          "url": { "type": "string", "format": "uri" }
+        },
+        "additionalProperties": false
+      },
+      "ResourceLink": {
+        "type": "object",
+        "required": ["url"],
+        "properties": {
+          "url": { "type": "string", "format": "uri" },
+          "label": { "type": ["string", "null"] },
+          "platform": { "type": ["string", "null"] },
+          "purpose": { "type": ["string", "null"] },
+          "is_free": { "type": ["boolean", "null"] },
+          "is_primary": { "type": ["boolean", "null"] },
+          "open_graph": {
+            "oneOf": [{ "$ref": "#/components/schemas/OpenGraphMetadata" }, { "type": "null" }]
+          }
+        },
+        "additionalProperties": false
+      },
+      "Finding": {
+        "type": "object",
+        "required": ["slug", "url", "type", "title", "description", "links"],
+        "properties": {
+          "slug": { "type": "string" },
+          "url": { "type": "string", "format": "uri" },
+          "type": { "type": "string" },
+          "authors": { "type": ["string", "null"] },
+          "organizations": { "type": ["string", "null"] },
+          "published_date": { "type": ["string", "null"], "format": "date" },
+          "found_date": { "type": ["string", "null"], "format": "date" },
+          "rating": { "type": ["string", "null"] },
+          "consumption_state": { "type": ["string", "null"] },
+          "type_details": {
+            "oneOf": [{ "$ref": "#/components/schemas/JsonObject" }, { "type": "null" }]
+          },
+          "title": { "type": "string" },
+          "alternative_title": { "type": ["string", "null"] },
+          "description": { "type": "string" },
+          "personal_note": { "type": ["string", "null"] },
+          "reason_found": { "type": ["string", "null"] },
+          "updated_date": { "type": ["string", "null"], "format": "date" },
+          "topics": { "type": "array", "items": { "$ref": "#/components/schemas/JsonObject" } },
+          "links": { "type": "array", "items": { "$ref": "#/components/schemas/ResourceLink" } },
+          "identifiers": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/JsonObject" }
+          },
+          "related": {
+            "type": ["array", "null"],
+            "items": { "$ref": "#/components/schemas/JsonObject" }
+          },
+          "relations": { "type": "array", "items": { "$ref": "#/components/schemas/JsonObject" } },
+          "popularity": {
+            "oneOf": [{ "$ref": "#/components/schemas/JsonObject" }, { "type": "null" }]
+          },
+          "featured": { "type": "boolean" },
+          "featured_order": { "type": ["integer", "null"] }
+        },
+        "additionalProperties": false
+      },
+      "FindingListMeta": {
+        "type": "object",
+        "required": ["page", "per_page", "total", "locale", "facets"],
+        "properties": {
+          "page": { "type": "integer" },
+          "per_page": { "type": "integer" },
+          "total": { "type": "integer" },
+          "locale": { "type": "string", "enum": ["en", "pt-BR"] },
+          "facets": { "$ref": "#/components/schemas/FindingFacets" }
+        },
+        "additionalProperties": false
+      },
+      "FindingFacets": {
+        "type": "object",
+        "required": ["types", "ratings", "consumptionStates", "years", "topics"],
+        "properties": {
+          "types": { "type": "array", "items": { "type": "string" } },
+          "ratings": { "type": "array", "items": { "type": "string" } },
+          "consumptionStates": { "type": "array", "items": { "type": "string" } },
+          "years": { "type": "array", "items": { "type": "string" } },
+          "topics": { "type": "array", "items": { "$ref": "#/components/schemas/JsonObject" } }
+        },
+        "additionalProperties": false
+      }
+    }
+  }
+}

@@ -1,6 +1,6 @@
 # blog
 
-Meu site pessoal, em Blazor (.NET 10). O conteúdo fica num PostgreSQL e é editado por um painel admin dentro do próprio app.
+Meu site pessoal, com frontend em TanStack Start e API mais painel administrativo em Laravel. O conteúdo fica num PostgreSQL e é editado pelo Filament.
 
 ## Rodar
 
@@ -15,7 +15,7 @@ Sobe em <http://localhost:8080>. `just check` roda os portões de qualidade, `ju
 
 ## Deploy
 
-Push em `main` roda os portões e publica a imagem em `ghcr.io/guesant/blog`. Como a imagem é orquestrada (Docker, Podman, k8s) fica fora do repositório: basta apontar as variáveis do Laravel para um PostgreSQL já migrado. Migração de banco nunca roda no start do processo web: durante a transição, o Job `PreSync` usa `php artisan migrate --force` na imagem Laravel e mantém `/app/migrate` como fallback da imagem legada; localmente é `just db-update`, com backup antes.
+Push em `main` roda os portões e publica a imagem do frontend em `ghcr.io/guesant/portfolio`; a imagem Laravel é publicada separadamente. Como as imagens são orquestradas fora do repositório, basta apontar as variáveis do Laravel para um PostgreSQL já migrado. Migração de banco nunca roda no start do processo web: o Job `PreSync` usa `php artisan migrate --force` na imagem Laravel; localmente é `just db-update`, com backup antes.
 
 ## Mais
 

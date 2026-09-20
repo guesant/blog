@@ -14,22 +14,20 @@ Este arquivo é a fonte da verdade das convenções. `CLAUDE.md` e `GEMINI.md` s
 
 ## Código
 
-- Zero comentários narrativos em C#, Razor, YAML, TypeScript/JavaScript, CSS e shell. Um comentário só é aceitável em duas situações: é uma diretiva exigida por uma ferramenta, ou carrega informação rara e crítica que não é inferível do código e cuja ausência causaria um erro real no futuro, como um invariante de segurança ou um motivo não óbvio para uma decisão que parece removível.
-- Para a segunda categoria o marcador é `IMPORTANT:`, sem exceção por julgamento caso a caso. O gate `tools/scripts/verify-csharp-comments.sh` impõe isso em `.cs` e `.razor`.
-- Documentação XML (`///`) só em `src/Blog/Blog.Blazor.UI`, o projeto de componentes; nos demais projetos ela conta como comentário narrativo.
+- Zero comentários narrativos em YAML, TypeScript/JavaScript, CSS, PHP e shell. Um comentário só é aceitável em duas situações: é uma diretiva exigida por uma ferramenta, ou carrega informação rara e crítica que não é inferível do código e cuja ausência causaria um erro real no futuro, como um invariante de segurança ou um motivo não óbvio para uma decisão que parece removível.
+- Para a segunda categoria o marcador é `IMPORTANT:`, sem exceção por julgamento caso a caso.
 - Diretivas de ferramenta permitidas: `biome-ignore`, `nosemgrep`, `@ts-expect-error`, `@ts-ignore`, `@ts-nocheck`, `istanbul`, `jscpd:ignore-start`/`jscpd:ignore-end`, `zizmor: ignore[...]`, `shellcheck`, `yamllint`.
 - Decisão, justificativa e contexto vão para `docs/pendencias-e-decisoes.md`, nunca inline.
-- O C# de um componente fica em `X.razor.cs` (partial class), nunca em `@code`, salvo quando o bloco contém um template razor (`@<...>`).
-- Toda medida em CSS passa por variáveis de `tokens.css` (nada de `px`/`rem` literais fora dele); conteúdo público só é lido pelo snapshot, nunca pelo `DbContext` do admin; tudo sob `/admin` é privado por construção (middleware + `[Authorize]`).
+- Toda medida em CSS passa por variáveis de tokens (nada de `px`/`rem` literais fora deles); conteúdo público é lido exclusivamente pela API Laravel; tudo sob `/admin` é privado por construção (middleware de autenticação e autorização do Filament).
 
 ## Formatação
 
-- `just format` verifica e `just format-fix` aplica: CSharpier (C#, 100 colunas), Prettier (CSS, JS, HTML, 100 colunas), shfmt (shell, indent 4), e os scripts de `tools/scripts/format-*.mjs` para Razor (uma tag por linha, um atributo por linha acima de 100 colunas).
+- `just format` verifica e `just format-fix` aplica: Prettier (CSS, JS, TypeScript, JSON e Markdown, 100 colunas) e shfmt (shell, indent 2).
 - Linhas longas, várias tags na mesma linha ou código que caberia em várias linhas não passam no gate; não contornar o formatador à mão.
 
 ## Qualidade
 
-- `just check` é o gate completo: formatação, lint, comentários, duplicação, build, testes, supply-chain, runtime somente-leitura, guard do admin, conteúdo oculto, schema (migrações EF), tokens de design, imports do UI, chaves de resx, texto fixo, composição por componentes `Site*`, uma story por componente e a regressão visual das stories (`vrt`; `just vrt-update` refaz os baselines depois de uma mudança visual intencional). A CI roda o mesmo `just check`.
+- `just check` é o gate completo: formatação, TypeScript, build, testes Laravel, supply chain e validação dos lockfiles. A CI roda o mesmo `just check`.
 - Nunca rodar comandos que apaguem ou recriem o banco de desenvolvimento (volume `postgres-data`); ele contém conteúdo real. Faça `just db-backup` antes de qualquer operação de risco no banco.
 
 ## Documentação

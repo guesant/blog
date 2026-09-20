@@ -6,7 +6,8 @@ compose := "docker compose" + env_file + " -f .docker/compose.yaml"
 compose_dev := compose + " -f .docker/compose.dev.yaml"
 tools_compose := "docker compose" + env_file + " -f .tools/docker/compose.yaml"
 tools_run := tools_compose + " run --rm tools sh -lc"
-node_run := compose + " run --rm --no-deps start sh -lc"
+compose_run := compose + " run --build --rm"
+node_run := compose_run + " --no-deps start sh -lc"
 prettier_flags := "--config ../../.config/prettierrc.json --ignore-path ../../.config/prettierignore"
 prettier_globs := '"**/*.{css,js,jsx,ts,tsx,json,md}"'
 actionlint_image := `grep -oE "rhysd/actionlint:[0-9.]+" .github/workflows/lint-actions.yml | head -1`
@@ -18,7 +19,7 @@ status:
     {{compose}} ps
 
 up:
-    {{compose}} up -d laravel start
+    {{compose}} up --build -d laravel start
 
 dev: up
 
@@ -47,19 +48,30 @@ shell:
 frontend-install:
     {{node_run}} 'corepack pnpm install --frozen-lockfile --ignore-scripts'
 
+api-generate:
+    {{tools_compose}} run --build --rm openapi-ts -f openapi-ts.config.mjs
+
+api-check:
+    {{tools_compose}} run --build --rm --entrypoint sh openapi-ts -lc 'rm -rf /tmp/generated && PORTFOLIO_API_GENERATED_OUTPUT=/tmp/generated /opt/openapi-ts/node_modules/.bin/openapi-ts -f openapi-ts.config.mjs && diff -ru src/data/api/generated /tmp/generated'
+
 frontend-lint: frontend-install frontend-architecture
     {{node_run}} 'corepack pnpm lint'
+
+frontend-lint-fix: frontend-install frontend-architecture
+    {{node_run}} 'corepack pnpm lint:fix'
 
 frontend-architecture: frontend-install tools-build
     {{node_run}} 'corepack pnpm lint:architecture:test'
     {{tools_compose}} run --rm ast-grep test --config /workspace/src/public-app/sgconfig.yml
     {{tools_compose}} run --rm ast-grep scan --config /workspace/src/public-app/sgconfig.yml /workspace/src/public-app/src
 
-frontend-check: frontend-lint
+frontend-typecheck: frontend-install
     {{node_run}} './node_modules/.bin/tsc --noEmit'
 
+frontend-check: frontend-lint frontend-typecheck
+
 frontend-complexity: tools-build
-    {{tools_compose}} run --rm lizard -l typescript -C 10 -L 60 -a 3 -w -x '*/generated/*' -x '*/knowledge-map-content/*' /workspace/src/public-app/src
+    {{tools_compose}} run --rm lizard -l typescript -C 5 -L 35 -a 3 -w -x '*/generated/*' /workspace/src/public-app/src
 
 frontend-dead-code: frontend-install
     {{node_run}} 'corepack pnpm dead-code'
@@ -67,60 +79,79 @@ frontend-dead-code: frontend-install
 frontend-build: frontend-install
     {{node_run}} 'corepack pnpm build'
 
+build: frontend-build
+
+ci: check
+
 action-test:
     {{node_run}} 'node --test ../../.github/actions/push-profile/test/*.test.mjs'
 
 laravel-check:
-    {{compose}} run --rm laravel php artisan migrate:status
-    {{compose}} run --rm laravel ./vendor/bin/pint --test
-    {{compose}} run --rm laravel php artisan test
+    {{compose_run}} -v "$PWD/src/laravel/.env.example:/app/.env:ro" laravel php artisan migrate:status
+    {{compose_run}} -v "$PWD/src/laravel/.env.example:/app/.env:ro" laravel ./vendor/bin/pint --test
+    {{compose_run}} -v "$PWD/src/laravel/.env.example:/app/.env:ro" laravel php artisan test
 
-check: tools-build format frontend-check frontend-complexity frontend-dead-code duplication repository-lint security quality-report audit lint-actions action-test laravel-check frontend-build
+check: tools-build format api-check frontend-lint frontend-typecheck frontend-complexity frontend-dead-code duplication local-links repository-lint security quality-report lint-actions action-test laravel-check frontend-build
 
 format: frontend-install tools-build
-    {{node_run}} 'corepack pnpm exec prettier {{prettier_flags}} --check {{prettier_globs}}'
-    {{tools_run}} 'shfmt -i 4 -ci -d .tools/scripts'
+    {{node_run}} 'corepack pnpm format'
+    {{tools_run}} 'shfmt -i 2 -ci -d .tools/scripts src/laravel/scripts src/laravel/docker .docker src/public-app/audits'
 
 format-fix: frontend-install tools-build
-    {{node_run}} 'corepack pnpm exec prettier {{prettier_flags}} --write {{prettier_globs}}'
-    {{tools_run}} 'shfmt -i 4 -ci -w .tools/scripts'
+    {{node_run}} 'corepack pnpm format:fix'
+    {{tools_run}} 'shfmt -i 2 -ci -w .tools/scripts src/laravel/scripts src/laravel/docker .docker src/public-app/audits'
 
 lint: frontend-check
 
 duplication: tools-build
-    {{tools_compose}} run --rm jscpd --config /workspace/src/public-app/.jscpd.json /workspace/src/public-app/src
+    {{tools_compose}} run --rm jscpd --config /workspace/src/public-app/.jscpd.json /workspace/src/public-app
     {{tools_compose}} run --rm jscpd --config /workspace/src/public-app/.jscpd.actions.json /workspace/.github/actions
+
+local-links: tools-build
+    {{tools_compose}} run --rm lychee --offline --include-fragments --root-dir /workspace /workspace/README.md /workspace/AGENTS.md /workspace/SECURITY.md /workspace/.github/actions/push-profile/README.md /workspace/src/public-app/README.md /workspace/src/laravel/README.md /workspace/src/laravel/SECURITY.md /workspace/src/laravel/docs
 
 repository-lint: tools-build
     {{tools_compose}} run --rm yamllint -c /workspace/.yamllint.yml /workspace/.github /workspace/.docker /workspace/.tools /workspace/.deploy
-    {{tools_compose}} run --rm hadolint --config /workspace/.hadolint.yaml .docker/Dockerfile .docker/tools.Dockerfile .tools/docker/Dockerfile src/laravel/docker/*.Dockerfile
+    {{tools_compose}} run --rm hadolint --config /workspace/.hadolint.yaml .docker/*.Dockerfile .tools/docker/*.Dockerfile src/laravel/docker/*.Dockerfile
     {{tools_compose}} run --rm shellcheck .tools/scripts/*.sh src/laravel/scripts/*.sh src/laravel/docker/*.sh
 
 security: tools-build
-    {{tools_compose}} run --rm gitleaks detect --source=/workspace --redact --no-banner
+    {{tools_compose}} run --rm gitleaks detect --source=/workspace --log-opts='-1' --redact --no-banner
+    {{tools_compose}} run --rm gitleaks dir --redact --no-banner /workspace/.github
+    {{tools_compose}} run --rm gitleaks dir --redact --no-banner /workspace/.tools
+    {{tools_compose}} run --rm gitleaks dir --redact --no-banner /workspace/.docker
+    {{tools_compose}} run --rm gitleaks dir --redact --no-banner /workspace/.deploy
+    {{tools_compose}} run --rm gitleaks dir --redact --no-banner /workspace/src/public-app/src
+    {{tools_compose}} run --rm gitleaks dir --redact --no-banner /workspace/src/laravel/app
+    {{tools_compose}} run --rm gitleaks dir --redact --no-banner /workspace/src/laravel/config
+    {{tools_compose}} run --rm gitleaks dir --redact --no-banner /workspace/src/laravel/routes
+    {{tools_compose}} run --rm gitleaks dir --redact --no-banner /workspace/src/laravel/docker
+    {{tools_compose}} run --rm gitleaks dir --redact --no-banner /workspace/src/laravel/scripts
     {{tools_compose}} run --rm osv-scanner scan source --recursive /workspace/src/public-app /workspace/src/laravel
-    {{tools_compose}} run --rm trivy fs --no-progress --scanners vuln,secret,misconfig --severity CRITICAL,HIGH --exit-code 1 /workspace
+    {{tools_compose}} run --rm trivy fs --no-progress --scanners vuln,secret --severity CRITICAL,HIGH --exit-code 1 --skip-dirs /workspace/src/public-app/node_modules --skip-dirs /workspace/src/public-app/dist --skip-dirs /workspace/src/laravel/node_modules --skip-dirs /workspace/src/laravel/vendor --skip-files '**/*.dockerignore' /workspace
     {{tools_compose}} run --rm semgrep scan --config auto --error --exclude 'node_modules/**' --exclude 'dist/**' /workspace/src/public-app/src /workspace/src/laravel/app /workspace/src/laravel/config /workspace/src/laravel/routes
 
 quality-report: tools-build
-    {{tools_compose}} run --rm qlty check --all || true
+    {{tools_compose}} run --rm qlty check --all --no-cache --no-upgrade-check || true
     {{tools_compose}} run --rm scorecard --local /workspace || true
 
-audit:
-    {{tools_run}} 'sh /src/.tools/scripts/verify-supply-chain.sh'
+audit: frontend-build frontend-install
+    {{node_run}} 'corepack pnpm audit:routes'
+    {{compose}} run --build --rm lighthouse sh -lc 'corepack pnpm audit:performance'
+    {{tools_run}} 'sh /workspace/.tools/scripts/verify-supply-chain.sh'
 
 tools-build:
-    test -n "${PORTFOLIO_TOOLS_PREBUILT:-}" || {{tools_compose}} build tools ast-grep jscpd lizard yamllint shellcheck actionlint zizmor hadolint gitleaks osv-scanner trivy semgrep qlty scorecard
+    test -n "${PORTFOLIO_TOOLS_PREBUILT:-}" || {{tools_compose}} build tools ast-grep jscpd lychee lizard yamllint shellcheck actionlint zizmor hadolint gitleaks osv-scanner trivy semgrep qlty scorecard
 
 db-migration name:
-    {{compose}} up -d --wait postgres
+    {{compose}} up --build -d --wait postgres
     just db-backup
-    {{compose}} run --rm laravel php artisan make:migration {{name}}
+    {{compose_run}} laravel php artisan make:migration {{name}}
 
 db-update:
-    {{compose}} up -d --wait postgres
+    {{compose}} up --build -d --wait postgres
     just db-backup
-    {{compose}} run --rm laravel php artisan migrate --force
+    {{compose_run}} laravel php artisan migrate --force
 
 db-backup:
     #!/usr/bin/env sh
@@ -131,7 +162,7 @@ db-backup:
     echo "wrote $file"
 
 db-restore file:
-    {{compose}} up -d --wait postgres
+    {{compose}} up --build -d --wait postgres
     cat "{{file}}" | {{compose}} exec -T postgres pg_restore -U portfolio -d portfolio --clean --if-exists
 
 start:

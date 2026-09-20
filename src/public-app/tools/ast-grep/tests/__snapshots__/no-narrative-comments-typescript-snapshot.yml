@@ -1,0 +1,18 @@
+id: no-narrative-comments-typescript
+snapshots:
+  ? |
+    /* temporary workaround */
+    const value = 1
+  : labels:
+    - source: /* temporary workaround */
+      style: primary
+      start: 0
+      end: 26
+  ? |
+    // normalize the data before rendering
+    const value = 1
+  : labels:
+    - source: // normalize the data before rendering
+      style: primary
+      start: 0
+      end: 38

@@ -1,0 +1,40 @@
+import { createFileRoute } from '@tanstack/react-router';
+import type { RouteData } from '../../data/queries';
+import { findingsQueryOptions, routeQueryOptions } from '../../data/queries';
+import { normalizeLocale } from '../../data/api/public-site-source-normalize-locale';
+import { metadataForRoute } from './splat-metadata-for-route';
+import { requestForPath } from './splat-request-for-path';
+import { SplatRoute } from './splat--splat-route';
+
+export const Route = createFileRoute('/_site/$')({
+  loader: async ({ context, location }) => {
+    const request = requestForPath(location.pathname, location.searchStr);
+
+    const data = await context.queryClient.ensureQueryData(routeQueryOptions(request));
+
+    if (data.kind === 'findings') {
+      await context.queryClient.ensureQueryData(
+        findingsQueryOptions({
+          locale: normalizeLocale(request.locale),
+          search: request.search,
+        }),
+      );
+    }
+
+    return data;
+  },
+  head: ({ loaderData }) => {
+    const metadata = metadataForRoute(loaderData as RouteData | undefined);
+
+    return {
+      meta: [
+        { title: `${metadata.title} · guesant.net` },
+        { name: 'description', content: metadata.description },
+        { property: 'og:title', content: metadata.title },
+        { property: 'og:description', content: metadata.description },
+        { property: 'og:type', content: metadata.type ?? 'website' },
+      ],
+    };
+  },
+  component: SplatRoute,
+});

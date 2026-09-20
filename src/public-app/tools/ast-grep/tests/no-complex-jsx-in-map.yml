@@ -1,0 +1,7 @@
+id: no-complex-jsx-in-map
+valid:
+  - |
+    items.map((item) => <ItemCard item={item} />)
+invalid:
+  - |
+    items.map((item) => <ItemCard item={item}><ItemDetails item={item} /></ItemCard>)

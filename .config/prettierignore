@@ -6,5 +6,7 @@
 package-lock.json
 **/playwright-report/**
 **/dist/**
+**/generated/**
 **/routeTree.gen.ts
 **/public/**
+**/.lighthouseci/**

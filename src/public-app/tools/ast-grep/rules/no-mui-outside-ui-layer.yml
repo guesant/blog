@@ -1,0 +1,15 @@
+id: no-mui-outside-ui-layer
+language: Tsx
+severity: error
+message: Visual libraries may only be imported by a UI layer.
+files:
+  - src/**/*.tsx
+ignores:
+  - src/routeTree.gen.ts
+  - src/data/api/generated/**
+  - src/components/ui/**
+  - src/components/sections/*/ui/**
+rule:
+  all:
+    - kind: import_statement
+    - regex: ^import.*from.*@(mui|emotion)/

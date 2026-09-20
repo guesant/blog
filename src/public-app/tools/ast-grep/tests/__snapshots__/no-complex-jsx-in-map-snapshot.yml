@@ -1,0 +1,9 @@
+id: no-complex-jsx-in-map
+snapshots:
+  ? |
+    items.map((item) => <ItemCard item={item}><ItemDetails item={item} /></ItemCard>)
+  : labels:
+    - source: items.map((item) => <ItemCard item={item}><ItemDetails item={item} /></ItemCard>)
+      style: primary
+      start: 0
+      end: 81

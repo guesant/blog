@@ -1,0 +1,7 @@
+id: map-must-return-single-component
+valid:
+  - |
+    items.map((item) => <ItemCard item={item} />)
+invalid:
+  - |
+    items.map((item) => <><ItemTitle item={item} /><ItemDetails item={item} /></>)

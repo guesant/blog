@@ -1,0 +1,9 @@
+id: no-narrative-comments-tsx
+valid:
+  - |
+    // @ts-expect-error legacy declaration has no public type
+    const value = 1
+invalid:
+  - |
+    // keep this component simple for now
+    const value = 1

@@ -1,0 +1,13 @@
+id: map-must-return-single-component
+language: Tsx
+severity: error
+message: A rendered map callback must return one imported component.
+files:
+  - src/**/*.tsx
+ignores:
+  - src/routeTree.gen.ts
+  - src/data/api/generated/**
+rule:
+  any:
+    - pattern: '$COLLECTION.map(($$$PARAMS) => <>$$$CHILDREN</>)'
+    - pattern: '$COLLECTION.map(($$$PARAMS) => (<>$$$CHILDREN</>))'

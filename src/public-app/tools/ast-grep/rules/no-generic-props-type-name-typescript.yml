@@ -1,0 +1,14 @@
+id: no-generic-props-type-name-typescript
+language: TypeScript
+severity: error
+message: Component prop contracts must use a specific Props name.
+files:
+  - src/**/*.ts
+ignores:
+  - src/routeTree.gen.ts
+  - src/data/api/generated/**
+rule:
+  any:
+    - pattern: 'type Props = $$$VALUE'
+    - pattern: 'type ComponentProps = $$$VALUE'
+    - pattern: 'type Tipagem = $$$VALUE'

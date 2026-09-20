@@ -1,0 +1,33 @@
+import { Outlet, useLoaderData, useLocation } from '@tanstack/react-router';
+import { useSuspenseQuery } from '@tanstack/react-query';
+import { I18nProvider } from '../i18n/compat';
+import { MaintenancePage } from '../components/layouts/maintenance-page';
+import { SiteShell } from '../components/layouts/site-shell';
+import { ThemeRegistry } from '../components/ui/theme-registry';
+import { shellQueryOptions } from '../data/queries';
+import { routeContext } from './site-route-context';
+
+export function LocaleLayout() {
+  const { locale } = routeContext(useLocation().pathname);
+
+  const themeMode = useLoaderData({ from: '__root__' });
+
+  const shell = useSuspenseQuery(shellQueryOptions(locale)).data;
+
+  const content = shell.site.maintenanceEnabled ? (
+    <MaintenancePage site={shell.site} profile={shell.profile} />
+  ) : (
+    <SiteShell
+      profile={shell.profile}
+      site={shell.site}
+      availability={shell.availability}
+      children={<Outlet />}
+    />
+  );
+
+  return (
+    <I18nProvider locale={locale} messages={shell.messages}>
+      <ThemeRegistry initialMode={themeMode}>{content}</ThemeRegistry>
+    </I18nProvider>
+  );
+}

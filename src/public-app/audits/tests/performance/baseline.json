@@ -1,0 +1,29 @@
+{
+  "cpuThrottlingRate": 4,
+  "flows": {
+    "cursor-pointer-move": {
+      "maxLongFrames": 0,
+      "maxForcedLayoutFrames": 0,
+      "recalcStyleCount": 260,
+      "layoutCount": 203
+    },
+    "scroll-reveal": {
+      "maxLongFrames": 0,
+      "maxForcedLayoutFrames": 0,
+      "recalcStyleCount": 55,
+      "layoutCount": 0
+    },
+    "client-navigation": {
+      "maxLongFrames": 1,
+      "maxForcedLayoutFrames": 1,
+      "recalcStyleCount": 66,
+      "layoutCount": 43
+    },
+    "mobile-drawer": {
+      "maxLongFrames": 1,
+      "maxForcedLayoutFrames": 1,
+      "recalcStyleCount": 48,
+      "layoutCount": 20
+    }
+  }
+}

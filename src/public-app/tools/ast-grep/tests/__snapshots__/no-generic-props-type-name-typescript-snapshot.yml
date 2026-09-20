@@ -1,0 +1,9 @@
+id: no-generic-props-type-name-typescript
+snapshots:
+  ? |
+    type Props = { name: string }
+  : labels:
+    - source: 'type Props = { name: string }'
+      style: primary
+      start: 0
+      end: 29

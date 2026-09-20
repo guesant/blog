@@ -1,0 +1,7 @@
+id: no-nested-ternary-in-jsx
+valid:
+  - |
+    const value = ready ? <Ready /> : <Pending />
+invalid:
+  - |
+    const value = <Box>{ready ? <Ready /> : failed ? <Failed /> : <Pending />}</Box>

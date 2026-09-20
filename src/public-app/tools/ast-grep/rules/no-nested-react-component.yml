@@ -1,0 +1,16 @@
+id: no-nested-react-component
+language: Tsx
+severity: error
+message: React components must be declared at module scope.
+files:
+  - src/**/*.tsx
+ignores:
+  - src/routeTree.gen.ts
+  - src/data/api/generated/**
+rule:
+  any:
+    - pattern: 'function $OUTER($$$OUTER_PARAMS) { $$$BEFORE function $INNER($$$INNER_PARAMS) { $$$BODY } $$$AFTER }'
+    - pattern: 'function $OUTER($$$OUTER_PARAMS) { $$$BEFORE const $INNER = ($$$INNER_PARAMS) => $$$BODY $$$AFTER }'
+constraints:
+  INNER:
+    regex: '^[A-Z]'

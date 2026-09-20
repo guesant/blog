@@ -1,0 +1,19 @@
+id: no-native-interactive-html-outside-ui
+language: Tsx
+severity: error
+message: Native interactive HTML is only allowed inside a UI layer.
+files:
+  - src/**/*.tsx
+ignores:
+  - src/routeTree.gen.ts
+  - src/data/api/generated/**
+  - src/components/ui/**
+  - src/components/sections/*/ui/**
+rule:
+  any:
+    - pattern: '<button $$$ATTRIBUTES />'
+    - pattern: '<button $$$ATTRIBUTES>$$$CHILDREN</button>'
+    - pattern: '<input $$$ATTRIBUTES />'
+    - pattern: '<select $$$ATTRIBUTES>$$$CHILDREN</select>'
+    - pattern: '<textarea $$$ATTRIBUTES>$$$CHILDREN</textarea>'
+    - pattern: '<a $$$ATTRIBUTES>$$$CHILDREN</a>'

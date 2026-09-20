@@ -1,0 +1,9 @@
+id: no-destructured-component-props-tsx
+valid:
+  - |
+    type UserCardProps = { name: string }
+    function UserCard(props: UserCardProps) { return props.name }
+invalid:
+  - |
+    type UserCardProps = { name: string }
+    function UserCard({ name }: UserCardProps) { return name }

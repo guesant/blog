@@ -1,0 +1,16 @@
+id: no-nested-ternary-in-jsx
+language: Tsx
+severity: error
+message: Nested ternaries are not allowed in JSX.
+files:
+  - src/**/*.tsx
+ignores:
+  - src/routeTree.gen.ts
+  - src/data/api/generated/**
+rule:
+  all:
+    - kind: ternary_expression
+    - inside:
+        kind: jsx_expression
+    - has:
+        kind: ternary_expression

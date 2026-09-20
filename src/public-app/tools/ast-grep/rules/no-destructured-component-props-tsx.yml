@@ -1,0 +1,14 @@
+id: no-destructured-component-props-tsx
+language: Tsx
+severity: error
+message: Component props must use a props parameter and destructure inside the body.
+files:
+  - src/**/*.tsx
+ignores:
+  - src/routeTree.gen.ts
+  - src/data/api/generated/**
+rule:
+  any:
+    - pattern: 'function $FUNCTION({ $$$PROPS }: $TYPE) { $$$BODY }'
+    - pattern: 'const $FUNCTION = ({ $$$PROPS }: $TYPE) => $$$BODY'
+    - pattern: 'const $FUNCTION = function ({ $$$PROPS }: $TYPE) { $$$BODY }'

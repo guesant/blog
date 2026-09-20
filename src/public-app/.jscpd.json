@@ -1,0 +1,13 @@
+{
+  "threshold": 3,
+  "minLines": 5,
+  "minTokens": 50,
+  "format": ["typescript", "tsx"],
+  "ignore": [
+    "**/node_modules/**",
+    "**/dist/**",
+    "**/routeTree.gen.ts",
+    "src/data/api/generated/**"
+  ],
+  "reporters": ["console", "threshold"]
+}

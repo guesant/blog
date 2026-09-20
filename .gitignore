@@ -16,6 +16,8 @@ node_modules
 
 playwright-report
 test-results
+src/public-app/audits/audited-routes.json
+src/public-app/.lighthouseci
 
 **/.DS_Store
 

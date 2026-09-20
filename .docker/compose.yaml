@@ -2,9 +2,18 @@
 # not depend on the checkout directory's name, which differs per machine.
 name: portfolio
 
+x-node-image: &node-image
+  build:
+    context: ..
+    dockerfile: .docker/node.Dockerfile
+  image: portfolio-node
+
 services:
   postgres:
-    image: postgres:17-alpine@sha256:18cfe3ef5e6815560c98237d6216d1e5119702fb0f3894c8785dd58b8bbe5d73
+    build:
+      context: ..
+      dockerfile: .docker/postgres.Dockerfile
+    image: portfolio-postgres
     environment:
       POSTGRES_USER: portfolio
       POSTGRES_PASSWORD: portfolio
@@ -56,7 +65,7 @@ services:
     ports: []
     command: php artisan schedule:work
   start:
-    image: node@sha256:235600a8101ab264e117b1768e925532262668dc9b581ef1dd7d96ced463b8e7
+    <<: *node-image
     working_dir: /workspace/src/public-app
     user: "${PORTFOLIO_CONTAINER_UID:-1000}:${PORTFOLIO_CONTAINER_GID:-1000}"
     volumes:
@@ -76,7 +85,7 @@ services:
       start-node-modules-init:
         condition: service_completed_successfully
   start-node-modules-init:
-    image: node@sha256:235600a8101ab264e117b1768e925532262668dc9b581ef1dd7d96ced463b8e7
+    <<: *node-image
     user: "0:0"
     volumes:
       - start-node-modules:/workspace/src/public-app/node_modules
@@ -85,8 +94,28 @@ services:
       ${PORTFOLIO_CONTAINER_UID:-1000}:${PORTFOLIO_CONTAINER_GID:-1000}
       /workspace/src/public-app/node_modules'
     restart: "no"
+  lighthouse:
+    build:
+      context: ..
+      dockerfile: .docker/lighthouse.Dockerfile
+    image: portfolio-lighthouse
+    working_dir: /workspace/src/public-app
+    volumes:
+      - ..:/workspace
+      - start-node-modules:/workspace/src/public-app/node_modules
+    environment:
+      HOME: /tmp
+      CHROME_PATH: /usr/bin/chromium
+      PORTFOLIO_CONTENT_API_URL: http://laravel:8000/api/v1/public-site
+      PORTFOLIO_PUBLIC_API_URL: /api/v1
+      SITE_URL: http://127.0.0.1:3000
+    depends_on:
+      laravel:
+        condition: service_started
+      start-node-modules-init:
+        condition: service_completed_successfully
   resume-cache-init:
-    image: node@sha256:235600a8101ab264e117b1768e925532262668dc9b581ef1dd7d96ced463b8e7
+    <<: *node-image
     user: "0:0"
     volumes:
       - resume-pdf-cache:/data/resume-cache

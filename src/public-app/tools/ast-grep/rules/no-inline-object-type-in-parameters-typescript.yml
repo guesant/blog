@@ -1,0 +1,14 @@
+id: no-inline-object-type-in-parameters-typescript
+language: TypeScript
+severity: error
+message: Parameter object types must use a named contract.
+files:
+  - src/**/*.ts
+ignores:
+  - src/routeTree.gen.ts
+  - src/data/api/generated/**
+rule:
+  any:
+    - pattern: 'function $FUNCTION($PARAM: { $$$FIELDS }) { $$$BODY }'
+    - pattern: 'const $FUNCTION = ($PARAM: { $$$FIELDS }) => $$$BODY'
+    - pattern: 'const $FUNCTION = function ($PARAM: { $$$FIELDS }) { $$$BODY }'

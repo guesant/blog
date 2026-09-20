@@ -1,0 +1,15 @@
+id: no-narrative-comments-typescript
+valid:
+  - |
+    // biome-ignore lint/suspicious/noExplicitAny
+    const value = 1
+  - |
+    /* IMPORTANT: this boundary is required by the runtime. */
+    const value = 1
+invalid:
+  - |
+    // normalize the data before rendering
+    const value = 1
+  - |
+    /* temporary workaround */
+    const value = 1

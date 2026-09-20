@@ -1,0 +1,7 @@
+id: no-native-interactive-html-outside-ui
+valid:
+  - |
+    const value = <UiButton />
+invalid:
+  - |
+    const value = <button type="button" />

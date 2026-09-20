@@ -1,0 +1,32 @@
+import { Box, Button, Typography } from '../../ui';
+import type { Topic } from '@portfolio/data/domain/types';
+import type { useTranslations } from '@/i18n/compat';
+import { ArrowForward } from '../../ui';
+import { NavLink } from '../../primitives/nav-link';
+
+type TopicListItemProps = {
+  topic: Topic;
+  t: ReturnType<typeof useTranslations>;
+};
+
+export function TopicListItem(props: TopicListItemProps) {
+  return (
+    <Box visualVariant="topicItem">
+      <Typography component="h2" visualVariant="topicTitle">
+        <NavLink href={`/topics/${props.topic.slug}`} underline="none" color="inherit">
+          {props.topic.name}
+        </NavLink>
+      </Typography>
+      <Button
+        component={NavLink}
+        href={`/topics/${props.topic.slug}`}
+        size="small"
+        variant="outlined"
+        endIcon={<ArrowForward visualVariant="topicArrow" />}
+        visualVariant="topicExplore"
+      >
+        {props.t('explore')}
+      </Button>
+    </Box>
+  );
+}

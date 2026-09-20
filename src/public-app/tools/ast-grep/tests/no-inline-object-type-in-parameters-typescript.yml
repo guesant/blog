@@ -1,0 +1,8 @@
+id: no-inline-object-type-in-parameters-typescript
+valid:
+  - |
+    type CreateOptions = { value: string }
+    function create(options: CreateOptions) { return options }
+invalid:
+  - |
+    function create(options: { value: string }) { return options }

@@ -1,0 +1,22 @@
+{
+  "routes": [
+    "/",
+    "/about",
+    "/portfolio",
+    "/now",
+    "/cases",
+    "/collections",
+    "/contact",
+    "/credits",
+    "/findings",
+    "/license",
+    "/follow",
+    "/projects",
+    "/resume",
+    "/snippets",
+    "/status",
+    "/technologies",
+    "/topics",
+    "/writing"
+  ]
+}

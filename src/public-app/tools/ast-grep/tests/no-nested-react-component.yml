@@ -1,0 +1,11 @@
+id: no-nested-react-component
+valid:
+  - |
+    function Card() { return null }
+    function Page() { return <Card /> }
+invalid:
+  - |
+    function Page() {
+      function Card() { return null }
+      return <Card />
+    }

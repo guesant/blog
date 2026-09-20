@@ -1,0 +1,15 @@
+config_version = "0"
+
+exclude_patterns = [
+  "**/.yarn/**",
+  "**/assets/**",
+  "**/build/**",
+  "**/cache/**",
+  "**/config/**",
+  "**/dist/**",
+  "**/generated/**",
+  "**/node_modules/**",
+  "**/storage/**",
+  "**/templates/**",
+  "**/vendor/**",
+]

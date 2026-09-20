@@ -13,7 +13,7 @@ db-backup:
     db_password=$({{kubectl}} get secret postgres-app -o jsonpath='{.data.password}' | base64 -d)
     db_name=$({{kubectl}} get secret postgres-app -o jsonpath='{.data.dbname}' | base64 -d)
     dump_file="$PORTFOLIO_PRODUCTION_BACKUP_DIR/postgres-$(date -u +%Y%m%dT%H%M%SZ).dump"
-    {{kubectl}} exec "$primary_pod" -- env PGPASSWORD="$db_password" pg_dump --format=custom --no-owner --no-acl --username="$db_user" --dbname="$db_name" > "$dump_file"
+    {{kubectl}} exec "$primary_pod" -- env PGPASSWORD="$db_password" pg_dump --host=127.0.0.1 --format=custom --no-owner --no-acl --username="$db_user" --dbname="$db_name" > "$dump_file"
     test -s "$dump_file"
     echo "wrote $dump_file"
 

@@ -20,11 +20,11 @@ ENTRYPOINT ["jscpd"]
 FROM lycheeverse/lychee:0.24.2@sha256:e2d19e57cf6ab037026f20b8e449a1f30d9d7f81eef4194763aab2eab20bd28d AS lychee
 ENTRYPOINT ["lychee"]
 
-FROM python:3.13-slim@sha256:e2a5fce94bd761967528a12f16d707c2613e1522f3f2d77fa45766f45962547f AS lizard
+FROM python:3.13-slim@sha256:8d9d0b8bcf6506481eae4907c18f5e3e7902e629f5f6d684f9e7c32e85e3ddf0 AS lizard
 RUN pip install --no-cache-dir lizard==1.18.0
 ENTRYPOINT ["lizard"]
 
-FROM python:3.13-slim@sha256:e2a5fce94bd761967528a12f16d707c2613e1522f3f2d77fa45766f45962547f AS yamllint
+FROM python:3.13-slim@sha256:8d9d0b8bcf6506481eae4907c18f5e3e7902e629f5f6d684f9e7c32e85e3ddf0 AS yamllint
 RUN pip install --no-cache-dir yamllint==1.38.0
 ENTRYPOINT ["yamllint"]
 

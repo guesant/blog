@@ -94,6 +94,7 @@ action-test:
     {{node_run}} 'node --test ../../.github/actions/push-profile/test/*.test.mjs'
 
 laravel-check:
+    if [[ "${CI:-}" == "true" ]]; then {{compose_run}} -v "$PWD/src/laravel/.env.example:/app/.env:ro" laravel php artisan migrate --force; fi
     {{compose_run}} -v "$PWD/src/laravel/.env.example:/app/.env:ro" laravel php artisan migrate:status
     {{compose_run}} -v "$PWD/src/laravel/.env.example:/app/.env:ro" laravel ./vendor/bin/pint --test
     {{compose_run}} -v "$PWD/src/laravel/.env.example:/app/.env:ro" laravel php -d memory_limit=512M vendor/bin/phpunit --configuration phpunit.xml

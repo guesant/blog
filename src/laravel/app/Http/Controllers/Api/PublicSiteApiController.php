@@ -189,7 +189,6 @@ class PublicSiteApiController extends Controller
 
     /** @response array<string, mixed> */
     #[ScrambleResponse(304, 'The cached public site snapshot is still current.')]
-    #[ScrambleResponse(503, 'The service is temporarily unavailable.', type: 'array{error: array{code: string, message: string, status: int, details: string}}')]
     public function index(Request $request): JsonResponse|Response
     {
         if ((new SiteSettingsQuery)->find()?->maintenance_enabled) {
@@ -202,15 +201,7 @@ class PublicSiteApiController extends Controller
 
         $locale = Locale::normalize($request->query('locale'));
         $revision = DB::table('content_revisions')->value('version') ?? 0;
-        $body = $this->cachedSnapshot($revision, $locale);
-
-        if ($body === '') {
-            return ApiErrorResponse::make(
-                ApiErrorCode::ServiceUnavailable,
-                503,
-                'The public site snapshot is warming.',
-            )->header('Retry-After', (string) 60);
-        }
+        $body = $this->cachedSnapshot($revision, $locale) ?: $this->buildSnapshotBody($locale);
 
         $etag = '"'.substr(hash('sha256', $body), 0, 32).'"';
 

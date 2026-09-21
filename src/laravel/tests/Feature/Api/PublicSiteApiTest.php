@@ -8,10 +8,23 @@ use App\Models\ReferenceCollection;
 use App\Models\ReferenceCollectionTranslation;
 use App\Models\Resource;
 use App\Models\ResourceTranslation;
+use Illuminate\Support\Facades\Cache;
 use Tests\TestCase;
 
 class PublicSiteApiTest extends TestCase
 {
+    public function test_public_site_builds_from_database_when_snapshot_cache_is_empty(): void
+    {
+        Cache::flush();
+
+        $response = $this->getJson('/api/v1/public-site?locale=en');
+
+        $response
+            ->assertOk()
+            ->assertJsonPath('schema_version', 3)
+            ->assertJsonPath('locale', 'en');
+    }
+
     public function test_content_collection_returns_a_paginated_page(): void
     {
         $this->createCaseStudy('first-case');

@@ -50,6 +50,16 @@ class ProjectQuery
             ->get();
     }
 
+    public function listExperimentsPaginated(int $perPage = 20, ?string $sort = null): LengthAwarePaginator
+    {
+        $query = Experiment::where('hidden', false)
+            ->with(['translations', 'technologies.translations']);
+
+        $this->applySort($query, $sort, alphaTable: 'experiment_translations', alphaForeignKey: 'experiment_id', alphaColumn: 'name');
+
+        return $query->paginate($perPage);
+    }
+
     public function findExperimentBySlug(string $slug): ?Experiment
     {
         return Experiment::where('slug', $slug)

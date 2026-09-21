@@ -2,7 +2,7 @@
 
 import { Typography } from '../../ui';
 import { useTranslations } from '@/i18n/compat';
-import { ListingView } from '../../content/listing-view';
+import { CollectionListing } from '../../content/collection-listing';
 import { PageHeader } from '../../content/page-header';
 import type { NowPageCopy } from '@portfolio/data/domain/types';
 import { CatalogCard } from '../../content/catalog-card';
@@ -24,7 +24,7 @@ export function NowPageContent(props: NowPageContentProps) {
         description={page.description}
         breadcrumbs={[{ label: tNav('now') }]}
       />
-      <ListingView
+      <CollectionListing
         items={entries}
         getKey={(entry) => entry.key}
         renderListItem={(entry) => (

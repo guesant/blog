@@ -1,4 +1,4 @@
-import { listFindings } from './generated/index.ts';
+import { listFindings } from './public-site-generated-client';
 import type { ContentLocale, FindingList, FindingListQuery } from './public-site-source-support';
 import { apiClient } from './public-site-source-api-client';
 import { objectValue } from './public-site-source-object-value';

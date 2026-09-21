@@ -17,14 +17,6 @@ WORKDIR /app
 COPY composer.json composer.lock ./
 RUN composer install --no-dev --no-scripts --no-autoloader --prefer-dist
 
-FROM node:22-bookworm-slim@sha256:83f487e0a63425e5b4d146fb5e5be574bcbe1b7b843d3ebafdd95eaf7767a7e5 AS assets
-WORKDIR /app
-COPY package.json package-lock.json ./
-RUN npm ci --ignore-scripts
-COPY vite.config.js ./
-COPY resources resources
-RUN npm run build
-
 FROM php-base
 WORKDIR /app
 
@@ -55,7 +47,6 @@ RUN composer dump-autoload --optimize --no-dev \
     && mkdir -p database \
     && ln -s ../storage/app/public public/storage \
     && chown -R www-data:www-data storage bootstrap/cache database
-COPY --from=assets /app/public/build ./public/build
 
 COPY docker/entrypoint.prod.sh /usr/local/bin/entrypoint.prod.sh
 RUN chmod +x /usr/local/bin/entrypoint.prod.sh

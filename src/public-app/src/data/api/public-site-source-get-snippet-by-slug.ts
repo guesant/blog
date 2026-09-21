@@ -1,12 +1,9 @@
 import type { Snippet } from '../domain/types.ts';
-import { slugFromKey } from './public-site-source-slug-from-key';
-import { getSnippets } from './public-site-source-get-snippets';
+import { getContentDocument } from './public-site-source-get-content-document';
 
 export async function getSnippetBySlug(
   slug: string,
   locale?: string,
 ): Promise<Snippet | undefined> {
-  return (await getSnippets(locale)).find(
-    (item) => item.slug === slug || slugFromKey(item.slug) === slug,
-  );
+  return getContentDocument<Snippet>('snippets', slug, locale);
 }

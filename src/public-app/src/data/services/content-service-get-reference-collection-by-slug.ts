@@ -1,41 +1,30 @@
 import { getContentDocument } from '../api/public-site-source.ts';
-import type {
-  ReferenceCollection,
-  ReferenceCollectionDetail,
-  ReferenceCollectionItem,
-} from '../domain/types.ts';
-import { RawCollectionItem } from './content-service-support';
-import { getReferences } from './content-service-get-references';
-import { collectionItemSlug } from './content-service-collection-item-slug';
+import type { ReferenceCollection, ReferenceCollectionDetail } from '../domain/types.ts';
+import type { RecordValue } from '../api/public-site-source-support';
+import { recordList } from '../api/public-site-source-list';
+import { reference } from '../api/public-site-source-reference';
+import { stringValue } from '../api/public-site-source-string-value';
 
 export async function getReferenceCollectionBySlug(
   slug: string,
   locale?: string,
 ): Promise<ReferenceCollectionDetail | undefined> {
-  const [collection, references] = await Promise.all([
-    getContentDocument<ReferenceCollection & { items?: RawCollectionItem[] }>(
-      'collections',
-      slug,
-      locale,
-    ),
-    getReferences(locale),
-  ]);
+  const collection = await getContentDocument<ReferenceCollection & { resources?: RecordValue[] }>(
+    'collections',
+    slug,
+    locale,
+  );
 
   if (!collection) {
     return undefined;
   }
 
-  const bySlug = new Map(references.map((reference) => [reference.slug, reference]));
+  const { resources, ...rest } = collection;
 
-  const { items: rawItems, ...rest } = collection;
-
-  const items: ReferenceCollectionItem[] = (rawItems ?? []).flatMap((entry) => {
-    const itemSlug = collectionItemSlug(entry.item);
-
-    const reference = itemSlug ? bySlug.get(itemSlug) : undefined;
-
-    return reference ? [{ reference, note: entry.note }] : [];
-  });
+  const items = recordList<RecordValue>(resources).map((resource) => ({
+    reference: reference(resource),
+    note: stringValue(resource.note) || undefined,
+  }));
 
   return { ...rest, items };
 }

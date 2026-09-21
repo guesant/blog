@@ -1,480 +1,2555 @@
 {
-  "openapi": "3.1.1",
-  "info": {
-    "title": "Portfolio public API",
-    "version": "1.0.0"
-  },
-  "servers": [
-    {
-      "url": "http://laravel:8000/api/v1"
+    "openapi": "3.1.0",
+    "info": {
+        "title": "Guesant public API",
+        "version": "1.0.0",
+        "description": "Public JSON API for guesant.net."
+    },
+    "servers": [
+        {
+            "url": "https://api.guesant.net/api/v1",
+            "description": "Production"
+        },
+        {
+            "url": "http://localhost:8001/api/v1",
+            "description": "Local"
+        }
+    ],
+    "paths": {
+        "/findings": {
+            "get": {
+                "operationId": "findingApi.index",
+                "tags": [
+                    "FindingApi"
+                ],
+                "parameters": [
+                    {
+                        "name": "locale",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "sort",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "meta": {
+                                            "type": "object",
+                                            "properties": {
+                                                "page": {
+                                                    "type": "integer"
+                                                },
+                                                "per_page": {
+                                                    "type": "integer"
+                                                },
+                                                "total": {
+                                                    "type": "integer"
+                                                },
+                                                "last_page": {
+                                                    "type": "integer"
+                                                },
+                                                "locale": {
+                                                    "type": "string",
+                                                    "enum": [
+                                                        "pt-BR",
+                                                        "en"
+                                                    ]
+                                                },
+                                                "facets": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "types": {
+                                                            "type": "object",
+                                                            "additionalProperties": {}
+                                                        },
+                                                        "ratings": {
+                                                            "type": "object",
+                                                            "additionalProperties": {}
+                                                        },
+                                                        "consumptionStates": {
+                                                            "type": "object",
+                                                            "additionalProperties": {}
+                                                        },
+                                                        "years": {
+                                                            "type": "array",
+                                                            "items": {
+                                                                "type": "string"
+                                                            }
+                                                        },
+                                                        "topics": {
+                                                            "type": "array",
+                                                            "items": {
+                                                                "type": "object",
+                                                                "properties": {
+                                                                    "slug": {
+                                                                        "type": "string"
+                                                                    },
+                                                                    "name": {
+                                                                        "type": "string"
+                                                                    }
+                                                                },
+                                                                "required": [
+                                                                    "slug",
+                                                                    "name"
+                                                                ]
+                                                            }
+                                                        }
+                                                    },
+                                                    "required": [
+                                                        "types",
+                                                        "ratings",
+                                                        "consumptionStates",
+                                                        "years",
+                                                        "topics"
+                                                    ]
+                                                }
+                                            },
+                                            "required": [
+                                                "page",
+                                                "per_page",
+                                                "total",
+                                                "last_page",
+                                                "locale",
+                                                "facets"
+                                            ]
+                                        }
+                                    },
+                                    "required": [
+                                        "data",
+                                        "meta"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "503": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "object",
+                                            "properties": {
+                                                "code": {
+                                                    "type": "string"
+                                                },
+                                                "message": {
+                                                    "type": "string",
+                                                    "const": "The service is temporarily unavailable."
+                                                },
+                                                "status": {
+                                                    "type": "integer",
+                                                    "const": 503
+                                                },
+                                                "details": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "required": [
+                                                "code",
+                                                "message",
+                                                "status",
+                                                "details"
+                                            ]
+                                        }
+                                    },
+                                    "required": [
+                                        "error"
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/findings/{slug}": {
+            "get": {
+                "operationId": "findingApi.show",
+                "tags": [
+                    "FindingApi"
+                ],
+                "parameters": [
+                    {
+                        "name": "slug",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "locale",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "object",
+                                            "properties": {
+                                                "code": {
+                                                    "type": "string"
+                                                },
+                                                "message": {
+                                                    "type": "string",
+                                                    "const": "The requested resource was not found."
+                                                },
+                                                "status": {
+                                                    "type": "integer",
+                                                    "const": 404
+                                                },
+                                                "details": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "required": [
+                                                "code",
+                                                "message",
+                                                "status",
+                                                "details"
+                                            ]
+                                        }
+                                    },
+                                    "required": [
+                                        "error"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "503": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "object",
+                                            "properties": {
+                                                "code": {
+                                                    "type": "string"
+                                                },
+                                                "message": {
+                                                    "type": "string",
+                                                    "const": "The service is temporarily unavailable."
+                                                },
+                                                "status": {
+                                                    "type": "integer",
+                                                    "const": 503
+                                                },
+                                                "details": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "required": [
+                                                "code",
+                                                "message",
+                                                "status",
+                                                "details"
+                                            ]
+                                        }
+                                    },
+                                    "required": [
+                                        "error"
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/public-site": {
+            "get": {
+                "operationId": "publicSiteApi.index",
+                "tags": [
+                    "PublicSiteApi"
+                ],
+                "parameters": [
+                    {
+                        "name": "locale",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json; charset=utf-8": {
+                                "schema": {
+                                    "type": [
+                                        "string",
+                                        "object"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "304": {
+                        "description": ""
+                    },
+                    "503": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "object",
+                                            "properties": {
+                                                "code": {
+                                                    "type": "string"
+                                                },
+                                                "message": {
+                                                    "type": "string",
+                                                    "const": "The service is temporarily unavailable."
+                                                },
+                                                "status": {
+                                                    "type": "integer",
+                                                    "const": 503
+                                                },
+                                                "details": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "required": [
+                                                "code",
+                                                "message",
+                                                "status",
+                                                "details"
+                                            ]
+                                        }
+                                    },
+                                    "required": [
+                                        "error"
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/content/{collection}": {
+            "get": {
+                "operationId": "publicSiteApi.collection",
+                "tags": [
+                    "PublicSiteApi"
+                ],
+                "parameters": [
+                    {
+                        "name": "collection",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "locale",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "sort",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer",
+                            "default": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "anyOf": [
+                                                    {
+                                                        "type": "object",
+                                                        "properties": {
+                                                            "slug": {
+                                                                "type": "string"
+                                                            },
+                                                            "url": {
+                                                                "type": "string"
+                                                            },
+                                                            "title": {
+                                                                "type": "string"
+                                                            },
+                                                            "status": {
+                                                                "type": [
+                                                                    "string",
+                                                                    "null"
+                                                                ]
+                                                            },
+                                                            "summary": {
+                                                                "type": [
+                                                                    "string",
+                                                                    "null"
+                                                                ]
+                                                            },
+                                                            "published_at": {
+                                                                "type": [
+                                                                    "string",
+                                                                    "null"
+                                                                ]
+                                                            },
+                                                            "external": {
+                                                                "type": "boolean"
+                                                            },
+                                                            "meta": {
+                                                                "type": [
+                                                                    "string",
+                                                                    "null"
+                                                                ]
+                                                            },
+                                                            "context": {
+                                                                "type": [
+                                                                    "string",
+                                                                    "null"
+                                                                ]
+                                                            },
+                                                            "role": {
+                                                                "type": [
+                                                                    "string",
+                                                                    "null"
+                                                                ]
+                                                            },
+                                                            "result": {
+                                                                "type": [
+                                                                    "string",
+                                                                    "null"
+                                                                ]
+                                                            },
+                                                            "metrics": {
+                                                                "type": [
+                                                                    "array",
+                                                                    "null"
+                                                                ],
+                                                                "items": {}
+                                                            },
+                                                            "technologies": {
+                                                                "type": "array",
+                                                                "items": {
+                                                                    "type": "object",
+                                                                    "properties": {
+                                                                        "slug": {
+                                                                            "type": "string"
+                                                                        },
+                                                                        "name": {
+                                                                            "type": "string"
+                                                                        }
+                                                                    },
+                                                                    "required": [
+                                                                        "slug",
+                                                                        "name"
+                                                                    ]
+                                                                }
+                                                            },
+                                                            "show_history": {
+                                                                "type": "boolean"
+                                                            },
+                                                            "href": {
+                                                                "type": [
+                                                                    "string",
+                                                                    "null"
+                                                                ]
+                                                            },
+                                                            "updated_at": {
+                                                                "type": [
+                                                                    "string",
+                                                                    "null"
+                                                                ]
+                                                            }
+                                                        },
+                                                        "required": [
+                                                            "slug",
+                                                            "url",
+                                                            "title",
+                                                            "status",
+                                                            "summary",
+                                                            "published_at",
+                                                            "external",
+                                                            "meta",
+                                                            "context",
+                                                            "role",
+                                                            "result",
+                                                            "metrics",
+                                                            "technologies",
+                                                            "show_history",
+                                                            "href",
+                                                            "updated_at"
+                                                        ]
+                                                    },
+                                                    {
+                                                        "type": "object",
+                                                        "properties": {
+                                                            "slug": {
+                                                                "type": "string"
+                                                            },
+                                                            "url": {
+                                                                "type": "string"
+                                                            },
+                                                            "title": {
+                                                                "type": "string"
+                                                            },
+                                                            "description": {
+                                                                "type": [
+                                                                    "string",
+                                                                    "null"
+                                                                ]
+                                                            },
+                                                            "intro": {
+                                                                "type": [
+                                                                    "string",
+                                                                    "null"
+                                                                ]
+                                                            },
+                                                            "published_at": {
+                                                                "type": [
+                                                                    "string",
+                                                                    "null"
+                                                                ]
+                                                            },
+                                                            "resources_count": {
+                                                                "anyOf": [
+                                                                    {
+                                                                        "type": "string"
+                                                                    },
+                                                                    {
+                                                                        "type": "integer",
+                                                                        "enum": [
+                                                                            0
+                                                                        ]
+                                                                    }
+                                                                ]
+                                                            },
+                                                            "related": {
+                                                                "type": "null"
+                                                            },
+                                                            "updated_at": {
+                                                                "type": [
+                                                                    "string",
+                                                                    "null"
+                                                                ]
+                                                            },
+                                                            "created_at": {
+                                                                "type": [
+                                                                    "string",
+                                                                    "null"
+                                                                ]
+                                                            }
+                                                        },
+                                                        "required": [
+                                                            "slug",
+                                                            "url",
+                                                            "title",
+                                                            "description",
+                                                            "intro",
+                                                            "published_at",
+                                                            "resources_count",
+                                                            "related",
+                                                            "updated_at",
+                                                            "created_at"
+                                                        ]
+                                                    },
+                                                    {
+                                                        "type": "object",
+                                                        "properties": {
+                                                            "category": {
+                                                                "type": "string"
+                                                            },
+                                                            "name": {
+                                                                "type": "string"
+                                                            },
+                                                            "description": {
+                                                                "type": [
+                                                                    "string",
+                                                                    "null"
+                                                                ]
+                                                            },
+                                                            "url": {
+                                                                "type": "string"
+                                                            },
+                                                            "package_manager": {
+                                                                "type": "string"
+                                                            },
+                                                            "package_name": {
+                                                                "type": "string"
+                                                            },
+                                                            "created_at": {
+                                                                "type": [
+                                                                    "string",
+                                                                    "null"
+                                                                ]
+                                                            }
+                                                        },
+                                                        "required": [
+                                                            "category",
+                                                            "name",
+                                                            "description",
+                                                            "url",
+                                                            "package_manager",
+                                                            "package_name",
+                                                            "created_at"
+                                                        ]
+                                                    },
+                                                    {
+                                                        "type": "object",
+                                                        "properties": {
+                                                            "slug": {
+                                                                "type": "string"
+                                                            },
+                                                            "url": {
+                                                                "type": "string"
+                                                            },
+                                                            "name": {
+                                                                "type": "string"
+                                                            },
+                                                            "purpose": {
+                                                                "type": [
+                                                                    "string",
+                                                                    "null"
+                                                                ]
+                                                            },
+                                                            "published_at": {
+                                                                "type": [
+                                                                    "string",
+                                                                    "null"
+                                                                ]
+                                                            },
+                                                            "external": {
+                                                                "type": "boolean"
+                                                            },
+                                                            "technologies": {
+                                                                "type": "array",
+                                                                "items": {
+                                                                    "type": "object",
+                                                                    "properties": {
+                                                                        "slug": {
+                                                                            "type": "string"
+                                                                        },
+                                                                        "name": {
+                                                                            "type": "string"
+                                                                        }
+                                                                    },
+                                                                    "required": [
+                                                                        "slug",
+                                                                        "name"
+                                                                    ]
+                                                                }
+                                                            },
+                                                            "href": {
+                                                                "type": [
+                                                                    "string",
+                                                                    "null"
+                                                                ]
+                                                            },
+                                                            "updated_at": {
+                                                                "type": [
+                                                                    "string",
+                                                                    "null"
+                                                                ]
+                                                            },
+                                                            "show_history": {
+                                                                "type": "boolean"
+                                                            }
+                                                        },
+                                                        "required": [
+                                                            "slug",
+                                                            "url",
+                                                            "name",
+                                                            "purpose",
+                                                            "published_at",
+                                                            "external",
+                                                            "technologies",
+                                                            "href",
+                                                            "updated_at",
+                                                            "show_history"
+                                                        ]
+                                                    },
+                                                    {
+                                                        "type": "object",
+                                                        "properties": {
+                                                            "slug": {
+                                                                "type": "string"
+                                                            },
+                                                            "url": {
+                                                                "type": "string"
+                                                            },
+                                                            "name": {
+                                                                "type": "string"
+                                                            },
+                                                            "purpose": {
+                                                                "type": [
+                                                                    "string",
+                                                                    "null"
+                                                                ]
+                                                            },
+                                                            "status": {
+                                                                "type": [
+                                                                    "string",
+                                                                    "null"
+                                                                ]
+                                                            },
+                                                            "published_at": {
+                                                                "type": [
+                                                                    "string",
+                                                                    "null"
+                                                                ]
+                                                            },
+                                                            "external": {
+                                                                "type": "boolean"
+                                                            },
+                                                            "problem": {
+                                                                "type": [
+                                                                    "string",
+                                                                    "null"
+                                                                ]
+                                                            },
+                                                            "current_focus": {
+                                                                "type": [
+                                                                    "string",
+                                                                    "null"
+                                                                ]
+                                                            },
+                                                            "metrics": {
+                                                                "type": [
+                                                                    "array",
+                                                                    "null"
+                                                                ],
+                                                                "items": {}
+                                                            },
+                                                            "technologies": {
+                                                                "type": "array",
+                                                                "items": {
+                                                                    "type": "object",
+                                                                    "properties": {
+                                                                        "slug": {
+                                                                            "type": "string"
+                                                                        },
+                                                                        "name": {
+                                                                            "type": "string"
+                                                                        }
+                                                                    },
+                                                                    "required": [
+                                                                        "slug",
+                                                                        "name"
+                                                                    ]
+                                                                }
+                                                            },
+                                                            "show_history": {
+                                                                "type": "boolean"
+                                                            },
+                                                            "href": {
+                                                                "type": [
+                                                                    "string",
+                                                                    "null"
+                                                                ]
+                                                            },
+                                                            "updated_at": {
+                                                                "type": [
+                                                                    "string",
+                                                                    "null"
+                                                                ]
+                                                            }
+                                                        },
+                                                        "required": [
+                                                            "slug",
+                                                            "url",
+                                                            "name",
+                                                            "purpose",
+                                                            "status",
+                                                            "published_at",
+                                                            "external",
+                                                            "problem",
+                                                            "current_focus",
+                                                            "metrics",
+                                                            "technologies",
+                                                            "show_history",
+                                                            "href",
+                                                            "updated_at"
+                                                        ]
+                                                    },
+                                                    {
+                                                        "type": "object",
+                                                        "properties": {
+                                                            "slug": {
+                                                                "type": "string"
+                                                            },
+                                                            "title": {
+                                                                "type": "string"
+                                                            },
+                                                            "description": {
+                                                                "type": [
+                                                                    "string",
+                                                                    "null"
+                                                                ]
+                                                            },
+                                                            "download_url": {
+                                                                "type": "string"
+                                                            },
+                                                            "files": {
+                                                                "type": "array",
+                                                                "items": {
+                                                                    "type": "string"
+                                                                },
+                                                                "minItems": 0,
+                                                                "maxItems": 0
+                                                            },
+                                                            "file_count": {
+                                                                "anyOf": [
+                                                                    {
+                                                                        "type": "string"
+                                                                    },
+                                                                    {
+                                                                        "type": "integer",
+                                                                        "enum": [
+                                                                            0
+                                                                        ]
+                                                                    }
+                                                                ]
+                                                            },
+                                                            "updated_at": {
+                                                                "type": [
+                                                                    "string",
+                                                                    "null"
+                                                                ]
+                                                            }
+                                                        },
+                                                        "required": [
+                                                            "slug",
+                                                            "title",
+                                                            "description",
+                                                            "download_url",
+                                                            "files",
+                                                            "file_count",
+                                                            "updated_at"
+                                                        ]
+                                                    },
+                                                    {
+                                                        "type": "object",
+                                                        "properties": {
+                                                            "slug": {
+                                                                "type": "string"
+                                                            },
+                                                            "name": {
+                                                                "type": "string"
+                                                            },
+                                                            "code": {
+                                                                "type": "string"
+                                                            },
+                                                            "url": {
+                                                                "type": "string"
+                                                            },
+                                                            "skills": {
+                                                                "type": "array",
+                                                                "items": {
+                                                                    "type": "string"
+                                                                }
+                                                            },
+                                                            "resume_skills": {
+                                                                "type": "array",
+                                                                "items": {
+                                                                    "type": [
+                                                                        "object",
+                                                                        "null"
+                                                                    ],
+                                                                    "properties": {
+                                                                        "slug": {
+                                                                            "type": "string"
+                                                                        },
+                                                                        "name": {
+                                                                            "type": "string"
+                                                                        },
+                                                                        "url": {
+                                                                            "type": "string"
+                                                                        },
+                                                                        "parent": {
+                                                                            "type": [
+                                                                                "string",
+                                                                                "null"
+                                                                            ]
+                                                                        },
+                                                                        "kind": {
+                                                                            "type": "null"
+                                                                        },
+                                                                        "children": {
+                                                                            "type": "null"
+                                                                        }
+                                                                    },
+                                                                    "required": [
+                                                                        "slug",
+                                                                        "name",
+                                                                        "url",
+                                                                        "parent",
+                                                                        "kind",
+                                                                        "children"
+                                                                    ]
+                                                                }
+                                                            }
+                                                        },
+                                                        "required": [
+                                                            "slug",
+                                                            "name",
+                                                            "code",
+                                                            "url",
+                                                            "skills",
+                                                            "resume_skills"
+                                                        ]
+                                                    },
+                                                    {
+                                                        "type": "object",
+                                                        "properties": {
+                                                            "slug": {
+                                                                "type": "string"
+                                                            },
+                                                            "name": {
+                                                                "type": "string"
+                                                            },
+                                                            "kind": {
+                                                                "type": "string"
+                                                            },
+                                                            "parent": {
+                                                                "type": [
+                                                                    "string",
+                                                                    "null"
+                                                                ]
+                                                            },
+                                                            "children": {
+                                                                "type": "array",
+                                                                "items": {
+                                                                    "type": "object",
+                                                                    "properties": {
+                                                                        "slug": {
+                                                                            "type": "string"
+                                                                        },
+                                                                        "name": {
+                                                                            "type": "string"
+                                                                        }
+                                                                    },
+                                                                    "required": [
+                                                                        "slug",
+                                                                        "name"
+                                                                    ]
+                                                                }
+                                                            }
+                                                        },
+                                                        "required": [
+                                                            "slug",
+                                                            "name",
+                                                            "kind",
+                                                            "parent",
+                                                            "children"
+                                                        ]
+                                                    },
+                                                    {
+                                                        "type": "object",
+                                                        "properties": {
+                                                            "slug": {
+                                                                "type": "string"
+                                                            },
+                                                            "url": {
+                                                                "type": "string"
+                                                            },
+                                                            "title": {
+                                                                "type": "string"
+                                                            },
+                                                            "excerpt": {
+                                                                "type": [
+                                                                    "string",
+                                                                    "null"
+                                                                ]
+                                                            },
+                                                            "reading_time": {
+                                                                "type": [
+                                                                    "string",
+                                                                    "null"
+                                                                ]
+                                                            },
+                                                            "type": {
+                                                                "type": "string"
+                                                            },
+                                                            "date": {
+                                                                "type": [
+                                                                    "string",
+                                                                    "null"
+                                                                ]
+                                                            },
+                                                            "topics": {
+                                                                "type": "array",
+                                                                "items": {
+                                                                    "type": "object",
+                                                                    "properties": {
+                                                                        "slug": {
+                                                                            "type": "string"
+                                                                        },
+                                                                        "name": {
+                                                                            "type": "string"
+                                                                        },
+                                                                        "url": {
+                                                                            "type": "string"
+                                                                        }
+                                                                    },
+                                                                    "required": [
+                                                                        "slug",
+                                                                        "name",
+                                                                        "url"
+                                                                    ]
+                                                                }
+                                                            },
+                                                            "show_history": {
+                                                                "type": "boolean"
+                                                            },
+                                                            "updated_at": {
+                                                                "type": [
+                                                                    "string",
+                                                                    "null"
+                                                                ]
+                                                            }
+                                                        },
+                                                        "required": [
+                                                            "slug",
+                                                            "url",
+                                                            "title",
+                                                            "excerpt",
+                                                            "reading_time",
+                                                            "type",
+                                                            "date",
+                                                            "topics",
+                                                            "show_history",
+                                                            "updated_at"
+                                                        ]
+                                                    }
+                                                ]
+                                            }
+                                        },
+                                        "meta": {
+                                            "type": "object",
+                                            "properties": {
+                                                "page": {
+                                                    "type": "integer"
+                                                },
+                                                "per_page": {
+                                                    "type": "integer"
+                                                },
+                                                "total": {
+                                                    "type": "integer"
+                                                },
+                                                "last_page": {
+                                                    "type": "integer"
+                                                },
+                                                "from": {
+                                                    "type": [
+                                                        "integer",
+                                                        "null"
+                                                    ]
+                                                },
+                                                "to": {
+                                                    "type": [
+                                                        "integer",
+                                                        "null"
+                                                    ]
+                                                },
+                                                "locale": {
+                                                    "type": "string",
+                                                    "enum": [
+                                                        "pt-BR",
+                                                        "en"
+                                                    ]
+                                                }
+                                            },
+                                            "required": [
+                                                "page",
+                                                "per_page",
+                                                "total",
+                                                "last_page",
+                                                "from",
+                                                "to",
+                                                "locale"
+                                            ]
+                                        }
+                                    },
+                                    "required": [
+                                        "data",
+                                        "meta"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "503": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "object",
+                                            "properties": {
+                                                "code": {
+                                                    "type": "string"
+                                                },
+                                                "message": {
+                                                    "type": "string",
+                                                    "const": "The service is temporarily unavailable."
+                                                },
+                                                "status": {
+                                                    "type": "integer",
+                                                    "const": 503
+                                                },
+                                                "details": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "required": [
+                                                "code",
+                                                "message",
+                                                "status",
+                                                "details"
+                                            ]
+                                        }
+                                    },
+                                    "required": [
+                                        "error"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/ModelNotFoundException"
+                    }
+                }
+            }
+        },
+        "/content/{collection}/{slug}": {
+            "get": {
+                "operationId": "publicSiteApi.document",
+                "tags": [
+                    "PublicSiteApi"
+                ],
+                "parameters": [
+                    {
+                        "name": "collection",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "slug",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "locale",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "anyOf": [
+                                        {
+                                            "type": "object",
+                                            "properties": {
+                                                "slug": {
+                                                    "type": "string"
+                                                },
+                                                "url": {
+                                                    "type": "string"
+                                                },
+                                                "title": {
+                                                    "type": "string"
+                                                },
+                                                "status": {
+                                                    "type": [
+                                                        "string",
+                                                        "null"
+                                                    ]
+                                                },
+                                                "summary": {
+                                                    "type": [
+                                                        "string",
+                                                        "null"
+                                                    ]
+                                                },
+                                                "published_at": {
+                                                    "type": [
+                                                        "string",
+                                                        "null"
+                                                    ]
+                                                },
+                                                "external": {
+                                                    "type": "boolean"
+                                                },
+                                                "meta": {
+                                                    "type": [
+                                                        "string",
+                                                        "null"
+                                                    ]
+                                                },
+                                                "context": {
+                                                    "type": [
+                                                        "string",
+                                                        "null"
+                                                    ]
+                                                },
+                                                "role": {
+                                                    "type": [
+                                                        "string",
+                                                        "null"
+                                                    ]
+                                                },
+                                                "result": {
+                                                    "type": [
+                                                        "string",
+                                                        "null"
+                                                    ]
+                                                },
+                                                "metrics": {
+                                                    "type": [
+                                                        "array",
+                                                        "null"
+                                                    ],
+                                                    "items": {}
+                                                },
+                                                "body": {
+                                                    "type": [
+                                                        "string",
+                                                        "null"
+                                                    ]
+                                                },
+                                                "technologies": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "object",
+                                                        "properties": {
+                                                            "slug": {
+                                                                "type": "string"
+                                                            },
+                                                            "name": {
+                                                                "type": "string"
+                                                            }
+                                                        },
+                                                        "required": [
+                                                            "slug",
+                                                            "name"
+                                                        ]
+                                                    }
+                                                },
+                                                "show_history": {
+                                                    "type": "boolean"
+                                                },
+                                                "history": {
+                                                    "type": "null"
+                                                },
+                                                "href": {
+                                                    "type": [
+                                                        "string",
+                                                        "null"
+                                                    ]
+                                                },
+                                                "related": {
+                                                    "type": "null"
+                                                },
+                                                "updated_at": {
+                                                    "type": [
+                                                        "string",
+                                                        "null"
+                                                    ]
+                                                }
+                                            },
+                                            "required": [
+                                                "slug",
+                                                "url",
+                                                "title",
+                                                "status",
+                                                "summary",
+                                                "published_at",
+                                                "external",
+                                                "meta",
+                                                "context",
+                                                "role",
+                                                "result",
+                                                "metrics",
+                                                "body",
+                                                "technologies",
+                                                "show_history",
+                                                "history",
+                                                "href",
+                                                "related",
+                                                "updated_at"
+                                            ]
+                                        },
+                                        {
+                                            "type": "object",
+                                            "properties": {
+                                                "slug": {
+                                                    "type": "string"
+                                                },
+                                                "url": {
+                                                    "type": "string"
+                                                },
+                                                "title": {
+                                                    "type": "string"
+                                                },
+                                                "description": {
+                                                    "type": [
+                                                        "string",
+                                                        "null"
+                                                    ]
+                                                },
+                                                "intro": {
+                                                    "type": [
+                                                        "string",
+                                                        "null"
+                                                    ]
+                                                },
+                                                "published_at": {
+                                                    "type": [
+                                                        "string",
+                                                        "null"
+                                                    ]
+                                                },
+                                                "resources": {
+                                                    "anyOf": [
+                                                        {
+                                                            "type": "array",
+                                                            "items": {
+                                                                "type": "object",
+                                                                "properties": {
+                                                                    "slug": {
+                                                                        "type": "string"
+                                                                    },
+                                                                    "url": {
+                                                                        "type": "string"
+                                                                    },
+                                                                    "title": {
+                                                                        "type": "string"
+                                                                    },
+                                                                    "description": {
+                                                                        "type": [
+                                                                            "string",
+                                                                            "null"
+                                                                        ]
+                                                                    },
+                                                                    "type": {
+                                                                        "type": "string"
+                                                                    },
+                                                                    "rating": {
+                                                                        "type": "string"
+                                                                    },
+                                                                    "note": {
+                                                                        "type": "string"
+                                                                    },
+                                                                    "topics": {
+                                                                        "type": "string"
+                                                                    }
+                                                                },
+                                                                "required": [
+                                                                    "slug",
+                                                                    "url",
+                                                                    "title",
+                                                                    "description",
+                                                                    "type",
+                                                                    "rating",
+                                                                    "note",
+                                                                    "topics"
+                                                                ]
+                                                            }
+                                                        },
+                                                        {
+                                                            "type": "array",
+                                                            "items": {
+                                                                "type": "string"
+                                                            }
+                                                        }
+                                                    ]
+                                                },
+                                                "related": {
+                                                    "type": "null"
+                                                },
+                                                "updated_at": {
+                                                    "type": [
+                                                        "string",
+                                                        "null"
+                                                    ]
+                                                },
+                                                "created_at": {
+                                                    "type": [
+                                                        "string",
+                                                        "null"
+                                                    ]
+                                                }
+                                            },
+                                            "required": [
+                                                "slug",
+                                                "url",
+                                                "title",
+                                                "description",
+                                                "intro",
+                                                "published_at",
+                                                "resources",
+                                                "related",
+                                                "updated_at",
+                                                "created_at"
+                                            ]
+                                        },
+                                        {
+                                            "type": "object",
+                                            "properties": {
+                                                "slug": {
+                                                    "type": "string"
+                                                },
+                                                "url": {
+                                                    "type": "string"
+                                                },
+                                                "name": {
+                                                    "type": "string"
+                                                },
+                                                "purpose": {
+                                                    "type": [
+                                                        "string",
+                                                        "null"
+                                                    ]
+                                                },
+                                                "body": {
+                                                    "type": [
+                                                        "string",
+                                                        "null"
+                                                    ]
+                                                },
+                                                "published_at": {
+                                                    "type": [
+                                                        "string",
+                                                        "null"
+                                                    ]
+                                                },
+                                                "external": {
+                                                    "type": "boolean"
+                                                },
+                                                "technologies": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "object",
+                                                        "properties": {
+                                                            "slug": {
+                                                                "type": "string"
+                                                            },
+                                                            "name": {
+                                                                "type": "string"
+                                                            }
+                                                        },
+                                                        "required": [
+                                                            "slug",
+                                                            "name"
+                                                        ]
+                                                    }
+                                                },
+                                                "href": {
+                                                    "type": [
+                                                        "string",
+                                                        "null"
+                                                    ]
+                                                },
+                                                "updated_at": {
+                                                    "type": [
+                                                        "string",
+                                                        "null"
+                                                    ]
+                                                },
+                                                "show_history": {
+                                                    "type": "boolean"
+                                                },
+                                                "history": {
+                                                    "type": "null"
+                                                },
+                                                "related": {
+                                                    "type": "null"
+                                                }
+                                            },
+                                            "required": [
+                                                "slug",
+                                                "url",
+                                                "name",
+                                                "purpose",
+                                                "body",
+                                                "published_at",
+                                                "external",
+                                                "technologies",
+                                                "href",
+                                                "updated_at",
+                                                "show_history",
+                                                "history",
+                                                "related"
+                                            ]
+                                        },
+                                        {
+                                            "type": "object",
+                                            "properties": {
+                                                "slug": {
+                                                    "type": "string"
+                                                },
+                                                "url": {
+                                                    "type": "string"
+                                                },
+                                                "name": {
+                                                    "type": "string"
+                                                },
+                                                "purpose": {
+                                                    "type": [
+                                                        "string",
+                                                        "null"
+                                                    ]
+                                                },
+                                                "status": {
+                                                    "type": [
+                                                        "string",
+                                                        "null"
+                                                    ]
+                                                },
+                                                "published_at": {
+                                                    "type": [
+                                                        "string",
+                                                        "null"
+                                                    ]
+                                                },
+                                                "external": {
+                                                    "type": "boolean"
+                                                },
+                                                "problem": {
+                                                    "type": [
+                                                        "string",
+                                                        "null"
+                                                    ]
+                                                },
+                                                "current_focus": {
+                                                    "type": [
+                                                        "string",
+                                                        "null"
+                                                    ]
+                                                },
+                                                "metrics": {
+                                                    "type": [
+                                                        "array",
+                                                        "null"
+                                                    ],
+                                                    "items": {}
+                                                },
+                                                "body": {
+                                                    "type": [
+                                                        "string",
+                                                        "null"
+                                                    ]
+                                                },
+                                                "technologies": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "object",
+                                                        "properties": {
+                                                            "slug": {
+                                                                "type": "string"
+                                                            },
+                                                            "name": {
+                                                                "type": "string"
+                                                            }
+                                                        },
+                                                        "required": [
+                                                            "slug",
+                                                            "name"
+                                                        ]
+                                                    }
+                                                },
+                                                "show_history": {
+                                                    "type": "boolean"
+                                                },
+                                                "history": {
+                                                    "type": "null"
+                                                },
+                                                "href": {
+                                                    "type": [
+                                                        "string",
+                                                        "null"
+                                                    ]
+                                                },
+                                                "related": {
+                                                    "type": "null"
+                                                },
+                                                "updated_at": {
+                                                    "type": [
+                                                        "string",
+                                                        "null"
+                                                    ]
+                                                }
+                                            },
+                                            "required": [
+                                                "slug",
+                                                "url",
+                                                "name",
+                                                "purpose",
+                                                "status",
+                                                "published_at",
+                                                "external",
+                                                "problem",
+                                                "current_focus",
+                                                "metrics",
+                                                "body",
+                                                "technologies",
+                                                "show_history",
+                                                "history",
+                                                "href",
+                                                "related",
+                                                "updated_at"
+                                            ]
+                                        },
+                                        {
+                                            "type": "object",
+                                            "properties": {
+                                                "slug": {
+                                                    "type": "string"
+                                                },
+                                                "url": {
+                                                    "type": "string"
+                                                },
+                                                "download_url": {
+                                                    "type": "string"
+                                                },
+                                                "title": {
+                                                    "type": "string"
+                                                },
+                                                "description": {
+                                                    "type": [
+                                                        "string",
+                                                        "null"
+                                                    ]
+                                                },
+                                                "published_at": {
+                                                    "type": [
+                                                        "string",
+                                                        "null"
+                                                    ]
+                                                },
+                                                "files": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "object",
+                                                        "properties": {
+                                                            "path": {
+                                                                "type": "string"
+                                                            },
+                                                            "language": {
+                                                                "type": [
+                                                                    "string",
+                                                                    "null"
+                                                                ]
+                                                            },
+                                                            "content": {
+                                                                "type": "string"
+                                                            },
+                                                            "id": {
+                                                                "type": "string"
+                                                            },
+                                                            "history": {
+                                                                "type": "null"
+                                                            }
+                                                        },
+                                                        "required": [
+                                                            "path",
+                                                            "language",
+                                                            "content",
+                                                            "id",
+                                                            "history"
+                                                        ]
+                                                    }
+                                                },
+                                                "show_history": {
+                                                    "type": "boolean"
+                                                },
+                                                "history": {
+                                                    "type": "null"
+                                                },
+                                                "related": {
+                                                    "type": "null"
+                                                },
+                                                "updated_at": {
+                                                    "type": [
+                                                        "string",
+                                                        "null"
+                                                    ]
+                                                }
+                                            },
+                                            "required": [
+                                                "slug",
+                                                "url",
+                                                "download_url",
+                                                "title",
+                                                "description",
+                                                "published_at",
+                                                "files",
+                                                "show_history",
+                                                "history",
+                                                "related",
+                                                "updated_at"
+                                            ]
+                                        },
+                                        {
+                                            "type": "object",
+                                            "properties": {
+                                                "slug": {
+                                                    "type": "string"
+                                                },
+                                                "name": {
+                                                    "type": "string"
+                                                },
+                                                "code": {
+                                                    "type": "string"
+                                                },
+                                                "url": {
+                                                    "type": "string"
+                                                },
+                                                "skills": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "resume_skills": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": [
+                                                            "object",
+                                                            "null"
+                                                        ],
+                                                        "properties": {
+                                                            "slug": {
+                                                                "type": "string"
+                                                            },
+                                                            "name": {
+                                                                "type": "string"
+                                                            },
+                                                            "url": {
+                                                                "type": "string"
+                                                            },
+                                                            "parent": {
+                                                                "type": [
+                                                                    "string",
+                                                                    "null"
+                                                                ]
+                                                            },
+                                                            "kind": {
+                                                                "type": "null"
+                                                            },
+                                                            "children": {
+                                                                "type": "null"
+                                                            }
+                                                        },
+                                                        "required": [
+                                                            "slug",
+                                                            "name",
+                                                            "url",
+                                                            "parent",
+                                                            "kind",
+                                                            "children"
+                                                        ]
+                                                    }
+                                                }
+                                            },
+                                            "required": [
+                                                "slug",
+                                                "name",
+                                                "code",
+                                                "url",
+                                                "skills",
+                                                "resume_skills"
+                                            ]
+                                        },
+                                        {
+                                            "type": "object",
+                                            "properties": {
+                                                "slug": {
+                                                    "type": "string"
+                                                },
+                                                "name": {
+                                                    "type": "string"
+                                                },
+                                                "kind": {
+                                                    "type": "string"
+                                                },
+                                                "parent": {
+                                                    "type": [
+                                                        "string",
+                                                        "null"
+                                                    ]
+                                                },
+                                                "children": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "object",
+                                                        "properties": {
+                                                            "slug": {
+                                                                "type": "string"
+                                                            },
+                                                            "name": {
+                                                                "type": "string"
+                                                            }
+                                                        },
+                                                        "required": [
+                                                            "slug",
+                                                            "name"
+                                                        ]
+                                                    }
+                                                }
+                                            },
+                                            "required": [
+                                                "slug",
+                                                "name",
+                                                "kind",
+                                                "parent",
+                                                "children"
+                                            ]
+                                        },
+                                        {
+                                            "type": "object",
+                                            "properties": {
+                                                "slug": {
+                                                    "type": "string"
+                                                },
+                                                "url": {
+                                                    "type": "string"
+                                                },
+                                                "title": {
+                                                    "type": "string"
+                                                },
+                                                "excerpt": {
+                                                    "type": [
+                                                        "string",
+                                                        "null"
+                                                    ]
+                                                },
+                                                "reading_time": {
+                                                    "type": [
+                                                        "string",
+                                                        "null"
+                                                    ]
+                                                },
+                                                "body": {
+                                                    "type": [
+                                                        "string",
+                                                        "null"
+                                                    ]
+                                                },
+                                                "type": {
+                                                    "type": "string"
+                                                },
+                                                "date": {
+                                                    "type": [
+                                                        "string",
+                                                        "null"
+                                                    ]
+                                                },
+                                                "topics": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "object",
+                                                        "properties": {
+                                                            "slug": {
+                                                                "type": "string"
+                                                            },
+                                                            "name": {
+                                                                "type": "string"
+                                                            },
+                                                            "url": {
+                                                                "type": "string"
+                                                            }
+                                                        },
+                                                        "required": [
+                                                            "slug",
+                                                            "name",
+                                                            "url"
+                                                        ]
+                                                    }
+                                                },
+                                                "show_history": {
+                                                    "type": "boolean"
+                                                },
+                                                "history": {
+                                                    "type": "null"
+                                                },
+                                                "related": {
+                                                    "type": "null"
+                                                },
+                                                "updated_at": {
+                                                    "type": [
+                                                        "string",
+                                                        "null"
+                                                    ]
+                                                }
+                                            },
+                                            "required": [
+                                                "slug",
+                                                "url",
+                                                "title",
+                                                "excerpt",
+                                                "reading_time",
+                                                "body",
+                                                "type",
+                                                "date",
+                                                "topics",
+                                                "show_history",
+                                                "history",
+                                                "related",
+                                                "updated_at"
+                                            ]
+                                        },
+                                        {
+                                            "type": "null"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "503": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "object",
+                                            "properties": {
+                                                "code": {
+                                                    "type": "string"
+                                                },
+                                                "message": {
+                                                    "type": "string",
+                                                    "const": "The service is temporarily unavailable."
+                                                },
+                                                "status": {
+                                                    "type": "integer",
+                                                    "const": 503
+                                                },
+                                                "details": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "required": [
+                                                "code",
+                                                "message",
+                                                "status",
+                                                "details"
+                                            ]
+                                        }
+                                    },
+                                    "required": [
+                                        "error"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/ModelNotFoundException"
+                    }
+                }
+            }
+        },
+        "/resume/{locale}.pdf": {
+            "get": {
+                "operationId": "publicSiteApi.resumePdf",
+                "tags": [
+                    "PublicSiteApi"
+                ],
+                "parameters": [
+                    {
+                        "name": "locale",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/pdf": {
+                                "schema": {
+                                    "type": "string",
+                                    "format": "binary"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/ModelNotFoundException"
+                    }
+                }
+            }
+        },
+        "/public/knowledge-map": {
+            "get": {
+                "operationId": "publicSiteApi.knowledgeMap",
+                "tags": [
+                    "PublicSiteApi"
+                ],
+                "parameters": [
+                    {
+                        "name": "locale",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "nodes": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "string"
+                                                    },
+                                                    "kind": {
+                                                        "type": "string"
+                                                    },
+                                                    "label": {
+                                                        "type": "string"
+                                                    },
+                                                    "url": {
+                                                        "type": "string"
+                                                    },
+                                                    "meta": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "required": [
+                                                    "id",
+                                                    "kind",
+                                                    "label",
+                                                    "url",
+                                                    "meta"
+                                                ]
+                                            }
+                                        },
+                                        "edges": {
+                                            "type": "array",
+                                            "prefixItems": [
+                                                {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "object",
+                                                        "properties": {
+                                                            "source": {
+                                                                "type": [
+                                                                    "string",
+                                                                    "null"
+                                                                ]
+                                                            },
+                                                            "target": {
+                                                                "type": [
+                                                                    "string",
+                                                                    "null"
+                                                                ]
+                                                            },
+                                                            "relationType": {
+                                                                "type": "string",
+                                                                "const": "has-topic"
+                                                            },
+                                                            "label": {
+                                                                "type": "string"
+                                                            }
+                                                        },
+                                                        "required": [
+                                                            "source",
+                                                            "target",
+                                                            "relationType",
+                                                            "label"
+                                                        ]
+                                                    }
+                                                },
+                                                {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "object",
+                                                        "properties": {
+                                                            "source": {
+                                                                "type": [
+                                                                    "string",
+                                                                    "null"
+                                                                ]
+                                                            },
+                                                            "target": {
+                                                                "type": [
+                                                                    "string",
+                                                                    "null"
+                                                                ]
+                                                            },
+                                                            "relationType": {
+                                                                "type": "string",
+                                                                "const": "uses"
+                                                            },
+                                                            "label": {
+                                                                "type": "string"
+                                                            }
+                                                        },
+                                                        "required": [
+                                                            "source",
+                                                            "target",
+                                                            "relationType",
+                                                            "label"
+                                                        ]
+                                                    }
+                                                },
+                                                {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "object",
+                                                        "properties": {
+                                                            "source": {
+                                                                "type": [
+                                                                    "string",
+                                                                    "null"
+                                                                ]
+                                                            },
+                                                            "target": {
+                                                                "type": [
+                                                                    "string",
+                                                                    "null"
+                                                                ]
+                                                            },
+                                                            "relationType": {
+                                                                "type": "string",
+                                                                "const": "contains"
+                                                            },
+                                                            "label": {
+                                                                "type": "string"
+                                                            }
+                                                        },
+                                                        "required": [
+                                                            "source",
+                                                            "target",
+                                                            "relationType",
+                                                            "label"
+                                                        ]
+                                                    }
+                                                },
+                                                {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "object",
+                                                        "properties": {
+                                                            "source": {
+                                                                "type": [
+                                                                    "string",
+                                                                    "null"
+                                                                ]
+                                                            },
+                                                            "target": {
+                                                                "type": [
+                                                                    "string",
+                                                                    "null"
+                                                                ]
+                                                            },
+                                                            "relationType": {
+                                                                "type": "string"
+                                                            },
+                                                            "label": {
+                                                                "type": "string"
+                                                            }
+                                                        },
+                                                        "required": [
+                                                            "source",
+                                                            "target",
+                                                            "relationType",
+                                                            "label"
+                                                        ]
+                                                    }
+                                                }
+                                            ],
+                                            "minItems": 4,
+                                            "maxItems": 4
+                                        },
+                                        "kinds": {
+                                            "type": "array",
+                                            "items": {}
+                                        }
+                                    },
+                                    "required": [
+                                        "nodes",
+                                        "edges",
+                                        "kinds"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "503": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "object",
+                                            "properties": {
+                                                "code": {
+                                                    "type": "string"
+                                                },
+                                                "message": {
+                                                    "type": "string",
+                                                    "const": "The service is temporarily unavailable."
+                                                },
+                                                "status": {
+                                                    "type": "integer",
+                                                    "const": 503
+                                                },
+                                                "details": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "required": [
+                                                "code",
+                                                "message",
+                                                "status",
+                                                "details"
+                                            ]
+                                        }
+                                    },
+                                    "required": [
+                                        "error"
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/protected-email/challenge": {
+            "post": {
+                "operationId": "publicSiteApi.protectedEmailChallenge",
+                "tags": [
+                    "PublicSiteApi"
+                ],
+                "parameters": [
+                    {
+                        "name": "locale",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": [
+                                        "object",
+                                        "null"
+                                    ],
+                                    "properties": {
+                                        "version": {
+                                            "type": "integer",
+                                            "const": 2
+                                        },
+                                        "algorithm": {
+                                            "type": "string",
+                                            "const": "argon2id-aes256gcm"
+                                        },
+                                        "salt": {
+                                            "type": "string"
+                                        },
+                                        "iv": {
+                                            "type": "string"
+                                        },
+                                        "ciphertext": {
+                                            "type": "string"
+                                        },
+                                        "params": {
+                                            "type": "object",
+                                            "properties": {
+                                                "memorySize": {
+                                                    "type": "integer",
+                                                    "const": 19456
+                                                },
+                                                "iterations": {
+                                                    "type": "integer",
+                                                    "const": 3
+                                                },
+                                                "parallelism": {
+                                                    "type": "integer",
+                                                    "const": 1
+                                                },
+                                                "hashLength": {
+                                                    "type": "integer",
+                                                    "const": 32
+                                                }
+                                            },
+                                            "required": [
+                                                "memorySize",
+                                                "iterations",
+                                                "parallelism",
+                                                "hashLength"
+                                            ]
+                                        }
+                                    },
+                                    "required": [
+                                        "version",
+                                        "algorithm",
+                                        "salt",
+                                        "iv",
+                                        "ciphertext",
+                                        "params"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "503": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "object",
+                                            "properties": {
+                                                "code": {
+                                                    "type": "string"
+                                                },
+                                                "message": {
+                                                    "type": "string",
+                                                    "const": "The service is temporarily unavailable."
+                                                },
+                                                "status": {
+                                                    "type": "integer",
+                                                    "const": 503
+                                                },
+                                                "details": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "required": [
+                                                "code",
+                                                "message",
+                                                "status",
+                                                "details"
+                                            ]
+                                        }
+                                    },
+                                    "required": [
+                                        "error"
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/snippets/{slug}/download": {
+            "get": {
+                "operationId": "snippetDownload",
+                "tags": [
+                    "SnippetDownload"
+                ],
+                "parameters": [
+                    {
+                        "name": "slug",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "files",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/zip": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "Content-Disposition": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            },
+                            "Cache-Control": {
+                                "schema": {
+                                    "type": "string",
+                                    "const": "no-store"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "object",
+                                            "properties": {
+                                                "code": {
+                                                    "type": "string"
+                                                },
+                                                "message": {
+                                                    "type": "string",
+                                                    "const": "The public snippet files do not satisfy the archive safety limits."
+                                                },
+                                                "status": {
+                                                    "type": "integer",
+                                                    "const": 422
+                                                },
+                                                "details": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "required": [
+                                                "code",
+                                                "message",
+                                                "status",
+                                                "details"
+                                            ]
+                                        }
+                                    },
+                                    "required": [
+                                        "error"
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "responses": {
+            "ModelNotFoundException": {
+                "description": "Not found",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "message": {
+                                    "type": "string",
+                                    "description": "Error overview."
+                                }
+                            },
+                            "required": [
+                                "message"
+                            ]
+                        }
+                    }
+                }
+            }
+        }
     }
-  ],
-  "paths": {
-    "/public-site": {
-      "get": {
-        "operationId": "getPublicSite",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/Locale"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Public site snapshot",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/PublicSiteSnapshot"
-                }
-              }
-            }
-          },
-          "503": {
-            "$ref": "#/components/responses/Maintenance"
-          }
-        }
-      }
-    },
-    "/findings": {
-      "get": {
-        "operationId": "listFindings",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/Locale"
-          },
-          {
-            "$ref": "#/components/parameters/SearchQuery"
-          },
-          {
-            "$ref": "#/components/parameters/Page"
-          },
-          {
-            "$ref": "#/components/parameters/PerPage"
-          },
-          {
-            "$ref": "#/components/parameters/Type"
-          },
-          {
-            "$ref": "#/components/parameters/Topic"
-          },
-          {
-            "$ref": "#/components/parameters/Rating"
-          },
-          {
-            "$ref": "#/components/parameters/ConsumptionState"
-          },
-          {
-            "$ref": "#/components/parameters/Year"
-          },
-          {
-            "$ref": "#/components/parameters/FreeOnly"
-          },
-          {
-            "$ref": "#/components/parameters/Sort"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Public findings",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/FindingListResponse"
-                }
-              }
-            }
-          },
-          "503": {
-            "$ref": "#/components/responses/Maintenance"
-          }
-        }
-      }
-    },
-    "/findings/{slug}": {
-      "get": {
-        "operationId": "getFinding",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/Slug"
-          },
-          {
-            "$ref": "#/components/parameters/Locale"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Public finding",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Finding"
-                }
-              }
-            }
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFound"
-          },
-          "503": {
-            "$ref": "#/components/responses/Maintenance"
-          }
-        }
-      }
-    },
-    "/public/knowledge-map": {
-      "get": {
-        "operationId": "getKnowledgeMap",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/Locale"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Public knowledge map",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/JsonObject"
-                }
-              }
-            }
-          },
-          "503": {
-            "$ref": "#/components/responses/Maintenance"
-          }
-        }
-      }
-    },
-    "/protected-email/challenge": {
-      "post": {
-        "operationId": "createProtectedEmailChallenge",
-        "responses": {
-          "200": {
-            "description": "Protected email challenge",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/JsonObject"
-                }
-              }
-            }
-          },
-          "503": {
-            "$ref": "#/components/responses/Maintenance"
-          }
-        }
-      }
-    },
-    "/resume/{locale}.pdf": {
-      "get": {
-        "operationId": "getResumePdf",
-        "parameters": [
-          {
-            "name": "locale",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "enum": ["en", "pt-BR"]
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Resume PDF",
-            "content": {
-              "application/pdf": {
-                "schema": {
-                  "type": "string",
-                  "format": "binary"
-                }
-              }
-            }
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFound"
-          }
-        }
-      }
-    }
-  },
-  "components": {
-    "parameters": {
-      "Locale": {
-        "name": "locale",
-        "in": "query",
-        "required": false,
-        "schema": {
-          "type": "string",
-          "enum": ["en", "pt-BR"],
-          "default": "en"
-        }
-      },
-      "Slug": {
-        "name": "slug",
-        "in": "path",
-        "required": true,
-        "schema": {
-          "type": "string",
-          "minLength": 1
-        }
-      },
-      "SearchQuery": {
-        "name": "q",
-        "in": "query",
-        "required": false,
-        "schema": {
-          "type": "string"
-        }
-      },
-      "Page": {
-        "name": "page",
-        "in": "query",
-        "required": false,
-        "schema": {
-          "type": "integer",
-          "minimum": 1,
-          "default": 1
-        }
-      },
-      "PerPage": {
-        "name": "per_page",
-        "in": "query",
-        "required": false,
-        "schema": {
-          "type": "integer",
-          "minimum": 1,
-          "maximum": 100,
-          "default": 20
-        }
-      },
-      "Type": {
-        "name": "type",
-        "in": "query",
-        "required": false,
-        "schema": {
-          "type": "string"
-        }
-      },
-      "Topic": {
-        "name": "topic",
-        "in": "query",
-        "required": false,
-        "schema": {
-          "type": "string"
-        }
-      },
-      "Rating": {
-        "name": "rating",
-        "in": "query",
-        "required": false,
-        "schema": {
-          "type": "string"
-        }
-      },
-      "ConsumptionState": {
-        "name": "consumption_state",
-        "in": "query",
-        "required": false,
-        "schema": {
-          "type": "string"
-        }
-      },
-      "Year": {
-        "name": "year",
-        "in": "query",
-        "required": false,
-        "schema": {
-          "type": "integer"
-        }
-      },
-      "FreeOnly": {
-        "name": "free_only",
-        "in": "query",
-        "required": false,
-        "schema": {
-          "type": "boolean"
-        }
-      },
-      "Sort": {
-        "name": "sort",
-        "in": "query",
-        "required": false,
-        "schema": {
-          "type": "string",
-          "enum": ["asc", "desc", "alpha", "popular"]
-        }
-      }
-    },
-    "responses": {
-      "Maintenance": {
-        "description": "Public site is in maintenance",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/JsonObject"
-            }
-          }
-        }
-      },
-      "NotFound": {
-        "description": "Resource not found",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/JsonObject"
-            }
-          }
-        }
-      }
-    },
-    "schemas": {
-      "JsonValue": {
-        "oneOf": [
-          {
-            "$ref": "#/components/schemas/JsonObject"
-          },
-          {
-            "type": "array",
-            "items": {}
-          },
-          {
-            "type": "string"
-          },
-          {
-            "type": "number"
-          },
-          {
-            "type": "boolean"
-          },
-          {
-            "type": "null"
-          }
-        ]
-      },
-      "JsonObject": {
-        "type": "object",
-        "additionalProperties": true
-      },
-      "PublicSiteSnapshot": {
-        "type": "object",
-        "required": ["interface"],
-        "properties": {
-          "interface": {
-            "$ref": "#/components/schemas/JsonObject"
-          }
-        },
-        "additionalProperties": true
-      },
-      "FindingListResponse": {
-        "type": "object",
-        "required": ["data", "meta"],
-        "properties": {
-          "data": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Finding"
-            }
-          },
-          "meta": {
-            "$ref": "#/components/schemas/FindingListMeta"
-          }
-        }
-      },
-      "OpenGraphMetadata": {
-        "type": "object",
-        "properties": {
-          "title": { "type": "string" },
-          "description": { "type": "string" },
-          "image": { "type": "string", "format": "uri" },
-          "site_name": { "type": "string" },
-          "type": { "type": "string" },
-          "url": { "type": "string", "format": "uri" }
-        },
-        "additionalProperties": false
-      },
-      "ResourceLink": {
-        "type": "object",
-        "required": ["url"],
-        "properties": {
-          "url": { "type": "string", "format": "uri" },
-          "label": { "type": ["string", "null"] },
-          "platform": { "type": ["string", "null"] },
-          "purpose": { "type": ["string", "null"] },
-          "is_free": { "type": ["boolean", "null"] },
-          "is_primary": { "type": ["boolean", "null"] },
-          "open_graph": {
-            "oneOf": [{ "$ref": "#/components/schemas/OpenGraphMetadata" }, { "type": "null" }]
-          }
-        },
-        "additionalProperties": false
-      },
-      "Finding": {
-        "type": "object",
-        "required": ["slug", "url", "type", "title", "description", "links"],
-        "properties": {
-          "slug": { "type": "string" },
-          "url": { "type": "string", "format": "uri" },
-          "type": { "type": "string" },
-          "authors": { "type": ["string", "null"] },
-          "organizations": { "type": ["string", "null"] },
-          "published_date": { "type": ["string", "null"], "format": "date" },
-          "found_date": { "type": ["string", "null"], "format": "date" },
-          "rating": { "type": ["string", "null"] },
-          "consumption_state": { "type": ["string", "null"] },
-          "type_details": {
-            "oneOf": [{ "$ref": "#/components/schemas/JsonObject" }, { "type": "null" }]
-          },
-          "title": { "type": "string" },
-          "alternative_title": { "type": ["string", "null"] },
-          "description": { "type": "string" },
-          "personal_note": { "type": ["string", "null"] },
-          "reason_found": { "type": ["string", "null"] },
-          "updated_date": { "type": ["string", "null"], "format": "date" },
-          "topics": { "type": "array", "items": { "$ref": "#/components/schemas/JsonObject" } },
-          "links": { "type": "array", "items": { "$ref": "#/components/schemas/ResourceLink" } },
-          "identifiers": {
-            "type": "array",
-            "items": { "$ref": "#/components/schemas/JsonObject" }
-          },
-          "related": {
-            "type": ["array", "null"],
-            "items": { "$ref": "#/components/schemas/JsonObject" }
-          },
-          "relations": { "type": "array", "items": { "$ref": "#/components/schemas/JsonObject" } },
-          "popularity": {
-            "oneOf": [{ "$ref": "#/components/schemas/JsonObject" }, { "type": "null" }]
-          },
-          "featured": { "type": "boolean" },
-          "featured_order": { "type": ["integer", "null"] }
-        },
-        "additionalProperties": false
-      },
-      "FindingListMeta": {
-        "type": "object",
-        "required": ["page", "per_page", "total", "locale", "facets"],
-        "properties": {
-          "page": { "type": "integer" },
-          "per_page": { "type": "integer" },
-          "total": { "type": "integer" },
-          "locale": { "type": "string", "enum": ["en", "pt-BR"] },
-          "facets": { "$ref": "#/components/schemas/FindingFacets" }
-        },
-        "additionalProperties": false
-      },
-      "FindingFacets": {
-        "type": "object",
-        "required": ["types", "ratings", "consumptionStates", "years", "topics"],
-        "properties": {
-          "types": { "type": "array", "items": { "type": "string" } },
-          "ratings": { "type": "array", "items": { "type": "string" } },
-          "consumptionStates": { "type": "array", "items": { "type": "string" } },
-          "years": { "type": "array", "items": { "type": "string" } },
-          "topics": { "type": "array", "items": { "$ref": "#/components/schemas/JsonObject" } }
-        },
-        "additionalProperties": false
-      }
-    }
-  }
 }

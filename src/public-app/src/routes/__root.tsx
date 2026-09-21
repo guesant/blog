@@ -8,8 +8,8 @@ import {
 } from '@tanstack/react-router';
 import type { QueryClient } from '@tanstack/react-query';
 import '@fontsource-variable/dm-sans';
-import '@fontsource-variable/exo-2';
 import '@fontsource/ibm-plex-mono';
+import '@fontsource-variable/roboto-slab';
 import '../app/fonts.css';
 import '../app/tokens.css';
 import { loadThemeMode } from '../data/config/theme';
@@ -18,10 +18,9 @@ import { DocumentShell } from '../components/ui';
 
 const themeBootstrapScript = `(() => {
   try {
-    const match = document.cookie.match(/(?:^|;\\s*)site-theme=(light|dark)(?:;|$)/);
-    if (match) {
-      document.documentElement.dataset.theme = match[1];
-    }
+    const cookie = document.cookie.match(/(?:^|;\\s*)site-theme=(light|dark)(?:;|$)/);
+    const mode = cookie?.[1] ?? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    document.documentElement.dataset.theme = mode;
   } catch {}
 })();`;
 

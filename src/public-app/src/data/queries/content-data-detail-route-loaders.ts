@@ -1,16 +1,17 @@
 import {
   getCaseBySlug,
+  getCollectionPage,
   getExperimentBySlug,
   getProjectBySlug,
   getReferenceBySlug,
   getReferenceCollectionBySlug,
-  getReferences,
-  getReferencesByTopic,
   getSnippetBySlug,
   getTechnologyBySlug,
   getTopicBySlug,
   getWritingBySlug,
 } from '@portfolio/data/services';
+import type { Reference } from '@portfolio/data/domain/types';
+import { collectionQuery } from './content-data-collection-query';
 import type { RouteLoader } from './content-data-route-loader';
 import { statusData } from './content-data-status-data';
 
@@ -30,11 +31,19 @@ export const detailRouteLoaders: Record<string, RouteLoader> = {
 
     return item ? { kind: 'finding-detail', item } : statusData(locale, 'notFound');
   },
-  '/finding-type': async ({ locale, type }) => ({
-    kind: 'finding-type',
-    type: type ?? '',
-    references: await getReferences(locale),
-  }),
+  '/finding-type': async ({ locale, type, search }) => {
+    const result = await getCollectionPage<Reference>('references', locale, {
+      ...collectionQuery(search),
+      type,
+    });
+
+    return {
+      kind: 'finding-type',
+      type: type ?? '',
+      references: result.items,
+      pagination: result.meta,
+    };
+  },
   '/project-detail': async ({ locale, slug }) => {
     const project = slug ? await getProjectBySlug(slug, locale) : undefined;
 
@@ -45,16 +54,28 @@ export const detailRouteLoaders: Record<string, RouteLoader> = {
 
     return experiment ? { kind: 'experiment-detail', experiment } : statusData(locale, 'notFound');
   },
-  '/topic-detail': async ({ locale, slug }) => {
+  '/topic-detail': async ({ locale, slug, search }) => {
     if (!slug) {
       return statusData(locale, 'notFound');
     }
 
     const topic = await getTopicBySlug(slug, locale);
 
-    return topic
-      ? { kind: 'topic-detail', topic, references: await getReferencesByTopic(slug, locale) }
-      : statusData(locale, 'notFound');
+    if (!topic) {
+      return statusData(locale, 'notFound');
+    }
+
+    const result = await getCollectionPage<Reference>('references', locale, {
+      ...collectionQuery(search),
+      topic: slug,
+    });
+
+    return {
+      kind: 'topic-detail',
+      topic,
+      references: result.items,
+      pagination: result.meta,
+    };
   },
   '/snippet-detail': async ({ locale, slug }) => {
     const snippet = slug ? await getSnippetBySlug(slug, locale) : undefined;

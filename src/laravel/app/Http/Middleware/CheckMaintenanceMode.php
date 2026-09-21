@@ -2,20 +2,15 @@
 
 namespace App\Http\Middleware;
 
-use App\Content\SiteChromeQuery;
 use App\Content\SiteSettingsQuery;
+use App\Http\Responses\ApiErrorCode;
+use App\Http\Responses\ApiErrorResponse;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class CheckMaintenanceMode
 {
-    /**
-     * sitemap.xml, robots.txt, the feed formats, and og are gone from
-     * Laravel's routes entirely; the public frontend serves the presentation layer.
-     * Only the public API keeps its own maintenance-aware degradation
-     * (JSON 503) instead of the HTML maintenance page.
-     */
     private const EXEMPT_PATHS = [
         'api/*',
     ];
@@ -26,10 +21,6 @@ class CheckMaintenanceMode
             return $next($request);
         }
 
-        // The admin panel must stay reachable even during maintenance —
-        // otherwise enabling maintenance mode locks the admin out of the
-        // only place that can turn it back off. Path read from config, not
-        // hardcoded, since ADMIN_PATH may move the panel off /admin.
         $adminPath = config('admin.path');
         if ($request->is($adminPath) || $request->is("{$adminPath}/*")) {
             return $next($request);
@@ -41,14 +32,11 @@ class CheckMaintenanceMode
             return $next($request);
         }
 
-        $currentLocale = app()->getLocale();
-        $chrome = (new SiteChromeQuery)->build($currentLocale);
-
-        return response()
-            ->view('pages.maintenance', [
-                'chrome' => $chrome,
-                'currentLocale' => $currentLocale,
-            ], 503)
+        return ApiErrorResponse::make(
+            ApiErrorCode::Maintenance,
+            503,
+            'The service is temporarily unavailable.',
+        )
             ->header('Retry-After', (string) 3600);
     }
 }

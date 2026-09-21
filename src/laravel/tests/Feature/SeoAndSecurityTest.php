@@ -2,18 +2,32 @@
 
 namespace Tests\Feature;
 
-use App\Content\Seo;
 use Illuminate\Support\Facades\Route;
 use Tests\TestCase;
 
 class SeoAndSecurityTest extends TestCase
 {
-    public function test_unmatched_routes_still_get_a_canonical_tag(): void
+    public function test_unmatched_api_routes_return_json(): void
     {
-        $response = $this->get('/this-page-does-not-exist');
+        $response = $this->get('/api/v1/public');
 
-        $response->assertStatus(404);
-        $response->assertSee('rel="canonical"', false);
+        $response->assertNotFound();
+        $response->assertHeader('Content-Type', 'application/json');
+        $response->assertJsonPath('error.code', 'not_found');
+        $response->assertJsonPath('error.message', 'The requested resource was not found.');
+        $response->assertJsonPath('error.status', 404);
+        $response->assertJsonPath('error.details', []);
+    }
+
+    public function test_api_resource_errors_use_the_standard_contract(): void
+    {
+        $response = $this->get('/api/v1/content/unknown-collection');
+
+        $response->assertNotFound();
+        $response->assertJsonPath('error.code', 'not_found');
+        $response->assertJsonPath('error.message', 'The requested resource was not found.');
+        $response->assertJsonPath('error.status', 404);
+        $response->assertJsonPath('error.details', []);
     }
 
     public function test_public_metadata_routes_are_available(): void
@@ -34,25 +48,26 @@ class SeoAndSecurityTest extends TestCase
         $feed->assertJsonPath('language', 'pt-BR');
     }
 
-    public function test_matched_localized_routes_expose_hreflang_alternates(): void
+    public function test_unmatched_web_routes_do_not_render_the_public_layout(): void
+    {
+        $response = $this->get('/this-page-does-not-exist');
+
+        $response->assertNotFound();
+        $response->assertDontSee('site-nav', false);
+        $response->assertDontSee('site-footer', false);
+    }
+
+    public function test_matched_localized_routes_return_json(): void
     {
         Route::localized('__seo-test', fn () => response()->json([
-            'canonical' => Seo::canonicalUrl(),
-            'alternates' => Seo::alternateUrls(),
+            'ok' => true,
         ]), '__seo-test');
         Route::getRoutes()->refreshNameLookups();
 
         $response = $this->get('/__seo-test');
 
         $response->assertOk();
-        $response->assertJson([
-            'canonical' => url('/__seo-test'),
-            'alternates' => [
-                'en' => url('/__seo-test'),
-                'pt-BR' => url('/pt-BR/__seo-test'),
-                'x-default' => url('/__seo-test'),
-            ],
-        ]);
+        $response->assertJson(['ok' => true]);
     }
 
     public function test_security_headers_are_present(): void

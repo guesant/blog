@@ -12,13 +12,6 @@ class AddSecurityHeaders
     {
         $response = $next($request);
 
-        // The Vite dev server runs on a separate origin (port 5173); production
-        // serves pre-built assets same-origin, so this never applies there.
-        $viteDevServer = app()->environment('local') ? ' http://localhost:5173' : '';
-        $viteDevServerWs = app()->environment('local') ? ' ws://localhost:5173' : '';
-
-        // Only widen the CSP for Google's analytics domains when analytics is
-        // actually configured — an unconfigured site keeps the tighter policy.
         $analyticsConfigured = (bool) (config('services.google.tag_manager_id') || config('services.google.analytics_id'));
         $analyticsScript = $analyticsConfigured ? ' https://www.googletagmanager.com' : '';
         $analyticsConnect = $analyticsConfigured ? ' https://www.googletagmanager.com https://www.google-analytics.com https://analytics.google.com' : '';
@@ -29,14 +22,12 @@ class AddSecurityHeaders
             "object-src 'none'",
             "frame-ancestors 'none'",
             "form-action 'self'",
-            // 'unsafe-eval' is required by Alpine.js, which evaluates x-data
-            // expressions via Function() rather than static parsing.
-            "script-src 'self' 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval'{$viteDevServer}{$analyticsScript}",
-            "style-src 'self' 'unsafe-inline'{$viteDevServer}",
+            "script-src 'self' https://cdn.jsdelivr.net 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval'{$analyticsScript}",
+            "style-src 'self' https://cdn.jsdelivr.net 'unsafe-inline'",
             "img-src 'self' data: https:",
-            "font-src 'self' data:{$viteDevServer}",
-            "connect-src 'self'{$viteDevServer}{$viteDevServerWs}{$analyticsConnect}",
-            "worker-src 'self' blob:{$viteDevServer}",
+            "font-src 'self' data:",
+            "connect-src 'self'{$analyticsConnect}",
+            "worker-src 'self' blob:",
         ];
 
         $response->headers->set('Content-Security-Policy', implode('; ', $csp));

@@ -10,7 +10,7 @@ import { useContentFeedTopics } from './use-content-feed-topics';
 import type { UseContentFeedDataProps } from './use-content-feed-data.types';
 
 export function useContentFeedData(props: UseContentFeedDataProps) {
-  const serverManaged = props.fixedKind === 'achado';
+  const serverManaged = props.fixedKind === 'achado' || Boolean(props.contentMeta);
 
   const entries = useContentFeedEntries({ input: props, serverManaged });
 

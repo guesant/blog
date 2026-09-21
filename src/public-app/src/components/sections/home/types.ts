@@ -16,7 +16,7 @@ export type HomeWorkSectionProps = {
 
 export type HomeProjectsSectionProps = {
   projects: HomePageContent['projects'];
-  experiments: HomePageContent['experiments'];
+  experimentsCount: HomePageContent['experimentsCount'];
   page: HomePageContent['page'];
   t: ReturnType<typeof useTranslations>;
 };

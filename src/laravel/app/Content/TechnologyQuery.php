@@ -14,9 +14,10 @@ class TechnologyQuery
 {
     use SortsListings;
 
-    public function listPaginated(int $perPage = 20, string $sort = 'order'): LengthAwarePaginator
+    public function listPaginated(int $perPage = 20, ?string $sort = 'order'): LengthAwarePaginator
     {
-        $query = Technology::with('translations');
+        $query = Technology::where('hidden', false)
+            ->with(['translations', 'resumeSkills.topic.translations']);
 
         $this->applySort($query, $sort, alphaTable: 'technology_translations', alphaForeignKey: 'technology_id', alphaColumn: 'name');
 
@@ -26,7 +27,8 @@ class TechnologyQuery
     public function findBySlug(string $slug): ?Technology
     {
         return Technology::where('slug', $slug)
-            ->with('translations')
+            ->where('hidden', false)
+            ->with(['translations', 'resumeSkills.topic.translations'])
             ->first();
     }
 

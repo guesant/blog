@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState, type ReactNode } from 'react';
 import type { ThemeMode } from '@portfolio/data/config/theme';
 import { createSiteTheme, type ResolvedThemeMode } from './create-site-theme';
+import { initialSystemMode } from './initial-system-mode';
 import { setThemeMode } from './set-theme-mode';
 import { syncSystemMode } from './sync-system-mode';
 import { ThemeModeContext } from './theme-mode-context';
@@ -17,7 +18,7 @@ export function ThemeRegistry(props: ThemeRegistryProps) {
 
   const [mode, setModeState] = useState<ThemeMode>(props.initialMode ?? 'system');
 
-  const [systemMode, setSystemMode] = useState<ResolvedThemeMode>('light');
+  const [systemMode, setSystemMode] = useState<ResolvedThemeMode>(initialSystemMode);
 
   useEffect(() => {
     const media = window.matchMedia('(prefers-color-scheme: dark)');
@@ -28,6 +29,12 @@ export function ThemeRegistry(props: ThemeRegistryProps) {
     media.addEventListener('change', listener);
     return () => media.removeEventListener('change', listener);
   }, []);
+
+  useEffect(() => {
+    if (mode === 'system') {
+      document.documentElement.dataset.theme = systemMode;
+    }
+  }, [mode, systemMode]);
 
   const setMode = setThemeMode.bind(null, setModeState);
 

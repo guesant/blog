@@ -12,6 +12,7 @@ import { HomeExperienceOptionalSection } from './home-experience-optional-sectio
 import { HomeProjectsSection } from './home-projects-section';
 import { HomeWorkSection } from './home-work-section';
 import type { Translator } from '@/i18n/compat-support';
+import type { ContentCollectionMeta } from '@portfolio/data/api/public-site-source-support';
 
 type HomeSectionsAfterHeroProps = {
   content: HomePageContent;
@@ -24,6 +25,7 @@ type HomeSectionsAfterHeroProps = {
   tExternalProfiles: Translator;
   showContact: boolean;
   hasEmail: boolean;
+  feedPagination: ContentCollectionMeta;
 };
 
 export function HomeSectionsAfterHero(props: HomeSectionsAfterHeroProps) {
@@ -32,10 +34,10 @@ export function HomeSectionsAfterHero(props: HomeSectionsAfterHeroProps) {
       {props.content.cases.length > 0 && (
         <HomeWorkSection cases={props.content.cases} page={props.content.page} t={props.t} />
       )}
-      {(props.content.projects.length > 0 || props.content.experiments.length > 0) && (
+      {(props.content.projects.length > 0 || props.content.experimentsCount > 0) && (
         <HomeProjectsSection
           projects={props.content.projects}
-          experiments={props.content.experiments}
+          experimentsCount={props.content.experimentsCount}
           page={props.content.page}
           t={props.t}
         />
@@ -52,6 +54,7 @@ export function HomeSectionsAfterHero(props: HomeSectionsAfterHeroProps) {
         tExternalProfiles={props.tExternalProfiles}
         showContact={props.showContact}
         hasEmail={props.hasEmail}
+        feedPagination={props.feedPagination}
       />
     </>
   );

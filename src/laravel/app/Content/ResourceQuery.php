@@ -92,11 +92,13 @@ class ResourceQuery
             'types' => (clone $public)->distinct()->orderBy('type')->pluck('type')->all(),
             'ratings' => (clone $public)->whereNotNull('rating')->distinct()->orderBy('rating')->pluck('rating')->all(),
             'consumptionStates' => (clone $public)->whereNotNull('consumption_state')->distinct()->orderBy('consumption_state')->pluck('consumption_state')->all(),
-            'years' => (clone $public)->whereNotNull('published_date_iso')
-                ->get()
-                ->map(fn (Resource $resource) => $resource->published_date_iso->format('Y'))
-                ->unique()
-                ->sortDesc()
+            'years' => (clone $public)
+                ->whereNotNull('published_date_iso')
+                ->selectRaw('EXTRACT(YEAR FROM published_date_iso) AS year')
+                ->distinct()
+                ->orderByDesc('year')
+                ->pluck('year')
+                ->map(fn (string|int|float $year) => (string) (int) $year)
                 ->values()
                 ->all(),
             'topics' => Topic::whereHas('findings', $onlyPublicFindings)

@@ -2,15 +2,14 @@ import type {
   ContentFeedPaginationViewProps,
   UseContentFeedViewPropsInput,
 } from './use-content-feed-view-props.types';
+import { contentFeedPaginationCount } from './content-feed-pagination-count';
 
 export function buildContentFeedPaginationViewProps(
   input: UseContentFeedViewPropsInput,
 ): ContentFeedPaginationViewProps {
-  const { props, runtime } = input;
+  const { runtime } = input;
 
-  const count = runtime.data.serverManaged
-    ? (props.findingsMeta?.total ?? 0)
-    : runtime.data.filteredEntries.length;
+  const count = contentFeedPaginationCount(input);
 
   return {
     count,

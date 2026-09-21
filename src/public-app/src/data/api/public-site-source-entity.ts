@@ -1,5 +1,6 @@
 import { reference } from './public-site-source-reference';
 import { recordList } from './public-site-source-list';
+import { snippet } from './public-site-source-snippet';
 import { stringValue } from './public-site-source-string-value';
 import type { ContentCollection, RecordValue } from './public-site-source-support';
 
@@ -36,6 +37,11 @@ const entityBuilders: Record<ContentCollection, (item: RecordValue) => RecordVal
       stringValue(technology.slug),
     ),
   }),
+  technologies: (item) => ({
+    ...item,
+    skills: recordList<unknown>(item.skills).map(stringValue),
+  }),
+  snippets: (item) => snippet(item),
   writing: (item) => ({
     ...item,
     dateISO: item.date,
@@ -51,6 +57,7 @@ const entityBuilders: Record<ContentCollection, (item: RecordValue) => RecordVal
     ...item,
     intro: item.intro,
   }),
+  credits: (item) => ({ ...item }),
   topics: (item) => ({
     slug: stringValue(item.slug),
     name: stringValue(item.name ?? item.slug),

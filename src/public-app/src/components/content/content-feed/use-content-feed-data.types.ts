@@ -9,6 +9,7 @@ export type UseContentFeedDataProps = Pick<
   | 'fixedKind'
   | 'findingFacets'
   | 'findingsMeta'
+  | 'contentMeta'
   | 'initialPage'
 > &
   ContentFeedState & {

@@ -21,12 +21,8 @@ logs *args:
 shell:
     docker compose exec app bash
 
-shell-node:
-    docker compose exec node bash
-
 install:
     docker compose run --rm app composer install
-    docker compose run --rm node npm ci --ignore-scripts
 
 artisan *args:
     docker compose exec app php artisan "$@"
@@ -34,19 +30,12 @@ artisan *args:
 composer *args:
     docker compose exec app composer "$@"
 
-npm *args:
-    docker compose exec node npm "$@"
-
 test *args:
     docker compose exec app php -d memory_limit=512M vendor/bin/phpunit --configuration phpunit.xml "$@"
 
 supply-chain:
-    docker compose exec node sh scripts/verify-supply-chain.sh
-    docker compose exec node npm audit --omit=dev --audit-level=high --ignore-scripts
+    docker compose exec app sh scripts/verify-supply-chain.sh
     docker compose exec app composer audit --locked --no-interaction
-
-sbom:
-    docker compose run --rm node node scripts/generate-sbom.mjs
 
 migrate *args:
     docker compose exec app php artisan migrate "$@"

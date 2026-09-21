@@ -48,10 +48,13 @@ shell:
 frontend-install:
     {{node_run}} 'corepack pnpm install --frozen-lockfile --ignore-scripts'
 
-api-generate:
+api-spec:
+    {{compose_run}} --no-deps laravel php artisan scramble:export --path=/app/openapi/public-site.json
+
+api-generate: api-spec
     {{tools_compose}} run --build --rm openapi-ts -f openapi-ts.config.mjs
 
-api-check:
+api-check: api-spec
     {{tools_compose}} run --build --rm --entrypoint sh openapi-ts -lc 'rm -rf /tmp/generated && PORTFOLIO_API_GENERATED_OUTPUT=/tmp/generated /opt/openapi-ts/node_modules/.bin/openapi-ts -f openapi-ts.config.mjs && diff -ru src/data/api/generated /tmp/generated'
 
 frontend-lint: frontend-install frontend-architecture
@@ -108,7 +111,7 @@ duplication: tools-build
     {{tools_compose}} run --rm jscpd --config /workspace/src/public-app/.jscpd.actions.json /workspace/.github/actions
 
 local-links: tools-build
-    {{tools_compose}} run --rm lychee --offline --include-fragments --root-dir /workspace /workspace/README.md /workspace/AGENTS.md /workspace/SECURITY.md /workspace/.github/actions/push-profile/README.md /workspace/src/public-app/README.md /workspace/src/laravel/README.md /workspace/src/laravel/SECURITY.md /workspace/src/laravel/docs
+    {{tools_compose}} run --rm lychee --offline --include-fragments --root-dir /workspace /workspace/README.md /workspace/AGENTS.md /workspace/SECURITY.md /workspace/.github/actions/push-profile/README.md /workspace/src/public-app/README.md /workspace/src/laravel/README.md /workspace/src/laravel/SECURITY.md
 
 repository-lint: tools-build
     {{tools_compose}} run --rm yamllint -c /workspace/.yamllint.yml /workspace/.github /workspace/.docker /workspace/.tools /workspace/.deploy

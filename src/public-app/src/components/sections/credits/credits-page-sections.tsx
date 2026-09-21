@@ -5,6 +5,7 @@ import { CreditsInfrastructure } from './credits-infrastructure';
 import { CreditsReferences } from './credits-references';
 import { CreditsSection } from './credits-section';
 import { PackageList } from './package-list';
+import { CollectionPagination } from '../../content/collection-pagination';
 
 type CreditsPageSectionsProps = {
   content: CreditsContent;
@@ -26,6 +27,7 @@ export function CreditsPageSections(props: CreditsPageSectionsProps) {
 
   return (
     <>
+      <CollectionPagination meta={props.content.credits.meta} action="/credits" />
       <CreditsAcknowledgements entries={acknowledgements} heading={props.t('eyebrow')} />
       <CreditsReferences entries={references} heading={props.t('referencesHeading')} />
       <CreditsInfrastructure entries={infrastructure} heading={props.t('infrastructureHeading')} />

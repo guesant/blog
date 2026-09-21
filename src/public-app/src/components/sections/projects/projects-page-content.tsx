@@ -26,6 +26,8 @@ export function ProjectsPageContent(props: ProjectsPageContentProps) {
         page={page}
         projects={projects}
         experiments={experiments}
+        projectsPagination={props.projectsPagination}
+        experimentsPagination={props.experimentsPagination}
         tCommon={tCommon}
       />
     </>

@@ -3,31 +3,33 @@
 import type { Reference } from '@portfolio/data/domain/types';
 import { useTranslations } from '@/i18n/compat';
 import { AchadosIndexLayout } from './achados-index-layout';
-import { ListingView } from './listing-view';
+import { CollectionListing } from './collection-listing';
 import { ReferenceCard } from './reference-card';
+import type { ContentCollectionMeta } from '@portfolio/data/api/public-site-source-support';
 
 type ReferenceGridPageProps = {
   eyebrow?: string;
   title: string;
   references: Reference[];
+  pagination: ContentCollectionMeta;
+  action: string;
 };
 
 export function ReferenceGridPage(props: ReferenceGridPageProps) {
-  const { eyebrow, title, references } = props;
-
   const t = useTranslations('Common');
 
   return (
     <AchadosIndexLayout
-      eyebrow={eyebrow}
-      title={title}
+      eyebrow={props.eyebrow}
+      title={props.title}
       emptyMessage={t('emptyAchados')}
-      isEmpty={references.length === 0}
+      isEmpty={props.references.length === 0}
     >
-      <ListingView
-        items={references}
+      <CollectionListing
+        items={props.references}
         getKey={(item) => item.slug}
         renderListItem={(reference) => <ReferenceCard reference={reference} headingLevel="h2" />}
+        pagination={{ meta: props.pagination, action: props.action }}
       />
     </AchadosIndexLayout>
   );

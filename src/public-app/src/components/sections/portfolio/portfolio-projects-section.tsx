@@ -4,7 +4,7 @@ import { PortfolioProjectsContent } from './portfolio-projects-content';
 
 type PortfolioProjectsSectionProps = Pick<
   PortfolioPageContentProps,
-  'page' | 'projects' | 'experiments'
+  'page' | 'projects' | 'experiments' | 'experimentsPagination'
 >;
 
 export function PortfolioProjectsSection(props: PortfolioProjectsSectionProps) {

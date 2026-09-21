@@ -3,8 +3,8 @@
 import { type InfiniteData, infiniteQueryOptions, queryOptions, type UseMutationOptions } from '@tanstack/react-query';
 
 import { client } from '../client.gen';
-import { createProtectedEmailChallenge, getFinding, getKnowledgeMap, getPublicSite, getResumePdf, listFindings, type Options } from '../sdk.gen';
-import type { CreateProtectedEmailChallengeData, CreateProtectedEmailChallengeError, CreateProtectedEmailChallengeResponse, GetFindingData, GetFindingError, GetFindingResponse, GetKnowledgeMapData, GetKnowledgeMapError, GetKnowledgeMapResponse, GetPublicSiteData, GetPublicSiteError, GetPublicSiteResponse, GetResumePdfData, GetResumePdfError, GetResumePdfResponse, ListFindingsData, ListFindingsError, ListFindingsResponse } from '../types.gen';
+import { findingApiIndex, findingApiShow, type Options, publicSiteApiCollection, publicSiteApiDocument, publicSiteApiIndex, publicSiteApiKnowledgeMap, publicSiteApiProtectedEmailChallenge, publicSiteApiResumePdf, snippetDownload } from '../sdk.gen';
+import type { FindingApiIndexData, FindingApiIndexError, FindingApiIndexResponse, FindingApiShowData, FindingApiShowError, FindingApiShowResponse, PublicSiteApiCollectionData, PublicSiteApiCollectionError, PublicSiteApiCollectionResponse, PublicSiteApiDocumentData, PublicSiteApiDocumentError, PublicSiteApiDocumentResponse, PublicSiteApiIndexData, PublicSiteApiIndexError, PublicSiteApiIndexResponse, PublicSiteApiKnowledgeMapData, PublicSiteApiKnowledgeMapError, PublicSiteApiKnowledgeMapResponse, PublicSiteApiProtectedEmailChallengeData, PublicSiteApiProtectedEmailChallengeError, PublicSiteApiProtectedEmailChallengeResponse, PublicSiteApiResumePdfData, PublicSiteApiResumePdfError, PublicSiteApiResumePdfResponse, SnippetDownloadData, SnippetDownloadError, SnippetDownloadResponse } from '../types.gen';
 
 export type QueryKey<TOptions extends Options> = [
     Pick<TOptions, 'baseUrl' | 'body' | 'headers' | 'path' | 'query'> & {
@@ -39,11 +39,11 @@ const createQueryKey = <TOptions extends Options>(id: string, options?: TOptions
     return [params];
 };
 
-export const getPublicSiteQueryKey = (options?: Options<GetPublicSiteData>) => createQueryKey('getPublicSite', options);
+export const findingApiIndexQueryKey = (options?: Options<FindingApiIndexData>) => createQueryKey('findingApiIndex', options);
 
-export const getPublicSiteOptions = (options?: Options<GetPublicSiteData>) => queryOptions<GetPublicSiteResponse, GetPublicSiteError, GetPublicSiteResponse, ReturnType<typeof getPublicSiteQueryKey>>({
+export const findingApiIndexOptions = (options?: Options<FindingApiIndexData>) => queryOptions<FindingApiIndexResponse, FindingApiIndexError, FindingApiIndexResponse, ReturnType<typeof findingApiIndexQueryKey>>({
     queryFn: async ({ queryKey, signal }) => {
-        const { data } = await getPublicSite({
+        const { data } = await findingApiIndex({
             ...options,
             ...queryKey[0],
             signal,
@@ -51,14 +51,14 @@ export const getPublicSiteOptions = (options?: Options<GetPublicSiteData>) => qu
         });
         return data;
     },
-    queryKey: getPublicSiteQueryKey(options)
+    queryKey: findingApiIndexQueryKey(options)
 });
 
-export const listFindingsQueryKey = (options?: Options<ListFindingsData>) => createQueryKey('listFindings', options);
+export const findingApiShowQueryKey = (options: Options<FindingApiShowData>) => createQueryKey('findingApiShow', options);
 
-export const listFindingsOptions = (options?: Options<ListFindingsData>) => queryOptions<ListFindingsResponse, ListFindingsError, ListFindingsResponse, ReturnType<typeof listFindingsQueryKey>>({
+export const findingApiShowOptions = (options: Options<FindingApiShowData>) => queryOptions<FindingApiShowResponse, FindingApiShowError, FindingApiShowResponse, ReturnType<typeof findingApiShowQueryKey>>({
     queryFn: async ({ queryKey, signal }) => {
-        const { data } = await listFindings({
+        const { data } = await findingApiShow({
             ...options,
             ...queryKey[0],
             signal,
@@ -66,7 +66,37 @@ export const listFindingsOptions = (options?: Options<ListFindingsData>) => quer
         });
         return data;
     },
-    queryKey: listFindingsQueryKey(options)
+    queryKey: findingApiShowQueryKey(options)
+});
+
+export const publicSiteApiIndexQueryKey = (options?: Options<PublicSiteApiIndexData>) => createQueryKey('publicSiteApiIndex', options);
+
+export const publicSiteApiIndexOptions = (options?: Options<PublicSiteApiIndexData>) => queryOptions<PublicSiteApiIndexResponse, PublicSiteApiIndexError, PublicSiteApiIndexResponse, ReturnType<typeof publicSiteApiIndexQueryKey>>({
+    queryFn: async ({ queryKey, signal }) => {
+        const { data } = await publicSiteApiIndex({
+            ...options,
+            ...queryKey[0],
+            signal,
+            throwOnError: true
+        });
+        return data;
+    },
+    queryKey: publicSiteApiIndexQueryKey(options)
+});
+
+export const publicSiteApiCollectionQueryKey = (options: Options<PublicSiteApiCollectionData>) => createQueryKey('publicSiteApiCollection', options);
+
+export const publicSiteApiCollectionOptions = (options: Options<PublicSiteApiCollectionData>) => queryOptions<PublicSiteApiCollectionResponse, PublicSiteApiCollectionError, PublicSiteApiCollectionResponse, ReturnType<typeof publicSiteApiCollectionQueryKey>>({
+    queryFn: async ({ queryKey, signal }) => {
+        const { data } = await publicSiteApiCollection({
+            ...options,
+            ...queryKey[0],
+            signal,
+            throwOnError: true
+        });
+        return data;
+    },
+    queryKey: publicSiteApiCollectionQueryKey(options)
 });
 
 const createInfiniteParams = <K extends Pick<QueryKey<Options>[0], 'body' | 'headers' | 'path' | 'query'>>(queryKey: QueryKey<Options>, page: K) => {
@@ -98,21 +128,21 @@ const createInfiniteParams = <K extends Pick<QueryKey<Options>[0], 'body' | 'hea
     return params as unknown as typeof page;
 };
 
-export const listFindingsInfiniteQueryKey = (options?: Options<ListFindingsData>): QueryKey<Options<ListFindingsData>> => createQueryKey('listFindings', options, true);
+export const publicSiteApiCollectionInfiniteQueryKey = (options: Options<PublicSiteApiCollectionData>): QueryKey<Options<PublicSiteApiCollectionData>> => createQueryKey('publicSiteApiCollection', options, true);
 
-export const listFindingsInfiniteOptions = (options?: Options<ListFindingsData>) => {
-    const opts = infiniteQueryOptions<ListFindingsResponse, ListFindingsError, InfiniteData<ListFindingsResponse>, QueryKey<Options<ListFindingsData>>, number | Pick<QueryKey<Options<ListFindingsData>>[0], 'body' | 'headers' | 'path' | 'query'>>(
+export const publicSiteApiCollectionInfiniteOptions = (options: Options<PublicSiteApiCollectionData>) => {
+    const opts = infiniteQueryOptions<PublicSiteApiCollectionResponse, PublicSiteApiCollectionError, InfiniteData<PublicSiteApiCollectionResponse>, QueryKey<Options<PublicSiteApiCollectionData>>, number | Pick<QueryKey<Options<PublicSiteApiCollectionData>>[0], 'body' | 'headers' | 'path' | 'query'>>(
     // @ts-ignore
     {
         queryFn: async ({ pageParam, queryKey, signal }) => {
             // @ts-ignore
-            const page: Pick<QueryKey<Options<ListFindingsData>>[0], 'body' | 'headers' | 'path' | 'query'> = typeof pageParam === 'object' ? pageParam : {
+            const page: Pick<QueryKey<Options<PublicSiteApiCollectionData>>[0], 'body' | 'headers' | 'path' | 'query'> = typeof pageParam === 'object' ? pageParam : {
                 query: {
                     page: pageParam
                 }
             };
             const params = createInfiniteParams(queryKey, page);
-            const { data } = await listFindings({
+            const { data } = await publicSiteApiCollection({
                 ...options,
                 ...params,
                 signal,
@@ -120,16 +150,16 @@ export const listFindingsInfiniteOptions = (options?: Options<ListFindingsData>)
             });
             return data;
         },
-        queryKey: listFindingsInfiniteQueryKey(options)
+        queryKey: publicSiteApiCollectionInfiniteQueryKey(options)
     });
     return opts as Omit<typeof opts, 'initialData'>;
 };
 
-export const getFindingQueryKey = (options: Options<GetFindingData>) => createQueryKey('getFinding', options);
+export const publicSiteApiDocumentQueryKey = (options: Options<PublicSiteApiDocumentData>) => createQueryKey('publicSiteApiDocument', options);
 
-export const getFindingOptions = (options: Options<GetFindingData>) => queryOptions<GetFindingResponse, GetFindingError, GetFindingResponse, ReturnType<typeof getFindingQueryKey>>({
+export const publicSiteApiDocumentOptions = (options: Options<PublicSiteApiDocumentData>) => queryOptions<PublicSiteApiDocumentResponse, PublicSiteApiDocumentError, PublicSiteApiDocumentResponse, ReturnType<typeof publicSiteApiDocumentQueryKey>>({
     queryFn: async ({ queryKey, signal }) => {
-        const { data } = await getFinding({
+        const { data } = await publicSiteApiDocument({
             ...options,
             ...queryKey[0],
             signal,
@@ -137,14 +167,14 @@ export const getFindingOptions = (options: Options<GetFindingData>) => queryOpti
         });
         return data;
     },
-    queryKey: getFindingQueryKey(options)
+    queryKey: publicSiteApiDocumentQueryKey(options)
 });
 
-export const getKnowledgeMapQueryKey = (options?: Options<GetKnowledgeMapData>) => createQueryKey('getKnowledgeMap', options);
+export const publicSiteApiResumePdfQueryKey = (options: Options<PublicSiteApiResumePdfData>) => createQueryKey('publicSiteApiResumePdf', options);
 
-export const getKnowledgeMapOptions = (options?: Options<GetKnowledgeMapData>) => queryOptions<GetKnowledgeMapResponse, GetKnowledgeMapError, GetKnowledgeMapResponse, ReturnType<typeof getKnowledgeMapQueryKey>>({
+export const publicSiteApiResumePdfOptions = (options: Options<PublicSiteApiResumePdfData>) => queryOptions<PublicSiteApiResumePdfResponse, PublicSiteApiResumePdfError, PublicSiteApiResumePdfResponse, ReturnType<typeof publicSiteApiResumePdfQueryKey>>({
     queryFn: async ({ queryKey, signal }) => {
-        const { data } = await getKnowledgeMap({
+        const { data } = await publicSiteApiResumePdf({
             ...options,
             ...queryKey[0],
             signal,
@@ -152,13 +182,28 @@ export const getKnowledgeMapOptions = (options?: Options<GetKnowledgeMapData>) =
         });
         return data;
     },
-    queryKey: getKnowledgeMapQueryKey(options)
+    queryKey: publicSiteApiResumePdfQueryKey(options)
 });
 
-export const createProtectedEmailChallengeMutation = (options?: Partial<Options<CreateProtectedEmailChallengeData>>): UseMutationOptions<CreateProtectedEmailChallengeResponse, CreateProtectedEmailChallengeError, Options<CreateProtectedEmailChallengeData>> => {
-    const mutationOptions: UseMutationOptions<CreateProtectedEmailChallengeResponse, CreateProtectedEmailChallengeError, Options<CreateProtectedEmailChallengeData>> = {
+export const publicSiteApiKnowledgeMapQueryKey = (options?: Options<PublicSiteApiKnowledgeMapData>) => createQueryKey('publicSiteApiKnowledgeMap', options);
+
+export const publicSiteApiKnowledgeMapOptions = (options?: Options<PublicSiteApiKnowledgeMapData>) => queryOptions<PublicSiteApiKnowledgeMapResponse, PublicSiteApiKnowledgeMapError, PublicSiteApiKnowledgeMapResponse, ReturnType<typeof publicSiteApiKnowledgeMapQueryKey>>({
+    queryFn: async ({ queryKey, signal }) => {
+        const { data } = await publicSiteApiKnowledgeMap({
+            ...options,
+            ...queryKey[0],
+            signal,
+            throwOnError: true
+        });
+        return data;
+    },
+    queryKey: publicSiteApiKnowledgeMapQueryKey(options)
+});
+
+export const publicSiteApiProtectedEmailChallengeMutation = (options?: Partial<Options<PublicSiteApiProtectedEmailChallengeData>>): UseMutationOptions<PublicSiteApiProtectedEmailChallengeResponse, PublicSiteApiProtectedEmailChallengeError, Options<PublicSiteApiProtectedEmailChallengeData>> => {
+    const mutationOptions: UseMutationOptions<PublicSiteApiProtectedEmailChallengeResponse, PublicSiteApiProtectedEmailChallengeError, Options<PublicSiteApiProtectedEmailChallengeData>> = {
         mutationFn: async (fnOptions) => {
-            const { data } = await createProtectedEmailChallenge({
+            const { data } = await publicSiteApiProtectedEmailChallenge({
                 ...options,
                 ...fnOptions,
                 throwOnError: true
@@ -169,11 +214,11 @@ export const createProtectedEmailChallengeMutation = (options?: Partial<Options<
     return mutationOptions;
 };
 
-export const getResumePdfQueryKey = (options: Options<GetResumePdfData>) => createQueryKey('getResumePdf', options);
+export const snippetDownloadQueryKey = (options: Options<SnippetDownloadData>) => createQueryKey('snippetDownload', options);
 
-export const getResumePdfOptions = (options: Options<GetResumePdfData>) => queryOptions<GetResumePdfResponse, GetResumePdfError, GetResumePdfResponse, ReturnType<typeof getResumePdfQueryKey>>({
+export const snippetDownloadOptions = (options: Options<SnippetDownloadData>) => queryOptions<SnippetDownloadResponse, SnippetDownloadError, SnippetDownloadResponse, ReturnType<typeof snippetDownloadQueryKey>>({
     queryFn: async ({ queryKey, signal }) => {
-        const { data } = await getResumePdf({
+        const { data } = await snippetDownload({
             ...options,
             ...queryKey[0],
             signal,
@@ -181,5 +226,5 @@ export const getResumePdfOptions = (options: Options<GetResumePdfData>) => query
         });
         return data;
     },
-    queryKey: getResumePdfQueryKey(options)
+    queryKey: snippetDownloadQueryKey(options)
 });

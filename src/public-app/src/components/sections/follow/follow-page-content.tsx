@@ -1,7 +1,7 @@
 'use client';
 
 import { Typography } from '../../ui';
-import { ListingView } from '../../content/listing-view';
+import { CollectionListing } from '../../content/collection-listing';
 import { PageHeader } from '../../content/page-header';
 import type { FollowPageCopy } from '@portfolio/data/domain/types';
 import { renderFollowEntryCard } from './render-follow-entry-card';
@@ -25,13 +25,13 @@ export function FollowPageContent(props: FollowPageContentProps) {
       <Typography component="h2" variant="h2" visualVariant="followSectionTitle">
         {page.sectionTitle}
       </Typography>
-      <ListingView
+      <CollectionListing
         items={entries}
         getKey={(entry) => entry.key}
         renderListItem={renderFollowEntryCard}
       />
       <FollowFutureSection label={page.futureLabel} title={page.futureTitle}>
-        <ListingView
+        <CollectionListing
           items={futureEntries}
           getKey={(entry) => entry.key}
           renderListItem={renderFollowEntryCard}

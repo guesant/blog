@@ -9,7 +9,7 @@ import { PortfolioSectionTitle } from './ui/section-title';
 
 type PortfolioProjectsContentProps = Pick<
   PortfolioPageContentProps,
-  'page' | 'projects' | 'experiments'
+  'page' | 'projects' | 'experiments' | 'experimentsPagination'
 >;
 
 export function PortfolioProjectsContent(props: PortfolioProjectsContentProps) {
@@ -34,7 +34,10 @@ export function PortfolioProjectsContent(props: PortfolioProjectsContentProps) {
         condition={props.experiments.length > 0}
         content={
           <PortfolioExperimentsLink>
-            {props.page.experimentsSummary.replace('{count}', String(props.experiments.length))}
+            {props.page.experimentsSummary.replace(
+              '{count}',
+              String(props.experimentsPagination.total),
+            )}
           </PortfolioExperimentsLink>
         }
       />

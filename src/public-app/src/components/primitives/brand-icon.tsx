@@ -2,8 +2,6 @@ import { Svg, SvgElement } from '../ui';
 import { brands } from './brand-icon-data';
 import type { BrandName } from './brand-icon-name';
 
-export type { BrandName } from './brand-icon-name';
-
 export { isBrandName } from './is-brand-name';
 
 type BrandIconProps = {

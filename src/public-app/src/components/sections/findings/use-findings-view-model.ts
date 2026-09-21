@@ -1,7 +1,7 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { normalizeLocale } from '@portfolio/data/api/public-site-source-normalize-locale';
 import type { ContentFeedProps } from '../../content/content-feed/types';
-import { findingsQueryOptions } from '../../../data/queries';
+import { findingsQueryOptions } from '../../../data/queries/findings-query-options';
 
 export type FindingsViewModelProps = {
   locale: string;

@@ -52,7 +52,7 @@ export { ToggleButtonGroup } from './toggle-button-group';
 
 export { Typography } from './typography';
 
-export { VisuallyHidden, type VisuallyHiddenProps } from './visually-hidden';
+export { VisuallyHidden } from './visually-hidden';
 
 export { ArrowForward } from './arrow-forward';
 

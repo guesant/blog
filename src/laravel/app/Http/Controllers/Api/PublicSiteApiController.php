@@ -12,13 +12,18 @@ use App\Content\PageQuery;
 use App\Content\ProjectQuery;
 use App\Content\ReferenceCollectionQuery;
 use App\Content\ResourceApiTransformer;
-use App\Content\ResourceQuery;
 use App\Content\ResumeQuery;
 use App\Content\SiteChromeQuery;
 use App\Content\SiteSettingsQuery;
+use App\Content\SnippetQuery;
+use App\Content\TechnologyQuery;
+use App\Content\TopicQuery;
 use App\Content\WritingQuery;
 use App\Http\Controllers\Controller;
+use App\Http\Responses\ApiErrorCode;
+use App\Http\Responses\ApiErrorResponse;
 use App\Models\CaseStudy;
+use App\Models\CreditEntry;
 use App\Models\Experiment;
 use App\Models\Page;
 use App\Models\Project;
@@ -30,6 +35,7 @@ use App\Models\Topic;
 use App\Models\Writing;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Response;
@@ -43,6 +49,75 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class PublicSiteApiController extends Controller
 {
+    private const COLLECTIONS = [
+        'cases',
+        'collections',
+        'credits',
+        'experiments',
+        'projects',
+        'snippets',
+        'technologies',
+        'topics',
+        'writing',
+    ];
+
+    public function collection(Request $request, string $collection): JsonResponse
+    {
+        if ((new SiteSettingsQuery)->find()?->maintenance_enabled) {
+            return ApiErrorResponse::make(
+                ApiErrorCode::Maintenance,
+                503,
+                'The service is temporarily unavailable.',
+            )->header('Retry-After', (string) 3600);
+        }
+
+        abort_unless(in_array($collection, self::COLLECTIONS, true), 404);
+
+        $locale = Locale::normalize($request->query('locale'));
+        $perPage = min(max((int) $request->query('per_page', 20), 1), 100);
+        $sort = $this->sort($request->query('sort'));
+        $items = $request->boolean('featured')
+            ? $this->featuredCollection($collection, $perPage, $request->integer('page', 1))
+            : $this->paginateCollection($collection, $perPage, $sort);
+
+        $data = $items->getCollection()
+            ->map(fn ($item) => $this->presentCollectionItem($collection, $item, $locale))
+            ->values();
+
+        return response()->json([
+            'data' => $data,
+            'meta' => [
+                'page' => $items->currentPage(),
+                'per_page' => $items->perPage(),
+                'total' => $items->total(),
+                'last_page' => $items->lastPage(),
+                'from' => $items->firstItem(),
+                'to' => $items->lastItem(),
+                'locale' => $locale,
+            ],
+        ])->header('Cache-Control', 'public, max-age=60, stale-while-revalidate=300');
+    }
+
+    public function document(Request $request, string $collection, string $slug): JsonResponse
+    {
+        if ((new SiteSettingsQuery)->find()?->maintenance_enabled) {
+            return ApiErrorResponse::make(
+                ApiErrorCode::Maintenance,
+                503,
+                'The service is temporarily unavailable.',
+            )->header('Retry-After', (string) 3600);
+        }
+
+        abort_unless(in_array($collection, self::COLLECTIONS, true), 404);
+
+        $locale = Locale::normalize($request->query('locale'));
+        $item = $this->findCollectionItem($collection, $slug, $locale);
+
+        abort_unless($item !== null, 404);
+
+        return response()->json($item)->header('Cache-Control', 'public, max-age=60, stale-while-revalidate=300');
+    }
+
     public function resumePdf(string $locale): Response
     {
         if (! in_array($locale, ['en', 'pt-BR'], true)) {
@@ -63,7 +138,11 @@ class PublicSiteApiController extends Controller
     public function protectedEmailChallenge(Request $request): JsonResponse|Response
     {
         if ((new SiteSettingsQuery)->find()?->maintenance_enabled) {
-            return response()->json(['error' => 'maintenance'], 503)->header('Retry-After', (string) 3600);
+            return ApiErrorResponse::make(
+                ApiErrorCode::Maintenance,
+                503,
+                'The service is temporarily unavailable.',
+            )->header('Retry-After', (string) 3600);
         }
 
         return response()->json((new SiteChromeQuery)->build(
@@ -74,7 +153,11 @@ class PublicSiteApiController extends Controller
     public function knowledgeMap(Request $request): JsonResponse
     {
         if ((new SiteSettingsQuery)->find()?->maintenance_enabled) {
-            return response()->json(['error' => 'maintenance'], 503)->header('Retry-After', (string) 3600);
+            return ApiErrorResponse::make(
+                ApiErrorCode::Maintenance,
+                503,
+                'The service is temporarily unavailable.',
+            )->header('Retry-After', (string) 3600);
         }
 
         return response()->json((new KnowledgeGraphQuery)->build(Locale::normalize($request->query('locale'))))
@@ -84,7 +167,11 @@ class PublicSiteApiController extends Controller
     public function index(Request $request): JsonResponse|Response
     {
         if ((new SiteSettingsQuery)->find()?->maintenance_enabled) {
-            return response()->json(['error' => 'maintenance'], 503)->header('Retry-After', (string) 3600);
+            return ApiErrorResponse::make(
+                ApiErrorCode::Maintenance,
+                503,
+                'The service is temporarily unavailable.',
+            )->header('Retry-After', (string) 3600);
         }
 
         $locale = Locale::normalize($request->query('locale'));
@@ -92,15 +179,9 @@ class PublicSiteApiController extends Controller
         $settings = $chrome['siteSettings'];
         $profile = $chrome['headerProfile'];
         $profileTranslation = $profile?->translation($locale);
-        $projects = (new ProjectQuery)->list()->map(fn ($project) => $this->project($project, $locale))->values();
-        $cases = (new CaseStudyQuery)->list()->map(fn ($case) => $this->caseStudy($case, $locale))->values();
-        $writings = (new WritingQuery)->list()->map(fn ($writing) => $this->writing($writing, $locale))->values();
-        $findings = (new ResourceQuery)->list([], $locale)->map(
-            fn ($resource) => $this->finding($resource, $locale)
-        )->values();
 
         $revision = DB::table('content_revisions')->value('version') ?? 0;
-        $body = Cache::rememberForever("public-site-snapshot:v3:navigation-children:{$revision}:{$locale}", fn () => response()->json([
+        $body = Cache::rememberForever("public-site-snapshot:v4:chrome-pages:{$revision}:{$locale}", fn () => response()->json([
             'schema_version' => 3,
             'locale' => $locale,
             'generated_at' => now()->toIso8601String(),
@@ -147,96 +228,26 @@ class PublicSiteApiController extends Controller
                 'visibility' => [
                     'about' => $profile !== null,
                     'resume' => $this->hasResume($locale, $profile),
-                    'portfolio' => $this->featured($projects, 'projects', $locale)->isNotEmpty()
-                        || $this->featured($cases, 'cases', $locale)->isNotEmpty()
+                    'portfolio' => Project::where('hidden', false)->where('nda', false)->exists()
+                        || CaseStudy::where('hidden', false)->where('nda', false)->exists()
                         || Experiment::where('hidden', false)->exists(),
-                    'cases' => $cases->isNotEmpty(),
+                    'cases' => CaseStudy::where('hidden', false)->where('nda', false)->exists(),
                     'contact' => (bool) ($settings?->contact_available),
                     'license' => $this->pageHasAny($locale, 'license', ['code_body', 'content_body', 'ai_body']),
-                    'credits' => (new CreditsQuery)->list()->isNotEmpty(),
+                    'credits' => CreditEntry::where('active', true)->exists(),
                     'follow' => $this->pageHasAny($locale, 'follow', ['rss_title', 'atom_title', 'jsonfeed_title', 'api_title', 'sitemap_title', 'robots_title', 'webfinger_title', 'activitypub_title', 'websub_title', 'webmention_title']),
-                    'feed' => $writings->isNotEmpty(),
-                    'writing' => $writings->isNotEmpty(),
-                    'findings' => $findings->isNotEmpty(),
+                    'feed' => Writing::where('hidden', false)->exists(),
+                    'writing' => Writing::where('hidden', false)->exists(),
+                    'findings' => Resource::public()->exists(),
                     'topics' => Topic::where('hidden', false)->exists(),
-                    'collections' => (new ReferenceCollectionQuery)->list()->isNotEmpty(),
+                    'collections' => ReferenceCollection::where('hidden', false)->exists(),
                     'snippets' => Snippet::where('hidden', false)->exists(),
                     'right_sidebar' => (bool) ($settings?->contact_available),
                 ],
             ],
             'interface' => (new InterfaceQuery)->forLocale($locale),
             'pages' => $this->pages($locale),
-            'credits' => (new CreditsQuery)->list()->map(fn ($credit) => [
-                'category' => $credit->category,
-                'name' => $credit->translation($locale)?->name ?? $credit->category,
-                'description' => $credit->translation($locale)?->description,
-                'url' => $credit->url,
-                'package_manager' => $credit->package_manager,
-                'package_name' => $credit->package_name,
-                'created_at' => $credit->created_at?->format('Y-m-d H:i:s'),
-            ])->values(),
             'resume' => $this->resume($locale, $profile),
-            'projects' => $projects,
-            'cases' => $cases,
-            'writings' => $writings,
-            'findings' => $findings,
-            'collections' => (new ReferenceCollectionQuery)->list()->map(
-                fn ($collection) => $this->collection($collection, $locale)
-            )->values(),
-            'topics' => Topic::where('hidden', false)->with(['translations', 'children.translations'])
-                ->orderBy('order')->orderBy('id')->get()->map(fn ($topic) => [
-                    'slug' => $topic->slug,
-                    'name' => $topic->translation($locale)?->name ?? $topic->slug,
-                    'url' => Locale::url("/topics/{$this->key($topic)}", $locale),
-                    'parent' => $topic->parent?->slug,
-                    'kind' => $topic->kind,
-                    'children' => $topic->children->where('hidden', false)->map(fn ($child) => [
-                        'slug' => $child->slug,
-                        'name' => $child->translation($locale)?->name ?? $child->slug,
-                        'url' => Locale::url("/topics/{$this->key($child)}", $locale),
-                    ])->values(),
-                ])->values(),
-            'technologies' => Technology::where('hidden', false)->with(['translations', 'resumeSkills.topic.translations'])
-                ->orderBy('order')
-                ->get()
-                ->map(fn ($technology) => [
-                    'slug' => $technology->slug,
-                    'name' => $technology->translation($locale)?->name ?? $technology->slug,
-                    'code' => $technology->code ?? '',
-                    'url' => Locale::url("/technologies/{$this->key($technology)}", $locale),
-                    'skills' => $technology->resumeSkills
-                        ->map(fn ($skill) => $skill->topic?->translation($locale)?->name ?? $skill->topic?->slug)
-                        ->filter()
-                        ->values(),
-                    'resume_skills' => $technology->resumeSkills->map(fn ($skill) => $skill->topic ? [
-                        'slug' => $skill->topic->slug,
-                        'name' => $skill->topic->translation($locale)?->name ?? $skill->topic->slug,
-                        'url' => Locale::url("/topics/{$this->key($skill->topic)}", $locale),
-                        'parent' => $skill->topic->parent?->slug,
-                        'kind' => null,
-                        'children' => null,
-                    ] : null)->filter()->unique('slug')->values(),
-                ])->values(),
-            'experiments' => Experiment::where('hidden', false)
-                ->orderBy('order')
-                ->with(['translations', 'technologies.translations'])
-                ->get()
-                ->map(fn ($experiment) => $this->experiment($experiment, $locale))
-                ->values(),
-            'snippets' => Snippet::where('hidden', false)
-                ->orderBy('order')
-                ->with(['translations', 'files'])
-                ->get()
-                ->map(fn ($snippet) => $this->snippet($snippet, $locale))
-                ->values(),
-            'featured_cases' => $this->featured($cases, 'cases', $locale),
-            'featured_projects' => $this->featured($projects, 'projects', $locale),
-            'featured_writings' => $this->featured($writings, 'writings', $locale),
-            'featured_findings' => $findings->where('featured', true)->sortBy([
-                ['featured_order', 'asc'],
-                ['popularity.rank', 'desc'],
-                ['published_date', 'desc'],
-            ])->values(),
             'resume_pdf_locales' => collect(['en', 'pt-BR'])->filter(function (string $value): bool {
                 $roots = [
                     (string) env('PORTFOLIO_RESUME_PDF_ROOT', '/data/resume-cache'),
@@ -309,6 +320,222 @@ class PublicSiteApiController extends Controller
             return [$page->slug => $fields];
         })
             ->all();
+    }
+
+    private function paginateCollection(string $collection, int $perPage, ?string $sort): LengthAwarePaginator
+    {
+        return match ($collection) {
+            'cases' => (new CaseStudyQuery)->listPaginated($perPage, $sort),
+            'collections' => (new ReferenceCollectionQuery)->listPaginated($perPage, $sort),
+            'credits' => (new CreditsQuery)->listPaginated($perPage, $sort),
+            'experiments' => (new ProjectQuery)->listExperimentsPaginated($perPage, $sort),
+            'projects' => (new ProjectQuery)->listPaginated($perPage, $sort),
+            'snippets' => (new SnippetQuery)->listPaginated($perPage, $sort),
+            'technologies' => (new TechnologyQuery)->listPaginated($perPage, $sort),
+            'topics' => (new TopicQuery)->listPaginated($perPage, $sort),
+            'writing' => (new WritingQuery)->listPaginated($perPage, $sort),
+        };
+    }
+
+    private function featuredCollection(string $collection, int $perPage, int $page): LengthAwarePaginator
+    {
+        $configuration = match ($collection) {
+            'cases' => [
+                'relation' => 'featuredCases',
+                'pivot' => 'page_featured_case',
+                'table' => 'case_studies',
+                'with' => ['translations', 'technologies.translations'],
+            ],
+            'projects' => [
+                'relation' => 'featuredProjects',
+                'pivot' => 'page_featured_project',
+                'table' => 'projects',
+                'with' => ['translations', 'technologies.translations'],
+            ],
+            'writing' => [
+                'relation' => 'featuredWritings',
+                'pivot' => 'page_featured_writing',
+                'table' => 'writings',
+                'with' => ['translations', 'topics.translations'],
+            ],
+            default => abort(404),
+        };
+        $portfolio = Page::where('slug', 'portfolio')->first();
+
+        if ($portfolio === null) {
+            return new LengthAwarePaginator([], 0, $perPage, max(1, $page));
+        }
+
+        $query = $portfolio->{$configuration['relation']}()
+            ->where('hidden', false)
+            ->with($configuration['with'])
+            ->when($collection === 'cases', fn ($builder) => $builder->where('nda', false));
+        $pivot = $configuration['pivot'];
+
+        return $query
+            ->orderByRaw("CASE WHEN {$pivot}.order IS NULL THEN 0 ELSE 1 END")
+            ->orderBy("{$pivot}.order")
+            ->orderBy("{$configuration['table']}.id")
+            ->paginate($perPage, ['*'], 'page', max(1, $page));
+    }
+
+    private function presentCollectionItem(string $collection, object $item, string $locale): array
+    {
+        return match ($collection) {
+            'cases' => $this->caseStudySummary($item, $locale),
+            'collections' => $this->collectionSummary($item, $locale),
+            'credits' => $this->credit($item, $locale),
+            'experiments' => $this->experimentSummary($item, $locale),
+            'projects' => $this->projectSummary($item, $locale),
+            'snippets' => $this->snippetSummary($item, $locale),
+            'technologies' => $this->technology($item, $locale),
+            'topics' => $this->topic($item, $locale),
+            'writing' => $this->writingSummary($item, $locale),
+        };
+    }
+
+    private function findCollectionItem(string $collection, string $slug, string $locale): ?array
+    {
+        $item = match ($collection) {
+            'cases' => (new CaseStudyQuery)->findBySlug($slug),
+            'collections' => (new ReferenceCollectionQuery)->findBySlug($slug),
+            'experiments' => (new ProjectQuery)->findExperimentBySlug($slug),
+            'projects' => (new ProjectQuery)->findBySlug($slug),
+            'snippets' => (new SnippetQuery)->findBySlug($slug),
+            'technologies' => (new TechnologyQuery)->findBySlug($slug),
+            'topics' => (new TopicQuery)->findBySlug($slug),
+            'writing' => (new WritingQuery)->findBySlug($slug),
+            default => null,
+        };
+
+        if ($item === null) {
+            return null;
+        }
+
+        return match ($collection) {
+            'cases' => $this->caseStudy($item, $locale),
+            'collections' => $this->collectionDetail($item, $locale),
+            'experiments' => $this->experiment($item, $locale),
+            'projects' => $this->project($item, $locale),
+            'snippets' => $this->snippet($item, $locale),
+            'technologies' => $this->technology($item, $locale),
+            'topics' => $this->topic($item, $locale),
+            'writing' => $this->writing($item, $locale),
+        };
+    }
+
+    private function sort(mixed $value): ?string
+    {
+        return in_array($value, ['asc', 'desc', 'alpha', 'popular'], true) ? $value : null;
+    }
+
+    private function projectSummary(Project $project, string $locale): array
+    {
+        return $this->withoutDetailFields($this->project($project, $locale));
+    }
+
+    private function caseStudySummary(CaseStudy $case, string $locale): array
+    {
+        return $this->withoutDetailFields($this->caseStudy($case, $locale));
+    }
+
+    private function writingSummary(Writing $writing, string $locale): array
+    {
+        return $this->withoutDetailFields($this->writing($writing, $locale));
+    }
+
+    private function experimentSummary(Experiment $experiment, string $locale): array
+    {
+        return $this->withoutDetailFields($this->experiment($experiment, $locale));
+    }
+
+    private function snippetSummary(Snippet $snippet, string $locale): array
+    {
+        $translation = $snippet->translation($locale);
+
+        return [
+            'slug' => $snippet->slug,
+            'title' => $translation?->title ?? $snippet->slug,
+            'description' => $translation?->description,
+            'download_url' => Locale::url("/snippets/{$this->key($snippet)}/download", $locale),
+            'files' => [],
+            'file_count' => $snippet->files_count ?? 0,
+            'updated_at' => $snippet->updated_at?->format('Y-m-d H:i:s'),
+        ];
+    }
+
+    private function collectionSummary(ReferenceCollection $collection, string $locale): array
+    {
+        $translation = $collection->translation($locale);
+
+        return [
+            'slug' => $collection->slug,
+            'url' => Locale::url("/collections/{$this->key($collection)}", $locale),
+            'title' => $translation?->title ?? $collection->slug,
+            'description' => $translation?->description,
+            'intro' => $translation?->intro,
+            'published_at' => $collection->published_at?->toDateString(),
+            'resources_count' => $collection->resources_count ?? 0,
+            'related' => null,
+            'updated_at' => $collection->updated_at?->format('Y-m-d H:i:s'),
+            'created_at' => $collection->created_at?->format('Y-m-d H:i:s'),
+        ];
+    }
+
+    private function technology(Technology $technology, string $locale): array
+    {
+        return [
+            'slug' => $technology->slug,
+            'name' => $technology->translation($locale)?->name ?? $technology->slug,
+            'code' => $technology->code ?? '',
+            'url' => Locale::url("/technologies/{$this->key($technology)}", $locale),
+            'skills' => $technology->resumeSkills
+                ->map(fn ($skill) => $skill->topic?->translation($locale)?->name ?? $skill->topic?->slug)
+                ->filter()
+                ->values(),
+            'resume_skills' => $technology->resumeSkills->map(fn ($skill) => $skill->topic ? [
+                'slug' => $skill->topic->slug,
+                'name' => $skill->topic->translation($locale)?->name ?? $skill->topic->slug,
+                'url' => Locale::url("/topics/{$this->key($skill->topic)}", $locale),
+                'parent' => $skill->topic->parent?->slug,
+                'kind' => null,
+                'children' => null,
+            ] : null)->filter()->unique('slug')->values(),
+        ];
+    }
+
+    private function topic(Topic $topic, string $locale): array
+    {
+        return [
+            'slug' => $topic->slug,
+            'name' => $topic->translation($locale)?->name ?? $topic->slug,
+            'kind' => $topic->kind === 'skill' ? 'topic' : $topic->kind,
+            'parent' => $topic->parent?->slug,
+            'children' => $topic->children->where('hidden', false)->map(fn ($child) => [
+                'slug' => $child->slug,
+                'name' => $child->translation($locale)?->name ?? $child->slug,
+            ])->values(),
+        ];
+    }
+
+    private function credit(object $credit, string $locale): array
+    {
+        return [
+            'category' => $credit->category,
+            'name' => $credit->translation($locale)?->name ?? $credit->category,
+            'description' => $credit->translation($locale)?->description,
+            'url' => $credit->url,
+            'package_manager' => $credit->package_manager,
+            'package_name' => $credit->package_name,
+            'created_at' => $credit->created_at?->format('Y-m-d H:i:s'),
+        ];
+    }
+
+    private function withoutDetailFields(array $data): array
+    {
+        unset($data['body'], $data['history'], $data['related']);
+
+        return $data;
     }
 
     private function project(Project $project, string $locale): array
@@ -394,7 +621,7 @@ class PublicSiteApiController extends Controller
         ];
     }
 
-    private function collection(ReferenceCollection $collection, string $locale): array
+    private function collectionDetail(ReferenceCollection $collection, string $locale): array
     {
         $translation = $collection->translation($locale);
         $details = (new ReferenceCollectionQuery)->findBySlug($collection->slug);
@@ -553,24 +780,5 @@ class PublicSiteApiController extends Controller
 
         return $resume?->translation($locale)?->summary !== null
             || ! empty($profile?->translation($locale)?->trajectory);
-    }
-
-    private function featured($items, string $kind, string $locale)
-    {
-        $relation = match ($kind) {
-            'cases' => 'featuredCases',
-            'projects' => 'featuredProjects',
-            'writings' => 'featuredWritings',
-        };
-
-        $page = Page::where('slug', 'portfolio')->with($relation)->first();
-        $slugs = $page?->{$relation}
-            ->sortBy(fn ($item) => [$item->pivot->order === null ? 0 : 1, $item->pivot->order, $item->id])
-            ->take(3)
-            ->pluck('slug') ?? collect();
-
-        return $slugs->map(fn (string $slug) => $items->firstWhere('slug', $slug))
-            ->filter()
-            ->values();
     }
 }

@@ -1,4 +1,4 @@
-import { getPublicSite } from './generated/index.ts';
+import { getPublicSite } from './public-site-generated-client';
 import {
   ContentLocale,
   Snapshot,

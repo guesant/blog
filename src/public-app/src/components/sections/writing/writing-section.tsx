@@ -3,7 +3,7 @@ import type { ContentFeedProps } from '../../content/content-feed/types';
 
 export type WritingSectionProps = Pick<
   ContentFeedProps,
-  'writings' | 'findings' | 'collections' | 'copy'
+  'writings' | 'findings' | 'collections' | 'copy' | 'contentMeta'
 >;
 
 export function WritingSection(props: WritingSectionProps) {
@@ -13,6 +13,7 @@ export function WritingSection(props: WritingSectionProps) {
       findings={props.findings}
       collections={props.collections}
       copy={props.copy}
+      contentMeta={props.contentMeta}
       fixedKind="post"
       action="/writing"
     />

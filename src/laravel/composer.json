@@ -6,6 +6,7 @@
     "keywords": ["laravel", "framework"],
     "license": "MIT",
     "require": {
+        "dedoc/scramble": "^0.13.45",
         "php": "^8.3",
         "filament/filament": "^4.0",
         "laravel/framework": "^13.17",
@@ -39,9 +40,7 @@
         "setup": [
             "composer install",
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\"",
-            "@php artisan key:generate",
-            "npm install --ignore-scripts",
-            "npm run build"
+            "@php artisan key:generate"
         ],
         "dev": [
             "Composer\\Config::disableProcessTimeout",

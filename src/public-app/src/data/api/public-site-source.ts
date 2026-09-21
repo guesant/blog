@@ -8,7 +8,7 @@ export { fetchFinding } from './public-site-source-fetch-finding';
 
 export { fetchFindingList } from './public-site-source-fetch-finding-list';
 
-export { getContentCollection } from './public-site-source-get-content-collection';
+export { getContentCollectionPage } from './public-site-source-get-content-collection';
 
 export { getContentDocument } from './public-site-source-get-content-document';
 
@@ -22,11 +22,7 @@ export { getLocalizedProfile } from './public-site-source-get-localized-profile'
 
 export { listTechnologies } from './public-site-source-list-technologies';
 
-export { getTechnologies } from './public-site-source-get-technologies';
-
 export { getTechnologyBySlug } from './public-site-source-get-technology-by-slug';
-
-export { getSnippets } from './public-site-source-get-snippets';
 
 export { getSnippetBySlug } from './public-site-source-get-snippet-by-slug';
 

@@ -7,7 +7,7 @@ type SiteMainContentProps = { children: ReactNode };
 export function SiteMainContent(props: SiteMainContentProps) {
   return (
     <Box id="main-content" tabIndex={-1} visualVariant="siteMainContent">
-      <PageTransition>{props.children}</PageTransition>
+      <PageTransition children={props.children} />
     </Box>
   );
 }

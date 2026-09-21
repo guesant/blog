@@ -17,7 +17,6 @@ class SetLocale
             : Locale::fromRequestPath();
 
         app()->setLocale($locale);
-        view()->share('currentLocale', $locale);
 
         return $next($request);
     }

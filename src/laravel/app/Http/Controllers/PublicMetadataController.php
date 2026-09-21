@@ -5,7 +5,10 @@ namespace App\Http\Controllers;
 use App\Content\Locale;
 use App\Content\SiteChromeQuery;
 use App\Content\SiteSettingsQuery;
+use App\Http\Controllers\Api\FindingApiController;
 use App\Http\Controllers\Api\PublicSiteApiController;
+use App\Http\Responses\ApiErrorCode;
+use App\Http\Responses\ApiErrorResponse;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -64,16 +67,16 @@ class PublicMetadataController extends Controller
 
         $urls = [];
         foreach (Locale::all() as $locale) {
-            $snapshot = $this->snapshot($locale);
             foreach (self::STATIC_PATHS as $path) {
                 $urls[] = $this->absolute(Locale::path($path, $locale));
             }
-            foreach (['projects', 'cases', 'writings', 'findings', 'collections', 'topics', 'technologies', 'experiments', 'snippets'] as $key) {
-                foreach ($snapshot[$key] ?? [] as $item) {
-                    if (filled($item['url'] ?? null)) {
-                        $urls[] = $this->absolute((string) $item['url']);
-                    }
+            foreach (['projects', 'cases', 'writing', 'collections', 'topics', 'technologies', 'experiments', 'snippets'] as $collection) {
+                foreach ($this->collectionItems($collection, $locale) as $item) {
+                    $this->appendUrl($urls, $item['url'] ?? null);
                 }
+            }
+            foreach ($this->findingItems($locale) as $item) {
+                $this->appendUrl($urls, $item['url'] ?? null);
             }
         }
 
@@ -88,16 +91,15 @@ class PublicMetadataController extends Controller
         ]);
     }
 
-    public function feed(Request $request, string $locale, string $format): Response
+    public function feed(string $locale, string $format): Response
     {
         $locale = Locale::normalize($locale);
-        $snapshot = $this->snapshot($locale);
-        $items = $this->feedItems($snapshot);
+        $items = $this->feedItems($locale);
 
         if ($format === 'json') {
             return response()->json([
                 'version' => 'https://jsonfeed.org/version/1.1',
-                'title' => $snapshot['chrome']['profile']['name'] ?? 'Portfolio',
+                'title' => (new SiteChromeQuery)->build($locale)['headerProfile']?->name ?? 'Portfolio',
                 'home_page_url' => $this->absolute(Locale::path('/', $locale)),
                 'feed_url' => $this->absolute(Locale::path('/feed.json', $locale)),
                 'language' => $locale,
@@ -125,15 +127,27 @@ class PublicMetadataController extends Controller
         $account = config('services.webfinger.acct');
         $resource = (string) $request->query('resource');
         if (blank($account)) {
-            return response()->json(['error' => 'not_found'], 404);
+            return ApiErrorResponse::make(
+                ApiErrorCode::NotFound,
+                404,
+                'The requested resource was not found.',
+            );
         }
         if (blank($resource)) {
-            return response()->json(['error' => 'resource_required'], 400);
+            return ApiErrorResponse::make(
+                ApiErrorCode::ResourceRequired,
+                400,
+                'The resource query parameter is required.',
+            );
         }
 
         $home = $this->absolute('/');
         if (! in_array(strtolower($resource), [strtolower("acct:{$account}"), strtolower($home)], true)) {
-            return response()->json(['error' => 'not_found'], 404);
+            return ApiErrorResponse::make(
+                ApiErrorCode::NotFound,
+                404,
+                'The requested resource was not found.',
+            );
         }
 
         $chrome = (new SiteChromeQuery)->build('en');
@@ -156,30 +170,19 @@ class PublicMetadataController extends Controller
         ])->header('Content-Type', 'application/jrd+json; charset=UTF-8');
     }
 
-    private function snapshot(string $locale): array
+    private function feedItems(string $locale): array
     {
-        $request = Request::create('/api/v1/public-site', 'GET', ['locale' => $locale]);
-        $response = app(PublicSiteApiController::class)->index($request);
-        if ($response->getStatusCode() >= 400) {
-            return [];
-        }
-
-        return json_decode((string) $response->getContent(), true) ?: [];
-    }
-
-    private function feedItems(array $snapshot): array
-    {
-        $items = collect($snapshot['writings'] ?? [])->map(fn (array $item) => [
+        $items = collect($this->collectionItems('writing', $locale, 30))->map(fn (array $item) => [
             'title' => $item['title'] ?? '',
             'excerpt' => $item['excerpt'] ?? null,
             'raw_date' => $item['date'] ?? null,
             'url' => $this->absolute($item['url'] ?? '/'),
-        ])->concat(collect($snapshot['findings'] ?? [])->filter(fn (array $item) => filled($item['title'] ?? null))->map(fn (array $item) => [
+        ])->concat(collect($this->findingItems($locale, 30))->filter(fn (array $item) => filled($item['title'] ?? null))->map(fn (array $item) => [
             'title' => $item['title'],
             'excerpt' => $item['personal_note'] ?? $item['reason_found'] ?? $item['description'] ?? null,
             'raw_date' => $item['found_date'] ?? $item['published_date'] ?? null,
             'url' => $this->absolute($item['url'] ?? '/'),
-        ]))->concat(collect($snapshot['collections'] ?? [])->map(fn (array $item) => [
+        ]))->concat(collect($this->collectionItems('collections', $locale, 30))->map(fn (array $item) => [
             'title' => $item['title'] ?? '',
             'excerpt' => $item['description'] ?? null,
             'raw_date' => $item['created_at'] ?? null,
@@ -192,6 +195,57 @@ class PublicMetadataController extends Controller
         })->sortByDesc(fn (array $item) => $item['date']?->getTimestamp() ?? 0)->take(30)->values()->all();
 
         return $items;
+    }
+
+    private function collectionItems(string $collection, string $locale, int $perPage = 100): array
+    {
+        $items = [];
+        $page = 1;
+        $lastPage = 1;
+
+        while ($page <= $lastPage) {
+            $request = Request::create('/api/v1/content/'.$collection, 'GET', [
+                'locale' => $locale,
+                'page' => $page,
+                'per_page' => $perPage,
+            ]);
+            $response = app(PublicSiteApiController::class)->collection($request, $collection);
+            $payload = json_decode((string) $response->getContent(), true) ?: [];
+            $items = [...$items, ...($payload['data'] ?? [])];
+            $lastPage = max($lastPage, (int) ($payload['meta']['last_page'] ?? $page));
+            $page++;
+        }
+
+        return $items;
+    }
+
+    private function findingItems(string $locale, int $perPage = 100): array
+    {
+        $items = [];
+        $page = 1;
+        $lastPage = 1;
+
+        while ($page <= $lastPage) {
+            $request = Request::create('/api/v1/findings', 'GET', [
+                'locale' => $locale,
+                'page' => $page,
+                'per_page' => $perPage,
+            ]);
+            $response = app(FindingApiController::class)->index($request);
+            $payload = json_decode((string) $response->getContent(), true) ?: [];
+            $items = [...$items, ...($payload['data'] ?? [])];
+            $lastPage = max($lastPage, (int) ($payload['meta']['last_page'] ?? $page));
+            $page++;
+        }
+
+        return $items;
+    }
+
+    private function appendUrl(array &$urls, mixed $url): void
+    {
+        if (filled($url)) {
+            $urls[] = $this->absolute((string) $url);
+        }
     }
 
     private function rss(string $locale, array $items): string

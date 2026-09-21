@@ -1,12 +1,16 @@
 'use client';
 
 import { useTranslations } from '@/i18n/compat';
-import { ListingView } from '../../content/listing-view';
+import { CollectionListing } from '../../content/collection-listing';
 import { PageHeader } from '../../content/page-header';
 import type { Technology } from '@portfolio/data/domain/types';
 import { TechnologyCard } from './technology-card';
+import type { ContentCollectionMeta } from '@portfolio/data/api/public-site-source-support';
 
-type TechnologiesPageContentProps = { technologies: Technology[] };
+type TechnologiesPageContentProps = {
+  technologies: Technology[];
+  pagination: ContentCollectionMeta;
+};
 
 export function TechnologiesPageContent(props: TechnologiesPageContentProps) {
   const { technologies } = props;
@@ -21,10 +25,11 @@ export function TechnologiesPageContent(props: TechnologiesPageContentProps) {
         description={tNav('technologiesDescription')}
         breadcrumbs={[{ label: tNav('technologies') }]}
       />
-      <ListingView
+      <CollectionListing
         items={technologies}
         getKey={(item) => item.slug}
         renderListItem={TechnologyCard}
+        pagination={{ meta: props.pagination, action: '/technologies' }}
       />
     </>
   );

@@ -1,83 +1,82 @@
 import {
   getAboutPageCopy,
   getAchadosPageCopy,
-  getCases,
-  getCasesPageCopy,
-  getCollectionsPageCopy,
+  getCollectionPage,
   getContactPageCopy,
-  getExperiments,
   getHomePageContent,
-  getLatestNotes,
+  getHomeFeedPage,
   getNowPageCopy,
   getPortfolioPageCopy,
   getProfile,
-  getProjects,
-  getProjectsPageCopy,
-  getReferenceCollections,
-  getReferences,
   getResumePageContent,
   getSiteText,
-  getWritingPageCopy,
   getCreditsPageContent,
   getFollowPageCopy,
   getLicensePageCopy,
-  getSnippets,
-  getTechnologies,
-  getTopics,
 } from '@portfolio/data/services';
+import type { CaseStudy, Experiment, Project } from '@portfolio/data/domain/types';
+import { collectionQuery } from './content-data-collection-query';
+import { collectionRouteLoaders } from './content-data-primary-collection-route-loaders';
 import { resumePdfUrls } from './content-data-resume-pdf-urls';
 import type { RouteLoader } from './content-data-route-loader';
 import { statusData } from './content-data-status-data';
 
 export const primaryRouteLoaders: Record<string, RouteLoader> = {
-  '/': async ({ locale }) => ({
-    kind: 'home',
-    content: await getHomePageContent(locale),
-    writings: await getLatestNotes(locale),
-    findings: await getReferences(locale),
-    collections: await getReferenceCollections(locale),
-  }),
+  ...collectionRouteLoaders,
+  '/': async ({ locale, search }) => {
+    const [content, feed] = await Promise.all([
+      getHomePageContent(locale),
+      getHomeFeedPage(locale, collectionQuery(search)),
+    ]);
+
+    return {
+      kind: 'home',
+      content,
+      writings: feed.writings,
+      findings: feed.findings,
+      collections: feed.collections,
+      feedPagination: feed.meta,
+    };
+  },
   '/about': async ({ locale }) => ({
     kind: 'about',
     page: await getAboutPageCopy(locale),
     profile: await getProfile(locale),
   }),
-  '/portfolio': async ({ locale }) => ({
-    kind: 'portfolio',
-    page: await getPortfolioPageCopy(locale),
-    profile: await getProfile(locale),
-    cases: await getCases(locale),
-    projects: await getProjects(locale),
-    experiments: await getExperiments(locale),
-  }),
+  '/portfolio': async ({ locale, search }) => {
+    const [page, profile, cases, projects, experiments] = await Promise.all([
+      getPortfolioPageCopy(locale),
+      getProfile(locale),
+      getCollectionPage<CaseStudy>('cases', locale, collectionQuery(search, 'portfolio_page', 3)),
+      getCollectionPage<Project>('projects', locale, collectionQuery(search, 'portfolio_page', 3)),
+      getCollectionPage<Experiment>(
+        'experiments',
+        locale,
+        collectionQuery(search, 'portfolio_page', 3),
+      ),
+    ]);
+
+    return {
+      kind: 'portfolio',
+      page,
+      profile,
+      cases: cases.items,
+      casesPagination: cases.meta,
+      projects: projects.items,
+      projectsPagination: projects.meta,
+      experiments: experiments.items,
+      experimentsPagination: experiments.meta,
+    };
+  },
   '/now': async ({ locale }) => ({ kind: 'now', page: await getNowPageCopy(locale) }),
-  '/cases': async ({ locale }) => ({
-    kind: 'cases',
-    page: await getCasesPageCopy(locale),
-    items: await getCases(locale),
-  }),
-  '/collections': async ({ locale }) => ({
-    kind: 'collections',
-    page: await getCollectionsPageCopy(locale),
-    writings: await getLatestNotes(locale),
-    findings: await getReferences(locale),
-    collections: await getReferenceCollections(locale),
-  }),
-  '/colecoes': async ({ locale }) => ({
-    kind: 'collections',
-    page: await getCollectionsPageCopy(locale),
-    writings: await getLatestNotes(locale),
-    findings: await getReferences(locale),
-    collections: await getReferenceCollections(locale),
-  }),
   '/contact': async ({ locale }) => ({
     kind: 'contact',
     page: await getContactPageCopy(locale),
     site: await getSiteText(locale),
   }),
-  '/credits': async ({ locale }) => ({
+  '/credits': async ({ locale, search }) => ({
     kind: 'credits',
-    content: await getCreditsPageContent(locale),
+    content: await getCreditsPageContent(locale, collectionQuery(search)),
   }),
   '/findings': async ({ locale, search }) => ({
     kind: 'findings',
@@ -94,30 +93,11 @@ export const primaryRouteLoaders: Record<string, RouteLoader> = {
     page: await getFollowPageCopy(locale),
     site: await getSiteText(locale),
   }),
-  '/projects': async ({ locale }) => ({
-    kind: 'projects',
-    page: await getProjectsPageCopy(locale),
-    projects: await getProjects(locale),
-    experiments: await getExperiments(locale),
-  }),
   '/resume': async ({ locale }) => ({
     kind: 'resume',
     content: await getResumePageContent(locale),
     pdfUrls: resumePdfUrls(),
   }),
-  '/writing': async ({ locale }) => ({
-    kind: 'writing',
-    page: await getWritingPageCopy(locale),
-    writings: await getLatestNotes(locale),
-    findings: await getReferences(locale),
-    collections: await getReferenceCollections(locale),
-  }),
-  '/snippets': async ({ locale }) => ({ kind: 'snippets', snippets: await getSnippets(locale) }),
-  '/technologies': async ({ locale }) => ({
-    kind: 'technologies',
-    technologies: await getTechnologies(locale),
-  }),
-  '/topics': async ({ locale }) => ({ kind: 'topics', topics: await getTopics(locale) }),
   '/tools': async ({ locale }) => statusData(locale, 'notFound'),
   '/tool': async ({ locale }) => statusData(locale, 'notFound'),
 };

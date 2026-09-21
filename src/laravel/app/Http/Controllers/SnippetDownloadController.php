@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Responses\ApiErrorCode;
+use App\Http\Responses\ApiErrorResponse;
 use App\Models\Snippet;
 use App\Support\SnippetArchiveBuilder;
 use Illuminate\Http\Request;
@@ -26,10 +28,11 @@ class SnippetDownloadController extends Controller
                     ->all(),
             );
         } catch (\RuntimeException) {
-            return response()->json([
-                'title' => 'Snippet download unavailable',
-                'detail' => 'The public snippet files do not satisfy the archive safety limits.',
-            ], 422);
+            return ApiErrorResponse::make(
+                ApiErrorCode::SnippetDownloadUnavailable,
+                422,
+                'The public snippet files do not satisfy the archive safety limits.',
+            );
         }
 
         return response($archive, 200, [

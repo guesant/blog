@@ -9,16 +9,18 @@ import type {
 import { useTranslations } from '@/i18n/compat';
 import { HomeHero } from './home-hero';
 import { HomeSectionsAfterHero } from './home-sections-after-hero';
+import { homeSectionContact } from './home-section-contact';
 
 export type HomeSectionProps = {
   content: HomePageContent;
   writings: Writing[];
   findings: Reference[];
   collections: ReferenceCollection[];
+  feedPagination: import('@portfolio/data/api/public-site-source-support').ContentCollectionMeta;
 };
 
 export function HomeSection(props: HomeSectionProps) {
-  const { content, writings, findings, collections } = props;
+  const { content, writings, findings, collections, feedPagination } = props;
 
   const t = useTranslations('Home');
 
@@ -32,9 +34,7 @@ export function HomeSection(props: HomeSectionProps) {
 
   const site = content.site;
 
-  const hasEmail = site.contact.hasEmail;
-
-  const showContact = site.contact.available && (hasEmail || site.contact.profiles.length > 0);
+  const contact = homeSectionContact(site);
 
   return (
     <>
@@ -42,7 +42,7 @@ export function HomeSection(props: HomeSectionProps) {
         page={page}
         profile={profile}
         site={site}
-        showContact={showContact}
+        showContact={contact.showContact}
         workTarget={null}
         t={t}
       />
@@ -51,12 +51,13 @@ export function HomeSection(props: HomeSectionProps) {
         writings={writings}
         findings={findings}
         collections={collections}
+        feedPagination={feedPagination}
         site={site}
         t={t}
         tFeed={tFeed}
         tExternalProfiles={tExternalProfiles}
-        showContact={showContact}
-        hasEmail={hasEmail}
+        showContact={contact.showContact}
+        hasEmail={contact.hasEmail}
       />
     </>
   );

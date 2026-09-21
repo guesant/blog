@@ -3,12 +3,11 @@
 use App\Http\Middleware\AddSecurityHeaders;
 use App\Http\Middleware\CheckMaintenanceMode;
 use App\Http\Middleware\SetLocale;
+use App\Http\Responses\ApiErrorResponse;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -42,11 +41,29 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        $exceptions->render(function (NotFoundHttpException $exception): Response {
-            return response()->view('errors.404', status: 404);
+        $documentationPaths = [
+            'docs',
+            'docs/*',
+            'scalar',
+            'scalar/*',
+            'api/docs',
+            'api/docs/*',
+            'api/scalar',
+            'api/scalar/*',
+        ];
+
+        $exceptions->render(function (Throwable $exception, Request $request) use ($documentationPaths) {
+            if ($request->is($documentationPaths) || ! $request->is('api/*')) {
+                return null;
+            }
+
+            return ApiErrorResponse::fromThrowable($exception);
         });
 
-        $exceptions->shouldRenderJsonWhen(
-            fn (Request $request) => $request->is('api/*') || $request->expectsJson(),
-        );
+        $exceptions->shouldRenderJsonWhen(function (Request $request) use ($documentationPaths): bool {
+            $documentationPath = collect($documentationPaths)
+                ->contains(fn (string $path): bool => $request->is($path));
+
+            return ! $documentationPath && ($request->is('api/*') || $request->expectsJson());
+        });
     })->create();

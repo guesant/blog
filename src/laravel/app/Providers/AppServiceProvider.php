@@ -7,6 +7,7 @@ use App\Models\AuditLog;
 use App\Models\AuditRequest;
 use App\Models\User;
 use App\Support\ContentRevisionTracker;
+use Dedoc\Scramble\Scramble;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Console\Events\CommandStarting;
 use Illuminate\Database\Eloquent\Model;
@@ -34,6 +35,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        Scramble::configure()->expose('docs', 'docs/openapi.json');
+
         Event::listen(CommandStarting::class, function (CommandStarting $event): void {
             $destructiveCommands = [
                 'db:wipe',

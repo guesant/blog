@@ -1,10 +1,10 @@
 import type { ExternalProfile } from '@portfolio/data/domain/types';
-import { BrandIcon, type BrandName } from './brand-icon';
 import { Icon, type IconName } from './icon';
+import { ProfileBrandIcon, type ProfileBrandName } from './profile-brand-icon';
 
 type ProfilePlatform = ExternalProfile['platform'];
 
-const platformBrands: Partial<Record<ProfilePlatform, BrandName>> = {
+const platformBrands: Partial<Record<ProfilePlatform, ProfileBrandName>> = {
   bluesky: 'bluesky',
   github: 'github',
   gitlab: 'gitlab',
@@ -31,7 +31,7 @@ export function ProfileIcon(props: ProfileIconProps) {
   const brand = platformBrands[platform];
 
   if (brand) {
-    return <BrandIcon name={brand} size={size} />;
+    return <ProfileBrandIcon name={brand} size={size} />;
   }
 
   return <Icon name={platformGlyphs[platform] ?? 'external'} size={size} />;

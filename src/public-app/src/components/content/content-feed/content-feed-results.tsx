@@ -1,6 +1,6 @@
 'use client';
 
-import { ListingView } from '../listing-view';
+import { CollectionListing } from '../collection-listing';
 import type { FeedEntry, FeedQuickFilter } from './types';
 import { useTranslations } from '@/i18n/compat';
 import { FeedCard } from './feed-card';
@@ -14,7 +14,7 @@ type ContentFeedResultsProps = {
 
 export function ContentFeedResults(props: ContentFeedResultsProps) {
   return (
-    <ListingView
+    <CollectionListing
       items={props.entries}
       getKey={(entry) => `${entry.kind}-${entry.slug}`}
       renderListItem={(entry) => (

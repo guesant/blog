@@ -4,6 +4,7 @@ import viteReact from '@vitejs/plugin-react';
 import { fileURLToPath, URL } from 'node:url';
 
 const sourceRoot = fileURLToPath(new URL('./src/', import.meta.url));
+
 const assetRevision = 'v2';
 
 export default defineConfig({
@@ -23,9 +24,7 @@ export default defineConfig({
         assetFileNames: `assets/[name]-[hash]-${assetRevision}.[ext]`,
         chunkFileNames: `assets/[name]-[hash]-${assetRevision}.js`,
         entryFileNames: (chunk) =>
-          chunk.name === 'server'
-            ? 'server.js'
-            : `assets/[name]-[hash]-${assetRevision}.js`,
+          chunk.name === 'server' ? 'server.js' : `assets/[name]-[hash]-${assetRevision}.js`,
       },
     },
   },

@@ -7,7 +7,7 @@ import { HomeProjectsGrid } from './home-projects-grid';
 import { HomeProjectsSummary } from './home-projects-summary';
 
 export function HomeProjectsSection(props: HomeProjectsSectionProps) {
-  const { projects, experiments, page, t } = props;
+  const { projects, experimentsCount, page, t } = props;
 
   return (
     <HomeSectionSurface id="projects">
@@ -20,7 +20,7 @@ export function HomeProjectsSection(props: HomeProjectsSectionProps) {
       />
       <HomeProjectsGrid projects={projects} />
       <HomeProjectsSummary
-        count={experiments.length}
+        count={experimentsCount}
         summary={page.experimentsSummary}
         label="browseLab"
         t={t}

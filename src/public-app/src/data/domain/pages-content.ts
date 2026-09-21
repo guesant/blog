@@ -3,11 +3,13 @@ import type { WithSeo } from './content';
 import type { Profile, ResumeContent } from './resume';
 import type { SiteText } from './site';
 import type { HomePageCopy, PageIntroduction, ResumePageCopy } from './pages-copy';
+import type { ContentCollectionMeta } from '../api/public-site-source-support';
 
 export type HomePageContent = {
   cases: CaseStudy[];
   projects: Project[];
   experiments: Experiment[];
+  experimentsCount: number;
   writings: Writing[];
   profile: Profile;
   resume: ResumeContent;
@@ -34,6 +36,7 @@ type CreditEntry = {
 
 export type CreditsContent = {
   entries: CreditEntry[];
+  meta: ContentCollectionMeta;
 };
 
 export type CreditsPageCopy = WithSeo & {

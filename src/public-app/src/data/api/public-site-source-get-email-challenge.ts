@@ -1,5 +1,5 @@
 import type { ProtectedEmailChallenge } from '../domain/protected-email/types.ts';
-import { createProtectedEmailChallenge } from './generated/index.ts';
+import { createProtectedEmailChallenge } from './public-site-generated-client';
 import { snapshotRequestTtlMs, emailChallengeState } from './public-site-source-support';
 import { apiClient } from './public-site-source-api-client';
 

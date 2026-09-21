@@ -117,7 +117,7 @@ type TopicMembership = {
   role?: 'primary' | 'related' | 'mentioned';
 };
 
-export type ReferenceCollectionItem = {
+type ReferenceCollectionItem = {
   reference: Reference;
   note?: string;
 };

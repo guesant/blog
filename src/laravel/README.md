@@ -21,6 +21,19 @@ Laravel is a web application framework with expressive, elegant syntax. We belie
 
 Laravel is accessible, powerful, and provides tools required for large, robust applications.
 
+## API documentation
+
+The public API documentation is generated from the Laravel routes and responses with Scramble.
+The Scalar reference is available at `/docs`, the OpenAPI document at `/docs/openapi.json`, and
+Swagger UI at `/docs/swagger` or `/docs/swagger/index.html`.
+
+Run `just api-spec` from the repository root to export the specification before regenerating the
+frontend client.
+
+Laravel does not build or serve the public site's frontend assets. Its only application assets are
+the default Filament panel assets. Swagger UI and Scalar are the sole exception and load their
+documentation assets from their respective documentation views.
+
 ## Learning Laravel
 
 Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.

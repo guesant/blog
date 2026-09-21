@@ -24,7 +24,8 @@ class TopicQuery
 
     public function listPaginated(int $perPage = 20, ?string $sort = null): LengthAwarePaginator
     {
-        $query = Topic::with('translations');
+        $query = Topic::where('hidden', false)
+            ->with(['translations', 'children.translations']);
 
         $this->applySort($query, $sort, alphaTable: 'topic_translations', alphaForeignKey: 'topic_id', alphaColumn: 'name');
 
@@ -34,7 +35,8 @@ class TopicQuery
     public function findBySlug(string $slug): ?Topic
     {
         return Topic::where('slug', $slug)
-            ->with('translations')
+            ->where('hidden', false)
+            ->with(['translations', 'children.translations'])
             ->first();
     }
 

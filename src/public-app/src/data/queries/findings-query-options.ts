@@ -1,5 +1,8 @@
 import { queryOptions } from '@tanstack/react-query';
-import { listFindingsOptions, type ListFindingsResponse } from '@portfolio/data/api/generated';
+import {
+  listFindingsOptions,
+  type ListFindingsResponse,
+} from '@portfolio/data/api/public-site-generated-client';
 import { apiClient } from '@portfolio/data/api/public-site-source-api-client';
 import type { ContentLocale, FindingList } from '@portfolio/data/api/public-site-source-support';
 import { findingListItems } from '@portfolio/data/api/public-site-source-finding-list-items';

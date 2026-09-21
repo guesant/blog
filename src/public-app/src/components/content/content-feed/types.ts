@@ -1,5 +1,6 @@
 import type { Reference, ReferenceCollection, Writing } from '@portfolio/data/domain/types';
 import type { FindingFacets, FindingListMeta } from '@portfolio/data/services';
+import type { ContentCollectionMeta } from '@portfolio/data/api/public-site-source-support';
 import type { SourcePreviewData } from '../source-preview/types';
 
 type FeedKind = 'post' | 'achado' | 'colecao';
@@ -45,4 +46,5 @@ export type ContentFeedProps = {
   initialPage?: number;
   findingsMeta?: FindingListMeta;
   findingFacets?: FindingFacets;
+  contentMeta?: ContentCollectionMeta;
 };

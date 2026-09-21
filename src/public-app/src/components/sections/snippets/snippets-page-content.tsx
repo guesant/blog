@@ -2,13 +2,13 @@
 
 import { Typography } from '../../ui';
 import { useTranslations } from '@/i18n/compat';
-import { ListingView } from '../../content/listing-view';
+import { CollectionListing } from '../../content/collection-listing';
 import { PageHeader } from '../../content/page-header';
 import type { Snippet } from '@portfolio/data/domain/types';
-import { ConditionalContent } from '../../primitives/conditional-content';
 import { SnippetCard } from './snippet-card';
+import type { ContentCollectionMeta } from '@portfolio/data/api/public-site-source-support';
 
-type SnippetsPageContentProps = { snippets: Snippet[] };
+type SnippetsPageContentProps = { snippets: Snippet[]; pagination: ContentCollectionMeta };
 
 export function SnippetsPageContent(props: SnippetsPageContentProps) {
   const { snippets } = props;
@@ -23,15 +23,12 @@ export function SnippetsPageContent(props: SnippetsPageContentProps) {
         description={tNav('snippetsDescription')}
         breadcrumbs={[{ label: tNav('snippets') }]}
       />
-      <ConditionalContent
-        condition={snippets.length === 0}
-        content={<Typography color="text.secondary">{tNav('noSnippets')}</Typography>}
-      />
-      <ConditionalContent
-        condition={snippets.length > 0}
-        content={
-          <ListingView items={snippets} getKey={(item) => item.slug} renderListItem={SnippetCard} />
-        }
+      <CollectionListing
+        items={snippets}
+        getKey={(item) => item.slug}
+        renderListItem={SnippetCard}
+        empty={<Typography color="text.secondary">{tNav('noSnippets')}</Typography>}
+        pagination={{ meta: props.pagination, action: '/snippets' }}
       />
     </>
   );

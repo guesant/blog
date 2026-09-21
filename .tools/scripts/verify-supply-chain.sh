@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 set -eu
 
-for file in src/public-app/pnpm-lock.yaml src/laravel/pnpm-lock.yaml src/laravel/composer.lock src/laravel/package-lock.json; do
+for file in src/public-app/pnpm-lock.yaml src/laravel/composer.lock; do
   test -s "$file" || {
     echo "missing lockfile: $file" >&2
     exit 1

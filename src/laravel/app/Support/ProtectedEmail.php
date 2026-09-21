@@ -2,22 +2,6 @@
 
 namespace App\Support;
 
-/**
- * Anti-scraping email obfuscation: the real address is never sent to the
- * browser in plain text. Instead we ship an AES-256-GCM ciphertext whose
- * key is derived via Argon2id from a public constant password + a random
- * per-challenge salt. The browser re-runs the same Argon2id derivation
- * (in a Web Worker, see resources/js/protected-email-worker.js) and
- * decrypts locally — no server round-trip at reveal time. This mirrors
- * the legacy Next.js app's protected-email mechanism (Argon2id KDF, not
- * a proof-of-work search), reimplemented for PHP/vanilla JS instead of
- * TypeScript/hash-wasm.
- *
- * The password constant below is deliberately public, like the original
- * — it is not a secret. Security comes from the random salt plus
- * Argon2id's memory-hardness, which makes each decrypt computationally
- * costly enough to deter naive bulk scraping without a server API call.
- */
 class ProtectedEmail
 {
     private const CHALLENGE_PASSWORD = 'portfolio-contact-challenge-v1';
@@ -54,7 +38,6 @@ class ProtectedEmail
             'algorithm' => 'argon2id-aes256gcm',
             'salt' => self::toBase64Url($salt),
             'iv' => self::toBase64Url($iv),
-            // Web Crypto's AES-GCM expects ciphertext and tag concatenated.
             'ciphertext' => self::toBase64Url($ciphertext.$tag),
             'params' => [
                 'memorySize' => self::MEMORY_KIB,

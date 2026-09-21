@@ -27,7 +27,8 @@ Laravel is the single source of truth for published content. The application con
 snapshot through TanStack Start server functions and does not include an editorial admin or CMS runtime.
 Localization is field-based and is resolved by Laravel before the snapshot reaches the frontend.
 The OpenAPI contract used to generate the frontend client lives at
-`../../src/laravel/openapi/public-site.json`.
+`../../src/laravel/openapi/public-site.json`. It is exported from Laravel with
+`just api-spec` before the client is generated.
 
 ### Content ownership
 

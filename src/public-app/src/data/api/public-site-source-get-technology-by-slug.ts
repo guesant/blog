@@ -1,12 +1,9 @@
 import type { Technology } from '../domain/types.ts';
-import { slugFromKey } from './public-site-source-slug-from-key';
-import { getTechnologies } from './public-site-source-get-technologies';
+import { getContentDocument } from './public-site-source-get-content-document';
 
 export async function getTechnologyBySlug(
   slug: string,
   locale?: string,
 ): Promise<Technology | undefined> {
-  return (await getTechnologies(locale)).find(
-    (technology) => technology.slug === slug || slugFromKey(technology.slug) === slug,
-  );
+  return getContentDocument<Technology>('technologies', slug, locale);
 }

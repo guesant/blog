@@ -1,7 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
 import type { RouteData } from '../../data/queries';
-import { findingsQueryOptions, routeQueryOptions } from '../../data/queries';
-import { normalizeLocale } from '../../data/api/public-site-source-normalize-locale';
+import { routeQueryOptions } from '../../data/queries';
 import { metadataForRoute } from './splat-metadata-for-route';
 import { requestForPath } from './splat-request-for-path';
 import { SplatRoute } from './splat--splat-route';
@@ -11,15 +10,6 @@ export const Route = createFileRoute('/_site/$')({
     const request = requestForPath(location.pathname, location.searchStr);
 
     const data = await context.queryClient.ensureQueryData(routeQueryOptions(request));
-
-    if (data.kind === 'findings') {
-      await context.queryClient.ensureQueryData(
-        findingsQueryOptions({
-          locale: normalizeLocale(request.locale),
-          search: request.search,
-        }),
-      );
-    }
 
     return data;
   },

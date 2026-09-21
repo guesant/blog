@@ -10,7 +10,9 @@ export const Route = createFileRoute('/_site/')({
   loader: ({ context, location }) => {
     const { locale } = routeContext(location.pathname);
 
-    return context.queryClient.ensureQueryData(routeQueryOptions({ locale, pathname: '/' }));
+    return context.queryClient.ensureQueryData(
+      routeQueryOptions({ locale, pathname: '/', search: location.searchStr }),
+    );
   },
   head: ({ loaderData }) => {
     const metadata = metadataForRoute(loaderData as RouteData | undefined);
@@ -29,9 +31,13 @@ export const Route = createFileRoute('/_site/')({
 });
 
 function HomeRoute() {
-  const { locale } = routeContext(useLocation().pathname);
+  const location = useLocation();
 
-  const data = useSuspenseQuery(routeQueryOptions({ locale, pathname: '/' })).data;
+  const { locale } = routeContext(location.pathname);
+
+  const data = useSuspenseQuery(
+    routeQueryOptions({ locale, pathname: '/', search: location.searchStr }),
+  ).data;
 
   return <RouteView data={data} />;
 }

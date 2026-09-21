@@ -23,6 +23,9 @@ ENV NODE_ENV=production \
     APP_BUILD_TIME=$APP_BUILD_TIME
 COPY --from=dependencies /app/node_modules ./node_modules
 COPY --from=build /app/dist ./dist
+COPY --from=build /app/tools/start-production.mjs ./tools/start-production.mjs
+COPY --from=build /app/tools/production-compression-middleware.mjs ./tools/production-compression-middleware.mjs
+COPY --from=build /app/tools/production-static-middleware.mjs ./tools/production-static-middleware.mjs
 COPY --chown=node:node .docker/entrypoint.prod.sh /usr/local/bin/entrypoint.prod.sh
 RUN chmod 0555 /usr/local/bin/entrypoint.prod.sh
 USER node
@@ -30,4 +33,4 @@ EXPOSE 3000
 HEALTHCHECK --interval=10s --timeout=3s --start-period=10s --retries=6 \
     CMD node -e "fetch('http://127.0.0.1:3000/pt-BR').then((response) => process.exit(response.ok ? 0 : 1)).catch(() => process.exit(1))"
 ENTRYPOINT ["/usr/local/bin/entrypoint.prod.sh"]
-CMD ["./node_modules/.bin/srvx", "--prod", "-s", "dist/client", "dist/server/server.js"]
+CMD ["node", "tools/start-production.mjs"]

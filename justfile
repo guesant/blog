@@ -46,7 +46,11 @@ shell:
     {{compose}} exec start sh
 
 frontend-install:
+    just frontend-node-modules-init
     {{node_run}} 'corepack pnpm install --frozen-lockfile --ignore-scripts'
+
+frontend-node-modules-init:
+    {{compose_run}} --no-deps start-node-modules-init
 
 api-spec:
     {{compose_run}} --no-deps laravel php artisan scramble:export --path=/app/openapi/public-site.json

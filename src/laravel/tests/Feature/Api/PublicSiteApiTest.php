@@ -4,6 +4,8 @@ namespace Tests\Feature\Api;
 
 use App\Models\CaseStudy;
 use App\Models\CaseStudyTranslation;
+use App\Models\ReferenceCollection;
+use App\Models\ReferenceCollectionTranslation;
 use App\Models\Resource;
 use App\Models\ResourceTranslation;
 use Tests\TestCase;
@@ -40,6 +42,33 @@ class PublicSiteApiTest extends TestCase
             ->assertJsonPath('meta.total', 2)
             ->assertJsonPath('meta.last_page', 2)
             ->assertJsonCount(1, 'data');
+    }
+
+    public function test_collection_detail_returns_a_paginated_resource_page(): void
+    {
+        $collection = ReferenceCollection::factory()->create([
+            'slug' => 'reading-list',
+            'hidden' => false,
+        ]);
+        ReferenceCollectionTranslation::factory()->create([
+            'reference_collection_id' => $collection->id,
+            'locale' => 'en',
+        ]);
+
+        $first = $this->createResource('first-collection-finding');
+        $second = $this->createResource('second-collection-finding');
+        $collection->resources()->attach($first, ['order' => 1]);
+        $collection->resources()->attach($second, ['order' => 2]);
+
+        $response = $this->getJson('/api/v1/content/collections/reading-list?locale=en&per_page=1');
+
+        $response
+            ->assertOk()
+            ->assertJsonPath('resources_meta.page', 1)
+            ->assertJsonPath('resources_meta.per_page', 1)
+            ->assertJsonPath('resources_meta.total', 2)
+            ->assertJsonPath('resources_meta.last_page', 2)
+            ->assertJsonCount(1, 'resources');
     }
 
     private function createCaseStudy(string $slug): CaseStudy

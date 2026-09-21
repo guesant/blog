@@ -13,15 +13,6 @@ class ProjectQuery
 {
     use RelatesByTechnology, SortsListings;
 
-    public function list(): Collection
-    {
-        return Project::where('hidden', false)
-            ->where('nda', false)
-            ->orderBy('order')
-            ->with(['translations', 'technologies.translations'])
-            ->get();
-    }
-
     public function listPaginated(int $perPage = 20, ?string $sort = null): LengthAwarePaginator
     {
         $query = Project::where('hidden', false)
@@ -40,14 +31,6 @@ class ProjectQuery
             ->where('nda', false)
             ->with(['translations', 'technologies.translations'])
             ->first();
-    }
-
-    public function listExperiments(): Collection
-    {
-        return Experiment::where('hidden', false)
-            ->orderBy('order')
-            ->with(['translations', 'technologies.translations'])
-            ->get();
     }
 
     public function listExperimentsPaginated(int $perPage = 20, ?string $sort = null): LengthAwarePaginator

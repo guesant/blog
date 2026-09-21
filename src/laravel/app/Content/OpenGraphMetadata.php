@@ -29,9 +29,25 @@ class OpenGraphMetadata
         $cached = $this->cachedEntry($store->get(self::CACHE_KEY), $key);
 
         if ($cached !== null) {
-            $this->touch($store, $key, $cached);
-
             return $cached['metadata'];
+        }
+
+        return null;
+    }
+
+    public function queue(string $value): void
+    {
+        $url = $this->normalizedUrl($value);
+
+        if ($url === null || ! $this->publicHost((string) parse_url($url, PHP_URL_HOST))) {
+            return;
+        }
+
+        $key = hash('sha256', $url);
+        $store = Cache::store();
+
+        if ($this->cachedEntry($store->get(self::CACHE_KEY), $key) !== null) {
+            return;
         }
 
         try {
@@ -41,8 +57,6 @@ class OpenGraphMetadata
                 ->onQueue(config('content.open_graph.queue', 'open-graph'));
         } catch (Throwable) {
         }
-
-        return null;
     }
 
     public function refresh(string $value): void
@@ -50,6 +64,10 @@ class OpenGraphMetadata
         $url = $this->normalizedUrl($value);
 
         if ($url === null) {
+            return;
+        }
+
+        if (! $this->publicHost((string) parse_url($url, PHP_URL_HOST))) {
             return;
         }
 
@@ -84,16 +102,6 @@ class OpenGraphMetadata
         }
 
         return $entry;
-    }
-
-    private function touch($store, string $key, array $entry): void
-    {
-        $entries = $this->entries($store->get(self::CACHE_KEY));
-        $entries[$key] = [
-            'last_used' => microtime(true),
-            'metadata' => $entry['metadata'],
-        ];
-        $this->write($store, $entries);
     }
 
     private function rememberPending($store, string $key): void
@@ -228,7 +236,7 @@ class OpenGraphMetadata
         $scheme = strtolower((string) ($parts['scheme'] ?? ''));
         $host = strtolower((string) ($parts['host'] ?? ''));
 
-        if (! in_array($scheme, ['http', 'https'], true) || $host === '' || isset($parts['user'], $parts['pass']) || ! $this->publicHost($host)) {
+        if (! in_array($scheme, ['http', 'https'], true) || $host === '' || isset($parts['user'], $parts['pass'])) {
             return null;
         }
 
@@ -274,11 +282,11 @@ class OpenGraphMetadata
         $candidate = parse_url($value);
 
         if (isset($candidate['scheme'])) {
-            return $this->normalizedUrl($value);
+            return $this->publicUrl($value);
         }
 
         if (str_starts_with($value, '//')) {
-            return $this->normalizedUrl(($base['scheme'] ?? 'https').':'.$value);
+            return $this->publicUrl(($base['scheme'] ?? 'https').':'.$value);
         }
 
         if (! isset($base['scheme'], $base['host'])) {
@@ -288,13 +296,24 @@ class OpenGraphMetadata
         $origin = $base['scheme'].'://'.$base['host'].(isset($base['port']) ? ':'.$base['port'] : '');
 
         if (str_starts_with($value, '/')) {
-            return $this->normalizedUrl($origin.$value);
+            return $this->publicUrl($origin.$value);
         }
 
         $path = $base['path'] ?? '/';
         $directory = str_ends_with($path, '/') ? $path : rtrim(dirname($path), '/').'/';
         $directory = '/'.ltrim($directory, '/');
 
-        return $this->normalizedUrl($origin.$directory.$value);
+        return $this->publicUrl($origin.$directory.$value);
+    }
+
+    private function publicUrl(string $value): ?string
+    {
+        $url = $this->normalizedUrl($value);
+
+        if ($url === null || ! $this->publicHost((string) parse_url($url, PHP_URL_HOST))) {
+            return null;
+        }
+
+        return $url;
     }
 }

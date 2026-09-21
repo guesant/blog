@@ -29,7 +29,7 @@ class PortfolioPageQuery
             'page' => $page,
             'cases' => $cases,
             'projects' => $projects,
-            'experiments' => (new ProjectQuery)->listExperiments(),
+            'experiments' => (new ProjectQuery)->listExperimentsPaginated(20)->getCollection(),
             'profile' => (new ProfileQuery)->find(),
             'site' => (new SiteSettingsQuery)->find(),
         ];

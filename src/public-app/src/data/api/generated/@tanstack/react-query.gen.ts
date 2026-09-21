@@ -170,6 +170,33 @@ export const publicSiteApiDocumentOptions = (options: Options<PublicSiteApiDocum
     queryKey: publicSiteApiDocumentQueryKey(options)
 });
 
+export const publicSiteApiDocumentInfiniteQueryKey = (options: Options<PublicSiteApiDocumentData>): QueryKey<Options<PublicSiteApiDocumentData>> => createQueryKey('publicSiteApiDocument', options, true);
+
+export const publicSiteApiDocumentInfiniteOptions = (options: Options<PublicSiteApiDocumentData>) => {
+    const opts = infiniteQueryOptions<PublicSiteApiDocumentResponse, PublicSiteApiDocumentError, InfiniteData<PublicSiteApiDocumentResponse>, QueryKey<Options<PublicSiteApiDocumentData>>, number | Pick<QueryKey<Options<PublicSiteApiDocumentData>>[0], 'body' | 'headers' | 'path' | 'query'>>(
+    // @ts-ignore
+    {
+        queryFn: async ({ pageParam, queryKey, signal }) => {
+            // @ts-ignore
+            const page: Pick<QueryKey<Options<PublicSiteApiDocumentData>>[0], 'body' | 'headers' | 'path' | 'query'> = typeof pageParam === 'object' ? pageParam : {
+                query: {
+                    page: pageParam
+                }
+            };
+            const params = createInfiniteParams(queryKey, page);
+            const { data } = await publicSiteApiDocument({
+                ...options,
+                ...params,
+                signal,
+                throwOnError: true
+            });
+            return data;
+        },
+        queryKey: publicSiteApiDocumentInfiniteQueryKey(options)
+    });
+    return opts as Omit<typeof opts, 'initialData'>;
+};
+
 export const publicSiteApiResumePdfQueryKey = (options: Options<PublicSiteApiResumePdfData>) => createQueryKey('publicSiteApiResumePdf', options);
 
 export const publicSiteApiResumePdfOptions = (options: Options<PublicSiteApiResumePdfData>) => queryOptions<PublicSiteApiResumePdfResponse, PublicSiteApiResumePdfError, PublicSiteApiResumePdfResponse, ReturnType<typeof publicSiteApiResumePdfQueryKey>>({

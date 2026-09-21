@@ -3,7 +3,6 @@
 namespace App\Content;
 
 use App\Support\ProtectedEmail;
-use Illuminate\Support\Facades\Cache;
 
 class SiteChromeQuery
 {
@@ -18,11 +17,7 @@ class SiteChromeQuery
         $headerProfile = (new ProfileQuery)->find();
 
         $emailChallenge = $siteSettings?->contact_email
-            ? Cache::remember(
-                'protected-email-challenge:v2:'.md5($siteSettings->contact_email),
-                now()->addDay(),
-                fn () => ProtectedEmail::encode($siteSettings->contact_email),
-            )
+            ? ProtectedEmail::encode($siteSettings->contact_email)
             : null;
 
         $copyrightTemplate = $siteSettings?->translation($locale)?->copyright_template;

@@ -26,7 +26,7 @@ class OpenGraphMetadataTest extends TestCase
 
         $first = $service->forUrl($url);
         $this->assertNull($first);
-        Queue::assertPushed(FetchOpenGraphMetadata::class, 1);
+        Queue::assertNothingPushed();
 
         (new FetchOpenGraphMetadata($url))->handle($service);
         $second = $service->forUrl($url);

@@ -17,7 +17,7 @@ class CaseStudyQueryTest extends TestCase
         $hidden = CaseStudy::factory()->create(['hidden' => true, 'order' => 2]);
         CaseStudyTranslation::factory()->create(['case_study_id' => $hidden->id, 'locale' => 'en']);
 
-        $result = (new CaseStudyQuery)->list();
+        $result = (new CaseStudyQuery)->listPaginated()->getCollection();
 
         $this->assertCount(1, $result);
         $this->assertEquals($visible->id, $result->first()->id);

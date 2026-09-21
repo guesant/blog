@@ -8,25 +8,17 @@ use Illuminate\Support\Collection;
 
 class WritingQuery
 {
-    public function list(): Collection
-    {
-        return Writing::where('hidden', false)
-            ->orderBy('date_iso', 'desc')
-            ->with(['translations', 'topics.translations'])
-            ->get();
-    }
-
     public function listPaginated(int $perPage = 20, ?string $sort = null): LengthAwarePaginator
     {
         $query = Writing::where('hidden', false)
             ->with(['translations', 'topics.translations']);
 
         if ($sort === 'asc') {
-            $query->orderBy('created_at', 'asc');
+            $query->orderBy('created_at', 'asc')->orderBy('id');
         } elseif ($sort === 'desc') {
-            $query->orderBy('created_at', 'desc');
+            $query->orderBy('created_at', 'desc')->orderBy('id');
         } else {
-            $query->orderBy('date_iso', 'desc');
+            $query->orderBy('date_iso', 'desc')->orderBy('id');
         }
 
         return $query->paginate($perPage);

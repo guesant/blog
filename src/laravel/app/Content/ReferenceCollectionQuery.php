@@ -11,14 +11,6 @@ class ReferenceCollectionQuery
 {
     use SortsListings;
 
-    public function list(): Collection
-    {
-        return ReferenceCollection::where('hidden', false)
-            ->orderBy('order')
-            ->with('translations')
-            ->get();
-    }
-
     public function listPaginated(int $perPage = 20, ?string $sort = null): LengthAwarePaginator
     {
         $query = ReferenceCollection::where('hidden', false)
@@ -34,19 +26,21 @@ class ReferenceCollectionQuery
     {
         $collection = ReferenceCollection::where('slug', $slug)
             ->where('hidden', false)
-            ->with(['translations', 'resources'])
+            ->with('translations')
             ->first();
 
-        if (! $collection) {
-            return null;
-        }
-
-        $collection->setRelation('resources', $collection->resources
-            ->filter(fn ($resource) => ! $resource->hidden && $resource->visibility === 'public')
-            ->sortBy('pivot.order')
-            ->values());
-
         return $collection;
+    }
+
+    public function resourcesPaginated(ReferenceCollection $collection, int $perPage = 20, int $page = 1): LengthAwarePaginator
+    {
+        return $collection->resources()
+            ->where('resources.hidden', false)
+            ->where('resources.visibility', 'public')
+            ->with(['translations', 'topics.translations'])
+            ->orderBy('reference_collection_item.order')
+            ->orderBy('resources.id')
+            ->paginate($perPage, ['resources.*'], 'page', max(1, $page));
     }
 
     public function related(ReferenceCollection $collection, int $limit = 3): Collection

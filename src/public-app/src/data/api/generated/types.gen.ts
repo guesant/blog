@@ -37,15 +37,9 @@ export type FindingApiIndexResponses = {
             last_page: number;
             locale: 'pt-BR' | 'en';
             facets: {
-                types: {
-                    [key: string]: unknown;
-                };
-                ratings: {
-                    [key: string]: unknown;
-                };
-                consumptionStates: {
-                    [key: string]: unknown;
-                };
+                types: Array<string>;
+                ratings: Array<string>;
+                consumptionStates: Array<string>;
                 years: Array<string>;
                 topics: Array<{
                     slug: string;
@@ -109,6 +103,13 @@ export type PublicSiteApiIndexErrors = {
     503: {
         error: {
             code: string;
+            message: 'The public site snapshot is warming.';
+            status: 503;
+            details: string;
+        };
+    } | {
+        error: {
+            code: string;
             message: 'The service is temporarily unavailable.';
             status: 503;
             details: string;
@@ -119,9 +120,7 @@ export type PublicSiteApiIndexErrors = {
 export type PublicSiteApiIndexError = PublicSiteApiIndexErrors[keyof PublicSiteApiIndexErrors];
 
 export type PublicSiteApiIndexResponses = {
-    200: string | {
-        [key: string]: unknown;
-    };
+    200: string;
 };
 
 export type PublicSiteApiIndexResponse = PublicSiteApiIndexResponses[keyof PublicSiteApiIndexResponses];
@@ -303,6 +302,7 @@ export type PublicSiteApiDocumentData = {
     };
     query?: {
         locale?: string;
+        page?: number;
     };
     url: '/content/{collection}/{slug}';
 };
@@ -369,7 +369,15 @@ export type PublicSiteApiDocumentResponses = {
             rating: string;
             note: string;
             topics: string;
-        }> | Array<string>;
+        }>;
+        resources_meta: {
+            page: number;
+            per_page: number;
+            total: number;
+            last_page: number;
+            from: number | null;
+            to: number | null;
+        };
         related: null;
         updated_at: string | null;
         created_at: string | null;
@@ -517,6 +525,13 @@ export type PublicSiteApiKnowledgeMapErrors = {
     503: {
         error: {
             code: string;
+            message: 'The knowledge map snapshot is warming.';
+            status: 503;
+            details: string;
+        };
+    } | {
+        error: {
+            code: string;
             message: 'The service is temporarily unavailable.';
             status: 503;
             details: string;
@@ -532,36 +547,23 @@ export type PublicSiteApiKnowledgeMapResponses = {
             id: string;
             kind: string;
             label: string;
-            url: string;
-            meta: string;
+            url: string | null;
+            meta: {
+                [key: string]: unknown;
+            };
         }>;
-        edges: [
-            Array<{
-                source: string | null;
-                target: string | null;
-                relationType: 'has-topic';
+        edges: Array<{
+            source: string;
+            target: string;
+            relationType: string;
+            label: string;
+        }>;
+        kinds: {
+            [key: string]: {
                 label: string;
-            }>,
-            Array<{
-                source: string | null;
-                target: string | null;
-                relationType: 'uses';
-                label: string;
-            }>,
-            Array<{
-                source: string | null;
-                target: string | null;
-                relationType: 'contains';
-                label: string;
-            }>,
-            Array<{
-                source: string | null;
-                target: string | null;
-                relationType: string;
-                label: string;
-            }>
-        ];
-        kinds: Array<unknown>;
+                color: string;
+            };
+        };
     };
 };
 

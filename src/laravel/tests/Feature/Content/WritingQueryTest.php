@@ -20,7 +20,7 @@ class WritingQueryTest extends TestCase
         $hidden = Writing::factory()->create(['slug' => 'hidden', 'hidden' => true, 'date_iso' => '2024-06-15']);
         WritingTranslation::factory()->create(['writing_id' => $hidden->id, 'locale' => 'en']);
 
-        $result = (new WritingQuery)->list();
+        $result = (new WritingQuery)->listPaginated()->getCollection();
 
         $this->assertCount(2, $result);
         $this->assertEquals('newer', $result->first()->slug);

@@ -6,6 +6,7 @@ use App\Content\Graph\NodeRegistry;
 use App\Models\ContentRelation;
 use App\Models\RelationType;
 use App\Models\Topic;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
 class KnowledgeGraphQuery
@@ -21,6 +22,25 @@ class KnowledgeGraphQuery
         'snippet' => '#4d7c0f',
         'collection' => '#a16207',
     ];
+
+    /**
+     * @return array{
+     *     nodes: list<array{id: string, kind: string, label: string, url: string|null, meta: array<string, mixed>}>,
+     *     edges: list<array{source: string, target: string, relationType: string, label: string}>,
+     *     kinds: array<string, array{label: string, color: string}>
+     * }
+     */
+    public function cached(?string $locale = null): array
+    {
+        $cached = Cache::get($this->cacheKey($locale));
+
+        return is_array($cached) ? $cached : [];
+    }
+
+    public function cacheKey(?string $locale = null): string
+    {
+        return 'knowledge-map:v1:'.Locale::normalize($locale);
+    }
 
     public function build(?string $locale = null): array
     {

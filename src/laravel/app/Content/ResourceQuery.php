@@ -9,23 +9,11 @@ use App\Models\Topic;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Cache;
 
 class ResourceQuery
 {
     use SortsListings;
-
-    public function list(array $filters = [], ?string $locale = null): Collection
-    {
-        $locale = Locale::normalize($locale);
-
-        $query = Resource::public();
-
-        $this->applyFilters($query, $filters, $locale);
-
-        return $query->orderBy('order')
-            ->with(['translations', 'topics.translations', 'links', 'identifiers'])
-            ->get();
-    }
 
     public function paginate(array $filters = [], ?string $locale = null, int $perPage = 20, ?string $sort = null): LengthAwarePaginator
     {
@@ -34,9 +22,10 @@ class ResourceQuery
         $query = Resource::public();
 
         $this->applyFilters($query, $filters, $locale);
+        $query->select($this->listingColumns());
 
         if ($sort === 'popular') {
-            $query->orderByDesc('popularity_rank')->orderBy('order');
+            $query->orderByDesc('popularity_rank')->orderBy('order')->orderBy('id');
         } else {
             $this->applySort(
                 $query,
@@ -45,42 +34,57 @@ class ResourceQuery
                 alphaTable: 'resource_translations',
                 alphaForeignKey: 'resource_id',
                 alphaColumn: 'title',
+                locale: $locale,
             );
         }
 
-        return $query->with(['translations', 'topics.translations', 'links', 'identifiers'])
+        return $query->with($this->listingRelations())
             ->paginate($perPage);
     }
 
     public function listByTypePaginated(string $type, int $perPage = 20, ?string $sort = null): LengthAwarePaginator
     {
         $query = Resource::public()->where('type', $type);
+        $query->select($this->listingColumns());
 
         $this->applySort($query, $sort, 'published_date_iso', alphaTable: 'resource_translations', alphaForeignKey: 'resource_id', alphaColumn: 'title');
 
-        return $query->with(['translations', 'topics.translations', 'links', 'identifiers'])
+        return $query->with($this->listingRelations())
             ->paginate($perPage);
     }
 
     public function listByTopicPaginated(int $topicId, int $perPage = 20, ?string $sort = null): LengthAwarePaginator
     {
         $query = Resource::public()->whereHas('topics', fn ($t) => $t->where('topics.id', $topicId));
+        $query->select($this->listingColumns());
 
         $this->applySort($query, $sort, 'published_date_iso', alphaTable: 'resource_translations', alphaForeignKey: 'resource_id', alphaColumn: 'title');
 
-        return $query->with(['translations', 'topics.translations', 'links', 'identifiers'])
+        return $query->with($this->listingRelations())
             ->paginate($perPage);
     }
 
     /**
-     * Distinct facet values across all public resources, independent of the
-     * filters currently applied — mirrors the legacy client-side search bar,
-     * whose facet dropdowns were always built from the full dataset rather
-     * than narrowing as other facets were picked.
+     * @return array{
+     *     types: list<string>,
+     *     ratings: list<string>,
+     *     consumptionStates: list<string>,
+     *     years: list<string>,
+     *     topics: list<array{slug: string, name: string}>
+     * }
      */
     public function facetOptions(?string $locale = null): array
     {
         $locale = Locale::normalize($locale);
+        $cached = Cache::get("resource-facets:v2:{$locale}");
+
+        return is_array($cached) ? $cached : $this->emptyFacetOptions();
+    }
+
+    public function buildFacetOptions(?string $locale = null): array
+    {
+        $locale = Locale::normalize($locale);
+
         $public = Resource::public();
 
         /** @param Builder<resource> $q */
@@ -154,7 +158,8 @@ class ResourceQuery
         }
 
         if (filled($filters['year'] ?? null)) {
-            $query->whereYear('published_date_iso', $filters['year']);
+            $year = (int) $filters['year'];
+            $query->whereBetween('published_date_iso', ["{$year}-01-01", ($year + 1).'-01-01']);
         }
 
         if (filled($filters['free_only'] ?? null)) {
@@ -199,6 +204,54 @@ class ResourceQuery
         return [
             'resource' => $resource,
             'relations' => (new RelationResolver)->for($resource, $locale)->all(),
+        ];
+    }
+
+    private function listingRelations(): array
+    {
+        return [
+            'translations:id,resource_id,locale,title,alternative_title,description,personal_note,reason_found',
+            'topics:id,slug,public_id',
+            'topics.translations:id,topic_id,locale,name',
+            'links:id,resource_id,url,label,platform,purpose,is_free,is_primary',
+            'identifiers:id,resource_id,kind,value',
+        ];
+    }
+
+    private function listingColumns(): array
+    {
+        return [
+            'id',
+            'slug',
+            'public_id',
+            'hidden',
+            'order',
+            'type',
+            'authors',
+            'organizations',
+            'published_date_iso',
+            'found_date_iso',
+            'consumption_state',
+            'rating',
+            'visibility',
+            'type_details',
+            'updated_at',
+            'featured',
+            'featured_order',
+            'popularity_kind',
+            'popularity_rank',
+            'popularity_value',
+        ];
+    }
+
+    private function emptyFacetOptions(): array
+    {
+        return [
+            'types' => [],
+            'ratings' => [],
+            'consumptionStates' => [],
+            'years' => [],
+            'topics' => [],
         ];
     }
 }

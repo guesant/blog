@@ -22,20 +22,21 @@ trait SortsListings
         ?string $alphaTable = null,
         ?string $alphaForeignKey = null,
         string $alphaColumn = 'title',
+        ?string $locale = null,
     ): void {
         if ($sort === 'asc' || $sort === 'desc') {
-            $query->orderBy($sortColumn, $sort);
+            $query->orderBy($sortColumn, $sort)->orderBy($query->getModel()->getTable().'.id');
 
             return;
         }
 
         if ($sort === 'alpha' && $alphaTable !== null && $alphaForeignKey !== null) {
-            $this->applyAlphaSort($query, $alphaTable, $alphaForeignKey, $alphaColumn);
+            $this->applyAlphaSort($query, $alphaTable, $alphaForeignKey, $alphaColumn, $locale);
 
             return;
         }
 
-        $query->orderBy($defaultColumn);
+        $query->orderBy($defaultColumn)->orderBy($query->getModel()->getTable().'.id');
     }
 
     /**
@@ -45,10 +46,10 @@ trait SortsListings
      *
      * @param  Builder<*>  $query
      */
-    private function applyAlphaSort(Builder $query, string $translationTable, string $foreignKey, string $column): void
+    private function applyAlphaSort(Builder $query, string $translationTable, string $foreignKey, string $column, ?string $locale = null): void
     {
         $baseTable = $query->getModel()->getTable();
-        $locale = app()->getLocale();
+        $locale ??= app()->getLocale();
 
         if (is_null($query->getQuery()->columns)) {
             $query->select("{$baseTable}.*");
@@ -57,6 +58,7 @@ trait SortsListings
         $query->leftJoin($translationTable, function ($join) use ($baseTable, $translationTable, $foreignKey, $locale) {
             $join->on("{$baseTable}.id", '=', "{$translationTable}.{$foreignKey}")
                 ->where("{$translationTable}.locale", $locale);
-        })->orderByRaw("lower({$translationTable}.{$column}) asc");
+        })->orderByRaw("lower({$translationTable}.{$column}) asc")
+            ->orderBy("{$baseTable}.id");
     }
 }

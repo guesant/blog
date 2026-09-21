@@ -111,7 +111,9 @@ class PublicSiteApiController extends Controller
         abort_unless(in_array($collection, self::COLLECTIONS, true), 404);
 
         $locale = Locale::normalize($request->query('locale'));
-        $item = $this->findCollectionItem($collection, $slug, $locale);
+        $perPage = min(max((int) $request->query('per_page', 100), 1), 100);
+        $page = max(1, $request->integer('page', 1));
+        $item = $this->findCollectionItem($collection, $slug, $locale, $perPage, $page);
 
         abort_unless($item !== null, 404);
 
@@ -160,7 +162,17 @@ class PublicSiteApiController extends Controller
             )->header('Retry-After', (string) 3600);
         }
 
-        return response()->json((new KnowledgeGraphQuery)->build(Locale::normalize($request->query('locale'))))
+        $graph = (new KnowledgeGraphQuery)->cached(Locale::normalize($request->query('locale')));
+
+        if ($graph === []) {
+            return ApiErrorResponse::make(
+                ApiErrorCode::ServiceUnavailable,
+                503,
+                'The knowledge map snapshot is warming.',
+            )->header('Retry-After', (string) 60);
+        }
+
+        return response()->json($graph)
             ->header('Cache-Control', 'public, max-age=60, stale-while-revalidate=300');
     }
 
@@ -175,13 +187,36 @@ class PublicSiteApiController extends Controller
         }
 
         $locale = Locale::normalize($request->query('locale'));
+        $revision = DB::table('content_revisions')->value('version') ?? 0;
+        $body = $this->cachedSnapshot($revision, $locale);
+
+        if ($body === '') {
+            return ApiErrorResponse::make(
+                ApiErrorCode::ServiceUnavailable,
+                503,
+                'The public site snapshot is warming.',
+            )->header('Retry-After', (string) 60);
+        }
+
+        $etag = '"'.substr(hash('sha256', $body), 0, 32).'"';
+
+        if ($request->header('If-None-Match') === $etag) {
+            return response(null, 304)->header('ETag', $etag);
+        }
+
+        return response($body, 200, ['Content-Type' => 'application/json; charset=utf-8'])
+            ->header('Cache-Control', 'public, max-age=60, stale-while-revalidate=300')
+            ->header('ETag', $etag);
+    }
+
+    public function buildSnapshotBody(string $locale): string
+    {
         $chrome = (new SiteChromeQuery)->build($locale);
         $settings = $chrome['siteSettings'];
         $profile = $chrome['headerProfile'];
         $profileTranslation = $profile?->translation($locale);
 
-        $revision = DB::table('content_revisions')->value('version') ?? 0;
-        $body = Cache::rememberForever("public-site-snapshot:v4:chrome-pages:{$revision}:{$locale}", fn () => response()->json([
+        return response()->json([
             'schema_version' => 3,
             'locale' => $locale,
             'generated_at' => now()->toIso8601String(),
@@ -259,16 +294,14 @@ class PublicSiteApiController extends Controller
                     fn (string $root) => file_exists("{$root}/resume-{$value}.pdf")
                 );
             })->values(),
-        ])->getContent());
-        $etag = '"'.substr(hash('sha256', $body), 0, 32).'"';
+        ])->getContent();
+    }
 
-        if ($request->header('If-None-Match') === $etag) {
-            return response(null, 304)->header('ETag', $etag);
-        }
+    private function cachedSnapshot(int|string $revision, string $locale): string
+    {
+        $body = Cache::get("public-site-snapshot:v4:chrome-pages:{$revision}:{$locale}");
 
-        return response($body, 200, ['Content-Type' => 'application/json; charset=utf-8'])
-            ->header('Cache-Control', 'public, max-age=60, stale-while-revalidate=300')
-            ->header('ETag', $etag);
+        return is_string($body) ? $body : '';
     }
 
     private function pages(string $locale): array
@@ -394,7 +427,7 @@ class PublicSiteApiController extends Controller
         };
     }
 
-    private function findCollectionItem(string $collection, string $slug, string $locale): ?array
+    private function findCollectionItem(string $collection, string $slug, string $locale, int $perPage = 20, int $page = 1): ?array
     {
         $item = match ($collection) {
             'cases' => (new CaseStudyQuery)->findBySlug($slug),
@@ -414,7 +447,7 @@ class PublicSiteApiController extends Controller
 
         return match ($collection) {
             'cases' => $this->caseStudy($item, $locale),
-            'collections' => $this->collectionDetail($item, $locale),
+            'collections' => $this->collectionDetail($item, $locale, $perPage, $page),
             'experiments' => $this->experiment($item, $locale),
             'projects' => $this->project($item, $locale),
             'snippets' => $this->snippet($item, $locale),
@@ -621,10 +654,10 @@ class PublicSiteApiController extends Controller
         ];
     }
 
-    private function collectionDetail(ReferenceCollection $collection, string $locale): array
+    private function collectionDetail(ReferenceCollection $collection, string $locale, int $perPage, int $page): array
     {
         $translation = $collection->translation($locale);
-        $details = (new ReferenceCollectionQuery)->findBySlug($collection->slug);
+        $resources = (new ReferenceCollectionQuery)->resourcesPaginated($collection, $perPage, $page);
 
         return [
             'slug' => $collection->slug,
@@ -633,7 +666,7 @@ class PublicSiteApiController extends Controller
             'description' => $translation?->description,
             'intro' => $translation?->intro,
             'published_at' => $collection->published_at?->toDateString(),
-            'resources' => $details?->resources->map(function ($resource) use ($locale) {
+            'resources' => $resources->getCollection()->map(function ($resource) use ($locale) {
                 $resourceTranslation = $resource->translation($locale);
 
                 return [
@@ -649,7 +682,15 @@ class PublicSiteApiController extends Controller
                         'name' => $topic->translation($locale)?->name ?? $topic->slug,
                     ])->values(),
                 ];
-            })->values() ?? collect(),
+            })->values(),
+            'resources_meta' => [
+                'page' => $resources->currentPage(),
+                'per_page' => $resources->perPage(),
+                'total' => $resources->total(),
+                'last_page' => $resources->lastPage(),
+                'from' => $resources->firstItem(),
+                'to' => $resources->lastItem(),
+            ],
             'related' => null,
             'updated_at' => $collection->updated_at?->format('Y-m-d H:i:s'),
             'created_at' => $collection->created_at?->format('Y-m-d H:i:s'),

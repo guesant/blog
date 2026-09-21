@@ -78,16 +78,22 @@
                                                     "type": "object",
                                                     "properties": {
                                                         "types": {
-                                                            "type": "object",
-                                                            "additionalProperties": {}
+                                                            "type": "array",
+                                                            "items": {
+                                                                "type": "string"
+                                                            }
                                                         },
                                                         "ratings": {
-                                                            "type": "object",
-                                                            "additionalProperties": {}
+                                                            "type": "array",
+                                                            "items": {
+                                                                "type": "string"
+                                                            }
                                                         },
                                                         "consumptionStates": {
-                                                            "type": "object",
-                                                            "additionalProperties": {}
+                                                            "type": "array",
+                                                            "items": {
+                                                                "type": "string"
+                                                            }
                                                         },
                                                         "years": {
                                                             "type": "array",
@@ -322,10 +328,7 @@
                         "content": {
                             "application/json; charset=utf-8": {
                                 "schema": {
-                                    "type": [
-                                        "string",
-                                        "object"
-                                    ]
+                                    "type": "string"
                                 }
                             }
                         }
@@ -338,36 +341,73 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "error": {
+                                    "anyOf": [
+                                        {
                                             "type": "object",
                                             "properties": {
-                                                "code": {
-                                                    "type": "string"
-                                                },
-                                                "message": {
-                                                    "type": "string",
-                                                    "const": "The service is temporarily unavailable."
-                                                },
-                                                "status": {
-                                                    "type": "integer",
-                                                    "const": 503
-                                                },
-                                                "details": {
-                                                    "type": "string"
+                                                "error": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "code": {
+                                                            "type": "string"
+                                                        },
+                                                        "message": {
+                                                            "type": "string",
+                                                            "const": "The public site snapshot is warming."
+                                                        },
+                                                        "status": {
+                                                            "type": "integer",
+                                                            "const": 503
+                                                        },
+                                                        "details": {
+                                                            "type": "string"
+                                                        }
+                                                    },
+                                                    "required": [
+                                                        "code",
+                                                        "message",
+                                                        "status",
+                                                        "details"
+                                                    ]
                                                 }
                                             },
                                             "required": [
-                                                "code",
-                                                "message",
-                                                "status",
-                                                "details"
+                                                "error"
+                                            ]
+                                        },
+                                        {
+                                            "type": "object",
+                                            "properties": {
+                                                "error": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "code": {
+                                                            "type": "string"
+                                                        },
+                                                        "message": {
+                                                            "type": "string",
+                                                            "const": "The service is temporarily unavailable."
+                                                        },
+                                                        "status": {
+                                                            "type": "integer",
+                                                            "const": 503
+                                                        },
+                                                        "details": {
+                                                            "type": "string"
+                                                        }
+                                                    },
+                                                    "required": [
+                                                        "code",
+                                                        "message",
+                                                        "status",
+                                                        "details"
+                                                    ]
+                                                }
+                                            },
+                                            "required": [
+                                                "error"
                                             ]
                                         }
-                                    },
-                                    "required": [
-                                        "error"
                                     ]
                                 }
                             }
@@ -1215,6 +1255,14 @@
                         "schema": {
                             "type": "string"
                         }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer",
+                            "default": 1
+                        }
                     }
                 ],
                 "responses": {
@@ -1387,58 +1435,85 @@
                                                     ]
                                                 },
                                                 "resources": {
-                                                    "anyOf": [
-                                                        {
-                                                            "type": "array",
-                                                            "items": {
-                                                                "type": "object",
-                                                                "properties": {
-                                                                    "slug": {
-                                                                        "type": "string"
-                                                                    },
-                                                                    "url": {
-                                                                        "type": "string"
-                                                                    },
-                                                                    "title": {
-                                                                        "type": "string"
-                                                                    },
-                                                                    "description": {
-                                                                        "type": [
-                                                                            "string",
-                                                                            "null"
-                                                                        ]
-                                                                    },
-                                                                    "type": {
-                                                                        "type": "string"
-                                                                    },
-                                                                    "rating": {
-                                                                        "type": "string"
-                                                                    },
-                                                                    "note": {
-                                                                        "type": "string"
-                                                                    },
-                                                                    "topics": {
-                                                                        "type": "string"
-                                                                    }
-                                                                },
-                                                                "required": [
-                                                                    "slug",
-                                                                    "url",
-                                                                    "title",
-                                                                    "description",
-                                                                    "type",
-                                                                    "rating",
-                                                                    "note",
-                                                                    "topics"
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "object",
+                                                        "properties": {
+                                                            "slug": {
+                                                                "type": "string"
+                                                            },
+                                                            "url": {
+                                                                "type": "string"
+                                                            },
+                                                            "title": {
+                                                                "type": "string"
+                                                            },
+                                                            "description": {
+                                                                "type": [
+                                                                    "string",
+                                                                    "null"
                                                                 ]
-                                                            }
-                                                        },
-                                                        {
-                                                            "type": "array",
-                                                            "items": {
+                                                            },
+                                                            "type": {
+                                                                "type": "string"
+                                                            },
+                                                            "rating": {
+                                                                "type": "string"
+                                                            },
+                                                            "note": {
+                                                                "type": "string"
+                                                            },
+                                                            "topics": {
                                                                 "type": "string"
                                                             }
+                                                        },
+                                                        "required": [
+                                                            "slug",
+                                                            "url",
+                                                            "title",
+                                                            "description",
+                                                            "type",
+                                                            "rating",
+                                                            "note",
+                                                            "topics"
+                                                        ]
+                                                    }
+                                                },
+                                                "resources_meta": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "page": {
+                                                            "type": "integer"
+                                                        },
+                                                        "per_page": {
+                                                            "type": "integer"
+                                                        },
+                                                        "total": {
+                                                            "type": "integer"
+                                                        },
+                                                        "last_page": {
+                                                            "type": "integer"
+                                                        },
+                                                        "from": {
+                                                            "type": [
+                                                                "integer",
+                                                                "null"
+                                                            ]
+                                                        },
+                                                        "to": {
+                                                            "type": [
+                                                                "integer",
+                                                                "null"
+                                                            ]
                                                         }
+                                                    },
+                                                    "required": [
+                                                        "page",
+                                                        "per_page",
+                                                        "total",
+                                                        "last_page",
+                                                        "from",
+                                                        "to"
                                                     ]
                                                 },
                                                 "related": {
@@ -1465,6 +1540,7 @@
                                                 "intro",
                                                 "published_at",
                                                 "resources",
+                                                "resources_meta",
                                                 "related",
                                                 "updated_at",
                                                 "created_at"
@@ -2102,10 +2178,14 @@
                                                         "type": "string"
                                                     },
                                                     "url": {
-                                                        "type": "string"
+                                                        "type": [
+                                                            "string",
+                                                            "null"
+                                                        ]
                                                     },
                                                     "meta": {
-                                                        "type": "string"
+                                                        "type": "object",
+                                                        "additionalProperties": {}
                                                     }
                                                 },
                                                 "required": [
@@ -2119,145 +2199,47 @@
                                         },
                                         "edges": {
                                             "type": "array",
-                                            "prefixItems": [
-                                                {
-                                                    "type": "array",
-                                                    "items": {
-                                                        "type": "object",
-                                                        "properties": {
-                                                            "source": {
-                                                                "type": [
-                                                                    "string",
-                                                                    "null"
-                                                                ]
-                                                            },
-                                                            "target": {
-                                                                "type": [
-                                                                    "string",
-                                                                    "null"
-                                                                ]
-                                                            },
-                                                            "relationType": {
-                                                                "type": "string",
-                                                                "const": "has-topic"
-                                                            },
-                                                            "label": {
-                                                                "type": "string"
-                                                            }
-                                                        },
-                                                        "required": [
-                                                            "source",
-                                                            "target",
-                                                            "relationType",
-                                                            "label"
-                                                        ]
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "source": {
+                                                        "type": "string"
+                                                    },
+                                                    "target": {
+                                                        "type": "string"
+                                                    },
+                                                    "relationType": {
+                                                        "type": "string"
+                                                    },
+                                                    "label": {
+                                                        "type": "string"
                                                     }
                                                 },
-                                                {
-                                                    "type": "array",
-                                                    "items": {
-                                                        "type": "object",
-                                                        "properties": {
-                                                            "source": {
-                                                                "type": [
-                                                                    "string",
-                                                                    "null"
-                                                                ]
-                                                            },
-                                                            "target": {
-                                                                "type": [
-                                                                    "string",
-                                                                    "null"
-                                                                ]
-                                                            },
-                                                            "relationType": {
-                                                                "type": "string",
-                                                                "const": "uses"
-                                                            },
-                                                            "label": {
-                                                                "type": "string"
-                                                            }
-                                                        },
-                                                        "required": [
-                                                            "source",
-                                                            "target",
-                                                            "relationType",
-                                                            "label"
-                                                        ]
-                                                    }
-                                                },
-                                                {
-                                                    "type": "array",
-                                                    "items": {
-                                                        "type": "object",
-                                                        "properties": {
-                                                            "source": {
-                                                                "type": [
-                                                                    "string",
-                                                                    "null"
-                                                                ]
-                                                            },
-                                                            "target": {
-                                                                "type": [
-                                                                    "string",
-                                                                    "null"
-                                                                ]
-                                                            },
-                                                            "relationType": {
-                                                                "type": "string",
-                                                                "const": "contains"
-                                                            },
-                                                            "label": {
-                                                                "type": "string"
-                                                            }
-                                                        },
-                                                        "required": [
-                                                            "source",
-                                                            "target",
-                                                            "relationType",
-                                                            "label"
-                                                        ]
-                                                    }
-                                                },
-                                                {
-                                                    "type": "array",
-                                                    "items": {
-                                                        "type": "object",
-                                                        "properties": {
-                                                            "source": {
-                                                                "type": [
-                                                                    "string",
-                                                                    "null"
-                                                                ]
-                                                            },
-                                                            "target": {
-                                                                "type": [
-                                                                    "string",
-                                                                    "null"
-                                                                ]
-                                                            },
-                                                            "relationType": {
-                                                                "type": "string"
-                                                            },
-                                                            "label": {
-                                                                "type": "string"
-                                                            }
-                                                        },
-                                                        "required": [
-                                                            "source",
-                                                            "target",
-                                                            "relationType",
-                                                            "label"
-                                                        ]
-                                                    }
-                                                }
-                                            ],
-                                            "minItems": 4,
-                                            "maxItems": 4
+                                                "required": [
+                                                    "source",
+                                                    "target",
+                                                    "relationType",
+                                                    "label"
+                                                ]
+                                            }
                                         },
                                         "kinds": {
-                                            "type": "array",
-                                            "items": {}
+                                            "type": "object",
+                                            "additionalProperties": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "label": {
+                                                        "type": "string"
+                                                    },
+                                                    "color": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "required": [
+                                                    "label",
+                                                    "color"
+                                                ]
+                                            }
                                         }
                                     },
                                     "required": [
@@ -2274,36 +2256,73 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "error": {
+                                    "anyOf": [
+                                        {
                                             "type": "object",
                                             "properties": {
-                                                "code": {
-                                                    "type": "string"
-                                                },
-                                                "message": {
-                                                    "type": "string",
-                                                    "const": "The service is temporarily unavailable."
-                                                },
-                                                "status": {
-                                                    "type": "integer",
-                                                    "const": 503
-                                                },
-                                                "details": {
-                                                    "type": "string"
+                                                "error": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "code": {
+                                                            "type": "string"
+                                                        },
+                                                        "message": {
+                                                            "type": "string",
+                                                            "const": "The knowledge map snapshot is warming."
+                                                        },
+                                                        "status": {
+                                                            "type": "integer",
+                                                            "const": 503
+                                                        },
+                                                        "details": {
+                                                            "type": "string"
+                                                        }
+                                                    },
+                                                    "required": [
+                                                        "code",
+                                                        "message",
+                                                        "status",
+                                                        "details"
+                                                    ]
                                                 }
                                             },
                                             "required": [
-                                                "code",
-                                                "message",
-                                                "status",
-                                                "details"
+                                                "error"
+                                            ]
+                                        },
+                                        {
+                                            "type": "object",
+                                            "properties": {
+                                                "error": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "code": {
+                                                            "type": "string"
+                                                        },
+                                                        "message": {
+                                                            "type": "string",
+                                                            "const": "The service is temporarily unavailable."
+                                                        },
+                                                        "status": {
+                                                            "type": "integer",
+                                                            "const": 503
+                                                        },
+                                                        "details": {
+                                                            "type": "string"
+                                                        }
+                                                    },
+                                                    "required": [
+                                                        "code",
+                                                        "message",
+                                                        "status",
+                                                        "details"
+                                                    ]
+                                                }
+                                            },
+                                            "required": [
+                                                "error"
                                             ]
                                         }
-                                    },
-                                    "required": [
-                                        "error"
                                     ]
                                 }
                             }

@@ -12,15 +12,6 @@ class CaseStudyQuery
 {
     use RelatesByTechnology, SortsListings;
 
-    public function list(): Collection
-    {
-        return CaseStudy::where('hidden', false)
-            ->where('nda', false)
-            ->orderBy('order')
-            ->with(['translations', 'technologies.translations'])
-            ->get();
-    }
-
     public function listPaginated(int $perPage = 20, ?string $sort = null): LengthAwarePaginator
     {
         $query = CaseStudy::where('hidden', false)

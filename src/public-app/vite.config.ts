@@ -4,6 +4,7 @@ import viteReact from '@vitejs/plugin-react';
 import { fileURLToPath, URL } from 'node:url';
 
 const sourceRoot = fileURLToPath(new URL('./src/', import.meta.url));
+const assetRevision = 'v2';
 
 export default defineConfig({
   server: {
@@ -17,6 +18,13 @@ export default defineConfig({
   },
   build: {
     chunkSizeWarningLimit: 700,
+    rollupOptions: {
+      output: {
+        assetFileNames: `assets/[name]-[hash]-${assetRevision}.[ext]`,
+        chunkFileNames: `assets/[name]-[hash]-${assetRevision}.js`,
+        entryFileNames: `assets/[name]-[hash]-${assetRevision}.js`,
+      },
+    },
   },
   plugins: [
     tanstackStart({

@@ -35,7 +35,7 @@ RUN ARCH="$(uname -m)" \
         aarch64) TECTONIC_TARGET="aarch64-unknown-linux-musl"; TECTONIC_SHA256="$TECTONIC_SHA256_AARCH64" ;; \
         *) echo "Unsupported architecture: $ARCH" >&2; exit 1 ;; \
     esac \
-    && curl --proto '=https' -fsSL \
+    && curl --proto '=https' -fsSL --retry 5 --retry-all-errors --retry-delay 5 \
         "https://github.com/tectonic-typesetting/tectonic/releases/download/tectonic%400.17.0/tectonic-0.17.0-${TECTONIC_TARGET}.tar.gz" \
         -o /tmp/tectonic.tar.gz \
     && printf '%s  %s\n' "$TECTONIC_SHA256" /tmp/tectonic.tar.gz > /tmp/tectonic.sha256 \

@@ -20,8 +20,6 @@ Push em `main` roda os portões e publica a imagem do frontend em `ghcr.io/guesa
 ## Mais
 
 - [AGENTS.md](AGENTS.md): convenções
-- [docs/pendencias-e-decisoes.md](docs/pendencias-e-decisoes.md): decisões e pendências
-- [docs/database-schema.md](docs/database-schema.md): banco
 - [SECURITY.md](SECURITY.md): reportar vulnerabilidade
 
 Código sob MIT. O conteúdo do site (textos, fotos, currículo) é meu e não entra na licença.

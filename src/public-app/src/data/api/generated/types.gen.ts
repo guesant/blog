@@ -98,22 +98,6 @@ export type PublicSiteApiIndexData = {
     url: '/public-site';
 };
 
-export type PublicSiteApiIndexErrors = {
-    /**
-     * The service is temporarily unavailable.
-     */
-    503: {
-        error: {
-            code: string;
-            message: string;
-            status: number;
-            details: string;
-        };
-    };
-};
-
-export type PublicSiteApiIndexError = PublicSiteApiIndexErrors[keyof PublicSiteApiIndexErrors];
-
 export type PublicSiteApiIndexResponses = {
     200: {
         [key: string]: unknown;

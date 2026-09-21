@@ -92,7 +92,7 @@ action-test:
 laravel-check:
     {{compose_run}} -v "$PWD/src/laravel/.env.example:/app/.env:ro" laravel php artisan migrate:status
     {{compose_run}} -v "$PWD/src/laravel/.env.example:/app/.env:ro" laravel ./vendor/bin/pint --test
-    {{compose_run}} -v "$PWD/src/laravel/.env.example:/app/.env:ro" laravel php artisan test
+    {{compose_run}} -v "$PWD/src/laravel/.env.example:/app/.env:ro" laravel php -d memory_limit=512M vendor/bin/phpunit --configuration phpunit.xml
 
 check: tools-build format api-check frontend-lint frontend-typecheck frontend-complexity frontend-dead-code duplication local-links repository-lint security quality-report lint-actions action-test laravel-check frontend-build
 

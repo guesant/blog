@@ -5,33 +5,17 @@ settings:
   excludeLinksFromLockfile: false
 
 overrides:
-  js-yaml@3.15.0: 3.15.1
+  js-yaml@3.15.0: 3.15.2
   js-yaml@4.1.1: 4.3.2
   js-yaml@4.2.0: 4.3.2
   js-yaml@4.3.0: 4.3.2
   js-yaml@4.3.1: 4.3.2
-  mermaid: 11.16.1
-  minimatch@10.1.1: 10.2.5
-  path-to-regexp@8.2.0: 8.4.0
-  vercel>undici: 6.28.0
-  '@vercel/blob>undici': 6.28.0
-  '@vercel/sandbox>undici': 7.29.0
-  '@tootallnate/once@2.0.0': 2.0.1
-  minimatch@5.1.9>brace-expansion: 5.0.9
-  minimatch@9.1.9>brace-expansion: 5.0.9
-  minimatch@10.2.5>brace-expansion: 5.0.9
   postcss>nanoid: 3.3.18
-  dompurify: 3.4.13
   ip-address: 10.3.1
-  lodash: 4.18.0
-  linkify-it: 5.0.2
-  markdown-it: 14.2.0
-  smol-toml@1.5.2: 1.6.1
-  tar@7.5.7: 7.5.21
+  lodash: 4.18.1
   tmp: 0.2.7
   postcss: 8.5.23
   qs@6.15.3: 6.16.0
-  sharp: 0.35.0
 
 importers:
 
@@ -2793,8 +2777,8 @@ packages:
   js-tokens@4.0.0:
     resolution: {integrity: sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==}
 
-  js-yaml@3.15.1:
-    resolution: {integrity: sha512-S99WuO3HlhO3XN41EtYUNl9zzXjoJx7QvmipxsJVxtCBT0YHEFy+iOJhjSvrmV12nYhWpZaM8lPHkJm0yUMbag==}
+  js-yaml@3.15.2:
+    resolution: {integrity: sha512-6EuL879VkRA+1Cz578mKMiKvjPNEuk6+r1JaFzoSWejZmtf7xWbIyw1e3KkxlkzTIt9Taw6JBhEppG7utc1P+w==}
     hasBin: true
 
   js-yaml@4.3.2:
@@ -3006,9 +2990,8 @@ packages:
   lodash.merge@4.6.2:
     resolution: {integrity: sha512-0KpjqXRVvrYyCsX1swR/XTK0va6VQkQM6MNo7PqW77ByjAhoARA8EfrP1N4+KlKj8YS0ZUCtRT/YUuhyYDujIQ==}
 
-  lodash@4.18.0:
-    resolution: {integrity: sha512-l1mfj2atMqndAHI3ls7XqPxEjV2J9ZkcNyHpoZA3r2T1LLwDB69jgkMWh71YKwhBbK0G2f4WSn05ahmQXVxupA==}
-    deprecated: Bad release. Please use lodash@4.17.21 instead.
+  lodash@4.18.1:
+    resolution: {integrity: sha512-dMInicTPVE8d1e5otfwmmjlxkZoUpiVLwyeTdUsi/Caj/gfzzblBcCE5sRHV/AsjuCmxWrte2TNGSYuCeCq+0Q==}
 
   lookup-closest-locale@6.2.0:
     resolution: {integrity: sha512-/c2kL+Vnp1jnV6K6RpDTHK3dgg0Tu2VVp+elEiJpjfS1UyY7AjOYHohRug6wT0OpoX2qFgNORndE9RqesfVxWQ==}
@@ -4693,7 +4676,7 @@ snapshots:
     dependencies:
       debug: 4.4.3(supports-color@7.2.0)
       isomorphic-fetch: 3.0.0
-      js-yaml: 3.15.1
+      js-yaml: 3.15.2
       lighthouse: 12.6.1(supports-color@7.2.0)
       tree-kill: 1.2.2
     transitivePeerDependencies:
@@ -6697,7 +6680,7 @@ snapshots:
       cli-width: 2.2.1
       external-editor: 3.1.0
       figures: 2.0.0
-      lodash: 4.18.0
+      lodash: 4.18.1
       mute-stream: 0.0.7
       run-async: 2.4.1
       rxjs: 6.6.7
@@ -6900,7 +6883,7 @@ snapshots:
 
   js-tokens@4.0.0: {}
 
-  js-yaml@3.15.1:
+  js-yaml@3.15.2:
     dependencies:
       argparse: 1.0.10
       esprima: 4.0.1
@@ -7117,7 +7100,7 @@ snapshots:
 
   lodash.merge@4.6.2: {}
 
-  lodash@4.18.0: {}
+  lodash@4.18.1: {}
 
   lookup-closest-locale@6.2.0: {}
 

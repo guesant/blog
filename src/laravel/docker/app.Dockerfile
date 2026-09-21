@@ -6,12 +6,15 @@ FROM laravelsail/php83-composer@sha256:428fa9b2edf2cfc1be71a6c32f0d6723449e5edc6
 # legacy /og route used ('Arial, sans-serif'), so no font-conversion needed.
 RUN apt-get update \
     && apt-get install -y --no-install-recommends libicu-dev libfreetype6-dev libjpeg62-turbo-dev libpng-dev libpq-dev libzip-dev fonts-liberation \
+    && apt-get upgrade -y \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install intl gd pdo_pgsql zip \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
 RUN echo "expose_php = Off" > /usr/local/etc/php/conf.d/no-expose-php.ini
+
+RUN rm -rf /laravel-installer /root/.composer
 
 WORKDIR /app
 COPY composer.json composer.lock ./

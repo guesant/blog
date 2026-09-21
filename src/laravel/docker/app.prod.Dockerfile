@@ -5,6 +5,7 @@ FROM laravelsail/php83-composer@sha256:428fa9b2edf2cfc1be71a6c32f0d6723449e5edc6
 # legacy /og route used ('Arial, sans-serif'), so no font-conversion needed.
 RUN apt-get update \
     && apt-get install -y --no-install-recommends libicu-dev libfreetype6-dev libjpeg62-turbo-dev libpng-dev libpq-dev libzip-dev fonts-liberation \
+    && apt-get upgrade -y \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install intl gd pdo_pgsql zip \
     && apt-get clean \
@@ -19,6 +20,8 @@ RUN composer install --no-dev --no-scripts --no-autoloader --prefer-dist
 
 FROM php-base
 WORKDIR /app
+
+RUN rm -rf /laravel-installer /root/.composer
 
 # Résumé PDF generation: static Tectonic binary, no LaTeX distro install.
 # The installer script only targets aarch64-unknown-linux-gnu on arm64, which

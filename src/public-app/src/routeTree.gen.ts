@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SiteRouteImport } from './routes/_site'
+import { Route as HealthRouteImport } from './routes/health'
 import { Route as SiteSupportRouteImport } from './routes/site-support'
 import { Route as SiteIndexRouteImport } from './routes/_site/index'
 import { Route as SiteSplatRouteImport } from './routes/_site/$'
@@ -17,6 +18,11 @@ import { Route as SiteSplatSupportRouteImport } from './routes/_site/splat-suppo
 
 const SiteRoute = SiteRouteImport.update({
   id: '/_site',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HealthRoute = HealthRouteImport.update({
+  id: '/health',
+  path: '/health',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SiteSupportRoute = SiteSupportRouteImport.update({
@@ -42,11 +48,13 @@ const SiteSplatSupportRoute = SiteSplatSupportRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof SiteIndexRoute
+  '/health': typeof HealthRoute
   '/site-support': typeof SiteSupportRoute
   '/$': typeof SiteSplatRoute
   '/splat-support': typeof SiteSplatSupportRoute
 }
 export interface FileRoutesByTo {
+  '/health': typeof HealthRoute
   '/site-support': typeof SiteSupportRoute
   '/$': typeof SiteSplatRoute
   '/splat-support': typeof SiteSplatSupportRoute
@@ -55,6 +63,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_site': typeof SiteRouteWithChildren
+  '/health': typeof HealthRoute
   '/site-support': typeof SiteSupportRoute
   '/_site/$': typeof SiteSplatRoute
   '/_site/splat-support': typeof SiteSplatSupportRoute
@@ -62,12 +71,13 @@ export interface FileRoutesById {
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/site-support' | '/$' | '/splat-support'
+  fullPaths: '/' | '/health' | '/site-support' | '/$' | '/splat-support'
   fileRoutesByTo: FileRoutesByTo
-  to: '/site-support' | '/$' | '/splat-support' | '/'
+  to: '/health' | '/site-support' | '/$' | '/splat-support' | '/'
   id:
     | '__root__'
     | '/_site'
+    | '/health'
     | '/site-support'
     | '/_site/$'
     | '/_site/splat-support'
@@ -76,6 +86,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   SiteRoute: typeof SiteRouteWithChildren
+  HealthRoute: typeof HealthRoute
   SiteSupportRoute: typeof SiteSupportRoute
 }
 
@@ -86,6 +97,13 @@ declare module '@tanstack/react-router' {
       path: ''
       fullPath: '/'
       preLoaderRoute: typeof SiteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/health': {
+      id: '/health'
+      path: '/health'
+      fullPath: '/health'
+      preLoaderRoute: typeof HealthRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/site-support': {
@@ -135,6 +153,7 @@ const SiteRouteWithChildren = SiteRoute._addFileChildren(SiteRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   SiteRoute: SiteRouteWithChildren,
+  HealthRoute: HealthRoute,
   SiteSupportRoute: SiteSupportRoute,
 }
 export const routeTree = rootRouteImport

@@ -32,4 +32,4 @@ jobs:
         run: sudo apt-get update && sudo apt-get install --yes --no-install-recommends just
 
       - name: Run the repository gate
-        run: just check
+        run: PORTFOLIO_CONTAINER_UID="$(id -u)" PORTFOLIO_CONTAINER_GID="$(id -g)" just check

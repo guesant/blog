@@ -4,13 +4,9 @@ on:
   push:
     paths-ignore:
       - .deploy/**
-      - docs/**
-      - "**/*.md"
   pull_request:
     paths-ignore:
       - .deploy/**
-      - docs/**
-      - "**/*.md"
 
 permissions:
   contents: read

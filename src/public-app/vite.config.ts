@@ -22,7 +22,10 @@ export default defineConfig({
       output: {
         assetFileNames: `assets/[name]-[hash]-${assetRevision}.[ext]`,
         chunkFileNames: `assets/[name]-[hash]-${assetRevision}.js`,
-        entryFileNames: `assets/[name]-[hash]-${assetRevision}.js`,
+        entryFileNames: (chunk) =>
+          chunk.name === 'server'
+            ? 'server.js'
+            : `assets/[name]-[hash]-${assetRevision}.js`,
       },
     },
   },

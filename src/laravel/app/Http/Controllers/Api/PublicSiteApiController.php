@@ -33,6 +33,7 @@ use App\Models\Snippet;
 use App\Models\Technology;
 use App\Models\Topic;
 use App\Models\Writing;
+use Dedoc\Scramble\Attributes\Response as ScrambleResponse;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -61,6 +62,9 @@ class PublicSiteApiController extends Controller
         'writing',
     ];
 
+    /** @response array{data: list<array<string, mixed>>, meta: array<string, mixed>} */
+    #[ScrambleResponse(404, 'The requested collection was not found.', type: 'array{error: array{code: string, message: string, status: int, details: string}}')]
+    #[ScrambleResponse(503, 'The service is temporarily unavailable.', type: 'array{error: array{code: string, message: string, status: int, details: string}}')]
     public function collection(Request $request, string $collection): JsonResponse
     {
         if ((new SiteSettingsQuery)->find()?->maintenance_enabled) {
@@ -98,6 +102,9 @@ class PublicSiteApiController extends Controller
         ])->header('Cache-Control', 'public, max-age=60, stale-while-revalidate=300');
     }
 
+    /** @response array<string, mixed> */
+    #[ScrambleResponse(404, 'The requested document was not found.', type: 'array{error: array{code: string, message: string, status: int, details: string}}')]
+    #[ScrambleResponse(503, 'The service is temporarily unavailable.', type: 'array{error: array{code: string, message: string, status: int, details: string}}')]
     public function document(Request $request, string $collection, string $slug): JsonResponse
     {
         if ((new SiteSettingsQuery)->find()?->maintenance_enabled) {
@@ -137,6 +144,8 @@ class PublicSiteApiController extends Controller
         ]);
     }
 
+    /** @response array<string, mixed>|null */
+    #[ScrambleResponse(503, 'The service is temporarily unavailable.', type: 'array{error: array{code: string, message: string, status: int, details: string}}')]
     public function protectedEmailChallenge(Request $request): JsonResponse|Response
     {
         if ((new SiteSettingsQuery)->find()?->maintenance_enabled) {
@@ -152,6 +161,8 @@ class PublicSiteApiController extends Controller
         )['emailChallenge']);
     }
 
+    /** @response array{nodes: list<array<string, mixed>>, edges: list<array<string, mixed>>, kinds: array<string, mixed>} */
+    #[ScrambleResponse(503, 'The service is temporarily unavailable.', type: 'array{error: array{code: string, message: string, status: int, details: string}}')]
     public function knowledgeMap(Request $request): JsonResponse
     {
         if ((new SiteSettingsQuery)->find()?->maintenance_enabled) {
@@ -176,6 +187,9 @@ class PublicSiteApiController extends Controller
             ->header('Cache-Control', 'public, max-age=60, stale-while-revalidate=300');
     }
 
+    /** @response array<string, mixed> */
+    #[ScrambleResponse(304, 'The cached public site snapshot is still current.')]
+    #[ScrambleResponse(503, 'The service is temporarily unavailable.', type: 'array{error: array{code: string, message: string, status: int, details: string}}')]
     public function index(Request $request): JsonResponse|Response
     {
         if ((new SiteSettingsQuery)->find()?->maintenance_enabled) {
@@ -204,7 +218,7 @@ class PublicSiteApiController extends Controller
             return response(null, 304)->header('ETag', $etag);
         }
 
-        return response($body, 200, ['Content-Type' => 'application/json; charset=utf-8'])
+        return JsonResponse::fromJsonString($body, 200)
             ->header('Cache-Control', 'public, max-age=60, stale-while-revalidate=300')
             ->header('ETag', $etag);
     }

@@ -15,11 +15,14 @@ export type FindingApiIndexData = {
 };
 
 export type FindingApiIndexErrors = {
+    /**
+     * The service is temporarily unavailable.
+     */
     503: {
         error: {
             code: string;
-            message: 'The service is temporarily unavailable.';
-            status: 503;
+            message: string;
+            status: number;
             details: string;
         };
     };
@@ -29,23 +32,11 @@ export type FindingApiIndexError = FindingApiIndexErrors[keyof FindingApiIndexEr
 
 export type FindingApiIndexResponses = {
     200: {
-        data: Array<string>;
+        data: Array<{
+            [key: string]: unknown;
+        }>;
         meta: {
-            page: number;
-            per_page: number;
-            total: number;
-            last_page: number;
-            locale: 'pt-BR' | 'en';
-            facets: {
-                types: Array<string>;
-                ratings: Array<string>;
-                consumptionStates: Array<string>;
-                years: Array<string>;
-                topics: Array<{
-                    slug: string;
-                    name: string;
-                }>;
-            };
+            [key: string]: unknown;
         };
     };
 };
@@ -64,19 +55,25 @@ export type FindingApiShowData = {
 };
 
 export type FindingApiShowErrors = {
+    /**
+     * The requested finding was not found.
+     */
     404: {
         error: {
             code: string;
-            message: 'The requested resource was not found.';
-            status: 404;
+            message: string;
+            status: number;
             details: string;
         };
     };
+    /**
+     * The service is temporarily unavailable.
+     */
     503: {
         error: {
             code: string;
-            message: 'The service is temporarily unavailable.';
-            status: 503;
+            message: string;
+            status: number;
             details: string;
         };
     };
@@ -85,7 +82,9 @@ export type FindingApiShowErrors = {
 export type FindingApiShowError = FindingApiShowErrors[keyof FindingApiShowErrors];
 
 export type FindingApiShowResponses = {
-    200: string;
+    200: {
+        [key: string]: unknown;
+    };
 };
 
 export type FindingApiShowResponse = FindingApiShowResponses[keyof FindingApiShowResponses];
@@ -100,18 +99,14 @@ export type PublicSiteApiIndexData = {
 };
 
 export type PublicSiteApiIndexErrors = {
+    /**
+     * The service is temporarily unavailable.
+     */
     503: {
         error: {
             code: string;
-            message: 'The public site snapshot is warming.';
-            status: 503;
-            details: string;
-        };
-    } | {
-        error: {
-            code: string;
-            message: 'The service is temporarily unavailable.';
-            status: 503;
+            message: string;
+            status: number;
             details: string;
         };
     };
@@ -120,7 +115,9 @@ export type PublicSiteApiIndexErrors = {
 export type PublicSiteApiIndexError = PublicSiteApiIndexErrors[keyof PublicSiteApiIndexErrors];
 
 export type PublicSiteApiIndexResponses = {
-    200: string;
+    200: {
+        [key: string]: unknown;
+    };
 };
 
 export type PublicSiteApiIndexResponse = PublicSiteApiIndexResponses[keyof PublicSiteApiIndexResponses];
@@ -140,19 +137,24 @@ export type PublicSiteApiCollectionData = {
 
 export type PublicSiteApiCollectionErrors = {
     /**
-     * Not found
+     * The requested collection was not found.
      */
     404: {
-        /**
-         * Error overview.
-         */
-        message: string;
+        error: {
+            code: string;
+            message: string;
+            status: number;
+            details: string;
+        };
     };
+    /**
+     * The service is temporarily unavailable.
+     */
     503: {
         error: {
             code: string;
-            message: 'The service is temporarily unavailable.';
-            status: 503;
+            message: string;
+            status: number;
             details: string;
         };
     };
@@ -163,131 +165,10 @@ export type PublicSiteApiCollectionError = PublicSiteApiCollectionErrors[keyof P
 export type PublicSiteApiCollectionResponses = {
     200: {
         data: Array<{
-            slug: string;
-            url: string;
-            title: string;
-            status: string | null;
-            summary: string | null;
-            published_at: string | null;
-            external: boolean;
-            meta: string | null;
-            context: string | null;
-            role: string | null;
-            result: string | null;
-            metrics: Array<unknown> | null;
-            technologies: Array<{
-                slug: string;
-                name: string;
-            }>;
-            show_history: boolean;
-            href: string | null;
-            updated_at: string | null;
-        } | {
-            slug: string;
-            url: string;
-            title: string;
-            description: string | null;
-            intro: string | null;
-            published_at: string | null;
-            resources_count: string | 0;
-            related: null;
-            updated_at: string | null;
-            created_at: string | null;
-        } | {
-            category: string;
-            name: string;
-            description: string | null;
-            url: string;
-            package_manager: string;
-            package_name: string;
-            created_at: string | null;
-        } | {
-            slug: string;
-            url: string;
-            name: string;
-            purpose: string | null;
-            published_at: string | null;
-            external: boolean;
-            technologies: Array<{
-                slug: string;
-                name: string;
-            }>;
-            href: string | null;
-            updated_at: string | null;
-            show_history: boolean;
-        } | {
-            slug: string;
-            url: string;
-            name: string;
-            purpose: string | null;
-            status: string | null;
-            published_at: string | null;
-            external: boolean;
-            problem: string | null;
-            current_focus: string | null;
-            metrics: Array<unknown> | null;
-            technologies: Array<{
-                slug: string;
-                name: string;
-            }>;
-            show_history: boolean;
-            href: string | null;
-            updated_at: string | null;
-        } | {
-            slug: string;
-            title: string;
-            description: string | null;
-            download_url: string;
-            files: Array<string>;
-            file_count: string | 0;
-            updated_at: string | null;
-        } | {
-            slug: string;
-            name: string;
-            code: string;
-            url: string;
-            skills: Array<string>;
-            resume_skills: Array<{
-                slug: string;
-                name: string;
-                url: string;
-                parent: string | null;
-                kind: null;
-                children: null;
-            } | null>;
-        } | {
-            slug: string;
-            name: string;
-            kind: string;
-            parent: string | null;
-            children: Array<{
-                slug: string;
-                name: string;
-            }>;
-        } | {
-            slug: string;
-            url: string;
-            title: string;
-            excerpt: string | null;
-            reading_time: string | null;
-            type: string;
-            date: string | null;
-            topics: Array<{
-                slug: string;
-                name: string;
-                url: string;
-            }>;
-            show_history: boolean;
-            updated_at: string | null;
+            [key: string]: unknown;
         }>;
         meta: {
-            page: number;
-            per_page: number;
-            total: number;
-            last_page: number;
-            from: number | null;
-            to: number | null;
-            locale: 'pt-BR' | 'en';
+            [key: string]: unknown;
         };
     };
 };
@@ -309,19 +190,24 @@ export type PublicSiteApiDocumentData = {
 
 export type PublicSiteApiDocumentErrors = {
     /**
-     * Not found
+     * The requested document was not found.
      */
     404: {
-        /**
-         * Error overview.
-         */
-        message: string;
+        error: {
+            code: string;
+            message: string;
+            status: number;
+            details: string;
+        };
     };
+    /**
+     * The service is temporarily unavailable.
+     */
     503: {
         error: {
             code: string;
-            message: 'The service is temporarily unavailable.';
-            status: 503;
+            message: string;
+            status: number;
             details: string;
         };
     };
@@ -331,154 +217,8 @@ export type PublicSiteApiDocumentError = PublicSiteApiDocumentErrors[keyof Publi
 
 export type PublicSiteApiDocumentResponses = {
     200: {
-        slug: string;
-        url: string;
-        title: string;
-        status: string | null;
-        summary: string | null;
-        published_at: string | null;
-        external: boolean;
-        meta: string | null;
-        context: string | null;
-        role: string | null;
-        result: string | null;
-        metrics: Array<unknown> | null;
-        body: string | null;
-        technologies: Array<{
-            slug: string;
-            name: string;
-        }>;
-        show_history: boolean;
-        history: null;
-        href: string | null;
-        related: null;
-        updated_at: string | null;
-    } | {
-        slug: string;
-        url: string;
-        title: string;
-        description: string | null;
-        intro: string | null;
-        published_at: string | null;
-        resources: Array<{
-            slug: string;
-            url: string;
-            title: string;
-            description: string | null;
-            type: string;
-            rating: string;
-            note: string;
-            topics: string;
-        }>;
-        resources_meta: {
-            page: number;
-            per_page: number;
-            total: number;
-            last_page: number;
-            from: number | null;
-            to: number | null;
-        };
-        related: null;
-        updated_at: string | null;
-        created_at: string | null;
-    } | {
-        slug: string;
-        url: string;
-        name: string;
-        purpose: string | null;
-        body: string | null;
-        published_at: string | null;
-        external: boolean;
-        technologies: Array<{
-            slug: string;
-            name: string;
-        }>;
-        href: string | null;
-        updated_at: string | null;
-        show_history: boolean;
-        history: null;
-        related: null;
-    } | {
-        slug: string;
-        url: string;
-        name: string;
-        purpose: string | null;
-        status: string | null;
-        published_at: string | null;
-        external: boolean;
-        problem: string | null;
-        current_focus: string | null;
-        metrics: Array<unknown> | null;
-        body: string | null;
-        technologies: Array<{
-            slug: string;
-            name: string;
-        }>;
-        show_history: boolean;
-        history: null;
-        href: string | null;
-        related: null;
-        updated_at: string | null;
-    } | {
-        slug: string;
-        url: string;
-        download_url: string;
-        title: string;
-        description: string | null;
-        published_at: string | null;
-        files: Array<{
-            path: string;
-            language: string | null;
-            content: string;
-            id: string;
-            history: null;
-        }>;
-        show_history: boolean;
-        history: null;
-        related: null;
-        updated_at: string | null;
-    } | {
-        slug: string;
-        name: string;
-        code: string;
-        url: string;
-        skills: Array<string>;
-        resume_skills: Array<{
-            slug: string;
-            name: string;
-            url: string;
-            parent: string | null;
-            kind: null;
-            children: null;
-        } | null>;
-    } | {
-        slug: string;
-        name: string;
-        kind: string;
-        parent: string | null;
-        children: Array<{
-            slug: string;
-            name: string;
-        }>;
-    } | {
-        slug: string;
-        url: string;
-        title: string;
-        excerpt: string | null;
-        reading_time: string | null;
-        body: string | null;
-        type: string;
-        date: string | null;
-        topics: Array<{
-            slug: string;
-            name: string;
-            url: string;
-        }>;
-        show_history: boolean;
-        history: null;
-        related: null;
-        updated_at: string | null;
-    } | null;
+        [key: string]: unknown;
+    };
 };
 
 export type PublicSiteApiDocumentResponse = PublicSiteApiDocumentResponses[keyof PublicSiteApiDocumentResponses];
@@ -522,18 +262,14 @@ export type PublicSiteApiKnowledgeMapData = {
 };
 
 export type PublicSiteApiKnowledgeMapErrors = {
+    /**
+     * The service is temporarily unavailable.
+     */
     503: {
         error: {
             code: string;
-            message: 'The knowledge map snapshot is warming.';
-            status: 503;
-            details: string;
-        };
-    } | {
-        error: {
-            code: string;
-            message: 'The service is temporarily unavailable.';
-            status: 503;
+            message: string;
+            status: number;
             details: string;
         };
     };
@@ -544,25 +280,13 @@ export type PublicSiteApiKnowledgeMapError = PublicSiteApiKnowledgeMapErrors[key
 export type PublicSiteApiKnowledgeMapResponses = {
     200: {
         nodes: Array<{
-            id: string;
-            kind: string;
-            label: string;
-            url: string | null;
-            meta: {
-                [key: string]: unknown;
-            };
+            [key: string]: unknown;
         }>;
         edges: Array<{
-            source: string;
-            target: string;
-            relationType: string;
-            label: string;
+            [key: string]: unknown;
         }>;
         kinds: {
-            [key: string]: {
-                label: string;
-                color: string;
-            };
+            [key: string]: unknown;
         };
     };
 };
@@ -579,11 +303,14 @@ export type PublicSiteApiProtectedEmailChallengeData = {
 };
 
 export type PublicSiteApiProtectedEmailChallengeErrors = {
+    /**
+     * The service is temporarily unavailable.
+     */
     503: {
         error: {
             code: string;
-            message: 'The service is temporarily unavailable.';
-            status: 503;
+            message: string;
+            status: number;
             details: string;
         };
     };
@@ -593,17 +320,7 @@ export type PublicSiteApiProtectedEmailChallengeError = PublicSiteApiProtectedEm
 
 export type PublicSiteApiProtectedEmailChallengeResponses = {
     200: {
-        version: 2;
-        algorithm: 'argon2id-aes256gcm';
-        salt: string;
-        iv: string;
-        ciphertext: string;
-        params: {
-            memorySize: 19456;
-            iterations: 3;
-            parallelism: 1;
-            hashLength: 32;
-        };
+        [key: string]: unknown;
     } | null;
 };
 
@@ -621,11 +338,14 @@ export type SnippetDownloadData = {
 };
 
 export type SnippetDownloadErrors = {
+    /**
+     * The public snippet files do not satisfy the archive safety limits.
+     */
     422: {
         error: {
             code: string;
-            message: 'The public snippet files do not satisfy the archive safety limits.';
-            status: 422;
+            message: string;
+            status: number;
             details: string;
         };
     };
@@ -634,7 +354,7 @@ export type SnippetDownloadErrors = {
 export type SnippetDownloadError = SnippetDownloadErrors[keyof SnippetDownloadErrors];
 
 export type SnippetDownloadResponses = {
-    200: Blob | File;
+    200: string;
 };
 
 export type SnippetDownloadResponse = SnippetDownloadResponses[keyof SnippetDownloadResponses];

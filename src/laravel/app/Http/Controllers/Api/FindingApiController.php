@@ -9,11 +9,14 @@ use App\Content\SiteSettingsQuery;
 use App\Http\Controllers\Controller;
 use App\Http\Responses\ApiErrorCode;
 use App\Http\Responses\ApiErrorResponse;
+use Dedoc\Scramble\Attributes\Response as ScrambleResponse;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class FindingApiController extends Controller
 {
+    /** @response array{data: list<array<string, mixed>>, meta: array<string, mixed>} */
+    #[ScrambleResponse(503, 'The service is temporarily unavailable.', type: 'array{error: array{code: string, message: string, status: int, details: string}}')]
     public function index(Request $request): JsonResponse
     {
         if ((new SiteSettingsQuery)->find()?->maintenance_enabled) {
@@ -51,6 +54,9 @@ class FindingApiController extends Controller
         ]);
     }
 
+    /** @response array<string, mixed> */
+    #[ScrambleResponse(404, 'The requested finding was not found.', type: 'array{error: array{code: string, message: string, status: int, details: string}}')]
+    #[ScrambleResponse(503, 'The service is temporarily unavailable.', type: 'array{error: array{code: string, message: string, status: int, details: string}}')]
     public function show(Request $request, string $slug): JsonResponse
     {
         if ((new SiteSettingsQuery)->find()?->maintenance_enabled) {

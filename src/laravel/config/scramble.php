@@ -37,6 +37,7 @@ return [
     ],
     'middleware' => [
         'web',
+        \App\Http\Middleware\CacheOpenApiDocumentation::class,
     ],
     'extensions' => [],
     'security_strategy' => null,

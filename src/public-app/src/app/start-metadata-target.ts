@@ -1,16 +1,13 @@
 import type { MetadataProxyContext } from './start-metadata-support';
+import { metadataLaravelBase } from './start-metadata-base';
+import { metadataResumeTarget } from './start-metadata-resume';
 
 export function metadataTarget(context: MetadataProxyContext): string {
   const url = new URL(context.request.url);
 
-  const resumeMatch = url.pathname.match(/^\/resume-(en|pt-BR)\.pdf$/);
+  const laravelBase = metadataLaravelBase();
 
-  const configured =
-    process.env.PORTFOLIO_CONTENT_API_URL ?? 'http://laravel:8000/api/v1/public-site';
+  const resumeTarget = metadataResumeTarget(url.pathname, laravelBase);
 
-  const laravelBase = configured.replace(/\/api\/v1\/public-site\/?$/, '');
-
-  return resumeMatch
-    ? `${laravelBase}/api/v1/resume/${resumeMatch[1]}.pdf`
-    : `${laravelBase}${url.pathname}${url.search}`;
+  return resumeTarget ?? `${laravelBase}${url.pathname}${url.search}`;
 }

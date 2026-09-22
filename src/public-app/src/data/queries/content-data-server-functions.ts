@@ -13,7 +13,7 @@ export const loadShell = createServerFn({ method: 'GET' })
 export const loadRoute = createServerFn({ method: 'GET' })
   .validator(requestSchema)
   .handler(async ({ data }) => {
-    const { loadRouteDataWithSnapshot } = await import('./content-data-server-load-route');
+    const { loadRouteDataForRequest } = await import('./content-data-server-load-route');
 
-    return serializable(await loadRouteDataWithSnapshot(data));
+    return serializable(await loadRouteDataForRequest(data));
   });

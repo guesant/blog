@@ -1,6 +1,6 @@
 import type { ProtectedEmailChallenge } from '../domain/protected-email/types.ts';
 import { createProtectedEmailChallenge } from './public-site-generated-client';
-import { snapshotRequestTtlMs, emailChallengeState } from './public-site-source-support';
+import { emailChallengeTtlMs, emailChallengeState } from './public-site-source-support';
 import { apiClient } from './public-site-source-api-client';
 
 export async function getEmailChallenge(): Promise<ProtectedEmailChallenge | undefined> {
@@ -14,7 +14,7 @@ export async function getEmailChallenge(): Promise<ProtectedEmailChallenge | und
     .then((result) => (result.data as ProtectedEmailChallenge | undefined) ?? undefined)
     .catch(() => undefined);
 
-  const request = { expiresAt: now + snapshotRequestTtlMs, promise };
+  const request = { expiresAt: now + emailChallengeTtlMs, promise };
 
   emailChallengeState.current = request;
   promise.then((value) => {

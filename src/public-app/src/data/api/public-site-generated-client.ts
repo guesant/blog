@@ -2,7 +2,13 @@ export { publicSiteApiDocument as getPublicContent } from './generated/sdk.gen';
 
 export { findingApiShow as getFinding } from './generated/sdk.gen';
 
-export { publicSiteApiIndex as getPublicSite } from './generated/sdk.gen';
+export { publicSiteApiChrome as getSiteChrome } from './generated/sdk.gen';
+
+export { publicSiteApiInterfaceMessages as getSiteInterface } from './generated/sdk.gen';
+
+export { publicSiteApiPage as getSitePage } from './generated/sdk.gen';
+
+export { publicSiteApiResumeData as getSiteResume } from './generated/sdk.gen';
 
 export { publicSiteApiProtectedEmailChallenge as createProtectedEmailChallenge } from './generated/sdk.gen';
 

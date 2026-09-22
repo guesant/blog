@@ -1,10 +1,15 @@
+import { getSitePage } from './public-site-generated-client';
+import { apiClient } from './public-site-source-api-client';
 import { RecordValue } from './public-site-source-support';
-import { getSnapshot } from './public-site-source-get-snapshot';
 
 export async function getLocalizedPage<T>(slug: string, locale?: string): Promise<T> {
-  const snapshot = await getSnapshot(locale);
+  const result = await getSitePage({
+    client: apiClient(),
+    path: { slug },
+    query: { locale },
+  });
 
-  const page = { ...(snapshot.pages[slug] ?? {}) } as RecordValue;
+  const page = { ...((result.data ?? {}) as RecordValue) };
 
   if (slug === 'home') {
     return { featuredCases: [], featuredProjects: [], featuredWriting: [], ...page } as T;

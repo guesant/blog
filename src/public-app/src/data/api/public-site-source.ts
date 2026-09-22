@@ -2,8 +2,6 @@ export * from './public-site-source-support';
 
 export { normalizeLocale } from './public-site-source-normalize-locale';
 
-export { withPublicSiteSnapshot } from './public-site-source-with-public-site-snapshot';
-
 export { fetchFinding } from './public-site-source-fetch-finding';
 
 export { fetchFindingList } from './public-site-source-fetch-finding-list';

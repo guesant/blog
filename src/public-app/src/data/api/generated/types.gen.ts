@@ -89,22 +89,206 @@ export type FindingApiShowResponses = {
 
 export type FindingApiShowResponse = FindingApiShowResponses[keyof FindingApiShowResponses];
 
-export type PublicSiteApiIndexData = {
+export type PublicSiteApiChromeData = {
     body?: never;
     path?: never;
     query?: {
         locale?: string;
     };
-    url: '/public-site';
+    url: '/site/chrome';
 };
 
-export type PublicSiteApiIndexResponses = {
-    200: {
-        [key: string]: unknown;
+export type PublicSiteApiChromeErrors = {
+    503: {
+        error: {
+            code: string;
+            message: 'The service is temporarily unavailable.';
+            status: 503;
+            details: string;
+        };
     };
 };
 
-export type PublicSiteApiIndexResponse = PublicSiteApiIndexResponses[keyof PublicSiteApiIndexResponses];
+export type PublicSiteApiChromeError = PublicSiteApiChromeErrors[keyof PublicSiteApiChromeErrors];
+
+export type PublicSiteApiChromeResponses = {
+    200: {
+        site: {
+            short_name: string | null;
+            portfolio_url: string | '';
+            source_repository_url: string | '';
+            contact_available: string | boolean;
+            contact_profiles: Array<{
+                platform: string;
+                label: string;
+                url: string;
+            }> | null;
+            protected_email: null;
+            maintenance_enabled: string | boolean;
+            maintenance_eyebrow: string | null;
+            maintenance_title: string | null;
+            maintenance_description: string | null;
+            seo: string | null;
+        };
+        profile: {
+            name: string;
+            title: string | null;
+            location: string | null;
+            description: string | null;
+            milestones: string | null;
+            birth_date: string | '';
+            birth_city: string | null;
+            interests: string | null;
+            learning: string | null;
+            personal_interests: string | null;
+        } | null;
+        copyright: Array<unknown> | string;
+        navigation: {
+            sidebar: Array<unknown>;
+            footer_links: {
+                [key: string]: string;
+            };
+            sitemap: {
+                [key: string]: string;
+            };
+        };
+        build: {
+            commit_sha: string;
+            build_time: string;
+        };
+        visibility: {
+            about: boolean;
+            resume: boolean;
+            portfolio: string;
+            cases: boolean;
+            contact: boolean;
+            license: boolean;
+            credits: boolean;
+            follow: boolean;
+            feed: boolean;
+            writing: boolean;
+            findings: boolean;
+            topics: boolean;
+            collections: boolean;
+            snippets: boolean;
+            right_sidebar: boolean;
+        };
+    };
+};
+
+export type PublicSiteApiChromeResponse = PublicSiteApiChromeResponses[keyof PublicSiteApiChromeResponses];
+
+export type PublicSiteApiInterfaceMessagesData = {
+    body?: never;
+    path?: never;
+    query?: {
+        locale?: string;
+    };
+    url: '/site/interface';
+};
+
+export type PublicSiteApiInterfaceMessagesResponses = {
+    200: Array<unknown>;
+};
+
+export type PublicSiteApiInterfaceMessagesResponse = PublicSiteApiInterfaceMessagesResponses[keyof PublicSiteApiInterfaceMessagesResponses];
+
+export type PublicSiteApiPageData = {
+    body?: never;
+    path: {
+        slug: string;
+    };
+    query?: {
+        locale?: string;
+    };
+    url: '/site/pages/{slug}';
+};
+
+export type PublicSiteApiPageErrors = {
+    /**
+     * Not found
+     */
+    404: {
+        /**
+         * Error overview.
+         */
+        message: string;
+    };
+};
+
+export type PublicSiteApiPageError = PublicSiteApiPageErrors[keyof PublicSiteApiPageErrors];
+
+export type PublicSiteApiPageResponses = {
+    200: Array<unknown>;
+};
+
+export type PublicSiteApiPageResponse = PublicSiteApiPageResponses[keyof PublicSiteApiPageResponses];
+
+export type PublicSiteApiResumeDataData = {
+    body?: never;
+    path?: never;
+    query?: {
+        locale?: string;
+    };
+    url: '/site/resume';
+};
+
+export type PublicSiteApiResumeDataResponses = {
+    200: {
+        summary: string | null;
+        leadership: string | Array<string>;
+        education: string | Array<string>;
+        certificates: string | Array<string>;
+        certifications: string | Array<string>;
+        publications: string | Array<string>;
+        recommendations: string | Array<string>;
+        technical_productions: string | Array<string>;
+        events: string | Array<string>;
+        awards: string | Array<string>;
+        experience: Array<string>;
+        selected_cases: Array<{
+            slug: string;
+            url: string;
+            title: string;
+            status: string | null;
+            summary: string | null;
+            published_at: string | null;
+            external: string;
+            meta: string | null;
+            context: string | null;
+            role: string | null;
+            result: string | null;
+            metrics: string | null;
+            body: string | null;
+            technologies: Array<{
+                slug: string;
+                name: string;
+            }>;
+            show_history: boolean;
+            history: null;
+            href: string;
+            related: null;
+            updated_at: string | null;
+        }> | Array<string>;
+        skills: Array<{
+            name: string;
+            technologies: Array<{
+                slug: string;
+                name: string;
+                code: null;
+                url: null;
+                skills: null;
+                resume_skills: null;
+            }>;
+        }> | Array<string>;
+        languages: Array<{
+            name: string;
+            proficiency: string | '';
+        }> | Array<string>;
+    };
+};
+
+export type PublicSiteApiResumeDataResponse = PublicSiteApiResumeDataResponses[keyof PublicSiteApiResumeDataResponses];
 
 export type PublicSiteApiCollectionData = {
     body?: never;

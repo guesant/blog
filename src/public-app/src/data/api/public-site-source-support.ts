@@ -1,5 +1,4 @@
-import type { InterfaceMessages, Reference } from '../domain/types.ts';
-import { AsyncLocalStorage } from 'node:async_hooks';
+import type { Reference } from '../domain/types.ts';
 import type { ProtectedEmailChallenge } from '../domain/protected-email/types.ts';
 
 export type RecordValue = Record<string, unknown>;
@@ -41,30 +40,16 @@ export type ContentCollectionPage<T> = {
   meta: ContentCollectionMeta;
 };
 
-export type Snapshot = RecordValue & {
-  chrome: RecordValue;
-  pages: Record<string, RecordValue>;
-  interface: InterfaceMessages;
-};
-
-export type SnapshotContext = { locale: ContentLocale; snapshot: Snapshot };
-
-export type SnapshotRequest = { expiresAt: number; promise: Promise<Snapshot> };
-
 export type EmailChallengeRequest = {
   expiresAt: number;
   promise: Promise<ProtectedEmailChallenge | undefined>;
 };
 
-export const snapshotContext = new AsyncLocalStorage<SnapshotContext>();
-
-export const snapshotRequests = new Map<ContentLocale, SnapshotRequest>();
-
-export const snapshotRequestTtlMs = 60000;
-
 export const emailChallengeState: { current: EmailChallengeRequest | undefined } = {
   current: undefined,
 };
+
+export const emailChallengeTtlMs = 60000;
 
 export type FindingListQuery = {
   q?: string;

@@ -1,6 +1,10 @@
 import { QueryClient } from '@tanstack/react-query';
 import { createRouter } from '@tanstack/react-router';
 import { setupRouterSsrQueryIntegration } from '@tanstack/react-router-ssr-query';
+import {
+  contentQueryGcTimeMs,
+  contentQueryStaleTimeMs,
+} from './data/queries/content-query-cache-policy';
 import { routeTree } from './routeTree.gen';
 
 export function getRouter() {
@@ -9,7 +13,9 @@ export function getRouter() {
       queries: {
         queryKeyHashFn: (queryKey) =>
           JSON.stringify(queryKey, (key, value) => (key === 'baseUrl' ? undefined : value)),
-        staleTime: 30_000,
+        staleTime: contentQueryStaleTimeMs,
+        gcTime: contentQueryGcTimeMs,
+        retry: false,
       },
     },
   });
@@ -18,7 +24,7 @@ export function getRouter() {
     routeTree,
     context: { queryClient },
     defaultPreload: 'intent',
-    defaultPreloadStaleTime: 0,
+    defaultPreloadStaleTime: contentQueryStaleTimeMs,
   });
 
   setupRouterSsrQueryIntegration({ router, queryClient });

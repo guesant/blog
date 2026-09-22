@@ -1,12 +1,15 @@
 import type { ResumeContent } from '../domain/types.ts';
+import { getSiteResume } from './public-site-generated-client';
+import { apiClient } from './public-site-source-api-client';
 import { RecordValue } from './public-site-source-support';
-import { getSnapshot } from './public-site-source-get-snapshot';
 import { objectValue } from './public-site-source-object-value';
 import { recordList } from './public-site-source-list';
 import { stringValue } from './public-site-source-string-value';
 
 export async function getLocalizedResume(locale?: string): Promise<ResumeContent> {
-  const resume = objectValue((await getSnapshot(locale)).resume) ?? {};
+  const result = await getSiteResume({ client: apiClient(), query: { locale } });
+
+  const resume = objectValue(result.data) ?? {};
 
   return {
     summary: stringValue(resume.summary),

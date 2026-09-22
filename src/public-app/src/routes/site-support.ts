@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { shellQueryOptions } from '../data/queries';
+import { fallbackShellData, getStaleQueryData, shellQueryOptions } from '../data/queries';
 import { routeContext } from './site-route-context';
 import { LocaleLayout } from './site--locale-layout';
 
@@ -7,7 +7,11 @@ export const Route = createFileRoute('/site-support')({
   loader: ({ context, location }) => {
     const { locale } = routeContext(location.pathname);
 
-    return context.queryClient.ensureQueryData(shellQueryOptions(locale));
+    return getStaleQueryData({
+      queryClient: context.queryClient,
+      options: shellQueryOptions(locale),
+      fallback: fallbackShellData,
+    });
   },
   component: LocaleLayout,
 });

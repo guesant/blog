@@ -1,6 +1,6 @@
-import { useSuspenseQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { useLocation } from '@tanstack/react-router';
-import { routeQueryOptions } from '../../data/queries';
+import { fallbackRouteData, routeQueryOptions } from '../../data/queries';
 import { RouteView } from '../../route-view';
 import { requestForPath } from './splat-request-for-path';
 
@@ -9,7 +9,7 @@ export function SplatRoute() {
 
   const request = requestForPath(location.pathname, location.searchStr);
 
-  const data = useSuspenseQuery(routeQueryOptions(request)).data;
+  const data = useQuery(routeQueryOptions(request)).data ?? fallbackRouteData;
 
   return <RouteView data={data} />;
 }

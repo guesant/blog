@@ -1,17 +1,19 @@
 import { createFileRoute } from '@tanstack/react-router';
 import type { RouteData } from '../../data/queries';
-import { routeQueryOptions } from '../../data/queries';
+import { fallbackRouteData, getStaleQueryData, routeQueryOptions } from '../../data/queries';
 import { metadataForRoute } from './splat-metadata-for-route';
 import { requestForPath } from './splat-request-for-path';
 import { SplatRoute } from './splat--splat-route';
 
 export const Route = createFileRoute('/_site/$')({
-  loader: async ({ context, location }) => {
+  loader: ({ context, location }) => {
     const request = requestForPath(location.pathname, location.searchStr);
 
-    const data = await context.queryClient.ensureQueryData(routeQueryOptions(request));
-
-    return data;
+    return getStaleQueryData({
+      queryClient: context.queryClient,
+      options: routeQueryOptions(request),
+      fallback: fallbackRouteData,
+    });
   },
   head: ({ loaderData }) => {
     const metadata = metadataForRoute(loaderData as RouteData | undefined);

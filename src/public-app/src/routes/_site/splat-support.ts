@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { routeQueryOptions } from '../../data/queries';
+import { fallbackRouteData, getStaleQueryData, routeQueryOptions } from '../../data/queries';
 import type { RouteData } from '../../data/queries';
 import { requestForPath } from './splat-request-for-path';
 import { metadataForRoute } from './splat-metadata-for-route';
@@ -9,9 +9,11 @@ export type RouteMetadata = { title: string; description: string; type?: string 
 
 export const Route = createFileRoute('/_site/splat-support')({
   loader: ({ context, location }) => {
-    return context.queryClient.ensureQueryData(
-      routeQueryOptions(requestForPath(location.pathname, location.searchStr)),
-    );
+    return getStaleQueryData({
+      queryClient: context.queryClient,
+      options: routeQueryOptions(requestForPath(location.pathname, location.searchStr)),
+      fallback: fallbackRouteData,
+    });
   },
   head: ({ loaderData }) => {
     const metadata = metadataForRoute(loaderData as RouteData | undefined);

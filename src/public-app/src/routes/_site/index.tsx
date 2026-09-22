@@ -1,7 +1,7 @@
-import { useSuspenseQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { createFileRoute, useLocation } from '@tanstack/react-router';
 import type { RouteData } from '../../data/queries';
-import { routeQueryOptions } from '../../data/queries';
+import { fallbackRouteData, getStaleQueryData, routeQueryOptions } from '../../data/queries';
 import { RouteView } from '../../route-view';
 import { routeContext } from '../_site';
 import { metadataForRoute } from './splat-metadata-for-route';
@@ -10,9 +10,11 @@ export const Route = createFileRoute('/_site/')({
   loader: ({ context, location }) => {
     const { locale } = routeContext(location.pathname);
 
-    return context.queryClient.ensureQueryData(
-      routeQueryOptions({ locale, pathname: '/', search: location.searchStr }),
-    );
+    return getStaleQueryData({
+      queryClient: context.queryClient,
+      options: routeQueryOptions({ locale, pathname: '/', search: location.searchStr }),
+      fallback: fallbackRouteData,
+    });
   },
   head: ({ loaderData }) => {
     const metadata = metadataForRoute(loaderData as RouteData | undefined);
@@ -35,9 +37,9 @@ function HomeRoute() {
 
   const { locale } = routeContext(location.pathname);
 
-  const data = useSuspenseQuery(
-    routeQueryOptions({ locale, pathname: '/', search: location.searchStr }),
-  ).data;
+  const data =
+    useQuery(routeQueryOptions({ locale, pathname: '/', search: location.searchStr })).data ??
+    fallbackRouteData;
 
   return <RouteView data={data} />;
 }

@@ -1,7 +1,8 @@
-import { useSuspenseQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { normalizeLocale } from '@portfolio/data/api/public-site-source-normalize-locale';
 import type { ContentFeedProps } from '../../content/content-feed/types';
 import { findingsQueryOptions } from '../../../data/queries/findings-query-options';
+import { emptyFindingList } from '../../../data/queries/empty-finding-list';
 
 export type FindingsViewModelProps = {
   locale: string;
@@ -16,7 +17,9 @@ export function useFindingsViewModel(
 > {
   const locale = normalizeLocale(props.locale);
 
-  const data = useSuspenseQuery(findingsQueryOptions({ locale, search: props.search })).data;
+  const data =
+    useQuery(findingsQueryOptions({ locale, search: props.search })).data ??
+    emptyFindingList(locale);
 
   return {
     writings: [],

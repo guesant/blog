@@ -1,6 +1,9 @@
 import type { InterfaceMessages } from '../domain/types.ts';
-import { getSnapshot } from './public-site-source-get-snapshot';
+import { getSiteInterface } from './public-site-generated-client';
+import { apiClient } from './public-site-source-api-client';
 
 export async function getLocalizedInterface(locale?: string): Promise<InterfaceMessages> {
-  return (await getSnapshot(locale)).interface;
+  const result = await getSiteInterface({ client: apiClient(), query: { locale } });
+
+  return (result.data ?? {}) as InterfaceMessages;
 }

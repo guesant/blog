@@ -23,9 +23,9 @@ The development address is [http://localhost:3000](http://localhost:3000).
 
 ## Content
 
-Laravel is the single source of truth for published content. The application consumes its localized
-snapshot through TanStack Start server functions and does not include an editorial admin or CMS runtime.
-Localization is field-based and is resolved by Laravel before the snapshot reaches the frontend.
+Laravel is the single source of truth for published content. The application consumes paginated,
+localized resources through TanStack Start server functions and does not include an editorial admin or
+CMS runtime. Localization is field-based and is resolved by Laravel before resources reach the frontend.
 The OpenAPI contract used to generate the frontend client lives at
 `../../src/laravel/openapi/public-site.json`. It is exported from Laravel with
 `just api-spec` before the client is generated.
@@ -34,7 +34,7 @@ The OpenAPI contract used to generate the frontend client lives at
 
 The database stores the canonical records, translations, relations, visibility flags and settings.
 Home, detail pages, résumé, metadata, structured data, social images and the web manifest consume
-the Laravel snapshot rather than a repository copy of editorial content.
+Laravel resources rather than a repository copy of editorial content.
 
 ### Optional content and empty states
 

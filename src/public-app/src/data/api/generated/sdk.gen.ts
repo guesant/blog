@@ -2,7 +2,7 @@
 
 import type { Client, ClientMeta, Options as Options2, RequestResult, TDataShape } from './client';
 import { client } from './client.gen';
-import type { FindingApiIndexData, FindingApiIndexErrors, FindingApiIndexResponses, FindingApiShowData, FindingApiShowErrors, FindingApiShowResponses, PublicSiteApiCollectionData, PublicSiteApiCollectionErrors, PublicSiteApiCollectionResponses, PublicSiteApiDocumentData, PublicSiteApiDocumentErrors, PublicSiteApiDocumentResponses, PublicSiteApiIndexData, PublicSiteApiIndexResponses, PublicSiteApiKnowledgeMapData, PublicSiteApiKnowledgeMapErrors, PublicSiteApiKnowledgeMapResponses, PublicSiteApiProtectedEmailChallengeData, PublicSiteApiProtectedEmailChallengeErrors, PublicSiteApiProtectedEmailChallengeResponses, PublicSiteApiResumePdfData, PublicSiteApiResumePdfErrors, PublicSiteApiResumePdfResponses, SnippetDownloadData, SnippetDownloadErrors, SnippetDownloadResponses } from './types.gen';
+import type { FindingApiIndexData, FindingApiIndexErrors, FindingApiIndexResponses, FindingApiShowData, FindingApiShowErrors, FindingApiShowResponses, PublicSiteApiChromeData, PublicSiteApiChromeErrors, PublicSiteApiChromeResponses, PublicSiteApiCollectionData, PublicSiteApiCollectionErrors, PublicSiteApiCollectionResponses, PublicSiteApiDocumentData, PublicSiteApiDocumentErrors, PublicSiteApiDocumentResponses, PublicSiteApiInterfaceMessagesData, PublicSiteApiInterfaceMessagesResponses, PublicSiteApiKnowledgeMapData, PublicSiteApiKnowledgeMapErrors, PublicSiteApiKnowledgeMapResponses, PublicSiteApiPageData, PublicSiteApiPageErrors, PublicSiteApiPageResponses, PublicSiteApiProtectedEmailChallengeData, PublicSiteApiProtectedEmailChallengeErrors, PublicSiteApiProtectedEmailChallengeResponses, PublicSiteApiResumeDataData, PublicSiteApiResumeDataResponses, PublicSiteApiResumePdfData, PublicSiteApiResumePdfErrors, PublicSiteApiResumePdfResponses, SnippetDownloadData, SnippetDownloadErrors, SnippetDownloadResponses } from './types.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean, TResponse = unknown> = Options2<TData, ThrowOnError, TResponse> & {
     /**
@@ -22,7 +22,13 @@ export const findingApiIndex = <ThrowOnError extends boolean = false>(options?: 
 
 export const findingApiShow = <ThrowOnError extends boolean = false>(options: Options<FindingApiShowData, ThrowOnError>): RequestResult<FindingApiShowResponses, FindingApiShowErrors, ThrowOnError> => (options.client ?? client).get<FindingApiShowResponses, FindingApiShowErrors, ThrowOnError>({ url: '/findings/{slug}', ...options });
 
-export const publicSiteApiIndex = <ThrowOnError extends boolean = false>(options?: Options<PublicSiteApiIndexData, ThrowOnError>): RequestResult<PublicSiteApiIndexResponses, unknown, ThrowOnError> => (options?.client ?? client).get<PublicSiteApiIndexResponses, unknown, ThrowOnError>({ url: '/public-site', ...options });
+export const publicSiteApiChrome = <ThrowOnError extends boolean = false>(options?: Options<PublicSiteApiChromeData, ThrowOnError>): RequestResult<PublicSiteApiChromeResponses, PublicSiteApiChromeErrors, ThrowOnError> => (options?.client ?? client).get<PublicSiteApiChromeResponses, PublicSiteApiChromeErrors, ThrowOnError>({ url: '/site/chrome', ...options });
+
+export const publicSiteApiInterfaceMessages = <ThrowOnError extends boolean = false>(options?: Options<PublicSiteApiInterfaceMessagesData, ThrowOnError>): RequestResult<PublicSiteApiInterfaceMessagesResponses, unknown, ThrowOnError> => (options?.client ?? client).get<PublicSiteApiInterfaceMessagesResponses, unknown, ThrowOnError>({ url: '/site/interface', ...options });
+
+export const publicSiteApiPage = <ThrowOnError extends boolean = false>(options: Options<PublicSiteApiPageData, ThrowOnError>): RequestResult<PublicSiteApiPageResponses, PublicSiteApiPageErrors, ThrowOnError> => (options.client ?? client).get<PublicSiteApiPageResponses, PublicSiteApiPageErrors, ThrowOnError>({ url: '/site/pages/{slug}', ...options });
+
+export const publicSiteApiResumeData = <ThrowOnError extends boolean = false>(options?: Options<PublicSiteApiResumeDataData, ThrowOnError>): RequestResult<PublicSiteApiResumeDataResponses, unknown, ThrowOnError> => (options?.client ?? client).get<PublicSiteApiResumeDataResponses, unknown, ThrowOnError>({ url: '/site/resume', ...options });
 
 export const publicSiteApiCollection = <ThrowOnError extends boolean = false>(options: Options<PublicSiteApiCollectionData, ThrowOnError>): RequestResult<PublicSiteApiCollectionResponses, PublicSiteApiCollectionErrors, ThrowOnError> => (options.client ?? client).get<PublicSiteApiCollectionResponses, PublicSiteApiCollectionErrors, ThrowOnError>({ url: '/content/{collection}', ...options });
 

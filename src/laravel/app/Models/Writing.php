@@ -7,36 +7,23 @@ use App\Content\Graph\InteractsWithGraph;
 use App\Content\Locale;
 use App\Models\Concerns\Auditable;
 use App\Models\Concerns\HasPublicId;
-use App\Models\Concerns\HasTranslations;
 use App\Models\Concerns\UsesCurrentRevision;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 /**
- * @method WritingTranslation|null translation(?string $locale = null)
+ * @method WritingRevisionTranslation|null translation(?string $locale = null)
  */
 class Writing extends Model implements GraphNode
 {
-    use Auditable, HasFactory, HasPublicId, HasTranslations, InteractsWithGraph, UsesCurrentRevision {
-        UsesCurrentRevision::translation insteadof HasTranslations;
-        HasTranslations::translation as legacyTranslation;
-    }
+    use Auditable, HasFactory, HasPublicId, InteractsWithGraph, UsesCurrentRevision;
 
     protected $fillable = ['slug', 'public_id', 'hidden', 'date_iso', 'type', 'show_history'];
 
     protected $casts = ['hidden' => 'boolean', 'date_iso' => 'date', 'show_history' => 'boolean'];
-
-    /**
-     * @return HasMany<WritingTranslation, $this>
-     */
-    public function translations(): HasMany
-    {
-        return $this->hasMany(WritingTranslation::class);
-    }
 
     /**
      * @return MorphToMany<Topic, $this>

@@ -3,7 +3,7 @@
 namespace Tests\Feature\Models;
 
 use App\Models\SiteSettings;
-use App\Models\SiteSettingsTranslation;
+use App\Models\SiteSettingsRevisionTranslation;
 use Tests\TestCase;
 
 class SiteSettingsTest extends TestCase
@@ -19,9 +19,10 @@ class SiteSettingsTest extends TestCase
     public function test_site_settings_has_translations(): void
     {
         $settings = SiteSettings::factory()->create();
-        SiteSettingsTranslation::factory()->create(['site_settings_id' => $settings->id]);
+        SiteSettingsRevisionTranslation::factory()->create(['site_settings_id' => $settings->id]);
+        $settings->refresh();
 
         $this->assertCount(1, $settings->translations);
-        $this->assertInstanceOf(SiteSettingsTranslation::class, $settings->translations->first());
+        $this->assertInstanceOf(SiteSettingsRevisionTranslation::class, $settings->translations->first());
     }
 }

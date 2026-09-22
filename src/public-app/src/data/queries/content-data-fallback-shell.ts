@@ -1,9 +1,4 @@
-import type {
-  InterfaceMessages,
-  NavigationAvailability,
-  Profile,
-  SiteText,
-} from '@portfolio/data/domain/types';
+import type { NavigationAvailability, Profile, SiteText } from '@portfolio/data/domain/types';
 import type { ShellData } from './content-data-support';
 
 const fallbackProfile: Profile = {
@@ -51,36 +46,8 @@ const fallbackAvailability: NavigationAvailability = {
   contact: false,
 };
 
-const fallbackMessages: InterfaceMessages = {
-  Nav: {
-    home: 'Home',
-    about: 'About me',
-    skipToContent: 'Skip to content',
-  },
-  Sidebar: {
-    navigation: 'Navigation',
-    preferences: 'Preferences',
-    language: 'Language',
-    theme: 'Theme',
-    systemTheme: 'System',
-    lightTheme: 'Light',
-    darkTheme: 'Dark',
-  },
-  Pages: {
-    error: {
-      eyebrow: 'Error',
-      title: 'Content temporarily unavailable',
-      description: 'The content service is unavailable. Please try again shortly.',
-      home: 'Home',
-      retry: 'Retry',
-      issue: 'Report issue',
-    },
-  },
-};
-
 export const fallbackShellData: ShellData = {
   profile: fallbackProfile,
   site: fallbackSite,
   availability: fallbackAvailability,
-  messages: fallbackMessages,
 };

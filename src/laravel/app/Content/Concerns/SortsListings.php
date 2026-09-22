@@ -55,10 +55,13 @@ trait SortsListings
             $query->select("{$baseTable}.*");
         }
 
-        $query->leftJoin($translationTable, function ($join) use ($baseTable, $translationTable, $foreignKey, $locale) {
-            $join->on("{$baseTable}.id", '=', "{$translationTable}.{$foreignKey}")
-                ->where("{$translationTable}.locale", $locale);
-        })->orderByRaw("lower({$translationTable}.{$column}) asc")
+        $revisionTable = str_replace('_revision_translations', '_revisions', $translationTable);
+
+        $query->leftJoin($revisionTable, "{$baseTable}.current_revision_id", '=', "{$revisionTable}.id")
+            ->leftJoin($translationTable, function ($join) use ($revisionTable, $translationTable, $foreignKey, $locale) {
+                $join->on("{$revisionTable}.id", '=', "{$translationTable}.{$foreignKey}")
+                    ->where("{$translationTable}.locale", $locale);
+            })->orderByRaw("lower({$translationTable}.{$column}) asc")
             ->orderBy("{$baseTable}.id");
     }
 }

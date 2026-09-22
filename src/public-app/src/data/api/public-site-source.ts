@@ -29,5 +29,3 @@ export { getLocalizedResume } from './public-site-source-get-localized-resume';
 export { getLocalizedCredits } from './public-site-source-get-localized-credits';
 
 export { getLocalizedSiteText } from './public-site-source-get-localized-site-text';
-
-export { getLocalizedInterface } from './public-site-source-get-localized-interface';

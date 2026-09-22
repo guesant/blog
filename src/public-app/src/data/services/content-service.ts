@@ -18,8 +18,6 @@ export { getProfile } from './content-service-get-profile';
 
 export { getSiteText } from './content-service-get-site-text';
 
-export { getInterfaceMessages } from './content-service-get-interface-messages';
-
 export { getNavigationAvailability } from './content-service-get-navigation-availability';
 
 export { getAchadosPageCopy } from './content-service-get-achados-page-copy';

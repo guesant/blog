@@ -2,11 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Str;
 
-class PageRevisionTranslation extends Model
+class PageRevisionTranslation extends RevisionTranslation
 {
     public const FIELDS = [
         'activitypub_description', 'activitypub_title', 'ai_body', 'ai_heading', 'api_description', 'api_title',
@@ -25,8 +24,6 @@ class PageRevisionTranslation extends Model
     ];
 
     protected $table = 'page_revision_translations';
-
-    protected $guarded = [];
 
     public function revision(): BelongsTo
     {

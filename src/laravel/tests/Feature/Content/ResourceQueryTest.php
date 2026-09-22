@@ -6,7 +6,7 @@ use App\Content\ResourceQuery;
 use App\Models\ContentRelation;
 use App\Models\RelationType;
 use App\Models\Resource;
-use App\Models\ResourceTranslation;
+use App\Models\ResourceRevisionTranslation;
 use Tests\TestCase;
 
 class ResourceQueryTest extends TestCase
@@ -23,10 +23,10 @@ class ResourceQueryTest extends TestCase
         ]);
 
         $resourceA = Resource::factory()->create(['slug' => 'resource-a', 'hidden' => false, 'visibility' => 'public']);
-        ResourceTranslation::factory()->create(['resource_id' => $resourceA->id, 'locale' => 'en', 'title' => 'Resource A']);
+        ResourceRevisionTranslation::factory()->create(['resource_id' => $resourceA->id, 'locale' => 'en', 'title' => 'Resource A']);
 
         $resourceB = Resource::factory()->create(['slug' => 'resource-b', 'hidden' => false, 'visibility' => 'public']);
-        ResourceTranslation::factory()->create(['resource_id' => $resourceB->id, 'locale' => 'en', 'title' => 'Resource B']);
+        ResourceRevisionTranslation::factory()->create(['resource_id' => $resourceB->id, 'locale' => 'en', 'title' => 'Resource B']);
 
         ContentRelation::factory()->create([
             'relation_type_id' => $relationType->id,
@@ -62,10 +62,10 @@ class ResourceQueryTest extends TestCase
         ]);
 
         $resourceA = Resource::factory()->create(['slug' => 'resource-a', 'hidden' => false, 'visibility' => 'public']);
-        ResourceTranslation::factory()->create(['resource_id' => $resourceA->id, 'locale' => 'en', 'title' => 'Resource A']);
+        ResourceRevisionTranslation::factory()->create(['resource_id' => $resourceA->id, 'locale' => 'en', 'title' => 'Resource A']);
 
         $resourceB = Resource::factory()->create(['slug' => 'resource-b', 'hidden' => false, 'visibility' => 'public']);
-        ResourceTranslation::factory()->create(['resource_id' => $resourceB->id, 'locale' => 'en', 'title' => 'Resource B']);
+        ResourceRevisionTranslation::factory()->create(['resource_id' => $resourceB->id, 'locale' => 'en', 'title' => 'Resource B']);
 
         ContentRelation::factory()->create([
             'relation_type_id' => $relationType->id,
@@ -91,10 +91,10 @@ class ResourceQueryTest extends TestCase
         $relationType = RelationType::factory()->create(['key' => 'depends-on']);
 
         $resourceA = Resource::factory()->create(['slug' => 'resource-a', 'hidden' => false, 'visibility' => 'public']);
-        ResourceTranslation::factory()->create(['resource_id' => $resourceA->id, 'locale' => 'en']);
+        ResourceRevisionTranslation::factory()->create(['resource_id' => $resourceA->id, 'locale' => 'en']);
 
         $resourceB = Resource::factory()->create(['slug' => 'resource-b', 'hidden' => true, 'visibility' => 'public']);
-        ResourceTranslation::factory()->create(['resource_id' => $resourceB->id, 'locale' => 'en']);
+        ResourceRevisionTranslation::factory()->create(['resource_id' => $resourceB->id, 'locale' => 'en']);
 
         ContentRelation::factory()->create([
             'relation_type_id' => $relationType->id,
@@ -115,10 +115,10 @@ class ResourceQueryTest extends TestCase
         $relationType = RelationType::factory()->create(['key' => 'depends-on']);
 
         $resourceA = Resource::factory()->create(['slug' => 'resource-a', 'hidden' => false, 'visibility' => 'public']);
-        ResourceTranslation::factory()->create(['resource_id' => $resourceA->id, 'locale' => 'en']);
+        ResourceRevisionTranslation::factory()->create(['resource_id' => $resourceA->id, 'locale' => 'en']);
 
         $resourceB = Resource::factory()->create(['slug' => 'resource-b', 'hidden' => false, 'visibility' => 'private']);
-        ResourceTranslation::factory()->create(['resource_id' => $resourceB->id, 'locale' => 'en']);
+        ResourceRevisionTranslation::factory()->create(['resource_id' => $resourceB->id, 'locale' => 'en']);
 
         ContentRelation::factory()->create([
             'relation_type_id' => $relationType->id,

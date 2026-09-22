@@ -4,8 +4,6 @@ export { findingApiShow as getFinding } from './generated/sdk.gen';
 
 export { publicSiteApiChrome as getSiteChrome } from './generated/sdk.gen';
 
-export { publicSiteApiInterfaceMessages as getSiteInterface } from './generated/sdk.gen';
-
 export { publicSiteApiPage as getSitePage } from './generated/sdk.gen';
 
 export { publicSiteApiResumeData as getSiteResume } from './generated/sdk.gen';

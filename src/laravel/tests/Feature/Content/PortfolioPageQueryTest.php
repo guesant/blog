@@ -4,15 +4,15 @@ namespace Tests\Feature\Content;
 
 use App\Content\PortfolioPageQuery;
 use App\Models\CaseStudy;
-use App\Models\CaseStudyTranslation;
+use App\Models\CaseStudyRevisionTranslation;
 use App\Models\Page;
-use App\Models\PageTranslation;
+use App\Models\PageRevisionTranslation;
 use App\Models\Profile;
-use App\Models\ProfileTranslation;
+use App\Models\ProfileRevisionTranslation;
 use App\Models\Project;
-use App\Models\ProjectTranslation;
+use App\Models\ProjectRevisionTranslation;
 use App\Models\SiteSettings;
-use App\Models\SiteSettingsTranslation;
+use App\Models\SiteSettingsRevisionTranslation;
 use Tests\TestCase;
 
 class PortfolioPageQueryTest extends TestCase
@@ -20,22 +20,22 @@ class PortfolioPageQueryTest extends TestCase
     public function test_portfolio_page_query_returns_structured_data(): void
     {
         $page = Page::factory()->create(['slug' => 'portfolio']);
-        PageTranslation::factory()->create(['page_id' => $page->id, 'locale' => 'en']);
+        PageRevisionTranslation::factory()->create(['page_id' => $page->id, 'locale' => 'en']);
 
         $caseStudy = CaseStudy::factory()->create(['hidden' => false]);
-        CaseStudyTranslation::factory()->create(['case_study_id' => $caseStudy->id, 'locale' => 'en']);
+        CaseStudyRevisionTranslation::factory()->create(['case_study_id' => $caseStudy->id, 'locale' => 'en']);
 
         $project = Project::factory()->create(['hidden' => false]);
-        ProjectTranslation::factory()->create(['project_id' => $project->id, 'locale' => 'en']);
+        ProjectRevisionTranslation::factory()->create(['project_id' => $project->id, 'locale' => 'en']);
 
         $page->featuredCases()->attach($caseStudy, ['order' => 1]);
         $page->featuredProjects()->attach($project, ['order' => 1]);
 
         $profile = Profile::factory()->create();
-        ProfileTranslation::factory()->create(['profile_id' => $profile->id, 'locale' => 'en']);
+        ProfileRevisionTranslation::factory()->create(['profile_id' => $profile->id, 'locale' => 'en']);
 
         $site = SiteSettings::factory()->create();
-        SiteSettingsTranslation::factory()->create(['site_settings_id' => $site->id, 'locale' => 'en']);
+        SiteSettingsRevisionTranslation::factory()->create(['site_settings_id' => $site->id, 'locale' => 'en']);
 
         $result = (new PortfolioPageQuery)->build();
 
@@ -57,15 +57,15 @@ class PortfolioPageQueryTest extends TestCase
     public function test_portfolio_page_query_limits_featured_cases_and_projects_to_three(): void
     {
         $page = Page::factory()->create(['slug' => 'portfolio']);
-        PageTranslation::factory()->create(['page_id' => $page->id, 'locale' => 'en']);
+        PageRevisionTranslation::factory()->create(['page_id' => $page->id, 'locale' => 'en']);
 
         foreach (range(1, 4) as $order) {
             $caseStudy = CaseStudy::factory()->create(['hidden' => false]);
-            CaseStudyTranslation::factory()->create(['case_study_id' => $caseStudy->id, 'locale' => 'en']);
+            CaseStudyRevisionTranslation::factory()->create(['case_study_id' => $caseStudy->id, 'locale' => 'en']);
             $page->featuredCases()->attach($caseStudy, ['order' => $order]);
 
             $project = Project::factory()->create(['hidden' => false]);
-            ProjectTranslation::factory()->create(['project_id' => $project->id, 'locale' => 'en']);
+            ProjectRevisionTranslation::factory()->create(['project_id' => $project->id, 'locale' => 'en']);
             $page->featuredProjects()->attach($project, ['order' => $order]);
         }
 

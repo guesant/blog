@@ -21,7 +21,7 @@ export function ExploreSection(props: ExploreSectionProps) {
   ];
 
   return (
-    <ExplorationSection title={t('exploreMoreTitle')} divider>
+    <ExplorationSection title={t('keepExploringTitle')} divider>
       <ExplorationTileGrid>
         {tiles.map((tile) => (
           <ExploreTile key={tile.href} tile={tile} />

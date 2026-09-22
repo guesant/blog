@@ -1,9 +1,10 @@
 import { createContext, type ReactNode } from 'react';
-import type { InterfaceMessages } from '@portfolio/data/domain/types';
 
 export type Locale = 'en' | 'pt-BR';
 
 export type Message = string | { [key: string]: Message };
+
+export type InterfaceMessages = { [key: string]: Message };
 
 export type Translator = (key: string, values?: Record<string, string | number>) => string;
 

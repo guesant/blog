@@ -1,10 +1,6 @@
 import type { RichTextContent, WithSeo } from './content';
 import type { ContentReference } from './resume';
 
-type InterfaceMessage = string | { [key: string]: InterfaceMessage };
-
-export type InterfaceMessages = { [key: string]: InterfaceMessage };
-
 export type PageIntroduction = WithSeo & {
   eyebrow: string;
   title: string;

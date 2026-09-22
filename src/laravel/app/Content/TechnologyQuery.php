@@ -15,7 +15,7 @@ class TechnologyQuery
         $query = Technology::where('hidden', false)
             ->with(['translations', 'resumeSkills.topic.translations', 'resumeSkills.topic.parent']);
 
-        $this->applySort($query, $sort, alphaTable: 'technology_translations', alphaForeignKey: 'technology_id', alphaColumn: 'name');
+        $this->applySort($query, $sort, alphaTable: 'technology_revision_translations', alphaForeignKey: 'technology_revision_id', alphaColumn: 'name');
 
         return $query->paginate($perPage);
     }

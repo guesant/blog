@@ -3,11 +3,9 @@
 namespace App\Filament\Concerns;
 
 use App\Content\EditorialRevisionPublisher;
-use App\Content\ResourceRevisionSynchronizer;
 use App\Events\PublicSiteContentChanged;
 use App\Models\PageRevisionTranslation;
 use App\Models\ProfileRevisionTranslation;
-use App\Models\Resource;
 use App\Models\ResumeRevisionTranslation;
 
 trait SyncsTranslations
@@ -18,11 +16,6 @@ trait SyncsTranslations
 
     protected function extractTranslationsBeforeSave(array $data): array
     {
-        $resourceClass = method_exists($this, 'getResource') ? static::getResource() : null;
-        if ($resourceClass !== null && is_a($resourceClass::getModel(), Resource::class, true)) {
-            app()->instance(ResourceRevisionSynchronizer::SKIP_NEXT_SAVE, true);
-        }
-
         $this->pendingRecordData = $data;
         $this->pendingTranslations = $data['translations'] ?? [];
         unset($data['translations']);

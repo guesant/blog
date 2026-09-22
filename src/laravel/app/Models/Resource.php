@@ -7,7 +7,7 @@ use App\Content\Graph\InteractsWithGraph;
 use App\Content\Locale;
 use App\Models\Concerns\Auditable;
 use App\Models\Concerns\HasPublicId;
-use App\Models\Concerns\HasTranslations;
+use App\Models\Concerns\UsesCurrentRevision;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -17,28 +17,15 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 /**
- * @method ResourceTranslation|null translation(?string $locale = null)
+ * @method ResourceRevisionTranslation|null translation(?string $locale = null)
  */
 class Resource extends Model implements GraphNode
 {
-    use Auditable, HasFactory, HasPublicId, HasTranslations, InteractsWithGraph;
+    use Auditable, HasFactory, HasPublicId, InteractsWithGraph, UsesCurrentRevision;
 
     protected $fillable = ['slug', 'public_id', 'hidden', 'order', 'type', 'language_id', 'published_date_iso', 'found_date_iso', 'consumption_state', 'rating', 'editorial_state', 'visibility', 'featured', 'featured_order', 'popularity_kind', 'popularity_rank', 'popularity_value'];
 
     protected $casts = ['hidden' => 'boolean', 'published_date_iso' => 'date', 'found_date_iso' => 'date', 'featured' => 'boolean', 'popularity_rank' => 'float'];
-
-    /**
-     * @return HasMany<ResourceTranslation, $this>
-     */
-    public function translations(): HasMany
-    {
-        return $this->hasMany(ResourceTranslation::class);
-    }
-
-    public function currentRevision(): BelongsTo
-    {
-        return $this->belongsTo(ResourceRevision::class, 'current_revision_id');
-    }
 
     /**
      * @return BelongsTo<Language, $this>

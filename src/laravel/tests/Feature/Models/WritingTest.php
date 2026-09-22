@@ -4,7 +4,7 @@ namespace Tests\Feature\Models;
 
 use App\Models\Topic;
 use App\Models\Writing;
-use App\Models\WritingTranslation;
+use App\Models\WritingRevisionTranslation;
 use Tests\TestCase;
 
 class WritingTest extends TestCase
@@ -21,7 +21,8 @@ class WritingTest extends TestCase
     public function test_writing_has_translations_and_topics(): void
     {
         $writing = Writing::factory()->create();
-        WritingTranslation::factory()->create(['writing_id' => $writing->id]);
+        WritingRevisionTranslation::factory()->create(['writing_id' => $writing->id]);
+        $writing->refresh();
         $topic = Topic::factory()->create();
         $writing->topics()->attach($topic);
 

@@ -1,5 +1,7 @@
 export * from './compat-support';
 
+export { getMessages } from './messages';
+
 export { I18nProvider } from './compat--i18n-provider';
 
 export { useLocale } from './compat-use-locale';

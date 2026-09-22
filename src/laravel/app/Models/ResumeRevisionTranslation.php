@@ -2,15 +2,12 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
-class ResumeRevisionTranslation extends Model
+class ResumeRevisionTranslation extends RevisionTranslation
 {
     protected $table = 'resume_revision_translations';
-
-    protected $guarded = [];
 
     public function getLeadershipAttribute(): array
     {

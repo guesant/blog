@@ -19,7 +19,7 @@ class ProjectQuery
             ->where('nda', false)
             ->with(['translations', 'technologies.translations']);
 
-        $this->applySort($query, $sort, alphaTable: 'project_translations', alphaForeignKey: 'project_id', alphaColumn: 'name');
+        $this->applySort($query, $sort, alphaTable: 'project_revision_translations', alphaForeignKey: 'project_revision_id', alphaColumn: 'name');
 
         return $query->paginate($perPage);
     }
@@ -38,7 +38,7 @@ class ProjectQuery
         $query = Experiment::where('hidden', false)
             ->with(['translations', 'technologies.translations']);
 
-        $this->applySort($query, $sort, alphaTable: 'experiment_translations', alphaForeignKey: 'experiment_id', alphaColumn: 'name');
+        $this->applySort($query, $sort, alphaTable: 'experiment_revision_translations', alphaForeignKey: 'experiment_revision_id', alphaColumn: 'name');
 
         return $query->paginate($perPage);
     }

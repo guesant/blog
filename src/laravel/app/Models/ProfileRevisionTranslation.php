@@ -2,15 +2,12 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
-class ProfileRevisionTranslation extends Model
+class ProfileRevisionTranslation extends RevisionTranslation
 {
     protected $table = 'profile_revision_translations';
-
-    protected $guarded = [];
 
     public function getPersonalInterestsAttribute(): array
     {

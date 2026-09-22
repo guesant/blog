@@ -7,7 +7,6 @@ use App\Content\Graph\InteractsWithGraph;
 use App\Content\Locale;
 use App\Models\Concerns\Auditable;
 use App\Models\Concerns\HasPublicId;
-use App\Models\Concerns\HasTranslations;
 use App\Models\Concerns\UsesCurrentRevision;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -17,26 +16,15 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 /**
- * @method TopicTranslation|null translation(?string $locale = null)
+ * @method TopicRevisionTranslation|null translation(?string $locale = null)
  */
 class Topic extends Model implements GraphNode
 {
-    use Auditable, HasFactory, HasPublicId, HasTranslations, InteractsWithGraph, UsesCurrentRevision {
-        UsesCurrentRevision::translation insteadof HasTranslations;
-        HasTranslations::translation as legacyTranslation;
-    }
+    use Auditable, HasFactory, HasPublicId, InteractsWithGraph, UsesCurrentRevision;
 
     protected $fillable = ['slug', 'public_id', 'order', 'kind', 'parent_id', 'hidden'];
 
     protected $casts = ['hidden' => 'boolean'];
-
-    /**
-     * @return HasMany<TopicTranslation, $this>
-     */
-    public function translations(): HasMany
-    {
-        return $this->hasMany(TopicTranslation::class);
-    }
 
     /**
      * @return BelongsTo<Topic, $this>

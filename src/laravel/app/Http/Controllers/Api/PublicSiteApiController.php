@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Api;
 
 use App\Content\CaseStudyQuery;
 use App\Content\CreditsQuery;
-use App\Content\InterfaceQuery;
 use App\Content\KnowledgeGraphQuery;
 use App\Content\Locale;
 use App\Content\PageQuery;
@@ -218,13 +217,6 @@ class PublicSiteApiController extends Controller
             ->header('Server-Timing', 'public-site-chrome;dur='.((hrtime(true) - $startedAt) / 1_000_000));
     }
 
-    public function interfaceMessages(Request $request): JsonResponse
-    {
-        return response()->json((new InterfaceQuery)->forLocale(
-            Locale::normalize($request->query('locale')),
-        ))->header('Cache-Control', 'public, max-age=3600, stale-while-revalidate=86400');
-    }
-
     public function page(Request $request, string $slug): JsonResponse
     {
         $page = (new PageQuery)->findBySlug($slug);
@@ -252,12 +244,12 @@ class PublicSiteApiController extends Controller
 
         if ($page->slug === 'now') {
             $fields['entries'] = collect([
-                ['key' => 'trabalhando', 'label' => __('now.working', [], $locale)],
-                ['key' => 'construindo', 'label' => __('now.building', [], $locale)],
-                ['key' => 'estudando', 'label' => __('now.studying', [], $locale)],
-                ['key' => 'lendo', 'label' => __('now.reading', [], $locale)],
-                ['key' => 'ouvindo', 'label' => __('now.listening', [], $locale)],
-                ['key' => 'assistindo', 'label' => __('now.watching', [], $locale)],
+                ['key' => 'trabalhando'],
+                ['key' => 'construindo'],
+                ['key' => 'estudando'],
+                ['key' => 'lendo'],
+                ['key' => 'ouvindo'],
+                ['key' => 'assistindo'],
             ])->map(fn (array $entry) => [
                 ...$entry,
                 'value' => $fields[$entry['key']] ?? $fields[str_replace(

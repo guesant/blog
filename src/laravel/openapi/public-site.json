@@ -470,50 +470,28 @@
                                                             },
                                                             "children": {
                                                                 "type": "array",
-                                                                "prefixItems": [
-                                                                    {
-                                                                        "type": "object",
-                                                                        "properties": {
-                                                                            "route": {
-                                                                                "type": "string"
-                                                                            },
-                                                                            "label": {
-                                                                                "type": "string",
-                                                                                "const": "RSS"
-                                                                            },
-                                                                            "children": {
-                                                                                "type": "null"
-                                                                            }
+                                                                "items": {
+                                                                    "type": "object",
+                                                                    "properties": {
+                                                                        "route": {
+                                                                            "type": "string"
                                                                         },
-                                                                        "required": [
-                                                                            "route",
-                                                                            "label",
-                                                                            "children"
-                                                                        ]
+                                                                        "label": {
+                                                                            "type": [
+                                                                                "string",
+                                                                                "null"
+                                                                            ]
+                                                                        },
+                                                                        "children": {
+                                                                            "type": "null"
+                                                                        }
                                                                     },
-                                                                    {
-                                                                        "type": "object",
-                                                                        "properties": {
-                                                                            "route": {
-                                                                                "type": "string"
-                                                                            },
-                                                                            "label": {
-                                                                                "type": "string",
-                                                                                "const": "Feed"
-                                                                            },
-                                                                            "children": {
-                                                                                "type": "null"
-                                                                            }
-                                                                        },
-                                                                        "required": [
-                                                                            "route",
-                                                                            "label",
-                                                                            "children"
-                                                                        ]
-                                                                    }
-                                                                ],
-                                                                "minItems": 2,
-                                                                "maxItems": 2
+                                                                    "required": [
+                                                                        "route",
+                                                                        "label",
+                                                                        "children"
+                                                                    ]
+                                                                }
                                                             }
                                                         },
                                                         "required": [
@@ -539,50 +517,28 @@
                                                             },
                                                             "children": {
                                                                 "type": "array",
-                                                                "prefixItems": [
-                                                                    {
-                                                                        "type": "object",
-                                                                        "properties": {
-                                                                            "route": {
-                                                                                "type": "string"
-                                                                            },
-                                                                            "label": {
-                                                                                "type": "string",
-                                                                                "const": "RSS"
-                                                                            },
-                                                                            "children": {
-                                                                                "type": "null"
-                                                                            }
+                                                                "items": {
+                                                                    "type": "object",
+                                                                    "properties": {
+                                                                        "route": {
+                                                                            "type": "string"
                                                                         },
-                                                                        "required": [
-                                                                            "route",
-                                                                            "label",
-                                                                            "children"
-                                                                        ]
+                                                                        "label": {
+                                                                            "type": [
+                                                                                "string",
+                                                                                "null"
+                                                                            ]
+                                                                        },
+                                                                        "children": {
+                                                                            "type": "null"
+                                                                        }
                                                                     },
-                                                                    {
-                                                                        "type": "object",
-                                                                        "properties": {
-                                                                            "route": {
-                                                                                "type": "string"
-                                                                            },
-                                                                            "label": {
-                                                                                "type": "string",
-                                                                                "const": "Feed"
-                                                                            },
-                                                                            "children": {
-                                                                                "type": "null"
-                                                                            }
-                                                                        },
-                                                                        "required": [
-                                                                            "route",
-                                                                            "label",
-                                                                            "children"
-                                                                        ]
-                                                                    }
-                                                                ],
-                                                                "minItems": 2,
-                                                                "maxItems": 2
+                                                                    "required": [
+                                                                        "route",
+                                                                        "label",
+                                                                        "children"
+                                                                    ]
+                                                                }
                                                             }
                                                         },
                                                         "required": [
@@ -730,36 +686,6 @@
                                     "required": [
                                         "error"
                                     ]
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/site/interface": {
-            "get": {
-                "operationId": "publicSiteApi.interfaceMessages",
-                "tags": [
-                    "PublicSiteApi"
-                ],
-                "parameters": [
-                    {
-                        "name": "locale",
-                        "in": "query",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "array",
-                                    "items": {}
                                 }
                             }
                         }

@@ -4,10 +4,10 @@ namespace Tests\Feature\Seeders;
 
 use App\Content\EditorialRevisionPublisher;
 use App\Models\CaseStudy;
-use App\Models\CaseStudyTranslation;
+use App\Models\CaseStudyRevisionTranslation;
 use App\Models\Page;
 use App\Models\Project;
-use App\Models\ProjectTranslation;
+use App\Models\ProjectRevisionTranslation;
 use Database\Seeders\PortfolioPageSeeder;
 use Tests\TestCase;
 
@@ -47,7 +47,7 @@ class PortfolioPageSeederTest extends TestCase
         $page = Page::factory()->create(['slug' => 'portfolio']);
 
         $caseStudy = CaseStudy::factory()->create(['hidden' => false, 'nda' => false]);
-        CaseStudyTranslation::factory()->create(['case_study_id' => $caseStudy->id, 'locale' => 'en']);
+        CaseStudyRevisionTranslation::factory()->create(['case_study_id' => $caseStudy->id, 'locale' => 'en']);
         $page->featuredCases()->attach($caseStudy, ['order' => 1]);
 
         $this->createVisibleCasesAndProjects();
@@ -64,16 +64,16 @@ class PortfolioPageSeederTest extends TestCase
     {
         foreach (range(1, 4) as $order) {
             $caseStudy = CaseStudy::factory()->create(['hidden' => false, 'nda' => false, 'order' => $order]);
-            CaseStudyTranslation::factory()->create([
+            CaseStudyRevisionTranslation::factory()->create([
                 'case_study_id' => $caseStudy->id,
                 'locale' => 'en',
                 'title' => "Case {$this->ordinalWord($order)}",
             ]);
-            CaseStudyTranslation::factory()->create(['case_study_id' => $caseStudy->id, 'locale' => 'pt-BR']);
+            CaseStudyRevisionTranslation::factory()->create(['case_study_id' => $caseStudy->id, 'locale' => 'pt-BR']);
 
             $project = Project::factory()->create(['hidden' => false, 'nda' => false, 'order' => $order]);
-            ProjectTranslation::factory()->create(['project_id' => $project->id, 'locale' => 'en']);
-            ProjectTranslation::factory()->create(['project_id' => $project->id, 'locale' => 'pt-BR']);
+            ProjectRevisionTranslation::factory()->create(['project_id' => $project->id, 'locale' => 'en']);
+            ProjectRevisionTranslation::factory()->create(['project_id' => $project->id, 'locale' => 'pt-BR']);
         }
     }
 

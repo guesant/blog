@@ -6,11 +6,11 @@ use App\Content\Graph\RelationResolver;
 use App\Models\ContentRelation;
 use App\Models\RelationType;
 use App\Models\Resource;
-use App\Models\ResourceTranslation;
+use App\Models\ResourceRevisionTranslation;
 use App\Models\Technology;
-use App\Models\TechnologyTranslation;
+use App\Models\TechnologyRevisionTranslation;
 use App\Models\Writing;
-use App\Models\WritingTranslation;
+use App\Models\WritingRevisionTranslation;
 use Tests\TestCase;
 
 class RelationResolverTest extends TestCase
@@ -25,10 +25,10 @@ class RelationResolverTest extends TestCase
         ]);
 
         $source = Resource::factory()->create(['slug' => 'source', 'hidden' => false, 'visibility' => 'public']);
-        ResourceTranslation::factory()->create(['resource_id' => $source->id, 'locale' => 'en', 'title' => 'Source']);
+        ResourceRevisionTranslation::factory()->create(['resource_id' => $source->id, 'locale' => 'en', 'title' => 'Source']);
 
         $target = Resource::factory()->create(['slug' => 'target', 'hidden' => false, 'visibility' => 'public']);
-        ResourceTranslation::factory()->create(['resource_id' => $target->id, 'locale' => 'en', 'title' => 'Target']);
+        ResourceRevisionTranslation::factory()->create(['resource_id' => $target->id, 'locale' => 'en', 'title' => 'Target']);
 
         ContentRelation::factory()->create([
             'relation_type_id' => $relationType->id,
@@ -56,10 +56,10 @@ class RelationResolverTest extends TestCase
         ]);
 
         $source = Resource::factory()->create(['slug' => 'source', 'hidden' => false, 'visibility' => 'public']);
-        ResourceTranslation::factory()->create(['resource_id' => $source->id, 'locale' => 'en', 'title' => 'Source']);
+        ResourceRevisionTranslation::factory()->create(['resource_id' => $source->id, 'locale' => 'en', 'title' => 'Source']);
 
         $target = Resource::factory()->create(['slug' => 'target', 'hidden' => false, 'visibility' => 'public']);
-        ResourceTranslation::factory()->create(['resource_id' => $target->id, 'locale' => 'en', 'title' => 'Target']);
+        ResourceRevisionTranslation::factory()->create(['resource_id' => $target->id, 'locale' => 'en', 'title' => 'Target']);
 
         ContentRelation::factory()->create([
             'relation_type_id' => $relationType->id,
@@ -87,10 +87,10 @@ class RelationResolverTest extends TestCase
         ]);
 
         $a = Resource::factory()->create(['slug' => 'a', 'hidden' => false, 'visibility' => 'public']);
-        ResourceTranslation::factory()->create(['resource_id' => $a->id, 'locale' => 'en', 'title' => 'A']);
+        ResourceRevisionTranslation::factory()->create(['resource_id' => $a->id, 'locale' => 'en', 'title' => 'A']);
 
         $b = Resource::factory()->create(['slug' => 'b', 'hidden' => false, 'visibility' => 'public']);
-        ResourceTranslation::factory()->create(['resource_id' => $b->id, 'locale' => 'en', 'title' => 'B']);
+        ResourceRevisionTranslation::factory()->create(['resource_id' => $b->id, 'locale' => 'en', 'title' => 'B']);
 
         ContentRelation::factory()->create([
             'relation_type_id' => $relationType->id,
@@ -117,10 +117,10 @@ class RelationResolverTest extends TestCase
         ]);
 
         $writing = Writing::factory()->create(['slug' => 'my-writing', 'hidden' => false]);
-        WritingTranslation::factory()->create(['writing_id' => $writing->id, 'locale' => 'en', 'title' => 'My Writing']);
+        WritingRevisionTranslation::factory()->create(['writing_id' => $writing->id, 'locale' => 'en', 'title' => 'My Writing']);
 
         $finding = Resource::factory()->create(['slug' => 'my-finding', 'hidden' => false, 'visibility' => 'public']);
-        ResourceTranslation::factory()->create(['resource_id' => $finding->id, 'locale' => 'en', 'title' => 'My Finding']);
+        ResourceRevisionTranslation::factory()->create(['resource_id' => $finding->id, 'locale' => 'en', 'title' => 'My Finding']);
 
         ContentRelation::factory()->create([
             'relation_type_id' => $relationType->id,
@@ -150,10 +150,10 @@ class RelationResolverTest extends TestCase
         $relationType = RelationType::factory()->create(['key' => 'depends-on']);
 
         $source = Resource::factory()->create(['slug' => 'source', 'hidden' => false, 'visibility' => 'public']);
-        ResourceTranslation::factory()->create(['resource_id' => $source->id, 'locale' => 'en']);
+        ResourceRevisionTranslation::factory()->create(['resource_id' => $source->id, 'locale' => 'en']);
 
         $target = Resource::factory()->create(['slug' => 'target', 'hidden' => true, 'visibility' => 'public']);
-        ResourceTranslation::factory()->create(['resource_id' => $target->id, 'locale' => 'en']);
+        ResourceRevisionTranslation::factory()->create(['resource_id' => $target->id, 'locale' => 'en']);
 
         ContentRelation::factory()->create([
             'relation_type_id' => $relationType->id,
@@ -173,10 +173,10 @@ class RelationResolverTest extends TestCase
         $relationType = RelationType::factory()->create(['key' => 'depends-on']);
 
         $source = Resource::factory()->create(['slug' => 'source', 'hidden' => false, 'visibility' => 'public']);
-        ResourceTranslation::factory()->create(['resource_id' => $source->id, 'locale' => 'en']);
+        ResourceRevisionTranslation::factory()->create(['resource_id' => $source->id, 'locale' => 'en']);
 
         $target = Resource::factory()->create(['slug' => 'target', 'hidden' => false, 'visibility' => 'public']);
-        ResourceTranslation::factory()->create(['resource_id' => $target->id, 'locale' => 'en']);
+        ResourceRevisionTranslation::factory()->create(['resource_id' => $target->id, 'locale' => 'en']);
 
         ContentRelation::factory()->create([
             'relation_type_id' => $relationType->id,
@@ -202,10 +202,10 @@ class RelationResolverTest extends TestCase
         ]);
 
         $finding = Resource::factory()->create(['slug' => 'a-finding', 'hidden' => false, 'visibility' => 'public']);
-        ResourceTranslation::factory()->create(['resource_id' => $finding->id, 'locale' => 'en', 'title' => 'A Finding']);
+        ResourceRevisionTranslation::factory()->create(['resource_id' => $finding->id, 'locale' => 'en', 'title' => 'A Finding']);
 
         $technology = Technology::factory()->create(['slug' => 'php']);
-        TechnologyTranslation::factory()->create(['technology_id' => $technology->id, 'locale' => 'en', 'name' => 'PHP']);
+        TechnologyRevisionTranslation::factory()->create(['technology_id' => $technology->id, 'locale' => 'en', 'name' => 'PHP']);
 
         ContentRelation::factory()->create([
             'relation_type_id' => $relationType->id,

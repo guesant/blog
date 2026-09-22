@@ -1,5 +1,4 @@
-import type { InterfaceMessages } from '@portfolio/data/domain/types';
-import { Translator } from './compat-support';
+import type { InterfaceMessages, Translator } from './compat-support';
 import { lookup } from './compat-lookup';
 
 export function translator(messages: InterfaceMessages, namespace?: string): Translator {

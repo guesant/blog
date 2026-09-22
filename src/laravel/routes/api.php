@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->middleware('throttle:public-api')->group(function () {
     Route::get('/site/chrome', [PublicSiteApiController::class, 'chrome']);
-    Route::get('/site/interface', [PublicSiteApiController::class, 'interfaceMessages']);
     Route::get('/site/pages/{slug}', [PublicSiteApiController::class, 'page']);
     Route::get('/site/resume', [PublicSiteApiController::class, 'resumeData']);
     Route::get('/content/{collection}', [PublicSiteApiController::class, 'collection']);

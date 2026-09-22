@@ -101,21 +101,6 @@ final class NavQuery
             ])->all();
         }
 
-        if ($item->route_name === 'follow' && $data['children'] === []) {
-            $data['children'] = [
-                [
-                    'route' => Locale::path('/feed.xml', $locale),
-                    'label' => 'RSS',
-                    'children' => null,
-                ],
-                [
-                    'route' => Locale::path('/feed.json', $locale),
-                    'label' => 'Feed',
-                    'children' => null,
-                ],
-            ];
-        }
-
         return $data;
     }
 

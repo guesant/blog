@@ -17,7 +17,7 @@ class ReferenceCollectionQuery
             ->with('translations')
             ->withCount('resources');
 
-        $this->applySort($query, $sort, alphaTable: 'reference_collection_translations', alphaForeignKey: 'reference_collection_id', alphaColumn: 'title');
+        $this->applySort($query, $sort, alphaTable: 'reference_collection_revision_translations', alphaForeignKey: 'reference_collection_revision_id', alphaColumn: 'title');
 
         return $query->paginate($perPage);
     }

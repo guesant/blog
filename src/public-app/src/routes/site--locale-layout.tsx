@@ -1,6 +1,6 @@
 import { Outlet, useLoaderData, useLocation } from '@tanstack/react-router';
 import { useQuery } from '@tanstack/react-query';
-import { I18nProvider } from '../i18n/compat';
+import { getMessages, I18nProvider } from '../i18n/compat';
 import { MaintenancePage } from '../components/layouts/maintenance-page';
 import { SiteShell } from '../components/layouts/site-shell';
 import { ThemeRegistry } from '../components/ui/theme-registry';
@@ -26,7 +26,7 @@ export function LocaleLayout() {
   );
 
   return (
-    <I18nProvider locale={locale} messages={shell.messages}>
+    <I18nProvider locale={locale} messages={getMessages(locale)}>
       <ThemeRegistry initialMode={themeMode}>{content}</ThemeRegistry>
     </I18nProvider>
   );

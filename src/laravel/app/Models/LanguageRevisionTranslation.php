@@ -2,9 +2,7 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-
-class LanguageRevisionTranslation extends Model
+class LanguageRevisionTranslation extends RevisionTranslation
 {
     protected $table = 'language_revision_translations';
 

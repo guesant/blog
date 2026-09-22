@@ -3,7 +3,7 @@
 namespace Tests\Feature\Models;
 
 use App\Models\ReferenceCollection;
-use App\Models\ReferenceCollectionTranslation;
+use App\Models\ReferenceCollectionRevisionTranslation;
 use App\Models\Resource;
 use Tests\TestCase;
 
@@ -21,7 +21,8 @@ class ReferenceCollectionTest extends TestCase
     public function test_reference_collection_has_translations_and_resources(): void
     {
         $collection = ReferenceCollection::factory()->create();
-        ReferenceCollectionTranslation::factory()->create(['reference_collection_id' => $collection->id]);
+        ReferenceCollectionRevisionTranslation::factory()->create(['reference_collection_id' => $collection->id]);
+        $collection->refresh();
         $resource = Resource::factory()->create();
         $collection->resources()->attach($resource);
 

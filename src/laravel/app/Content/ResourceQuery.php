@@ -31,8 +31,8 @@ class ResourceQuery
                 $query,
                 $sort,
                 'found_date_iso',
-                alphaTable: 'resource_translations',
-                alphaForeignKey: 'resource_id',
+                alphaTable: 'resource_revision_translations',
+                alphaForeignKey: 'resource_revision_id',
                 alphaColumn: 'title',
                 locale: $locale,
             );
@@ -47,7 +47,7 @@ class ResourceQuery
         $query = Resource::public()->where('type', $type);
         $query->select($this->listingColumns());
 
-        $this->applySort($query, $sort, 'published_date_iso', alphaTable: 'resource_translations', alphaForeignKey: 'resource_id', alphaColumn: 'title');
+        $this->applySort($query, $sort, 'published_date_iso', alphaTable: 'resource_revision_translations', alphaForeignKey: 'resource_revision_id', alphaColumn: 'title');
 
         return $query->with($this->listingRelations())
             ->paginate($perPage);
@@ -58,7 +58,7 @@ class ResourceQuery
         $query = Resource::public()->whereHas('topics', fn ($t) => $t->where('topics.id', $topicId));
         $query->select($this->listingColumns());
 
-        $this->applySort($query, $sort, 'published_date_iso', alphaTable: 'resource_translations', alphaForeignKey: 'resource_id', alphaColumn: 'title');
+        $this->applySort($query, $sort, 'published_date_iso', alphaTable: 'resource_revision_translations', alphaForeignKey: 'resource_revision_id', alphaColumn: 'title');
 
         return $query->with($this->listingRelations())
             ->paginate($perPage);

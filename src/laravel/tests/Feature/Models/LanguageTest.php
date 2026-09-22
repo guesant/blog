@@ -3,7 +3,7 @@
 namespace Tests\Feature\Models;
 
 use App\Models\Language;
-use App\Models\LanguageTranslation;
+use App\Models\LanguageRevisionTranslation;
 use Tests\TestCase;
 
 class LanguageTest extends TestCase
@@ -20,9 +20,10 @@ class LanguageTest extends TestCase
     public function test_language_has_translations(): void
     {
         $language = Language::factory()->create();
-        LanguageTranslation::factory()->create(['language_id' => $language->id]);
+        LanguageRevisionTranslation::factory()->create(['language_id' => $language->id]);
+        $language->refresh();
 
         $this->assertCount(1, $language->translations);
-        $this->assertInstanceOf(LanguageTranslation::class, $language->translations->first());
+        $this->assertInstanceOf(LanguageRevisionTranslation::class, $language->translations->first());
     }
 }

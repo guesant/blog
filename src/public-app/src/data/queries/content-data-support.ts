@@ -1,9 +1,4 @@
-import type {
-  InterfaceMessages,
-  NavigationAvailability,
-  Profile,
-  SiteText,
-} from '@portfolio/data/domain/types';
+import type { NavigationAvailability, Profile, SiteText } from '@portfolio/data/domain/types';
 
 export { loadRoute, loadShell } from './content-data-server-functions';
 
@@ -13,7 +8,6 @@ export type ShellData = {
   profile: Profile;
   site: SiteText;
   availability: NavigationAvailability;
-  messages: InterfaceMessages;
 };
 
 export type RouteRequest = {

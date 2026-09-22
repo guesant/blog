@@ -4,7 +4,7 @@ namespace Tests\Feature\Models;
 
 use App\Models\CaseStudy;
 use App\Models\Page;
-use App\Models\PageTranslation;
+use App\Models\PageRevisionTranslation;
 use Tests\TestCase;
 
 class PageTest extends TestCase
@@ -21,7 +21,8 @@ class PageTest extends TestCase
     public function test_page_has_translations_and_featured_cases(): void
     {
         $page = Page::factory()->create();
-        PageTranslation::factory()->create(['page_id' => $page->id]);
+        PageRevisionTranslation::factory()->create(['page_id' => $page->id]);
+        $page->refresh();
         $caseStudy = CaseStudy::factory()->create();
         $page->featuredCases()->attach($caseStudy);
 

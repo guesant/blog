@@ -3,21 +3,16 @@
 namespace App\Models;
 
 use App\Models\Concerns\Auditable;
-use App\Models\Concerns\HasTranslations;
 use App\Models\Concerns\UsesCurrentRevision;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * @method CreditEntryTranslation|null translation(?string $locale = null)
+ * @method CreditEntryRevisionTranslation|null translation(?string $locale = null)
  */
 class CreditEntry extends Model
 {
-    use Auditable, HasFactory, HasTranslations, UsesCurrentRevision {
-        UsesCurrentRevision::translation insteadof HasTranslations;
-        HasTranslations::translation as legacyTranslation;
-    }
+    use Auditable, HasFactory, UsesCurrentRevision;
 
     protected $fillable = [
         'url', 'category', 'order',
@@ -28,12 +23,4 @@ class CreditEntry extends Model
         'is_automatic' => 'boolean',
         'active' => 'boolean',
     ];
-
-    /**
-     * @return HasMany<CreditEntryTranslation, $this>
-     */
-    public function translations(): HasMany
-    {
-        return $this->hasMany(CreditEntryTranslation::class);
-    }
 }

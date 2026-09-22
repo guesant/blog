@@ -148,34 +148,20 @@ export type PublicSiteApiChromeResponses = {
             footer_links: Array<{
                 route: string;
                 label: string | null;
-                children: [
-                    {
-                        route: string;
-                        label: 'RSS';
-                        children: null;
-                    },
-                    {
-                        route: string;
-                        label: 'Feed';
-                        children: null;
-                    }
-                ];
+                children: Array<{
+                    route: string;
+                    label: string | null;
+                    children: null;
+                }>;
             }>;
             sitemap: Array<{
                 route: string;
                 label: string | null;
-                children: [
-                    {
-                        route: string;
-                        label: 'RSS';
-                        children: null;
-                    },
-                    {
-                        route: string;
-                        label: 'Feed';
-                        children: null;
-                    }
-                ];
+                children: Array<{
+                    route: string;
+                    label: string | null;
+                    children: null;
+                }>;
             }>;
         };
         build: {
@@ -203,21 +189,6 @@ export type PublicSiteApiChromeResponses = {
 };
 
 export type PublicSiteApiChromeResponse = PublicSiteApiChromeResponses[keyof PublicSiteApiChromeResponses];
-
-export type PublicSiteApiInterfaceMessagesData = {
-    body?: never;
-    path?: never;
-    query?: {
-        locale?: string;
-    };
-    url: '/site/interface';
-};
-
-export type PublicSiteApiInterfaceMessagesResponses = {
-    200: Array<unknown>;
-};
-
-export type PublicSiteApiInterfaceMessagesResponse = PublicSiteApiInterfaceMessagesResponses[keyof PublicSiteApiInterfaceMessagesResponses];
 
 export type PublicSiteApiPageData = {
     body?: never;

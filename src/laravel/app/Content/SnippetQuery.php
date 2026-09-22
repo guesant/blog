@@ -17,7 +17,7 @@ class SnippetQuery
             ->withCount('files')
             ->with('translations');
 
-        $this->applySort($query, $sort, alphaTable: 'snippet_translations', alphaForeignKey: 'snippet_id', alphaColumn: 'title');
+        $this->applySort($query, $sort, alphaTable: 'snippet_revision_translations', alphaForeignKey: 'snippet_revision_id', alphaColumn: 'title');
 
         return $query->paginate($perPage);
     }

@@ -3,7 +3,7 @@
 namespace Tests\Feature\Models;
 
 use App\Models\Technology;
-use App\Models\TechnologyTranslation;
+use App\Models\TechnologyRevisionTranslation;
 use Tests\TestCase;
 
 class TechnologyTest extends TestCase
@@ -20,9 +20,10 @@ class TechnologyTest extends TestCase
     public function test_technology_has_translations(): void
     {
         $technology = Technology::factory()->create();
-        TechnologyTranslation::factory()->create(['technology_id' => $technology->id]);
+        TechnologyRevisionTranslation::factory()->create(['technology_id' => $technology->id]);
+        $technology->refresh();
 
         $this->assertCount(1, $technology->translations);
-        $this->assertInstanceOf(TechnologyTranslation::class, $technology->translations->first());
+        $this->assertInstanceOf(TechnologyRevisionTranslation::class, $technology->translations->first());
     }
 }

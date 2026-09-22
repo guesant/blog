@@ -15,7 +15,7 @@ class TopicQuery
         $query = Topic::where('hidden', false)
             ->with(['translations', 'parent.translations', 'children.translations']);
 
-        $this->applySort($query, $sort, alphaTable: 'topic_translations', alphaForeignKey: 'topic_id', alphaColumn: 'name');
+        $this->applySort($query, $sort, alphaTable: 'topic_revision_translations', alphaForeignKey: 'topic_revision_id', alphaColumn: 'name');
 
         return $query->paginate($perPage);
     }

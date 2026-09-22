@@ -3,7 +3,7 @@
 namespace Tests\Feature\Models;
 
 use App\Models\CaseStudy;
-use App\Models\CaseStudyTranslation;
+use App\Models\CaseStudyRevisionTranslation;
 use App\Models\Technology;
 use Tests\TestCase;
 
@@ -21,7 +21,8 @@ class CaseStudyTest extends TestCase
     public function test_case_study_has_translations_and_technologies(): void
     {
         $caseStudy = CaseStudy::factory()->create();
-        CaseStudyTranslation::factory()->create(['case_study_id' => $caseStudy->id]);
+        CaseStudyRevisionTranslation::factory()->create(['case_study_id' => $caseStudy->id]);
+        $caseStudy->refresh();
         $technology = Technology::factory()->create();
         $caseStudy->technologies()->attach($technology);
 

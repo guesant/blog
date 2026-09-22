@@ -18,7 +18,7 @@ class CaseStudyQuery
             ->where('nda', false)
             ->with(['translations', 'technologies.translations']);
 
-        $this->applySort($query, $sort, alphaTable: 'case_study_translations', alphaForeignKey: 'case_study_id', alphaColumn: 'title');
+        $this->applySort($query, $sort, alphaTable: 'case_study_revision_translations', alphaForeignKey: 'case_study_revision_id', alphaColumn: 'title');
 
         return $query->paginate($perPage);
     }

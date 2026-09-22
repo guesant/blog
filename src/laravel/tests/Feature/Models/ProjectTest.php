@@ -3,7 +3,7 @@
 namespace Tests\Feature\Models;
 
 use App\Models\Project;
-use App\Models\ProjectTranslation;
+use App\Models\ProjectRevisionTranslation;
 use App\Models\Technology;
 use Tests\TestCase;
 
@@ -21,7 +21,8 @@ class ProjectTest extends TestCase
     public function test_project_has_translations_and_technologies(): void
     {
         $project = Project::factory()->create();
-        ProjectTranslation::factory()->create(['project_id' => $project->id]);
+        ProjectRevisionTranslation::factory()->create(['project_id' => $project->id]);
+        $project->refresh();
         $technology = Technology::factory()->create();
         $project->technologies()->attach($technology);
 

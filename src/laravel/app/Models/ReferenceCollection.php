@@ -7,35 +7,22 @@ use App\Content\Graph\InteractsWithGraph;
 use App\Content\Locale;
 use App\Models\Concerns\Auditable;
 use App\Models\Concerns\HasPublicId;
-use App\Models\Concerns\HasTranslations;
 use App\Models\Concerns\UsesCurrentRevision;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * @method ReferenceCollectionTranslation|null translation(?string $locale = null)
+ * @method ReferenceCollectionRevisionTranslation|null translation(?string $locale = null)
  */
 class ReferenceCollection extends Model implements GraphNode
 {
-    use Auditable, HasFactory, HasPublicId, HasTranslations, InteractsWithGraph, UsesCurrentRevision {
-        UsesCurrentRevision::translation insteadof HasTranslations;
-        HasTranslations::translation as legacyTranslation;
-    }
+    use Auditable, HasFactory, HasPublicId, InteractsWithGraph, UsesCurrentRevision;
 
     protected $fillable = ['slug', 'public_id', 'hidden', 'order', 'image', 'published_at'];
 
     protected $casts = ['hidden' => 'boolean', 'published_at' => 'date'];
-
-    /**
-     * @return HasMany<ReferenceCollectionTranslation, $this>
-     */
-    public function translations(): HasMany
-    {
-        return $this->hasMany(ReferenceCollectionTranslation::class);
-    }
 
     /**
      * @return BelongsToMany<resource, $this>

@@ -30,7 +30,7 @@ export function buildRightSidebarData(props: BuildRightSidebarDataProps) {
     showContact,
     showLegal: sidebarLegalVisible({ visibility, showContact }),
     showUpdates: sidebarUpdatesVisible(visibility),
-    followWithFeeds: buildFollowWithFeeds({ item: followItem, locale: props.locale }),
+    followWithFeeds: buildFollowWithFeeds({ item: followItem, locale: props.locale, t: props.t }),
     legalItems: buildSidebarLegalItems({ visibility, showContact, t: props.t }),
     ...build,
   };

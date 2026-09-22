@@ -8,11 +8,11 @@ use App\Events\PublicSiteContentChanged;
 use App\Jobs\WarmPublicSiteChrome;
 use App\Listeners\InvalidatePublicSiteChrome;
 use App\Models\CaseStudy;
-use App\Models\CaseStudyTranslation;
+use App\Models\CaseStudyRevisionTranslation;
 use App\Models\ReferenceCollection;
-use App\Models\ReferenceCollectionTranslation;
+use App\Models\ReferenceCollectionRevisionTranslation;
 use App\Models\Resource;
-use App\Models\ResourceTranslation;
+use App\Models\ResourceRevisionTranslation;
 use Illuminate\Database\Events\QueryExecuted;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
@@ -21,6 +21,11 @@ use Tests\TestCase;
 
 class PublicSiteApiTest extends TestCase
 {
+    public function test_static_interface_catalog_is_not_an_api_resource(): void
+    {
+        $this->getJson('/api/v1/site/interface?locale=en')->assertNotFound();
+    }
+
     public function test_site_chrome_builds_from_database_without_writing_cache(): void
     {
         Cache::flush();
@@ -142,7 +147,7 @@ class PublicSiteApiTest extends TestCase
             'slug' => 'reading-list',
             'hidden' => false,
         ]);
-        ReferenceCollectionTranslation::factory()->create([
+        ReferenceCollectionRevisionTranslation::factory()->create([
             'reference_collection_id' => $collection->id,
             'locale' => 'en',
         ]);
@@ -171,7 +176,7 @@ class PublicSiteApiTest extends TestCase
             'nda' => false,
         ]);
 
-        CaseStudyTranslation::factory()->create([
+        CaseStudyRevisionTranslation::factory()->create([
             'case_study_id' => $case->id,
             'locale' => 'en',
         ]);
@@ -187,7 +192,7 @@ class PublicSiteApiTest extends TestCase
             'visibility' => 'public',
         ]);
 
-        ResourceTranslation::factory()->create([
+        ResourceRevisionTranslation::factory()->create([
             'resource_id' => $resource->id,
             'locale' => 'en',
         ]);

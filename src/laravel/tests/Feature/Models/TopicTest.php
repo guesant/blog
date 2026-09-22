@@ -4,7 +4,7 @@ namespace Tests\Feature\Models;
 
 use App\Models\Resource;
 use App\Models\Topic;
-use App\Models\TopicTranslation;
+use App\Models\TopicRevisionTranslation;
 use App\Models\Writing;
 use Tests\TestCase;
 
@@ -22,10 +22,11 @@ class TopicTest extends TestCase
     public function test_topic_has_translations(): void
     {
         $topic = Topic::factory()->create();
-        TopicTranslation::factory()->create(['topic_id' => $topic->id]);
+        TopicRevisionTranslation::factory()->create(['topic_id' => $topic->id]);
+        $topic->refresh();
 
         $this->assertCount(1, $topic->translations);
-        $this->assertInstanceOf(TopicTranslation::class, $topic->translations->first());
+        $this->assertInstanceOf(TopicRevisionTranslation::class, $topic->translations->first());
     }
 
     public function test_topic_has_writings_through_topicables(): void

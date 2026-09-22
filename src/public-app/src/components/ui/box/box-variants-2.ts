@@ -84,7 +84,12 @@ export const boxVariants2: Record<string, SxProps<Theme>> = {
     alignItems: 'center',
     gap: 1,
   },
-  statusPage: { minHeight: { xs: '55vh', md: '60vh' }, display: 'flex', alignItems: 'center' },
+  statusPage: {
+    minHeight: { xs: '55vh', md: '60vh' },
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   statusContent: { width: '100%' },
   licenseSection: { mt: { xs: 4, md: 5 }, maxWidth: '60ch' },
   resumeSection: { mt: { xs: 4, md: 5 } },

@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Concerns\HasTranslations;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
@@ -13,7 +14,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 class Resume extends Model
 {
-    use HasFactory, HasTranslations;
+    use HasFactory, HasTranslations {
+        translation as legacyTranslation;
+    }
 
     protected $fillable = [];
 
@@ -23,6 +26,20 @@ class Resume extends Model
     public function translations(): HasMany
     {
         return $this->hasMany(ResumeTranslation::class);
+    }
+
+    public function currentRevision(): BelongsTo
+    {
+        return $this->belongsTo(ResumeRevision::class, 'current_revision_id');
+    }
+
+    public function translation(?string $locale = null): ResumeRevisionTranslation|ResumeTranslation|null
+    {
+        if (! $this->relationLoaded('currentRevision')) {
+            $this->load('currentRevision.translations');
+        }
+
+        return $this->currentRevision?->translation($locale) ?? $this->legacyTranslation($locale);
     }
 
     /**

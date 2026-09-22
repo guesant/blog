@@ -7,6 +7,7 @@ use App\Models\Page;
 use App\Models\Project;
 use App\Models\Writing;
 use Illuminate\Console\Command;
+use Illuminate\Support\Str;
 
 class FixEmDashesInContent extends Command
 {
@@ -144,9 +145,7 @@ class FixEmDashesInContent extends Command
 
             if (str_starts_with($field, 'fields.')) {
                 $key = substr($field, strlen('fields.'));
-                $fields = $translation->fields ?? [];
-                $fields[$key] = $updated;
-                $translation->fields = $fields;
+                $translation->setAttribute(Str::snake($key), $updated);
             } else {
                 $translation->{$field} = $updated;
             }
@@ -164,9 +163,9 @@ class FixEmDashesInContent extends Command
     private function resolveTranslation(string $model, string $slug, string $locale)
     {
         if ($model === 'Page') {
-            $page = Page::with('translations')->where('slug', $slug)->first();
+            $page = Page::with('currentRevision.translations')->where('slug', $slug)->first();
 
-            return $page?->translations->firstWhere('locale', $locale);
+            return $page?->currentRevision?->translations->firstWhere('locale', $locale);
         }
 
         $class = self::MODEL_CLASSES[$model] ?? null;

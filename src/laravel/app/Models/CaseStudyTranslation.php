@@ -11,9 +11,7 @@ class CaseStudyTranslation extends Model
 {
     use Auditable, HasFactory;
 
-    protected $fillable = ['case_study_id', 'locale', 'title', 'status', 'meta', 'summary', 'context', 'role', 'result', 'metrics', 'body', 'seo'];
-
-    protected $casts = ['metrics' => 'array', 'seo' => 'array'];
+    protected $fillable = ['case_study_id', 'locale', 'title', 'status', 'meta', 'summary', 'context', 'role', 'result', 'body'];
 
     /**
      * @return BelongsTo<CaseStudy, $this>

@@ -2,34 +2,25 @@
 
 namespace Database\Seeders;
 
+use App\Content\EditorialRevisionPublisher;
 use App\Models\CaseStudy;
 use App\Models\Page;
 use App\Models\Project;
 use Illuminate\Database\Seeder;
 
-/**
- * Seeds the 'portfolio' Page row and its per-locale translation fields with
- * placeholder copy, plus up to 3 featured cases/projects, so the redesigned
- * /portfolio hub has content to render. Not called from DatabaseSeeder —
- * run manually with:
- *
- *   php artisan db:seed --class=PortfolioPageSeeder
- *
- * Safe to re-run: translation fields are merged fill-missing-only (existing
- * keys, including edits made in Filament, are never overwritten), and
- * featured pivots are only attached when the page currently has none.
- */
 class PortfolioPageSeeder extends Seeder
 {
     public function run(): void
     {
         $page = Page::firstOrCreate(['slug' => 'portfolio']);
+        $translations = [];
 
         foreach ($this->translations() as $locale => $defaults) {
-            $translation = $page->translations()->firstOrNew(['locale' => $locale]);
-            $translation->fields = [...$defaults, ...($translation->fields ?? [])];
-            $translation->save();
+            $current = $page->translation($locale)?->fields ?? [];
+            $translations[$locale] = [...$defaults, ...$current];
         }
+
+        app(EditorialRevisionPublisher::class)->publish($page, $translations);
 
         if ($page->featuredCases()->count() === 0) {
             CaseStudy::query()
@@ -52,6 +43,8 @@ class PortfolioPageSeeder extends Seeder
                 ->get()
                 ->each(fn (Project $project, int $index) => $page->featuredProjects()->attach($project, ['order' => $index + 1]));
         }
+
+        app(EditorialRevisionPublisher::class)->syncPageRelations($page->fresh());
     }
 
     private function translations(): array

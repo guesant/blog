@@ -3,7 +3,7 @@
 namespace App\Jobs;
 
 use App\Content\Locale;
-use App\Content\ResourceQuery;
+use App\Content\PublicResourceQuery;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
@@ -19,11 +19,11 @@ class WarmResourceFacetCache implements ShouldBeUnique, ShouldQueue
 
     public int $uniqueFor = 300;
 
-    public function handle(ResourceQuery $query): void
+    public function handle(PublicResourceQuery $query): void
     {
         foreach (Locale::all() as $locale) {
             Cache::put(
-                "resource-facets:v2:{$locale}",
+                "resource-facets:v3:{$locale}",
                 $query->buildFacetOptions($locale),
                 now()->addMinutes(15),
             );

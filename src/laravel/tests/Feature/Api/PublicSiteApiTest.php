@@ -13,16 +13,22 @@ use Tests\TestCase;
 
 class PublicSiteApiTest extends TestCase
 {
-    public function test_public_site_builds_from_database_when_snapshot_cache_is_empty(): void
+    public function test_site_chrome_builds_from_database_without_cache(): void
     {
         Cache::flush();
 
-        $response = $this->getJson('/api/v1/public-site?locale=en');
+        $response = $this->getJson('/api/v1/site/chrome?locale=en');
 
         $response
             ->assertOk()
-            ->assertJsonPath('schema_version', 3)
-            ->assertJsonPath('locale', 'en');
+            ->assertJsonStructure([
+                'site',
+                'profile',
+                'copyright',
+                'navigation',
+                'build',
+                'visibility',
+            ]);
     }
 
     public function test_content_collection_returns_a_paginated_page(): void

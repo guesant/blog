@@ -2,14 +2,12 @@
 
 namespace App\Content;
 
-use App\Models\Resource;
-
 class ResourceApiTransformer
 {
     public function __construct(private readonly OpenGraphMetadata $openGraph) {}
 
     public function toArray(
-        Resource $resource,
+        object $resource,
         string $locale,
         ?array $relations = null,
         bool $includeOpenGraph = false,

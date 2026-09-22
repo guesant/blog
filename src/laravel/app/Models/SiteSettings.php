@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Concerns\HasTranslations;
+use App\Models\Concerns\UsesCurrentRevision;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -12,7 +13,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 class SiteSettings extends Model
 {
-    use HasFactory, HasTranslations;
+    use HasFactory, HasTranslations, UsesCurrentRevision {
+        UsesCurrentRevision::translation insteadof HasTranslations;
+        HasTranslations::translation as legacyTranslation;
+    }
 
     protected $table = 'site_settings';
 

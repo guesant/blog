@@ -221,9 +221,9 @@
                 }
             }
         },
-        "/public-site": {
+        "/site/chrome": {
             "get": {
-                "operationId": "publicSiteApi.index",
+                "operationId": "publicSiteApi.chrome",
                 "tags": [
                     "PublicSiteApi"
                 ],
@@ -243,17 +243,871 @@
                             "application/json": {
                                 "schema": {
                                     "type": "object",
-                                    "additionalProperties": {}
+                                    "properties": {
+                                        "site": {
+                                            "type": "object",
+                                            "properties": {
+                                                "short_name": {
+                                                    "type": [
+                                                        "string",
+                                                        "null"
+                                                    ]
+                                                },
+                                                "portfolio_url": {
+                                                    "anyOf": [
+                                                        {
+                                                            "type": "string"
+                                                        },
+                                                        {
+                                                            "type": "string",
+                                                            "enum": [
+                                                                ""
+                                                            ]
+                                                        }
+                                                    ]
+                                                },
+                                                "source_repository_url": {
+                                                    "anyOf": [
+                                                        {
+                                                            "type": "string"
+                                                        },
+                                                        {
+                                                            "type": "string",
+                                                            "enum": [
+                                                                ""
+                                                            ]
+                                                        }
+                                                    ]
+                                                },
+                                                "contact_available": {
+                                                    "type": [
+                                                        "string",
+                                                        "boolean"
+                                                    ]
+                                                },
+                                                "contact_profiles": {
+                                                    "type": [
+                                                        "array",
+                                                        "null"
+                                                    ],
+                                                    "items": {
+                                                        "type": "object",
+                                                        "properties": {
+                                                            "platform": {
+                                                                "type": "string"
+                                                            },
+                                                            "label": {
+                                                                "type": "string"
+                                                            },
+                                                            "url": {
+                                                                "type": "string"
+                                                            }
+                                                        },
+                                                        "required": [
+                                                            "platform",
+                                                            "label",
+                                                            "url"
+                                                        ]
+                                                    }
+                                                },
+                                                "protected_email": {
+                                                    "type": "null"
+                                                },
+                                                "maintenance_enabled": {
+                                                    "type": [
+                                                        "string",
+                                                        "boolean"
+                                                    ]
+                                                },
+                                                "maintenance_eyebrow": {
+                                                    "type": [
+                                                        "string",
+                                                        "null"
+                                                    ]
+                                                },
+                                                "maintenance_title": {
+                                                    "type": [
+                                                        "string",
+                                                        "null"
+                                                    ]
+                                                },
+                                                "maintenance_description": {
+                                                    "type": [
+                                                        "string",
+                                                        "null"
+                                                    ]
+                                                },
+                                                "seo": {
+                                                    "type": [
+                                                        "string",
+                                                        "null"
+                                                    ]
+                                                }
+                                            },
+                                            "required": [
+                                                "short_name",
+                                                "portfolio_url",
+                                                "source_repository_url",
+                                                "contact_available",
+                                                "contact_profiles",
+                                                "protected_email",
+                                                "maintenance_enabled",
+                                                "maintenance_eyebrow",
+                                                "maintenance_title",
+                                                "maintenance_description",
+                                                "seo"
+                                            ]
+                                        },
+                                        "profile": {
+                                            "type": [
+                                                "object",
+                                                "null"
+                                            ],
+                                            "properties": {
+                                                "name": {
+                                                    "type": "string"
+                                                },
+                                                "title": {
+                                                    "type": [
+                                                        "string",
+                                                        "null"
+                                                    ]
+                                                },
+                                                "location": {
+                                                    "type": [
+                                                        "string",
+                                                        "null"
+                                                    ]
+                                                },
+                                                "description": {
+                                                    "type": [
+                                                        "string",
+                                                        "null"
+                                                    ]
+                                                },
+                                                "milestones": {
+                                                    "type": [
+                                                        "string",
+                                                        "null"
+                                                    ]
+                                                },
+                                                "birth_date": {
+                                                    "anyOf": [
+                                                        {
+                                                            "type": "string"
+                                                        },
+                                                        {
+                                                            "type": "string",
+                                                            "enum": [
+                                                                ""
+                                                            ]
+                                                        }
+                                                    ]
+                                                },
+                                                "birth_city": {
+                                                    "type": [
+                                                        "string",
+                                                        "null"
+                                                    ]
+                                                },
+                                                "interests": {
+                                                    "type": [
+                                                        "string",
+                                                        "null"
+                                                    ]
+                                                },
+                                                "learning": {
+                                                    "type": [
+                                                        "string",
+                                                        "null"
+                                                    ]
+                                                },
+                                                "personal_interests": {
+                                                    "type": [
+                                                        "string",
+                                                        "null"
+                                                    ]
+                                                }
+                                            },
+                                            "required": [
+                                                "name",
+                                                "title",
+                                                "location",
+                                                "description",
+                                                "milestones",
+                                                "birth_date",
+                                                "birth_city",
+                                                "interests",
+                                                "learning",
+                                                "personal_interests"
+                                            ]
+                                        },
+                                        "copyright": {
+                                            "type": [
+                                                "array",
+                                                "string"
+                                            ]
+                                        },
+                                        "navigation": {
+                                            "type": "object",
+                                            "properties": {
+                                                "sidebar": {
+                                                    "type": "array",
+                                                    "items": {}
+                                                },
+                                                "footer_links": {
+                                                    "type": "object",
+                                                    "additionalProperties": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "sitemap": {
+                                                    "type": "object",
+                                                    "additionalProperties": {
+                                                        "type": "string"
+                                                    }
+                                                }
+                                            },
+                                            "required": [
+                                                "sidebar",
+                                                "footer_links",
+                                                "sitemap"
+                                            ]
+                                        },
+                                        "build": {
+                                            "type": "object",
+                                            "properties": {
+                                                "commit_sha": {
+                                                    "type": "string"
+                                                },
+                                                "build_time": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "required": [
+                                                "commit_sha",
+                                                "build_time"
+                                            ]
+                                        },
+                                        "visibility": {
+                                            "type": "object",
+                                            "properties": {
+                                                "about": {
+                                                    "type": "boolean"
+                                                },
+                                                "resume": {
+                                                    "type": "boolean"
+                                                },
+                                                "portfolio": {
+                                                    "type": "string"
+                                                },
+                                                "cases": {
+                                                    "type": "boolean"
+                                                },
+                                                "contact": {
+                                                    "type": "boolean"
+                                                },
+                                                "license": {
+                                                    "type": "boolean"
+                                                },
+                                                "credits": {
+                                                    "type": "boolean"
+                                                },
+                                                "follow": {
+                                                    "type": "boolean"
+                                                },
+                                                "feed": {
+                                                    "type": "boolean"
+                                                },
+                                                "writing": {
+                                                    "type": "boolean"
+                                                },
+                                                "findings": {
+                                                    "type": "boolean"
+                                                },
+                                                "topics": {
+                                                    "type": "boolean"
+                                                },
+                                                "collections": {
+                                                    "type": "boolean"
+                                                },
+                                                "snippets": {
+                                                    "type": "boolean"
+                                                },
+                                                "right_sidebar": {
+                                                    "type": "boolean"
+                                                }
+                                            },
+                                            "required": [
+                                                "about",
+                                                "resume",
+                                                "portfolio",
+                                                "cases",
+                                                "contact",
+                                                "license",
+                                                "credits",
+                                                "follow",
+                                                "feed",
+                                                "writing",
+                                                "findings",
+                                                "topics",
+                                                "collections",
+                                                "snippets",
+                                                "right_sidebar"
+                                            ]
+                                        }
+                                    },
+                                    "required": [
+                                        "site",
+                                        "profile",
+                                        "copyright",
+                                        "navigation",
+                                        "build",
+                                        "visibility"
+                                    ]
                                 }
                             }
                         }
                     },
-                    "304": {
-                        "description": "The cached public site snapshot is still current.",
+                    "503": {
+                        "description": "",
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "type": "string"
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "object",
+                                            "properties": {
+                                                "code": {
+                                                    "type": "string"
+                                                },
+                                                "message": {
+                                                    "type": "string",
+                                                    "const": "The service is temporarily unavailable."
+                                                },
+                                                "status": {
+                                                    "type": "integer",
+                                                    "const": 503
+                                                },
+                                                "details": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "required": [
+                                                "code",
+                                                "message",
+                                                "status",
+                                                "details"
+                                            ]
+                                        }
+                                    },
+                                    "required": [
+                                        "error"
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/site/interface": {
+            "get": {
+                "operationId": "publicSiteApi.interfaceMessages",
+                "tags": [
+                    "PublicSiteApi"
+                ],
+                "parameters": [
+                    {
+                        "name": "locale",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {}
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/site/pages/{slug}": {
+            "get": {
+                "operationId": "publicSiteApi.page",
+                "tags": [
+                    "PublicSiteApi"
+                ],
+                "parameters": [
+                    {
+                        "name": "slug",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "locale",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {}
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/ModelNotFoundException"
+                    }
+                }
+            }
+        },
+        "/site/resume": {
+            "get": {
+                "operationId": "publicSiteApi.resumeData",
+                "tags": [
+                    "PublicSiteApi"
+                ],
+                "parameters": [
+                    {
+                        "name": "locale",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "summary": {
+                                            "type": [
+                                                "string",
+                                                "null"
+                                            ]
+                                        },
+                                        "leadership": {
+                                            "anyOf": [
+                                                {
+                                                    "type": "string"
+                                                },
+                                                {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string"
+                                                    },
+                                                    "minItems": 0,
+                                                    "maxItems": 0
+                                                }
+                                            ]
+                                        },
+                                        "education": {
+                                            "anyOf": [
+                                                {
+                                                    "type": "string"
+                                                },
+                                                {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string"
+                                                    },
+                                                    "minItems": 0,
+                                                    "maxItems": 0
+                                                }
+                                            ]
+                                        },
+                                        "certificates": {
+                                            "anyOf": [
+                                                {
+                                                    "type": "string"
+                                                },
+                                                {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string"
+                                                    },
+                                                    "minItems": 0,
+                                                    "maxItems": 0
+                                                }
+                                            ]
+                                        },
+                                        "certifications": {
+                                            "anyOf": [
+                                                {
+                                                    "type": "string"
+                                                },
+                                                {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string"
+                                                    },
+                                                    "minItems": 0,
+                                                    "maxItems": 0
+                                                }
+                                            ]
+                                        },
+                                        "publications": {
+                                            "anyOf": [
+                                                {
+                                                    "type": "string"
+                                                },
+                                                {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string"
+                                                    },
+                                                    "minItems": 0,
+                                                    "maxItems": 0
+                                                }
+                                            ]
+                                        },
+                                        "recommendations": {
+                                            "anyOf": [
+                                                {
+                                                    "type": "string"
+                                                },
+                                                {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string"
+                                                    },
+                                                    "minItems": 0,
+                                                    "maxItems": 0
+                                                }
+                                            ]
+                                        },
+                                        "technical_productions": {
+                                            "anyOf": [
+                                                {
+                                                    "type": "string"
+                                                },
+                                                {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string"
+                                                    },
+                                                    "minItems": 0,
+                                                    "maxItems": 0
+                                                }
+                                            ]
+                                        },
+                                        "events": {
+                                            "anyOf": [
+                                                {
+                                                    "type": "string"
+                                                },
+                                                {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string"
+                                                    },
+                                                    "minItems": 0,
+                                                    "maxItems": 0
+                                                }
+                                            ]
+                                        },
+                                        "awards": {
+                                            "anyOf": [
+                                                {
+                                                    "type": "string"
+                                                },
+                                                {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string"
+                                                    },
+                                                    "minItems": 0,
+                                                    "maxItems": 0
+                                                }
+                                            ]
+                                        },
+                                        "experience": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "selected_cases": {
+                                            "anyOf": [
+                                                {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "object",
+                                                        "properties": {
+                                                            "slug": {
+                                                                "type": "string"
+                                                            },
+                                                            "url": {
+                                                                "type": "string"
+                                                            },
+                                                            "title": {
+                                                                "type": "string"
+                                                            },
+                                                            "status": {
+                                                                "type": [
+                                                                    "string",
+                                                                    "null"
+                                                                ]
+                                                            },
+                                                            "summary": {
+                                                                "type": [
+                                                                    "string",
+                                                                    "null"
+                                                                ]
+                                                            },
+                                                            "published_at": {
+                                                                "type": [
+                                                                    "string",
+                                                                    "null"
+                                                                ]
+                                                            },
+                                                            "external": {
+                                                                "type": "string"
+                                                            },
+                                                            "meta": {
+                                                                "type": [
+                                                                    "string",
+                                                                    "null"
+                                                                ]
+                                                            },
+                                                            "context": {
+                                                                "type": [
+                                                                    "string",
+                                                                    "null"
+                                                                ]
+                                                            },
+                                                            "role": {
+                                                                "type": [
+                                                                    "string",
+                                                                    "null"
+                                                                ]
+                                                            },
+                                                            "result": {
+                                                                "type": [
+                                                                    "string",
+                                                                    "null"
+                                                                ]
+                                                            },
+                                                            "metrics": {
+                                                                "type": [
+                                                                    "string",
+                                                                    "null"
+                                                                ]
+                                                            },
+                                                            "body": {
+                                                                "type": [
+                                                                    "string",
+                                                                    "null"
+                                                                ]
+                                                            },
+                                                            "technologies": {
+                                                                "type": "array",
+                                                                "items": {
+                                                                    "type": "object",
+                                                                    "properties": {
+                                                                        "slug": {
+                                                                            "type": "string"
+                                                                        },
+                                                                        "name": {
+                                                                            "type": "string"
+                                                                        }
+                                                                    },
+                                                                    "required": [
+                                                                        "slug",
+                                                                        "name"
+                                                                    ]
+                                                                }
+                                                            },
+                                                            "show_history": {
+                                                                "type": "boolean"
+                                                            },
+                                                            "history": {
+                                                                "type": "null"
+                                                            },
+                                                            "href": {
+                                                                "type": "string"
+                                                            },
+                                                            "related": {
+                                                                "type": "null"
+                                                            },
+                                                            "updated_at": {
+                                                                "type": [
+                                                                    "string",
+                                                                    "null"
+                                                                ]
+                                                            }
+                                                        },
+                                                        "required": [
+                                                            "slug",
+                                                            "url",
+                                                            "title",
+                                                            "status",
+                                                            "summary",
+                                                            "published_at",
+                                                            "external",
+                                                            "meta",
+                                                            "context",
+                                                            "role",
+                                                            "result",
+                                                            "metrics",
+                                                            "body",
+                                                            "technologies",
+                                                            "show_history",
+                                                            "history",
+                                                            "href",
+                                                            "related",
+                                                            "updated_at"
+                                                        ]
+                                                    }
+                                                },
+                                                {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string"
+                                                    }
+                                                }
+                                            ]
+                                        },
+                                        "skills": {
+                                            "anyOf": [
+                                                {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "object",
+                                                        "properties": {
+                                                            "name": {
+                                                                "type": "string"
+                                                            },
+                                                            "technologies": {
+                                                                "type": "array",
+                                                                "items": {
+                                                                    "type": "object",
+                                                                    "properties": {
+                                                                        "slug": {
+                                                                            "type": "string"
+                                                                        },
+                                                                        "name": {
+                                                                            "type": "string"
+                                                                        },
+                                                                        "code": {
+                                                                            "type": "null"
+                                                                        },
+                                                                        "url": {
+                                                                            "type": "null"
+                                                                        },
+                                                                        "skills": {
+                                                                            "type": "null"
+                                                                        },
+                                                                        "resume_skills": {
+                                                                            "type": "null"
+                                                                        }
+                                                                    },
+                                                                    "required": [
+                                                                        "slug",
+                                                                        "name",
+                                                                        "code",
+                                                                        "url",
+                                                                        "skills",
+                                                                        "resume_skills"
+                                                                    ]
+                                                                }
+                                                            }
+                                                        },
+                                                        "required": [
+                                                            "name",
+                                                            "technologies"
+                                                        ]
+                                                    }
+                                                },
+                                                {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string"
+                                                    }
+                                                }
+                                            ]
+                                        },
+                                        "languages": {
+                                            "anyOf": [
+                                                {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "object",
+                                                        "properties": {
+                                                            "name": {
+                                                                "type": "string"
+                                                            },
+                                                            "proficiency": {
+                                                                "anyOf": [
+                                                                    {
+                                                                        "type": "string"
+                                                                    },
+                                                                    {
+                                                                        "type": "string",
+                                                                        "enum": [
+                                                                            ""
+                                                                        ]
+                                                                    }
+                                                                ]
+                                                            }
+                                                        },
+                                                        "required": [
+                                                            "name",
+                                                            "proficiency"
+                                                        ]
+                                                    }
+                                                },
+                                                {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string"
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    "required": [
+                                        "summary",
+                                        "leadership",
+                                        "education",
+                                        "certificates",
+                                        "certifications",
+                                        "publications",
+                                        "recommendations",
+                                        "technical_productions",
+                                        "events",
+                                        "awards",
+                                        "experience",
+                                        "selected_cases",
+                                        "skills",
+                                        "languages"
+                                    ]
                                 }
                             }
                         }

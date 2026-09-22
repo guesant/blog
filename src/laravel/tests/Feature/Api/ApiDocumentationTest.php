@@ -34,6 +34,6 @@ class ApiDocumentationTest extends TestCase
                 'servers',
                 'paths',
             ])
-            ->assertJsonPath('paths./public-site.get', fn ($value): bool => is_array($value));
+            ->assertJsonPath('paths./site/chrome.get', fn ($value): bool => is_array($value));
     }
 }

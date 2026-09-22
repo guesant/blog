@@ -19,7 +19,6 @@ class WritingTranslationFactory extends Factory
             'excerpt' => $this->faker->optional()->paragraph(),
             'reading_time' => $this->faker->optional()->word(),
             'body' => $this->faker->optional()->paragraph(),
-            'seo' => null,
         ];
     }
 }

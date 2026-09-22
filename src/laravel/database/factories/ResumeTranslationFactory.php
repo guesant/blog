@@ -16,15 +16,6 @@ class ResumeTranslationFactory extends Factory
             'resume_id' => Resume::factory(),
             'locale' => $this->faker->randomElement(['en', 'pt-BR']),
             'summary' => $this->faker->optional()->paragraph(),
-            'leadership' => null,
-            'education' => null,
-            'certificates' => null,
-            'certifications' => null,
-            'publications' => null,
-            'recommendations' => null,
-            'technical_productions' => null,
-            'events' => null,
-            'awards' => null,
         ];
     }
 }

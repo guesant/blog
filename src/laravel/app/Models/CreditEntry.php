@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Concerns\Auditable;
 use App\Models\Concerns\HasTranslations;
+use App\Models\Concerns\UsesCurrentRevision;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -13,7 +14,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 class CreditEntry extends Model
 {
-    use Auditable, HasFactory, HasTranslations;
+    use Auditable, HasFactory, HasTranslations, UsesCurrentRevision {
+        UsesCurrentRevision::translation insteadof HasTranslations;
+        HasTranslations::translation as legacyTranslation;
+    }
 
     protected $fillable = [
         'url', 'category', 'order',

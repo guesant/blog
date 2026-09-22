@@ -4,10 +4,9 @@ namespace App\Filament\Resources\Pages\Schemas;
 
 use App\Filament\Concerns\BuildsTranslationTabs;
 use App\Models\CaseStudy;
-use App\Models\Page;
+use App\Models\PageRevisionTranslation;
 use App\Models\Project;
 use App\Models\Writing;
-use Filament\Forms\Components\KeyValue;
 use Filament\Forms\Components\MarkdownEditor;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
@@ -16,52 +15,26 @@ use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Group;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
-use Illuminate\Support\Str;
 
 class PageForm
 {
     use BuildsTranslationTabs;
 
-    /**
-     * Every page stores a different set of copy fields in one JSON column
-     * (home has ~22, credits has 2). Rather than a raw JSON textarea, build
-     * one real input per key found on the record — long prose becomes a
-     * textarea, the about-page story a markdown editor, everything else a
-     * text input.
-     */
-    protected static function pageFieldInputs(?Page $record, string $prefix): array
+    protected static function pageFieldInputs(string $prefix): array
     {
-        if (! $record) {
-            return [
-                KeyValue::make("{$prefix}fields")
-                    ->label('Fields')
-                    ->keyLabel('Field')
-                    ->valueLabel('Copy')
-                    ->helperText('Field keys become editable as dedicated inputs after the page is saved once.'),
-            ];
-        }
+        return collect(PageRevisionTranslation::FIELDS)->map(function (string $key) use ($prefix) {
+            $field = "{$prefix}fields.{$key}";
+            $label = str($key)->headline()->toString();
 
-        $translations = $record->translations->keyBy('locale');
-        $keys = $translations
-            ->flatMap(fn ($translation) => array_keys($translation->fields ?? []))
-            ->unique()
-            ->values();
-
-        return $keys->map(function (string $key) use ($translations, $prefix) {
-            $label = Str::headline($key);
-            $values = $translations->map(fn ($translation) => $translation->fields[$key] ?? '');
-            $isLong = $values->contains(fn ($value) => is_string($value)
-                && (mb_strlen($value) > 140 || str_contains($value, "\n")));
-
-            if ($key === 'story') {
-                return MarkdownEditor::make("{$prefix}fields.{$key}")->label($label)->nullable();
+            if ($key === 'story' || str_ends_with($key, '_body') || str_ends_with($key, '_description') || in_array($key, ['context', 'intro', 'lead'], true)) {
+                return MarkdownEditor::make($field)->label($label)->nullable();
             }
 
-            if ($isLong) {
-                return Textarea::make("{$prefix}fields.{$key}")->label($label)->rows(3)->nullable();
+            if (str_ends_with($key, '_title') || str_ends_with($key, '_label') || in_array($key, ['hero_identity', 'hero_experience', 'hero_current_focus', 'title', 'eyebrow'], true)) {
+                return TextInput::make($field)->label($label)->nullable();
             }
 
-            return TextInput::make("{$prefix}fields.{$key}")->label($label)->nullable();
+            return Textarea::make($field)->label($label)->rows(3)->nullable();
         })->all();
     }
 
@@ -132,7 +105,7 @@ class PageForm
                     ]),
                 static::translationTabs(fn (string $prefix) => [
                     Group::make()
-                        ->schema(fn (?Page $record) => static::pageFieldInputs($record, $prefix)),
+                        ->schema(fn () => static::pageFieldInputs($prefix)),
                 ]),
             ]);
     }

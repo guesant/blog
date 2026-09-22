@@ -122,8 +122,7 @@ class ResourceQuery
         if (filled($filters['q'] ?? null)) {
             $term = '%'.$filters['q'].'%';
             $query->where(function ($outer) use ($term, $locale) {
-                $outer->where('authors', 'ilike', $term)
-                    ->orWhere('organizations', 'ilike', $term)
+                $outer->whereHas('currentRevision.attributions', fn ($attribution) => $attribution->where('name', 'ilike', $term))
                     ->orWhereHas('translations', function ($t) use ($term, $locale) {
                         $t->where('locale', $locale)
                             ->where(function ($tt) use ($term) {
@@ -227,14 +226,11 @@ class ResourceQuery
             'hidden',
             'order',
             'type',
-            'authors',
-            'organizations',
             'published_date_iso',
             'found_date_iso',
             'consumption_state',
             'rating',
             'visibility',
-            'type_details',
             'updated_at',
             'featured',
             'featured_order',

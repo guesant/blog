@@ -11,9 +11,7 @@ class ExperimentTranslation extends Model
 {
     use Auditable, HasFactory;
 
-    protected $fillable = ['experiment_id', 'locale', 'name', 'purpose', 'body', 'seo'];
-
-    protected $casts = ['seo' => 'array'];
+    protected $fillable = ['experiment_id', 'locale', 'name', 'purpose', 'body'];
 
     /**
      * @return BelongsTo<Experiment, $this>

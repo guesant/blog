@@ -20,9 +20,7 @@ class ProjectTranslationFactory extends Factory
             'problem' => $this->faker->optional()->paragraph(),
             'current_focus' => $this->faker->optional()->paragraph(),
             'status' => $this->faker->optional()->word(),
-            'metrics' => null,
             'body' => $this->faker->optional()->paragraph(),
-            'seo' => null,
         ];
     }
 }

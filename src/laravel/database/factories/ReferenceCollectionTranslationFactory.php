@@ -18,7 +18,6 @@ class ReferenceCollectionTranslationFactory extends Factory
             'title' => $this->faker->sentence(),
             'description' => $this->faker->optional()->paragraph(),
             'intro' => $this->faker->optional()->paragraph(),
-            'seo' => null,
         ];
     }
 }

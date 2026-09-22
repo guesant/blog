@@ -8,6 +8,7 @@ use App\Content\Locale;
 use App\Models\Concerns\Auditable;
 use App\Models\Concerns\HasPublicId;
 use App\Models\Concerns\HasTranslations;
+use App\Models\Concerns\UsesCurrentRevision;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -21,7 +22,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 class CaseStudy extends Model implements GraphNode
 {
-    use Auditable, HasFactory, HasPublicId, HasTranslations, InteractsWithGraph;
+    use Auditable, HasFactory, HasPublicId, HasTranslations, InteractsWithGraph, UsesCurrentRevision {
+        UsesCurrentRevision::translation insteadof HasTranslations;
+        HasTranslations::translation as legacyTranslation;
+    }
 
     protected $fillable = ['slug', 'public_id', 'hidden', 'order', 'href', 'external', 'visual', 'nda', 'published_at', 'show_history'];
 

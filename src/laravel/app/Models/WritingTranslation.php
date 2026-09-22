@@ -11,9 +11,7 @@ class WritingTranslation extends Model
 {
     use Auditable, HasFactory;
 
-    protected $fillable = ['writing_id', 'locale', 'title', 'excerpt', 'reading_time', 'body', 'seo'];
-
-    protected $casts = ['seo' => 'array'];
+    protected $fillable = ['writing_id', 'locale', 'title', 'excerpt', 'reading_time', 'body'];
 
     /**
      * @return BelongsTo<Writing, $this>

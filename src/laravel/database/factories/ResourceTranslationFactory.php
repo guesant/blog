@@ -20,7 +20,6 @@ class ResourceTranslationFactory extends Factory
             'description' => $this->faker->optional()->paragraph(),
             'personal_note' => $this->faker->optional()->paragraph(),
             'reason_found' => $this->faker->optional()->paragraph(),
-            'seo' => null,
         ];
     }
 }

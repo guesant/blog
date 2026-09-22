@@ -2,10 +2,10 @@
 
 namespace Tests\Feature\Seeders;
 
+use App\Content\EditorialRevisionPublisher;
 use App\Models\CaseStudy;
 use App\Models\CaseStudyTranslation;
 use App\Models\Page;
-use App\Models\PageTranslation;
 use App\Models\Project;
 use App\Models\ProjectTranslation;
 use Database\Seeders\PortfolioPageSeeder;
@@ -22,7 +22,7 @@ class PortfolioPageSeederTest extends TestCase
 
         $page = Page::where('slug', 'portfolio')->firstOrFail();
 
-        $this->assertCount(2, $page->translations);
+        $this->assertCount(2, $page->fresh()->currentRevision->translations);
         $this->assertCount(3, $page->featuredCases);
         $this->assertCount(3, $page->featuredProjects);
     }
@@ -30,15 +30,13 @@ class PortfolioPageSeederTest extends TestCase
     public function test_seeder_does_not_overwrite_existing_field_values(): void
     {
         $page = Page::factory()->create(['slug' => 'portfolio']);
-        PageTranslation::factory()->create([
-            'page_id' => $page->id,
-            'locale' => 'en',
-            'fields' => ['heroIdentity' => 'a very specific existing value'],
+        app(EditorialRevisionPublisher::class)->publish($page, [
+            'en' => ['heroIdentity' => 'a very specific existing value'],
         ]);
 
         (new PortfolioPageSeeder)->run();
 
-        $translation = $page->translations()->where('locale', 'en')->firstOrFail();
+        $translation = $page->fresh()->translation('en');
 
         $this->assertSame('a very specific existing value', $translation->fields['heroIdentity']);
         $this->assertArrayHasKey('workTitle', $translation->fields);

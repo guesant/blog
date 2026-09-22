@@ -10,7 +10,10 @@ class PageQuery
     {
         return Page::where('slug', $slug)
             ->with([
-                'translations',
+                'currentRevision.translations',
+                'currentRevision.featuredCases',
+                'currentRevision.featuredProjects',
+                'currentRevision.featuredWritings',
                 'featuredCases.translations',
                 'featuredProjects.translations',
                 'featuredWritings.translations',

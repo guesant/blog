@@ -8,20 +8,21 @@ class PortfolioPageQuery
     {
         $page = (new PageQuery)->findBySlug('portfolio');
 
-        // Featured items are curated by reference (pivot), but a reference to
-        // a since-hidden item must not resurrect it on the portfolio page —
-        // the same visibility rule the list pages (*Query::list()) apply.
-        $cases = $page?->featuredCases
+        $cases = ($page?->currentRevision?->featuredCases?->isNotEmpty()
+            ? $page->currentRevision->featuredCases
+            : $page?->featuredCases)
             ->where('hidden', false)
             ->where('nda', false)
-            ->sortBy('pivot.order')
+            ->sortBy('pivot.sort_order')
             ->values()
             ->take(3) ?? collect();
 
-        $projects = $page?->featuredProjects
+        $projects = ($page?->currentRevision?->featuredProjects?->isNotEmpty()
+            ? $page->currentRevision->featuredProjects
+            : $page?->featuredProjects)
             ->where('hidden', false)
             ->where('nda', false)
-            ->sortBy('pivot.order')
+            ->sortBy('pivot.sort_order')
             ->values()
             ->take(3) ?? collect();
 

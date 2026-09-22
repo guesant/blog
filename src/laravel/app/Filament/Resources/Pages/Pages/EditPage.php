@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Pages\Pages;
 
+use App\Content\EditorialRevisionPublisher;
 use App\Filament\Concerns\SyncsTranslations;
 use App\Filament\Resources\Pages\PageResource;
 use Filament\Resources\Pages\EditRecord;
@@ -74,5 +75,7 @@ class EditPage extends EditRecord
                 $item['writing_id'] => ['order' => $item['order'] ?? null],
             ])
         );
+
+        app(EditorialRevisionPublisher::class)->syncPageRelations($this->getRecord());
     }
 }

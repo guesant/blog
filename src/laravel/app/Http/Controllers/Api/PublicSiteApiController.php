@@ -37,8 +37,6 @@ use Dedoc\Scramble\Attributes\Response as ScrambleResponse;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -176,20 +174,19 @@ class PublicSiteApiController extends Controller
         $graph = (new KnowledgeGraphQuery)->cached(Locale::normalize($request->query('locale')));
 
         if ($graph === []) {
-            return ApiErrorResponse::make(
-                ApiErrorCode::ServiceUnavailable,
-                503,
-                'The knowledge map snapshot is warming.',
-            )->header('Retry-After', (string) 60);
+            return response()->json([
+                'nodes' => [],
+                'edges' => [],
+                'kinds' => [],
+                'meta' => ['available' => false],
+            ]);
         }
 
         return response()->json($graph)
             ->header('Cache-Control', 'public, max-age=60, stale-while-revalidate=300');
     }
 
-    /** @response array<string, mixed> */
-    #[ScrambleResponse(304, 'The cached public site snapshot is still current.')]
-    public function index(Request $request): JsonResponse|Response
+    public function chrome(Request $request): JsonResponse
     {
         if ((new SiteSettingsQuery)->find()?->maintenance_enabled) {
             return ApiErrorResponse::make(
@@ -199,165 +196,159 @@ class PublicSiteApiController extends Controller
             )->header('Retry-After', (string) 3600);
         }
 
-        $locale = Locale::normalize($request->query('locale'));
-        $revision = DB::table('content_revisions')->value('version') ?? 0;
-        $body = $this->cachedSnapshot($revision, $locale) ?: $this->buildSnapshotBody($locale);
-
-        $etag = '"'.substr(hash('sha256', $body), 0, 32).'"';
-
-        if ($request->header('If-None-Match') === $etag) {
-            return response(null, 304)->header('ETag', $etag);
-        }
-
-        return JsonResponse::fromJsonString($body, 200)
-            ->header('Cache-Control', 'public, max-age=60, stale-while-revalidate=300')
-            ->header('ETag', $etag);
+        return response()->json($this->chromeData(Locale::normalize($request->query('locale'))))
+            ->header('Cache-Control', 'public, max-age=60, stale-while-revalidate=300');
     }
 
-    public function buildSnapshotBody(string $locale): string
+    public function interfaceMessages(Request $request): JsonResponse
+    {
+        return response()->json((new InterfaceQuery)->forLocale(
+            Locale::normalize($request->query('locale')),
+        ))->header('Cache-Control', 'public, max-age=3600, stale-while-revalidate=86400');
+    }
+
+    public function page(Request $request, string $slug): JsonResponse
+    {
+        $page = (new PageQuery)->findBySlug($slug);
+        abort_unless($page !== null, 404);
+
+        return response()->json($this->pageFields($page, Locale::normalize($request->query('locale'))))
+            ->header('Cache-Control', 'public, max-age=60, stale-while-revalidate=300');
+    }
+
+    public function resumeData(Request $request): JsonResponse
+    {
+        $locale = Locale::normalize($request->query('locale'));
+        $profile = (new ProfileQuery)->find();
+
+        return response()->json($this->resume($locale, $profile))
+            ->header('Cache-Control', 'public, max-age=60, stale-while-revalidate=300');
+    }
+
+    private function pageFields(Page $page, string $locale): array
+    {
+        $fields = $page->translation($locale)?->fields ?? [];
+        if ($page->updated_at) {
+            $fields['updated_at'] = $page->updated_at->format('Y-m-d H:i:s');
+        }
+
+        if ($page->slug === 'now') {
+            $fields['entries'] = collect([
+                ['key' => 'trabalhando', 'label' => __('now.working', [], $locale)],
+                ['key' => 'construindo', 'label' => __('now.building', [], $locale)],
+                ['key' => 'estudando', 'label' => __('now.studying', [], $locale)],
+                ['key' => 'lendo', 'label' => __('now.reading', [], $locale)],
+                ['key' => 'ouvindo', 'label' => __('now.listening', [], $locale)],
+                ['key' => 'assistindo', 'label' => __('now.watching', [], $locale)],
+            ])->map(fn (array $entry) => [
+                ...$entry,
+                'value' => $fields[$entry['key']] ?? $fields[str_replace(
+                    ['trabalhando', 'construindo', 'estudando', 'lendo', 'ouvindo', 'assistindo'],
+                    ['working', 'building', 'studying', 'reading', 'listening', 'watching'],
+                    $entry['key'],
+                )] ?? null,
+            ])->filter(fn (array $entry): bool => filled($entry['value']))->values()->all();
+        }
+
+        if ($page->slug === 'follow') {
+            $available = [
+                ['key' => 'rss', 'url' => Locale::path('/feed.xml', $locale)],
+                ['key' => 'atom', 'url' => Locale::path('/atom.xml', $locale)],
+                ['key' => 'jsonfeed', 'url' => Locale::path('/feed.json', $locale)],
+                ['key' => 'api', 'url' => '/api/v1/findings'],
+                ['key' => 'sitemap', 'url' => Locale::path('/sitemap.xml', $locale)],
+                ['key' => 'robots', 'url' => Locale::path('/robots.txt', $locale)],
+                ['key' => 'webfinger'],
+            ];
+            $future = [['key' => 'activitypub'], ['key' => 'websub'], ['key' => 'webmention']];
+            $buildEntry = fn (array $entry): array => [
+                ...$entry,
+                'title' => $fields["{$entry['key']}_title"] ?? null,
+                'description' => $fields["{$entry['key']}_description"] ?? null,
+            ];
+            $fields['entries'] = collect($available)->map($buildEntry)->filter(
+                fn (array $entry): bool => filled($entry['title']),
+            )->values()->all();
+            $fields['future_entries'] = collect($future)->map($buildEntry)->filter(
+                fn (array $entry): bool => filled($entry['title']),
+            )->values()->all();
+        }
+
+        return $fields;
+    }
+
+    private function chromeData(string $locale): array
     {
         $chrome = (new SiteChromeQuery)->build($locale);
         $settings = $chrome['siteSettings'];
         $profile = $chrome['headerProfile'];
         $profileTranslation = $profile?->translation($locale);
 
-        return response()->json([
-            'schema_version' => 3,
-            'locale' => $locale,
-            'generated_at' => now()->toIso8601String(),
-            'chrome' => [
-                'site' => [
-                    'short_name' => $settings?->short_name,
-                    'portfolio_url' => $settings?->portfolio_url ?? '',
-                    'source_repository_url' => $settings?->source_repository_url ?? '',
-                    'contact_available' => $settings?->contact_available ?? false,
-                    'contact_profiles' => $settings?->contactProfiles->map(fn ($profile) => [
-                        'platform' => $profile->platform,
-                        'label' => $profile->label ?: $profile->platform,
-                        'url' => $profile->url,
-                    ])->values(),
-                    'protected_email' => null,
-                    'maintenance_enabled' => $settings?->maintenance_enabled ?? false,
-                    'maintenance_eyebrow' => $settings?->translation($locale)?->maintenance_eyebrow,
-                    'maintenance_title' => $settings?->translation($locale)?->maintenance_title,
-                    'maintenance_description' => $settings?->translation($locale)?->maintenance_description,
-                    'seo' => $settings?->translation($locale)?->seo,
-                ],
-                'profile' => $profile ? [
-                    'name' => $profile->name,
-                    'title' => $profileTranslation?->title,
-                    'location' => $profileTranslation?->location,
-                    'description' => $profileTranslation?->description,
-                    'milestones' => $profileTranslation?->milestones,
-                    'birth_date' => $profile->birth_date?->toDateString() ?? '',
-                    'birth_city' => $profileTranslation?->birth_city,
-                    'interests' => $profileTranslation?->interests,
-                    'learning' => $profileTranslation?->learning,
-                    'personal_interests' => $profileTranslation?->personal_interests,
-                ] : null,
-                'copyright' => $chrome['copyright'],
-                'navigation' => [
-                    'sidebar' => (new NavQuery)->sidebarGroups($locale),
-                    'footer_links' => (new NavQuery)->footerLinkItems($locale),
-                    'sitemap' => (new NavQuery)->siteMapTree($locale),
-                ],
-                'build' => [
-                    'commit_sha' => $chrome['commitSha'],
-                    'build_time' => $chrome['buildTime'],
-                ],
-                'visibility' => [
-                    'about' => $profile !== null,
-                    'resume' => $this->hasResume($locale, $profile),
-                    'portfolio' => Project::where('hidden', false)->where('nda', false)->exists()
-                        || CaseStudy::where('hidden', false)->where('nda', false)->exists()
-                        || Experiment::where('hidden', false)->exists(),
-                    'cases' => CaseStudy::where('hidden', false)->where('nda', false)->exists(),
-                    'contact' => (bool) ($settings?->contact_available),
-                    'license' => $this->pageHasAny($locale, 'license', ['code_body', 'content_body', 'ai_body']),
-                    'credits' => CreditEntry::where('active', true)->exists(),
-                    'follow' => $this->pageHasAny($locale, 'follow', ['rss_title', 'atom_title', 'jsonfeed_title', 'api_title', 'sitemap_title', 'robots_title', 'webfinger_title', 'activitypub_title', 'websub_title', 'webmention_title']),
-                    'feed' => Writing::where('hidden', false)->exists(),
-                    'writing' => Writing::where('hidden', false)->exists(),
-                    'findings' => Resource::public()->exists(),
-                    'topics' => Topic::where('hidden', false)->exists(),
-                    'collections' => ReferenceCollection::where('hidden', false)->exists(),
-                    'snippets' => Snippet::where('hidden', false)->exists(),
-                    'right_sidebar' => (bool) ($settings?->contact_available),
-                ],
+        return [
+            'site' => [
+                'short_name' => $settings?->short_name,
+                'portfolio_url' => $settings?->portfolio_url ?? '',
+                'source_repository_url' => $settings?->source_repository_url ?? '',
+                'contact_available' => $settings?->contact_available ?? false,
+                'contact_profiles' => $settings?->contactProfiles->map(fn ($contactProfile) => [
+                    'platform' => $contactProfile->platform,
+                    'label' => $contactProfile->label ?: $contactProfile->platform,
+                    'url' => $contactProfile->url,
+                ])->values(),
+                'protected_email' => null,
+                'maintenance_enabled' => $settings?->maintenance_enabled ?? false,
+                'maintenance_eyebrow' => $settings?->translation($locale)?->maintenance_eyebrow,
+                'maintenance_title' => $settings?->translation($locale)?->maintenance_title,
+                'maintenance_description' => $settings?->translation($locale)?->maintenance_description,
+                'seo' => $settings?->translation($locale)?->seo,
             ],
-            'interface' => (new InterfaceQuery)->forLocale($locale),
-            'pages' => $this->pages($locale),
-            'resume' => $this->resume($locale, $profile),
-            'resume_pdf_locales' => collect(['en', 'pt-BR'])->filter(function (string $value): bool {
-                $roots = [
-                    (string) env('PORTFOLIO_RESUME_PDF_ROOT', '/data/resume-cache'),
-                    (string) env('PORTFOLIO_PUBLIC_ASSET_ROOT', '/data/public'),
-                    storage_path('app/public'),
-                ];
-
-                return collect($roots)->contains(
-                    fn (string $root) => file_exists("{$root}/resume-{$value}.pdf")
-                );
-            })->values(),
-        ])->getContent();
+            'profile' => $profile ? [
+                'name' => $profile->name,
+                'title' => $profileTranslation?->title,
+                'location' => $profileTranslation?->location,
+                'description' => $profileTranslation?->description,
+                'milestones' => $profileTranslation?->milestones,
+                'birth_date' => $profile->birth_date?->toDateString() ?? '',
+                'birth_city' => $profileTranslation?->birth_city,
+                'interests' => $profileTranslation?->interests,
+                'learning' => $profileTranslation?->learning,
+                'personal_interests' => $profileTranslation?->personal_interests,
+            ] : null,
+            'copyright' => $chrome['copyright'],
+            'navigation' => [
+                'sidebar' => (new NavQuery)->sidebarGroups($locale),
+                'footer_links' => (new NavQuery)->footerLinkItems($locale),
+                'sitemap' => (new NavQuery)->siteMapTree($locale),
+            ],
+            'build' => [
+                'commit_sha' => $chrome['commitSha'],
+                'build_time' => $chrome['buildTime'],
+            ],
+            'visibility' => $this->visibility($locale, $profile, $settings),
+        ];
     }
 
-    private function cachedSnapshot(int|string $revision, string $locale): string
+    private function visibility(string $locale, $profile, $settings): array
     {
-        $body = Cache::get("public-site-snapshot:v4:chrome-pages:{$revision}:{$locale}");
-
-        return is_string($body) ? $body : '';
-    }
-
-    private function pages(string $locale): array
-    {
-        return Page::with('translations')->orderBy('id')->get()->mapWithKeys(function (Page $page) use ($locale): array {
-            $fields = $page?->translation($locale)?->fields ?? [];
-            if ($page?->updated_at) {
-                $fields['updated_at'] = $page->updated_at->format('Y-m-d H:i:s');
-            }
-
-            if ($page->slug === 'now') {
-                $fields['entries'] = collect([
-                    ['key' => 'trabalhando', 'label' => __('now.working', [], $locale)],
-                    ['key' => 'construindo', 'label' => __('now.building', [], $locale)],
-                    ['key' => 'estudando', 'label' => __('now.studying', [], $locale)],
-                    ['key' => 'lendo', 'label' => __('now.reading', [], $locale)],
-                    ['key' => 'ouvindo', 'label' => __('now.listening', [], $locale)],
-                    ['key' => 'assistindo', 'label' => __('now.watching', [], $locale)],
-                ])->map(fn (array $entry) => [
-                    ...$entry,
-                    'value' => $fields[$entry['key']] ?? $fields[str_replace(
-                        ['trabalhando', 'construindo', 'estudando', 'lendo', 'ouvindo', 'assistindo'],
-                        ['working', 'building', 'studying', 'reading', 'listening', 'watching'],
-                        $entry['key'],
-                    )] ?? null,
-                ])->filter(fn (array $entry) => filled($entry['value']))->values()->all();
-            }
-
-            if ($page->slug === 'follow') {
-                $available = [
-                    ['key' => 'rss', 'url' => Locale::path('/feed.xml', $locale)],
-                    ['key' => 'atom', 'url' => Locale::path('/atom.xml', $locale)],
-                    ['key' => 'jsonfeed', 'url' => Locale::path('/feed.json', $locale)],
-                    ['key' => 'api', 'url' => '/api/v1/findings'],
-                    ['key' => 'sitemap', 'url' => Locale::path('/sitemap.xml', $locale)],
-                    ['key' => 'robots', 'url' => Locale::path('/robots.txt', $locale)],
-                    ['key' => 'webfinger'],
-                ];
-                $future = [['key' => 'activitypub'], ['key' => 'websub'], ['key' => 'webmention']];
-                $buildEntry = fn (array $entry) => [
-                    ...$entry,
-                    'title' => $fields["{$entry['key']}_title"] ?? null,
-                    'description' => $fields["{$entry['key']}_description"] ?? null,
-                ];
-                $fields['entries'] = collect($available)->map($buildEntry)->filter(fn (array $entry) => filled($entry['title']))->values()->all();
-                $fields['future_entries'] = collect($future)->map($buildEntry)->filter(fn (array $entry) => filled($entry['title']))->values()->all();
-            }
-
-            return [$page->slug => $fields];
-        })
-            ->all();
+        return [
+            'about' => $profile !== null,
+            'resume' => $this->hasResume($locale, $profile),
+            'portfolio' => Project::where('hidden', false)->where('nda', false)->exists()
+                || CaseStudy::where('hidden', false)->where('nda', false)->exists()
+                || Experiment::where('hidden', false)->exists(),
+            'cases' => CaseStudy::where('hidden', false)->where('nda', false)->exists(),
+            'contact' => (bool) ($settings?->contact_available),
+            'license' => $this->pageHasAny($locale, 'license', ['code_body', 'content_body', 'ai_body']),
+            'credits' => CreditEntry::where('active', true)->exists(),
+            'follow' => $this->pageHasAny($locale, 'follow', ['rss_title', 'atom_title', 'jsonfeed_title', 'api_title', 'sitemap_title', 'robots_title', 'webfinger_title', 'activitypub_title', 'websub_title', 'webmention_title']),
+            'feed' => Writing::where('hidden', false)->exists(),
+            'writing' => Writing::where('hidden', false)->exists(),
+            'findings' => Resource::public()->exists(),
+            'topics' => Topic::where('hidden', false)->exists(),
+            'collections' => ReferenceCollection::where('hidden', false)->exists(),
+            'snippets' => Snippet::where('hidden', false)->exists(),
+            'right_sidebar' => (bool) ($settings?->contact_available),
+        ];
     }
 
     private function paginateCollection(string $collection, int $perPage, ?string $sort): LengthAwarePaginator
@@ -380,25 +371,25 @@ class PublicSiteApiController extends Controller
         $configuration = match ($collection) {
             'cases' => [
                 'relation' => 'featuredCases',
-                'pivot' => 'page_featured_case',
+                'pivot' => 'page_revision_featured_cases',
                 'table' => 'case_studies',
                 'with' => ['translations', 'technologies.translations'],
             ],
             'projects' => [
                 'relation' => 'featuredProjects',
-                'pivot' => 'page_featured_project',
+                'pivot' => 'page_revision_featured_projects',
                 'table' => 'projects',
                 'with' => ['translations', 'technologies.translations'],
             ],
             'writing' => [
                 'relation' => 'featuredWritings',
-                'pivot' => 'page_featured_writing',
+                'pivot' => 'page_revision_featured_writings',
                 'table' => 'writings',
                 'with' => ['translations', 'topics.translations'],
             ],
             default => abort(404),
         };
-        $portfolio = Page::where('slug', 'portfolio')->first();
+        $portfolio = Page::where('slug', 'portfolio')->with('currentRevision')->first()?->currentRevision;
 
         if ($portfolio === null) {
             return new LengthAwarePaginator([], 0, $perPage, max(1, $page));
@@ -411,8 +402,8 @@ class PublicSiteApiController extends Controller
         $pivot = $configuration['pivot'];
 
         return $query
-            ->orderByRaw("CASE WHEN {$pivot}.order IS NULL THEN 0 ELSE 1 END")
-            ->orderBy("{$pivot}.order")
+            ->orderByRaw("CASE WHEN {$pivot}.sort_order IS NULL THEN 0 ELSE 1 END")
+            ->orderBy("{$pivot}.sort_order")
             ->orderBy("{$configuration['table']}.id")
             ->paginate($perPage, ['*'], 'page', max(1, $page));
     }

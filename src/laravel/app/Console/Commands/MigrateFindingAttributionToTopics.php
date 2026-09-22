@@ -14,7 +14,7 @@ class MigrateFindingAttributionToTopics extends Command
 {
     protected $signature = 'content:migrate-finding-attribution {--apply : Persist the changes instead of only printing a diff}';
 
-    protected $description = 'Convert Resource authors/organizations free text into Topic nodes linked via authored-by/published-by ContentRelation rows';
+    protected $description = 'Convert normalized finding attributions into Topic nodes linked via ContentRelation rows';
 
     public function handle(): int
     {
@@ -26,9 +26,9 @@ class MigrateFindingAttributionToTopics extends Command
         $created = ['topics' => 0, 'relations' => 0];
 
         DB::transaction(function () use ($apply, $authoredBy, $publishedBy, &$created) {
-            foreach (Resource::query()->get() as $resource) {
-                $this->convert($resource, 'authors', 'person', $authoredBy, $apply, $created);
-                $this->convert($resource, 'organizations', 'organization', $publishedBy, $apply, $created);
+            foreach (Resource::with('currentRevision.attributions')->get() as $resource) {
+                $this->convert($resource, 'person', $authoredBy, $apply, $created);
+                $this->convert($resource, 'organization', $publishedBy, $apply, $created);
             }
 
             if (! $apply) {
@@ -49,10 +49,12 @@ class MigrateFindingAttributionToTopics extends Command
     /**
      * @param  array{topics: int, relations: int}  $created
      */
-    private function convert(Resource $resource, string $column, string $topicKind, RelationType $relationType, bool $apply, array &$created): void
+    private function convert(Resource $resource, string $topicKind, RelationType $relationType, bool $apply, array &$created): void
     {
-        $names = collect(explode(',', (string) $resource->{$column}))
-            ->map(fn (string $name) => trim($name))
+        $names = $resource->currentRevision?->attributions
+            ->where('kind', $topicKind)
+            ->pluck('name')
+            ->map(fn (string $name): string => trim($name))
             ->filter();
 
         foreach ($names as $name) {

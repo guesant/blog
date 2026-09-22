@@ -10,9 +10,7 @@ class ProfileTranslation extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['profile_id', 'locale', 'title', 'location', 'birth_city', 'description', 'interests', 'learning', 'personal_interests', 'trajectory', 'milestones', 'fortunes', 'personal_facts', 'personal_things'];
-
-    protected $casts = ['personal_interests' => 'array', 'trajectory' => 'array', 'milestones' => 'array', 'fortunes' => 'array', 'personal_facts' => 'array', 'personal_things' => 'array'];
+    protected $fillable = ['profile_id', 'locale', 'title', 'location', 'birth_city', 'description', 'interests', 'learning'];
 
     /**
      * @return BelongsTo<Profile, $this>

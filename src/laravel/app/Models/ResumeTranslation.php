@@ -10,9 +10,7 @@ class ResumeTranslation extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['resume_id', 'locale', 'summary', 'leadership', 'education', 'certificates', 'certifications', 'publications', 'recommendations', 'technical_productions', 'events', 'awards'];
-
-    protected $casts = ['leadership' => 'array', 'education' => 'array', 'certificates' => 'array', 'certifications' => 'array', 'publications' => 'array', 'recommendations' => 'array', 'technical_productions' => 'array', 'events' => 'array', 'awards' => 'array'];
+    protected $fillable = ['resume_id', 'locale', 'summary'];
 
     /**
      * @return BelongsTo<Resume, $this>

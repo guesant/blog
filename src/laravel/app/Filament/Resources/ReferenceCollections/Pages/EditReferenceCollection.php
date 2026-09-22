@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\ReferenceCollections\Pages;
 
+use App\Content\EditorialRevisionPublisher;
 use App\Filament\Concerns\SyncsTranslations;
 use App\Filament\Resources\ReferenceCollections\ReferenceCollectionResource;
 use Filament\Actions\DeleteAction;
@@ -59,5 +60,7 @@ class EditReferenceCollection extends EditRecord
                 $item['resource_id'] => ['note' => $item['note'] ?? null, 'order' => $item['order'] ?? null],
             ])
         );
+
+        app(EditorialRevisionPublisher::class)->syncReferenceCollectionRelations($this->getRecord());
     }
 }

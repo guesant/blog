@@ -8,6 +8,6 @@ class ProfileQuery
 {
     public function find(): ?Profile
     {
-        return Profile::with('translations')->first();
+        return Profile::with('currentRevision.translations')->first();
     }
 }

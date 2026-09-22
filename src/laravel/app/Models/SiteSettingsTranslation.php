@@ -10,9 +10,7 @@ class SiteSettingsTranslation extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['site_settings_id', 'locale', 'copyright_template', 'maintenance_eyebrow', 'maintenance_title', 'maintenance_description', 'seo'];
-
-    protected $casts = ['seo' => 'array'];
+    protected $fillable = ['site_settings_id', 'locale', 'copyright_template', 'maintenance_eyebrow', 'maintenance_title', 'maintenance_description'];
 
     /**
      * @return BelongsTo<SiteSettings, $this>

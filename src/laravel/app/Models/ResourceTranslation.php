@@ -10,9 +10,7 @@ class ResourceTranslation extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['resource_id', 'locale', 'title', 'alternative_title', 'description', 'personal_note', 'reason_found', 'seo'];
-
-    protected $casts = ['seo' => 'array'];
+    protected $fillable = ['resource_id', 'locale', 'title', 'alternative_title', 'description', 'personal_note', 'reason_found'];
 
     /**
      * @return BelongsTo<resource, $this>

@@ -18,7 +18,6 @@ class ExperimentTranslationFactory extends Factory
             'name' => $this->faker->word(),
             'purpose' => $this->faker->paragraph(),
             'body' => $this->faker->optional()->paragraph(),
-            'seo' => null,
         ];
     }
 }

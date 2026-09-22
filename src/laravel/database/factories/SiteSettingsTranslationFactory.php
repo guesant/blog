@@ -19,7 +19,6 @@ class SiteSettingsTranslationFactory extends Factory
             'maintenance_eyebrow' => $this->faker->optional()->word(),
             'maintenance_title' => $this->faker->optional()->word(),
             'maintenance_description' => $this->faker->optional()->paragraph(),
-            'seo' => null,
         ];
     }
 }

@@ -10,6 +10,7 @@ use App\Models\Resource;
 use App\Models\Topic;
 use App\Models\Writing;
 use Illuminate\Console\Command;
+use Illuminate\Support\Str;
 
 class LowercaseAuthoredContent extends Command
 {
@@ -161,13 +162,13 @@ class LowercaseAuthoredContent extends Command
         ];
 
         foreach ($targets as $slug => $keys) {
-            $page = Page::with('translations')->where('slug', $slug)->first();
+            $page = Page::with('currentRevision.translations')->where('slug', $slug)->first();
             if (! $page) {
                 continue;
             }
 
-            foreach ($page->translations as $t) {
-                $fields = $t->fields ?? [];
+            foreach ($page->currentRevision?->translations ?? [] as $t) {
+                $fields = $t->fields;
                 $changed = false;
 
                 foreach ($keys as $key) {
@@ -187,7 +188,9 @@ class LowercaseAuthoredContent extends Command
                 }
 
                 if ($changed && $apply) {
-                    $t->fields = $fields;
+                    foreach ($fields as $key => $value) {
+                        $t->setAttribute(Str::snake($key), $value);
+                    }
                     $t->save();
                 }
             }

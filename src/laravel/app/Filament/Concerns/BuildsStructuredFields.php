@@ -9,11 +9,6 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Fieldset;
 
-/**
- * High-level form fields for the JSON columns that used to be edited as raw
- * JSON textareas. Each helper binds nested inputs straight into the array
- * cast, so the stored shape stays identical to what the importer produced.
- */
 trait BuildsStructuredFields
 {
     protected static function seoFieldset(string $prefix): Fieldset
@@ -65,10 +60,6 @@ trait BuildsStructuredFields
 
     protected static function stringListRepeater(string $name, string $label, string $addLabel): Repeater
     {
-        // IMPORTANT: no formatStateUsing here — it would replace the simple
-        // repeater's own state hydration, which is what maps a plain array of
-        // strings into items whose inner 'value' field is filled; overriding
-        // it leaves every item blank and failing its required rule.
         return Repeater::make($name)
             ->label($label)
             ->simple(Textarea::make('value')->rows(2)->required())

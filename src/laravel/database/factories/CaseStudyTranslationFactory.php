@@ -22,9 +22,7 @@ class CaseStudyTranslationFactory extends Factory
             'context' => $this->faker->optional()->paragraph(),
             'role' => $this->faker->optional()->word(),
             'result' => $this->faker->optional()->paragraph(),
-            'metrics' => null,
             'body' => $this->faker->optional()->paragraph(),
-            'seo' => null,
         ];
     }
 }

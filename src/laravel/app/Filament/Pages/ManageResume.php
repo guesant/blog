@@ -2,6 +2,7 @@
 
 namespace App\Filament\Pages;
 
+use App\Content\EditorialRevisionPublisher;
 use App\Filament\Concerns\BuildsStructuredFields;
 use App\Filament\Concerns\BuildsTranslationTabs;
 use App\Filament\Concerns\HasSingleSaveAction;
@@ -275,6 +276,8 @@ class ManageResume extends Page
             ]);
             $skill->technologies()->sync($item['technologies'] ?? []);
         }
+
+        app(EditorialRevisionPublisher::class)->syncResumeRelations($this->getRecord());
 
         Notification::make()->success()->title('Saved')->send();
     }

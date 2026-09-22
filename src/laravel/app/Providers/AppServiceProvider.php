@@ -3,14 +3,12 @@
 namespace App\Providers;
 
 use App\Content\Graph\NodeRegistry;
-use App\Models\AuditLog;
-use App\Models\AuditRequest;
-use App\Models\User;
-use App\Support\ContentRevisionTracker;
+use App\Content\ResourceRevisionSynchronizer;
+use App\Models\Resource;
+use App\Models\ResourceTranslation;
 use Dedoc\Scramble\Scramble;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Console\Events\CommandStarting;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Event;
@@ -35,6 +33,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        Resource::observe(ResourceRevisionSynchronizer::class);
+        ResourceTranslation::observe(ResourceRevisionSynchronizer::class);
+
         Scramble::configure()->expose('docs', 'docs/openapi.json');
 
         Event::listen(CommandStarting::class, function (CommandStarting $event): void {
@@ -57,8 +58,6 @@ class AppServiceProvider extends ServiceProvider
 
         Event::listen(SocialiteWasCalled::class, [KeycloakExtendSocialite::class, 'handle']);
 
-        $this->registerContentRevisionObservers();
-
         // Registers two physical routes per page (one unprefixed for English,
         // one under /pt-BR) sharing a common name so `route()` calls can
         // resolve either variant via App\Content\Locale::routeName(). This
@@ -80,22 +79,5 @@ class AppServiceProvider extends ServiceProvider
         RateLimiter::for('public-api', function (Request $request) {
             return Limit::perMinute(60)->by($request->ip());
         });
-    }
-
-    private function registerContentRevisionObservers(): void
-    {
-        foreach (glob(app_path('Models/*.php')) ?: [] as $path) {
-            $class = 'App\\Models\\'.pathinfo($path, PATHINFO_FILENAME);
-
-            if (! class_exists($class) || ! is_subclass_of($class, Model::class)) {
-                continue;
-            }
-
-            if (in_array($class, [AuditLog::class, AuditRequest::class, User::class], true)) {
-                continue;
-            }
-
-            $class::observe(ContentRevisionTracker::class);
-        }
     }
 }

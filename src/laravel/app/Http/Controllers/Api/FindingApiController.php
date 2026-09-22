@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Content\Locale;
+use App\Content\PublicResourceQuery;
 use App\Content\ResourceApiTransformer;
-use App\Content\ResourceQuery;
 use App\Content\SiteSettingsQuery;
 use App\Http\Controllers\Controller;
 use App\Http\Responses\ApiErrorCode;
@@ -34,7 +34,7 @@ class FindingApiController extends Controller
         $sort = in_array($request->query('sort'), ['asc', 'desc', 'alpha', 'popular'], true)
             ? $request->query('sort')
             : null;
-        $resources = (new ResourceQuery)->paginate($filters, $locale, $perPage, $sort);
+        $resources = (new PublicResourceQuery)->paginate($filters, $locale, $perPage, $sort);
 
         $transformer = app(ResourceApiTransformer::class);
         $data = $resources->getCollection()->map(
@@ -49,7 +49,7 @@ class FindingApiController extends Controller
                 'total' => $resources->total(),
                 'last_page' => $resources->lastPage(),
                 'locale' => $locale,
-                'facets' => (new ResourceQuery)->facetOptions($locale),
+                'facets' => (new PublicResourceQuery)->facetOptions($locale),
             ],
         ]);
     }
@@ -68,9 +68,9 @@ class FindingApiController extends Controller
         }
 
         $locale = Locale::normalize($request->query('locale'));
-        $result = (new ResourceQuery)->findBySlug($slug, $locale);
+        $resource = (new PublicResourceQuery)->findBySlug($slug, $locale);
 
-        if (! $result) {
+        if (! $resource) {
             return ApiErrorResponse::make(
                 ApiErrorCode::NotFound,
                 404,
@@ -80,6 +80,6 @@ class FindingApiController extends Controller
 
         $transformer = app(ResourceApiTransformer::class);
 
-        return response()->json($transformer->toArray($result['resource'], $locale, $result['relations'], true));
+        return response()->json($transformer->toArray($resource, $locale, [], true));
     }
 }

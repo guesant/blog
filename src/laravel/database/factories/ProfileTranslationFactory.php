@@ -21,9 +21,6 @@ class ProfileTranslationFactory extends Factory
             'description' => $this->faker->optional()->paragraph(),
             'interests' => $this->faker->optional()->paragraph(),
             'learning' => $this->faker->optional()->paragraph(),
-            'personal_interests' => null,
-            'trajectory' => null,
-            'milestones' => null,
         ];
     }
 }

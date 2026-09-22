@@ -23,9 +23,9 @@ class Resource extends Model implements GraphNode
 {
     use Auditable, HasFactory, HasPublicId, HasTranslations, InteractsWithGraph;
 
-    protected $fillable = ['slug', 'public_id', 'hidden', 'order', 'type', 'language_id', 'authors', 'organizations', 'published_date_iso', 'found_date_iso', 'consumption_state', 'rating', 'editorial_state', 'visibility', 'type_details', 'featured', 'featured_order', 'popularity_kind', 'popularity_rank', 'popularity_value'];
+    protected $fillable = ['slug', 'public_id', 'hidden', 'order', 'type', 'language_id', 'published_date_iso', 'found_date_iso', 'consumption_state', 'rating', 'editorial_state', 'visibility', 'featured', 'featured_order', 'popularity_kind', 'popularity_rank', 'popularity_value'];
 
-    protected $casts = ['hidden' => 'boolean', 'published_date_iso' => 'date', 'found_date_iso' => 'date', 'type_details' => 'array', 'featured' => 'boolean', 'popularity_rank' => 'float'];
+    protected $casts = ['hidden' => 'boolean', 'published_date_iso' => 'date', 'found_date_iso' => 'date', 'featured' => 'boolean', 'popularity_rank' => 'float'];
 
     /**
      * @return HasMany<ResourceTranslation, $this>
@@ -33,6 +33,11 @@ class Resource extends Model implements GraphNode
     public function translations(): HasMany
     {
         return $this->hasMany(ResourceTranslation::class);
+    }
+
+    public function currentRevision(): BelongsTo
+    {
+        return $this->belongsTo(ResourceRevision::class, 'current_revision_id');
     }
 
     /**

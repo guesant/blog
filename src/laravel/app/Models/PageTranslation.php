@@ -10,9 +10,7 @@ class PageTranslation extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['page_id', 'locale', 'fields'];
-
-    protected $casts = ['fields' => 'array'];
+    protected $fillable = ['page_id', 'locale'];
 
     /**
      * @return BelongsTo<Page, $this>

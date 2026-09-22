@@ -10,9 +10,7 @@ class ReferenceCollectionTranslation extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['reference_collection_id', 'locale', 'title', 'description', 'intro', 'seo'];
-
-    protected $casts = ['seo' => 'array'];
+    protected $fillable = ['reference_collection_id', 'locale', 'title', 'description', 'intro'];
 
     /**
      * @return BelongsTo<ReferenceCollection, $this>

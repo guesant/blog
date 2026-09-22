@@ -15,7 +15,6 @@ class PageTranslationFactory extends Factory
         return [
             'page_id' => Page::factory(),
             'locale' => $this->faker->randomElement(['en', 'pt-BR']),
-            'fields' => [],
         ];
     }
 }

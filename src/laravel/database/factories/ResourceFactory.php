@@ -17,15 +17,12 @@ class ResourceFactory extends Factory
             'order' => $this->faker->numberBetween(1, 100),
             'type' => $this->faker->word(),
             'language_id' => null,
-            'authors' => $this->faker->optional()->name(),
-            'organizations' => $this->faker->optional()->company(),
             'published_date_iso' => $this->faker->optional()->date(),
             'found_date_iso' => $this->faker->optional()->date(),
             'consumption_state' => $this->faker->optional()->word(),
             'rating' => $this->faker->optional()->word(),
             'editorial_state' => $this->faker->optional()->word(),
             'visibility' => $this->faker->optional()->word(),
-            'type_details' => null,
         ];
     }
 }

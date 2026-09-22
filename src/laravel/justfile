@@ -47,12 +47,6 @@ fresh:
 tinker:
     docker compose exec app php artisan tinker
 
-import-legacy *args:
-    docker compose exec app php artisan portfolio:import-legacy "$@"
-
-validate-import:
-    docker compose exec app php artisan portfolio:validate-import
-
 resume-pdf *args:
     docker compose exec app php artisan portfolio:generate-resume-pdf "$@"
 

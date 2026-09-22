@@ -9,6 +9,7 @@ use App\Content\KnowledgeGraphQuery;
 use App\Content\Locale;
 use App\Content\NavQuery;
 use App\Content\PageQuery;
+use App\Content\ProfileQuery;
 use App\Content\ProjectQuery;
 use App\Content\ReferenceCollectionQuery;
 use App\Content\ResourceApiTransformer;

@@ -2,7 +2,7 @@ name: Push profile README
 description: Generate a profile README from the public Laravel content API
 inputs:
   api-url:
-    description: Public Laravel API URL for the public-site snapshot
+    description: Laravel API base URL ending at /api/v1
     required: true
   locale:
     description: Locale used for the generated profile

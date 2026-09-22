@@ -43,42 +43,43 @@ const source = {
   email: '',
 };
 
-test('loads profile data from the Laravel public-site API', async () => {
+test('loads profile data from the Laravel site endpoints', async () => {
   const previousFetch = globalThis.fetch;
   globalThis.fetch = async (url) => {
-    assert.equal(String(url), 'https://portfolio.example/api/v1/public-site?locale=en');
+    const value = String(url);
+    assert.match(value, /^https:\/\/portfolio\.example\/api\/v1\/site\/(chrome|resume)/);
     return {
       ok: true,
-      json: async () => ({
-        chrome: {
-          copyright: '© 2026',
-          profile: {
-            name: 'Gabriel Antunes',
-            title: 'Solutions developer',
-            location: 'Rondônia, Brazil · remote',
-            birth_city: 'Ji-Paraná, Rondônia, Brazil',
-            description: 'I solve problems with systems, data and tools.',
-            personal_interests: ['Coffee and code.'],
-          },
-          site: {
-            short_name: 'GA',
-            portfolio_url: 'https://guesant.net',
-            contact_available: true,
-            contact_profiles: [{ platform: 'github', url: 'https://github.com/guesant' }],
-          },
-        },
-        resume: {
-          summary: 'I work across backend systems and infrastructure.',
-          skills: [{ name: 'Languages', technologies: [{ name: 'TypeScript' }] }],
-          languages: [{ code: 'pt-BR', name: 'Portuguese (Brazil)', proficiency: 'native' }],
-        },
-      }),
+      json: async () =>
+        value.endsWith('/resume?locale=en')
+          ? {
+              summary: 'I work across backend systems and infrastructure.',
+              skills: [{ name: 'Languages', technologies: [{ name: 'TypeScript' }] }],
+              languages: [{ code: 'pt-BR', name: 'Portuguese (Brazil)', proficiency: 'native' }],
+            }
+          : {
+              site: {
+                short_name: 'GA',
+                portfolio_url: 'https://guesant.net',
+                contact_available: true,
+                contact_profiles: [{ platform: 'github', url: 'https://github.com/guesant' }],
+              },
+              profile: {
+                name: 'Gabriel Antunes',
+                title: 'Solutions developer',
+                location: 'Rondônia, Brazil · remote',
+                birth_city: 'Ji-Paraná, Rondônia, Brazil',
+                description: 'I solve problems with systems, data and tools.',
+                personal_interests: ['Coffee and code.'],
+              },
+              copyright: '© 2026',
+            },
     };
   };
 
   try {
     const loaded = await loadProfileReadmeSource({
-      apiUrl: 'https://portfolio.example/api/v1/public-site',
+      apiUrl: 'https://portfolio.example/api/v1',
     });
     assert.equal(loaded.profile.name, 'Gabriel Antunes');
     assert.equal(loaded.resume.languages[0].name, 'Portuguese (Brazil)');

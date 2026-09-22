@@ -1,11 +1,11 @@
 # Push profile README
 
-This action reads the public profile and resume data from the Laravel `public-site` API and writes a deterministic Markdown README in the consuming repository.
+This action reads the public profile and resume data from the Laravel site endpoints and writes a deterministic Markdown README in the consuming repository.
 
 ```yaml
 - uses: guesant/portfolio/.github/actions/push-profile@main
   with:
-    api-url: https://guesant.net/api/v1/public-site
+    api-url: https://api.guesant.net/api/v1
     locale: en
     output: README.md
 ```

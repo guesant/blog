@@ -197,10 +197,10 @@ function arrayValue(value) {
   return Array.isArray(value) ? value : [];
 }
 
-function profileReadmeSource(snapshot, email) {
-  const profile = snapshot.chrome?.profile ?? {};
-  const site = snapshot.chrome?.site ?? {};
-  const resume = snapshot.resume ?? {};
+function profileReadmeSource(chrome, resumeDocument, email) {
+  const profile = chrome.profile ?? {};
+  const site = chrome.site ?? {};
+  const resume = resumeDocument ?? {};
 
   return {
     profile: {
@@ -242,7 +242,7 @@ function profileReadmeSource(snapshot, email) {
     site: {
       shortName: stringValue(site.short_name),
       portfolioUrl: stringValue(site.portfolio_url),
-      copyrightTemplate: stringValue(snapshot.chrome?.copyright),
+      copyrightTemplate: stringValue(chrome.copyright),
       maintenanceEnabled: site.maintenance_enabled === true,
       maintenance: {
         eyebrow: stringValue(site.maintenance_eyebrow),
@@ -263,19 +263,29 @@ function profileReadmeSource(snapshot, email) {
 }
 
 export async function loadProfileReadmeSource({ apiUrl, locale = 'en', token, email = '' }) {
-  const url = new URL(apiUrl);
-  url.searchParams.set('locale', locale);
+  const base = new URL(apiUrl);
+  base.pathname = base.pathname.replace(/\/(?:public-site|site\/chrome)\/?$/, '');
+  const chromeUrl = new URL(`${base.pathname.replace(/\/$/, '')}/site/chrome`, base.origin);
+  const resumeUrl = new URL(`${base.pathname.replace(/\/$/, '')}/site/resume`, base.origin);
+  chromeUrl.searchParams.set('locale', locale);
+  resumeUrl.searchParams.set('locale', locale);
   const headers = { accept: 'application/json' };
   if (token) {
     headers.authorization = `Bearer ${token}`;
   }
 
-  const response = await fetch(url, { headers });
-  if (!response.ok) {
-    throw new Error(`Laravel API request failed with HTTP ${response.status}`);
+  const [chromeResponse, resumeResponse] = await Promise.all([
+    fetch(chromeUrl, { headers }),
+    fetch(resumeUrl, { headers }),
+  ]);
+
+  for (const response of [chromeResponse, resumeResponse]) {
+    if (!response.ok) {
+      throw new Error(`Laravel API request failed with HTTP ${response.status}`);
+    }
   }
 
-  return profileReadmeSource(await response.json(), email);
+  return profileReadmeSource(await chromeResponse.json(), await resumeResponse.json(), email);
 }
 
 function workspaceOutputPath(output, workspace) {

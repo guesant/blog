@@ -254,42 +254,16 @@
                                                     ]
                                                 },
                                                 "portfolio_url": {
-                                                    "anyOf": [
-                                                        {
-                                                            "type": "string"
-                                                        },
-                                                        {
-                                                            "type": "string",
-                                                            "enum": [
-                                                                ""
-                                                            ]
-                                                        }
-                                                    ]
+                                                    "type": "string"
                                                 },
                                                 "source_repository_url": {
-                                                    "anyOf": [
-                                                        {
-                                                            "type": "string"
-                                                        },
-                                                        {
-                                                            "type": "string",
-                                                            "enum": [
-                                                                ""
-                                                            ]
-                                                        }
-                                                    ]
+                                                    "type": "string"
                                                 },
                                                 "contact_available": {
-                                                    "type": [
-                                                        "string",
-                                                        "boolean"
-                                                    ]
+                                                    "type": "boolean"
                                                 },
                                                 "contact_profiles": {
-                                                    "type": [
-                                                        "array",
-                                                        "null"
-                                                    ],
+                                                    "type": "array",
                                                     "items": {
                                                         "type": "object",
                                                         "properties": {
@@ -314,10 +288,7 @@
                                                     "type": "null"
                                                 },
                                                 "maintenance_enabled": {
-                                                    "type": [
-                                                        "string",
-                                                        "boolean"
-                                                    ]
+                                                    "type": "boolean"
                                                 },
                                                 "maintenance_eyebrow": {
                                                     "type": [
@@ -339,8 +310,65 @@
                                                 },
                                                 "seo": {
                                                     "type": [
-                                                        "string",
+                                                        "object",
                                                         "null"
+                                                    ],
+                                                    "properties": {
+                                                        "title": {
+                                                            "type": [
+                                                                "string",
+                                                                "null"
+                                                            ]
+                                                        },
+                                                        "description": {
+                                                            "type": [
+                                                                "string",
+                                                                "null"
+                                                            ]
+                                                        },
+                                                        "canonical": {
+                                                            "type": [
+                                                                "string",
+                                                                "null"
+                                                            ]
+                                                        },
+                                                        "image": {
+                                                            "type": [
+                                                                "string",
+                                                                "null"
+                                                            ]
+                                                        },
+                                                        "imageAlt": {
+                                                            "type": [
+                                                                "string",
+                                                                "null"
+                                                            ]
+                                                        },
+                                                        "robots": {
+                                                            "type": [
+                                                                "string",
+                                                                "null"
+                                                            ]
+                                                        },
+                                                        "noIndex": {
+                                                            "type": "boolean"
+                                                        },
+                                                        "keywords": {
+                                                            "type": "array",
+                                                            "items": {
+                                                                "type": "string"
+                                                            }
+                                                        }
+                                                    },
+                                                    "required": [
+                                                        "title",
+                                                        "description",
+                                                        "canonical",
+                                                        "image",
+                                                        "imageAlt",
+                                                        "robots",
+                                                        "noIndex",
+                                                        "keywords"
                                                     ]
                                                 }
                                             },
@@ -386,23 +414,42 @@
                                                     ]
                                                 },
                                                 "milestones": {
-                                                    "type": [
-                                                        "string",
-                                                        "null"
-                                                    ]
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "object",
+                                                        "properties": {
+                                                            "year": {
+                                                                "type": [
+                                                                    "string",
+                                                                    "null"
+                                                                ]
+                                                            },
+                                                            "title": {
+                                                                "type": [
+                                                                    "string",
+                                                                    "null"
+                                                                ]
+                                                            },
+                                                            "description": {
+                                                                "type": [
+                                                                    "string",
+                                                                    "null"
+                                                                ]
+                                                            },
+                                                            "hidden": {
+                                                                "type": "boolean"
+                                                            }
+                                                        },
+                                                        "required": [
+                                                            "year",
+                                                            "title",
+                                                            "description",
+                                                            "hidden"
+                                                        ]
+                                                    }
                                                 },
                                                 "birth_date": {
-                                                    "anyOf": [
-                                                        {
-                                                            "type": "string"
-                                                        },
-                                                        {
-                                                            "type": "string",
-                                                            "enum": [
-                                                                ""
-                                                            ]
-                                                        }
-                                                    ]
+                                                    "type": "string"
                                                 },
                                                 "birth_city": {
                                                     "type": [
@@ -423,10 +470,18 @@
                                                     ]
                                                 },
                                                 "personal_interests": {
-                                                    "type": [
-                                                        "string",
-                                                        "null"
-                                                    ]
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "object",
+                                                        "properties": {
+                                                            "value": {
+                                                                "type": "string"
+                                                            }
+                                                        },
+                                                        "required": [
+                                                            "value"
+                                                        ]
+                                                    }
                                                 }
                                             },
                                             "required": [
@@ -443,16 +498,60 @@
                                             ]
                                         },
                                         "copyright": {
-                                            "type": [
-                                                "array",
-                                                "string"
-                                            ]
+                                            "type": "string"
                                         },
                                         "navigation": {
                                             "type": "object",
                                             "properties": {
                                                 "sidebar": {
-                                                    "type": "string"
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "array",
+                                                        "items": {
+                                                            "type": "object",
+                                                            "properties": {
+                                                                "route": {
+                                                                    "type": "string"
+                                                                },
+                                                                "label": {
+                                                                    "type": [
+                                                                        "string",
+                                                                        "null"
+                                                                    ]
+                                                                },
+                                                                "children": {
+                                                                    "type": "array",
+                                                                    "items": {
+                                                                        "type": "object",
+                                                                        "properties": {
+                                                                            "route": {
+                                                                                "type": "string"
+                                                                            },
+                                                                            "label": {
+                                                                                "type": [
+                                                                                    "string",
+                                                                                    "null"
+                                                                                ]
+                                                                            },
+                                                                            "children": {
+                                                                                "type": "null"
+                                                                            }
+                                                                        },
+                                                                        "required": [
+                                                                            "route",
+                                                                            "label",
+                                                                            "children"
+                                                                        ]
+                                                                    }
+                                                                }
+                                                            },
+                                                            "required": [
+                                                                "route",
+                                                                "label",
+                                                                "children"
+                                                            ]
+                                                        }
+                                                    }
                                                 },
                                                 "footer_links": {
                                                     "type": "array",
@@ -580,7 +679,7 @@
                                                     "type": "boolean"
                                                 },
                                                 "portfolio": {
-                                                    "type": "string"
+                                                    "type": "boolean"
                                                 },
                                                 "cases": {
                                                     "type": "boolean"
@@ -651,7 +750,7 @@
                         }
                     },
                     "503": {
-                        "description": "",
+                        "description": "The service is temporarily unavailable.",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -664,12 +763,10 @@
                                                     "type": "string"
                                                 },
                                                 "message": {
-                                                    "type": "string",
-                                                    "const": "The service is temporarily unavailable."
+                                                    "type": "string"
                                                 },
                                                 "status": {
-                                                    "type": "integer",
-                                                    "const": 503
+                                                    "type": "integer"
                                                 },
                                                 "details": {
                                                     "type": "string"
@@ -772,9 +869,7 @@
                                                     "type": "array",
                                                     "items": {
                                                         "type": "string"
-                                                    },
-                                                    "minItems": 0,
-                                                    "maxItems": 0
+                                                    }
                                                 }
                                             ]
                                         },
@@ -787,9 +882,7 @@
                                                     "type": "array",
                                                     "items": {
                                                         "type": "string"
-                                                    },
-                                                    "minItems": 0,
-                                                    "maxItems": 0
+                                                    }
                                                 }
                                             ]
                                         },
@@ -802,9 +895,7 @@
                                                     "type": "array",
                                                     "items": {
                                                         "type": "string"
-                                                    },
-                                                    "minItems": 0,
-                                                    "maxItems": 0
+                                                    }
                                                 }
                                             ]
                                         },
@@ -817,9 +908,7 @@
                                                     "type": "array",
                                                     "items": {
                                                         "type": "string"
-                                                    },
-                                                    "minItems": 0,
-                                                    "maxItems": 0
+                                                    }
                                                 }
                                             ]
                                         },
@@ -832,9 +921,7 @@
                                                     "type": "array",
                                                     "items": {
                                                         "type": "string"
-                                                    },
-                                                    "minItems": 0,
-                                                    "maxItems": 0
+                                                    }
                                                 }
                                             ]
                                         },
@@ -847,9 +934,7 @@
                                                     "type": "array",
                                                     "items": {
                                                         "type": "string"
-                                                    },
-                                                    "minItems": 0,
-                                                    "maxItems": 0
+                                                    }
                                                 }
                                             ]
                                         },
@@ -862,9 +947,7 @@
                                                     "type": "array",
                                                     "items": {
                                                         "type": "string"
-                                                    },
-                                                    "minItems": 0,
-                                                    "maxItems": 0
+                                                    }
                                                 }
                                             ]
                                         },
@@ -877,9 +960,7 @@
                                                     "type": "array",
                                                     "items": {
                                                         "type": "string"
-                                                    },
-                                                    "minItems": 0,
-                                                    "maxItems": 0
+                                                    }
                                                 }
                                             ]
                                         },
@@ -892,9 +973,7 @@
                                                     "type": "array",
                                                     "items": {
                                                         "type": "string"
-                                                    },
-                                                    "minItems": 0,
-                                                    "maxItems": 0
+                                                    }
                                                 }
                                             ]
                                         },
@@ -1196,6 +1275,14 @@
                         }
                     },
                     {
+                        "name": "featured",
+                        "in": "query",
+                        "schema": {
+                            "type": "boolean",
+                            "default": false
+                        }
+                    },
+                    {
                         "name": "page",
                         "in": "query",
                         "schema": {
@@ -1481,30 +1568,17 @@
                 "tags": [
                     "PublicSiteApi"
                 ],
-                "parameters": [
-                    {
-                        "name": "locale",
-                        "in": "query",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
                 "responses": {
                     "200": {
                         "description": "",
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "anyOf": [
-                                        {
-                                            "type": "object",
-                                            "additionalProperties": {}
-                                        },
-                                        {
-                                            "type": "null"
-                                        }
-                                    ]
+                                    "type": [
+                                        "object",
+                                        "null"
+                                    ],
+                                    "additionalProperties": {}
                                 }
                             }
                         }
@@ -1583,6 +1657,9 @@
                                 }
                             }
                         }
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/ModelNotFoundException"
                     },
                     "422": {
                         "description": "The public snippet files do not satisfy the archive safety limits.",

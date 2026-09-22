@@ -2,7 +2,6 @@
 
 namespace App\Support;
 
-use App\Models\Snippet;
 use RuntimeException;
 use ZipArchive;
 
@@ -14,7 +13,7 @@ class SnippetArchiveBuilder
 
     private const MAXIMUM_ARCHIVE_BYTES = 10 * 1024 * 1024;
 
-    public function build(Snippet $snippet, array $selectedFileIds = []): string
+    public function build(object $snippet, array $selectedFileIds = []): string
     {
         $files = $snippet->files;
 

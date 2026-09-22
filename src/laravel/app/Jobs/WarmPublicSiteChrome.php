@@ -2,9 +2,11 @@
 
 namespace App\Jobs;
 
+use App\Application\PublicSite\GetPublicSiteChrome;
+use App\Application\PublicSite\GetPublicSiteChromeHandler;
 use App\Content\Locale;
 use App\Content\PublicSiteChromeCache;
-use App\Content\PublicSiteChromeQuery;
+use App\Http\Responses\PublicSiteChromeResponseDto;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
@@ -26,10 +28,12 @@ class WarmPublicSiteChrome implements ShouldBeUnique, ShouldQueue
         return Locale::normalize($this->locale);
     }
 
-    public function handle(PublicSiteChromeCache $cache, PublicSiteChromeQuery $query): void
+    public function handle(PublicSiteChromeCache $cache, GetPublicSiteChromeHandler $handler): void
     {
         $locale = Locale::normalize($this->locale);
 
-        $cache->put($locale, $query->build($locale));
+        $cache->put($locale, PublicSiteChromeResponseDto::fromResult(
+            $handler->handle(new GetPublicSiteChrome($locale)),
+        )->toArray());
     }
 }

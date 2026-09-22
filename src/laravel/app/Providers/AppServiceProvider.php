@@ -2,9 +2,15 @@
 
 namespace App\Providers;
 
+use App\Application\PublicSite\PublicSnippetReader;
 use App\Content\Graph\NodeRegistry;
+use App\Content\SnippetQuery;
 use App\Events\PublicSiteContentChanged;
 use App\Listeners\InvalidatePublicSiteChrome;
+use App\ReadModel\PublicSite\Chrome\PublicSiteChromeReader;
+use App\ReadModel\PublicSite\Chrome\PublicSiteChromeSqlReader;
+use App\ReadModel\PublicSite\Email\PublicEmailChallengeReader;
+use App\ReadModel\PublicSite\Email\PublicEmailChallengeSqlReader;
 use Dedoc\Scramble\Scramble;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Console\Events\CommandStarting;
@@ -24,7 +30,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->bind(PublicSiteChromeReader::class, PublicSiteChromeSqlReader::class);
+        $this->app->bind(PublicEmailChallengeReader::class, PublicEmailChallengeSqlReader::class);
+        $this->app->bind(PublicSnippetReader::class, SnippetQuery::class);
     }
 
     /**

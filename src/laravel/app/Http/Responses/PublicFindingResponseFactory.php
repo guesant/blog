@@ -1,16 +1,43 @@
 <?php
 
-namespace App\Content;
+namespace App\Http\Responses;
 
-class ResourceApiTransformer
+use App\Application\PublicSite\PublicFindingReadResult;
+use App\Content\Locale;
+use App\Content\OpenGraphMetadata;
+use Illuminate\Pagination\LengthAwarePaginator;
+
+final class PublicFindingResponseFactory
 {
-    public function __construct(private readonly OpenGraphMetadata $openGraph) {}
+    public function __construct(
+        private readonly OpenGraphMetadata $openGraph,
+    ) {}
 
-    public function toArray(
+    public function list(
+        LengthAwarePaginator $page,
+        string $locale,
+        array $facets,
+    ): PublicFindingListResponseDto {
+        $data = $page->getCollection()
+            ->map(fn (object $resource): array => $this->item($resource, $locale, null, true))
+            ->all();
+
+        return PublicFindingListResponseDto::fromPage(
+            $data,
+            PublicListMetaDto::fromPage($page, $locale, $facets),
+        );
+    }
+
+    public function detail(PublicFindingReadResult $result, string $locale): PublicFindingResponseDto
+    {
+        return PublicFindingResponseDto::fromArray($this->item($result->resource, $locale, [], true));
+    }
+
+    private function item(
         object $resource,
         string $locale,
-        ?array $relations = null,
-        bool $includeOpenGraph = false,
+        ?array $relations,
+        bool $includeOpenGraph,
     ): array {
         $translation = $resource->translation($locale);
 

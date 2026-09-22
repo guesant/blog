@@ -2,8 +2,8 @@
 
 namespace Tests\Feature\Api;
 
+use App\Application\PublicSite\GetPublicSiteChromeHandler;
 use App\Content\PublicSiteChromeCache;
-use App\Content\PublicSiteChromeQuery;
 use App\Events\PublicSiteContentChanged;
 use App\Jobs\WarmPublicSiteChrome;
 use App\Listeners\InvalidatePublicSiteChrome;
@@ -79,6 +79,61 @@ class PublicSiteApiTest extends TestCase
         $this->assertSame([], $contentQueries);
     }
 
+    public function test_site_chrome_uses_public_read_queries_without_detail_relations(): void
+    {
+        Cache::flush();
+        $queries = [];
+
+        DB::listen(function (QueryExecuted $query) use (&$queries): void {
+            $queries[] = strtolower($query->sql);
+        });
+
+        $response = $this->getJson('/api/v1/site/chrome?locale=en');
+
+        $response
+            ->assertOk()
+            ->assertJsonStructure([
+                'site',
+                'profile',
+                'copyright',
+                'navigation',
+                'build',
+                'visibility' => [
+                    'about',
+                    'resume',
+                    'portfolio',
+                    'cases',
+                    'contact',
+                    'license',
+                    'credits',
+                    'follow',
+                    'feed',
+                    'writing',
+                    'findings',
+                    'topics',
+                    'collections',
+                    'snippets',
+                    'right_sidebar',
+                ],
+            ]);
+
+        $joinedQueries = implode(' ', $queries);
+
+        foreach ([
+            'resume_selected_case',
+            'resume_skills',
+            'resume_languages',
+            'page_revision_featured',
+            'page_featured_case',
+            'page_featured_project',
+            'page_featured_writing',
+        ] as $forbiddenTable) {
+            $this->assertStringNotContainsString($forbiddenTable, $joinedQueries);
+        }
+
+        $this->assertLessThan(30, count($queries));
+    }
+
     public function test_site_chrome_warm_job_writes_each_locale(): void
     {
         Cache::flush();
@@ -86,7 +141,7 @@ class PublicSiteApiTest extends TestCase
         foreach (['en', 'pt-BR'] as $locale) {
             (new WarmPublicSiteChrome($locale))->handle(
                 app(PublicSiteChromeCache::class),
-                app(PublicSiteChromeQuery::class),
+                app(GetPublicSiteChromeHandler::class),
             );
         }
 

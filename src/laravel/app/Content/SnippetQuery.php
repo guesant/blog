@@ -2,12 +2,13 @@
 
 namespace App\Content;
 
+use App\Application\PublicSite\PublicSnippetReader;
 use App\Content\Concerns\SortsListings;
 use App\Models\Snippet;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 
-class SnippetQuery
+class SnippetQuery implements PublicSnippetReader
 {
     use SortsListings;
 
@@ -27,6 +28,14 @@ class SnippetQuery
         return Snippet::where('slug', $slug)
             ->where('hidden', false)
             ->with(['translations', 'files'])
+            ->first();
+    }
+
+    public function findForDownload(string $slug): mixed
+    {
+        return Snippet::where('slug', $slug)
+            ->where('hidden', false)
+            ->with('files')
             ->first();
     }
 

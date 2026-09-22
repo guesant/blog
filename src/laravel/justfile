@@ -49,9 +49,3 @@ tinker:
 
 resume-pdf *args:
     docker compose exec app php artisan portfolio:generate-resume-pdf "$@"
-
-backup-db *args:
-    docker compose exec app php artisan portfolio:backup-database "$@"
-
-restore-db *args:
-    docker compose exec app php artisan portfolio:restore-database "$@"

@@ -99,11 +99,14 @@ export type PublicSiteApiChromeData = {
 };
 
 export type PublicSiteApiChromeErrors = {
+    /**
+     * The service is temporarily unavailable.
+     */
     503: {
         error: {
             code: string;
-            message: 'The service is temporarily unavailable.';
-            status: 503;
+            message: string;
+            status: number;
             details: string;
         };
     };
@@ -115,36 +118,60 @@ export type PublicSiteApiChromeResponses = {
     200: {
         site: {
             short_name: string | null;
-            portfolio_url: string | '';
-            source_repository_url: string | '';
-            contact_available: string | boolean;
+            portfolio_url: string;
+            source_repository_url: string;
+            contact_available: boolean;
             contact_profiles: Array<{
                 platform: string;
                 label: string;
                 url: string;
-            }> | null;
+            }>;
             protected_email: null;
-            maintenance_enabled: string | boolean;
+            maintenance_enabled: boolean;
             maintenance_eyebrow: string | null;
             maintenance_title: string | null;
             maintenance_description: string | null;
-            seo: string | null;
+            seo: {
+                title: string | null;
+                description: string | null;
+                canonical: string | null;
+                image: string | null;
+                imageAlt: string | null;
+                robots: string | null;
+                noIndex: boolean;
+                keywords: Array<string>;
+            } | null;
         };
         profile: {
             name: string;
             title: string | null;
             location: string | null;
             description: string | null;
-            milestones: string | null;
-            birth_date: string | '';
+            milestones: Array<{
+                year: string | null;
+                title: string | null;
+                description: string | null;
+                hidden: boolean;
+            }>;
+            birth_date: string;
             birth_city: string | null;
             interests: string | null;
             learning: string | null;
-            personal_interests: string | null;
+            personal_interests: Array<{
+                value: string;
+            }>;
         } | null;
-        copyright: Array<unknown> | string;
+        copyright: string;
         navigation: {
-            sidebar: string;
+            sidebar: Array<Array<{
+                route: string;
+                label: string | null;
+                children: Array<{
+                    route: string;
+                    label: string | null;
+                    children: null;
+                }>;
+            }>>;
             footer_links: Array<{
                 route: string;
                 label: string | null;
@@ -171,7 +198,7 @@ export type PublicSiteApiChromeResponses = {
         visibility: {
             about: boolean;
             resume: boolean;
-            portfolio: string;
+            portfolio: boolean;
             cases: boolean;
             contact: boolean;
             license: boolean;
@@ -295,6 +322,7 @@ export type PublicSiteApiCollectionData = {
     query?: {
         locale?: string;
         sort?: string;
+        featured?: boolean;
         page?: number;
     };
     url: '/content/{collection}';
@@ -420,9 +448,7 @@ export type PublicSiteApiResumePdfResponse = PublicSiteApiResumePdfResponses[key
 export type PublicSiteApiProtectedEmailChallengeData = {
     body?: never;
     path?: never;
-    query?: {
-        locale?: string;
-    };
+    query?: never;
     url: '/protected-email/challenge';
 };
 
@@ -462,6 +488,15 @@ export type SnippetDownloadData = {
 };
 
 export type SnippetDownloadErrors = {
+    /**
+     * Not found
+     */
+    404: {
+        /**
+         * Error overview.
+         */
+        message: string;
+    };
     /**
      * The public snippet files do not satisfy the archive safety limits.
      */

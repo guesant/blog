@@ -53,7 +53,7 @@ frontend-node-modules-init:
     {{compose_run}} --no-deps start-node-modules-init
 
 api-spec:
-    {{compose_run}} --no-deps -e DB_CONNECTION=sqlite -e DB_DATABASE=:memory: -e CACHE_STORE=array -e SESSION_DRIVER=array -e QUEUE_CONNECTION=sync laravel php artisan scramble:export --path=/app/openapi/public-site.json
+    {{compose_run}} --no-deps -e DB_CONNECTION=unavailable -e CACHE_STORE=array -e SESSION_DRIVER=array -e QUEUE_CONNECTION=sync laravel php artisan scramble:export --path=/app/openapi/public-site.json
 
 api-generate: api-spec
     {{tools_compose}} run --build --rm openapi-ts -f openapi-ts.config.mjs

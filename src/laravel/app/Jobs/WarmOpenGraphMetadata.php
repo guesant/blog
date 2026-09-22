@@ -20,6 +20,10 @@ class WarmOpenGraphMetadata implements ShouldBeUnique, ShouldQueue
 
     public function handle(OpenGraphMetadata $metadata): void
     {
+        if (! config('content.open_graph.enabled')) {
+            return;
+        }
+
         ResourceLink::query()
             ->select(['id', 'url'])
             ->whereNotNull('url')

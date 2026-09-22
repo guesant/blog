@@ -16,8 +16,14 @@ class OpenGraphMetadata
 
     private const USER_AGENT = 'guesant.net content preview/1.0';
 
+    private ?array $entriesCache = null;
+
     public function forUrl(string $value): ?array
     {
+        if (! config('content.open_graph.enabled')) {
+            return null;
+        }
+
         $url = $this->normalizedUrl($value);
 
         if ($url === null) {
@@ -26,7 +32,7 @@ class OpenGraphMetadata
 
         $key = hash('sha256', $url);
         $store = Cache::store();
-        $cached = $this->cachedEntry($store->get(self::CACHE_KEY), $key);
+        $cached = $this->cachedEntry($this->cachedEntries($store), $key);
 
         if ($cached !== null) {
             return $cached['metadata'];
@@ -37,6 +43,10 @@ class OpenGraphMetadata
 
     public function queue(string $value): void
     {
+        if (! config('content.open_graph.enabled')) {
+            return;
+        }
+
         $url = $this->normalizedUrl($value);
 
         if ($url === null || ! $this->publicHost((string) parse_url($url, PHP_URL_HOST))) {
@@ -46,7 +56,7 @@ class OpenGraphMetadata
         $key = hash('sha256', $url);
         $store = Cache::store();
 
-        if ($this->cachedEntry($store->get(self::CACHE_KEY), $key) !== null) {
+        if ($this->cachedEntry($this->cachedEntries($store), $key) !== null) {
             return;
         }
 
@@ -61,6 +71,10 @@ class OpenGraphMetadata
 
     public function refresh(string $value): void
     {
+        if (! config('content.open_graph.enabled')) {
+            return;
+        }
+
         $url = $this->normalizedUrl($value);
 
         if ($url === null) {
@@ -76,7 +90,7 @@ class OpenGraphMetadata
 
         try {
             $store->lock(self::LOCK_KEY, 10)->block(2, function () use ($store, $key, $url): void {
-                $entries = $this->entries($store->get(self::CACHE_KEY));
+                $entries = $this->cachedEntries($store);
                 $entries[$key] = [
                     'last_used' => microtime(true),
                     'metadata' => $this->fetch($url),
@@ -84,7 +98,7 @@ class OpenGraphMetadata
                 $this->write($store, $entries);
             });
         } catch (Throwable) {
-            $entries = $this->entries($store->get(self::CACHE_KEY));
+            $entries = $this->cachedEntries($store);
             $entries[$key] = [
                 'last_used' => microtime(true),
                 'metadata' => null,
@@ -95,7 +109,7 @@ class OpenGraphMetadata
 
     private function cachedEntry(mixed $cache, string $key): ?array
     {
-        $entry = is_array($cache['entries'][$key] ?? null) ? $cache['entries'][$key] : null;
+        $entry = is_array($cache[$key] ?? null) ? $cache[$key] : null;
 
         if (! $entry || ! array_key_exists('metadata', $entry)) {
             return null;
@@ -119,6 +133,11 @@ class OpenGraphMetadata
         return is_array($cache['entries'] ?? null) ? $cache['entries'] : [];
     }
 
+    private function cachedEntries($store): array
+    {
+        return $this->entriesCache ??= $this->entries($store->get(self::CACHE_KEY));
+    }
+
     private function write($store, array $entries): void
     {
         uasort($entries, fn (array $left, array $right) => $left['last_used'] <=> $right['last_used']);
@@ -126,6 +145,7 @@ class OpenGraphMetadata
         $entries = array_slice($entries, -$maxEntries, null, true);
         $ttl = max(1, (int) config('content.open_graph.cache_ttl', 604800));
 
+        $this->entriesCache = $entries;
         $store->put(self::CACHE_KEY, ['entries' => $entries], $ttl);
     }
 

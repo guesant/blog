@@ -19,7 +19,8 @@
 
 | Artefato | Referência | Verificação |
 | --- | --- | --- |
-| PHP/Composer | `laravelsail/php83-composer@sha256:428fa9b2edf2cfc1be71a6c32f0d6723449e5edc6ae1c3eeaac5a31d89b0c9f2` | digest do manifesto multi-arquitetura |
+| FrankenPHP | `dunglas/frankenphp:1.12.7-php8.3-bookworm@sha256:08ab9f028c9e6123cbeaa2c01df08b6d1ab18113dd8713b8b9d339d704618a7d` | digest do manifesto multi-arquitetura |
+| Composer | `laravelsail/php83-composer@sha256:428fa9b2edf2cfc1be71a6c32f0d6723449e5edc6ae1c3eeaac5a31d89b0c9f2` | digest do manifesto multi-arquitetura |
 | Cloudflared | `cloudflare/cloudflared@sha256:0aa26e284f05e6c77ae375b8c9c11d9eb6a448fb7bcd8d40f31cb6176189eb38` | digest do manifesto multi-arquitetura |
 | Tectonic x86_64 | versão 0.17.0 | SHA-256 `8533d07f9ccbd7a65824b9e0459041bca34af1eb33daba48f59215593753a3b7` |
 | Tectonic aarch64 | versão 0.17.0 | SHA-256 `b10954a95404f3ab2328d2fa59a5ebab8e657f893fab096f98be8db7c0c979b8` |

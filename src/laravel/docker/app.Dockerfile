@@ -1,4 +1,8 @@
-FROM laravelsail/php83-composer@sha256:428fa9b2edf2cfc1be71a6c32f0d6723449e5edc6ae1c3eeaac5a31d89b0c9f2
+FROM laravelsail/php83-composer@sha256:428fa9b2edf2cfc1be71a6c32f0d6723449e5edc6ae1c3eeaac5a31d89b0c9f2 AS composer
+
+FROM dunglas/frankenphp:1.12.7-php8.3-bookworm@sha256:08ab9f028c9e6123cbeaa2c01df08b6d1ab18113dd8713b8b9d339d704618a7d AS php-base
+
+COPY --from=composer /usr/bin/composer /usr/bin/composer
 
 # Filament requires ext-intl, which the base image doesn't ship with.
 # GD (+ freetype) renders the dynamic OG image; fonts-liberation ships
@@ -6,9 +10,7 @@ FROM laravelsail/php83-composer@sha256:428fa9b2edf2cfc1be71a6c32f0d6723449e5edc6
 # legacy /og route used ('Arial, sans-serif'), so no font-conversion needed.
 RUN apt-get update \
     && apt-get install -y --no-install-recommends libicu-dev libfreetype6-dev libjpeg62-turbo-dev libpng-dev libpq-dev libzip-dev fonts-liberation \
-    && apt-get upgrade -y \
-    && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install intl gd pdo_pgsql zip \
+    && install-php-extensions intl gd pdo_pgsql zip \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 

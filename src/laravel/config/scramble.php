@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Middleware\CacheOpenApiDocumentation;
+
 return [
     'api_path' => 'api/v1',
     'api_domain' => null,
@@ -37,7 +39,7 @@ return [
     ],
     'middleware' => [
         'web',
-        \App\Http\Middleware\CacheOpenApiDocumentation::class,
+        CacheOpenApiDocumentation::class,
     ],
     'extensions' => [],
     'security_strategy' => null,

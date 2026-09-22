@@ -51,7 +51,7 @@ class FindingApiController extends Controller
                 'locale' => $locale,
                 'facets' => (new PublicResourceQuery)->facetOptions($locale),
             ],
-        ]);
+        ])->header('Cache-Control', 'public, max-age=60, stale-while-revalidate=300');
     }
 
     /** @response array<string, mixed> */
@@ -80,6 +80,7 @@ class FindingApiController extends Controller
 
         $transformer = app(ResourceApiTransformer::class);
 
-        return response()->json($transformer->toArray($resource, $locale, [], true));
+        return response()->json($transformer->toArray($resource, $locale, [], true))
+            ->header('Cache-Control', 'public, max-age=60, stale-while-revalidate=300');
     }
 }

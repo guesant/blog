@@ -72,12 +72,21 @@ class ResourceRevision extends Model
 
     public function getAuthorsAttribute(): string
     {
-        return $this->attributions()->where('kind', 'person')->pluck('name')->implode(', ');
+        return $this->attributionNames('person');
     }
 
     public function getOrganizationsAttribute(): string
     {
-        return $this->attributions()->where('kind', 'organization')->pluck('name')->implode(', ');
+        return $this->attributionNames('organization');
+    }
+
+    private function attributionNames(string $kind): string
+    {
+        $attributions = $this->relationLoaded('attributions')
+            ? $this->attributions
+            : $this->attributions()->get();
+
+        return $attributions->where('kind', $kind)->pluck('name')->implode(', ');
     }
 
     public function attributions(): HasMany

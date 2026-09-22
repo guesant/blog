@@ -13,10 +13,11 @@ export async function getHomePageContent(
   locale?: string,
   shell?: Pick<HomePageContent, 'profile' | 'site'>,
 ): Promise<HomePageContent> {
-  const [featured, experiments, page] = await Promise.all([
+  const [featured, experiments, page, resume] = await Promise.all([
     getFeaturedContent(locale),
     getContentCollectionPage<Experiment>('experiments', locale, { page: 1, perPage: 1 }),
     getLocalizedPage<HomePageCopy>('home', locale),
+    getLocalizedResume(locale),
   ]);
 
   return {
@@ -26,7 +27,7 @@ export async function getHomePageContent(
     experimentsCount: experiments.meta.total,
     writings: featured.writings,
     profile: shell?.profile ?? (await getLocalizedProfile(locale)),
-    resume: await getLocalizedResume(locale),
+    resume,
     page,
     site: shell?.site ?? (await getLocalizedSiteText(locale)),
     recurringTechnologies: await listTechnologies(

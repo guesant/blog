@@ -6,18 +6,24 @@ export async function getFeaturedContent(locale?: string): Promise<{
   projects: Project[];
   writings: Writing[];
 }> {
+  const [cases, projects, writings] = await Promise.all([
+    getContentCollection<CaseStudy>('cases', locale, {
+      featured: true,
+      perPage: 3,
+    }),
+    getContentCollection<Project>('projects', locale, {
+      featured: true,
+      perPage: 3,
+    }),
+    getContentCollection<Writing>('writing', locale, {
+      featured: true,
+      perPage: 3,
+    }),
+  ]);
+
   return {
-    cases: await getContentCollection<CaseStudy>('cases', locale, {
-      featured: true,
-      perPage: 3,
-    }),
-    projects: await getContentCollection<Project>('projects', locale, {
-      featured: true,
-      perPage: 3,
-    }),
-    writings: await getContentCollection<Writing>('writing', locale, {
-      featured: true,
-      perPage: 3,
-    }),
+    cases,
+    projects,
+    writings,
   };
 }

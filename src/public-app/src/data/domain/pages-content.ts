@@ -74,9 +74,9 @@ export type PortfolioPageCopy = WithSeo & {
   experimentsSummary: string;
 };
 
-export type NowPageCopy = PageIntroduction & { entries: NowPageEntry[] };
-
-export type NowPageEntry = { key: string; label: string; value: string };
+export type NowPageCopy = PageIntroduction & {
+  entries: Array<{ key: string; label: string; value: string }>;
+};
 
 export type FollowPageEntry = {
   key: string;

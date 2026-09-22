@@ -14,7 +14,6 @@ Route::prefix('v1')->middleware('throttle:public-api')->group(function () {
     Route::get('/content/{collection}', [PublicSiteApiController::class, 'collection']);
     Route::get('/content/{collection}/{slug}', [PublicSiteApiController::class, 'document']);
     Route::get('/resume/{locale}.pdf', [PublicSiteApiController::class, 'resumePdf']);
-    Route::get('/public/knowledge-map', [PublicSiteApiController::class, 'knowledgeMap']);
     Route::post('/protected-email/challenge', [PublicSiteApiController::class, 'protectedEmailChallenge']);
     Route::get('/findings', [FindingApiController::class, 'index']);
     Route::get('/findings/{slug}', [FindingApiController::class, 'show']);

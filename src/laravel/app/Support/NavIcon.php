@@ -9,7 +9,6 @@ class NavIcon
         'findings' => 'lightbulb',
         'topics' => 'layout-list',
         'collections' => 'archive',
-        'knowledge-map' => 'git-branch',
         'snippets' => 'copy',
         'tools' => 'wrench',
         'about' => 'user',

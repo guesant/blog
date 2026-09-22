@@ -4,7 +4,6 @@ import { buildLeftSidebarAboutItems } from './build-left-sidebar-about-items';
 import { isAboutRoute } from './is-about-route';
 import { isContentSidebarRoute } from './is-content-sidebar-route';
 import { navigationItem } from './navigation-item';
-import { removeKnowledgeMap } from './remove-knowledge-map';
 import { routeSegment } from './route-segment';
 import { visibleAboutRoutes } from './visible-about-routes';
 
@@ -20,12 +19,7 @@ export function buildLeftSidebarData(props: BuildLeftSidebarDataProps) {
   const aboutGroup = groups.flatMap((group) => group).filter((item) => isAboutRoute(item.route));
 
   const contentGroups = groups
-    .map((items) =>
-      items
-        .filter((item) => !isAboutRoute(item.route))
-        .map(removeKnowledgeMap)
-        .filter((item): item is NavigationItem => item !== undefined),
-    )
+    .map((items) => items.filter((item) => !isAboutRoute(item.route)))
     .filter((items) => items.length > 0);
 
   const visibleRoutes = visibleAboutRoutes(props.site.visibility);

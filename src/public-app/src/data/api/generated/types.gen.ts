@@ -417,47 +417,6 @@ export type PublicSiteApiResumePdfResponses = {
 
 export type PublicSiteApiResumePdfResponse = PublicSiteApiResumePdfResponses[keyof PublicSiteApiResumePdfResponses];
 
-export type PublicSiteApiKnowledgeMapData = {
-    body?: never;
-    path?: never;
-    query?: {
-        locale?: string;
-    };
-    url: '/public/knowledge-map';
-};
-
-export type PublicSiteApiKnowledgeMapErrors = {
-    /**
-     * The service is temporarily unavailable.
-     */
-    503: {
-        error: {
-            code: string;
-            message: string;
-            status: number;
-            details: string;
-        };
-    };
-};
-
-export type PublicSiteApiKnowledgeMapError = PublicSiteApiKnowledgeMapErrors[keyof PublicSiteApiKnowledgeMapErrors];
-
-export type PublicSiteApiKnowledgeMapResponses = {
-    200: {
-        nodes: Array<{
-            [key: string]: unknown;
-        }>;
-        edges: Array<{
-            [key: string]: unknown;
-        }>;
-        kinds: {
-            [key: string]: unknown;
-        };
-    };
-};
-
-export type PublicSiteApiKnowledgeMapResponse = PublicSiteApiKnowledgeMapResponses[keyof PublicSiteApiKnowledgeMapResponses];
-
 export type PublicSiteApiProtectedEmailChallengeData = {
     body?: never;
     path?: never;

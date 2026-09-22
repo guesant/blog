@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Api;
 
 use App\Content\CaseStudyQuery;
 use App\Content\CreditsQuery;
-use App\Content\KnowledgeGraphQuery;
 use App\Content\Locale;
 use App\Content\PageQuery;
 use App\Content\ProfileQuery;
@@ -157,33 +156,6 @@ class PublicSiteApiController extends Controller
         return response()->json((new SiteChromeQuery)->build(
             Locale::normalize($request->query('locale'))
         )['emailChallenge']);
-    }
-
-    /** @response array{nodes: list<array<string, mixed>>, edges: list<array<string, mixed>>, kinds: array<string, mixed>} */
-    #[ScrambleResponse(503, 'The service is temporarily unavailable.', type: 'array{error: array{code: string, message: string, status: int, details: string}}')]
-    public function knowledgeMap(Request $request): JsonResponse
-    {
-        if ((new SiteSettingsQuery)->find()?->maintenance_enabled) {
-            return ApiErrorResponse::make(
-                ApiErrorCode::Maintenance,
-                503,
-                'The service is temporarily unavailable.',
-            )->header('Retry-After', (string) 3600);
-        }
-
-        $graph = (new KnowledgeGraphQuery)->cached(Locale::normalize($request->query('locale')));
-
-        if ($graph === []) {
-            return response()->json([
-                'nodes' => [],
-                'edges' => [],
-                'kinds' => [],
-                'meta' => ['available' => false],
-            ]);
-        }
-
-        return response()->json($graph)
-            ->header('Cache-Control', 'public, max-age=60, stale-while-revalidate=300');
     }
 
     public function chrome(

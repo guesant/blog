@@ -101,7 +101,7 @@ class NavItemSeeder extends Seeder
     {
         return [
             [$this->writing(), $this->findings()],
-            [$this->topics(), $this->collections(), $this->knowledgeMap()],
+            [$this->topics(), $this->collections()],
             [$this->snippets(), $this->tools()],
             [$this->about(), $this->agora(), $this->resume(), $this->portfolio()],
         ];
@@ -138,11 +138,6 @@ class NavItemSeeder extends Seeder
     private function collections(): array
     {
         return ['route' => 'collections', 'translations' => ['en' => 'Collections', 'pt-BR' => 'Coleções']];
-    }
-
-    private function knowledgeMap(): array
-    {
-        return ['route' => 'knowledge-map', 'translations' => ['en' => 'Map', 'pt-BR' => 'Mapa']];
     }
 
     private function topics(): array

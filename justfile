@@ -86,6 +86,14 @@ frontend-dead-code: frontend-install
 frontend-build: frontend-install
     {{node_run}} 'corepack pnpm build'
 
+public-site-benchmark:
+    just frontend-install
+    {{compose_run}} --no-deps \
+        -e PUBLIC_SITE_URL="${PUBLIC_SITE_URL:-http://laravel:8000/api/v1/site/chrome?locale=en}" \
+        -e PUBLIC_SITE_RUNS="${PUBLIC_SITE_RUNS:-20}" \
+        -e PUBLIC_SITE_CONCURRENCY="${PUBLIC_SITE_CONCURRENCY:-4}" \
+        start sh -lc 'node audits/benchmark-public-site.mjs'
+
 build: frontend-build
 
 ci: check

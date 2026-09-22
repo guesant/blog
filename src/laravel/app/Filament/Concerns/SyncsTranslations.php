@@ -4,6 +4,7 @@ namespace App\Filament\Concerns;
 
 use App\Content\EditorialRevisionPublisher;
 use App\Content\ResourceRevisionSynchronizer;
+use App\Events\PublicSiteContentChanged;
 use App\Models\PageRevisionTranslation;
 use App\Models\ProfileRevisionTranslation;
 use App\Models\Resource;
@@ -33,10 +34,17 @@ trait SyncsTranslations
     protected function persistTranslations(): void
     {
         if ($this->pendingTranslations === []) {
+            PublicSiteContentChanged::dispatch();
+
             return;
         }
 
         app(EditorialRevisionPublisher::class)->publish($this->getRecord(), $this->pendingTranslations, $this->pendingRecordData);
+    }
+
+    protected function afterDelete(): void
+    {
+        PublicSiteContentChanged::dispatch();
     }
 
     protected function fillTranslationsIntoData(array $data): array

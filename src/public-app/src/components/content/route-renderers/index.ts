@@ -132,6 +132,8 @@ const StatusRouteRenderer = lazy(() =>
   import('./status-route-renderer').then((module) => ({ default: module.StatusRouteRenderer })),
 );
 
+const LoadingRouteRenderer = lazy(() => import('./loading-route-renderer'));
+
 const TechnologiesRouteRenderer = lazy(() =>
   import('./technologies-route-renderer').then((module) => ({
     default: module.TechnologiesRouteRenderer,
@@ -143,6 +145,7 @@ const TopicsRouteRenderer = lazy(() =>
 );
 
 export const routeRenderers: Record<RouteData['kind'], LazyRouteRenderer> = {
+  loading: LoadingRouteRenderer,
   home: HomeRouteRenderer,
   about: AboutRouteRenderer,
   portfolio: PortfolioRouteRenderer,

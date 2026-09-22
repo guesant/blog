@@ -28,6 +28,7 @@ import type { ContentCollectionMeta } from '../api/public-site-source-support';
 import type { RouteRequest } from './content-data-support';
 
 export type RouteData =
+  | { kind: 'loading' }
   | {
       kind: 'home';
       content: HomePageContent;

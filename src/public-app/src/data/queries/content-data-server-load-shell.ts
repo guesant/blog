@@ -1,16 +1,10 @@
-import {
-  getInterfaceMessages,
-  getNavigationAvailability,
-  getProfile,
-  getSiteText,
-} from '@portfolio/data/services';
+import { getLocalizedShell } from '../api/public-site-source-get-localized-shell';
+import { getInterfaceMessages } from '@portfolio/data/services';
 import type { ShellData } from './content-data-support';
 
 export async function loadShellData(locale: string): Promise<ShellData> {
-  const [profile, site, availability, messages] = await Promise.all([
-    getProfile(locale),
-    getSiteText(locale),
-    getNavigationAvailability(locale),
+  const [{ profile, site, availability }, messages] = await Promise.all([
+    getLocalizedShell(locale),
     getInterfaceMessages(locale),
   ]);
 

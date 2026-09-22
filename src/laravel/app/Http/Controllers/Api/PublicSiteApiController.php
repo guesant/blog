@@ -7,10 +7,11 @@ use App\Content\CreditsQuery;
 use App\Content\InterfaceQuery;
 use App\Content\KnowledgeGraphQuery;
 use App\Content\Locale;
-use App\Content\NavQuery;
 use App\Content\PageQuery;
 use App\Content\ProfileQuery;
 use App\Content\ProjectQuery;
+use App\Content\PublicSiteChromeCache;
+use App\Content\PublicSiteChromeQuery;
 use App\Content\ReferenceCollectionQuery;
 use App\Content\ResourceApiTransformer;
 use App\Content\ResumeQuery;
@@ -24,7 +25,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Responses\ApiErrorCode;
 use App\Http\Responses\ApiErrorResponse;
 use App\Models\CaseStudy;
-use App\Models\CreditEntry;
 use App\Models\Experiment;
 use App\Models\Page;
 use App\Models\Project;
@@ -187,18 +187,35 @@ class PublicSiteApiController extends Controller
             ->header('Cache-Control', 'public, max-age=60, stale-while-revalidate=300');
     }
 
-    public function chrome(Request $request): JsonResponse
-    {
-        if ((new SiteSettingsQuery)->find()?->maintenance_enabled) {
+    public function chrome(
+        Request $request,
+        PublicSiteChromeCache $cache,
+        PublicSiteChromeQuery $query,
+    ): JsonResponse {
+        $startedAt = hrtime(true);
+        $locale = Locale::normalize($request->query('locale'));
+        $data = $cache->get($locale);
+        $cacheState = 'hit';
+
+        if ($data === null) {
+            $cacheState = 'miss';
+            $data = $query->build($locale);
+        }
+
+        if (($data['site']['maintenance_enabled'] ?? false) === true) {
             return ApiErrorResponse::make(
                 ApiErrorCode::Maintenance,
                 503,
                 'The service is temporarily unavailable.',
-            )->header('Retry-After', (string) 3600);
+            )->header('Retry-After', (string) 3600)
+                ->header('X-Public-Site-Cache', $cacheState)
+                ->header('Server-Timing', 'public-site-chrome;dur='.((hrtime(true) - $startedAt) / 1_000_000));
         }
 
-        return response()->json($this->chromeData(Locale::normalize($request->query('locale'))))
-            ->header('Cache-Control', 'public, max-age=60, stale-while-revalidate=300');
+        return response()->json($data)
+            ->header('Cache-Control', 'public, max-age=60, stale-while-revalidate=300')
+            ->header('X-Public-Site-Cache', $cacheState)
+            ->header('Server-Timing', 'public-site-chrome;dur='.((hrtime(true) - $startedAt) / 1_000_000));
     }
 
     public function interfaceMessages(Request $request): JsonResponse
@@ -276,80 +293,6 @@ class PublicSiteApiController extends Controller
         }
 
         return $fields;
-    }
-
-    private function chromeData(string $locale): array
-    {
-        $chrome = (new SiteChromeQuery)->build($locale);
-        $settings = $chrome['siteSettings'];
-        $profile = $chrome['headerProfile'];
-        $profileTranslation = $profile?->translation($locale);
-
-        return [
-            'site' => [
-                'short_name' => $settings?->short_name,
-                'portfolio_url' => $settings?->portfolio_url ?? '',
-                'source_repository_url' => $settings?->source_repository_url ?? '',
-                'contact_available' => $settings?->contact_available ?? false,
-                'contact_profiles' => $settings?->contactProfiles->map(fn ($contactProfile) => [
-                    'platform' => $contactProfile->platform,
-                    'label' => $contactProfile->label ?: $contactProfile->platform,
-                    'url' => $contactProfile->url,
-                ])->values(),
-                'protected_email' => null,
-                'maintenance_enabled' => $settings?->maintenance_enabled ?? false,
-                'maintenance_eyebrow' => $settings?->translation($locale)?->maintenance_eyebrow,
-                'maintenance_title' => $settings?->translation($locale)?->maintenance_title,
-                'maintenance_description' => $settings?->translation($locale)?->maintenance_description,
-                'seo' => $settings?->translation($locale)?->seo,
-            ],
-            'profile' => $profile ? [
-                'name' => $profile->name,
-                'title' => $profileTranslation?->title,
-                'location' => $profileTranslation?->location,
-                'description' => $profileTranslation?->description,
-                'milestones' => $profileTranslation?->milestones,
-                'birth_date' => $profile->birth_date?->toDateString() ?? '',
-                'birth_city' => $profileTranslation?->birth_city,
-                'interests' => $profileTranslation?->interests,
-                'learning' => $profileTranslation?->learning,
-                'personal_interests' => $profileTranslation?->personal_interests,
-            ] : null,
-            'copyright' => $chrome['copyright'],
-            'navigation' => [
-                'sidebar' => (new NavQuery)->sidebarGroups($locale),
-                'footer_links' => (new NavQuery)->footerLinkItems($locale),
-                'sitemap' => (new NavQuery)->siteMapTree($locale),
-            ],
-            'build' => [
-                'commit_sha' => $chrome['commitSha'],
-                'build_time' => $chrome['buildTime'],
-            ],
-            'visibility' => $this->visibility($locale, $profile, $settings),
-        ];
-    }
-
-    private function visibility(string $locale, $profile, $settings): array
-    {
-        return [
-            'about' => $profile !== null,
-            'resume' => $this->hasResume($locale, $profile),
-            'portfolio' => Project::where('hidden', false)->where('nda', false)->exists()
-                || CaseStudy::where('hidden', false)->where('nda', false)->exists()
-                || Experiment::where('hidden', false)->exists(),
-            'cases' => CaseStudy::where('hidden', false)->where('nda', false)->exists(),
-            'contact' => (bool) ($settings?->contact_available),
-            'license' => $this->pageHasAny($locale, 'license', ['code_body', 'content_body', 'ai_body']),
-            'credits' => CreditEntry::where('active', true)->exists(),
-            'follow' => $this->pageHasAny($locale, 'follow', ['rss_title', 'atom_title', 'jsonfeed_title', 'api_title', 'sitemap_title', 'robots_title', 'webfinger_title', 'activitypub_title', 'websub_title', 'webmention_title']),
-            'feed' => Writing::where('hidden', false)->exists(),
-            'writing' => Writing::where('hidden', false)->exists(),
-            'findings' => Resource::public()->exists(),
-            'topics' => Topic::where('hidden', false)->exists(),
-            'collections' => ReferenceCollection::where('hidden', false)->exists(),
-            'snippets' => Snippet::where('hidden', false)->exists(),
-            'right_sidebar' => (bool) ($settings?->contact_available),
-        ];
     }
 
     private function paginateCollection(string $collection, int $perPage, ?string $sort): LengthAwarePaginator
@@ -797,26 +740,5 @@ class PublicSiteApiController extends Controller
     private function key(object $model): string
     {
         return $model->public_id ? "{$model->public_id}-{$model->slug}" : $model->slug;
-    }
-
-    private function pageHasAny(string $locale, string $slug, array $fields): bool
-    {
-        $values = (new PageQuery)->findBySlug($slug)?->translation($locale)?->fields ?? [];
-
-        foreach ($fields as $field) {
-            if (! empty($values[$field])) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    private function hasResume(string $locale, $profile): bool
-    {
-        $resume = (new ResumeQuery)->find();
-
-        return $resume?->translation($locale)?->summary !== null
-            || ! empty($profile?->translation($locale)?->trajectory);
     }
 }

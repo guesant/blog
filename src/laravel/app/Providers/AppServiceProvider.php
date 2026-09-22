@@ -4,6 +4,8 @@ namespace App\Providers;
 
 use App\Content\Graph\NodeRegistry;
 use App\Content\ResourceRevisionSynchronizer;
+use App\Events\PublicSiteContentChanged;
+use App\Listeners\InvalidatePublicSiteChrome;
 use App\Models\Resource;
 use App\Models\ResourceTranslation;
 use Dedoc\Scramble\Scramble;
@@ -35,6 +37,7 @@ class AppServiceProvider extends ServiceProvider
     {
         Resource::observe(ResourceRevisionSynchronizer::class);
         ResourceTranslation::observe(ResourceRevisionSynchronizer::class);
+        Event::listen(PublicSiteContentChanged::class, InvalidatePublicSiteChrome::class);
 
         Scramble::configure()->expose('docs', 'docs/openapi.json');
 

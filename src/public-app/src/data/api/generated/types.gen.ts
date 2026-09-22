@@ -144,13 +144,39 @@ export type PublicSiteApiChromeResponses = {
         } | null;
         copyright: Array<unknown> | string;
         navigation: {
-            sidebar: Array<unknown>;
-            footer_links: {
-                [key: string]: string;
-            };
-            sitemap: {
-                [key: string]: string;
-            };
+            sidebar: string;
+            footer_links: Array<{
+                route: string;
+                label: string | null;
+                children: [
+                    {
+                        route: string;
+                        label: 'RSS';
+                        children: null;
+                    },
+                    {
+                        route: string;
+                        label: 'Feed';
+                        children: null;
+                    }
+                ];
+            }>;
+            sitemap: Array<{
+                route: string;
+                label: string | null;
+                children: [
+                    {
+                        route: string;
+                        label: 'RSS';
+                        children: null;
+                    },
+                    {
+                        route: string;
+                        label: 'Feed';
+                        children: null;
+                    }
+                ];
+            }>;
         };
         build: {
             commit_sha: string;

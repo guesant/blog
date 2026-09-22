@@ -1,26 +1,24 @@
 import type { SiteText } from '../domain/types.ts';
 import { siteVisibility } from './public-site-source-site-visibility';
-import { getSiteChrome } from './public-site-generated-client';
-import { apiClient } from './public-site-source-api-client';
 import { objectValue } from './public-site-source-object-value';
 import { stringValue } from './public-site-source-string-value';
 import { siteContact } from './public-site-source-site-contact';
 import { siteMaintenance } from './public-site-source-site-maintenance';
 import { siteNavigation } from './public-site-source-site-navigation';
-import { resolveEmailChallenge } from './public-site-source-resolve-email-challenge';
 import { recordOrEmpty } from './public-site-source-record-or-empty';
 import { siteBuild } from './public-site-source-site-build';
+import { getLocalizedSiteChrome } from './public-site-source-get-localized-site-chrome';
+import type { RecordValue } from './public-site-source-support';
 
-export async function getLocalizedSiteText(locale?: string): Promise<SiteText> {
-  const result = await getSiteChrome({ client: apiClient(), query: { locale } });
+export async function getLocalizedSiteText(
+  locale?: string,
+  chrome?: RecordValue,
+): Promise<SiteText> {
+  const resolvedChrome = chrome ?? (await getLocalizedSiteChrome(locale));
 
-  const chrome = objectValue(result.data) ?? {};
+  const site = recordOrEmpty(resolvedChrome.site);
 
-  const site = recordOrEmpty(chrome.site);
-
-  const emailChallenge = await resolveEmailChallenge(site);
-
-  const copyright = stringValue(chrome.copyright);
+  const copyright = stringValue(resolvedChrome.copyright);
 
   return {
     shortName: stringValue(site.short_name),
@@ -29,10 +27,10 @@ export async function getLocalizedSiteText(locale?: string): Promise<SiteText> {
     copyrightTemplate: copyright,
     maintenanceEnabled: site.maintenance_enabled === true,
     maintenance: siteMaintenance(site),
-    contact: siteContact(site, emailChallenge),
-    navigation: siteNavigation(chrome.navigation),
-    visibility: siteVisibility(recordOrEmpty(chrome.visibility)),
-    build: siteBuild(objectValue(chrome.build)),
+    contact: siteContact(site, undefined),
+    navigation: siteNavigation(resolvedChrome.navigation),
+    visibility: siteVisibility(recordOrEmpty(resolvedChrome.visibility)),
+    build: siteBuild(objectValue(resolvedChrome.build)),
     seo: objectValue(site.seo),
   };
 }

@@ -2,6 +2,7 @@
 
 namespace App\Content;
 
+use App\Events\PublicSiteContentChanged;
 use App\Models\Resource;
 use App\Models\ResourceRevision;
 use App\Models\ResourceTranslation;
@@ -29,6 +30,7 @@ class ResourceRevisionSynchronizer
         }
 
         DB::transaction(fn (): ResourceRevision => $this->sync($resource));
+        PublicSiteContentChanged::dispatch();
     }
 
     private function sync(Resource $resource): ResourceRevision

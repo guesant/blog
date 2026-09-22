@@ -10,8 +10,6 @@ export { publicSiteApiPage as getSitePage } from './generated/sdk.gen';
 
 export { publicSiteApiResumeData as getSiteResume } from './generated/sdk.gen';
 
-export { publicSiteApiProtectedEmailChallenge as createProtectedEmailChallenge } from './generated/sdk.gen';
-
 export { publicSiteApiProtectedEmailChallengeMutation as createProtectedEmailChallengeMutation } from './generated/@tanstack/react-query.gen';
 
 export { listFindings } from './public-site-generated-list-findings';

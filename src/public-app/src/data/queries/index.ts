@@ -6,6 +6,6 @@ export { routeQueryOptions } from './content-data-route-query-options';
 
 export { fallbackShellData } from './content-data-fallback-shell';
 
-export { fallbackRouteData } from './content-data-fallback-route';
+export { errorRouteData, fallbackRouteData } from './content-data-fallback-route';
 
 export { getStaleQueryData } from './get-stale-query-data';

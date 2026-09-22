@@ -7,7 +7,10 @@ import {
 import type { ResumePageContent } from '../domain/types.ts';
 import { getResumePageCopy } from './content-service-get-resume-page-copy';
 
-export async function getResumePageContent(locale?: string): Promise<ResumePageContent> {
+export async function getResumePageContent(
+  locale?: string,
+  shell?: Pick<ResumePageContent, 'profile' | 'site'>,
+): Promise<ResumePageContent> {
   const [cases, resume, page] = await Promise.all([
     getSelectedResumeCases(locale),
     getLocalizedResume(locale),
@@ -15,8 +18,8 @@ export async function getResumePageContent(locale?: string): Promise<ResumePageC
   ]);
 
   return {
-    profile: await getLocalizedProfile(locale),
-    site: await getLocalizedSiteText(locale),
+    profile: shell?.profile ?? (await getLocalizedProfile(locale)),
+    site: shell?.site ?? (await getLocalizedSiteText(locale)),
     resume,
     page,
     cases,

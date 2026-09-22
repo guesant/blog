@@ -1,14 +1,14 @@
 import type { Profile } from '../domain/types.ts';
-import { getSiteChrome } from './public-site-generated-client';
-import { apiClient } from './public-site-source-api-client';
 import { textValue } from './public-site-source-text-value';
 import { listValue } from './public-site-source-list-value';
 import { objectValue } from './public-site-source-object-value';
+import { getLocalizedSiteChrome } from './public-site-source-get-localized-site-chrome';
+import type { RecordValue } from './public-site-source-support';
 
-export async function getLocalizedProfile(locale?: string): Promise<Profile> {
-  const result = await getSiteChrome({ client: apiClient(), query: { locale } });
+export async function getLocalizedProfile(locale?: string, chrome?: RecordValue): Promise<Profile> {
+  const result = chrome ?? (await getLocalizedSiteChrome(locale));
 
-  const profile = objectValue(result.data?.profile) ?? {};
+  const profile = objectValue(result.profile) ?? {};
 
   return {
     name: textValue(profile.name),

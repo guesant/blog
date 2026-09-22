@@ -13,27 +13,45 @@ use Illuminate\Support\Collection;
  */
 final class NavQuery
 {
+    public function build(string $locale): array
+    {
+        $items = $this->roots($locale);
+
+        return [
+            'sidebar' => $items
+                ->filter(fn (array $item): bool => $item['placement'] === 'sidebar')
+                ->groupBy(fn (array $item) => $item['sidebar_group'])
+                ->map(fn (Collection $group): array => $group
+                    ->map(fn (array $item): array => $this->withoutGroup($item))
+                    ->values()
+                    ->all())
+                ->values()
+                ->all(),
+            'footer_links' => $items
+                ->filter(fn (array $item): bool => $item['placement'] === 'footer_links')
+                ->map(fn (array $item): array => $this->withoutGroup($item))
+                ->values()
+                ->all(),
+            'sitemap' => $items
+                ->map(fn (array $item): array => $this->withoutGroup($item))
+                ->values()
+                ->all(),
+        ];
+    }
+
     public function sidebarGroups(string $locale): array
     {
-        return $this->roots($locale, fn ($query) => $query->where('placement', 'sidebar'))
-            ->groupBy(fn (array $item) => $item['sidebar_group'])
-            ->map(fn (Collection $items) => $items->map(fn (array $item) => $this->withoutGroup($item))->values()->all())
-            ->values()
-            ->all();
+        return $this->build($locale)['sidebar'];
     }
 
     public function footerLinkItems(string $locale): array
     {
-        return $this->roots($locale, fn ($query) => $query->where('placement', 'footer_links'))
-            ->map(fn (array $item) => $this->withoutGroup($item))
-            ->all();
+        return $this->build($locale)['footer_links'];
     }
 
     public function siteMapTree(string $locale): array
     {
-        return $this->roots($locale, fn ($query) => $query)
-            ->map(fn (array $item) => $this->withoutGroup($item))
-            ->all();
+        return $this->build($locale)['sitemap'];
     }
 
     public function activeItem(?string $baseRouteName): ?string
@@ -52,7 +70,7 @@ final class NavQuery
         return $item->parent?->route_name;
     }
 
-    private function roots(string $locale, callable $scope): Collection
+    private function roots(string $locale): Collection
     {
         $query = NavItem::query()
             ->whereNull('parent_id')
@@ -62,7 +80,7 @@ final class NavQuery
             ->orderBy('order')
             ->orderBy('id');
 
-        return $scope($query)->get()->map(fn (NavItem $item) => $this->present($item, $locale));
+        return $query->get()->map(fn (NavItem $item) => $this->present($item, $locale));
     }
 
     private function present(NavItem $item, string $locale): array
@@ -70,6 +88,7 @@ final class NavQuery
         $data = [
             'route' => $this->route($item->route_name, $locale),
             'label' => $item->translation($locale)?->label,
+            'placement' => $item->placement,
             'sidebar_group' => $item->sidebar_group,
             'children' => [],
         ];
@@ -103,6 +122,7 @@ final class NavQuery
     private function withoutGroup(array $item): array
     {
         unset($item['sidebar_group']);
+        unset($item['placement']);
 
         return $item;
     }

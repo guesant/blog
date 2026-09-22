@@ -8,7 +8,7 @@ export function siteContact(
   emailChallenge: ProtectedEmailChallenge | undefined,
 ): SiteText['contact'] {
   return {
-    hasEmail: emailChallenge !== undefined,
+    hasEmail: emailChallenge !== undefined || site.contact_available === true,
     emailChallenge,
     profiles: recordList<SiteText['contact']['profiles'][number]>(site.contact_profiles),
     available: site.contact_available === true,

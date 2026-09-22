@@ -1,4 +1,4 @@
-const publicApiRequestTimeoutMs = 1500;
+const publicApiRequestTimeoutMs = 15_000;
 
 export async function fetchPublicApiWithTimeout(
   input: RequestInfo | URL,

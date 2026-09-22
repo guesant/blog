@@ -1,7 +1,12 @@
 import { useQuery } from '@tanstack/react-query';
 import { createFileRoute, useLocation } from '@tanstack/react-router';
 import type { RouteData } from '../../data/queries';
-import { fallbackRouteData, getStaleQueryData, routeQueryOptions } from '../../data/queries';
+import {
+  errorRouteData,
+  fallbackRouteData,
+  getStaleQueryData,
+  routeQueryOptions,
+} from '../../data/queries';
 import { RouteView } from '../../route-view';
 import { routeContext } from '../_site';
 import { metadataForRoute } from './splat-metadata-for-route';
@@ -37,9 +42,11 @@ function HomeRoute() {
 
   const { locale } = routeContext(location.pathname);
 
-  const data =
-    useQuery(routeQueryOptions({ locale, pathname: '/', search: location.searchStr })).data ??
-    fallbackRouteData;
+  const routeQuery = useQuery(
+    routeQueryOptions({ locale, pathname: '/', search: location.searchStr }),
+  );
+
+  const data = routeQuery.data ?? (routeQuery.isError ? errorRouteData : fallbackRouteData);
 
   return <RouteView data={data} />;
 }

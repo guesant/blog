@@ -2,6 +2,7 @@
 
 namespace App\Content;
 
+use App\Events\PublicSiteContentChanged;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -42,6 +43,8 @@ class EditorialRevisionPublisher
             }
             $this->updatePointers($record, $revisionId);
         });
+
+        PublicSiteContentChanged::dispatch();
     }
 
     public function syncResumeRelations(Model $record): void
@@ -90,6 +93,8 @@ class EditorialRevisionPublisher
                 ]);
             }
         });
+
+        PublicSiteContentChanged::dispatch();
     }
 
     public function syncPageRelations(Model $record): void
@@ -117,6 +122,8 @@ class EditorialRevisionPublisher
                 }
             }
         });
+
+        PublicSiteContentChanged::dispatch();
     }
 
     public function syncReferenceCollectionRelations(Model $record): void
@@ -137,6 +144,8 @@ class EditorialRevisionPublisher
                 ]);
             }
         });
+
+        PublicSiteContentChanged::dispatch();
     }
 
     private function createRevision(Model $record, array $definition, array $recordData): int

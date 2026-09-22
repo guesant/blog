@@ -1,5 +1,4 @@
 import type { Reference } from '../domain/types.ts';
-import type { ProtectedEmailChallenge } from '../domain/protected-email/types.ts';
 
 export type RecordValue = Record<string, unknown>;
 
@@ -39,17 +38,6 @@ export type ContentCollectionPage<T> = {
   items: T[];
   meta: ContentCollectionMeta;
 };
-
-export type EmailChallengeRequest = {
-  expiresAt: number;
-  promise: Promise<ProtectedEmailChallenge | undefined>;
-};
-
-export const emailChallengeState: { current: EmailChallengeRequest | undefined } = {
-  current: undefined,
-};
-
-export const emailChallengeTtlMs = 60000;
 
 export type FindingListQuery = {
   q?: string;

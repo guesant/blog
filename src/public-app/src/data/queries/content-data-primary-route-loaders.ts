@@ -18,14 +18,14 @@ import type { CaseStudy, Experiment, Project } from '@portfolio/data/domain/type
 import { collectionQuery } from './content-data-collection-query';
 import { collectionRouteLoaders } from './content-data-primary-collection-route-loaders';
 import { resumePdfUrls } from './content-data-resume-pdf-urls';
-import type { RouteLoader } from './content-data-route-loader';
+import type { RouteLoadContext, RouteLoader } from './content-data-route-loader';
 import { statusData } from './content-data-status-data';
 
 export const primaryRouteLoaders: Record<string, RouteLoader> = {
   ...collectionRouteLoaders,
-  '/': async ({ locale, search }) => {
+  '/': async ({ locale, search }, context?: RouteLoadContext) => {
     const [content, feed] = await Promise.all([
-      getHomePageContent(locale),
+      getHomePageContent(locale, context?.shell),
       getHomeFeedPage(locale, collectionQuery(search)),
     ]);
 
@@ -38,15 +38,15 @@ export const primaryRouteLoaders: Record<string, RouteLoader> = {
       feedPagination: feed.meta,
     };
   },
-  '/about': async ({ locale }) => ({
+  '/about': async ({ locale }, context?: RouteLoadContext) => ({
     kind: 'about',
     page: await getAboutPageCopy(locale),
-    profile: await getProfile(locale),
+    profile: context?.shell?.profile ?? (await getProfile(locale)),
   }),
-  '/portfolio': async ({ locale, search }) => {
+  '/portfolio': async ({ locale, search }, context?: RouteLoadContext) => {
     const [page, profile, cases, projects, experiments] = await Promise.all([
       getPortfolioPageCopy(locale),
-      getProfile(locale),
+      context?.shell?.profile ?? getProfile(locale),
       getCollectionPage<CaseStudy>('cases', locale, collectionQuery(search, 'portfolio_page', 3)),
       getCollectionPage<Project>('projects', locale, collectionQuery(search, 'portfolio_page', 3)),
       getCollectionPage<Experiment>(
@@ -69,10 +69,10 @@ export const primaryRouteLoaders: Record<string, RouteLoader> = {
     };
   },
   '/now': async ({ locale }) => ({ kind: 'now', page: await getNowPageCopy(locale) }),
-  '/contact': async ({ locale }) => ({
+  '/contact': async ({ locale }, context?: RouteLoadContext) => ({
     kind: 'contact',
     page: await getContactPageCopy(locale),
-    site: await getSiteText(locale),
+    site: context?.shell?.site ?? (await getSiteText(locale)),
   }),
   '/credits': async ({ locale, search }) => ({
     kind: 'credits',
@@ -83,19 +83,19 @@ export const primaryRouteLoaders: Record<string, RouteLoader> = {
     page: await getAchadosPageCopy(locale),
     request: { locale, search },
   }),
-  '/license': async ({ locale }) => ({
+  '/license': async ({ locale }, context?: RouteLoadContext) => ({
     kind: 'license',
     page: await getLicensePageCopy(locale),
-    site: await getSiteText(locale),
+    site: context?.shell?.site ?? (await getSiteText(locale)),
   }),
-  '/follow': async ({ locale }) => ({
+  '/follow': async ({ locale }, context?: RouteLoadContext) => ({
     kind: 'follow',
     page: await getFollowPageCopy(locale),
-    site: await getSiteText(locale),
+    site: context?.shell?.site ?? (await getSiteText(locale)),
   }),
-  '/resume': async ({ locale }) => ({
+  '/resume': async ({ locale }, context?: RouteLoadContext) => ({
     kind: 'resume',
-    content: await getResumePageContent(locale),
+    content: await getResumePageContent(locale, context?.shell),
     pdfUrls: resumePdfUrls(),
   }),
   '/tools': async ({ locale }) => statusData(locale, 'notFound'),

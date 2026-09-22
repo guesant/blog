@@ -4,6 +4,10 @@ FROM dunglas/frankenphp:1.12.7-php8.3-bookworm@sha256:08ab9f028c9e6123cbeaa2c01d
 
 COPY --from=composer /usr/bin/composer /usr/bin/composer
 
+RUN cp /usr/local/bin/frankenphp /tmp/frankenphp \
+    && rm /usr/local/bin/frankenphp \
+    && mv /tmp/frankenphp /usr/local/bin/frankenphp
+
 RUN apt-get update \
     && apt-get install -y --no-install-recommends libicu-dev libfreetype6-dev libjpeg62-turbo-dev libpng-dev libpq-dev libzip-dev fonts-liberation \
     && install-php-extensions intl gd pdo_pgsql zip \

@@ -4,6 +4,10 @@ FROM dunglas/frankenphp:1.12.7-php8.3-bookworm@sha256:08ab9f028c9e6123cbeaa2c01d
 
 COPY --from=composer /usr/bin/composer /usr/bin/composer
 
+RUN cp /usr/local/bin/frankenphp /tmp/frankenphp \
+    && rm /usr/local/bin/frankenphp \
+    && mv /tmp/frankenphp /usr/local/bin/frankenphp
+
 # Filament requires ext-intl, which the base image doesn't ship with.
 # GD (+ freetype) renders the dynamic OG image; fonts-liberation ships
 # Liberation Sans, metrically compatible with Arial — the same fallback the

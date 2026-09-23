@@ -1,48 +1,23 @@
-import type { DefaultError, FetchQueryOptions, QueryClient, QueryKey } from '@tanstack/react-query';
-import { prefetchClientQuery } from './prefetch-client-query';
-
-type GetSsrQueryDataOptions<TQueryFnData, TError, TData, TQueryKey extends QueryKey> = {
-  queryClient: QueryClient;
-  options: FetchQueryOptions<TQueryFnData, TError, TData, TQueryKey>;
-  fallback: TData;
-  timeoutMs?: number;
-};
+import type { QueryKey } from '@tanstack/react-query';
+import { getCachedSsrQueryData } from './get-cached-ssr-query-data';
+import { getClientSsrFallback } from './get-client-ssr-fallback';
+import { getServerSsrQueryData } from './get-server-ssr-query-data';
+import type { DefaultSsrQueryDataOptions } from './get-ssr-query-data-options';
 
 export async function getSsrQueryData<
   TQueryFnData,
-  TError = DefaultError,
   TData = TQueryFnData,
   TQueryKey extends QueryKey = QueryKey,
->(props: GetSsrQueryDataOptions<TQueryFnData, TError, TData, TQueryKey>): Promise<TData> {
-  const cachedData = props.queryClient.getQueryData<TData>(props.options.queryKey);
+>(props: DefaultSsrQueryDataOptions<TQueryFnData, TData, TQueryKey>): Promise<TData> {
+  const cachedData = getCachedSsrQueryData(props);
 
   if (cachedData !== undefined) {
-    prefetchClientQuery({
-      request: () => props.queryClient.prefetchQuery(props.options),
-    });
-
     return cachedData;
   }
 
   if (typeof window !== 'undefined') {
-    prefetchClientQuery({
-      request: () => props.queryClient.prefetchQuery(props.options),
-    });
-
-    return props.fallback;
+    return getClientSsrFallback(props);
   }
 
-  const request = props.queryClient.fetchQuery(props.options).catch(() => undefined);
-
-  if (props.timeoutMs === undefined) {
-    return (await request) ?? props.fallback;
-  }
-
-  const timeout = new Promise<undefined>((resolve) => {
-    setTimeout(resolve, props.timeoutMs);
-  });
-
-  const data = await Promise.race([request, timeout]);
-
-  return data ?? props.fallback;
+  return getServerSsrQueryData(props);
 }

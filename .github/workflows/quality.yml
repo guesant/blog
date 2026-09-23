@@ -2,11 +2,7 @@ name: quality
 
 on:
   push:
-    paths-ignore:
-      - .deploy/**
   pull_request:
-    paths-ignore:
-      - .deploy/**
 
 permissions:
   contents: read

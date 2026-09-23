@@ -8,6 +8,7 @@ tools_compose := "docker compose" + env_file + " -f .tools/docker/compose.yaml"
 tools_run := tools_compose + " run --rm tools sh -lc"
 compose_run := compose + " run --build --rm"
 node_run := compose_run + " --no-deps start sh -lc"
+production_kubectl := "kubectl -n blog"
 prettier_flags := "--config ../../.config/prettierrc.json --ignore-path ../../.config/prettierignore"
 prettier_globs := '"**/*.{css,js,jsx,ts,tsx,json,md}"'
 actionlint_image := `grep -oE "rhysd/actionlint:[0-9.]+" .github/workflows/lint-actions.yml | head -1`
@@ -127,8 +128,8 @@ local-links: tools-build
     {{tools_compose}} run --rm lychee --offline --include-fragments --root-dir /workspace /workspace/README.md /workspace/AGENTS.md /workspace/SECURITY.md /workspace/.github/actions/push-profile/README.md /workspace/src/public-app/README.md /workspace/src/laravel/README.md /workspace/src/laravel/SECURITY.md
 
 repository-lint: tools-build
-    {{tools_compose}} run --rm yamllint -c /workspace/.yamllint.yml /workspace/.github /workspace/.docker /workspace/.tools /workspace/.deploy
-    {{tools_compose}} run --rm hadolint --config /workspace/.hadolint.yaml .docker/*.Dockerfile .tools/docker/*.Dockerfile src/laravel/docker/*.Dockerfile
+    {{tools_compose}} run --rm yamllint -c /workspace/.config/yamllint.yml /workspace/.github /workspace/.docker /workspace/.tools
+    {{tools_compose}} run --rm hadolint --config /workspace/.config/hadolint.yaml .docker/*.Dockerfile .tools/docker/*.Dockerfile src/laravel/docker/*.Dockerfile
     {{tools_compose}} run --rm shellcheck .tools/scripts/*.sh src/laravel/scripts/*.sh src/laravel/docker/*.sh
 
 security: tools-build
@@ -136,7 +137,6 @@ security: tools-build
     {{tools_compose}} run --rm gitleaks dir --redact --no-banner /workspace/.github
     {{tools_compose}} run --rm gitleaks dir --redact --no-banner /workspace/.tools
     {{tools_compose}} run --rm gitleaks dir --redact --no-banner /workspace/.docker
-    {{tools_compose}} run --rm gitleaks dir --redact --no-banner /workspace/.deploy
     {{tools_compose}} run --rm gitleaks dir --redact --no-banner /workspace/src/public-app/src
     {{tools_compose}} run --rm gitleaks dir --redact --no-banner /workspace/src/laravel/app
     {{tools_compose}} run --rm gitleaks dir --redact --no-banner /workspace/src/laravel/config
@@ -190,3 +190,50 @@ start-logs:
 lint-actions:
     {{tools_compose}} run --rm actionlint -color .github/workflows/*.yml
     {{tools_compose}} run --rm zizmor --no-progress /workspace/.github/workflows
+
+production-db-backup:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    : "${PORTFOLIO_PRODUCTION_BACKUP_DIR:?set PORTFOLIO_PRODUCTION_BACKUP_DIR outside the repository}"
+    mkdir -p "$PORTFOLIO_PRODUCTION_BACKUP_DIR"
+    primary_pod=$({{production_kubectl}} get pods -l cnpg.io/cluster=postgres -o jsonpath='{range .items[*]}{.metadata.name}{" "}{.metadata.labels.cnpg\\.io/instanceRole}{"\\n"}{end}' | awk '$2 == "primary" { print $1; exit }')
+    test -n "$primary_pod"
+    db_user=$({{production_kubectl}} get secret postgres-app -o jsonpath='{.data.user}' | base64 -d)
+    db_password=$({{production_kubectl}} get secret postgres-app -o jsonpath='{.data.password}' | base64 -d)
+    db_name=$({{production_kubectl}} get secret postgres-app -o jsonpath='{.data.dbname}' | base64 -d)
+    dump_file="$PORTFOLIO_PRODUCTION_BACKUP_DIR/postgres-$(date -u +%Y%m%dT%H%M%SZ).dump"
+    {{production_kubectl}} exec "$primary_pod" -- env PGPASSWORD="$db_password" pg_dump --host=127.0.0.1 --format=custom --no-owner --no-acl --username="$db_user" --dbname="$db_name" > "$dump_file"
+    test -s "$dump_file"
+    echo "wrote $dump_file"
+
+production-db-update:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    just production-db-backup
+    {{production_kubectl}} port-forward svc/postgres-rw 5432:5432 &
+    forward_pid=$!
+    trap 'kill $forward_pid' EXIT
+    sleep 2
+    db_user=$({{production_kubectl}} get secret postgres-app -o jsonpath='{.data.user}' | base64 -d)
+    db_password=$({{production_kubectl}} get secret postgres-app -o jsonpath='{.data.password}' | base64 -d)
+    db_name=$({{production_kubectl}} get secret postgres-app -o jsonpath='{.data.dbname}' | base64 -d)
+    {{compose}} run --rm --no-deps \
+        --add-host=host.docker.internal:host-gateway \
+        -e DB_CONNECTION=pgsql \
+        -e DB_HOST=host.docker.internal \
+        -e DB_PORT=5432 \
+        -e DB_DATABASE="$db_name" \
+        -e DB_USERNAME="$db_user" \
+        -e DB_PASSWORD="$db_password" \
+        laravel php artisan migrate --force
+
+production-status:
+    {{production_kubectl}} get pods
+    kubectl -n argocd get application blog cloudflared network-policies postgres
+
+production-webhook-register url:
+    gh api repos/guesant/blog/hooks -f name=web -f active=true \
+        -f config[url]="{{url}}/api/webhook" \
+        -f config[content_type]=json \
+        -f config[secret]="$ARGOCD_GITHUB_WEBHOOK_SECRET" \
+        -f events[]=push

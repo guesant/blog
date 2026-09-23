@@ -6,7 +6,7 @@ Este arquivo é a fonte da verdade das convenções. `CLAUDE.md` e `GEMINI.md` s
 
 - Conventional Commits: `<type>(<scope>): <título>`.
 - Types permitidos: feat, fix, docs, style, refactor, perf, test, build, ci, chore.
-- Só o título, sem body e sem footer. Sem co-autoria (`Co-Authored-By`) e sem qualquer trailer. O contexto detalhado vai em `docs/pendencias-e-decisoes.md`.
+- Só o título, sem body e sem footer. Sem co-autoria (`Co-Authored-By`) e sem qualquer trailer. O contexto detalhado permanece na conversa ou na issue correspondente.
 - Título em inglês, no imperativo, máximo 72 caracteres, sem ponto final.
 - Tudo minúsculo, exceto nomes próprios, tokens e identificadores (ex.: `fix(admin): raise sortable handle hit area`).
 - Commits atômicos: um assunto por commit; formatação em massa separada de mudanças de comportamento.
@@ -17,7 +17,7 @@ Este arquivo é a fonte da verdade das convenções. `CLAUDE.md` e `GEMINI.md` s
 - Zero comentários narrativos em YAML, TypeScript/JavaScript, CSS, PHP e shell. Um comentário só é aceitável em duas situações: é uma diretiva exigida por uma ferramenta, ou carrega informação rara e crítica que não é inferível do código e cuja ausência causaria um erro real no futuro, como um invariante de segurança ou um motivo não óbvio para uma decisão que parece removível.
 - Para a segunda categoria o marcador é `IMPORTANT:`, sem exceção por julgamento caso a caso.
 - Diretivas de ferramenta permitidas: `biome-ignore`, `nosemgrep`, `@ts-expect-error`, `@ts-ignore`, `@ts-nocheck`, `istanbul`, `jscpd:ignore-start`/`jscpd:ignore-end`, `zizmor: ignore[...]`, `shellcheck`, `yamllint`.
-- Decisão, justificativa e contexto vão para `docs/pendencias-e-decisoes.md`, nunca inline.
+- Decisão, justificativa e contexto vão para a conversa ou para a issue correspondente, nunca inline.
 - Toda medida em CSS passa por variáveis de tokens (nada de `px`/`rem` literais fora deles); conteúdo público é lido exclusivamente pela API Laravel; tudo sob `/admin` é privado por construção (middleware de autenticação e autorização do Filament).
 
 ## Formatação
@@ -32,7 +32,7 @@ Este arquivo é a fonte da verdade das convenções. `CLAUDE.md` e `GEMINI.md` s
 
 ## Documentação
 
-- Um único documento de contexto: `docs/pendencias-e-decisoes.md` (pendências abertas, decisões tomadas e por quê).
+- O contexto de pendências e decisões permanece na conversa ou na issue correspondente.
 - Sem travessão, meia-risca ou setas Unicode em docs; usar vírgula, frase separada, `>` ou `->`.
 
 ## Escrita de prosa

@@ -255,9 +255,15 @@ class PublicSiteApiController extends Controller
 
         if ($data === null) {
             $cacheState = 'miss';
-            $data = PublicSiteChromeResponseDto::fromResult(
-                $handler->handle(new GetPublicSiteChrome($locale)),
-            )->toArray();
+            $data = $cache->remember(
+                $locale,
+                function () use ($handler, $locale): array {
+                    return PublicSiteChromeResponseDto::fromResult(
+                        $handler->handle(new GetPublicSiteChrome($locale)),
+                    )->toArray();
+                },
+                static fn (array $value): bool => ($value['site']['maintenance_enabled'] ?? false) !== true,
+            );
         }
 
         if (($data['site']['maintenance_enabled'] ?? false) === true) {

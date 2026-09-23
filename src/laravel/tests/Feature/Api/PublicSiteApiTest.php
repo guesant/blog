@@ -26,7 +26,7 @@ class PublicSiteApiTest extends TestCase
         $this->getJson('/api/v1/site/interface?locale=en')->assertNotFound();
     }
 
-    public function test_site_chrome_builds_from_database_without_writing_cache(): void
+    public function test_site_chrome_builds_from_database_and_writes_cache(): void
     {
         Cache::flush();
 
@@ -43,7 +43,11 @@ class PublicSiteApiTest extends TestCase
                 'visibility',
             ]);
         $response->assertHeader('X-Public-Site-Cache', 'miss');
-        $this->assertFalse(Cache::has(app(PublicSiteChromeCache::class)->key('en')));
+        $this->assertTrue(Cache::has(app(PublicSiteChromeCache::class)->key('en')));
+
+        $this->getJson('/api/v1/site/chrome?locale=en')
+            ->assertOk()
+            ->assertHeader('X-Public-Site-Cache', 'hit');
     }
 
     public function test_site_chrome_uses_cache_without_building_the_query(): void

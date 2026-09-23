@@ -35,8 +35,7 @@ export const loadRoute = createServerFn({ method: 'GET' })
     return serializable(
       await getServerStaleWhileRevalidate({
         key: `route:${JSON.stringify(data)}`,
-        loader: async () =>
-          loadRouteDataForRequest(data, { shell }),
+        loader: async () => loadRouteDataForRequest(data, { shell }),
         fallback: fallbackRouteData,
       }),
     );

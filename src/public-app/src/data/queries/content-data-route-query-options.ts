@@ -11,5 +11,6 @@ export const routeQueryOptions = (request: RouteRequest) =>
       request.type,
       request.search,
     ],
+    enabled: typeof window !== 'undefined',
     queryFn: async () => (await loadRoute({ data: request })) as RouteData,
   });

@@ -1,6 +1,6 @@
 import type { DefaultError, FetchQueryOptions, QueryClient, QueryKey } from '@tanstack/react-query';
 
-export type GetSsrQueryDataOptions<TQueryFnData, TError, TData, TQueryKey extends QueryKey> = {
+type GetSsrQueryDataOptions<TQueryFnData, TError, TData, TQueryKey extends QueryKey> = {
   queryClient: QueryClient;
   options: FetchQueryOptions<TQueryFnData, TError, TData, TQueryKey>;
   fallback: TData;

@@ -1,6 +1,5 @@
 import { AnimatePresence } from 'motion/react';
-import { MotionDiv } from '../ui';
-import { ConditionalContent } from './conditional-content';
+import { PageTransitionFrame } from './page-transition-frame';
 import type { ReactNode } from 'react';
 
 type PageTransitionAnimatedProps = {
@@ -14,18 +13,13 @@ type PageTransitionAnimatedProps = {
 export function PageTransitionAnimated(props: PageTransitionAnimatedProps) {
   return (
     <AnimatePresence mode="wait" initial={false} onExitComplete={props.handleExitComplete}>
-      <ConditionalContent condition={!props.waitingForExit}>
-        <MotionDiv
+      {!props.waitingForExit && (
+        <PageTransitionFrame
           key={props.pathname}
-          initial={props.reduceMotion ? false : { opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={props.reduceMotion ? undefined : { opacity: 0, y: -8 }}
-          transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
-          visualVariant="pageTransition"
-        >
-          {props.children}
-        </MotionDiv>
-      </ConditionalContent>
+          reduceMotion={props.reduceMotion}
+          children={props.children}
+        />
+      )}
     </AnimatePresence>
   );
 }

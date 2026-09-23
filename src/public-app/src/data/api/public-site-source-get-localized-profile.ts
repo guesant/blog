@@ -19,7 +19,9 @@ export async function getLocalizedProfile(locale?: string, chrome?: RecordValue)
     description: textValue(profile.description),
     interests: textValue(profile.interests),
     learning: textValue(profile.learning),
-    personalInterests: listValue<string>(profile.personal_interests),
+    personalInterests: listValue<RecordValue>(profile.personal_interests).map((item) =>
+      textValue(item.value),
+    ),
     trajectory: listValue<Profile['trajectory'][number]>(profile.trajectory),
     milestones: listValue<Profile['milestones'][number]>(profile.milestones),
   };

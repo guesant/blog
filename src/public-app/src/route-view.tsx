@@ -1,5 +1,6 @@
 import { Suspense } from 'react';
 import { PageLayout } from './components/layouts/page-layout';
+import { LoadingPage } from './components/sections/loading';
 import type { RouteData } from './data/queries';
 import { routeRenderers } from './components/content/route-renderers';
 
@@ -11,7 +12,7 @@ export function RouteView(props: RouteViewProps) {
   return (
     <PageLayout
       children={
-        <Suspense fallback={null}>
+        <Suspense fallback={<LoadingPage />}>
           <Renderer data={props.data} />
         </Suspense>
       }

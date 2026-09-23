@@ -8,4 +8,6 @@ export { fallbackShellData } from './content-data-fallback-shell';
 
 export { errorRouteData, fallbackRouteData } from './content-data-fallback-route';
 
-export { getStaleQueryData } from './get-stale-query-data';
+export { getSsrQueryData } from './get-ssr-query-data';
+
+export { SSR_CONTENT_BUDGET_MS } from './content-data-ssr-budgets';

@@ -4,21 +4,23 @@ import type { RouteData } from '../../data/queries';
 import {
   errorRouteData,
   fallbackRouteData,
-  getStaleQueryData,
+  getSsrQueryData,
   routeQueryOptions,
+  SSR_CONTENT_BUDGET_MS,
 } from '../../data/queries';
 import { RouteView } from '../../route-view';
 import { routeContext } from '../_site';
 import { metadataForRoute } from './splat-metadata-for-route';
 
 export const Route = createFileRoute('/_site/')({
-  loader: ({ context, location }) => {
+  loader: async ({ context, location }) => {
     const { locale } = routeContext(location.pathname);
 
-    return getStaleQueryData({
+    return getSsrQueryData({
       queryClient: context.queryClient,
       options: routeQueryOptions({ locale, pathname: '/', search: location.searchStr }),
       fallback: fallbackRouteData,
+      timeoutMs: SSR_CONTENT_BUDGET_MS,
     });
   },
   head: ({ loaderData }) => {

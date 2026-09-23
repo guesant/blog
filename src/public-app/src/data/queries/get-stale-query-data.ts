@@ -1,4 +1,5 @@
 import type { DefaultError, FetchQueryOptions, QueryClient, QueryKey } from '@tanstack/react-query';
+import { prefetchClientQuery } from './prefetch-client-query';
 
 type GetStaleQueryDataOptions<TQueryFnData, TError, TData, TQueryKey extends QueryKey> = {
   queryClient: QueryClient;
@@ -14,11 +15,9 @@ export function getStaleQueryData<
 >(props: GetStaleQueryDataOptions<TQueryFnData, TError, TData, TQueryKey>): TData {
   const cachedData = props.queryClient.getQueryData<TData>(props.options.queryKey);
 
-  if (typeof window === 'undefined') {
-    return cachedData ?? props.fallback;
-  }
-
-  void props.queryClient.prefetchQuery(props.options);
+  prefetchClientQuery({
+    request: () => props.queryClient.prefetchQuery(props.options),
+  });
 
   return cachedData ?? props.fallback;
 }

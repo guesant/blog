@@ -24,6 +24,7 @@ export async function getHomeFeedPage(
 
   const result = await listPublicContent({
     client: apiClient(),
+    throwOnError: true,
     path: { collection: 'feed' },
     query: {
       locale,
@@ -36,6 +37,10 @@ export async function getHomeFeedPage(
       kind: feedQuery.kind,
     },
   });
+
+  if (!result.data) {
+    throw new Error('Public site API returned an empty feed response');
+  }
 
   const payload = objectValue(result.data);
 

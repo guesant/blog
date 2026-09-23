@@ -5,6 +5,7 @@ import {
   contentQueryGcTimeMs,
   contentQueryStaleTimeMs,
 } from './data/queries/content-query-cache-policy';
+import { contentQueryRetryCount } from './data/queries/content-query-retry-policy';
 import { routeTree } from './routeTree.gen';
 
 export function getRouter() {
@@ -15,7 +16,7 @@ export function getRouter() {
           JSON.stringify(queryKey, (key, value) => (key === 'baseUrl' ? undefined : value)),
         staleTime: contentQueryStaleTimeMs,
         gcTime: contentQueryGcTimeMs,
-        retry: false,
+        retry: contentQueryRetryCount,
       },
     },
   });
@@ -23,7 +24,7 @@ export function getRouter() {
   const router = createRouter({
     routeTree,
     context: { queryClient },
-    defaultPreload: 'intent',
+    defaultPreload: 'viewport',
     defaultPreloadStaleTime: contentQueryStaleTimeMs,
   });
 

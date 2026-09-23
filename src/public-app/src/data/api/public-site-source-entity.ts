@@ -2,40 +2,26 @@ import { reference } from './public-site-source-reference';
 import { recordList } from './public-site-source-list';
 import { snippet } from './public-site-source-snippet';
 import { stringValue } from './public-site-source-string-value';
+import { technologyFields } from './public-site-source-technology-fields';
 import type { ContentCollection, RecordValue } from './public-site-source-support';
 
 const entityBuilders: Record<ContentCollection, (item: RecordValue) => RecordValue> = {
   cases: (item) => ({
     ...item,
     number: '',
-    technologies: recordList<RecordValue>(item.technologies).map((technology) =>
-      stringValue(technology.name),
-    ),
-    technologySlugs: recordList<RecordValue>(item.technologies).map((technology) =>
-      stringValue(technology.slug),
-    ),
+    ...technologyFields(item),
     metrics: recordList<RecordValue>(item.metrics),
     visual: 'queue',
   }),
   projects: (item) => ({
     ...item,
     currentFocus: item.current_focus,
-    technologies: recordList<RecordValue>(item.technologies).map((technology) =>
-      stringValue(technology.name),
-    ),
-    technologySlugs: recordList<RecordValue>(item.technologies).map((technology) =>
-      stringValue(technology.slug),
-    ),
+    ...technologyFields(item),
     metrics: recordList<RecordValue>(item.metrics),
   }),
   experiments: (item) => ({
     ...item,
-    technologies: recordList<RecordValue>(item.technologies).map((technology) =>
-      stringValue(technology.name),
-    ),
-    technologySlugs: recordList<RecordValue>(item.technologies).map((technology) =>
-      stringValue(technology.slug),
-    ),
+    ...technologyFields(item),
   }),
   technologies: (item) => ({
     ...item,

@@ -1,20 +1,15 @@
 import { ProjectsPageContent } from '../../sections/projects';
-import type { RouteRendererProps } from './route-renderers.types';
+import { createRouteRenderer } from './create-route-renderer';
 
-type ProjectsRouteRendererProps = RouteRendererProps;
-
-export function ProjectsRouteRenderer(props: ProjectsRouteRendererProps) {
-  if (props.data.kind !== 'projects') {
-    return null;
-  }
-
-  return (
+export const ProjectsRouteRenderer = createRouteRenderer({
+  kind: 'projects',
+  render: (data) => (
     <ProjectsPageContent
-      page={props.data.page}
-      projects={props.data.projects}
-      experiments={props.data.experiments}
-      projectsPagination={props.data.projectsPagination}
-      experimentsPagination={props.data.experimentsPagination}
+      page={data.page}
+      projects={data.projects}
+      experiments={data.experiments}
+      projectsPagination={data.projectsPagination}
+      experimentsPagination={data.experimentsPagination}
     />
-  );
-}
+  ),
+});

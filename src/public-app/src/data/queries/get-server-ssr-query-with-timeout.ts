@@ -1,16 +1,20 @@
 import type { QueryKey } from '@tanstack/react-query';
+import { createSsrQueryRequest } from './create-ssr-query-request';
+import { createSsrQueryTimeout } from './create-ssr-query-timeout';
 import type { DefaultSsrQueryDataOptions } from './get-ssr-query-data-options';
+import { resolveSsrQueryResult } from './resolve-ssr-query-result';
 
 export async function getServerSsrQueryWithTimeout<TQueryFnData, TData, TQueryKey extends QueryKey>(
   props: DefaultSsrQueryDataOptions<TQueryFnData, TData, TQueryKey>,
 ): Promise<TData> {
-  const request = props.queryClient.fetchQuery(props.options).catch(() => undefined);
+  const result = await Promise.race([
+    createSsrQueryRequest(props),
+    createSsrQueryTimeout<TData>(props.timeoutMs),
+  ]);
 
-  const timeout = new Promise<undefined>((resolve) => {
-    setTimeout(resolve, props.timeoutMs);
+  return resolveSsrQueryResult({
+    result,
+    fallback: props.fallback,
+    errorFallback: props.errorFallback,
   });
-
-  const data = await Promise.race([request, timeout]);
-
-  return data ?? props.fallback;
 }

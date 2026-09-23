@@ -1,10 +1,9 @@
-import { Outlet, useLoaderData, useLocation } from '@tanstack/react-router';
+import { useLoaderData, useLocation } from '@tanstack/react-router';
 import { useQuery } from '@tanstack/react-query';
 import { getMessages, I18nProvider } from '../i18n/compat';
-import { MaintenancePage } from '../components/layouts/maintenance-page';
-import { SiteShell } from '../components/layouts/site-shell';
+import { LocaleLayoutState } from './-locale-layout-state';
 import { ThemeRegistry } from '../components/ui/theme-registry';
-import { fallbackShellData, shellQueryOptions } from '../data/queries';
+import { shellQueryOptions } from '../data/queries';
 import { routeContext } from './site-route-context';
 
 export function LocaleLayout() {
@@ -14,22 +13,19 @@ export function LocaleLayout() {
 
   const loaderShell = useLoaderData({ from: '/_site' });
 
-  const shell = useQuery(shellQueryOptions(locale)).data ?? loaderShell ?? fallbackShellData;
+  const shellQuery = useQuery(shellQueryOptions(locale));
 
-  const content = shell.site.maintenanceEnabled ? (
-    <MaintenancePage site={shell.site} profile={shell.profile} />
-  ) : (
-    <SiteShell
-      profile={shell.profile}
-      site={shell.site}
-      availability={shell.availability}
-      children={<Outlet />}
-    />
-  );
+  const shell = shellQuery.data ?? loaderShell;
 
   return (
     <I18nProvider locale={locale} messages={getMessages(locale)}>
-      <ThemeRegistry initialMode={themeMode}>{content}</ThemeRegistry>
+      <ThemeRegistry initialMode={themeMode}>
+        <LocaleLayoutState
+          shell={shell}
+          isError={shellQuery.isError}
+          retry={() => void shellQuery.refetch()}
+        />
+      </ThemeRegistry>
     </I18nProvider>
   );
 }

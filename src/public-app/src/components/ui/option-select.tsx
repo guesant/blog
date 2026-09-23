@@ -27,7 +27,7 @@ export function OptionSelect(props: OptionSelectProps) {
       renderValue={renderOptionSelectValue.bind(null, options)}
       sx={createOptionSelectSx(selectProps.sx, Boolean(selectProps.endAdornment))}
     >
-      <OptionSelectItems options={options} />
+      {OptionSelectItems({ options })}
     </MuiSelect>
   );
 }

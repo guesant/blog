@@ -9,6 +9,6 @@ export async function getServerSsrQueryWithoutTimeout<
   try {
     return await props.queryClient.fetchQuery(props.options);
   } catch {
-    return props.fallback;
+    return props.errorFallback ?? props.fallback;
   }
 }

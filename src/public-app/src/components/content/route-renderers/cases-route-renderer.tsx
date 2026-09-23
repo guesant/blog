@@ -1,18 +1,9 @@
 import { CasesPageContent } from '../../sections/cases';
-import type { RouteRendererProps } from './route-renderers.types';
+import { createRouteRenderer } from './create-route-renderer';
 
-type CasesRouteRendererProps = RouteRendererProps;
-
-export function CasesRouteRenderer(props: CasesRouteRendererProps) {
-  if (props.data.kind !== 'cases') {
-    return null;
-  }
-
-  return (
-    <CasesPageContent
-      page={props.data.page}
-      items={props.data.items}
-      pagination={props.data.pagination}
-    />
-  );
-}
+export const CasesRouteRenderer = createRouteRenderer({
+  kind: 'cases',
+  render: (data) => (
+    <CasesPageContent page={data.page} items={data.items} pagination={data.pagination} />
+  ),
+});

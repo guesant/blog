@@ -1,12 +1,7 @@
 import { CreditsPageContent } from '../../sections/credits';
-import type { RouteRendererProps } from './route-renderers.types';
+import { createRouteRenderer } from './create-route-renderer';
 
-type CreditsRouteRendererProps = RouteRendererProps;
-
-export function CreditsRouteRenderer(props: CreditsRouteRendererProps) {
-  if (props.data.kind !== 'credits') {
-    return null;
-  }
-
-  return <CreditsPageContent content={props.data.content} />;
-}
+export const CreditsRouteRenderer = createRouteRenderer({
+  kind: 'credits',
+  render: (data) => <CreditsPageContent content={data.content} />,
+});

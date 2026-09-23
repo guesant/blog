@@ -1,12 +1,7 @@
 import { ContactPageContent } from '../../sections/contact';
-import type { RouteRendererProps } from './route-renderers.types';
+import { createRouteRenderer } from './create-route-renderer';
 
-type ContactRouteRendererProps = RouteRendererProps;
-
-export function ContactRouteRenderer(props: ContactRouteRendererProps) {
-  if (props.data.kind !== 'contact') {
-    return null;
-  }
-
-  return <ContactPageContent page={props.data.page} site={props.data.site} />;
-}
+export const ContactRouteRenderer = createRouteRenderer({
+  kind: 'contact',
+  render: (data) => <ContactPageContent page={data.page} site={data.site} />,
+});

@@ -1,7 +1,6 @@
 import {
   getCasesPageCopy,
   getCollectionPage,
-  getCollectionsPageCopy,
   getProjectsPageCopy,
   getWritingPageCopy,
 } from '@portfolio/data/services';
@@ -9,13 +8,13 @@ import type {
   CaseStudy,
   Experiment,
   Project,
-  ReferenceCollection,
   Snippet,
   Technology,
   Topic,
   Writing,
 } from '@portfolio/data/domain/types';
 import { collectionQuery } from './content-data-collection-query';
+import { collectionsRouteLoader } from './content-data-primary-collections-route';
 import type { RouteLoader } from './content-data-route-loader';
 
 export const collectionRouteLoaders: Record<string, RouteLoader> = {
@@ -29,38 +28,8 @@ export const collectionRouteLoaders: Record<string, RouteLoader> = {
       pagination: result.meta,
     };
   },
-  '/collections': async ({ locale, search }) => {
-    const result = await getCollectionPage<ReferenceCollection>(
-      'collections',
-      locale,
-      collectionQuery(search),
-    );
-
-    return {
-      kind: 'collections',
-      page: await getCollectionsPageCopy(locale),
-      writings: [],
-      findings: [],
-      collections: result.items,
-      pagination: result.meta,
-    };
-  },
-  '/colecoes': async ({ locale, search }) => {
-    const result = await getCollectionPage<ReferenceCollection>(
-      'collections',
-      locale,
-      collectionQuery(search),
-    );
-
-    return {
-      kind: 'collections',
-      page: await getCollectionsPageCopy(locale),
-      writings: [],
-      findings: [],
-      collections: result.items,
-      pagination: result.meta,
-    };
-  },
+  '/collections': collectionsRouteLoader,
+  '/colecoes': collectionsRouteLoader,
   '/projects': async ({ locale, search }) => {
     const [projects, experiments] = await Promise.all([
       getCollectionPage<Project>('projects', locale, collectionQuery(search, 'projects_page')),

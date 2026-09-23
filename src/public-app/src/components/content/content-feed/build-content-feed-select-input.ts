@@ -1,7 +1,7 @@
-import { useContentFeedSelectDefinitions } from './use-content-feed-select-definitions';
+import { buildContentFeedSelectDefinitions } from './build-content-feed-select-definitions';
 import type { UseContentFeedViewPropsInput } from './use-content-feed-view-props.types';
 
-type ContentFeedSelectInput = Parameters<typeof useContentFeedSelectDefinitions>[0];
+type ContentFeedSelectInput = Parameters<typeof buildContentFeedSelectDefinitions>[0];
 
 export function buildContentFeedSelectInput(
   input: UseContentFeedViewPropsInput,

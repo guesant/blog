@@ -1,8 +1,0 @@
-{
-  "threshold": 1,
-  "minLines": 10,
-  "minTokens": 80,
-  "format": ["javascript"],
-  "ignore": ["**/node_modules/**", "**/dist/**"],
-  "reporters": ["console"]
-}

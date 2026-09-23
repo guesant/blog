@@ -1,11 +1,44 @@
 import type { SxProps, Theme } from '@mui/material/styles';
 
+const contentCard = {
+  display: 'flex',
+  flexDirection: 'column',
+  gap: 'var(--site-space-2)',
+};
+
+const highlightedProjectCard = {
+  minHeight: '17rem',
+  p: 3,
+  display: 'flex',
+  flexDirection: 'column',
+  transition: 'border-color .2s, background-color .2s, transform .2s',
+  '&:hover .project-card-title': { color: 'secondary.main' },
+  '&:hover': {
+    borderColor: 'rgba(29,95,167,.55)',
+    transform: 'translateY(-2px)',
+  },
+};
+
+const linkedCaseCard = {
+  display: 'flex',
+  flexDirection: 'column',
+  p: 3,
+  color: 'text.primary',
+  textDecoration: 'none',
+  bgcolor: 'rgba(255,255,255,.56)',
+  transition: 'border-color .2s, background-color .2s, transform .2s',
+  '&:hover': {
+    borderColor: 'rgba(29,95,167,.55)',
+    bgcolor: 'background.paper',
+    transform: 'translateY(-2px)',
+  },
+  '&:hover .case-link-title': { color: 'secondary.main' },
+};
+
 export const cardVariants: Record<string, SxProps<Theme>> = {
   caseCard: {
+    ...contentCard,
     p: 'var(--site-inset-card)',
-    display: 'flex',
-    flexDirection: 'column',
-    gap: 'var(--site-space-2)',
     borderLeft: 'var(--site-feed-accent-w) solid var(--site-primary)',
     bgcolor: 'var(--site-surface)',
     transition:
@@ -27,9 +60,7 @@ export const cardVariants: Record<string, SxProps<Theme>> = {
     borderLeft: 'var(--site-feed-accent-w) solid var(--site-primary)',
   },
   catalogEntry: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: 'var(--site-space-2)',
+    ...contentCard,
     p: 'var(--site-inset-card)',
     borderLeft: 'var(--site-feed-accent-w) solid var(--site-primary)',
     color: 'inherit',
@@ -43,10 +74,8 @@ export const cardVariants: Record<string, SxProps<Theme>> = {
     bgcolor: 'background.paper',
   },
   referenceCard: {
+    ...contentCard,
     p: 'var(--site-inset-card)',
-    display: 'flex',
-    flexDirection: 'column',
-    gap: 'var(--site-space-2)',
     bgcolor: 'var(--site-surface)',
     borderLeft: 'var(--site-feed-accent-w) solid var(--site-primary)',
     borderColor: 'var(--site-border)',
@@ -81,14 +110,9 @@ export const cardVariants: Record<string, SxProps<Theme>> = {
     '&:hover .content-feed-title': { color: 'secondary.main' },
   },
   projectCardHighlighted: {
-    minHeight: '17rem',
-    p: 3,
-    display: 'flex',
-    flexDirection: 'column',
-    transition: 'border-color .2s, background-color .2s, transform .2s',
+    ...highlightedProjectCard,
     bgcolor: '#EAF2FA',
     borderColor: 'rgba(29,95,167,.28)',
-    '&:hover .project-card-title': { color: 'secondary.main' },
     '&:hover': {
       borderColor: 'rgba(29,95,167,.55)',
       bgcolor: '#E1EDF8',
@@ -96,14 +120,9 @@ export const cardVariants: Record<string, SxProps<Theme>> = {
     },
   },
   projectCardPlain: {
-    minHeight: '17rem',
-    p: 3,
-    display: 'flex',
-    flexDirection: 'column',
-    transition: 'border-color .2s, background-color .2s, transform .2s',
+    ...highlightedProjectCard,
     bgcolor: 'rgba(255,255,255,.72)',
     borderColor: 'divider',
-    '&:hover .project-card-title': { color: 'secondary.main' },
     '&:hover': {
       borderColor: 'rgba(29,95,167,.55)',
       bgcolor: 'background.paper',
@@ -111,35 +130,11 @@ export const cardVariants: Record<string, SxProps<Theme>> = {
     },
   },
   caseLinkCardCompact: {
-    display: 'flex',
-    flexDirection: 'column',
-    p: 3,
-    color: 'text.primary',
-    textDecoration: 'none',
-    bgcolor: 'rgba(255,255,255,.56)',
+    ...linkedCaseCard,
     minHeight: '14rem',
-    transition: 'border-color .2s, background-color .2s, transform .2s',
-    '&:hover': {
-      borderColor: 'rgba(29,95,167,.55)',
-      bgcolor: 'background.paper',
-      transform: 'translateY(-2px)',
-    },
-    '&:hover .case-link-title': { color: 'secondary.main' },
   },
   caseLinkCardFull: {
-    display: 'flex',
-    flexDirection: 'column',
-    p: 3,
-    color: 'text.primary',
-    textDecoration: 'none',
-    bgcolor: 'rgba(255,255,255,.56)',
+    ...linkedCaseCard,
     minHeight: 'auto',
-    transition: 'border-color .2s, background-color .2s, transform .2s',
-    '&:hover': {
-      borderColor: 'rgba(29,95,167,.55)',
-      bgcolor: 'background.paper',
-      transform: 'translateY(-2px)',
-    },
-    '&:hover .case-link-title': { color: 'secondary.main' },
   },
 };

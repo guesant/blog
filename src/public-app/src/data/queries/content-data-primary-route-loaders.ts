@@ -12,10 +12,12 @@ import {
   getSiteText,
   getCreditsPageContent,
   getFollowPageCopy,
+  getFindingList,
   getLicensePageCopy,
 } from '@portfolio/data/services';
 import type { CaseStudy, Experiment, Project } from '@portfolio/data/domain/types';
 import { collectionQuery } from './content-data-collection-query';
+import { findingFilters } from './content-data-finding-filters';
 import { collectionRouteLoaders } from './content-data-primary-collection-route-loaders';
 import { resumePdfUrls } from './content-data-resume-pdf-urls';
 import type { RouteLoadContext, RouteLoader } from './content-data-route-loader';
@@ -34,6 +36,7 @@ export const primaryRouteLoaders: Record<string, RouteLoader> = {
       content,
       feedItems: feed.items,
       feedPagination: feed.meta,
+      feedSearch: search ?? '',
     };
   },
   '/about': async ({ locale }, context?: RouteLoadContext) => ({
@@ -64,6 +67,7 @@ export const primaryRouteLoaders: Record<string, RouteLoader> = {
       projectsPagination: projects.meta,
       experiments: experiments.items,
       experimentsPagination: experiments.meta,
+      search: search ?? '',
     };
   },
   '/now': async ({ locale }) => ({ kind: 'now', page: await getNowPageCopy(locale) }),
@@ -76,11 +80,19 @@ export const primaryRouteLoaders: Record<string, RouteLoader> = {
     kind: 'credits',
     content: await getCreditsPageContent(locale, collectionQuery(search)),
   }),
-  '/findings': async ({ locale, search }) => ({
-    kind: 'findings',
-    page: await getAchadosPageCopy(locale),
-    request: { locale, search },
-  }),
+  '/findings': async ({ locale, search }) => {
+    const [page, initialData] = await Promise.all([
+      getAchadosPageCopy(locale),
+      getFindingList(findingFilters(search), locale),
+    ]);
+
+    return {
+      kind: 'findings',
+      page,
+      request: { locale, search },
+      initialData,
+    };
+  },
   '/license': async ({ locale }, context?: RouteLoadContext) => ({
     kind: 'license',
     page: await getLicensePageCopy(locale),

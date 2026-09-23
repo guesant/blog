@@ -15,5 +15,3 @@ export { listFindings } from './public-site-generated-list-findings';
 export { listFindingsOptions } from './public-site-generated-list-findings-options';
 
 export { listPublicContent } from './public-site-generated-list-public-content';
-
-export type { ListFindingsResponse } from './public-site-generated-list-findings';

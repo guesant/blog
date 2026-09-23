@@ -1,12 +1,7 @@
 import { ColecaoDetailContent } from '../../sections/collection-detail';
-import type { RouteRendererProps } from './route-renderers.types';
+import { createRouteRenderer } from './create-route-renderer';
 
-type CollectionDetailRouteRendererProps = RouteRendererProps;
-
-export function CollectionDetailRouteRenderer(props: CollectionDetailRouteRendererProps) {
-  if (props.data.kind !== 'collection-detail') {
-    return null;
-  }
-
-  return <ColecaoDetailContent collection={props.data.collection} />;
-}
+export const CollectionDetailRouteRenderer = createRouteRenderer({
+  kind: 'collection-detail',
+  render: (data) => <ColecaoDetailContent collection={data.collection} />,
+});

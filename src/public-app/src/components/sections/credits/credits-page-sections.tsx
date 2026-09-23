@@ -1,7 +1,6 @@
 import type { useTranslations } from '@/i18n/compat';
 import type { CreditsPageContent as CreditsContent } from '@portfolio/data/domain/types';
-import { CreditsAcknowledgements } from './credits-acknowledgements';
-import { CreditsInfrastructure } from './credits-infrastructure';
+import { CreditsEntrySection } from './credits-entry-section';
 import { CreditsReferences } from './credits-references';
 import { CreditsSection } from './credits-section';
 import { PackageList } from './package-list';
@@ -18,9 +17,9 @@ export function CreditsPageSections(props: CreditsPageSectionsProps) {
   return (
     <>
       <CollectionPagination meta={props.content.credits.meta} action="/credits" />
-      <CreditsAcknowledgements entries={groups.acknowledgements} heading={props.t('eyebrow')} />
+      <CreditsEntrySection entries={groups.acknowledgements} heading={props.t('eyebrow')} />
       <CreditsReferences entries={groups.references} heading={props.t('referencesHeading')} />
-      <CreditsInfrastructure
+      <CreditsEntrySection
         entries={groups.infrastructure}
         heading={props.t('infrastructureHeading')}
       />

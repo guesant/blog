@@ -11,6 +11,7 @@ import type { FeedEntry, FeedQuickFilter } from './types';
 export type ContentFeedViewProps = {
   copy: { title: string; description: string };
   showHeader: boolean;
+  showPagination: boolean;
   selects: FeedSelectDefinition[];
   pendingSearch: string;
   searchLabel: string;

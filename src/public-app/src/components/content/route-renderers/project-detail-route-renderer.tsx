@@ -1,12 +1,7 @@
 import { ProjectDetailContent } from '../../sections/project-detail';
-import type { RouteRendererProps } from './route-renderers.types';
+import { createRouteRenderer } from './create-route-renderer';
 
-type ProjectDetailRouteRendererProps = RouteRendererProps;
-
-export function ProjectDetailRouteRenderer(props: ProjectDetailRouteRendererProps) {
-  if (props.data.kind !== 'project-detail') {
-    return null;
-  }
-
-  return <ProjectDetailContent project={props.data.project} />;
-}
+export const ProjectDetailRouteRenderer = createRouteRenderer({
+  kind: 'project-detail',
+  render: (data) => <ProjectDetailContent project={data.project} />,
+});

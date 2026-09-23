@@ -1,18 +1,14 @@
 import { HomeSection } from '../../sections/home';
-import type { RouteRendererProps } from './route-renderers.types';
+import { createRouteRenderer } from './create-route-renderer';
 
-type HomeRouteRendererProps = RouteRendererProps;
-
-export function HomeRouteRenderer(props: HomeRouteRendererProps) {
-  if (props.data.kind !== 'home') {
-    return null;
-  }
-
-  return (
+export const HomeRouteRenderer = createRouteRenderer({
+  kind: 'home',
+  render: (data) => (
     <HomeSection
-      content={props.data.content}
-      feedItems={props.data.feedItems}
-      feedPagination={props.data.feedPagination}
+      content={data.content}
+      feedItems={data.feedItems}
+      feedPagination={data.feedPagination}
+      feedSearch={data.feedSearch}
     />
-  );
-}
+  ),
+});

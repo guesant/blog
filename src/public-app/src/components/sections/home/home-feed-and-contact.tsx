@@ -5,6 +5,8 @@ import type { Translator } from '@/i18n/compat-support';
 import type { ContentCollectionMeta } from '@portfolio/data/api/public-site-source-support';
 import { ContentFeed } from '../../content/content-feed';
 import { HomeContactSection } from './home-contact-section';
+import { useHomeFeedProgressive } from './use-home-feed-progressive';
+import { HomeFeedProgressiveFooter } from './home-feed-progressive-footer';
 
 type HomeFeedAndContactProps = {
   content: HomePageContent;
@@ -16,20 +18,29 @@ type HomeFeedAndContactProps = {
   showContact: boolean;
   hasEmail: boolean;
   feedPagination: ContentCollectionMeta;
+  feedSearch: string;
 };
 
 export function HomeFeedAndContact(props: HomeFeedAndContactProps) {
+  const progressive = useHomeFeedProgressive({
+    items: props.feedItems,
+    meta: props.feedPagination,
+    search: props.feedSearch,
+  });
+
   return (
     <>
       <ContentFeed
-        feedItems={props.feedItems}
+        feedItems={progressive.items}
         writings={[]}
         findings={[]}
         collections={[]}
         contentMeta={props.feedPagination}
+        showPagination={false}
         copy={{ title: props.tFeed('title'), description: props.tFeed('description') }}
         action="/"
       />
+      <HomeFeedProgressiveFooter progressive={progressive} />
       <HomeContactSection
         page={props.content.page}
         site={props.site}

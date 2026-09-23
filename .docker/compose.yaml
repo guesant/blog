@@ -78,6 +78,7 @@ services:
     volumes:
       - ..:/workspace
       - start-node-modules:/workspace/src/public-app/node_modules
+      - start-node-modules:/workspace/src/node_modules
     environment:
       PORTFOLIO_CONTENT_API_URL: http://laravel:8000/api/v1/public-site
       PORTFOLIO_PUBLIC_API_URL: /api/v1
@@ -96,10 +97,11 @@ services:
     user: "0:0"
     volumes:
       - start-node-modules:/workspace/src/public-app/node_modules
+      - start-node-modules:/workspace/src/node_modules
     command: >-
-      sh -lc 'mkdir -p /workspace/src/public-app/node_modules && chown -R
+      sh -lc 'mkdir -p /workspace/src/public-app/node_modules /workspace/src/node_modules && chown -R
       ${PORTFOLIO_CONTAINER_UID:-1000}:${PORTFOLIO_CONTAINER_GID:-1000}
-      /workspace/src/public-app/node_modules'
+      /workspace/src/public-app/node_modules /workspace/src/node_modules'
     restart: "no"
   lighthouse:
     build:

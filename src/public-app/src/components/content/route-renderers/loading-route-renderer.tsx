@@ -1,12 +1,9 @@
 import { LoadingPage } from '../../sections/loading';
-import type { RouteRendererProps } from './route-renderers.types';
+import { createRouteRenderer } from './create-route-renderer';
 
-type LoadingRouteRendererProps = RouteRendererProps;
+const LoadingRouteRenderer = createRouteRenderer({
+  kind: 'loading',
+  render: () => <LoadingPage />,
+});
 
-export default function LoadingRouteRenderer(props: LoadingRouteRendererProps) {
-  if (props.data.kind !== 'loading') {
-    return null;
-  }
-
-  return <LoadingPage />;
-}
+export default LoadingRouteRenderer;

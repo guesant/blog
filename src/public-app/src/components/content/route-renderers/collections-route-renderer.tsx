@@ -1,20 +1,9 @@
-import { CollectionsSection } from '../../sections/collections';
-import type { RouteRendererProps } from './route-renderers.types';
+import { ContentFeedRouteSection } from '../content-feed-route-section';
+import { createRouteRenderer } from './create-route-renderer';
 
-type CollectionsRouteRendererProps = RouteRendererProps;
-
-export function CollectionsRouteRenderer(props: CollectionsRouteRendererProps) {
-  if (props.data.kind !== 'collections') {
-    return null;
-  }
-
-  return (
-    <CollectionsSection
-      writings={props.data.writings}
-      findings={props.data.findings}
-      collections={props.data.collections}
-      copy={props.data.page}
-      contentMeta={props.data.pagination}
-    />
-  );
-}
+export const CollectionsRouteRenderer = createRouteRenderer({
+  kind: 'collections',
+  render: (data) => (
+    <ContentFeedRouteSection data={data} fixedKind="colecao" action="/collections" />
+  ),
+});

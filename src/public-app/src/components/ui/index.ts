@@ -88,4 +88,8 @@ export { RichTextElement } from './rich-text-element';
 
 export { Svg } from './svg';
 
-export { SvgElement } from './svg-element';
+export { SvgElement, type SvgElementProps } from './svg-element';
+
+export { Skeleton } from './skeleton';
+
+export { VisibilitySentinel } from './visibility-sentinel';

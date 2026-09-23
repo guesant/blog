@@ -1,9 +1,0 @@
-id: map-must-return-single-component
-snapshots:
-  ? |
-    items.map((item) => <><ItemTitle item={item} /><ItemDetails item={item} /></>)
-  : labels:
-    - source: items.map((item) => <><ItemTitle item={item} /><ItemDetails item={item} /></>)
-      style: primary
-      start: 0
-      end: 78

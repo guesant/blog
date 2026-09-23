@@ -1,0 +1,14 @@
+{
+  "mode": "strict",
+  "threshold": 1,
+  "minLines": 10,
+  "minTokens": 80,
+  "maxGapLines": 1,
+  "similarity": 0.85,
+  "ignoreIdentifiers": true,
+  "ignoreLiterals": true,
+  "ignoreAnnotations": true,
+  "format": ["javascript"],
+  "ignore": ["**/node_modules/**", "**/dist/**"],
+  "reporters": ["console"]
+}

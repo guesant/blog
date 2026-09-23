@@ -13,6 +13,7 @@ export function DocumentShell(props: DocumentShellProps) {
   return (
     <html
       lang={props.locale}
+      suppressHydrationWarning
       data-theme={props.themeMode === 'system' ? undefined : props.themeMode}
     >
       <head>

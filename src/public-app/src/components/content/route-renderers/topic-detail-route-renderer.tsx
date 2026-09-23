@@ -1,18 +1,13 @@
 import { TopicoDetailContent } from '../../sections/topic-detail';
-import type { RouteRendererProps } from './route-renderers.types';
+import { createRouteRenderer } from './create-route-renderer';
 
-type TopicDetailRouteRendererProps = RouteRendererProps;
-
-export function TopicDetailRouteRenderer(props: TopicDetailRouteRendererProps) {
-  if (props.data.kind !== 'topic-detail') {
-    return null;
-  }
-
-  return (
+export const TopicDetailRouteRenderer = createRouteRenderer({
+  kind: 'topic-detail',
+  render: (data) => (
     <TopicoDetailContent
-      topic={props.data.topic}
-      references={props.data.references}
-      pagination={props.data.pagination}
+      topic={data.topic}
+      references={data.references}
+      pagination={data.pagination}
     />
-  );
-}
+  ),
+});

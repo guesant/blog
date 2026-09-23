@@ -1,12 +1,7 @@
 import { ResumePageContent } from '../../sections/resume';
-import type { RouteRendererProps } from './route-renderers.types';
+import { createRouteRenderer } from './create-route-renderer';
 
-type ResumeRouteRendererProps = RouteRendererProps;
-
-export function ResumeRouteRenderer(props: ResumeRouteRendererProps) {
-  if (props.data.kind !== 'resume') {
-    return null;
-  }
-
-  return <ResumePageContent content={props.data.content} pdfUrls={props.data.pdfUrls} />;
-}
+export const ResumeRouteRenderer = createRouteRenderer({
+  kind: 'resume',
+  render: (data) => <ResumePageContent content={data.content} pdfUrls={data.pdfUrls} />,
+});

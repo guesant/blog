@@ -1,12 +1,9 @@
 import { FindingsSection } from '../../sections/findings';
-import type { RouteRendererProps } from './route-renderers.types';
+import { createRouteRenderer } from './create-route-renderer';
 
-type FindingsRouteRendererProps = RouteRendererProps;
-
-export function FindingsRouteRenderer(props: FindingsRouteRendererProps) {
-  if (props.data.kind !== 'findings') {
-    return null;
-  }
-
-  return <FindingsSection copy={props.data.page} {...props.data.request} />;
-}
+export const FindingsRouteRenderer = createRouteRenderer({
+  kind: 'findings',
+  render: (data) => (
+    <FindingsSection copy={data.page} initialData={data.initialData} {...data.request} />
+  ),
+});

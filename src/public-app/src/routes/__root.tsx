@@ -7,7 +7,6 @@ import {
   useLocation,
 } from '@tanstack/react-router';
 import type { QueryClient } from '@tanstack/react-query';
-import '@fontsource-variable/dm-sans';
 import '@fontsource/ibm-plex-mono';
 import '@fontsource-variable/roboto-slab';
 import '../app/fonts.css';

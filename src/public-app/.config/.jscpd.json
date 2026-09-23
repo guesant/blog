@@ -1,0 +1,19 @@
+{
+  "mode": "strict",
+  "threshold": 3,
+  "minLines": 12,
+  "minTokens": 120,
+  "maxGapLines": 1,
+  "similarity": 0.85,
+  "ignoreIdentifiers": true,
+  "ignoreLiterals": true,
+  "ignoreAnnotations": true,
+  "format": ["typescript", "tsx"],
+  "ignore": [
+    "**/node_modules/**",
+    "**/dist/**",
+    "**/routeTree.gen.ts",
+    "src/data/api/generated/**"
+  ],
+  "reporters": ["console", "threshold"]
+}

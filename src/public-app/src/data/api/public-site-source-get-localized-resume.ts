@@ -7,7 +7,11 @@ import { recordList } from './public-site-source-list';
 import { stringValue } from './public-site-source-string-value';
 
 export async function getLocalizedResume(locale?: string): Promise<ResumeContent> {
-  const result = await getSiteResume({ client: apiClient(), query: { locale } });
+  const result = await getSiteResume({
+    client: apiClient(),
+    throwOnError: true,
+    query: { locale },
+  });
 
   const resume = objectValue(result.data) ?? {};
 

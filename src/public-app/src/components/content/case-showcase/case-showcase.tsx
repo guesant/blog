@@ -9,7 +9,7 @@ export function CaseShowcase(props: CaseShowcaseProps) {
   return (
     <Box>
       <FeaturedCaseCard item={props.cases[0]} />
-      <SecondaryCaseGrid items={props.cases.slice(1, 3)} />
+      <SecondaryCaseGrid items={props.cases.slice(1)} />
     </Box>
   );
 }

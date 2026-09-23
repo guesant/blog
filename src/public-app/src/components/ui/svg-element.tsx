@@ -1,6 +1,6 @@
 import { createElement, type SVGProps } from 'react';
 
-type SvgElementProps = SVGProps<SVGElement> & {
+export type SvgElementProps = SVGProps<SVGElement> & {
   component: keyof SVGElementTagNameMap;
 };
 

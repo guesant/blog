@@ -1,12 +1,7 @@
 import { AboutPageContent } from '../../sections/about';
-import type { RouteRendererProps } from './route-renderers.types';
+import { createRouteRenderer } from './create-route-renderer';
 
-type AboutRouteRendererProps = RouteRendererProps;
-
-export function AboutRouteRenderer(props: AboutRouteRendererProps) {
-  if (props.data.kind !== 'about') {
-    return null;
-  }
-
-  return <AboutPageContent page={props.data.page} profile={props.data.profile} />;
-}
+export const AboutRouteRenderer = createRouteRenderer({
+  kind: 'about',
+  render: (data) => <AboutPageContent page={data.page} profile={data.profile} />,
+});

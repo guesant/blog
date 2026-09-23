@@ -4,7 +4,7 @@ import type { BreadcrumbItem } from '../../navigation/breadcrumbs';
 import type { DetailEntry } from './types';
 import { joinDefined } from './join-defined';
 import { pushEntry } from './push-entry';
-import { formatDate } from './format-date';
+import { formatDate } from '../../content/format-date';
 import { stateLabel } from './state-label';
 import { typeSpecificEntries } from './type-specific-entries';
 

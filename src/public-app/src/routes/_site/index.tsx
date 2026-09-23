@@ -1,41 +1,21 @@
 import { useQuery } from '@tanstack/react-query';
 import { createFileRoute, useLocation } from '@tanstack/react-router';
-import type { RouteData } from '../../data/queries';
-import {
-  errorRouteData,
-  fallbackRouteData,
-  getSsrQueryData,
-  routeQueryOptions,
-  SSR_CONTENT_BUDGET_MS,
-} from '../../data/queries';
+import { routeQueryOptions, useStableRouteData } from '../../data/queries';
 import { RouteView } from '../../route-view';
 import { routeContext } from '../_site';
-import { metadataForRoute } from './splat-metadata-for-route';
+import { siteRouteHead } from '../site-route-head';
+import { siteRouteLoader } from '../site-route-loader';
 
 export const Route = createFileRoute('/_site/')({
   loader: async ({ context, location }) => {
     const { locale } = routeContext(location.pathname);
 
-    return getSsrQueryData({
+    return siteRouteLoader({
       queryClient: context.queryClient,
-      options: routeQueryOptions({ locale, pathname: '/', search: location.searchStr }),
-      fallback: fallbackRouteData,
-      timeoutMs: SSR_CONTENT_BUDGET_MS,
+      request: { locale, pathname: '/', search: location.searchStr },
     });
   },
-  head: ({ loaderData }) => {
-    const metadata = metadataForRoute(loaderData as RouteData | undefined);
-
-    return {
-      meta: [
-        { title: `${metadata.title} · guesant.net` },
-        { name: 'description', content: metadata.description },
-        { property: 'og:title', content: metadata.title },
-        { property: 'og:description', content: metadata.description },
-        { property: 'og:type', content: metadata.type ?? 'website' },
-      ],
-    };
-  },
+  head: ({ loaderData }) => siteRouteHead({ loaderData }),
   component: HomeRoute,
 });
 
@@ -50,8 +30,11 @@ function HomeRoute() {
     routeQueryOptions({ locale, pathname: '/', search: location.searchStr }),
   );
 
-  const data =
-    routeQuery.data ?? loaderData ?? (routeQuery.isError ? errorRouteData : fallbackRouteData);
+  const data = useStableRouteData({
+    queryData: routeQuery.data,
+    loaderData,
+    queryHasError: routeQuery.isError,
+  });
 
   return <RouteView data={data} />;
 }

@@ -1,5 +1,14 @@
 import type { SxProps, Theme } from '@mui/material/styles';
 
+const mutedDetailText = {
+  color: 'var(--site-text-secondary)',
+  fontSize: 'var(--site-text-sm)',
+};
+
+const relaxedDetailText = { margin: 0, lineHeight: 'var(--site-leading-relaxed)' };
+
+const projectOverview = { mt: 1 };
+
 export const typographyVariants2: Record<string, SxProps<Theme>> = {
   referenceLinkLabel: {
     fontSize: 'var(--site-text-body)',
@@ -55,16 +64,10 @@ export const typographyVariants2: Record<string, SxProps<Theme>> = {
     fontSize: 'var(--site-text-lg)',
     lineHeight: 'var(--site-leading-relaxed)',
   },
-  achadoDetailContent3: {
-    color: 'var(--site-text-secondary)',
-    fontSize: 'var(--site-text-sm)',
-  },
-  achadoDetailContent4: {
-    color: 'var(--site-text-secondary)',
-    fontSize: 'var(--site-text-sm)',
-  },
-  achadoDetailContent5: { margin: 0, lineHeight: 'var(--site-leading-relaxed)' },
-  achadoDetailContent6: { margin: 0, lineHeight: 'var(--site-leading-relaxed)' },
+  achadoDetailContent3: mutedDetailText,
+  achadoDetailContent4: mutedDetailText,
+  achadoDetailContent5: relaxedDetailText,
+  achadoDetailContent6: relaxedDetailText,
   selectedProjectsLabel: { display: 'block', mb: 2 },
   projectRow: { fontSize: 'var(--site-text-xl)', fontWeight: 'var(--site-weight-semibold)' },
   experimentRow: { fontWeight: 'var(--site-weight-semibold)', mb: 'var(--site-space-1)' },
@@ -83,8 +86,8 @@ export const typographyVariants2: Record<string, SxProps<Theme>> = {
   caseDetailMetric: { display: 'flex', alignItems: 'center', gap: 0.5, mb: 1 },
   projectDetailContent: { display: 'block', mb: 1 },
   projectDetailContent2: { mb: 4 },
-  projectOverview: { mt: 1 },
-  projectOverview2: { mt: 1 },
+  projectOverview,
+  projectOverview2: projectOverview,
   generatedString: { fontFamily: 'var(--site-font-mono)', overflowWrap: 'anywhere' },
   sidebarContentFooter: { textAlign: 'center' },
   sidebarSection: { display: 'block' },

@@ -1,23 +1,28 @@
 import type { CaseStudy, Project } from '../domain/types.ts';
-import { getContentCollection } from './public-site-source-get-content-collection-items';
+import type { ContentCollectionMeta } from './public-site-source-support';
+import { getContentCollectionPage } from './public-site-source-get-content-collection';
 
 export async function getFeaturedContent(locale?: string): Promise<{
   cases: CaseStudy[];
+  casesPagination: ContentCollectionMeta;
   projects: Project[];
+  projectsPagination: ContentCollectionMeta;
 }> {
   const [cases, projects] = await Promise.all([
-    getContentCollection<CaseStudy>('cases', locale, {
+    getContentCollectionPage<CaseStudy>('cases', locale, {
       featured: true,
       perPage: 3,
     }),
-    getContentCollection<Project>('projects', locale, {
+    getContentCollectionPage<Project>('projects', locale, {
       featured: true,
       perPage: 3,
     }),
   ]);
 
   return {
-    cases,
-    projects,
+    cases: cases.items,
+    casesPagination: cases.meta,
+    projects: projects.items,
+    projectsPagination: projects.meta,
   };
 }

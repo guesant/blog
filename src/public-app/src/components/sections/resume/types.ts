@@ -66,15 +66,17 @@ export type RecommendationEntriesProps = {
   items: { author: string; role: string; quote: string; url?: string; period?: string }[];
 };
 
+export type TechnicalProductionItem = {
+  name: string;
+  kind?: string;
+  description?: string;
+  url?: string;
+  period: string;
+  projectHref?: string;
+};
+
 export type TechnicalProductionEntriesProps = {
-  items: {
-    name: string;
-    kind?: string;
-    description?: string;
-    url?: string;
-    period: string;
-    projectHref?: string;
-  }[];
+  items: TechnicalProductionItem[];
 };
 
 export type EventEntriesProps = {

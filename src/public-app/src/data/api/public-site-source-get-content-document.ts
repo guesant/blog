@@ -23,7 +23,11 @@ export async function getContentDocument<T>(
   });
 
   if (!result.data) {
-    return undefined;
+    if (result.response?.status === 404) {
+      return undefined;
+    }
+
+    throw new Error('Public site API returned an empty content response');
   }
 
   return entity(collection, result.data as RecordValue) as T;

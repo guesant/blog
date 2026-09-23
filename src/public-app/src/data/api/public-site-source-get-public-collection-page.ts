@@ -16,6 +16,7 @@ export async function getPublicCollectionPage<T>(
 ): Promise<ContentCollectionPage<T>> {
   const result = await listPublicContent({
     client: apiClient(),
+    throwOnError: true,
     path: { collection },
     query: {
       locale,
@@ -28,6 +29,10 @@ export async function getPublicCollectionPage<T>(
       topic: query.topic,
     },
   });
+
+  if (!result.data) {
+    throw new Error('Public site API returned an empty collection response');
+  }
 
   const payload = objectValue(result.data);
 

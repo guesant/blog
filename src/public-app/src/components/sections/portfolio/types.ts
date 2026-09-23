@@ -11,4 +11,5 @@ export type PortfolioPageContentProps = {
   projectsPagination: ContentCollectionMeta;
   experiments: Experiment[];
   experimentsPagination: ContentCollectionMeta;
+  search: string;
 };

@@ -1,13 +1,16 @@
 import type { SxProps, Theme } from '@mui/material/styles';
+import { richTextBody } from './rich-text-body';
+
+const resumeEntryGrid = {
+  display: 'grid',
+  gridTemplateColumns: { xs: '1fr', sm: '1fr auto' },
+  columnGap: 3,
+  rowGap: 0.25,
+};
 
 export const boxVariants3: Record<string, SxProps<Theme>> = {
   recommendationEntries: { display: 'grid', gap: 3 },
-  resumeEntryGrid: {
-    display: 'grid',
-    gridTemplateColumns: { xs: '1fr', sm: '1fr auto' },
-    columnGap: 3,
-    rowGap: 0.25,
-  },
+  resumeEntryGrid,
   resumeHeader: { textAlign: 'center' },
   resumeHeader2: { mt: 2, '@media print': { display: 'none' } },
   resumeHeader3: {
@@ -22,12 +25,7 @@ export const boxVariants3: Record<string, SxProps<Theme>> = {
   resumePdfActions: { display: 'flex', justifyContent: 'center' },
   resumeQualificationSections: { display: 'grid', gap: 1.25 },
   trajectoryEntry: { m: 0, mt: 1, pl: 2.25, color: 'text.secondary' },
-  educationEntry: {
-    display: 'grid',
-    gridTemplateColumns: { xs: '1fr', sm: '1fr auto' },
-    columnGap: 3,
-    rowGap: 0.25,
-  },
+  educationEntry: resumeEntryGrid,
   resumeSkill: { color: 'text.primary', fontWeight: 700 },
   referenceLinkItem: {
     '& + &': {
@@ -88,19 +86,5 @@ export const boxVariants3: Record<string, SxProps<Theme>> = {
   achadoDetailContent: { display: 'grid', gap: 'var(--site-space-6)' },
   achadoDetailContent2: { display: 'grid', gap: 'var(--site-space-3)' },
   experimentSource: { mt: 6, pt: 4, borderTop: 1, borderColor: 'divider' },
-  experimentBody: {
-    mt: 6,
-    pt: 5,
-    borderTop: 1,
-    borderColor: 'divider',
-    '& p, & li': {
-      fontSize: 'var(--site-text-body)',
-      lineHeight: 'var(--site-leading-relaxed)',
-    },
-    '& p': { mb: 3 },
-    '& h2': { mt: 5, mb: 2, fontSize: 'var(--site-text-2xl)' },
-    '& h3': { mt: 4, mb: 1.5, fontSize: 'var(--site-text-xl)' },
-    '& pre': { overflowX: 'auto', p: 2, bgcolor: 'background.paper' },
-    '& code': { fontFamily: 'var(--site-font-mono)' },
-  },
+  experimentBody: richTextBody,
 };

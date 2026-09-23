@@ -1,12 +1,7 @@
 import { NowPageContent } from '../../sections/now';
-import type { RouteRendererProps } from './route-renderers.types';
+import { createRouteRenderer } from './create-route-renderer';
 
-type NowRouteRendererProps = RouteRendererProps;
-
-export function NowRouteRenderer(props: NowRouteRendererProps) {
-  if (props.data.kind !== 'now') {
-    return null;
-  }
-
-  return <NowPageContent page={props.data.page} />;
-}
+export const NowRouteRenderer = createRouteRenderer({
+  kind: 'now',
+  render: (data) => <NowPageContent page={data.page} />,
+});

@@ -5,6 +5,7 @@ import { objectValue } from './public-site-source-object-value';
 import { reference } from './public-site-source-reference';
 import { findingListItems } from './public-site-source-finding-list-items';
 import { findingListMeta } from './public-site-source-finding-list-meta';
+import { findingApiQuery } from './public-site-source-finding-api-query';
 
 export async function fetchFindingList(
   filters: FindingListQuery,
@@ -12,20 +13,13 @@ export async function fetchFindingList(
 ): Promise<FindingList> {
   const result = await listFindings({
     client: apiClient(),
-    query: {
-      locale,
-      q: filters.q,
-      type: filters.type,
-      topic: filters.topic,
-      rating: filters.rating,
-      consumption_state: filters.consumptionState,
-      year: filters.year,
-      free_only: filters.freeOnly,
-      sort: filters.sort,
-      page: filters.page,
-      per_page: filters.perPage,
-    },
+    throwOnError: true,
+    query: findingApiQuery({ locale, filters }),
   });
+
+  if (!result.data) {
+    throw new Error('Public site API returned an empty findings response');
+  }
 
   const payload = objectValue(result.data);
 

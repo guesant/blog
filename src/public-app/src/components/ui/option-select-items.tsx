@@ -35,5 +35,5 @@ export function OptionSelectItems(props: OptionSelectItemsProps) {
     );
   }
 
-  return <>{items}</>;
+  return items;
 }

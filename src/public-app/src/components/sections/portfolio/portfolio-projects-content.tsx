@@ -1,15 +1,14 @@
 import { Box, Typography } from '../../ui';
-import { ProjectCard } from '../../content/project-card';
 import { ConditionalContent } from '../../primitives/conditional-content';
 import type { PortfolioPageContentProps } from './types';
 import { PortfolioExperimentsLink } from './ui/experiments-link';
-import { PortfolioProjectGrid } from './ui/project-grid';
 import { PortfolioSectionDescription } from './ui/section-description';
 import { PortfolioSectionTitle } from './ui/section-title';
+import { PortfolioProjectResults } from './portfolio-project-results';
 
 type PortfolioProjectsContentProps = Pick<
   PortfolioPageContentProps,
-  'page' | 'projects' | 'experiments' | 'experimentsPagination'
+  'page' | 'projects' | 'projectsPagination' | 'experiments' | 'experimentsPagination' | 'search'
 >;
 
 export function PortfolioProjectsContent(props: PortfolioProjectsContentProps) {
@@ -20,15 +19,10 @@ export function PortfolioProjectsContent(props: PortfolioProjectsContentProps) {
       </Typography>
       <PortfolioSectionTitle>{props.page.projectsTitle}</PortfolioSectionTitle>
       <PortfolioSectionDescription>{props.page.projectsDescription}</PortfolioSectionDescription>
-      <ConditionalContent
-        condition={props.projects.length > 0}
-        content={
-          <PortfolioProjectGrid>
-            {props.projects.slice(0, 3).map((project, index) => (
-              <ProjectCard key={project.slug} project={project} highlighted={index === 0} />
-            ))}
-          </PortfolioProjectGrid>
-        }
+      <PortfolioProjectResults
+        projects={props.projects}
+        pagination={props.projectsPagination}
+        search={props.search}
       />
       <ConditionalContent
         condition={props.experiments.length > 0}

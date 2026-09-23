@@ -1,23 +1,19 @@
 import { PortfolioPageContent } from '../../sections/portfolio';
-import type { RouteRendererProps } from './route-renderers.types';
+import { createRouteRenderer } from './create-route-renderer';
 
-type PortfolioRouteRendererProps = RouteRendererProps;
-
-export function PortfolioRouteRenderer(props: PortfolioRouteRendererProps) {
-  if (props.data.kind !== 'portfolio') {
-    return null;
-  }
-
-  return (
+export const PortfolioRouteRenderer = createRouteRenderer({
+  kind: 'portfolio',
+  render: (data) => (
     <PortfolioPageContent
-      page={props.data.page}
-      profile={props.data.profile}
-      cases={props.data.cases}
-      casesPagination={props.data.casesPagination}
-      projects={props.data.projects}
-      projectsPagination={props.data.projectsPagination}
-      experiments={props.data.experiments}
-      experimentsPagination={props.data.experimentsPagination}
+      page={data.page}
+      profile={data.profile}
+      cases={data.cases}
+      casesPagination={data.casesPagination}
+      projects={data.projects}
+      projectsPagination={data.projectsPagination}
+      experiments={data.experiments}
+      experimentsPagination={data.experimentsPagination}
+      search={data.search}
     />
-  );
-}
+  ),
+});

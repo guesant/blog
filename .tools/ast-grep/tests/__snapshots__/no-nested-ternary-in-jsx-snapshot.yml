@@ -1,0 +1,28 @@
+id: no-nested-ternary-in-jsx
+snapshots:
+  ? |
+    const value = <Box>{ready ? <Ready /> : failed ? <Failed /> : <Pending />}</Box>
+  : labels:
+      - source: 'ready ? <Ready /> : failed ? <Failed /> : <Pending />'
+        style: primary
+        start: 20
+        end: 73
+      - source: '{ready ? <Ready /> : failed ? <Failed /> : <Pending />}'
+        style: secondary
+        start: 19
+        end: 74
+      - source: 'failed ? <Failed /> : <Pending />'
+        style: secondary
+        start: 40
+        end: 73
+  ? |
+    const value = ready ? <Ready /> : failed ? <Failed /> : <Pending />
+  : labels:
+      - source: 'ready ? <Ready /> : failed ? <Failed /> : <Pending />'
+        style: primary
+        start: 14
+        end: 67
+      - source: 'failed ? <Failed /> : <Pending />'
+        style: secondary
+        start: 34
+        end: 67

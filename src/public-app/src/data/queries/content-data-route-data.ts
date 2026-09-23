@@ -26,6 +26,7 @@ import type {
   getResumePageContent,
 } from '@portfolio/data/services';
 import type { ContentCollectionMeta } from '../api/public-site-source-support';
+import type { FindingList } from '../api/public-site-source-support';
 import type { RouteRequest } from './content-data-support';
 
 export type RouteData =
@@ -35,6 +36,7 @@ export type RouteData =
       content: HomePageContent;
       feedItems: PublicFeedItem[];
       feedPagination: ContentCollectionMeta;
+      feedSearch: string;
     }
   | { kind: 'about'; page: AboutPageCopy; profile: Profile }
   | {
@@ -47,6 +49,7 @@ export type RouteData =
       projectsPagination: ContentCollectionMeta;
       experiments: Experiment[];
       experimentsPagination: ContentCollectionMeta;
+      search: string;
     }
   | { kind: 'now'; page: Awaited<ReturnType<typeof getNowPageCopy>> }
   | {
@@ -71,6 +74,7 @@ export type RouteData =
       kind: 'findings';
       page: PageIntroduction;
       request: Pick<RouteRequest, 'locale' | 'search'>;
+      initialData: FindingList;
     }
   | { kind: 'finding-detail'; item: Reference }
   | {

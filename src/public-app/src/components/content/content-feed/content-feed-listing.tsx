@@ -5,6 +5,7 @@ import { ContentFeedResultsState } from './content-feed-results-state';
 import { ContentFeedStatus } from './content-feed-status';
 import { ListingPagination } from '../listing-pagination';
 import type { ContentFeedViewProps } from './content-feed-view';
+import { ConditionalContent } from '../../primitives/conditional-content';
 
 export type ContentFeedListingProps = Pick<
   ContentFeedViewProps,
@@ -26,6 +27,7 @@ export type ContentFeedListingProps = Pick<
   | 'nextLabel'
   | 'lastLabel'
   | 'onPageChange'
+  | 'showPagination'
 >;
 
 export function ContentFeedListing(props: ContentFeedListingProps) {
@@ -43,16 +45,21 @@ export function ContentFeedListing(props: ContentFeedListingProps) {
         t={props.t}
         onQuickFilter={props.onQuickFilter}
       />
-      <ListingPagination
-        page={props.page}
-        pageCount={props.pageCount}
-        ariaLabel={props.ariaLabel}
-        firstLabel={props.firstLabel}
-        previousLabel={props.previousLabel}
-        nextLabel={props.nextLabel}
-        lastLabel={props.lastLabel}
-        onPageChange={props.onPageChange}
-        scrollTargetId="content-feed"
+      <ConditionalContent
+        condition={props.showPagination}
+        content={
+          <ListingPagination
+            page={props.page}
+            pageCount={props.pageCount}
+            ariaLabel={props.ariaLabel}
+            firstLabel={props.firstLabel}
+            previousLabel={props.previousLabel}
+            nextLabel={props.nextLabel}
+            lastLabel={props.lastLabel}
+            onPageChange={props.onPageChange}
+            scrollTargetId="content-feed"
+          />
+        }
       />
       <ExploreSection />
     </>

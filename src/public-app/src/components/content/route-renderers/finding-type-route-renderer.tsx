@@ -1,18 +1,9 @@
 import { TipoDetailContent } from '../../sections/finding-type';
-import type { RouteRendererProps } from './route-renderers.types';
+import { createRouteRenderer } from './create-route-renderer';
 
-type FindingTypeRouteRendererProps = RouteRendererProps;
-
-export function FindingTypeRouteRenderer(props: FindingTypeRouteRendererProps) {
-  if (props.data.kind !== 'finding-type') {
-    return null;
-  }
-
-  return (
-    <TipoDetailContent
-      tipo={props.data.type}
-      references={props.data.references}
-      pagination={props.data.pagination}
-    />
-  );
-}
+export const FindingTypeRouteRenderer = createRouteRenderer({
+  kind: 'finding-type',
+  render: (data) => (
+    <TipoDetailContent tipo={data.type} references={data.references} pagination={data.pagination} />
+  ),
+});

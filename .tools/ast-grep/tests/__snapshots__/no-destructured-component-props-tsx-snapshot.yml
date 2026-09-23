@@ -1,0 +1,10 @@
+id: no-destructured-component-props-tsx
+snapshots:
+  ? |
+    type UserCardProps = { name: string }
+    function UserCard({ name }: UserCardProps) { return name }
+  : labels:
+      - source: 'function UserCard({ name }: UserCardProps) { return name }'
+        style: primary
+        start: 38
+        end: 96

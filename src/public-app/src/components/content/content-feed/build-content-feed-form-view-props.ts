@@ -2,6 +2,7 @@ import type {
   ContentFeedFormViewProps,
   UseContentFeedViewPropsInput,
 } from './use-content-feed-view-props.types';
+import { contentFeedShowPagination } from './content-feed-show-pagination';
 
 export function buildContentFeedFormViewProps(
   input: UseContentFeedViewPropsInput,
@@ -11,6 +12,7 @@ export function buildContentFeedFormViewProps(
   return {
     copy: props.copy,
     showHeader: props.showHeader ?? true,
+    showPagination: contentFeedShowPagination(props.showPagination),
     selects: selects ?? [],
     pendingSearch: runtime.state.pendingSearch,
     searchLabel: runtime.translations.searchLabel,

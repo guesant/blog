@@ -1,4 +1,5 @@
 import type { SxProps, Theme } from '@mui/material/styles';
+import { richTextBody } from './rich-text-body';
 
 export const boxVariants4: Record<string, SxProps<Theme>> = {
   projectRow: {
@@ -43,37 +44,9 @@ export const boxVariants4: Record<string, SxProps<Theme>> = {
     gap: 3,
     mt: { xs: 6, md: 8 },
   },
-  caseDetailContent2: {
-    mt: 6,
-    pt: 5,
-    borderTop: 1,
-    borderColor: 'divider',
-    '& p, & li': {
-      fontSize: 'var(--site-text-body)',
-      lineHeight: 'var(--site-leading-relaxed)',
-    },
-    '& p': { mb: 3 },
-    '& h2': { mt: 5, mb: 2, fontSize: 'var(--site-text-2xl)' },
-    '& h3': { mt: 4, mb: 1.5, fontSize: 'var(--site-text-xl)' },
-    '& pre': { overflowX: 'auto', p: 2, bgcolor: 'background.paper' },
-    '& code': { fontFamily: 'var(--site-font-mono)' },
-  },
+  caseDetailContent2: richTextBody,
   projectDetailContent: { mt: 6, pt: 4, borderTop: 1, borderColor: 'divider' },
-  projectDetailContent2: {
-    mt: 6,
-    pt: 5,
-    borderTop: 1,
-    borderColor: 'divider',
-    '& p, & li': {
-      fontSize: 'var(--site-text-body)',
-      lineHeight: 'var(--site-leading-relaxed)',
-    },
-    '& p': { mb: 3 },
-    '& h2': { mt: 5, mb: 2, fontSize: 'var(--site-text-2xl)' },
-    '& h3': { mt: 4, mb: 1.5, fontSize: 'var(--site-text-xl)' },
-    '& pre': { overflowX: 'auto', p: 2, bgcolor: 'background.paper' },
-    '& code': { fontFamily: 'var(--site-font-mono)' },
-  },
+  projectDetailContent2: richTextBody,
   projectOverview: {
     display: 'grid',
     gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)' },
@@ -94,7 +67,13 @@ export const boxVariants4: Record<string, SxProps<Theme>> = {
     gap: 'var(--site-space-3)',
   },
   stickyLeftSidebar: { position: 'sticky', top: 0, height: '100dvh', overflowY: 'auto' },
-  sidebarBrandRow: { display: 'flex', alignItems: 'center', gap: 1, minHeight: '2rem' },
+  sidebarBrandRow: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: 'relative',
+    minHeight: '2rem',
+  },
   desktopLeftSidebar: {
     display: { xs: 'none', md: 'block' },
     borderRight: 'var(--site-border-width) solid',

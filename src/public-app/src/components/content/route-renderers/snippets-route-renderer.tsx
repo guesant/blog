@@ -1,12 +1,7 @@
 import { SnippetsPageContent } from '../../sections/snippets';
-import type { RouteRendererProps } from './route-renderers.types';
+import { createRouteRenderer } from './create-route-renderer';
 
-type SnippetsRouteRendererProps = RouteRendererProps;
-
-export function SnippetsRouteRenderer(props: SnippetsRouteRendererProps) {
-  if (props.data.kind !== 'snippets') {
-    return null;
-  }
-
-  return <SnippetsPageContent snippets={props.data.snippets} pagination={props.data.pagination} />;
-}
+export const SnippetsRouteRenderer = createRouteRenderer({
+  kind: 'snippets',
+  render: (data) => <SnippetsPageContent snippets={data.snippets} pagination={data.pagination} />,
+});

@@ -1,12 +1,7 @@
 import { SnippetDetailPageContent } from '../../sections/snippets';
-import type { RouteRendererProps } from './route-renderers.types';
+import { createRouteRenderer } from './create-route-renderer';
 
-type SnippetDetailRouteRendererProps = RouteRendererProps;
-
-export function SnippetDetailRouteRenderer(props: SnippetDetailRouteRendererProps) {
-  if (props.data.kind !== 'snippet-detail') {
-    return null;
-  }
-
-  return <SnippetDetailPageContent snippet={props.data.snippet} />;
-}
+export const SnippetDetailRouteRenderer = createRouteRenderer({
+  kind: 'snippet-detail',
+  render: (data) => <SnippetDetailPageContent snippet={data.snippet} />,
+});

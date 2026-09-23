@@ -20,9 +20,12 @@ export async function getHomePageContent(
 
   return {
     cases: featured.cases,
+    casesPagination: featured.casesPagination,
     projects: featured.projects,
+    projectsPagination: featured.projectsPagination,
     experiments: experiments.items,
     experimentsCount: experiments.meta.total,
+    experimentsPagination: experiments.meta,
     profile: await resolveHomeProfile(locale, shell),
     page,
     site: await resolveHomeSite(locale, shell),

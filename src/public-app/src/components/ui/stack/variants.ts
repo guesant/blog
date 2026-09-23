@@ -1,5 +1,7 @@
 import type { SxProps, Theme } from '@mui/material/styles';
 
+const sidebarGroup = { gap: 'var(--site-sidebar-gap-half)', mt: 'var(--site-sidebar-gap-half)' };
+
 export const stackVariants: Record<string, SxProps<Theme>> = {
   listingToolbarContent: {
     columnGap: { xs: 'var(--site-space-2)', md: 'var(--site-space-3)' },
@@ -12,8 +14,8 @@ export const stackVariants: Record<string, SxProps<Theme>> = {
   passwordEntropy: { mt: 2 },
   generatedStringList: { mt: 1 },
   mobileSidebarStack: { overflowY: 'auto', p: 1.5 },
-  sidebarGroup: { gap: 'var(--site-sidebar-gap-half)', mt: 'var(--site-sidebar-gap-half)' },
-  sidebarSection: { gap: 'var(--site-sidebar-gap-half)', mt: 'var(--site-sidebar-gap-half)' },
+  sidebarGroup,
+  sidebarSection: sidebarGroup,
   rightSidebar: { gap: 'var(--site-sidebar-gap)' },
   contentFeedEmpty: { alignItems: 'center', gap: 'var(--site-space-4)' },
   contentFeedStatus: { alignItems: 'center', mb: 'var(--site-space-4)' },
@@ -43,6 +45,12 @@ export const stackVariants: Record<string, SxProps<Theme>> = {
     },
   },
   listingList: { gap: 'var(--site-space-4)' },
+  progressiveFooter: {
+    alignItems: 'center',
+    mt: 'var(--site-space-4)',
+    minHeight: 'var(--site-space-1)',
+  },
+  progressiveSkeleton: { gap: 'var(--site-space-4)', width: '100%' },
   listingView: {
     gap: 'var(--site-space-4)',
     mb: { xs: 'var(--site-space-10)', md: 'var(--site-space-12)' },

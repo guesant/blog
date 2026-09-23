@@ -28,8 +28,6 @@ export type ListFindingsData = {
   url: '/findings';
 };
 
-export type ListFindingsResponse = FindingApiIndexResponses[200];
-
 export function listFindings<ThrowOnError extends boolean = false>(
   options: Options<ListFindingsData, ThrowOnError>,
 ): RequestResult<FindingApiIndexResponses, FindingApiIndexErrors, ThrowOnError> {

@@ -1,9 +1,0 @@
-id: no-native-interactive-html-outside-ui
-snapshots:
-  ? |
-    const value = <button type="button" />
-  : labels:
-    - source: <button type="button" />
-      style: primary
-      start: 14
-      end: 38

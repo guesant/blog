@@ -1,0 +1,9 @@
+id: no-inline-object-type-in-parameters-typescript
+snapshots:
+  ? |
+    function create(options: { value: string }) { return options }
+  : labels:
+      - source: 'function create(options: { value: string }) { return options }'
+        style: primary
+        start: 0
+        end: 62

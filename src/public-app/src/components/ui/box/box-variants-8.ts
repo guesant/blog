@@ -1,57 +1,39 @@
 import type { SxProps, Theme } from '@mui/material/styles';
 
+const sourcePreviewSurface = {
+  display: 'grid',
+  gridTemplateColumns: { xs: '1fr', sm: '1fr 2fr' },
+  minWidth: 0,
+  overflow: 'hidden',
+  border: 'var(--site-border-width) solid var(--site-border)',
+  borderColor: 'var(--site-border)',
+  backgroundColor: 'var(--site-surface-muted)',
+};
+
+const sourcePreviewMedia = {
+  display: 'grid',
+  placeItems: 'center',
+  height: '100%',
+  minHeight: { xs: 'var(--site-space-12)', sm: 'var(--site-tile-min-h)' },
+  overflow: 'hidden',
+  backgroundColor: 'var(--site-accent-bg)',
+};
+
 export const boxVariants8: Record<string, SxProps<Theme>> = {
-  sourcePreviewSurfaceFeed: {
-    display: 'grid',
-    gridTemplateColumns: { xs: '1fr', sm: '1fr 2fr' },
-    minWidth: 0,
-    overflow: 'hidden',
-    border: 'var(--site-border-width) solid var(--site-border)',
-    borderColor: 'var(--site-border)',
-    backgroundColor: 'var(--site-surface-muted)',
-  },
+  sourcePreviewSurfaceFeed: sourcePreviewSurface,
   sourcePreviewSurfaceDetail: {
-    display: 'grid',
+    ...sourcePreviewSurface,
     gridTemplateColumns: { xs: '1fr', sm: 'minmax(0, 2fr) minmax(0, 3fr)' },
-    minWidth: 0,
-    overflow: 'hidden',
-    border: 'var(--site-border-width) solid var(--site-border)',
     borderColor: 'var(--site-border-strong)',
     backgroundColor: 'var(--site-surface)',
   },
-  sourcePreviewSurfaceTable: {
-    display: 'grid',
-    gridTemplateColumns: { xs: '1fr', sm: '1fr 2fr' },
-    minWidth: 0,
-    overflow: 'hidden',
-    border: 'var(--site-border-width) solid var(--site-border)',
-    borderColor: 'var(--site-border)',
-    backgroundColor: 'var(--site-surface-muted)',
-  },
-  sourcePreviewMediaFeed: {
-    display: 'grid',
-    placeItems: 'center',
-    height: '100%',
-    minHeight: { xs: 'var(--site-space-12)', sm: 'var(--site-tile-min-h)' },
-    overflow: 'hidden',
-    backgroundColor: 'var(--site-accent-bg)',
-  },
+  sourcePreviewSurfaceTable: sourcePreviewSurface,
+  sourcePreviewMediaFeed: sourcePreviewMedia,
   sourcePreviewMediaDetail: {
-    display: 'grid',
-    placeItems: 'center',
-    height: '100%',
+    ...sourcePreviewMedia,
     minHeight: { xs: 'var(--site-space-12)', sm: '100%' },
-    overflow: 'hidden',
-    backgroundColor: 'var(--site-accent-bg)',
   },
-  sourcePreviewMediaTable: {
-    display: 'grid',
-    placeItems: 'center',
-    height: '100%',
-    minHeight: { xs: 'var(--site-space-12)', sm: 'var(--site-tile-min-h)' },
-    overflow: 'hidden',
-    backgroundColor: 'var(--site-accent-bg)',
-  },
+  sourcePreviewMediaTable: sourcePreviewMedia,
   technologyChip: {
     display: 'inline-flex',
     alignItems: 'center',

@@ -57,10 +57,10 @@ api-spec:
     {{compose_run}} --no-deps -e DB_CONNECTION=unavailable -e CACHE_STORE=array -e SESSION_DRIVER=array -e QUEUE_CONNECTION=sync laravel php artisan scramble:export --path=/app/openapi/public-site.json
 
 api-generate: api-spec
-    {{tools_compose}} run --build --rm openapi-ts -f openapi-ts.config.mjs
+    {{tools_compose}} run --build --rm openapi-ts -f .config/openapi-ts.config.mjs
 
 api-check: api-spec
-    {{tools_compose}} run --build --rm --entrypoint sh openapi-ts -lc 'rm -rf /tmp/generated && PORTFOLIO_API_GENERATED_OUTPUT=/tmp/generated /opt/openapi-ts/node_modules/.bin/openapi-ts -f openapi-ts.config.mjs && diff -ru src/data/api/generated /tmp/generated'
+    {{tools_compose}} run --build --rm --entrypoint sh openapi-ts -lc 'rm -rf /tmp/generated && PORTFOLIO_API_GENERATED_OUTPUT=/tmp/generated /opt/openapi-ts/node_modules/.bin/openapi-ts -f .config/openapi-ts.config.mjs && diff -ru src/data/api/generated /tmp/generated'
 
 frontend-lint: frontend-install frontend-architecture
     {{node_run}} 'corepack pnpm lint'
@@ -70,8 +70,8 @@ frontend-lint-fix: frontend-install frontend-architecture
 
 frontend-architecture: frontend-install tools-build
     {{node_run}} 'corepack pnpm lint:architecture:test'
-    {{tools_compose}} run --rm ast-grep test --config /workspace/src/public-app/sgconfig.yml
-    {{tools_compose}} run --rm ast-grep scan --config /workspace/src/public-app/sgconfig.yml /workspace/src/public-app/src
+    {{tools_compose}} run --rm ast-grep test --config /workspace/.tools/sgconfig.yml
+    {{tools_compose}} run --rm ast-grep scan --config /workspace/.tools/sgconfig.yml /workspace/src/public-app/src
 
 frontend-typecheck: frontend-install
     {{node_run}} './node_modules/.bin/tsc --noEmit'
@@ -121,8 +121,8 @@ format-fix: frontend-install tools-build
 lint: frontend-check
 
 duplication: tools-build
-    {{tools_compose}} run --rm jscpd --config /workspace/src/public-app/.jscpd.json /workspace/src/public-app
-    {{tools_compose}} run --rm jscpd --config /workspace/src/public-app/.jscpd.actions.json /workspace/.github/actions
+    {{tools_compose}} run --rm jscpd --config /workspace/src/public-app/.config/.jscpd.json /workspace/src/public-app
+    {{tools_compose}} run --rm jscpd --config /workspace/src/public-app/.config/.jscpd.actions.json /workspace/.github/actions
 
 local-links: tools-build
     {{tools_compose}} run --rm lychee --offline --include-fragments --root-dir /workspace /workspace/README.md /workspace/AGENTS.md /workspace/SECURITY.md /workspace/.github/actions/push-profile/README.md /workspace/src/public-app/README.md /workspace/src/laravel/README.md /workspace/src/laravel/SECURITY.md
@@ -138,14 +138,15 @@ security: tools-build
     {{tools_compose}} run --rm gitleaks dir --redact --no-banner /workspace/.tools
     {{tools_compose}} run --rm gitleaks dir --redact --no-banner /workspace/.docker
     {{tools_compose}} run --rm gitleaks dir --redact --no-banner /workspace/src/public-app/src
+    {{tools_compose}} run --rm gitleaks dir --redact --no-banner /workspace/src/packages/tools
     {{tools_compose}} run --rm gitleaks dir --redact --no-banner /workspace/src/laravel/app
     {{tools_compose}} run --rm gitleaks dir --redact --no-banner /workspace/src/laravel/config
     {{tools_compose}} run --rm gitleaks dir --redact --no-banner /workspace/src/laravel/routes
     {{tools_compose}} run --rm gitleaks dir --redact --no-banner /workspace/src/laravel/docker
     {{tools_compose}} run --rm gitleaks dir --redact --no-banner /workspace/src/laravel/scripts
-    {{tools_compose}} run --rm osv-scanner scan source --recursive /workspace/src/public-app /workspace/src/laravel
+    {{tools_compose}} run --rm osv-scanner scan source --config=/workspace/src/public-app/.config/osv-scanner.toml --recursive /workspace/src/public-app /workspace/src/laravel /workspace/src/packages
     {{tools_compose}} run --rm trivy fs --no-progress --scanners vuln,secret --severity CRITICAL,HIGH --exit-code 1 --skip-dirs /workspace/src/public-app/node_modules --skip-dirs /workspace/src/public-app/dist --skip-dirs /workspace/src/laravel/node_modules --skip-dirs /workspace/src/laravel/vendor --skip-files '**/*.dockerignore' /workspace
-    {{tools_compose}} run --rm semgrep scan --config auto --error --exclude 'node_modules/**' --exclude 'dist/**' /workspace/src/public-app/src /workspace/src/laravel/app /workspace/src/laravel/config /workspace/src/laravel/routes
+    {{tools_compose}} run --rm semgrep scan --config auto --error --exclude 'node_modules/**' --exclude 'dist/**' /workspace/src/public-app/src /workspace/src/packages/tools /workspace/src/laravel/app /workspace/src/laravel/config /workspace/src/laravel/routes
 
 quality-report: tools-build
     {{tools_compose}} run --rm qlty check --all --no-cache --no-upgrade-check || true

@@ -1,9 +1,0 @@
-id: no-mui-outside-ui-layer
-snapshots:
-  ? |
-    import { Button } from '@mui/material'
-  : labels:
-    - source: import { Button } from '@mui/material'
-      style: primary
-      start: 0
-      end: 38

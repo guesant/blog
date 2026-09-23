@@ -1,0 +1,20 @@
+id: no-narrative-comments-tsx
+language: Tsx
+severity: error
+message: Narrative comments are not allowed in source code.
+files:
+  - src/**/*.tsx
+ignores:
+  - src/routeTree.gen.ts
+  - src/data/api/generated/**
+rule:
+  all:
+    - kind: comment
+    - not:
+        any:
+          - regex: '^///\s*<reference\s+types=.*>$'
+          - regex: '^//\s*(biome-ignore|nosemgrep|@ts-expect-error|@ts-ignore|@ts-nocheck|istanbul).*'
+          - regex: '^//\s*(jscpd:ignore-(start|end)|zizmor:\s*ignore\[|shellcheck|yamllint|IMPORTANT:).*'
+          - regex: '^/\*[\s\S]*IMPORTANT:[\s\S]*\*/$'
+          - regex: '^/\*\s*(biome-ignore|nosemgrep|@ts-expect-error|@ts-ignore|@ts-nocheck|istanbul).*'
+          - regex: '^/\*\s*(jscpd:ignore-(start|end)|zizmor:\s*ignore\[|shellcheck|yamllint)[\s\S]*\*/$'

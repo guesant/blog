@@ -1,14 +1,9 @@
 import { StatusPage } from '../../sections/status';
-import type { RouteRendererProps } from './route-renderers.types';
+import { createRouteRenderer } from './create-route-renderer';
 
-type StatusRouteRendererProps = RouteRendererProps;
-
-export function StatusRouteRenderer(props: StatusRouteRendererProps) {
-  if (props.data.kind !== 'status') {
-    return null;
-  }
-
-  return (
-    <StatusPage kind={props.data.status} sourceRepositoryUrl={props.data.sourceRepositoryUrl} />
-  );
-}
+export const StatusRouteRenderer = createRouteRenderer({
+  kind: 'status',
+  render: (data) => (
+    <StatusPage kind={data.status} sourceRepositoryUrl={data.sourceRepositoryUrl} />
+  ),
+});

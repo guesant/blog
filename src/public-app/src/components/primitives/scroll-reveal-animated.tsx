@@ -10,7 +10,7 @@ type ScrollRevealAnimatedProps = {
 export function ScrollRevealAnimated(props: ScrollRevealAnimatedProps) {
   return (
     <MotionDiv
-      initial={props.reduceMotion ? false : { opacity: 0, y: 20 }}
+      initial={props.reduceMotion ? false : { opacity: 1, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.18 }}
       transition={{

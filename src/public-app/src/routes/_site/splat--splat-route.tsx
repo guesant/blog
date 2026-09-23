@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { useLocation } from '@tanstack/react-router';
-import { errorRouteData, fallbackRouteData, routeQueryOptions } from '../../data/queries';
+import { routeQueryOptions, useStableRouteData } from '../../data/queries';
 import type { RouteData } from '../../data/queries';
 import { RouteView } from '../../route-view';
 import { requestForPath } from './splat-request-for-path';
@@ -14,10 +14,11 @@ export function SplatRoute(props: SplatRouteProps) {
 
   const routeQuery = useQuery(routeQueryOptions(request));
 
-  const data =
-    routeQuery.data ??
-    props.initialData ??
-    (routeQuery.isError ? errorRouteData : fallbackRouteData);
+  const data = useStableRouteData({
+    queryData: routeQuery.data,
+    loaderData: props.initialData,
+    queryHasError: routeQuery.isError,
+  });
 
   return <RouteView data={data} />;
 }

@@ -1,6 +1,6 @@
 import { Box, Chip, Stack } from '../../ui';
 import type { FeedCardProps } from './feed-card-types';
-import { formatDate } from './format-date';
+import { formatDate } from '../format-date';
 
 type FeedCardHeaderProps = Pick<FeedCardProps, 'entry' | 'locale' | 't' | 'onQuickFilter'>;
 

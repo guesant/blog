@@ -10,10 +10,11 @@ export type HomeSectionProps = {
   content: HomePageContent;
   feedItems: PublicFeedItem[];
   feedPagination: import('@portfolio/data/api/public-site-source-support').ContentCollectionMeta;
+  feedSearch: string;
 };
 
 export function HomeSection(props: HomeSectionProps) {
-  const { content, feedItems, feedPagination } = props;
+  const { content, feedItems, feedPagination, feedSearch } = props;
 
   const t = useTranslations('Home');
 
@@ -43,6 +44,7 @@ export function HomeSection(props: HomeSectionProps) {
         content={content}
         feedItems={feedItems}
         feedPagination={feedPagination}
+        feedSearch={feedSearch}
         site={site}
         t={t}
         tFeed={tFeed}

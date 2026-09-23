@@ -1,179 +1,80 @@
 import { lazy, type ComponentType, type LazyExoticComponent } from 'react';
 import type { RouteData } from '../../../data/queries';
 import type { RouteRendererProps } from './route-renderers.types';
+import { HomeRouteRenderer } from './home-route-renderer';
 
 type LazyRouteRenderer = LazyExoticComponent<ComponentType<RouteRendererProps>>;
 
-const HomeRouteRenderer = lazy(() =>
-  import('./home-route-renderer').then((module) => ({ default: module.HomeRouteRenderer })),
-);
+export type RouteRenderer = ComponentType<RouteRendererProps> | LazyRouteRenderer;
 
-const AboutRouteRenderer = lazy(() =>
-  import('./about-route-renderer').then((module) => ({ default: module.AboutRouteRenderer })),
-);
+type RouteRendererModule = Record<string, ComponentType<RouteRendererProps>>;
 
-const PortfolioRouteRenderer = lazy(() =>
-  import('./portfolio-route-renderer').then((module) => ({
-    default: module.PortfolioRouteRenderer,
-  })),
-);
+const routeRendererModules = import.meta.glob<RouteRendererModule>([
+  './*-route-renderer.tsx',
+  '!./home-route-renderer.tsx',
+]);
 
-const NowRouteRenderer = lazy(() =>
-  import('./now-route-renderer').then((module) => ({ default: module.NowRouteRenderer })),
-);
+function loadRouteRenderer(file: string, exportName: string): LazyRouteRenderer {
+  return lazy(async () => {
+    const moduleLoader = routeRendererModules[`./${file}`];
 
-const CasesRouteRenderer = lazy(() =>
-  import('./cases-route-renderer').then((module) => ({ default: module.CasesRouteRenderer })),
-);
+    if (!moduleLoader) {
+      throw new Error(`Route renderer module not found: ${file}`);
+    }
 
-const ContactRouteRenderer = lazy(() =>
-  import('./contact-route-renderer').then((module) => ({ default: module.ContactRouteRenderer })),
-);
+    const module = await moduleLoader();
 
-const FindingsRouteRenderer = lazy(() =>
-  import('./findings-route-renderer').then((module) => ({ default: module.FindingsRouteRenderer })),
-);
+    const renderer = module[exportName];
 
-const ProjectsRouteRenderer = lazy(() =>
-  import('./projects-route-renderer').then((module) => ({ default: module.ProjectsRouteRenderer })),
-);
+    if (!renderer) {
+      throw new Error(`Route renderer export not found: ${exportName}`);
+    }
 
-const WritingRouteRenderer = lazy(() =>
-  import('./writing-route-renderer').then((module) => ({ default: module.WritingRouteRenderer })),
-);
+    return { default: renderer };
+  });
+}
 
-const CaseDetailRouteRenderer = lazy(() =>
-  import('./case-detail-route-renderer').then((module) => ({
-    default: module.CaseDetailRouteRenderer,
-  })),
-);
+const routeRendererDefinitions = {
+  loading: ['loading-route-renderer.tsx', 'default'],
+  about: ['about-route-renderer.tsx', 'AboutRouteRenderer'],
+  portfolio: ['portfolio-route-renderer.tsx', 'PortfolioRouteRenderer'],
+  now: ['now-route-renderer.tsx', 'NowRouteRenderer'],
+  cases: ['cases-route-renderer.tsx', 'CasesRouteRenderer'],
+  contact: ['contact-route-renderer.tsx', 'ContactRouteRenderer'],
+  findings: ['findings-route-renderer.tsx', 'FindingsRouteRenderer'],
+  projects: ['projects-route-renderer.tsx', 'ProjectsRouteRenderer'],
+  writing: ['writing-route-renderer.tsx', 'WritingRouteRenderer'],
+  'case-detail': ['case-detail-route-renderer.tsx', 'CaseDetailRouteRenderer'],
+  'collection-detail': ['collection-detail-route-renderer.tsx', 'CollectionDetailRouteRenderer'],
+  'finding-detail': ['finding-detail-route-renderer.tsx', 'FindingDetailRouteRenderer'],
+  'finding-type': ['finding-type-route-renderer.tsx', 'FindingTypeRouteRenderer'],
+  'experiment-detail': ['experiment-detail-route-renderer.tsx', 'ExperimentDetailRouteRenderer'],
+  'project-detail': ['project-detail-route-renderer.tsx', 'ProjectDetailRouteRenderer'],
+  'snippet-detail': ['snippet-detail-route-renderer.tsx', 'SnippetDetailRouteRenderer'],
+  'technology-detail': ['technology-detail-route-renderer.tsx', 'TechnologyDetailRouteRenderer'],
+  'topic-detail': ['topic-detail-route-renderer.tsx', 'TopicDetailRouteRenderer'],
+  'writing-detail': ['writing-detail-route-renderer.tsx', 'WritingDetailRouteRenderer'],
+  collections: ['collections-route-renderer.tsx', 'CollectionsRouteRenderer'],
+  credits: ['credits-route-renderer.tsx', 'CreditsRouteRenderer'],
+  follow: ['follow-route-renderer.tsx', 'FollowRouteRenderer'],
+  license: ['license-route-renderer.tsx', 'LicenseRouteRenderer'],
+  resume: ['resume-route-renderer.tsx', 'ResumeRouteRenderer'],
+  snippets: ['snippets-route-renderer.tsx', 'SnippetsRouteRenderer'],
+  status: ['status-route-renderer.tsx', 'StatusRouteRenderer'],
+  technologies: ['technologies-route-renderer.tsx', 'TechnologiesRouteRenderer'],
+  topics: ['topics-route-renderer.tsx', 'TopicsRouteRenderer'],
+  'tools-index': ['status-route-renderer.tsx', 'StatusRouteRenderer'],
+  tool: ['status-route-renderer.tsx', 'StatusRouteRenderer'],
+} satisfies Record<Exclude<RouteData['kind'], 'home'>, readonly [string, string]>;
 
-const CollectionDetailRouteRenderer = lazy(() =>
-  import('./collection-detail-route-renderer').then((module) => ({
-    default: module.CollectionDetailRouteRenderer,
-  })),
-);
+const lazyRouteRenderers = Object.fromEntries(
+  Object.entries(routeRendererDefinitions).map(([kind, [file, exportName]]) => [
+    kind,
+    loadRouteRenderer(file, exportName),
+  ]),
+) as Record<Exclude<RouteData['kind'], 'home'>, LazyRouteRenderer>;
 
-const FindingDetailRouteRenderer = lazy(() =>
-  import('./finding-detail-route-renderer').then((module) => ({
-    default: module.FindingDetailRouteRenderer,
-  })),
-);
-
-const FindingTypeRouteRenderer = lazy(() =>
-  import('./finding-type-route-renderer').then((module) => ({
-    default: module.FindingTypeRouteRenderer,
-  })),
-);
-
-const ExperimentDetailRouteRenderer = lazy(() =>
-  import('./experiment-detail-route-renderer').then((module) => ({
-    default: module.ExperimentDetailRouteRenderer,
-  })),
-);
-
-const ProjectDetailRouteRenderer = lazy(() =>
-  import('./project-detail-route-renderer').then((module) => ({
-    default: module.ProjectDetailRouteRenderer,
-  })),
-);
-
-const SnippetDetailRouteRenderer = lazy(() =>
-  import('./snippet-detail-route-renderer').then((module) => ({
-    default: module.SnippetDetailRouteRenderer,
-  })),
-);
-
-const TechnologyDetailRouteRenderer = lazy(() =>
-  import('./technology-detail-route-renderer').then((module) => ({
-    default: module.TechnologyDetailRouteRenderer,
-  })),
-);
-
-const TopicDetailRouteRenderer = lazy(() =>
-  import('./topic-detail-route-renderer').then((module) => ({
-    default: module.TopicDetailRouteRenderer,
-  })),
-);
-
-const WritingDetailRouteRenderer = lazy(() =>
-  import('./writing-detail-route-renderer').then((module) => ({
-    default: module.WritingDetailRouteRenderer,
-  })),
-);
-
-const CollectionsRouteRenderer = lazy(() =>
-  import('./collections-route-renderer').then((module) => ({
-    default: module.CollectionsRouteRenderer,
-  })),
-);
-
-const CreditsRouteRenderer = lazy(() =>
-  import('./credits-route-renderer').then((module) => ({ default: module.CreditsRouteRenderer })),
-);
-
-const FollowRouteRenderer = lazy(() =>
-  import('./follow-route-renderer').then((module) => ({ default: module.FollowRouteRenderer })),
-);
-
-const LicenseRouteRenderer = lazy(() =>
-  import('./license-route-renderer').then((module) => ({ default: module.LicenseRouteRenderer })),
-);
-
-const ResumeRouteRenderer = lazy(() =>
-  import('./resume-route-renderer').then((module) => ({ default: module.ResumeRouteRenderer })),
-);
-
-const SnippetsRouteRenderer = lazy(() =>
-  import('./snippets-route-renderer').then((module) => ({ default: module.SnippetsRouteRenderer })),
-);
-
-const StatusRouteRenderer = lazy(() =>
-  import('./status-route-renderer').then((module) => ({ default: module.StatusRouteRenderer })),
-);
-
-const LoadingRouteRenderer = lazy(() => import('./loading-route-renderer'));
-
-const TechnologiesRouteRenderer = lazy(() =>
-  import('./technologies-route-renderer').then((module) => ({
-    default: module.TechnologiesRouteRenderer,
-  })),
-);
-
-const TopicsRouteRenderer = lazy(() =>
-  import('./topics-route-renderer').then((module) => ({ default: module.TopicsRouteRenderer })),
-);
-
-export const routeRenderers: Record<RouteData['kind'], LazyRouteRenderer> = {
-  loading: LoadingRouteRenderer,
+export const routeRenderers = {
+  ...lazyRouteRenderers,
   home: HomeRouteRenderer,
-  about: AboutRouteRenderer,
-  portfolio: PortfolioRouteRenderer,
-  now: NowRouteRenderer,
-  cases: CasesRouteRenderer,
-  contact: ContactRouteRenderer,
-  findings: FindingsRouteRenderer,
-  projects: ProjectsRouteRenderer,
-  writing: WritingRouteRenderer,
-  'case-detail': CaseDetailRouteRenderer,
-  'collection-detail': CollectionDetailRouteRenderer,
-  'finding-detail': FindingDetailRouteRenderer,
-  'finding-type': FindingTypeRouteRenderer,
-  'experiment-detail': ExperimentDetailRouteRenderer,
-  'project-detail': ProjectDetailRouteRenderer,
-  'snippet-detail': SnippetDetailRouteRenderer,
-  'technology-detail': TechnologyDetailRouteRenderer,
-  'topic-detail': TopicDetailRouteRenderer,
-  'writing-detail': WritingDetailRouteRenderer,
-  collections: CollectionsRouteRenderer,
-  credits: CreditsRouteRenderer,
-  follow: FollowRouteRenderer,
-  license: LicenseRouteRenderer,
-  resume: ResumeRouteRenderer,
-  snippets: SnippetsRouteRenderer,
-  status: StatusRouteRenderer,
-  technologies: TechnologiesRouteRenderer,
-  topics: TopicsRouteRenderer,
-  'tools-index': StatusRouteRenderer,
-  tool: StatusRouteRenderer,
-};
+} as Record<RouteData['kind'], RouteRenderer>;

@@ -1,20 +1,7 @@
-import { WritingSection } from '../../sections/writing';
-import type { RouteRendererProps } from './route-renderers.types';
+import { ContentFeedRouteSection } from '../content-feed-route-section';
+import { createRouteRenderer } from './create-route-renderer';
 
-type WritingRouteRendererProps = RouteRendererProps;
-
-export function WritingRouteRenderer(props: WritingRouteRendererProps) {
-  if (props.data.kind !== 'writing') {
-    return null;
-  }
-
-  return (
-    <WritingSection
-      writings={props.data.writings}
-      findings={props.data.findings}
-      collections={props.data.collections}
-      copy={props.data.page}
-      contentMeta={props.data.pagination}
-    />
-  );
-}
+export const WritingRouteRenderer = createRouteRenderer({
+  kind: 'writing',
+  render: (data) => <ContentFeedRouteSection data={data} fixedKind="post" action="/writing" />,
+});

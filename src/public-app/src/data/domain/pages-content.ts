@@ -7,9 +7,12 @@ import type { ContentCollectionMeta } from '../api/public-site-source-support';
 
 export type HomePageContent = {
   cases: CaseStudy[];
+  casesPagination: ContentCollectionMeta;
   projects: Project[];
+  projectsPagination: ContentCollectionMeta;
   experiments: Experiment[];
   experimentsCount: number;
+  experimentsPagination: ContentCollectionMeta;
   profile: Profile;
   page: HomePageCopy;
   site: SiteText;
@@ -32,7 +35,7 @@ export type CreditEntry = {
   packageManager?: string;
 };
 
-export type CreditsGroups = {
+type CreditsGroups = {
   acknowledgements: CreditEntry[];
   references: CreditEntry[];
   infrastructure: CreditEntry[];

@@ -4,6 +4,7 @@ type GetSsrQueryDataOptions<TQueryFnData, TError, TData, TQueryKey extends Query
   queryClient: QueryClient;
   options: FetchQueryOptions<TQueryFnData, TError, TData, TQueryKey>;
   fallback: TData;
+  errorFallback?: TData;
   timeoutMs?: number;
 };
 

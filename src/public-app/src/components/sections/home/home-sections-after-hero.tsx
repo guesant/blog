@@ -3,8 +3,7 @@
 import type { HomePageContent, PublicFeedItem, SiteText } from '@portfolio/data/domain/types';
 import { HomeFeedAndContact } from './home-feed-and-contact';
 import { HomeExperienceOptionalSection } from './home-experience-optional-section';
-import { HomeProjectsSection } from './home-projects-section';
-import { HomeWorkSection } from './home-work-section';
+import { HomeFeaturedSections } from './home-featured-sections';
 import type { Translator } from '@/i18n/compat-support';
 import type { ContentCollectionMeta } from '@portfolio/data/api/public-site-source-support';
 
@@ -18,22 +17,13 @@ type HomeSectionsAfterHeroProps = {
   showContact: boolean;
   hasEmail: boolean;
   feedPagination: ContentCollectionMeta;
+  feedSearch: string;
 };
 
 export function HomeSectionsAfterHero(props: HomeSectionsAfterHeroProps) {
   return (
     <>
-      {props.content.cases.length > 0 && (
-        <HomeWorkSection cases={props.content.cases} page={props.content.page} t={props.t} />
-      )}
-      {(props.content.projects.length > 0 || props.content.experimentsCount > 0) && (
-        <HomeProjectsSection
-          projects={props.content.projects}
-          experimentsCount={props.content.experimentsCount}
-          page={props.content.page}
-          t={props.t}
-        />
-      )}
+      <HomeFeaturedSections content={props.content} t={props.t} />
       <HomeExperienceOptionalSection content={props.content} t={props.t} />
       <HomeFeedAndContact
         content={props.content}
@@ -45,6 +35,7 @@ export function HomeSectionsAfterHero(props: HomeSectionsAfterHeroProps) {
         showContact={props.showContact}
         hasEmail={props.hasEmail}
         feedPagination={props.feedPagination}
+        feedSearch={props.feedSearch}
       />
     </>
   );

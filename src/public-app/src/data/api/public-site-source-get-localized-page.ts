@@ -1,15 +1,23 @@
 import { getSitePage } from './public-site-generated-client';
 import { apiClient } from './public-site-source-api-client';
-import { RecordValue } from './public-site-source-support';
+import { objectValue } from './public-site-source-object-value';
+import type { RecordValue } from './public-site-source-support';
 
 export async function getLocalizedPage<T>(slug: string, locale?: string): Promise<T> {
   const result = await getSitePage({
     client: apiClient(),
+    throwOnError: true,
     path: { slug },
     query: { locale },
   });
 
-  const page = { ...((result.data ?? {}) as RecordValue) };
+  const pageValue = objectValue(result.data);
+
+  if (!pageValue) {
+    throw new Error('Public site API returned an empty page response');
+  }
+
+  const page = { ...pageValue } as RecordValue;
 
   if (slug === 'home') {
     return { featuredCases: [], featuredProjects: [], featuredWriting: [], ...page } as T;

@@ -1,4 +1,4 @@
-export type TrajectoryItem = {
+type TrajectoryItem = {
   hidden?: boolean;
   includeInResume?: boolean;
   role: string;

@@ -32,7 +32,7 @@ export default defineConfig({
     tanstackStart({
       router: {
         routeFileIgnorePattern:
-          '^(?:site-route-context\\.tsx|site--locale-layout\\.tsx|splat-(?:request-for-path|metadata-for-route)\\.tsx|splat-metadata-(?:default|kind|page|article)\\.ts|splat-detail-route-path\\.ts|splat--splat-route\\.tsx)$',
+          '^(?:site-route-(?:context|loader|head)\\.(?:tsx|ts)|site--locale-layout\\.tsx|splat-(?:request-for-path|metadata-for-route)\\.tsx|splat-metadata-(?:default|kind|page|article)\\.ts|splat-detail-route-path\\.ts|splat--splat-route\\.tsx)$',
       },
     }),
     viteReact(),

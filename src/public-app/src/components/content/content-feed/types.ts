@@ -42,6 +42,7 @@ export type ContentFeedProps = {
   collections: ReferenceCollection[];
   copy: FeedPageCopy;
   showHeader?: boolean;
+  showPagination?: boolean;
   fixedKind?: FeedKind;
   action: string;
   initialKind?: string;

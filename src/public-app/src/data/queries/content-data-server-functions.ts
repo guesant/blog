@@ -22,17 +22,21 @@ export const loadShell = createServerFn({ method: 'GET' })
 export const loadRoute = createServerFn({ method: 'GET' })
   .validator(requestSchema)
   .handler(async ({ data }) => {
-    const { getLocalizedShell } = await import('../api/public-site-source-get-localized-shell');
+    const { loadShellData } = await import('./content-data-server-load-shell');
 
     const { loadRouteDataForRequest } = await import('./content-data-server-load-route');
+
+    const shell = await getServerStaleWhileRevalidate({
+      key: `shell:${data.locale}`,
+      loader: () => loadShellData(data.locale),
+      fallback: fallbackShellData,
+    });
 
     return serializable(
       await getServerStaleWhileRevalidate({
         key: `route:${JSON.stringify(data)}`,
         loader: async () =>
-          loadRouteDataForRequest(data, {
-            shell: await getLocalizedShell(data.locale),
-          }),
+          loadRouteDataForRequest(data, { shell }),
         fallback: fallbackRouteData,
       }),
     );

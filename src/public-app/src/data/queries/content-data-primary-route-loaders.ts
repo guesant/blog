@@ -26,7 +26,7 @@ export const primaryRouteLoaders: Record<string, RouteLoader> = {
   '/': async ({ locale, search }, context?: RouteLoadContext) => {
     const [content, feed] = await Promise.all([
       getHomePageContent(locale, context?.shell),
-      getHomeFeedPage(locale, collectionQuery(search)),
+      getHomeFeedPage(locale, collectionQuery(search, 'page', 6)),
     ]);
 
     return {

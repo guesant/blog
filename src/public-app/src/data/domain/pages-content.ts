@@ -1,4 +1,4 @@
-import type { CaseStudy, Experiment, Project, TechnologyBadge, Writing } from './content';
+import type { CaseStudy, Experiment, Project, TechnologyBadge } from './content';
 import type { WithSeo } from './content';
 import type { Profile, ResumeContent } from './resume';
 import type { SiteText } from './site';
@@ -10,9 +10,7 @@ export type HomePageContent = {
   projects: Project[];
   experiments: Experiment[];
   experimentsCount: number;
-  writings: Writing[];
   profile: Profile;
-  resume: ResumeContent;
   page: HomePageCopy;
   site: SiteText;
   recurringTechnologies: TechnologyBadge[];

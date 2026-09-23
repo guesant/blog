@@ -33,6 +33,11 @@ final class PublicFindingResponseFactory
         return PublicFindingResponseDto::fromArray($this->item($result->resource, $locale, [], true));
     }
 
+    public function summary(object $resource, string $locale): array
+    {
+        return $this->item($resource, $locale, null, true);
+    }
+
     private function item(
         object $resource,
         string $locale,

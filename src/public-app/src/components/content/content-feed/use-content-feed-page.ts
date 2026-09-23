@@ -8,7 +8,6 @@ import type { UseContentFeedDataProps } from './use-content-feed-data.types';
 type UseContentFeedPageProps = {
   input: UseContentFeedDataProps;
   entries: FeedEntry[];
-  serverManaged: boolean;
 };
 
 export function useContentFeedPage(props: UseContentFeedPageProps) {
@@ -20,7 +19,6 @@ export function useContentFeedPage(props: UseContentFeedPageProps) {
         contentMeta: props.input.contentMeta,
         initialPage: props.input.initialPage ?? 1,
         pageFromQuery: Number(props.input.query.get('page') || props.input.initialPage || 1),
-        serverManaged: props.serverManaged,
       }),
     [
       props.entries,
@@ -28,7 +26,6 @@ export function useContentFeedPage(props: UseContentFeedPageProps) {
       props.input.contentMeta,
       props.input.initialPage,
       props.input.query,
-      props.serverManaged,
     ],
   );
 }

@@ -1,4 +1,4 @@
-import type { RichTextContent, WithSeo } from './content';
+import type { RichTextContent, TechnologyBadge, WithSeo } from './content';
 import type { ContentReference } from './resume';
 
 export type PageIntroduction = WithSeo & {
@@ -8,6 +8,7 @@ export type PageIntroduction = WithSeo & {
 };
 
 export type HomePageCopy = WithSeo & {
+  recurringTechnologies?: TechnologyBadge[];
   featuredCases: ContentReference[];
   featuredProjects: ContentReference[];
   featuredWriting: ContentReference[];

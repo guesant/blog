@@ -13,24 +13,17 @@ type CreditsPageSectionsProps = {
 };
 
 export function CreditsPageSections(props: CreditsPageSectionsProps) {
-  const acknowledgements = props.content.credits.entries.filter(
-    (entry) => entry.category === 'reference' && !entry.url,
-  );
-
-  const references = props.content.credits.entries.filter(
-    (entry) => entry.category === 'reference' && entry.url,
-  );
-
-  const infrastructure = props.content.credits.entries.filter(
-    (entry) => entry.category === 'infrastructure',
-  );
+  const groups = props.content.credits.groups;
 
   return (
     <>
       <CollectionPagination meta={props.content.credits.meta} action="/credits" />
-      <CreditsAcknowledgements entries={acknowledgements} heading={props.t('eyebrow')} />
-      <CreditsReferences entries={references} heading={props.t('referencesHeading')} />
-      <CreditsInfrastructure entries={infrastructure} heading={props.t('infrastructureHeading')} />
+      <CreditsAcknowledgements entries={groups.acknowledgements} heading={props.t('eyebrow')} />
+      <CreditsReferences entries={groups.references} heading={props.t('referencesHeading')} />
+      <CreditsInfrastructure
+        entries={groups.infrastructure}
+        heading={props.t('infrastructureHeading')}
+      />
       <CreditsSection heading={props.t('librariesHeading')} maxWidth="none">
         <PackageList packages={props.content.libraries} />
       </CreditsSection>

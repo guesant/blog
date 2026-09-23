@@ -1,12 +1,6 @@
 'use client';
 
-import type {
-  HomePageContent,
-  Reference,
-  ReferenceCollection,
-  SiteText,
-  Writing,
-} from '@portfolio/data/domain/types';
+import type { HomePageContent, PublicFeedItem, SiteText } from '@portfolio/data/domain/types';
 import type { Translator } from '@/i18n/compat-support';
 import type { ContentCollectionMeta } from '@portfolio/data/api/public-site-source-support';
 import { ContentFeed } from '../../content/content-feed';
@@ -14,9 +8,7 @@ import { HomeContactSection } from './home-contact-section';
 
 type HomeFeedAndContactProps = {
   content: HomePageContent;
-  writings: Writing[];
-  findings: Reference[];
-  collections: ReferenceCollection[];
+  feedItems: PublicFeedItem[];
   site: SiteText;
   t: Translator;
   tFeed: Translator;
@@ -30,9 +22,10 @@ export function HomeFeedAndContact(props: HomeFeedAndContactProps) {
   return (
     <>
       <ContentFeed
-        writings={props.writings}
-        findings={props.findings}
-        collections={props.collections}
+        feedItems={props.feedItems}
+        writings={[]}
+        findings={[]}
+        collections={[]}
         contentMeta={props.feedPagination}
         copy={{ title: props.tFeed('title'), description: props.tFeed('description') }}
         action="/"

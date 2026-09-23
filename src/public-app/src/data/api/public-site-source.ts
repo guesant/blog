@@ -18,8 +18,6 @@ export { getLocalizedPage } from './public-site-source-get-localized-page';
 
 export { getLocalizedProfile } from './public-site-source-get-localized-profile';
 
-export { listTechnologies } from './public-site-source-list-technologies';
-
 export { getTechnologyBySlug } from './public-site-source-get-technology-by-slug';
 
 export { getSnippetBySlug } from './public-site-source-get-snippet-by-slug';

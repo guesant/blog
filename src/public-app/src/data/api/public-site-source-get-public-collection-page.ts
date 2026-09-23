@@ -23,6 +23,9 @@ export async function getPublicCollectionPage<T>(
       per_page: query.perPage,
       sort: query.sort,
       featured: query.featured,
+      q: query.q,
+      type: query.type,
+      topic: query.topic,
     },
   });
 
@@ -35,5 +38,6 @@ export async function getPublicCollectionPage<T>(
       query,
       locale,
     }),
+    groups: objectValue(payload?.groups),
   };
 }

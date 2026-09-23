@@ -12,7 +12,9 @@ export function LocaleLayout() {
 
   const themeMode = useLoaderData({ from: '__root__' });
 
-  const shell = useQuery(shellQueryOptions(locale)).data ?? fallbackShellData;
+  const loaderShell = useLoaderData({ from: '/_site' });
+
+  const shell = useQuery(shellQueryOptions(locale)).data ?? loaderShell ?? fallbackShellData;
 
   const content = shell.site.maintenanceEnabled ? (
     <MaintenancePage site={shell.site} profile={shell.profile} />

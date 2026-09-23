@@ -1,4 +1,9 @@
-import type { Reference, ReferenceCollection, Writing } from '@portfolio/data/domain/types';
+import type {
+  PublicFeedItem,
+  Reference,
+  ReferenceCollection,
+  Writing,
+} from '@portfolio/data/domain/types';
 import type { FindingFacets, FindingListMeta } from '@portfolio/data/services';
 import type { ContentCollectionMeta } from '@portfolio/data/api/public-site-source-support';
 import type { SourcePreviewData } from '../source-preview/types';
@@ -31,6 +36,7 @@ export type FeedEntry = {
 export type FeedPageCopy = { title: string; description: string };
 
 export type ContentFeedProps = {
+  feedItems?: PublicFeedItem[];
   writings: Writing[];
   findings: Reference[];
   collections: ReferenceCollection[];

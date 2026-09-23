@@ -13,9 +13,7 @@ type ResumePageSectionsProps = {
 export function ResumePageSections(props: ResumePageSectionsProps) {
   const resume = props.content.resume;
 
-  const experience = props.content.profile.trajectory
-    .filter((item) => item.includeInResume)
-    .map((item) => ({ item }));
+  const experience = props.content.resume.experience.map((item) => ({ item }));
 
   return (
     <>

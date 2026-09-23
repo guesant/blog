@@ -4,11 +4,10 @@ import { ExplorationSection, ExplorationTileGrid } from '../exploration-section'
 import { featureFlags } from '@portfolio/data/config/feature-flags';
 import type { IconName } from '../../primitives/icon';
 import { ExploreTile } from './explore-tile';
+import { useTranslations } from '@/i18n/compat';
 
-type ExploreSectionProps = { t: (key: string) => string };
-
-export function ExploreSection(props: ExploreSectionProps) {
-  const { t } = props;
+export function ExploreSection() {
+  const t = useTranslations('Common');
 
   const tiles: { icon: IconName; label: string; href: string }[] = [
     { icon: 'pen-line', label: t('writing'), href: '/writing' },
@@ -21,7 +20,7 @@ export function ExploreSection(props: ExploreSectionProps) {
   ];
 
   return (
-    <ExplorationSection title={t('keepExploringTitle')} divider>
+    <ExplorationSection title={t('continueExploring')} divider>
       <ExplorationTileGrid>
         {tiles.map((tile) => (
           <ExploreTile key={tile.href} tile={tile} />

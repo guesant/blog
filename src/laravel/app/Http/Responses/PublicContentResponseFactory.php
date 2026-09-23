@@ -2,6 +2,7 @@
 
 namespace App\Http\Responses;
 
+use App\Application\PublicSite\PublicFeedItem;
 use App\Content\Locale;
 use App\Models\CaseStudy;
 use App\Models\Experiment;
@@ -15,6 +16,19 @@ use Illuminate\Pagination\LengthAwarePaginator;
 
 final class PublicContentResponseFactory
 {
+    public function __construct(
+        private readonly PublicFindingResponseFactory $findings,
+    ) {}
+
+    public function feedItem(PublicFeedItem $item, string $locale): array
+    {
+        return match ($item->kind) {
+            'post' => $this->feedWriting($this->collectionItem('writing', $item->content, $locale)),
+            'achado' => $this->feedFinding($this->findings->summary($item->content, $locale)),
+            'colecao' => $this->feedCollection($this->collectionItem('collections', $item->content, $locale)),
+        };
+    }
+
     public function collectionItem(string $collection, object $item, string $locale): array
     {
         return match ($collection) {
@@ -147,6 +161,77 @@ final class PublicContentResponseFactory
             'package_manager' => $credit->package_manager,
             'package_name' => $credit->package_name,
             'created_at' => $credit->created_at?->format('Y-m-d H:i:s'),
+        ];
+    }
+
+    public function creditGroups(array $credits): array
+    {
+        return [
+            'acknowledgements' => array_values(array_filter(
+                $credits,
+                static fn (array $credit): bool => $credit['category'] === 'reference' && empty($credit['url']),
+            )),
+            'references' => array_values(array_filter(
+                $credits,
+                static fn (array $credit): bool => $credit['category'] === 'reference' && filled($credit['url']),
+            )),
+            'infrastructure' => array_values(array_filter(
+                $credits,
+                static fn (array $credit): bool => $credit['category'] === 'infrastructure',
+            )),
+            'libraries' => array_values(array_filter(
+                $credits,
+                static fn (array $credit): bool => in_array($credit['category'], ['library', 'font'], true),
+            )),
+            'tools' => array_values(array_filter(
+                $credits,
+                static fn (array $credit): bool => $credit['category'] === 'tool',
+            )),
+        ];
+    }
+
+    private function feedWriting(array $item): array
+    {
+        return [
+            'kind' => 'post',
+            'slug' => $item['slug'],
+            'title' => $item['title'],
+            'preview' => $item['excerpt'] ?? '',
+            'date' => $item['date'] ?? '',
+            'reading_time' => $item['reading_time'] ?? null,
+            'topics' => $item['topics'] ?? [],
+            'href' => $item['url'],
+        ];
+    }
+
+    private function feedFinding(array $item): array
+    {
+        return [
+            ...$item,
+            'kind' => 'achado',
+            'slug' => $item['slug'],
+            'title' => $item['title'] ?? $item['slug'],
+            'preview' => $item['personal_note'] ?: ($item['reason_found'] ?: ($item['description'] ?? '')),
+            'date' => $item['found_date'] ?: ($item['published_date'] ?? ''),
+            'finding_type' => $item['type'],
+            'popularity' => $item['popularity'],
+            'featured' => $item['featured'],
+            'topics' => $item['topics'],
+            'links' => $item['links'],
+            'href' => $item['url'],
+        ];
+    }
+
+    private function feedCollection(array $item): array
+    {
+        return [
+            'kind' => 'colecao',
+            'slug' => $item['slug'],
+            'title' => $item['title'],
+            'preview' => $item['description'] ?? '',
+            'date' => $item['published_at'] ?? '',
+            'topics' => [],
+            'href' => $item['url'],
         ];
     }
 

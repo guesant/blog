@@ -1,4 +1,4 @@
-type TrajectoryItem = {
+export type TrajectoryItem = {
   hidden?: boolean;
   includeInResume?: boolean;
   role: string;
@@ -98,6 +98,7 @@ type AwardItem = {
 export type ContentReference = string | { item: string };
 
 export type ResumeContent = {
+  experience: TrajectoryItem[];
   summary: string;
   skills: ResumeSkillGroup[];
   languages: LanguageProficiency[];

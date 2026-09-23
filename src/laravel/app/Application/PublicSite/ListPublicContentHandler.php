@@ -4,6 +4,7 @@ namespace App\Application\PublicSite;
 
 use App\Content\CaseStudyQuery;
 use App\Content\CreditsQuery;
+use App\Content\FeedQuery;
 use App\Content\ProjectQuery;
 use App\Content\ReferenceCollectionQuery;
 use App\Content\SnippetQuery;
@@ -16,18 +17,43 @@ use InvalidArgumentException;
 
 final class ListPublicContentHandler
 {
+    public function __construct(
+        private readonly FeedQuery $feed,
+    ) {}
+
     public function handle(ListPublicContent $query): PublicContentListResult
     {
         $page = $query->featured ? $this->featured($query) : match ($query->collection) {
+            'feed' => $this->feed->listPaginated(
+                perPage: $query->perPage,
+                page: $query->page,
+                sort: $query->sort,
+                kind: $query->kind,
+                locale: $query->locale,
+                search: $query->search,
+                type: $query->type,
+                topic: $query->topic,
+            ),
             'cases' => (new CaseStudyQuery)->listPaginated($query->perPage, $query->sort),
-            'collections' => (new ReferenceCollectionQuery)->listPaginated($query->perPage, $query->sort),
+            'collections' => (new ReferenceCollectionQuery)->listPaginated(
+                $query->perPage,
+                $query->sort,
+                $query->locale,
+                $query->search,
+            ),
             'credits' => (new CreditsQuery)->listPaginated($query->perPage, $query->sort),
             'experiments' => (new ProjectQuery)->listExperimentsPaginated($query->perPage, $query->sort),
             'projects' => (new ProjectQuery)->listPaginated($query->perPage, $query->sort),
             'snippets' => (new SnippetQuery)->listPaginated($query->perPage, $query->sort),
             'technologies' => (new TechnologyQuery)->listPaginated($query->perPage, $query->sort),
             'topics' => (new TopicQuery)->listPaginated($query->perPage, $query->sort),
-            'writing' => (new WritingQuery)->listPaginated($query->perPage, $query->sort),
+            'writing' => (new WritingQuery)->listPaginated(
+                $query->perPage,
+                $query->sort,
+                $query->locale,
+                $query->search,
+                $query->topic,
+            ),
             default => throw new InvalidArgumentException('Unsupported public content collection.'),
         };
 

@@ -54,7 +54,7 @@ export function ContentFeedListing(props: ContentFeedListingProps) {
         onPageChange={props.onPageChange}
         scrollTargetId="content-feed"
       />
-      <ExploreSection t={props.t} />
+      <ExploreSection />
     </>
   );
 }

@@ -8,10 +8,30 @@ use Illuminate\Support\Collection;
 
 class WritingQuery
 {
-    public function listPaginated(int $perPage = 20, ?string $sort = null): LengthAwarePaginator
-    {
+    public function listPaginated(
+        int $perPage = 20,
+        ?string $sort = null,
+        ?string $locale = null,
+        ?string $search = null,
+        ?string $topic = null,
+    ): LengthAwarePaginator {
         $query = Writing::where('hidden', false)
             ->with(['translations', 'topics.translations']);
+
+        if (filled($search)) {
+            $term = '%'.$search.'%';
+            $query->whereHas('translations', function ($translation) use ($locale, $term): void {
+                $translation->where('locale', Locale::normalize($locale))
+                    ->where(function ($fields) use ($term): void {
+                        $fields->where('title', 'ilike', $term)
+                            ->orWhere('excerpt', 'ilike', $term);
+                    });
+            });
+        }
+
+        if (filled($topic)) {
+            $query->whereHas('topics', fn ($topicQuery) => $topicQuery->where('topics.slug', $topic));
+        }
 
         if ($sort === 'asc') {
             $query->orderBy('created_at', 'asc')->orderBy('id');

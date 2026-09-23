@@ -1,4 +1,7 @@
 import type { ContentCollectionQuery } from '../api/public-site-source-support';
+import { contentCollectionQueryKind } from './content-collection-query-kind';
+import { contentCollectionQueryString } from './content-collection-query-string';
+import { contentCollectionQuerySort } from './content-collection-query-sort';
 import { positiveQueryNumber } from './positive-query-number';
 
 export function collectionQuery(
@@ -10,5 +13,21 @@ export function collectionQuery(
 
   const page = positiveQueryNumber(params.get(parameter));
 
-  return { page: page ?? 1, perPage };
+  const sort = params.get('sort');
+
+  const query = params.get('q');
+
+  const type = params.get('type');
+
+  const topic = params.get('topic');
+
+  return {
+    page: page ?? 1,
+    perPage,
+    q: contentCollectionQueryString(query),
+    type: contentCollectionQueryString(type),
+    topic: contentCollectionQueryString(topic),
+    kind: contentCollectionQueryKind(params.get('kind')),
+    sort: contentCollectionQuerySort(sort),
+  };
 }

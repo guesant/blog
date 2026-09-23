@@ -12,6 +12,7 @@ export async function getLocalizedResume(locale?: string): Promise<ResumeContent
   const resume = objectValue(result.data) ?? {};
 
   return {
+    experience: recordList<ResumeContent['experience'][number]>(resume.experience),
     summary: stringValue(resume.summary),
     skills: recordList<RecordValue>(resume.skills).map((skill) => ({
       label: stringValue(skill.name),

@@ -1,12 +1,6 @@
 'use client';
 
-import type {
-  HomePageContent,
-  Reference,
-  ReferenceCollection,
-  SiteText,
-  Writing,
-} from '@portfolio/data/domain/types';
+import type { HomePageContent, PublicFeedItem, SiteText } from '@portfolio/data/domain/types';
 import { HomeFeedAndContact } from './home-feed-and-contact';
 import { HomeExperienceOptionalSection } from './home-experience-optional-section';
 import { HomeProjectsSection } from './home-projects-section';
@@ -16,9 +10,7 @@ import type { ContentCollectionMeta } from '@portfolio/data/api/public-site-sour
 
 type HomeSectionsAfterHeroProps = {
   content: HomePageContent;
-  writings: Writing[];
-  findings: Reference[];
-  collections: ReferenceCollection[];
+  feedItems: PublicFeedItem[];
   site: SiteText;
   t: Translator;
   tFeed: Translator;
@@ -45,9 +37,7 @@ export function HomeSectionsAfterHero(props: HomeSectionsAfterHeroProps) {
       <HomeExperienceOptionalSection content={props.content} t={props.t} />
       <HomeFeedAndContact
         content={props.content}
-        writings={props.writings}
-        findings={props.findings}
-        collections={props.collections}
+        feedItems={props.feedItems}
         site={props.site}
         t={props.t}
         tFeed={props.tFeed}

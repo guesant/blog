@@ -34,5 +34,9 @@ export const Route = createFileRoute('/_site/$')({
       ],
     };
   },
-  component: SplatRoute,
+  component: SiteSplatRoute,
 });
+
+function SiteSplatRoute() {
+  return <SplatRoute initialData={Route.useLoaderData()} />;
+}

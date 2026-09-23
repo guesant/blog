@@ -2,6 +2,7 @@ import { getLocalizedCredits } from '../api/public-site-source.ts';
 import type { ContentCollectionQuery } from '../api/public-site-source-support';
 import type { CreditsPageContent } from '../domain/types.ts';
 import { getCreditsPageCopy } from './content-service-get-credits-page-copy';
+import { creditToPackage } from './content-service-credit-to-package';
 
 export async function getCreditsPageContent(
   locale?: string,
@@ -12,17 +13,10 @@ export async function getCreditsPageContent(
     getLocalizedCredits(locale, query),
   ]);
 
-  const packageCredit = (entry: CreditsPageContent['credits']['entries'][number]) => ({
-    name: entry.name,
-    description: entry.description,
-  });
-
   return {
     page,
     credits,
-    libraries: credits.entries
-      .filter((entry) => entry.category === 'library' || entry.category === 'font')
-      .map(packageCredit),
-    tools: credits.entries.filter((entry) => entry.category === 'tool').map(packageCredit),
+    libraries: credits.groups.libraries.map(creditToPackage),
+    tools: credits.groups.tools.map(creditToPackage),
   };
 }

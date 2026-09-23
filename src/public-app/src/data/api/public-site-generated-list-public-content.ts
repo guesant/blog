@@ -13,6 +13,10 @@ type ListPublicContentQuery = {
   per_page?: number;
   sort?: string;
   featured?: boolean;
+  q?: string;
+  type?: string;
+  topic?: string;
+  kind?: 'post' | 'achado' | 'colecao';
 };
 
 export type ListPublicContentData = {

@@ -1,11 +1,6 @@
 'use client';
 
-import type {
-  HomePageContent,
-  Reference,
-  ReferenceCollection,
-  Writing,
-} from '@portfolio/data/domain/types';
+import type { HomePageContent, PublicFeedItem } from '@portfolio/data/domain/types';
 import { useTranslations } from '@/i18n/compat';
 import { HomeHero } from './home-hero';
 import { HomeSectionsAfterHero } from './home-sections-after-hero';
@@ -13,14 +8,12 @@ import { homeSectionContact } from './home-section-contact';
 
 export type HomeSectionProps = {
   content: HomePageContent;
-  writings: Writing[];
-  findings: Reference[];
-  collections: ReferenceCollection[];
+  feedItems: PublicFeedItem[];
   feedPagination: import('@portfolio/data/api/public-site-source-support').ContentCollectionMeta;
 };
 
 export function HomeSection(props: HomeSectionProps) {
-  const { content, writings, findings, collections, feedPagination } = props;
+  const { content, feedItems, feedPagination } = props;
 
   const t = useTranslations('Home');
 
@@ -48,9 +41,7 @@ export function HomeSection(props: HomeSectionProps) {
       />
       <HomeSectionsAfterHero
         content={content}
-        writings={writings}
-        findings={findings}
-        collections={collections}
+        feedItems={feedItems}
         feedPagination={feedPagination}
         site={site}
         t={t}

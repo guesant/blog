@@ -3,6 +3,7 @@ import type { ContentFeedState } from './read-content-feed-state';
 
 export type UseContentFeedDataProps = Pick<
   ContentFeedProps,
+  | 'feedItems'
   | 'writings'
   | 'findings'
   | 'collections'

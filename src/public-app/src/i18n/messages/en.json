@@ -86,7 +86,7 @@
   },
   "Common": {
     "explore": "Explore",
-    "keepExploringTitle": "Keep exploring",
+    "continueExploring": "Keep exploring",
     "writing": "Writing",
     "findings": "Findings",
     "collections": "Collections",

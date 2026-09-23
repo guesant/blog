@@ -32,9 +32,7 @@ export const primaryRouteLoaders: Record<string, RouteLoader> = {
     return {
       kind: 'home',
       content,
-      writings: feed.writings,
-      findings: feed.findings,
-      collections: feed.collections,
+      feedItems: feed.items,
       feedPagination: feed.meta,
     };
   },

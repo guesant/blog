@@ -24,6 +24,7 @@ export type ContentCollectionQuery = {
   q?: string;
   type?: string;
   topic?: string;
+  kind?: 'post' | 'achado' | 'colecao';
 };
 
 export type ContentCollectionMeta = {
@@ -37,6 +38,7 @@ export type ContentCollectionMeta = {
 export type ContentCollectionPage<T> = {
   items: T[];
   meta: ContentCollectionMeta;
+  groups?: RecordValue;
 };
 
 export type FindingListQuery = {

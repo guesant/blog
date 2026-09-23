@@ -44,11 +44,14 @@ function HomeRoute() {
 
   const { locale } = routeContext(location.pathname);
 
+  const loaderData = Route.useLoaderData();
+
   const routeQuery = useQuery(
     routeQueryOptions({ locale, pathname: '/', search: location.searchStr }),
   );
 
-  const data = routeQuery.data ?? (routeQuery.isError ? errorRouteData : fallbackRouteData);
+  const data =
+    routeQuery.data ?? loaderData ?? (routeQuery.isError ? errorRouteData : fallbackRouteData);
 
   return <RouteView data={data} />;
 }

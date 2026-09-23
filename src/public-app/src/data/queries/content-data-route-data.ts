@@ -13,6 +13,7 @@ import type {
   ReferenceCollection,
   ReferenceCollectionDetail,
   SiteText,
+  PublicFeedItem,
   Snippet,
   Topic,
   Technology,
@@ -32,9 +33,7 @@ export type RouteData =
   | {
       kind: 'home';
       content: HomePageContent;
-      writings: Writing[];
-      findings: Reference[];
-      collections: ReferenceCollection[];
+      feedItems: PublicFeedItem[];
       feedPagination: ContentCollectionMeta;
     }
   | { kind: 'about'; page: AboutPageCopy; profile: Profile }

@@ -11,11 +11,26 @@ class ReferenceCollectionQuery
 {
     use SortsListings;
 
-    public function listPaginated(int $perPage = 20, ?string $sort = null): LengthAwarePaginator
-    {
+    public function listPaginated(
+        int $perPage = 20,
+        ?string $sort = null,
+        ?string $locale = null,
+        ?string $search = null,
+    ): LengthAwarePaginator {
         $query = ReferenceCollection::where('hidden', false)
             ->with('translations')
             ->withCount('resources');
+
+        if (filled($search)) {
+            $term = '%'.$search.'%';
+            $query->whereHas('translations', function ($translation) use ($locale, $term): void {
+                $translation->where('locale', Locale::normalize($locale))
+                    ->where(function ($fields) use ($term): void {
+                        $fields->where('title', 'ilike', $term)
+                            ->orWhere('description', 'ilike', $term);
+                    });
+            });
+        }
 
         $this->applySort($query, $sort, alphaTable: 'reference_collection_revision_translations', alphaForeignKey: 'reference_collection_revision_id', alphaColumn: 'title');
 

@@ -2,11 +2,11 @@ import {
   getFeaturedContent,
   getContentCollectionPage,
   getLocalizedPage,
-  getLocalizedProfile,
-  getLocalizedSiteText,
-  listTechnologies,
 } from '../api/public-site-source.ts';
 import type { Experiment, HomePageContent, HomePageCopy } from '../domain/types.ts';
+import { homeTechnologies } from './content-service-home-technologies';
+import { resolveHomeProfile } from './content-service-resolve-home-profile';
+import { resolveHomeSite } from './content-service-resolve-home-site';
 
 export async function getHomePageContent(
   locale?: string,
@@ -23,12 +23,9 @@ export async function getHomePageContent(
     projects: featured.projects,
     experiments: experiments.items,
     experimentsCount: experiments.meta.total,
-    profile: shell?.profile ?? (await getLocalizedProfile(locale)),
+    profile: await resolveHomeProfile(locale, shell),
     page,
-    site: shell?.site ?? (await getLocalizedSiteText(locale)),
-    recurringTechnologies: await listTechnologies(
-      [...featured.cases, ...featured.projects].flatMap((item) => item.technologySlugs ?? []),
-      locale,
-    ),
+    site: await resolveHomeSite(locale, shell),
+    recurringTechnologies: homeTechnologies(page),
   };
 }

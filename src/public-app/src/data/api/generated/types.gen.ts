@@ -322,6 +322,10 @@ export type PublicSiteApiCollectionData = {
     query?: {
         locale?: string;
         sort?: string;
+        q?: string;
+        type?: string;
+        topic?: string;
+        kind?: string;
         featured?: boolean;
         page?: number;
     };

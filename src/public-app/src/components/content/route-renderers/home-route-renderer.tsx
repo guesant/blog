@@ -11,9 +11,7 @@ export function HomeRouteRenderer(props: HomeRouteRendererProps) {
   return (
     <HomeSection
       content={props.data.content}
-      writings={props.data.writings}
-      findings={props.data.findings}
-      collections={props.data.collections}
+      feedItems={props.data.feedItems}
       feedPagination={props.data.feedPagination}
     />
   );

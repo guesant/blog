@@ -1,4 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router';
+import { createElement } from 'react';
 import {
   fallbackRouteData,
   getSsrQueryData,
@@ -34,5 +35,9 @@ export const Route = createFileRoute('/_site/splat-support')({
       ],
     };
   },
-  component: SplatRoute,
+  component: SiteSplatSupportRoute,
 });
+
+function SiteSplatSupportRoute() {
+  return createElement(SplatRoute, { initialData: Route.useLoaderData() });
+}

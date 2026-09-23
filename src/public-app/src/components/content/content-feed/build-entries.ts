@@ -29,9 +29,5 @@ export function buildEntries(
       topics: [],
       href: `/collections/${item.slug}`,
     })),
-  ].sort((left, right) => {
-    const dateOrder = right.date.localeCompare(left.date);
-
-    return dateOrder || left.title.localeCompare(right.title);
-  });
+  ];
 }

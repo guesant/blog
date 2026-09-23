@@ -1,3 +1,6 @@
+import type { ExternalLink } from './refs-links';
+import type { Reference } from './refs-details';
+
 export type RichTextContent = Record<string, unknown>;
 
 type SeoMetadata = {
@@ -109,4 +112,20 @@ export type Writing = WithSeo & {
   topicSlugs?: string[];
   language?: 'en' | 'pt-BR';
   body: RichTextContent;
+};
+
+export type PublicFeedItem = {
+  kind: 'post' | 'achado' | 'colecao';
+  slug: string;
+  title: string;
+  preview: string;
+  date: string;
+  readingTime?: string;
+  topics: { name: string; slug?: string }[];
+  findingType?: string;
+  popularity?: { value: number; kind: string; rank: number };
+  featured?: boolean;
+  links?: ExternalLink[];
+  reference?: Reference;
+  href: string;
 };

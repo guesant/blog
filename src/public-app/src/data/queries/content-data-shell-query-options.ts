@@ -5,5 +5,6 @@ export const shellQueryOptions = (locale: string) =>
   queryOptions<ShellData>({
     queryKey: ['shell', locale],
     enabled: typeof window !== 'undefined',
+    placeholderData: (previousData) => previousData,
     queryFn: async () => (await loadShell({ data: locale })) as ShellData,
   });

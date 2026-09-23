@@ -6,12 +6,11 @@ import type { UseContentFeedDataProps } from './use-content-feed-data.types';
 
 type UseContentFeedEntriesProps = {
   input: UseContentFeedDataProps;
-  serverManaged: boolean;
 };
 
 export function useContentFeedEntries(props: UseContentFeedEntriesProps) {
   return useMemo(
-    () => buildContentFeedEntries({ ...props.input, serverManaged: props.serverManaged }),
-    [props.input.collections, props.input.findings, props.input.writings, props.serverManaged],
+    () => buildContentFeedEntries(props.input),
+    [props.input.collections, props.input.feedItems, props.input.findings, props.input.writings],
   );
 }

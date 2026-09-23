@@ -24,7 +24,7 @@ export type ResumePageContent = {
   page: ResumePageCopy;
 };
 
-type CreditEntry = {
+export type CreditEntry = {
   url: string;
   category: string;
   name: string;
@@ -32,9 +32,18 @@ type CreditEntry = {
   packageManager?: string;
 };
 
+export type CreditsGroups = {
+  acknowledgements: CreditEntry[];
+  references: CreditEntry[];
+  infrastructure: CreditEntry[];
+  libraries: CreditEntry[];
+  tools: CreditEntry[];
+};
+
 export type CreditsContent = {
   entries: CreditEntry[];
   meta: ContentCollectionMeta;
+  groups: CreditsGroups;
 };
 
 export type CreditsPageCopy = WithSeo & {

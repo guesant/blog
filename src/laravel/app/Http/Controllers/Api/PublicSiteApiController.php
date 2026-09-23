@@ -44,6 +44,7 @@ use Symfony\Component\HttpFoundation\Response;
 class PublicSiteApiController extends Controller
 {
     private const COLLECTIONS = [
+        'feed',
         'cases',
         'collections',
         'credits',
@@ -79,21 +80,34 @@ class PublicSiteApiController extends Controller
         $locale = Locale::normalize($request->query('locale'));
         $perPage = min(max((int) $request->query('per_page', 20), 1), 100);
         $sort = $this->sort($request->query('sort'));
+        $search = $this->queryString($request->query('q'));
+        $type = $this->queryString($request->query('type'));
+        $topic = $this->queryString($request->query('topic'));
+        $kind = $this->queryString($request->query('kind'));
         $items = $handler->handle(new ListPublicContent(
             collection: $collection,
+            locale: $locale,
             perPage: $perPage,
             sort: $sort,
             featured: $request->boolean('featured'),
             page: $request->integer('page', 1),
+            search: $search,
+            type: $type,
+            topic: $topic,
+            kind: $kind,
         ));
 
         $data = $items->page->getCollection()
-            ->map(fn ($item) => $presenter->collectionItem($collection, $item, $locale))
+            ->map(fn ($item) => $collection === 'feed'
+                ? $presenter->feedItem($item, $locale)
+                : $presenter->collectionItem($collection, $item, $locale))
             ->values();
+        $groups = $collection === 'credits' ? $presenter->creditGroups($data->all()) : null;
 
         return response()->json(PublicContentListResponseDto::fromPage(
             $data->all(),
             PublicListMetaDto::fromPage($items->page, $locale),
+            $groups,
         )->toArray())->header('Cache-Control', 'public, max-age=60, stale-while-revalidate=300');
     }
 
@@ -330,5 +344,10 @@ class PublicSiteApiController extends Controller
     private function sort(mixed $value): ?string
     {
         return in_array($value, ['asc', 'desc', 'alpha', 'popular'], true) ? $value : null;
+    }
+
+    private function queryString(mixed $value): ?string
+    {
+        return is_string($value) && trim($value) !== '' ? trim($value) : null;
     }
 }

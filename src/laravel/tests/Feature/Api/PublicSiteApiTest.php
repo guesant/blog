@@ -3,12 +3,14 @@
 namespace Tests\Feature\Api;
 
 use App\Application\PublicSite\GetPublicSiteChromeHandler;
+use App\Content\EditorialRevisionPublisher;
 use App\Content\PublicSiteChromeCache;
 use App\Events\PublicSiteContentChanged;
 use App\Jobs\WarmPublicSiteChrome;
 use App\Listeners\InvalidatePublicSiteChrome;
 use App\Models\CaseStudy;
 use App\Models\CaseStudyRevisionTranslation;
+use App\Models\Page;
 use App\Models\ReferenceCollection;
 use App\Models\ReferenceCollectionRevisionTranslation;
 use App\Models\Resource;
@@ -48,6 +50,18 @@ class PublicSiteApiTest extends TestCase
         $this->getJson('/api/v1/site/chrome?locale=en')
             ->assertOk()
             ->assertHeader('X-Public-Site-Cache', 'hit');
+    }
+
+    public function test_home_page_returns_server_computed_recurring_technologies(): void
+    {
+        $page = Page::factory()->create(['slug' => 'home']);
+        app(EditorialRevisionPublisher::class)->publish($page, [
+            'en' => ['title' => 'Home'],
+        ]);
+
+        $this->getJson('/api/v1/site/pages/home?locale=en')
+            ->assertOk()
+            ->assertJsonPath('recurringTechnologies', []);
     }
 
     public function test_site_chrome_uses_cache_without_building_the_query(): void
@@ -197,6 +211,21 @@ class PublicSiteApiTest extends TestCase
             ->assertJsonPath('meta.per_page', 1)
             ->assertJsonPath('meta.total', 2)
             ->assertJsonPath('meta.last_page', 2)
+            ->assertJsonCount(1, 'data');
+    }
+
+    public function test_home_feed_is_paginated_and_server_ordered(): void
+    {
+        $this->createResource('first-feed-finding');
+
+        $response = $this->getJson('/api/v1/content/feed?locale=en&per_page=1&kind=achado');
+
+        $response
+            ->assertOk()
+            ->assertJsonPath('meta.page', 1)
+            ->assertJsonPath('meta.per_page', 1)
+            ->assertJsonPath('meta.total', 1)
+            ->assertJsonPath('data.0.kind', 'achado')
             ->assertJsonCount(1, 'data');
     }
 

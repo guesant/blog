@@ -5,6 +5,13 @@ use Illuminate\Support\Facades\DB;
 
 return new class extends Migration
 {
+    private const CURRENT_LABEL = 'Available for Opportunities';
+
+    private const LEGACY_LABELS = [
+        'Avaiable for Oportunities',
+        'Available for software development opportunities',
+    ];
+
     public function up(): void
     {
         DB::transaction(function (): void {
@@ -20,16 +27,9 @@ return new class extends Migration
             DB::table('page_revision_translations')
                 ->whereIn('page_revision_id', $revisionIds)
                 ->where('locale', 'en')
+                ->whereIn('available_label', self::LEGACY_LABELS)
                 ->update([
-                    'available_label' => 'Avaiable for Oportunities',
-                    'updated_at' => now(),
-                ]);
-
-            DB::table('page_revision_translations')
-                ->whereIn('page_revision_id', $revisionIds)
-                ->where('locale', 'pt-BR')
-                ->update([
-                    'available_label' => 'Disponível para Oportunidades',
+                    'available_label' => self::CURRENT_LABEL,
                     'updated_at' => now(),
                 ]);
         });

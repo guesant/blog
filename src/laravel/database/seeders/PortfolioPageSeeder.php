@@ -54,7 +54,7 @@ class PortfolioPageSeeder extends Seeder
                 'heroIdentity' => 'software engineer',
                 'heroExperience' => 'building products end to end, from architecture to interface.',
                 'heroCurrentFocus' => 'currently focused on turning ambiguous problems into shipped software.',
-                'availableLabel' => 'Avaiable for Oportunities',
+                'availableLabel' => 'Available for Opportunities',
                 'workEyebrow' => 'selected work',
                 'workTitle' => 'cases',
                 'workDescription' => 'a few projects worth a closer look.',

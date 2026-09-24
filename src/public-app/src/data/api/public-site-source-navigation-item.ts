@@ -4,9 +4,11 @@ import { recordList } from './public-site-source-list';
 import { stringValue } from './public-site-source-string-value';
 
 export function navigationItem(item: RecordValue): NavigationItem {
+  const route = stringValue(item.route);
+
   return {
-    route: stringValue(item.route),
-    label: stringValue(item.label),
+    route,
+    label: stringValue(item.label) || route.split('/').filter(Boolean).pop() || route,
     children: recordList<RecordValue>(item.children).map(navigationItem),
   };
 }

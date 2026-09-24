@@ -64,7 +64,6 @@ abstract class RevisionTranslation extends Model
             'reference_collection_revision_translations' => 'reference_collection',
             'writing_revision_translations' => 'writing',
             'site_settings_revision_translations' => 'site_settings',
-            'nav_item_revision_translations' => 'nav_item',
             'credit_entry_revision_translations' => 'credit_entry',
             'snippet_revision_translations' => 'snippet',
             'technology_revision_translations' => 'technology',

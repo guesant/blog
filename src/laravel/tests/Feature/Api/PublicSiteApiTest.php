@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Api;
 
-use App\Application\PublicSite\GetPublicSiteChromeHandler;
+use App\Application\PublicSite\GetPublicSiteChromeQueryHandler;
 use App\Content\EditorialRevisionPublisher;
 use App\Content\PublicSiteChromeCache;
 use App\Events\PublicSiteContentChanged;
@@ -44,6 +44,10 @@ class PublicSiteApiTest extends TestCase
                 'build',
                 'visibility',
             ]);
+        $this->assertStringNotContainsString(
+            '"label"',
+            json_encode($response->json('navigation'), JSON_THROW_ON_ERROR),
+        );
         $response->assertHeader('X-Public-Site-Cache', 'miss');
         $this->assertTrue(Cache::has(app(PublicSiteChromeCache::class)->key('en')));
 
@@ -159,7 +163,7 @@ class PublicSiteApiTest extends TestCase
         foreach (['en', 'pt-BR'] as $locale) {
             (new WarmPublicSiteChrome($locale))->handle(
                 app(PublicSiteChromeCache::class),
-                app(GetPublicSiteChromeHandler::class),
+                app(GetPublicSiteChromeQueryHandler::class),
             );
         }
 
@@ -251,11 +255,53 @@ class PublicSiteApiTest extends TestCase
             ->assertOk()
             ->assertJsonStructure([
                 'highlights',
-                'recent' => ['feed', 'projects'],
-                'popular',
-                'collections',
-                'projects',
+                'recent' => ['writing', 'finding', 'collection'],
+                'popular' => ['writing', 'finding', 'collection'],
+                'portfolio' => [
+                    'cases',
+                    'projects',
+                    'experiments',
+                    'collections',
+                    'snippets',
+                    'technologies',
+                    'topics',
+                    'credits',
+                ],
+                'collection_showcases',
             ]);
+
+        foreach (['recent', 'popular'] as $group) {
+            foreach (['writing', 'finding', 'collection'] as $kind) {
+                $this->assertLessThanOrEqual(6, count($response->json("{$group}.{$kind}")));
+            }
+        }
+        foreach (
+            ['cases', 'projects', 'experiments', 'collections', 'snippets', 'technologies', 'topics', 'credits'] as $kind
+        ) {
+            $this->assertLessThanOrEqual(6, count($response->json("portfolio.{$kind}")));
+        }
+        foreach ($response->json('collection_showcases') as $showcase) {
+            $this->assertLessThanOrEqual(6, count($showcase['items']));
+        }
+    }
+
+    public function test_home_gallery_returns_items_for_each_visible_collection(): void
+    {
+        $collection = ReferenceCollection::factory()->create([
+            'slug' => 'reading-list',
+            'hidden' => false,
+        ]);
+        ReferenceCollectionRevisionTranslation::factory()->create([
+            'reference_collection_id' => $collection->id,
+            'locale' => 'en',
+        ]);
+        $resource = $this->createResource('collection-finding');
+        $collection->resources()->attach($resource, ['order' => 1]);
+
+        $this->getJson('/api/v1/site/home-gallery?locale=en')
+            ->assertOk()
+            ->assertJsonPath('collection_showcases.0.collection.slug', 'reading-list')
+            ->assertJsonCount(1, 'collection_showcases.0.items');
     }
 
     public function test_collection_detail_returns_a_paginated_resource_page(): void

@@ -2,13 +2,13 @@
 
 namespace App\Http\Responses;
 
-use App\Application\PublicSite\PublicResumeReadResult;
+use App\Application\PublicSite\GetPublicResumeQueryResult;
 use App\Content\Locale;
 use App\Content\PublicIdentifier;
 
 final class PublicResumeResponseFactory
 {
-    public function fromResult(PublicResumeReadResult $result): PublicResumeResponseDto
+    public function fromResult(GetPublicResumeQueryResult $result): PublicResumeResponseDto
     {
         $translation = $result->resume?->translation($result->locale);
         $profileTranslation = $result->profile?->translation($result->locale);

@@ -2,8 +2,8 @@
 
 namespace App\Console\Commands;
 
-use App\Application\PublicSite\GetPublicSiteChrome;
-use App\Application\PublicSite\GetPublicSiteChromeHandler;
+use App\Application\PublicSite\GetPublicSiteChromeQuery;
+use App\Application\PublicSite\GetPublicSiteChromeQueryHandler;
 use App\Content\Locale;
 use App\Content\PublicSiteChromeCache;
 use App\Http\Responses\PublicSiteChromeResponseDto;
@@ -15,11 +15,11 @@ class WarmPublicSiteChrome extends Command
 
     protected $description = 'Warm the public site chrome cache';
 
-    public function handle(PublicSiteChromeCache $cache, GetPublicSiteChromeHandler $handler): int
+    public function handle(PublicSiteChromeCache $cache, GetPublicSiteChromeQueryHandler $handler): int
     {
         foreach (Locale::all() as $locale) {
             $cache->put($locale, PublicSiteChromeResponseDto::fromResult(
-                $handler->handle(new GetPublicSiteChrome($locale)),
+                $handler->handle(new GetPublicSiteChromeQuery($locale)),
             )->toArray());
         }
 

@@ -2,11 +2,11 @@
 
 namespace App\Support\ResumePdf;
 
-use App\Content\PageQuery;
-use App\Content\ProfileQuery;
-use App\Content\ResumeQuery;
-use App\Content\SiteSettingsQuery;
 use App\Models\CaseStudy;
+use App\ReadModel\PublicSite\Content\PageReader;
+use App\ReadModel\PublicSite\Content\ProfileReader;
+use App\ReadModel\PublicSite\Content\ResumeReader;
+use App\ReadModel\PublicSite\Content\SiteSettingsReader;
 use RuntimeException;
 
 class ResumePdfBuilder
@@ -62,6 +62,13 @@ class ResumePdfBuilder
         'dataset' => 'Dataset',
     ];
 
+    public function __construct(
+        private readonly PageReader $pages,
+        private readonly ProfileReader $profiles,
+        private readonly ResumeReader $resumes,
+        private readonly SiteSettingsReader $siteSettings,
+    ) {}
+
     public function buildTexSource(string $locale): string
     {
         if (! isset(self::LOCALES[$locale])) {
@@ -70,10 +77,10 @@ class ResumePdfBuilder
 
         $localeConfig = self::LOCALES[$locale];
 
-        $profile = (new ProfileQuery)->find();
-        $resume = (new ResumeQuery)->find();
-        $siteSettings = (new SiteSettingsQuery)->find();
-        $page = (new PageQuery)->findBySlug('resume');
+        $profile = $this->profiles->find();
+        $resume = $this->resumes->find();
+        $siteSettings = $this->siteSettings->find();
+        $page = $this->pages->findBySlug('resume');
 
         if (! $profile || ! $resume || ! $siteSettings) {
             throw new RuntimeException('Profile, Resume and SiteSettings must all exist before generating the résumé PDF.');

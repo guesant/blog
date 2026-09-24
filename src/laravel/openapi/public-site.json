@@ -513,12 +513,6 @@
                                                                 "route": {
                                                                     "type": "string"
                                                                 },
-                                                                "label": {
-                                                                    "type": [
-                                                                        "string",
-                                                                        "null"
-                                                                    ]
-                                                                },
                                                                 "children": {
                                                                     "type": "array",
                                                                     "items": {
@@ -527,19 +521,12 @@
                                                                             "route": {
                                                                                 "type": "string"
                                                                             },
-                                                                            "label": {
-                                                                                "type": [
-                                                                                    "string",
-                                                                                    "null"
-                                                                                ]
-                                                                            },
                                                                             "children": {
                                                                                 "type": "null"
                                                                             }
                                                                         },
                                                                         "required": [
                                                                             "route",
-                                                                            "label",
                                                                             "children"
                                                                         ]
                                                                     }
@@ -547,7 +534,6 @@
                                                             },
                                                             "required": [
                                                                 "route",
-                                                                "label",
                                                                 "children"
                                                             ]
                                                         }
@@ -561,12 +547,6 @@
                                                             "route": {
                                                                 "type": "string"
                                                             },
-                                                            "label": {
-                                                                "type": [
-                                                                    "string",
-                                                                    "null"
-                                                                ]
-                                                            },
                                                             "children": {
                                                                 "type": "array",
                                                                 "items": {
@@ -575,19 +555,12 @@
                                                                         "route": {
                                                                             "type": "string"
                                                                         },
-                                                                        "label": {
-                                                                            "type": [
-                                                                                "string",
-                                                                                "null"
-                                                                            ]
-                                                                        },
                                                                         "children": {
                                                                             "type": "null"
                                                                         }
                                                                     },
                                                                     "required": [
                                                                         "route",
-                                                                        "label",
                                                                         "children"
                                                                     ]
                                                                 }
@@ -595,7 +568,6 @@
                                                         },
                                                         "required": [
                                                             "route",
-                                                            "label",
                                                             "children"
                                                         ]
                                                     }
@@ -608,12 +580,6 @@
                                                             "route": {
                                                                 "type": "string"
                                                             },
-                                                            "label": {
-                                                                "type": [
-                                                                    "string",
-                                                                    "null"
-                                                                ]
-                                                            },
                                                             "children": {
                                                                 "type": "array",
                                                                 "items": {
@@ -622,19 +588,12 @@
                                                                         "route": {
                                                                             "type": "string"
                                                                         },
-                                                                        "label": {
-                                                                            "type": [
-                                                                                "string",
-                                                                                "null"
-                                                                            ]
-                                                                        },
                                                                         "children": {
                                                                             "type": "null"
                                                                         }
                                                                     },
                                                                     "required": [
                                                                         "route",
-                                                                        "label",
                                                                         "children"
                                                                     ]
                                                                 }
@@ -642,7 +601,6 @@
                                                         },
                                                         "required": [
                                                             "route",
-                                                            "label",
                                                             "children"
                                                         ]
                                                     }
@@ -835,7 +793,69 @@
                                         "recent": {
                                             "type": "object",
                                             "properties": {
-                                                "feed": {
+                                                "writing": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "object",
+                                                        "additionalProperties": {}
+                                                    }
+                                                },
+                                                "finding": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "object",
+                                                        "additionalProperties": {}
+                                                    }
+                                                },
+                                                "collection": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "object",
+                                                        "additionalProperties": {}
+                                                    }
+                                                }
+                                            },
+                                            "required": [
+                                                "writing",
+                                                "finding",
+                                                "collection"
+                                            ]
+                                        },
+                                        "popular": {
+                                            "type": "object",
+                                            "properties": {
+                                                "writing": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "object",
+                                                        "additionalProperties": {}
+                                                    }
+                                                },
+                                                "finding": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "object",
+                                                        "additionalProperties": {}
+                                                    }
+                                                },
+                                                "collection": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "object",
+                                                        "additionalProperties": {}
+                                                    }
+                                                }
+                                            },
+                                            "required": [
+                                                "writing",
+                                                "finding",
+                                                "collection"
+                                            ]
+                                        },
+                                        "portfolio": {
+                                            "type": "object",
+                                            "properties": {
+                                                "cases": {
                                                     "type": "array",
                                                     "items": {
                                                         "type": "object",
@@ -848,32 +868,82 @@
                                                         "type": "object",
                                                         "additionalProperties": {}
                                                     }
+                                                },
+                                                "experiments": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "object",
+                                                        "additionalProperties": {}
+                                                    }
+                                                },
+                                                "collections": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "object",
+                                                        "additionalProperties": {}
+                                                    }
+                                                },
+                                                "snippets": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "object",
+                                                        "additionalProperties": {}
+                                                    }
+                                                },
+                                                "technologies": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "object",
+                                                        "additionalProperties": {}
+                                                    }
+                                                },
+                                                "topics": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "object",
+                                                        "additionalProperties": {}
+                                                    }
+                                                },
+                                                "credits": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "object",
+                                                        "additionalProperties": {}
+                                                    }
                                                 }
                                             },
                                             "required": [
-                                                "feed",
-                                                "projects"
+                                                "cases",
+                                                "projects",
+                                                "experiments",
+                                                "collections",
+                                                "snippets",
+                                                "technologies",
+                                                "topics",
+                                                "credits"
                                             ]
                                         },
-                                        "popular": {
+                                        "collection_showcases": {
                                             "type": "array",
                                             "items": {
                                                 "type": "object",
-                                                "additionalProperties": {}
-                                            }
-                                        },
-                                        "collections": {
-                                            "type": "array",
-                                            "items": {
-                                                "type": "object",
-                                                "additionalProperties": {}
-                                            }
-                                        },
-                                        "projects": {
-                                            "type": "array",
-                                            "items": {
-                                                "type": "object",
-                                                "additionalProperties": {}
+                                                "properties": {
+                                                    "collection": {
+                                                        "type": "object",
+                                                        "additionalProperties": {}
+                                                    },
+                                                    "items": {
+                                                        "type": "array",
+                                                        "items": {
+                                                            "type": "object",
+                                                            "additionalProperties": {}
+                                                        }
+                                                    }
+                                                },
+                                                "required": [
+                                                    "collection",
+                                                    "items"
+                                                ]
                                             }
                                         }
                                     },
@@ -881,8 +951,8 @@
                                         "highlights",
                                         "recent",
                                         "popular",
-                                        "collections",
-                                        "projects"
+                                        "portfolio",
+                                        "collection_showcases"
                                     ]
                                 }
                             }

@@ -2,6 +2,7 @@ import type { SiteText } from '@portfolio/data/domain/types';
 import type { Translator } from '@/i18n/compat-support';
 import { buildLeftSidebarAboutItems } from './build-left-sidebar-about-items';
 import { isAboutRoute } from './is-about-route';
+import { localizeNavigationItem } from './localize-navigation-item';
 import { navigationItem } from './navigation-item';
 import { visibleAboutRoutes } from './visible-about-routes';
 
@@ -12,7 +13,9 @@ type BuildLeftSidebarDataProps = {
 };
 
 export function buildLeftSidebarData(props: BuildLeftSidebarDataProps) {
-  const groups = props.site.navigation?.sidebar ?? [];
+  const groups = (props.site.navigation?.sidebar ?? []).map((items) =>
+    items.map((item) => localizeNavigationItem({ item, t: props.tNav })),
+  );
 
   const aboutGroup = groups.flatMap((group) => group).filter((item) => isAboutRoute(item.route));
 

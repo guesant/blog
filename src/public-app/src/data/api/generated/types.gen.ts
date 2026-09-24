@@ -165,28 +165,22 @@ export type PublicSiteApiChromeResponses = {
         navigation: {
             sidebar: Array<Array<{
                 route: string;
-                label: string | null;
                 children: Array<{
                     route: string;
-                    label: string | null;
                     children: null;
                 }>;
             }>>;
             footer_links: Array<{
                 route: string;
-                label: string | null;
                 children: Array<{
                     route: string;
-                    label: string | null;
                     children: null;
                 }>;
             }>;
             sitemap: Array<{
                 route: string;
-                label: string | null;
                 children: Array<{
                     route: string;
-                    label: string | null;
                     children: null;
                 }>;
             }>;
@@ -251,21 +245,60 @@ export type PublicSiteApiHomeGalleryResponses = {
             };
         }>;
         recent: {
-            feed: Array<{
+            writing: Array<{
+                [key: string]: unknown;
+            }>;
+            finding: Array<{
+                [key: string]: unknown;
+            }>;
+            collection: Array<{
+                [key: string]: unknown;
+            }>;
+        };
+        popular: {
+            writing: Array<{
+                [key: string]: unknown;
+            }>;
+            finding: Array<{
+                [key: string]: unknown;
+            }>;
+            collection: Array<{
+                [key: string]: unknown;
+            }>;
+        };
+        portfolio: {
+            cases: Array<{
                 [key: string]: unknown;
             }>;
             projects: Array<{
                 [key: string]: unknown;
             }>;
+            experiments: Array<{
+                [key: string]: unknown;
+            }>;
+            collections: Array<{
+                [key: string]: unknown;
+            }>;
+            snippets: Array<{
+                [key: string]: unknown;
+            }>;
+            technologies: Array<{
+                [key: string]: unknown;
+            }>;
+            topics: Array<{
+                [key: string]: unknown;
+            }>;
+            credits: Array<{
+                [key: string]: unknown;
+            }>;
         };
-        popular: Array<{
-            [key: string]: unknown;
-        }>;
-        collections: Array<{
-            [key: string]: unknown;
-        }>;
-        projects: Array<{
-            [key: string]: unknown;
+        collection_showcases: Array<{
+            collection: {
+                [key: string]: unknown;
+            };
+            items: Array<{
+                [key: string]: unknown;
+            }>;
         }>;
     };
 };

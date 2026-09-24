@@ -20,9 +20,11 @@ export function buildRightSidebarData(props: BuildRightSidebarDataProps) {
 
   const showContact = sidebarContactVisible(props.site);
 
-  const followItem =
-    props.site.navigation?.footerLinks.find((item) => routeSegment(item.route) === 'follow') ??
-    navigationItem('/follow', props.t('follow'));
+  const followItem = {
+    ...(props.site.navigation?.footerLinks.find((item) => routeSegment(item.route) === 'follow') ??
+      navigationItem('/follow', props.t('follow'))),
+    label: props.t('follow'),
+  };
 
   const build = buildSidebarBuildUrl(props.site);
 

@@ -18,7 +18,6 @@ final class PublicNavigationReader
                 'placement',
                 'sidebar_group',
                 'order',
-                'current_revision_id',
             ])
             ->whereNull('parent_id')
             ->orderByRaw('sidebar_group is not null')
@@ -35,19 +34,15 @@ final class PublicNavigationReader
                 'placement',
                 'sidebar_group',
                 'order',
-                'current_revision_id',
             ])
             ->whereIn('parent_id', $roots->pluck('id'))
             ->orderBy('order')
             ->orderBy('id')
             ->get();
 
-        $items = $roots->concat($children);
-        $translations = $this->translations($items, $locale);
         $presented = $roots->map(fn (object $item): array => $this->present(
             $item,
             $children->where('parent_id', $item->id),
-            $translations,
             $locale,
         ));
 
@@ -73,37 +68,17 @@ final class PublicNavigationReader
         ];
     }
 
-    private function translations(Collection $items, string $locale): Collection
-    {
-        return DB::table('nav_item_revision_translations')
-            ->select(['nav_item_revision_id', 'locale', 'label'])
-            ->whereIn('nav_item_revision_id', $items->pluck('current_revision_id')->filter()->unique())
-            ->whereIn('locale', array_values(array_unique([$locale, 'en'])))
-            ->get()
-            ->groupBy('nav_item_revision_id');
-    }
-
-    private function present(object $item, Collection $children, Collection $translations, string $locale): array
+    private function present(object $item, Collection $children, string $locale): array
     {
         return [
             'route' => $this->route($item->route_name, $locale),
-            'label' => $this->label($item->current_revision_id, $translations, $locale),
             'placement' => $item->placement,
             'sidebar_group' => $item->sidebar_group,
             'children' => $children->map(fn (object $child): array => [
                 'route' => $this->route($child->route_name, $locale),
-                'label' => $this->label($child->current_revision_id, $translations, $locale),
                 'children' => null,
             ])->values()->all(),
         ];
-    }
-
-    private function label(?int $revisionId, Collection $translations, string $locale): ?string
-    {
-        $rows = $translations->get($revisionId, collect());
-
-        return $rows->firstWhere('locale', $locale)?->label
-            ?? $rows->firstWhere('locale', 'en')?->label;
     }
 
     private function withoutGroup(array $item): array

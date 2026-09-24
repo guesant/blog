@@ -12,7 +12,6 @@ use App\Models\ExperimentRevisionTranslation;
 use App\Models\LanguageRevision;
 use App\Models\LanguageRevisionTranslation;
 use App\Models\NavItemRevision;
-use App\Models\NavItemRevisionTranslation;
 use App\Models\PageRevision;
 use App\Models\PageRevisionTranslation;
 use App\Models\ProfileRevision;
@@ -46,7 +45,6 @@ trait UsesCurrentRevision
         'credit_entries' => [CreditEntryRevisionTranslation::class, 'credit_entry_revision_id'],
         'experiments' => [ExperimentRevisionTranslation::class, 'experiment_revision_id'],
         'languages' => [LanguageRevisionTranslation::class, 'language_revision_id'],
-        'nav_items' => [NavItemRevisionTranslation::class, 'nav_item_revision_id'],
         'pages' => [PageRevisionTranslation::class, 'page_revision_id'],
         'profiles' => [ProfileRevisionTranslation::class, 'profile_revision_id'],
         'projects' => [ProjectRevisionTranslation::class, 'project_revision_id'],

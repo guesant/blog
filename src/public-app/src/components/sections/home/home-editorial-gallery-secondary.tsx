@@ -1,6 +1,7 @@
 import type { HomeGallery } from '@portfolio/data/domain/types';
 import type { Translator } from '@/i18n/compat-support';
-import { HomeGalleryOptionalSection } from './home-gallery-optional-section';
+import { HomeCollectionShowcases } from './home-collection-showcases';
+import { HomePortfolioSections } from './home-portfolio-sections';
 
 type HomeEditorialGallerySecondaryProps = {
   gallery: HomeGallery;
@@ -10,23 +11,8 @@ type HomeEditorialGallerySecondaryProps = {
 export function HomeEditorialGallerySecondary(props: HomeEditorialGallerySecondaryProps) {
   return (
     <>
-      <HomeGalleryOptionalSection
-        id="collections"
-        title={props.t('collections')}
-        action={props.t('viewCollections')}
-        href="/collections"
-        entries={props.gallery.collections}
-        mode="carousel"
-        t={props.t}
-      />
-      <HomeGalleryOptionalSection
-        id="projects"
-        title={props.t('projects')}
-        action={props.t('viewProjects')}
-        href="/projects"
-        entries={props.gallery.projects}
-        t={props.t}
-      />
+      <HomePortfolioSections portfolio={props.gallery.portfolio} t={props.t} />
+      <HomeCollectionShowcases showcases={props.gallery.collectionShowcases} t={props.t} />
     </>
   );
 }

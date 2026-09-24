@@ -2,6 +2,7 @@
 
 namespace App\ReadModel\PublicSite\Email;
 
+use App\Application\PublicSite\Ports\PublicEmailChallengeReader;
 use App\Support\ProtectedEmail;
 use Illuminate\Support\Facades\DB;
 

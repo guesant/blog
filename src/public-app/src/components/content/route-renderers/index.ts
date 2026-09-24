@@ -37,6 +37,7 @@ function loadRouteRenderer(file: string, exportName: string): LazyRouteRenderer 
 const routeRendererDefinitions = {
   loading: ['loading-route-renderer.tsx', 'default'],
   about: ['about-route-renderer.tsx', 'AboutRouteRenderer'],
+  feed: ['feed-route-renderer.tsx', 'FeedRouteRenderer'],
   portfolio: ['portfolio-route-renderer.tsx', 'PortfolioRouteRenderer'],
   now: ['now-route-renderer.tsx', 'NowRouteRenderer'],
   cases: ['cases-route-renderer.tsx', 'CasesRouteRenderer'],

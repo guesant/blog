@@ -17,9 +17,13 @@ import { DocumentShell } from '../components/ui';
 
 const themeBootstrapScript = `(() => {
   try {
-    const cookie = document.cookie.match(/(?:^|;\\s*)site-theme=(light|dark)(?:;|$)/);
-    const mode = cookie?.[1] ?? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-    document.documentElement.dataset.theme = mode;
+    const cookie = document.cookie.match(/(?:^|;\\s*)site-theme=([^;]+)/);
+    const value = cookie?.[1] ?? '';
+    const cached = value.match(/^system\\.(light|dark)$/)?.[1];
+    const resolved = value === 'light' || value === 'dark'
+      ? value
+      : cached ?? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    document.documentElement.dataset.theme = resolved;
   } catch {}
 })();`;
 
@@ -38,12 +42,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 function RootDocument() {
   const locale = localeFromPathname(useLocation().pathname);
 
-  const themeMode = Route.useLoaderData();
+  const themeState = Route.useLoaderData();
 
   return (
     <DocumentShell
       locale={locale}
-      themeMode={themeMode}
+      themeState={themeState}
       head={<HeadContent />}
       body={<Outlet />}
       scripts={<Scripts />}

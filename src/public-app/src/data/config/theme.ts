@@ -3,14 +3,25 @@ import { getRequestHeader, setResponseHeader } from '@tanstack/react-start/serve
 
 export type ThemeMode = 'system' | 'light' | 'dark';
 
-function parseThemeCookie(cookieHeader: string | undefined): ThemeMode {
-  const value = cookieHeader
-    ?.split(';')
-    .map((part) => part.trim())
-    .find((part) => part.startsWith('site-theme='))
-    ?.slice('site-theme='.length);
+export type ResolvedThemeMode = Exclude<ThemeMode, 'system'>;
 
-  return value === 'light' || value === 'dark' ? value : 'system';
+export type ThemeState = {
+  mode: ThemeMode;
+  resolvedMode: ResolvedThemeMode | null;
+};
+
+const themeStates: Record<string, ThemeState> = {
+  light: { mode: 'light', resolvedMode: 'light' },
+  dark: { mode: 'dark', resolvedMode: 'dark' },
+  'system.light': { mode: 'system', resolvedMode: 'light' },
+  'system.dark': { mode: 'system', resolvedMode: 'dark' },
+  default: { mode: 'system', resolvedMode: null },
+};
+
+function parseThemeCookie(cookieHeader: string | undefined): ThemeState {
+  const value = String(cookieHeader).match(/(?:^|;\s*)site-theme=([^;]*)/)?.[1];
+
+  return themeStates[value || ''] || themeStates.default;
 }
 
 export const loadThemeMode = createServerFn({ method: 'GET' }).handler(() => {

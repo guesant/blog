@@ -8,9 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-/**
- * @method NavItemRevisionTranslation|null translation(?string $locale = null)
- */
 class NavItem extends Model
 {
     use HasFactory, UsesCurrentRevision;

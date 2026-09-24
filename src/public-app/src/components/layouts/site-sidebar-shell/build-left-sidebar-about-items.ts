@@ -17,7 +17,7 @@ export function buildLeftSidebarAboutItems(
       (route) =>
         props.aboutGroup.find((item) => routeSegment(item.route) === route) ?? {
           route: `/${route}`,
-          label: route === 'resume' ? props.tNav('resume') : route,
+          label: props.tNav(route),
           children: [],
         },
     )

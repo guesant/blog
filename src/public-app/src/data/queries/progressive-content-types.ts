@@ -6,6 +6,7 @@ export type ProgressiveContentPage<T> = {
 };
 
 export type ProgressiveContentQuery<T> = {
+  enabled?: boolean;
   initialPage: ProgressiveContentPage<T>;
   queryKey: readonly unknown[];
   loadPage: (page: number) => Promise<ProgressiveContentPage<T>>;

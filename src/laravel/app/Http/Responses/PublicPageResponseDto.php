@@ -2,7 +2,7 @@
 
 namespace App\Http\Responses;
 
-use App\Application\PublicSite\PublicPageReadResult;
+use App\Application\PublicSite\GetPublicPageQueryResult;
 
 final readonly class PublicPageResponseDto
 {
@@ -10,7 +10,7 @@ final readonly class PublicPageResponseDto
         private array $value,
     ) {}
 
-    public static function fromResult(PublicPageReadResult $result): self
+    public static function fromResult(GetPublicPageQueryResult $result): self
     {
         return new self($result->fields);
     }

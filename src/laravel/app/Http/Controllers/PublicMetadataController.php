@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Application\PublicSite\GetPublicSiteChrome;
-use App\Application\PublicSite\GetPublicSiteChromeHandler;
-use App\Application\PublicSite\IsPublicSiteInMaintenance;
-use App\Application\PublicSite\IsPublicSiteInMaintenanceHandler;
-use App\Application\PublicSite\ListPublicContentHandler;
-use App\Application\PublicSite\ListPublicFindingsHandler;
+use App\Application\PublicSite\GetPublicSiteChromeQuery;
+use App\Application\PublicSite\GetPublicSiteChromeQueryHandler;
+use App\Application\PublicSite\IsPublicSiteInMaintenanceQuery;
+use App\Application\PublicSite\IsPublicSiteInMaintenanceQueryHandler;
+use App\Application\PublicSite\ListPublicContentQuery;
+use App\Application\PublicSite\ListPublicContentQueryHandler;
+use App\Application\PublicSite\ListPublicFindingsQuery;
+use App\Application\PublicSite\ListPublicFindingsQueryHandler;
 use App\Content\Locale;
-use App\Http\Controllers\Api\FindingApiController;
-use App\Http\Controllers\Api\PublicSiteApiController;
 use App\Http\Responses\ApiErrorCode;
 use App\Http\Responses\ApiErrorResponse;
 use App\Http\Responses\PublicContentResponseFactory;
@@ -21,8 +21,12 @@ use Symfony\Component\HttpFoundation\Response;
 class PublicMetadataController extends Controller
 {
     public function __construct(
-        private readonly GetPublicSiteChromeHandler $chrome,
-        private readonly IsPublicSiteInMaintenanceHandler $maintenance,
+        private readonly GetPublicSiteChromeQueryHandler $chrome,
+        private readonly IsPublicSiteInMaintenanceQueryHandler $maintenance,
+        private readonly ListPublicContentQueryHandler $content,
+        private readonly PublicContentResponseFactory $contentPresenter,
+        private readonly ListPublicFindingsQueryHandler $findings,
+        private readonly PublicFindingResponseFactory $findingPresenter,
     ) {}
 
     private const STATIC_PATHS = [
@@ -110,7 +114,7 @@ class PublicMetadataController extends Controller
         if ($format === 'json') {
             return response()->json([
                 'version' => 'https://jsonfeed.org/version/1.1',
-                'title' => $this->chrome->handle(new GetPublicSiteChrome($locale))->profile['name'] ?? 'Portfolio',
+                'title' => $this->chrome->handle(new GetPublicSiteChromeQuery($locale))->profile['name'] ?? 'Portfolio',
                 'home_page_url' => $this->absolute(Locale::path('/', $locale)),
                 'feed_url' => $this->absolute(Locale::path('/feed.json', $locale)),
                 'language' => $locale,
@@ -161,7 +165,7 @@ class PublicMetadataController extends Controller
             );
         }
 
-        $chrome = $this->chrome->handle(new GetPublicSiteChrome('en'));
+        $chrome = $this->chrome->handle(new GetPublicSiteChromeQuery('en'));
         $about = $this->absolute('/about');
         $links = [[
             'rel' => 'http://webfinger.net/rel/profile-page',
@@ -215,21 +219,28 @@ class PublicMetadataController extends Controller
         $lastPage = 1;
 
         while ($page <= $lastPage) {
-            $request = Request::create('/api/v1/content/'.$collection, 'GET', [
-                'locale' => $locale,
-                'page' => $page,
-                'per_page' => $perPage,
-            ]);
-            $response = app(PublicSiteApiController::class)->collection(
-                $request,
-                $collection,
-                app(ListPublicContentHandler::class),
-                app(IsPublicSiteInMaintenanceHandler::class),
-                app(PublicContentResponseFactory::class),
-            );
-            $payload = json_decode((string) $response->getContent(), true) ?: [];
-            $items = [...$items, ...($payload['data'] ?? [])];
-            $lastPage = max($lastPage, (int) ($payload['meta']['last_page'] ?? $page));
+            $result = $this->content->handle(new ListPublicContentQuery(
+                collection: $collection,
+                locale: $locale,
+                perPage: $perPage,
+                sort: null,
+                featured: false,
+                page: $page,
+                search: null,
+                type: null,
+                topic: null,
+                kind: null,
+            ));
+
+            $items = [
+                ...$items,
+                ...$result->page->getCollection()
+                    ->map(fn (object $item): array => $collection === 'feed'
+                        ? $this->contentPresenter->feedItem($item, $locale)
+                        : $this->contentPresenter->collectionItem($collection, $item, $locale))
+                    ->all(),
+            ];
+            $lastPage = $result->page->lastPage();
             $page++;
         }
 
@@ -243,20 +254,21 @@ class PublicMetadataController extends Controller
         $lastPage = 1;
 
         while ($page <= $lastPage) {
-            $request = Request::create('/api/v1/findings', 'GET', [
-                'locale' => $locale,
-                'page' => $page,
-                'per_page' => $perPage,
-            ]);
-            $response = app(FindingApiController::class)->index(
-                $request,
-                app(ListPublicFindingsHandler::class),
-                app(IsPublicSiteInMaintenanceHandler::class),
-                app(PublicFindingResponseFactory::class),
-            );
-            $payload = json_decode((string) $response->getContent(), true) ?: [];
-            $items = [...$items, ...($payload['data'] ?? [])];
-            $lastPage = max($lastPage, (int) ($payload['meta']['last_page'] ?? $page));
+            $result = $this->findings->handle(new ListPublicFindingsQuery(
+                filters: [],
+                locale: $locale,
+                perPage: $perPage,
+                sort: null,
+            ));
+
+            $items = [
+                ...$items,
+                ...$result->page
+                    ->getCollection()
+                    ->map(fn (object $item): array => $this->findingPresenter->summary($item, $locale))
+                    ->all(),
+            ];
+            $lastPage = $result->page->lastPage();
             $page++;
         }
 
@@ -304,6 +316,6 @@ class PublicMetadataController extends Controller
 
     private function maintenanceEnabled(): bool
     {
-        return $this->maintenance->handle(new IsPublicSiteInMaintenance);
+        return $this->maintenance->handle(new IsPublicSiteInMaintenanceQuery);
     }
 }

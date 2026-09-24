@@ -1,9 +1,16 @@
 import type { ResolvedThemeMode } from './create-site-theme';
 
-export function initialSystemMode(): ResolvedThemeMode {
+const documentModes: Partial<Record<string, ResolvedThemeMode>> = {
+  dark: 'dark',
+  light: 'light',
+};
+
+export function initialSystemMode(fallback: ResolvedThemeMode = 'light'): ResolvedThemeMode {
   if (typeof document === 'undefined') {
-    return 'light';
+    return fallback;
   }
 
-  return document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light';
+  const mode = documentModes[String(document.documentElement.dataset.theme)];
+
+  return mode || fallback;
 }

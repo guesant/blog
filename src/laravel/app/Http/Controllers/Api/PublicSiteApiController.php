@@ -2,22 +2,22 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Application\PublicSite\GetPublicContent;
-use App\Application\PublicSite\GetPublicContentHandler;
-use App\Application\PublicSite\GetPublicEmailChallenge;
-use App\Application\PublicSite\GetPublicEmailChallengeHandler;
-use App\Application\PublicSite\GetPublicHomeGallery;
-use App\Application\PublicSite\GetPublicHomeGalleryHandler;
-use App\Application\PublicSite\GetPublicPage;
-use App\Application\PublicSite\GetPublicPageHandler;
-use App\Application\PublicSite\GetPublicResume;
-use App\Application\PublicSite\GetPublicResumeHandler;
-use App\Application\PublicSite\GetPublicSiteChrome;
-use App\Application\PublicSite\GetPublicSiteChromeHandler;
-use App\Application\PublicSite\IsPublicSiteInMaintenance;
-use App\Application\PublicSite\IsPublicSiteInMaintenanceHandler;
-use App\Application\PublicSite\ListPublicContent;
-use App\Application\PublicSite\ListPublicContentHandler;
+use App\Application\PublicSite\GetPublicContentQuery;
+use App\Application\PublicSite\GetPublicContentQueryHandler;
+use App\Application\PublicSite\GetPublicEmailChallengeQuery;
+use App\Application\PublicSite\GetPublicEmailChallengeQueryHandler;
+use App\Application\PublicSite\GetPublicHomeGalleryQuery;
+use App\Application\PublicSite\GetPublicHomeGalleryQueryHandler;
+use App\Application\PublicSite\GetPublicPageQuery;
+use App\Application\PublicSite\GetPublicPageQueryHandler;
+use App\Application\PublicSite\GetPublicResumeQuery;
+use App\Application\PublicSite\GetPublicResumeQueryHandler;
+use App\Application\PublicSite\GetPublicSiteChromeQuery;
+use App\Application\PublicSite\GetPublicSiteChromeQueryHandler;
+use App\Application\PublicSite\IsPublicSiteInMaintenanceQuery;
+use App\Application\PublicSite\IsPublicSiteInMaintenanceQueryHandler;
+use App\Application\PublicSite\ListPublicContentQuery;
+use App\Application\PublicSite\ListPublicContentQueryHandler;
 use App\Content\Locale;
 use App\Content\PublicSiteChromeCache;
 use App\Http\Controllers\Controller;
@@ -66,11 +66,11 @@ class PublicSiteApiController extends Controller
     public function collection(
         Request $request,
         string $collection,
-        ListPublicContentHandler $handler,
-        IsPublicSiteInMaintenanceHandler $maintenance,
+        ListPublicContentQueryHandler $handler,
+        IsPublicSiteInMaintenanceQueryHandler $maintenance,
         PublicContentResponseFactory $presenter,
     ): JsonResponse {
-        if ($maintenance->handle(new IsPublicSiteInMaintenance)) {
+        if ($maintenance->handle(new IsPublicSiteInMaintenanceQuery)) {
             return ApiErrorResponse::make(
                 ApiErrorCode::Maintenance,
                 503,
@@ -87,7 +87,7 @@ class PublicSiteApiController extends Controller
         $type = $this->queryString($request->query('type'));
         $topic = $this->queryString($request->query('topic'));
         $kind = $this->queryString($request->query('kind'));
-        $items = $handler->handle(new ListPublicContent(
+        $items = $handler->handle(new ListPublicContentQuery(
             collection: $collection,
             locale: $locale,
             perPage: $perPage,
@@ -122,11 +122,11 @@ class PublicSiteApiController extends Controller
         Request $request,
         string $collection,
         string $slug,
-        GetPublicContentHandler $handler,
-        IsPublicSiteInMaintenanceHandler $maintenance,
+        GetPublicContentQueryHandler $handler,
+        IsPublicSiteInMaintenanceQueryHandler $maintenance,
         PublicContentResponseFactory $presenter,
     ): JsonResponse {
-        if ($maintenance->handle(new IsPublicSiteInMaintenance)) {
+        if ($maintenance->handle(new IsPublicSiteInMaintenanceQuery)) {
             return ApiErrorResponse::make(
                 ApiErrorCode::Maintenance,
                 503,
@@ -139,7 +139,7 @@ class PublicSiteApiController extends Controller
         $locale = Locale::normalize($request->query('locale'));
         $perPage = min(max((int) $request->query('per_page', 100), 1), 100);
         $page = max(1, $request->integer('page', 1));
-        $result = $handler->handle(new GetPublicContent(
+        $result = $handler->handle(new GetPublicContentQuery(
             collection: $collection,
             identifier: $slug,
             perPage: $perPage,
@@ -181,10 +181,10 @@ class PublicSiteApiController extends Controller
     #[ScrambleResponse(200, type: 'array<string, mixed>|null')]
     #[ScrambleResponse(503, 'The service is temporarily unavailable.', type: 'array{error: array{code: string, message: string, status: int, details: string}}')]
     public function protectedEmailChallenge(
-        GetPublicEmailChallengeHandler $handler,
-        IsPublicSiteInMaintenanceHandler $maintenance,
+        GetPublicEmailChallengeQueryHandler $handler,
+        IsPublicSiteInMaintenanceQueryHandler $maintenance,
     ): JsonResponse|Response {
-        if ($maintenance->handle(new IsPublicSiteInMaintenance)) {
+        if ($maintenance->handle(new IsPublicSiteInMaintenanceQuery)) {
             return ApiErrorResponse::make(
                 ApiErrorCode::Maintenance,
                 503,
@@ -192,7 +192,7 @@ class PublicSiteApiController extends Controller
             )->header('Retry-After', (string) 3600);
         }
 
-        $challenge = $handler->handle(new GetPublicEmailChallenge);
+        $challenge = $handler->handle(new GetPublicEmailChallengeQuery);
 
         return response()->json(PublicEmailChallengeResponseDto::fromResult($challenge)->toArray());
     }
@@ -235,9 +235,9 @@ class PublicSiteApiController extends Controller
      *   }|null,
      *   copyright: string,
      *   navigation: array{
-     *     sidebar: array<int, array<int, array{route: string, label: string|null, children: array<int, array{route: string, label: string|null, children: null}>}>>,
-     *     footer_links: array<int, array{route: string, label: string|null, children: array<int, array{route: string, label: string|null, children: null}>}>,
-     *     sitemap: array<int, array{route: string, label: string|null, children: array<int, array{route: string, label: string|null, children: null}>}>
+     *     sidebar: array<int, array<int, array{route: string, children: array<int, array{route: string, children: null}>}>>,
+     *     footer_links: array<int, array{route: string, children: array<int, array{route: string, children: null}>}>,
+     *     sitemap: array<int, array{route: string, children: array<int, array{route: string, children: null}>}>
      *   },
      *   build: array{commit_sha: string, build_time: string},
      *   visibility: array{
@@ -263,7 +263,7 @@ class PublicSiteApiController extends Controller
     public function chrome(
         Request $request,
         PublicSiteChromeCache $cache,
-        GetPublicSiteChromeHandler $handler,
+        GetPublicSiteChromeQueryHandler $handler,
     ): JsonResponse {
         $startedAt = hrtime(true);
         $locale = Locale::normalize($request->query('locale'));
@@ -276,7 +276,7 @@ class PublicSiteApiController extends Controller
                 $locale,
                 function () use ($handler, $locale): array {
                     return PublicSiteChromeResponseDto::fromResult(
-                        $handler->handle(new GetPublicSiteChrome($locale)),
+                        $handler->handle(new GetPublicSiteChromeQuery($locale)),
                     )->toArray();
                 },
                 static fn (array $value): bool => ($value['site']['maintenance_enabled'] ?? false) !== true,
@@ -300,9 +300,9 @@ class PublicSiteApiController extends Controller
     }
 
     #[ScrambleResponse(200, type: 'array')]
-    public function page(Request $request, string $slug, GetPublicPageHandler $handler): JsonResponse
+    public function page(Request $request, string $slug, GetPublicPageQueryHandler $handler): JsonResponse
     {
-        $result = $handler->handle(new GetPublicPage(
+        $result = $handler->handle(new GetPublicPageQuery(
             slug: $slug,
             locale: Locale::normalize($request->query('locale')),
         ));
@@ -312,15 +312,15 @@ class PublicSiteApiController extends Controller
             ->header('Cache-Control', 'public, max-age=60, stale-while-revalidate=300');
     }
 
-    #[ScrambleResponse(200, type: 'array{highlights: list<array{kind: string, item: array<string, mixed>}>, recent: array{feed: list<array<string, mixed>>, projects: list<array<string, mixed>>}, popular: list<array<string, mixed>>, collections: list<array<string, mixed>>, projects: list<array<string, mixed>>}')]
+    #[ScrambleResponse(200, type: 'array{highlights: list<array{kind: string, item: array<string, mixed>}>, recent: array{writing: list<array<string, mixed>>, finding: list<array<string, mixed>>, collection: list<array<string, mixed>>}, popular: array{writing: list<array<string, mixed>>, finding: list<array<string, mixed>>, collection: list<array<string, mixed>>}, portfolio: array{cases: list<array<string, mixed>>, projects: list<array<string, mixed>>, experiments: list<array<string, mixed>>, collections: list<array<string, mixed>>, snippets: list<array<string, mixed>>, technologies: list<array<string, mixed>>, topics: list<array<string, mixed>>, credits: list<array<string, mixed>>}, collection_showcases: list<array{collection: array<string, mixed>, items: list<array<string, mixed>>}>}')]
     #[ScrambleResponse(503, 'The service is temporarily unavailable.', type: 'array{error: array{code: string, message: string, status: int, details: string}}')]
     public function homeGallery(
         Request $request,
-        GetPublicHomeGalleryHandler $handler,
-        IsPublicSiteInMaintenanceHandler $maintenance,
+        GetPublicHomeGalleryQueryHandler $handler,
+        IsPublicSiteInMaintenanceQueryHandler $maintenance,
         PublicContentResponseFactory $presenter,
     ): JsonResponse {
-        if ($maintenance->handle(new IsPublicSiteInMaintenance)) {
+        if ($maintenance->handle(new IsPublicSiteInMaintenanceQuery)) {
             return ApiErrorResponse::make(
                 ApiErrorCode::Maintenance,
                 503,
@@ -329,7 +329,7 @@ class PublicSiteApiController extends Controller
         }
 
         $locale = Locale::normalize($request->query('locale'));
-        $result = $handler->handle(new GetPublicHomeGallery($locale));
+        $result = $handler->handle(new GetPublicHomeGalleryQuery($locale));
 
         return response()->json(
             PublicHomeGalleryResponseDto::fromResult($result, $presenter, $locale)->toArray(),
@@ -357,13 +357,13 @@ class PublicSiteApiController extends Controller
     #[ScrambleResponse(200, type: "array{summary: string|null, leadership: string|array<int, string>, education: string|array<int, string>, certificates: string|array<int, string>, certifications: string|array<int, string>, publications: string|array<int, string>, recommendations: string|array<int, string>, technical_productions: string|array<int, string>, events: string|array<int, string>, awards: string|array<int, string>, experience: array<int, string>, selected_cases: array<int, array{slug: string, url: string, title: string, status: string|null, summary: string|null, published_at: string|null, external: string, meta: string|null, context: string|null, role: string|null, result: string|null, metrics: string|null, body: string|null, technologies: array<int, array{slug: string, name: string}>, show_history: bool, history: null, href: string, related: null, updated_at: string|null}>|array<int, string>, skills: array<int, array{name: string, technologies: array<int, array{slug: string, name: string, code: null, url: null, skills: null, resume_skills: null}>}>|array<int, string>, languages: array<int, array{name: string, proficiency: string|''}>|array<int, string>}")]
     public function resumeData(
         Request $request,
-        GetPublicResumeHandler $handler,
+        GetPublicResumeQueryHandler $handler,
         PublicResumeResponseFactory $presenter,
     ): JsonResponse {
         $locale = Locale::normalize($request->query('locale'));
 
         return response()->json($presenter->fromResult(
-            $handler->handle(new GetPublicResume($locale)),
+            $handler->handle(new GetPublicResumeQuery($locale)),
         )->toArray())
             ->header('Cache-Control', 'public, max-age=60, stale-while-revalidate=300');
     }

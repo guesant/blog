@@ -2,7 +2,7 @@ import type {
   ContentFeedFormViewProps,
   UseContentFeedViewPropsInput,
 } from './use-content-feed-view-props.types';
-import { contentFeedShowPagination } from './content-feed-show-pagination';
+import { buildContentFeedShowPagination } from './build-content-feed-show-pagination';
 
 export function buildContentFeedFormViewProps(
   input: UseContentFeedViewPropsInput,
@@ -12,7 +12,10 @@ export function buildContentFeedFormViewProps(
   return {
     copy: props.copy,
     showHeader: props.showHeader ?? true,
-    showPagination: contentFeedShowPagination(props.showPagination),
+    showPagination: buildContentFeedShowPagination({
+      showPagination: props.showPagination,
+      displayMode: runtime.state.displayMode,
+    }),
     selects: selects ?? [],
     pendingSearch: runtime.state.pendingSearch,
     searchLabel: runtime.translations.searchLabel,
@@ -20,5 +23,14 @@ export function buildContentFeedFormViewProps(
     clearLabel: runtime.translations.clearLabel,
     onPendingSearchChange: runtime.state.setPendingSearch,
     onSubmit: runtime.actions.applyFilters,
+    displayControls: props.displayControls ?? false,
+    displayMode: runtime.state.displayMode,
+    perPage: runtime.state.perPage,
+    modeLabel: runtime.translations.modeLabel,
+    paginationModeLabel: runtime.translations.paginationModeLabel,
+    infiniteModeLabel: runtime.translations.infiniteModeLabel,
+    perPageLabel: runtime.translations.perPageLabel,
+    onDisplayModeChange: runtime.actions.setDisplayMode,
+    onPerPageChange: runtime.actions.setPerPage,
   };
 }

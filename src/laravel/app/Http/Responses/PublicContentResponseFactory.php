@@ -91,6 +91,7 @@ final class PublicContentResponseFactory
             'slug' => $snippet->slug,
             'title' => $translation?->title ?? $snippet->slug,
             'description' => $translation?->description,
+            'url' => Locale::url('/snippets/'.PublicIdentifier::key($snippet), $locale),
             'download_url' => Locale::url('/snippets/'.PublicIdentifier::key($snippet).'/download', $locale),
             'files' => [],
             'file_count' => $snippet->files_count ?? 0,
@@ -156,6 +157,7 @@ final class PublicContentResponseFactory
     private function credit(object $credit, string $locale): array
     {
         return [
+            'slug' => $credit->package_name ?: $credit->category.'-'.$credit->id,
             'category' => $credit->category,
             'name' => $credit->translation($locale)?->name ?? $credit->category,
             'description' => $credit->translation($locale)?->description,

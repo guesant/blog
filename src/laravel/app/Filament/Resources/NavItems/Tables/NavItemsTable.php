@@ -20,9 +20,6 @@ class NavItemsTable
                 TextColumn::make('placement')->sortable(),
                 TextColumn::make('sidebar_group')->sortable(),
                 TextColumn::make('order')->sortable(),
-                TextColumn::make('label_en')
-                    ->label('Label (EN)')
-                    ->getStateUsing(fn ($record) => $record->translation('en')?->label),
             ])
             ->filters([
                 //

@@ -2,7 +2,9 @@
 
 namespace App\ReadModel\PublicSite\Chrome;
 
-use App\Application\PublicSite\GetPublicSiteChrome;
+use App\Application\PublicSite\GetPublicSiteChromeQuery;
+use App\Application\PublicSite\GetPublicSiteChromeQueryResult;
+use App\Application\PublicSite\Ports\PublicSiteChromeReader;
 
 final class PublicSiteChromeSqlReader implements PublicSiteChromeReader
 {
@@ -13,14 +15,14 @@ final class PublicSiteChromeSqlReader implements PublicSiteChromeReader
         private readonly PublicSiteAvailabilityReader $availability,
     ) {}
 
-    public function read(GetPublicSiteChrome $query): PublicSiteChromeResult
+    public function read(GetPublicSiteChromeQuery $query): GetPublicSiteChromeQueryResult
     {
         $settings = $this->settings->read($query->locale);
         $profile = $this->profile->read($query->locale);
         $profileName = $profile['name'] ?? null;
         $copyright = $this->copyright($settings['copyright_template'], $profileName, $settings['short_name']);
 
-        return new PublicSiteChromeResult(
+        return new GetPublicSiteChromeQueryResult(
             site: [
                 'short_name' => $settings['short_name'],
                 'portfolio_url' => $settings['portfolio_url'],

@@ -20,7 +20,7 @@ class EditorialRevisionPublisher
         'reference_collections' => ['revision' => 'reference_collection_revisions', 'revision_key' => 'reference_collection_id', 'translation' => 'reference_collection_revision_translations', 'columns' => ['slug', 'public_id', 'hidden', 'order', 'image', 'published_at'], 'translation_columns' => ['title', 'description', 'intro']],
         'writings' => ['revision' => 'writing_revisions', 'revision_key' => 'writing_id', 'translation' => 'writing_revision_translations', 'columns' => ['slug', 'public_id', 'hidden', 'date_iso', 'type', 'show_history'], 'translation_columns' => ['title', 'excerpt', 'reading_time', 'body']],
         'site_settings' => ['revision' => 'site_settings_revisions', 'revision_key' => 'site_settings_id', 'translation' => 'site_settings_revision_translations', 'columns' => ['short_name', 'portfolio_url', 'maintenance_enabled', 'contact_email', 'contact_available', 'source_repository_url'], 'translation_columns' => ['copyright_template', 'maintenance_eyebrow', 'maintenance_title', 'maintenance_description']],
-        'nav_items' => ['revision' => 'nav_item_revisions', 'revision_key' => 'nav_item_id', 'translation' => 'nav_item_revision_translations', 'columns' => ['route_name', 'parent_id', 'placement', 'sidebar_group', 'order'], 'translation_columns' => ['label']],
+        'nav_items' => ['revision' => 'nav_item_revisions', 'revision_key' => 'nav_item_id', 'translation' => null, 'columns' => ['route_name', 'parent_id', 'placement', 'sidebar_group', 'order'], 'translation_columns' => []],
         'credit_entries' => ['revision' => 'credit_entry_revisions', 'revision_key' => 'credit_entry_id', 'translation' => 'credit_entry_revision_translations', 'columns' => ['url', 'category', 'order', 'is_automatic', 'active', 'package_manager', 'package_name'], 'translation_columns' => ['name', 'description']],
         'snippets' => ['revision' => 'snippet_revisions', 'revision_key' => 'snippet_id', 'translation' => 'snippet_revision_translations', 'columns' => ['slug', 'public_id', 'hidden', 'show_history', 'order', 'published_at'], 'translation_columns' => ['title', 'description']],
         'technologies' => ['revision' => 'technology_revisions', 'revision_key' => 'technology_id', 'translation' => 'technology_revision_translations', 'columns' => ['slug', 'public_id', 'order', 'code', 'logo', 'hidden'], 'translation_columns' => ['name']],
@@ -170,6 +170,10 @@ class EditorialRevisionPublisher
 
     private function createTranslations(Model $record, array $definition, int $revisionId, array $translations): void
     {
+        if ($definition['translation'] === null) {
+            return;
+        }
+
         $revisionKey = Str::singular($definition['revision']).'_id';
         foreach ($translations as $locale => $fields) {
             $translation = [$revisionKey => $revisionId, 'locale' => $locale, 'created_at' => now(), 'updated_at' => now()];

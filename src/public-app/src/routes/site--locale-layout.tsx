@@ -9,7 +9,7 @@ import { routeContext } from './site-route-context';
 export function LocaleLayout() {
   const { locale } = routeContext(useLocation().pathname);
 
-  const themeMode = useLoaderData({ from: '__root__' });
+  const themeState = useLoaderData({ from: '__root__' });
 
   const loaderShell = useLoaderData({ from: '/_site' });
 
@@ -19,7 +19,10 @@ export function LocaleLayout() {
 
   return (
     <I18nProvider locale={locale} messages={getMessages(locale)}>
-      <ThemeRegistry initialMode={themeMode}>
+      <ThemeRegistry
+        initialMode={themeState.mode}
+        initialResolvedMode={themeState.resolvedMode ?? undefined}
+      >
         <LocaleLayoutState
           shell={shell}
           isError={shellQuery.isError}

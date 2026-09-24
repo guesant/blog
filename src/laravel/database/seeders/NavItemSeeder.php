@@ -7,18 +7,13 @@ use Illuminate\Database\Seeder;
 
 /**
  * One-time migration of the hand-maintained App\Content\SiteNav tree into
- * editable NavItem/NavItemTranslation rows. It is invoked by the initial
+ * editable NavItem rows. It is invoked by the initial
  * navigation migration and can also be run manually with:
  *
  *   php artisan db:seed --class=NavItemSeeder
  *
  * Safe to re-run: every item is upserted by route_name, which is unique
  * across the current tree.
- *
- * Labels below are copied verbatim from lang/en/nav.php and
- * lang/pt-BR/nav.php as of the SiteNav migration, not re-derived from the
- * lang files at runtime, so this seeder keeps producing the same rows even
- * if those files change later.
  */
 class NavItemSeeder extends Seeder
 {
@@ -71,13 +66,6 @@ class NavItemSeeder extends Seeder
             [...$attributes, 'route_name' => $entry['route']],
         );
 
-        foreach ($entry['translations'] as $locale => $label) {
-            $navItem->translations()->updateOrCreate(
-                ['locale' => $locale],
-                ['label' => $label],
-            );
-        }
-
         $childOrder = 0;
 
         foreach ($entry['children'] ?? [] as $child) {
@@ -93,9 +81,8 @@ class NavItemSeeder extends Seeder
     }
 
     /**
-     * Mirrors SiteNav::SIDEBAR_GROUPS, but with the actual translated
-     * labels and children inlined instead of a 'nav.*' lang key, so
-     * SiteNav does not need to be touched to run this seeder.
+     * Mirrors SiteNav::SIDEBAR_GROUPS with children inlined so SiteNav does
+     * not need to be touched to run this seeder.
      */
     private function sidebarGroups(): array
     {
@@ -117,63 +104,62 @@ class NavItemSeeder extends Seeder
 
     private function home(): array
     {
-        return ['route' => 'home', 'translations' => ['en' => 'Home', 'pt-BR' => 'Início']];
+        return ['route' => 'home'];
     }
 
     private function writing(): array
     {
-        return ['route' => 'writing', 'translations' => ['en' => 'Writing', 'pt-BR' => 'Escritos']];
+        return ['route' => 'writing'];
     }
 
     private function snippets(): array
     {
-        return ['route' => 'snippets', 'translations' => ['en' => 'Snippets', 'pt-BR' => 'Snippets']];
+        return ['route' => 'snippets'];
     }
 
     private function findings(): array
     {
-        return ['route' => 'findings', 'translations' => ['en' => 'findings', 'pt-BR' => 'achados']];
+        return ['route' => 'findings'];
     }
 
     private function collections(): array
     {
-        return ['route' => 'collections', 'translations' => ['en' => 'Collections', 'pt-BR' => 'Coleções']];
+        return ['route' => 'collections'];
     }
 
     private function topics(): array
     {
-        return ['route' => 'topics', 'translations' => ['en' => 'Topics', 'pt-BR' => 'Tópicos']];
+        return ['route' => 'topics'];
     }
 
     private function portfolio(): array
     {
         return [
             'route' => 'portfolio',
-            'translations' => ['en' => 'Portfolio', 'pt-BR' => 'Portfólio'],
             'children' => [
-                ['route' => 'cases', 'translations' => ['en' => 'Cases', 'pt-BR' => 'Cases']],
-                ['route' => 'projects', 'translations' => ['en' => 'projects', 'pt-BR' => 'projetos']],
+                ['route' => 'cases'],
+                ['route' => 'projects'],
             ],
         ];
     }
 
     private function about(): array
     {
-        return ['route' => 'about', 'translations' => ['en' => 'About Me', 'pt-BR' => 'Sobre mim']];
+        return ['route' => 'about'];
     }
 
     private function agora(): array
     {
-        return ['route' => 'now', 'translations' => ['en' => 'Now', 'pt-BR' => 'Agora']];
+        return ['route' => 'now'];
     }
 
     private function resume(): array
     {
-        return ['route' => 'resume', 'translations' => ['en' => 'Résumé', 'pt-BR' => 'Currículo']];
+        return ['route' => 'resume'];
     }
 
     private function follow(): array
     {
-        return ['route' => 'follow', 'translations' => ['en' => 'Follow', 'pt-BR' => 'Acompanhe']];
+        return ['route' => 'follow'];
     }
 }

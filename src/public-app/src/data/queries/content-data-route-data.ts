@@ -34,9 +34,11 @@ export type RouteData =
   | {
       kind: 'home';
       content: HomePageContent;
+    }
+  | {
+      kind: 'feed';
       feedItems: PublicFeedItem[];
       feedPagination: ContentCollectionMeta;
-      feedSearch: string;
     }
   | { kind: 'about'; page: AboutPageCopy; profile: Profile }
   | {

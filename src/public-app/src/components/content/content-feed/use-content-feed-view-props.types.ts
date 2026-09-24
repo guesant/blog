@@ -21,6 +21,15 @@ export type ContentFeedFormViewProps = Pick<
   | 'clearLabel'
   | 'onPendingSearchChange'
   | 'onSubmit'
+  | 'displayControls'
+  | 'displayMode'
+  | 'perPage'
+  | 'modeLabel'
+  | 'paginationModeLabel'
+  | 'infiniteModeLabel'
+  | 'perPageLabel'
+  | 'onDisplayModeChange'
+  | 'onPerPageChange'
 >;
 
 export type ContentFeedPaginationViewProps = Pick<
@@ -42,4 +51,5 @@ export type ContentFeedPaginationViewProps = Pick<
   | 'nextLabel'
   | 'lastLabel'
   | 'onPageChange'
+  | 'progressive'
 >;

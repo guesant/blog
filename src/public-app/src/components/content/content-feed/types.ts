@@ -13,6 +13,8 @@ type FeedKind = 'post' | 'achado' | 'colecao';
 
 export type SortMode = 'desc' | 'asc' | 'alpha' | 'popular';
 
+export type ContentFeedDisplayMode = 'pagination' | 'infinite';
+
 export type FeedQuickFilter = {
   kind?: FeedKind;
   type?: string;
@@ -51,6 +53,8 @@ export type ContentFeedProps = {
   initialSearch?: string;
   initialSort?: SortMode;
   initialType?: string;
+  displayControls?: boolean;
+  initialPerPage?: number;
   initialPage?: number;
   findingsMeta?: FindingListMeta;
   findingFacets?: FindingFacets;

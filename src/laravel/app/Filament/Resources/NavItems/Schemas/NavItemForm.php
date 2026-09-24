@@ -2,7 +2,6 @@
 
 namespace App\Filament\Resources\NavItems\Schemas;
 
-use App\Filament\Concerns\BuildsTranslationTabs;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Section;
@@ -11,8 +10,6 @@ use Illuminate\Support\Facades\Route;
 
 class NavItemForm
 {
-    use BuildsTranslationTabs;
-
     public static function configure(Schema $schema): Schema
     {
         return $schema
@@ -42,12 +39,6 @@ class NavItemForm
                             ->default(0)
                             ->required(),
                     ]),
-                static::translationTabs(fn (string $prefix) => [
-                    TextInput::make("{$prefix}label")
-                        ->label('Label')
-                        ->required()
-                        ->maxLength(255),
-                ]),
             ]);
     }
 

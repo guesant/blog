@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Application\PublicSite\GetPublicFinding;
-use App\Application\PublicSite\GetPublicFindingHandler;
-use App\Application\PublicSite\IsPublicSiteInMaintenance;
-use App\Application\PublicSite\IsPublicSiteInMaintenanceHandler;
-use App\Application\PublicSite\ListPublicFindings;
-use App\Application\PublicSite\ListPublicFindingsHandler;
+use App\Application\PublicSite\GetPublicFindingQuery;
+use App\Application\PublicSite\GetPublicFindingQueryHandler;
+use App\Application\PublicSite\IsPublicSiteInMaintenanceQuery;
+use App\Application\PublicSite\IsPublicSiteInMaintenanceQueryHandler;
+use App\Application\PublicSite\ListPublicFindingsQuery;
+use App\Application\PublicSite\ListPublicFindingsQueryHandler;
 use App\Content\Locale;
 use App\Http\Controllers\Controller;
 use App\Http\Responses\ApiErrorCode;
@@ -24,11 +24,11 @@ class FindingApiController extends Controller
     #[ScrambleResponse(503, 'The service is temporarily unavailable.', type: 'array{error: array{code: string, message: string, status: int, details: string}}')]
     public function index(
         Request $request,
-        ListPublicFindingsHandler $handler,
-        IsPublicSiteInMaintenanceHandler $maintenance,
+        ListPublicFindingsQueryHandler $handler,
+        IsPublicSiteInMaintenanceQueryHandler $maintenance,
         PublicFindingResponseFactory $presenter,
     ): JsonResponse {
-        if ($maintenance->handle(new IsPublicSiteInMaintenance)) {
+        if ($maintenance->handle(new IsPublicSiteInMaintenanceQuery)) {
             return ApiErrorResponse::make(
                 ApiErrorCode::Maintenance,
                 503,
@@ -43,7 +43,7 @@ class FindingApiController extends Controller
         $sort = in_array($request->query('sort'), ['asc', 'desc', 'alpha', 'popular'], true)
             ? $request->query('sort')
             : null;
-        $result = $handler->handle(new ListPublicFindings(
+        $result = $handler->handle(new ListPublicFindingsQuery(
             filters: $filters,
             locale: $locale,
             perPage: $perPage,
@@ -64,11 +64,11 @@ class FindingApiController extends Controller
     public function show(
         Request $request,
         string $slug,
-        GetPublicFindingHandler $handler,
-        IsPublicSiteInMaintenanceHandler $maintenance,
+        GetPublicFindingQueryHandler $handler,
+        IsPublicSiteInMaintenanceQueryHandler $maintenance,
         PublicFindingResponseFactory $presenter,
     ): JsonResponse {
-        if ($maintenance->handle(new IsPublicSiteInMaintenance)) {
+        if ($maintenance->handle(new IsPublicSiteInMaintenanceQuery)) {
             return ApiErrorResponse::make(
                 ApiErrorCode::Maintenance,
                 503,
@@ -77,7 +77,7 @@ class FindingApiController extends Controller
         }
 
         $locale = Locale::normalize($request->query('locale'));
-        $resource = $handler->handle(new GetPublicFinding($slug, $locale));
+        $resource = $handler->handle(new GetPublicFindingQuery($slug, $locale));
 
         if (! $resource) {
             return ApiErrorResponse::make(

@@ -3,25 +3,17 @@ import type { WithSeo } from './content';
 import type { Profile, ResumeContent } from './resume';
 import type { SiteText } from './site';
 import type { HomePageCopy, PageIntroduction, ResumePageCopy } from './pages-copy';
+import type { HomeGallery } from './pages-gallery';
 import type { ContentCollectionMeta } from '../api/public-site-source-support';
 
-export type HomeGalleryEntryKind = 'cases' | 'projects' | 'writing' | 'finding' | 'collection';
-
-export type HomeGalleryEntry = Record<string, unknown> & {
-  kind: HomeGalleryEntryKind;
-  slug: string;
-  title: string;
-  description: string;
-  href: string;
-};
-
-export type HomeGallery = {
-  highlights: HomeGalleryEntry[];
-  recent: HomeGalleryEntry[];
-  popular: HomeGalleryEntry[];
-  collections: HomeGalleryEntry[];
-  projects: HomeGalleryEntry[];
-};
+export type {
+  HomeCollectionShowcase,
+  HomeGallery,
+  HomeGalleryEntry,
+  HomeGalleryEntryKind,
+  HomeGalleryFeedCategories,
+  HomeGalleryPortfolio,
+} from './pages-gallery';
 
 export type HomePageContent = {
   profile: Profile;

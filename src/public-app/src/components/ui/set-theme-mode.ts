@@ -1,16 +1,15 @@
 import type { Dispatch, SetStateAction } from 'react';
-import type { ThemeMode } from '@portfolio/data/config/theme';
+import type { ResolvedThemeMode, ThemeMode } from '@portfolio/data/config/theme';
+import { writeThemeCookie } from './write-theme-cookie';
 
 export function setThemeMode(
   setModeState: Dispatch<SetStateAction<ThemeMode>>,
+  resolvedSystemMode: ResolvedThemeMode,
   nextMode: ThemeMode,
-) {
-  if (nextMode === 'system') {
-    document.documentElement.removeAttribute('data-theme');
-    document.cookie = 'site-theme=; Path=/; Max-Age=0; SameSite=Lax';
-  } else {
-    document.documentElement.dataset.theme = nextMode;
-    document.cookie = 'site-theme=' + nextMode + '; Path=/; Max-Age=31536000; SameSite=Lax';
-  }
+): void {
+  const resolvedMode = nextMode === 'system' ? resolvedSystemMode : nextMode;
+
+  document.documentElement.dataset.theme = resolvedMode;
+  writeThemeCookie(nextMode, resolvedMode);
   setModeState(nextMode);
 }

@@ -30,5 +30,6 @@ export function buildContentFeedPaginationViewProps(
     lastLabel: runtime.translations.lastLabel,
     onPageChange: (value) =>
       runtime.router.push(runtime.actions.pageHref(value), { resetScroll: false }),
+    progressive: runtime.progressive,
   };
 }

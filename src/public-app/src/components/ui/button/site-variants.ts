@@ -59,6 +59,11 @@ export const siteButtonVariants: Record<SiteButtonVariant, SxProps<Theme>> = {
     color: 'var(--site-success)',
     borderColor: 'var(--site-success)',
     padding: 'var(--site-action-py) var(--site-action-px)',
+    whiteSpace: 'nowrap',
+    fontSize: {
+      xs: 'var(--site-text-xs)',
+      sm: 'var(--site-text-sm)',
+    },
     textTransform: 'none',
     '&:hover': {
       color: 'var(--site-success)',
@@ -111,6 +116,7 @@ export const siteButtonVariants: Record<SiteButtonVariant, SxProps<Theme>> = {
     color: 'var(--site-primary)',
     borderColor: 'var(--site-primary)',
     backgroundColor: 'var(--site-accent-bg)',
+    whiteSpace: 'nowrap',
     '&:hover': {
       borderColor: 'var(--site-primary-hover)',
       backgroundColor: 'var(--site-surface-hover)',

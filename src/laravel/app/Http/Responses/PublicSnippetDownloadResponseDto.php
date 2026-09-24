@@ -2,7 +2,7 @@
 
 namespace App\Http\Responses;
 
-use App\Application\PublicSite\PublicSnippetDownloadResult;
+use App\Application\PublicSite\DownloadPublicSnippetQueryResult;
 
 final readonly class PublicSnippetDownloadResponseDto
 {
@@ -11,7 +11,7 @@ final readonly class PublicSnippetDownloadResponseDto
         private string $filename,
     ) {}
 
-    public static function fromResult(PublicSnippetDownloadResult $result): self
+    public static function fromResult(DownloadPublicSnippetQueryResult $result): self
     {
         return new self($result->contents, $result->filename);
     }

@@ -1,6 +1,4 @@
-import type { ThemeMode } from '@portfolio/data/config/theme';
-
-export type ResolvedThemeMode = Exclude<ThemeMode, 'system'>;
+export type { ResolvedThemeMode } from '@portfolio/data/config/theme';
 
 export const lightPalette = {
   primary: { main: '#1D4ED8', light: '#EEF3F8', dark: '#163DA9', contrastText: '#FFFFFF' },

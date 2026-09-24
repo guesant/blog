@@ -35,7 +35,7 @@ export function SidebarLink(props: SidebarLinkProps) {
       icon={icon ? <Icon name={icon} size={14} /> : undefined}
       active={active}
       ariaCurrent={active ? 'page' : undefined}
-      label={item.label.toLowerCase()}
+      label={item.label}
     />
   );
 }

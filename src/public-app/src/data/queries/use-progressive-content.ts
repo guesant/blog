@@ -10,6 +10,7 @@ import type { ProgressiveContentPage, ProgressiveContentQuery } from './progress
 export function useProgressiveContent<T>(props: ProgressiveContentQuery<T>) {
   const query = useInfiniteQuery<ProgressiveContentPage<T>>({
     queryKey: props.queryKey,
+    enabled: props.enabled,
     initialPageParam: props.initialPage.meta.page,
     initialData: {
       pages: [props.initialPage],

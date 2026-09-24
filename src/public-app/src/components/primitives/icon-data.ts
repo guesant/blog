@@ -60,6 +60,8 @@ export const icons = {
   moon: LucideIcons.Moon,
   sun: LucideIcons.Sun,
   trash: LucideIcons.Trash2,
+  list: LucideIcons.List,
+  infinity: LucideIcons.Infinity,
 } satisfies Record<string, ComponentType<LucideProps>>;
 
 export type IconName = keyof typeof icons;

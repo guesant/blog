@@ -6,8 +6,9 @@ export const themeComponentsControls = {
         borderRadius: 0,
         fontFamily: 'var(--site-font-action)',
         padding: 'var(--site-action-py) var(--site-action-px)',
-        height: 'var(--site-control-h)',
         minHeight: 'var(--site-control-h)',
+        height: 'auto',
+        whiteSpace: 'normal',
         '& .MuiButton-startIcon': {
           marginLeft: 0,
           marginRight: 'var(--site-space-2)',
@@ -22,12 +23,10 @@ export const themeComponentsControls = {
       },
       sizeSmall: {
         padding: 'var(--site-action-py) var(--site-action-px)',
-        height: 'var(--site-control-h-sm)',
         minHeight: 'var(--site-control-h-sm)',
       },
       sizeLarge: {
         padding: 'var(--site-action-py) var(--site-action-px)',
-        height: 'var(--site-control-h-lg)',
         minHeight: 'var(--site-control-h-lg)',
       },
       text: { padding: 'var(--site-action-py) var(--site-action-px)' },

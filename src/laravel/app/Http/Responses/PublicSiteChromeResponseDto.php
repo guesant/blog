@@ -2,15 +2,15 @@
 
 namespace App\Http\Responses;
 
-use App\ReadModel\PublicSite\Chrome\PublicSiteChromeResult;
+use App\Application\PublicSite\GetPublicSiteChromeQueryResult;
 
 final readonly class PublicSiteChromeResponseDto
 {
     private function __construct(
-        private PublicSiteChromeResult $result,
+        private GetPublicSiteChromeQueryResult $result,
     ) {}
 
-    public static function fromResult(PublicSiteChromeResult $result): self
+    public static function fromResult(GetPublicSiteChromeQueryResult $result): self
     {
         return new self($result);
     }

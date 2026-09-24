@@ -1,8 +1,9 @@
 import type { ReactNode } from 'react';
+import type { ThemeState } from '@portfolio/data/config/theme';
 
 type DocumentShellProps = {
   locale: string;
-  themeMode: 'system' | 'light' | 'dark';
+  themeState: ThemeState;
   head: ReactNode;
   body: ReactNode;
   scripts: ReactNode;
@@ -14,7 +15,7 @@ export function DocumentShell(props: DocumentShellProps) {
     <html
       lang={props.locale}
       suppressHydrationWarning
-      data-theme={props.themeMode === 'system' ? undefined : props.themeMode}
+      data-theme={props.themeState.resolvedMode ?? undefined}
     >
       <head>
         {props.head}

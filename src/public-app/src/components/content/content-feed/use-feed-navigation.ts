@@ -1,5 +1,9 @@
 import { useCallback } from 'react';
 import type { ContentFeedRouter } from './use-content-feed-actions.types';
+import type { ContentFeedDisplayMode } from './types';
+import { buildFeedDisplayModeHref } from './build-feed-display-mode-href';
+import { buildFeedPageHref } from './build-feed-page-href';
+import { buildFeedPerPageHref } from './build-feed-per-page-href';
 
 type UseFeedNavigationProps = {
   action: string;
@@ -23,15 +27,27 @@ export function useFeedNavigation(props: UseFeedNavigationProps) {
   );
 
   const pageHref = useCallback(
-    (value: number) => {
-      const params = new URLSearchParams(Object.fromEntries(props.query));
-
-      params.delete('view');
-      params.set('page', String(value));
-      return `${props.action}?${params.toString()}`;
-    },
+    (value: number) => buildFeedPageHref(props.action, props.query, value),
     [props.action, props.query],
   );
 
-  return { pageHref, scrollToFeedAfter };
+  const displayModeHref = useCallback(
+    (mode: ContentFeedDisplayMode, perPage: number) =>
+      buildFeedDisplayModeHref({ action: props.action, query: props.query, mode, perPage }),
+    [props.action, props.query],
+  );
+
+  const perPageHref = useCallback(
+    (perPage: number) => buildFeedPerPageHref(props.action, props.query, perPage),
+    [props.action, props.query],
+  );
+
+  const navigate = useCallback(
+    (href: string) => {
+      scrollToFeedAfter(props.router.push(href, { resetScroll: false }));
+    },
+    [props.router, scrollToFeedAfter],
+  );
+
+  return { pageHref, scrollToFeedAfter, displayModeHref, perPageHref, navigate };
 }

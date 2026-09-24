@@ -1,16 +1,20 @@
-import type { FeedQuickFilter, SortMode } from './types';
+import type { ContentFeedDisplayMode, FeedQuickFilter, SortMode } from './types';
 import { contentFeedQueryKind } from './content-feed-query-kind';
 import { contentFeedQuerySort } from './content-feed-query-sort';
 import { resolveContentFeedKind } from './resolve-content-feed-kind';
+import { setContentFeedOptionalQueryParams } from './set-content-feed-optional-query-params';
 import { setQueryParameter } from './set-query-parameter';
 
-type BuildContentFeedQueryProps = {
+export type BuildContentFeedQueryProps = {
   fixedKind?: string;
   kind: string;
   topic: string;
   type: string;
   search: string;
   sort: SortMode;
+  displayMode?: ContentFeedDisplayMode;
+  perPage?: number;
+  page?: number;
   filter?: FeedQuickFilter;
 };
 
@@ -37,5 +41,8 @@ export function buildContentFeedQuery(props: BuildContentFeedQueryProps) {
   };
 
   Object.entries(values).forEach(([key, value]) => setQueryParameter(params, key, value));
+
+  setContentFeedOptionalQueryParams(params, props);
+
   return { params, nextKind, nextType };
 }

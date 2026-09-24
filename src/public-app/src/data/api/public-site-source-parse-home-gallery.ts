@@ -1,6 +1,8 @@
 import type { HomeGallery, HomeGalleryEntryKind } from '../domain/pages-content';
-import { homeGalleryFeedKind } from './public-site-source-home-gallery-feed-kind';
 import { homeGalleryEntry } from './public-site-source-home-gallery-entry';
+import { parseHomeCollectionShowcase } from './public-site-source-parse-home-collection-showcase';
+import { parseHomeGalleryFeedCategories } from './public-site-source-parse-home-gallery-feed-categories';
+import { parseHomeGalleryPortfolio } from './public-site-source-parse-home-gallery-portfolio';
 import { objectValue } from './public-site-source-object-value';
 import { recordList } from './public-site-source-list';
 import { stringValue } from './public-site-source-string-value';
@@ -9,7 +11,9 @@ import type { RecordValue } from './public-site-source-support';
 export function parseHomeGallery(value: unknown): HomeGallery {
   const payload = objectValue(value) ?? {};
 
-  const recent = objectValue(payload.recent) ?? {};
+  const collectionShowcases = recordList<RecordValue>(payload.collection_showcases).map(
+    parseHomeCollectionShowcase,
+  );
 
   return {
     highlights: recordList<RecordValue>(payload.highlights).map((entry) => {
@@ -19,24 +23,9 @@ export function parseHomeGallery(value: unknown): HomeGallery {
 
       return homeGalleryEntry(item, kind);
     }),
-    recent: [
-      ...recordList<RecordValue>(recent.feed).map((item) => {
-        const kind = stringValue(item.kind);
-
-        const entryKind = homeGalleryFeedKind(kind);
-
-        return homeGalleryEntry(item, entryKind);
-      }),
-      ...recordList<RecordValue>(recent.projects).map((item) => homeGalleryEntry(item, 'projects')),
-    ],
-    popular: recordList<RecordValue>(payload.popular).map((item) =>
-      homeGalleryEntry(item, 'finding'),
-    ),
-    collections: recordList<RecordValue>(payload.collections).map((item) =>
-      homeGalleryEntry(item, 'collection'),
-    ),
-    projects: recordList<RecordValue>(payload.projects).map((item) =>
-      homeGalleryEntry(item, 'projects'),
-    ),
+    recent: parseHomeGalleryFeedCategories(payload.recent),
+    popular: parseHomeGalleryFeedCategories(payload.popular),
+    portfolio: parseHomeGalleryPortfolio(payload.portfolio),
+    collectionShowcases,
   };
 }

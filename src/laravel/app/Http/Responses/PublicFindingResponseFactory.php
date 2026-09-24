@@ -2,7 +2,7 @@
 
 namespace App\Http\Responses;
 
-use App\Application\PublicSite\PublicFindingReadResult;
+use App\Application\PublicSite\GetPublicFindingQueryResult;
 use App\Content\Locale;
 use App\Content\OpenGraphMetadata;
 use App\Content\PublicIdentifier;
@@ -29,7 +29,7 @@ final class PublicFindingResponseFactory
         );
     }
 
-    public function detail(PublicFindingReadResult $result, string $locale): PublicFindingResponseDto
+    public function detail(GetPublicFindingQueryResult $result, string $locale): PublicFindingResponseDto
     {
         return PublicFindingResponseDto::fromArray($this->item($result->resource, $locale, [], true));
     }

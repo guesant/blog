@@ -18,6 +18,12 @@ export const stackVariants: Record<string, SxProps<Theme>> = {
   rightSidebar: { gap: 'var(--site-sidebar-gap)' },
   contentFeedEmpty: { alignItems: 'center', gap: 'var(--site-space-4)' },
   contentFeedStatus: { alignItems: 'center', mb: 'var(--site-space-4)' },
+  contentFeedDisplayControls: {
+    alignItems: 'center',
+    flexWrap: 'wrap',
+    gap: 'var(--site-space-3)',
+    mb: 'var(--site-space-4)',
+  },
   feedCard: {
     alignItems: 'center',
     flexWrap: 'wrap',

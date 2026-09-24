@@ -143,7 +143,6 @@ security: tools-build
     {{tools_compose}} run --rm gitleaks dir --redact --no-banner /workspace/src/laravel/config
     {{tools_compose}} run --rm gitleaks dir --redact --no-banner /workspace/src/laravel/routes
     {{tools_compose}} run --rm gitleaks dir --redact --no-banner /workspace/src/laravel/docker
-    {{tools_compose}} run --rm gitleaks dir --redact --no-banner /workspace/src/laravel/scripts
     {{tools_compose}} run --rm osv-scanner scan source --config=/workspace/src/public-app/.config/osv-scanner.toml --recursive /workspace/src/public-app /workspace/src/laravel /workspace/src/packages
     {{tools_compose}} run --rm trivy fs --no-progress --scanners vuln,secret --severity CRITICAL,HIGH --exit-code 1 --skip-dirs /workspace/src/public-app/node_modules --skip-dirs /workspace/src/public-app/dist --skip-dirs /workspace/src/laravel/node_modules --skip-dirs /workspace/src/laravel/vendor --skip-files '**/*.dockerignore' /workspace
     {{tools_compose}} run --rm semgrep scan --config auto --error --exclude 'node_modules/**' --exclude 'dist/**' /workspace/src/public-app/src /workspace/src/packages/tools /workspace/src/laravel/app /workspace/src/laravel/config /workspace/src/laravel/routes

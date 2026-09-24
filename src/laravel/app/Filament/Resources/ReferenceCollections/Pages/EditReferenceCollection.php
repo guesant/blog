@@ -32,11 +32,11 @@ class EditReferenceCollection extends EditRecord
 
         $data['items'] = $this->getRecord()
             ->resources()
+            ->orderByPivot('order')
             ->get()
             ->map(fn ($resource) => [
                 'resource_id' => $resource->id,
                 'note' => $resource->pivot->note,
-                'order' => $resource->pivot->order,
             ])
             ->all();
 
@@ -56,8 +56,8 @@ class EditReferenceCollection extends EditRecord
         $this->persistTranslations();
 
         $this->getRecord()->resources()->sync(
-            collect($this->pendingItems)->mapWithKeys(fn (array $item) => [
-                $item['resource_id'] => ['note' => $item['note'] ?? null, 'order' => $item['order'] ?? null],
+            collect($this->pendingItems)->values()->mapWithKeys(fn (array $item, int $order) => [
+                $item['resource_id'] => ['note' => $item['note'] ?? null, 'order' => $order],
             ])
         );
 

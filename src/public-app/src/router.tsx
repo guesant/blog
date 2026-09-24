@@ -6,6 +6,7 @@ import {
   contentQueryStaleTimeMs,
 } from './data/queries/content-query-cache-policy';
 import { contentQueryRetryCount } from './data/queries/content-query-retry-policy';
+import { restorePersistedQueryClient } from './data/queries/query-persistence';
 import { routeTree } from './routeTree.gen';
 
 export function getRouter() {
@@ -17,9 +18,15 @@ export function getRouter() {
         staleTime: contentQueryStaleTimeMs,
         gcTime: contentQueryGcTimeMs,
         retry: contentQueryRetryCount,
+        refetchOnMount: 'always',
+        refetchOnReconnect: true,
+        refetchOnWindowFocus: true,
+        placeholderData: (previousData: unknown) => previousData,
       },
     },
   });
+
+  restorePersistedQueryClient(queryClient);
 
   const router = createRouter({
     routeTree,

@@ -13,7 +13,6 @@ export function CreditsPageContent(props: CreditsPageContentProps) {
   return (
     <>
       <PageHeader
-        eyebrow={t('eyebrow')}
         title={content.page.title}
         description={content.page.description}
         breadcrumbs={[{ label: tFooter('credits') }]}

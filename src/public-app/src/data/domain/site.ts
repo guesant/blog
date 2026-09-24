@@ -28,7 +28,6 @@ type ContactInformation = {
 };
 
 type MaintenanceContent = {
-  eyebrow: string;
   title: string;
   description: string;
 };

@@ -7,11 +7,17 @@ import {
   useLocation,
 } from '@tanstack/react-router';
 import type { QueryClient } from '@tanstack/react-query';
+import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
 import '@fontsource/ibm-plex-mono';
 import '@fontsource-variable/roboto-slab';
 import '../app/fonts.css';
 import '../app/tokens.css';
 import { loadThemeMode } from '../data/config/theme';
+import {
+  queryPersister,
+  queryPersistenceBuster,
+  queryPersistenceMaxAgeMs,
+} from '../data/queries/query-persistence';
 import { localeFromPathname } from '../i18n/routing';
 import { DocumentShell } from '../components/ui';
 
@@ -35,6 +41,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       { title: 'guesant.net' },
     ],
+    links: [{ rel: 'icon', href: '/favicon.svg', type: 'image/svg+xml' }],
   }),
   component: RootDocument,
 });
@@ -44,14 +51,25 @@ function RootDocument() {
 
   const themeState = Route.useLoaderData();
 
+  const routeContext = Route.useRouteContext();
+
   return (
-    <DocumentShell
-      locale={locale}
-      themeState={themeState}
-      head={<HeadContent />}
-      body={<Outlet />}
-      scripts={<Scripts />}
-      themeBootstrapScript={themeBootstrapScript}
-    />
+    <PersistQueryClientProvider
+      client={routeContext.queryClient}
+      persistOptions={{
+        buster: queryPersistenceBuster,
+        maxAge: queryPersistenceMaxAgeMs,
+        persister: queryPersister,
+      }}
+    >
+      <DocumentShell
+        locale={locale}
+        themeState={themeState}
+        head={<HeadContent />}
+        body={<Outlet />}
+        scripts={<Scripts />}
+        themeBootstrapScript={themeBootstrapScript}
+      />
+    </PersistQueryClientProvider>
   );
 }

@@ -9,5 +9,5 @@ import type {
 type SourcePreviewProps = { data: SourcePreviewData; t: SourcePreviewTranslator };
 
 export function SourcePreview(props: SourcePreviewProps) {
-  return <SourcePreviewListItem data={props.data} t={props.t} variant="detail" />;
+  return <SourcePreviewListItem data={props.data} t={props.t} />;
 }

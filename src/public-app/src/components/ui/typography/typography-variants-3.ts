@@ -1,5 +1,17 @@
 import type { SxProps, Theme } from '@mui/material/styles';
 
+const homeReadingText = {
+  display: 'block',
+  width: '100%',
+  maxWidth: '100%',
+  marginLeft: 'auto',
+  marginRight: 'auto',
+  px: 'var(--site-inset-page)',
+  boxSizing: 'border-box',
+  textAlign: 'justify',
+  hyphens: 'auto',
+};
+
 export const typographyVariants3: Record<string, SxProps<Theme>> = {
   caseLinkReadMore: {
     mt: 2,
@@ -19,6 +31,14 @@ export const typographyVariants3: Record<string, SxProps<Theme>> = {
     hyphens: 'auto',
   },
   contentFeedStatus: { textAlign: 'center' },
+  homeIntro: {
+    ...homeReadingText,
+    fontFamily: 'var(--site-font-action)',
+    fontSize: 'var(--site-text-lg)',
+    fontWeight: 'var(--site-weight-medium)',
+    lineHeight: 'var(--site-leading-relaxed)',
+    color: 'text.secondary',
+  },
   feedCard: {
     margin: 0,
     color: 'var(--site-text-primary)',
@@ -46,12 +66,12 @@ export const typographyVariants3: Record<string, SxProps<Theme>> = {
   },
   metricItem: { fontWeight: 700 },
   explorationSection: {
-    maxWidth: 'var(--site-lede-max)',
-    marginLeft: 'auto',
-    marginRight: 'auto',
+    ...homeReadingText,
     mt: 'var(--site-space-3)',
-    textAlign: 'center',
-    hyphens: 'auto',
+  },
+  contentFeedDescription: {
+    ...homeReadingText,
+    mt: 'var(--site-space-3)',
   },
   connectionsSection: {
     margin: 0,

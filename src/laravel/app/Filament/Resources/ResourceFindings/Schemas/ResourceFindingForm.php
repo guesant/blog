@@ -55,7 +55,7 @@ class ResourceFindingForm
     {
         return $schema
             ->components([
-                Section::make()
+                Section::make('Publishing')
                     ->columns(2)
                     ->schema([
                         TextInput::make('slug')
@@ -64,10 +64,6 @@ class ResourceFindingForm
                             ->maxLength(255),
                         Toggle::make('hidden')
                             ->default(false),
-                        TextInput::make('order')
-                            ->numeric()
-                            ->default(0)
-                            ->required(),
                         Select::make('type')
                             ->required()
                             ->options(array_combine(self::TYPES, self::TYPES)),

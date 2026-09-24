@@ -32,12 +32,12 @@ class ManageResumeTest extends TestCase
 
         Livewire::test(ManageResume::class)
             ->set('data.skills', [
-                ['topic_id' => $topic->id, 'order' => 1, 'technologies' => [$technology->id]],
+                ['topic_id' => $topic->id, 'technologies' => [$technology->id]],
             ])
             ->call('save')
             ->assertHasNoErrors();
 
-        $this->assertDatabaseHas('resume_skills', ['topic_id' => $topic->id, 'order' => 1]);
+        $this->assertDatabaseHas('resume_skills', ['topic_id' => $topic->id, 'order' => 0]);
 
         $skill = ResumeSkill::where('topic_id', $topic->id)->firstOrFail();
         $this->assertTrue($skill->technologies->contains($technology->id));

@@ -10,11 +10,6 @@ export type HomeContactSectionProps = {
   tExternalProfiles: ReturnType<typeof useTranslations>;
 };
 
-export type HomeContactProfileButtonProps = {
-  profile: HomePageContent['site']['contact']['profiles'][number];
-  tExternalProfiles: ReturnType<typeof useTranslations>;
-};
-
 export type HomeAvailabilityProps = {
   page: HomePageContent['page'];
   showContact: boolean;

@@ -106,7 +106,6 @@
     "unavailable": "Não estou disponível para novas oportunidades no momento.",
     "reveal": "E-mail",
     "revealing": "Verificando…",
-    "revealHint": "Isso impede que robôs copiem o endereço direto da página. Seu navegador faz um cálculo rápido antes de mostrar o e-mail aqui.",
     "revealedIntro": "Aqui está:",
     "revealError": "Não funcionou dessa vez. Tente de novo ou use um dos perfis abaixo.",
     "revealNoScript": "É necessário JavaScript para mostrar o endereço. Use um dos perfis abaixo.",
@@ -209,8 +208,6 @@
     },
     "projects": {
       "back": "Todos os projetos",
-      "projectEyebrow": "Projeto independente",
-      "experimentEyebrow": "Experimento",
       "problem": "Problema explorado",
       "currentFocus": "Foco atual",
       "technologies": "Tecnologias",
@@ -351,7 +348,6 @@
       }
     },
     "topics": {
-      "eyebrow": "Tópico",
       "metaDescription": "Referências marcadas com {name}.",
       "indexTitle": "Tópicos",
       "indexDescription": "Navegue pelos achados por tópico."
@@ -369,7 +365,6 @@
       "noResults": "Nenhum nó corresponde a este filtro."
     },
     "collections": {
-      "eyebrow": "Coleção",
       "indexTitle": "Coleções",
       "indexDescription": "Trilhas curadas pelo catálogo de achados."
     },
@@ -381,7 +376,6 @@
       "trajectory": "Trajetória",
       "milestones": "Marcos",
       "githubStatistics": {
-        "eyebrow": "Estatísticas do GitHub",
         "title": "Atividade pública de desenvolvimento, em resumo.",
         "description": "Um snapshot versionado, coletado do GitHub e renderizado diretamente por este portfólio.",
         "contributionsLastYear": "Contribuições no último ano",
@@ -429,7 +423,6 @@
       "pdfOptions": "Opções de PDF"
     },
     "license": {
-      "eyebrow": "Legal",
       "title": "Licença e reutilização.",
       "description": "Este site separa duas coisas: o software que o executa e o conteúdo pessoal publicado nele. Cada um tem uma licença diferente.",
       "codeHeading": "Código-fonte",
@@ -441,23 +434,28 @@
       "contact": "Dúvidas sobre reutilização ou licenciamento? Entre em contato por:"
     },
     "credits": {
-      "eyebrow": "Agradecimentos",
+      "acknowledgementsHeading": "Agradecimentos",
       "referencesHeading": "Referências",
       "infrastructureHeading": "Infraestrutura e ferramentas",
       "librariesHeading": "Bibliotecas",
       "toolsHeading": "Ferramentas"
     },
     "notFound": {
-      "eyebrow": "404",
       "title": "Esta página saiu do caminho.",
       "description": "O endereço pode estar desatualizado ou a página pode nunca ter existido. Você pode voltar ao início ou relatar um problema se algo parecer errado.",
       "home": "Voltar ao Início",
       "issue": "Relatar um Problema"
     },
     "error": {
-      "eyebrow": "Algo deu errado",
       "title": "Não foi possível carregar esta página.",
       "description": "Um erro inesperado interrompeu a página. Tente novamente ou relate o problema para que eu possa investigar.",
+      "retry": "Tentar novamente",
+      "home": "Voltar ao Início",
+      "issue": "Relatar um Problema"
+    },
+    "apiUnavailable": {
+      "title": "O site está temporariamente indisponível.",
+      "description": "Não foi possível alcançar a API pública. Tente novamente em instantes.",
       "retry": "Tentar novamente",
       "home": "Voltar ao Início",
       "issue": "Relatar um Problema"

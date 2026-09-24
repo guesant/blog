@@ -23,18 +23,11 @@ export function ContactPageContent(props: ContactPageContentProps) {
   return (
     <>
       <PageHeader
-        eyebrow={page.eyebrow}
         title={page.title}
         description={site.contact.available ? page.description : undefined}
         breadcrumbs={[{ label: tNav('contact') }]}
       />
-      <ContactPageBody
-        page={page}
-        site={site}
-        t={t}
-        tCommon={tCommon}
-        tExternalProfiles={tExternalProfiles}
-      />
+      <ContactPageBody site={site} t={t} tCommon={tCommon} tExternalProfiles={tExternalProfiles} />
     </>
   );
 }

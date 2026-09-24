@@ -19,7 +19,6 @@ export function NowPageContent(props: NowPageContentProps) {
   return (
     <>
       <PageHeader
-        eyebrow={tNav('now')}
         title={tNav('now')}
         description={page.description}
         breadcrumbs={[{ label: tNav('now') }]}

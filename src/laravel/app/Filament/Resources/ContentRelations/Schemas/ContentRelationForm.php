@@ -18,7 +18,7 @@ class ContentRelationForm
     {
         return $schema
             ->components([
-                Section::make()
+                Section::make('Relation')
                     ->columns(2)
                     ->schema([
                         MorphToSelect::make('subject')
@@ -31,17 +31,13 @@ class ContentRelationForm
                             ->required(),
                         Select::make('relation_type_id')
                             ->label('Relation type')
-                            ->options(
-                                RelationType::query()
-                                    ->orderBy('family')
-                                    ->orderBy('key')
-                                    ->get()
-                                    ->groupBy('family')
-                                    ->map(fn ($group) => $group->pluck('key', 'id'))
-                                    ->all()
-                            )
+                            ->options(self::relationTypeOptions())
                             ->searchable()
                             ->required(),
+                    ]),
+                Section::make('Visibility')
+                    ->columns(2)
+                    ->schema([
                         Select::make('status')
                             ->options([
                                 'verified' => 'verified',
@@ -55,6 +51,10 @@ class ContentRelationForm
                             ])
                             ->default('public')
                             ->nullable(),
+                    ]),
+                Section::make('Notes')
+                    ->columns(2)
+                    ->schema([
                         Textarea::make('note')
                             ->rows(2)
                             ->columnSpanFull(),
@@ -72,6 +72,17 @@ class ContentRelationForm
                 ->titleAttribute('slug')
                 ->label(Str::headline($kind)))
             ->values()
+            ->all();
+    }
+
+    private static function relationTypeOptions(): array
+    {
+        return RelationType::query()
+            ->orderBy('family')
+            ->orderBy('key')
+            ->get()
+            ->groupBy('family')
+            ->map(fn ($group): array => $group->pluck('key', 'id')->all())
             ->all();
     }
 }

@@ -27,18 +27,21 @@ class EditPage extends EditRecord
         $data = $this->fillTranslationsIntoData($data);
 
         $data['featured_cases'] = $this->getRecord()->featuredCases()
+            ->orderByPivot('order')
             ->get()
-            ->map(fn ($case) => ['case_study_id' => $case->id, 'order' => $case->pivot->order])
+            ->map(fn ($case) => ['case_study_id' => $case->id])
             ->all();
 
         $data['featured_projects'] = $this->getRecord()->featuredProjects()
+            ->orderByPivot('order')
             ->get()
-            ->map(fn ($project) => ['project_id' => $project->id, 'order' => $project->pivot->order])
+            ->map(fn ($project) => ['project_id' => $project->id])
             ->all();
 
         $data['featured_writings'] = $this->getRecord()->featuredWritings()
+            ->orderByPivot('order')
             ->get()
-            ->map(fn ($writing) => ['writing_id' => $writing->id, 'order' => $writing->pivot->order])
+            ->map(fn ($writing) => ['writing_id' => $writing->id])
             ->all();
 
         return $data;
@@ -59,20 +62,20 @@ class EditPage extends EditRecord
         $this->persistTranslations();
 
         $this->getRecord()->featuredCases()->sync(
-            collect($this->pendingFeaturedCases)->mapWithKeys(fn (array $item) => [
-                $item['case_study_id'] => ['order' => $item['order'] ?? null],
+            collect($this->pendingFeaturedCases)->values()->mapWithKeys(fn (array $item, int $order) => [
+                $item['case_study_id'] => ['order' => $order],
             ])
         );
 
         $this->getRecord()->featuredProjects()->sync(
-            collect($this->pendingFeaturedProjects)->mapWithKeys(fn (array $item) => [
-                $item['project_id'] => ['order' => $item['order'] ?? null],
+            collect($this->pendingFeaturedProjects)->values()->mapWithKeys(fn (array $item, int $order) => [
+                $item['project_id'] => ['order' => $order],
             ])
         );
 
         $this->getRecord()->featuredWritings()->sync(
-            collect($this->pendingFeaturedWritings)->mapWithKeys(fn (array $item) => [
-                $item['writing_id'] => ['order' => $item['order'] ?? null],
+            collect($this->pendingFeaturedWritings)->values()->mapWithKeys(fn (array $item, int $order) => [
+                $item['writing_id'] => ['order' => $order],
             ])
         );
 

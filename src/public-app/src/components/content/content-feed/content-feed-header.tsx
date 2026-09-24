@@ -16,7 +16,7 @@ export function ContentFeedHeader(props: ContentFeedHeaderProps) {
           <ConditionalContent
             condition={Boolean(props.copy.description)}
             content={
-              <Typography color="text.secondary" visualVariant="contentFeedHeader">
+              <Typography color="text.secondary" visualVariant="contentFeedDescription">
                 {props.copy.description}
               </Typography>
             }

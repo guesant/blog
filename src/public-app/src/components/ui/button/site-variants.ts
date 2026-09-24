@@ -72,7 +72,10 @@ export const siteButtonVariants: Record<SiteButtonVariant, SxProps<Theme>> = {
     },
   },
   exploration: {
+    width: '100%',
+    minWidth: 0,
     justifyContent: 'flex-start',
+    textTransform: 'none',
     color: 'var(--site-text-primary)',
     borderColor: 'var(--site-border)',
     backgroundColor: 'transparent',

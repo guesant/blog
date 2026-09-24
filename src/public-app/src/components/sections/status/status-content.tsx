@@ -5,9 +5,10 @@ import { useTranslations } from '@/i18n/compat';
 import { PageHeader } from '../../content/page-header';
 import { Icon } from '../../primitives/icon';
 import { StatusActions } from './status-actions';
+import type { StatusPageKind } from './status-page-kind';
 
 type StatusContentProps = {
-  kind: 'notFound' | 'error';
+  kind: StatusPageKind;
   sourceRepositoryUrl?: string;
   reset?: () => void;
 };
@@ -18,7 +19,7 @@ export function StatusContent(props: StatusContentProps) {
   return (
     <Box visualVariant="statusContent">
       <Icon name="problem" size={22} visualVariant="status" />
-      <PageHeader eyebrow={t('eyebrow')} title={t('title')} description={t('description')} />
+      <PageHeader title={t('title')} description={t('description')} />
       <StatusActions {...props} />
     </Box>
   );

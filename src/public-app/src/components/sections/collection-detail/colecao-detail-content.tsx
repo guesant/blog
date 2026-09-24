@@ -9,14 +9,11 @@ import { CollectionDetailSections } from './collection-detail-sections';
 export function ColecaoDetailContent(props: ColecaoDetailContentProps) {
   const { collection } = props;
 
-  const tPages = useTranslations('Pages.collections');
-
   const tNav = useTranslations('Nav');
 
   return (
     <>
       <PageHeader
-        eyebrow={tPages('eyebrow')}
         title={collection.title}
         description={collection.description}
         actions={

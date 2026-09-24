@@ -31,8 +31,8 @@ class CreateReferenceCollection extends CreateRecord
         $this->persistTranslations();
 
         $this->getRecord()->resources()->sync(
-            collect($this->pendingItems)->mapWithKeys(fn (array $item) => [
-                $item['resource_id'] => ['note' => $item['note'] ?? null, 'order' => $item['order'] ?? null],
+            collect($this->pendingItems)->values()->mapWithKeys(fn (array $item, int $order) => [
+                $item['resource_id'] => ['note' => $item['note'] ?? null, 'order' => $order],
             ])
         );
 

@@ -15,7 +15,7 @@ export function HomeAvailability(props: HomeAvailabilityProps) {
       sx={{
         position: 'relative',
         zIndex: 1,
-        mt: { xs: 'var(--site-space-4)', sm: 'var(--site-space-6)' },
+        mt: 'var(--site-space-3)',
         pb: 'var(--site-space-6)',
         alignItems: 'center',
         justifyContent: 'center',

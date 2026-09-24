@@ -19,7 +19,7 @@ class SnippetForm
     {
         return $schema
             ->components([
-                Section::make()
+                Section::make('Snippet settings')
                     ->columns(2)
                     ->schema([
                         TextInput::make('slug')
@@ -28,10 +28,6 @@ class SnippetForm
                             ->maxLength(255),
                         Toggle::make('hidden')
                             ->default(false),
-                        TextInput::make('order')
-                            ->numeric()
-                            ->default(0)
-                            ->required(),
                         Toggle::make('show_history')
                             ->helperText('Show a public version-history/diff section on this snippet\'s page.')
                             ->default(false),
@@ -44,11 +40,12 @@ class SnippetForm
                         Repeater::make('files')
                             ->relationship('files')
                             ->orderColumn('order')
+                            ->reorderableWithButtons()
                             ->columns(2)
                             ->schema([
                                 TextInput::make('path')
                                     ->label('Path')
-                                    ->placeholder('src/components/Foo.tsx')
+                                    ->placeholder('src/components/Example.tsx')
                                     ->required()
                                     ->columnSpanFull(),
                                 TextInput::make('language')

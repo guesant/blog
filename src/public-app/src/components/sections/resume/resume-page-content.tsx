@@ -27,8 +27,6 @@ export function ResumePageContent(props: ResumePageContentProps) {
 
   const hasEmail = site.contact.hasEmail;
 
-  const hasProfiles = site.contact.profiles.length > 0;
-
   return (
     <ResumeArticle>
       <ResumeBreadcrumbs>
@@ -39,7 +37,6 @@ export function ResumePageContent(props: ResumePageContentProps) {
         profile={profile}
         site={site}
         hasEmail={hasEmail}
-        hasProfiles={hasProfiles}
         locale={locale}
         pdfUrls={pdfUrls}
         t={t}

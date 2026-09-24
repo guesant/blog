@@ -1,26 +1,21 @@
-'use client';
-
-import { Box, Typography } from '../../ui';
-import { ContactDetailsActions } from './contact-details-actions';
-import { Stack } from '../../ui';
-import { contactLabel, type ContactDetailsProps } from './types';
+import { ActionSection } from '../../content/action-section';
+import { ContactActionEmail } from '../../contact/contact-action-email';
+import { ContactActionProfiles } from '../../contact/contact-action-profiles';
+import { Box } from '../../ui';
+import type { ContactDetailsProps } from './types';
 
 export function ContactDetails(props: ContactDetailsProps) {
-  const { page, site, hasEmail, t, tCommon, tExternalProfiles } = props;
+  const { site, hasEmail, t, tExternalProfiles } = props;
 
   return (
-    <Box visualVariant="contactDetails">
-      <Typography variant="overline" color="text.secondary">
-        {contactLabel({ page, site, hasEmail, tCommon })}
-      </Typography>
-      <Stack data-testid="contact-actions" visualVariant="contactDetails">
-        <ContactDetailsActions
-          hasEmail={hasEmail}
-          site={site}
-          t={t}
+    <Box data-testid="contact-actions">
+      <ActionSection>
+        <ContactActionEmail site={site} hasEmail={hasEmail} label={t('email')} />
+        <ContactActionProfiles
+          profiles={site.contact.profiles}
           tExternalProfiles={tExternalProfiles}
         />
-      </Stack>
+      </ActionSection>
     </Box>
   );
 }

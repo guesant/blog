@@ -15,7 +15,7 @@ export function ResumePdfOptionsButton(props: ResumePdfOptionsButtonProps) {
       aria-label={props.label}
       aria-haspopup="menu"
       aria-expanded={props.open}
-      siteVariant="compact-icon"
+      siteVariant="action-icon"
       variant="outlined"
       visualVariant="resumePdfOptionsButton"
     >

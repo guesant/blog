@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\CreditEntries\Tables;
 
+use App\Filament\Concerns\ConfiguresRecordOrdering;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
@@ -10,13 +11,14 @@ use Filament\Tables\Table;
 
 class CreditEntriesTable
 {
+    use ConfiguresRecordOrdering;
+
     public static function configure(Table $table): Table
     {
-        return $table
+        return static::configureRecordOrdering($table
             ->defaultSort('order')
             ->columns([
                 TextColumn::make('category')->sortable(),
-                TextColumn::make('order')->sortable(),
                 TextColumn::make('name_en')
                     ->label('Name (EN)')
                     ->getStateUsing(fn ($record) => $record->translation('en')?->name),
@@ -32,6 +34,6 @@ class CreditEntriesTable
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
                 ]),
-            ]);
+            ]));
     }
 }

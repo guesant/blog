@@ -8,7 +8,6 @@ import { ReferenceCard } from './reference-card';
 import type { ContentCollectionMeta } from '@portfolio/data/api/public-site-source-support';
 
 type ReferenceGridPageProps = {
-  eyebrow?: string;
   title: string;
   references: Reference[];
   pagination: ContentCollectionMeta;
@@ -20,7 +19,6 @@ export function ReferenceGridPage(props: ReferenceGridPageProps) {
 
   return (
     <AchadosIndexLayout
-      eyebrow={props.eyebrow}
       title={props.title}
       emptyMessage={t('emptyAchados')}
       isEmpty={props.references.length === 0}

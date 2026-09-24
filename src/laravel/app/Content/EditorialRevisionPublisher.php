@@ -106,14 +106,14 @@ class EditorialRevisionPublisher
         $revisionId = $record->current_revision_id;
         DB::transaction(function () use ($record, $revisionId): void {
             $relations = [
-                ['legacy' => 'featuredCases', 'table' => 'page_revision_featured_cases', 'column' => 'case_study_id'],
-                ['legacy' => 'featuredProjects', 'table' => 'page_revision_featured_projects', 'column' => 'project_id'],
-                ['legacy' => 'featuredWritings', 'table' => 'page_revision_featured_writings', 'column' => 'writing_id'],
+                ['relation' => 'featuredCases', 'table' => 'page_revision_featured_cases', 'column' => 'case_study_id'],
+                ['relation' => 'featuredProjects', 'table' => 'page_revision_featured_projects', 'column' => 'project_id'],
+                ['relation' => 'featuredWritings', 'table' => 'page_revision_featured_writings', 'column' => 'writing_id'],
             ];
 
             foreach ($relations as $relation) {
                 DB::table($relation['table'])->where('page_revision_id', $revisionId)->delete();
-                foreach ($record->{$relation['legacy']}()->get() as $item) {
+                foreach ($record->{$relation['relation']}()->get() as $item) {
                     DB::table($relation['table'])->insert([
                         'page_revision_id' => $revisionId,
                         $relation['column'] => $item->id,

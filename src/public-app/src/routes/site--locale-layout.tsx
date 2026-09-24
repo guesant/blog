@@ -26,6 +26,7 @@ export function LocaleLayout() {
         <LocaleLayoutState
           shell={shell}
           isError={shellQuery.isError}
+          error={shellQuery.error}
           retry={() => void shellQuery.refetch()}
         />
       </ThemeRegistry>

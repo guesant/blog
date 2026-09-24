@@ -1,5 +1,4 @@
 import { getLocalizedPage } from '../api/public-site-source.ts';
-import { firstValue } from '../api/public-site-source-first-value';
 import { stringValue } from '../api/public-site-source-string-value';
 
 export async function getFollowPageCopy(locale?: string) {
@@ -11,7 +10,6 @@ export async function getFollowPageCopy(locale?: string) {
 
   return {
     ...page,
-    eyebrow: stringValue(firstValue(page.eyebrow, page.title)),
     title: stringValue(page.title),
     description: stringValue(page.intro),
     intro: stringValue(page.intro),

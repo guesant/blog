@@ -15,7 +15,7 @@ export const Route = createFileRoute('/_site/')({
       request: { locale, pathname: '/', search: location.searchStr },
     });
   },
-  head: ({ loaderData }) => siteRouteHead({ loaderData }),
+  head: ({ loaderData, match }) => siteRouteHead({ loaderData, pathname: match.pathname }),
   component: HomeRoute,
 });
 

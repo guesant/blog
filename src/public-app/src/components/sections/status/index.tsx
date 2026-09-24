@@ -2,9 +2,10 @@
 
 import { Box } from '../../ui';
 import { StatusContent } from './status-content';
+import type { StatusPageKind } from './status-page-kind';
 
 type StatusPageProps = {
-  kind: 'notFound' | 'error';
+  kind: StatusPageKind;
   sourceRepositoryUrl?: string;
   reset?: () => void;
 };

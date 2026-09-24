@@ -23,7 +23,7 @@ class ReferenceCollectionForm
     {
         return $schema
             ->components([
-                Section::make()
+                Section::make('Publishing')
                     ->columns(2)
                     ->schema([
                         TextInput::make('slug')
@@ -32,10 +32,6 @@ class ReferenceCollectionForm
                             ->maxLength(255),
                         Toggle::make('hidden')
                             ->default(false),
-                        TextInput::make('order')
-                            ->numeric()
-                            ->default(0)
-                            ->required(),
                         TextInput::make('image')
                             ->nullable()
                             ->maxLength(255),
@@ -46,6 +42,7 @@ class ReferenceCollectionForm
                     ->columnSpanFull()
                     ->schema([
                         Repeater::make('items')
+                            ->reorderableWithButtons()
                             ->columns(2)
                             ->schema([
                                 Select::make('resource_id')
@@ -53,9 +50,6 @@ class ReferenceCollectionForm
                                     ->options(fn () => ResourceModel::query()->pluck('slug', 'id'))
                                     ->searchable()
                                     ->required(),
-                                TextInput::make('order')
-                                    ->numeric()
-                                    ->nullable(),
                                 Textarea::make('note')
                                     ->columnSpanFull()
                                     ->nullable(),

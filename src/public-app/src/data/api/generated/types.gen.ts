@@ -16,6 +16,24 @@ export type FindingApiIndexData = {
 
 export type FindingApiIndexErrors = {
     /**
+     * Unauthenticated
+     */
+    401: {
+        /**
+         * Error overview.
+         */
+        message: string;
+    };
+    /**
+     * Authorization error
+     */
+    403: {
+        /**
+         * Error overview.
+         */
+        message: string;
+    };
+    /**
      * The service is temporarily unavailable.
      */
     503: {
@@ -55,6 +73,24 @@ export type FindingApiShowData = {
 };
 
 export type FindingApiShowErrors = {
+    /**
+     * Unauthenticated
+     */
+    401: {
+        /**
+         * Error overview.
+         */
+        message: string;
+    };
+    /**
+     * Authorization error
+     */
+    403: {
+        /**
+         * Error overview.
+         */
+        message: string;
+    };
     /**
      * The requested finding was not found.
      */
@@ -99,6 +135,24 @@ export type PublicSiteApiChromeData = {
 };
 
 export type PublicSiteApiChromeErrors = {
+    /**
+     * Unauthenticated
+     */
+    401: {
+        /**
+         * Error overview.
+         */
+        message: string;
+    };
+    /**
+     * Authorization error
+     */
+    403: {
+        /**
+         * Error overview.
+         */
+        message: string;
+    };
     /**
      * The service is temporarily unavailable.
      */
@@ -222,6 +276,24 @@ export type PublicSiteApiHomeGalleryData = {
 
 export type PublicSiteApiHomeGalleryErrors = {
     /**
+     * Unauthenticated
+     */
+    401: {
+        /**
+         * Error overview.
+         */
+        message: string;
+    };
+    /**
+     * Authorization error
+     */
+    403: {
+        /**
+         * Error overview.
+         */
+        message: string;
+    };
+    /**
      * The service is temporarily unavailable.
      */
     503: {
@@ -318,6 +390,24 @@ export type PublicSiteApiPageData = {
 
 export type PublicSiteApiPageErrors = {
     /**
+     * Unauthenticated
+     */
+    401: {
+        /**
+         * Error overview.
+         */
+        message: string;
+    };
+    /**
+     * Authorization error
+     */
+    403: {
+        /**
+         * Error overview.
+         */
+        message: string;
+    };
+    /**
      * Not found
      */
     404: {
@@ -344,6 +434,29 @@ export type PublicSiteApiResumeDataData = {
     };
     url: '/site/resume';
 };
+
+export type PublicSiteApiResumeDataErrors = {
+    /**
+     * Unauthenticated
+     */
+    401: {
+        /**
+         * Error overview.
+         */
+        message: string;
+    };
+    /**
+     * Authorization error
+     */
+    403: {
+        /**
+         * Error overview.
+         */
+        message: string;
+    };
+};
+
+export type PublicSiteApiResumeDataError = PublicSiteApiResumeDataErrors[keyof PublicSiteApiResumeDataErrors];
 
 export type PublicSiteApiResumeDataResponses = {
     200: {
@@ -422,6 +535,24 @@ export type PublicSiteApiCollectionData = {
 
 export type PublicSiteApiCollectionErrors = {
     /**
+     * Unauthenticated
+     */
+    401: {
+        /**
+         * Error overview.
+         */
+        message: string;
+    };
+    /**
+     * Authorization error
+     */
+    403: {
+        /**
+         * Error overview.
+         */
+        message: string;
+    };
+    /**
      * The requested collection was not found.
      */
     404: {
@@ -475,6 +606,24 @@ export type PublicSiteApiDocumentData = {
 
 export type PublicSiteApiDocumentErrors = {
     /**
+     * Unauthenticated
+     */
+    401: {
+        /**
+         * Error overview.
+         */
+        message: string;
+    };
+    /**
+     * Authorization error
+     */
+    403: {
+        /**
+         * Error overview.
+         */
+        message: string;
+    };
+    /**
      * The requested document was not found.
      */
     404: {
@@ -519,6 +668,24 @@ export type PublicSiteApiResumePdfData = {
 
 export type PublicSiteApiResumePdfErrors = {
     /**
+     * Unauthenticated
+     */
+    401: {
+        /**
+         * Error overview.
+         */
+        message: string;
+    };
+    /**
+     * Authorization error
+     */
+    403: {
+        /**
+         * Error overview.
+         */
+        message: string;
+    };
+    /**
      * Not found
      */
     404: {
@@ -545,6 +712,24 @@ export type PublicSiteApiProtectedEmailChallengeData = {
 };
 
 export type PublicSiteApiProtectedEmailChallengeErrors = {
+    /**
+     * Unauthenticated
+     */
+    401: {
+        /**
+         * Error overview.
+         */
+        message: string;
+    };
+    /**
+     * Authorization error
+     */
+    403: {
+        /**
+         * Error overview.
+         */
+        message: string;
+    };
     /**
      * The service is temporarily unavailable.
      */
@@ -580,6 +765,24 @@ export type SnippetDownloadData = {
 };
 
 export type SnippetDownloadErrors = {
+    /**
+     * Unauthenticated
+     */
+    401: {
+        /**
+         * Error overview.
+         */
+        message: string;
+    };
+    /**
+     * Authorization error
+     */
+    403: {
+        /**
+         * Error overview.
+         */
+        message: string;
+    };
     /**
      * Not found
      */

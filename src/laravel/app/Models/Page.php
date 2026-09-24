@@ -22,7 +22,9 @@ class Page extends Model
      */
     public function featuredCases(): BelongsToMany
     {
-        return $this->belongsToMany(CaseStudy::class, 'page_featured_case')->withPivot('order');
+        return $this->belongsToMany(CaseStudy::class, 'page_featured_case')
+            ->withPivot('order')
+            ->orderByPivot('order');
     }
 
     /**
@@ -30,7 +32,9 @@ class Page extends Model
      */
     public function featuredProjects(): BelongsToMany
     {
-        return $this->belongsToMany(Project::class, 'page_featured_project')->withPivot('order');
+        return $this->belongsToMany(Project::class, 'page_featured_project')
+            ->withPivot('order')
+            ->orderByPivot('order');
     }
 
     /**
@@ -38,6 +42,8 @@ class Page extends Model
      */
     public function featuredWritings(): BelongsToMany
     {
-        return $this->belongsToMany(Writing::class, 'page_featured_writing')->withPivot('order');
+        return $this->belongsToMany(Writing::class, 'page_featured_writing')
+            ->withPivot('order')
+            ->orderByPivot('order');
     }
 }

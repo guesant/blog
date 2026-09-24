@@ -8,6 +8,7 @@ use App\Application\PublicSite\Ports\PublicSnippetReader;
 use App\Content\Graph\NodeRegistry;
 use App\Events\PublicSiteContentChanged;
 use App\Listeners\InvalidatePublicSiteChrome;
+use App\Models\User;
 use App\ReadModel\PublicSite\Chrome\PublicSiteChromeSqlReader;
 use App\ReadModel\PublicSite\Content\SnippetReader;
 use App\ReadModel\PublicSite\Email\PublicEmailChallengeSqlReader;
@@ -17,6 +18,7 @@ use Illuminate\Console\Events\CommandStarting;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
@@ -40,6 +42,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        Gate::define('access-private-api', static fn (?User $user): bool => $user?->canAccessAdminArea() ?? false);
+
         Event::listen(PublicSiteContentChanged::class, InvalidatePublicSiteChrome::class);
 
         Scramble::configure()->expose('docs', 'docs/openapi.json');

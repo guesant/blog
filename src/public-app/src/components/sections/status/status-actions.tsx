@@ -5,9 +5,10 @@ import { useTranslations } from '@/i18n/compat';
 import { ConditionalContent } from '../../primitives/conditional-content';
 import { ExternalLink } from '../../primitives/external-link';
 import { NavButton } from '../../primitives/nav-button';
+import type { StatusPageKind } from './status-page-kind';
 
 type StatusActionsProps = {
-  kind: 'notFound' | 'error';
+  kind: StatusPageKind;
   sourceRepositoryUrl?: string;
   reset?: () => void;
 };
@@ -15,7 +16,7 @@ type StatusActionsProps = {
 export function StatusActions(props: StatusActionsProps) {
   const t = useTranslations(`Pages.${props.kind}`);
 
-  const isError = props.kind === 'error';
+  const isError = props.kind !== 'notFound';
 
   const issueReportUrl = props.sourceRepositoryUrl
     ? `${props.sourceRepositoryUrl.replace(/\/$/, '')}/issues/new`

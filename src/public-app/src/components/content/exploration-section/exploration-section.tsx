@@ -10,7 +10,6 @@ export function ExplorationSection(props: ExplorationSectionProps) {
       visualVariant={props.divider ? 'explorationSection' : 'explorationSectionSpaced'}
     >
       <ExplorationSectionHeader
-        eyebrow={props.eyebrow}
         title={props.title}
         description={props.description}
         divider={props.divider}

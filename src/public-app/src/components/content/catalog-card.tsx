@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { Card } from '../ui';
+import { Card, Link } from '../ui';
 import { NavLink } from '../primitives/nav-link';
 
 type CatalogCardProps = {
@@ -8,7 +8,14 @@ type CatalogCardProps = {
 };
 
 export function CatalogCard(props: CatalogCardProps) {
-  const linkProps = props.href ? { component: NavLink, href: props.href } : {};
+  const isExternal = /^https?:\/\//.test(props.href ?? '');
+
+  const component = isExternal ? Link : NavLink;
+
+  const linkProps = {
+    ...(props.href ? { component, href: props.href } : {}),
+    ...(isExternal ? { target: '_blank', rel: 'noopener noreferrer' } : {}),
+  };
 
   return (
     <Card {...linkProps} variant="outlined" visualVariant="catalogEntry">

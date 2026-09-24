@@ -17,7 +17,6 @@ export function TechnologyDetailPageContent(props: TechnologyDetailPageContentPr
   return (
     <>
       <PageHeader
-        eyebrow={tNav('technologies')}
         title={technology.name}
         breadcrumbs={[{ label: tNav('technologies'), href: '/technologies' }]}
       />

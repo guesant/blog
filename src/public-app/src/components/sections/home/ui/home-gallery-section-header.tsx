@@ -1,10 +1,7 @@
-import { Button, Box, Typography } from '../../../ui';
-import { NavLink } from '../../../primitives/nav-link';
+import { Box, Typography } from '../../../ui';
 
 type HomeGallerySectionHeaderProps = {
   title: string;
-  action: string;
-  href: string;
 };
 
 export function HomeGallerySectionHeader(props: HomeGallerySectionHeaderProps) {
@@ -14,17 +11,15 @@ export function HomeGallerySectionHeader(props: HomeGallerySectionHeaderProps) {
       sx={{
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'space-between',
+        justifyContent: 'center',
         gap: 2,
         mb: 3,
+        textAlign: 'center',
       }}
     >
       <Typography component="h2" variant="h2">
         {props.title}
       </Typography>
-      <Button component={NavLink} href={props.href} variant="outlined">
-        {props.action}
-      </Button>
     </Box>
   );
 }

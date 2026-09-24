@@ -18,7 +18,6 @@ export function CaseDetailContent(props: CaseDetailContentProps) {
     <Box>
       <DetailHeader
         breadcrumbs={[{ label: tNav('work'), href: '/cases' }, { label: item.title }]}
-        eyebrow={`${t('detailPrefix')} ${item.number}`}
         title={item.title}
         description={item.summary}
         meta={[item.status, item.meta].filter(Boolean).join(' · ')}

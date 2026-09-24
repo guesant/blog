@@ -8,7 +8,6 @@ import { ConditionalContent } from '../primitives/conditional-content';
 
 type AchadosIndexLayoutProps = {
   title: string;
-  eyebrow?: string;
   description?: string;
   emptyMessage: string;
   isEmpty: boolean;
@@ -16,14 +15,13 @@ type AchadosIndexLayoutProps = {
 };
 
 export function AchadosIndexLayout(props: AchadosIndexLayoutProps) {
-  const { title, eyebrow, description, emptyMessage, isEmpty, children } = props;
+  const { title, description, emptyMessage, isEmpty, children } = props;
 
   const tNav = useTranslations('Nav');
 
   return (
     <>
       <PageHeader
-        eyebrow={eyebrow ?? tNav('achados')}
         title={title}
         description={description}
         breadcrumbs={[{ label: tNav('achados'), href: '/findings' }, { label: title }]}

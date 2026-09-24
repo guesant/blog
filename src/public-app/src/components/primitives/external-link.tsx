@@ -19,6 +19,7 @@ export function ExternalLink(props: ExternalLinkProps) {
       {...linkProps}
       target={target ?? '_blank'}
       rel={rel ?? 'noopener noreferrer'}
+      data-site-external-link="true"
       visualVariant={visualVariant ?? 'externalLink'}
     >
       <ExternalLinkLeadingIcon name={leadingIcon} size={size} />

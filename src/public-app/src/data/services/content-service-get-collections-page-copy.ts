@@ -8,7 +8,6 @@ export async function getCollectionsPageCopy(locale?: string): Promise<PageIntro
   const page = lookup(messages, 'Pages.collections') as Record<string, string>;
 
   return {
-    eyebrow: page.eyebrow,
     title: page.indexTitle,
     description: page.indexDescription,
   };

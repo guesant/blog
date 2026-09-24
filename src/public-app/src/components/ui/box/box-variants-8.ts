@@ -7,7 +7,7 @@ const sourcePreviewSurface = {
   overflow: 'hidden',
   border: 'var(--site-border-width) solid var(--site-border)',
   borderColor: 'var(--site-border)',
-  backgroundColor: 'var(--site-surface-muted)',
+  backgroundColor: 'var(--site-source-preview-surface)',
 };
 
 const sourcePreviewMedia = {
@@ -21,19 +21,7 @@ const sourcePreviewMedia = {
 
 export const boxVariants8: Record<string, SxProps<Theme>> = {
   sourcePreviewSurfaceFeed: sourcePreviewSurface,
-  sourcePreviewSurfaceDetail: {
-    ...sourcePreviewSurface,
-    gridTemplateColumns: { xs: '1fr', sm: 'minmax(0, 2fr) minmax(0, 3fr)' },
-    borderColor: 'var(--site-border-strong)',
-    backgroundColor: 'var(--site-surface)',
-  },
-  sourcePreviewSurfaceTable: sourcePreviewSurface,
   sourcePreviewMediaFeed: sourcePreviewMedia,
-  sourcePreviewMediaDetail: {
-    ...sourcePreviewMedia,
-    minHeight: { xs: 'var(--site-space-12)', sm: '100%' },
-  },
-  sourcePreviewMediaTable: sourcePreviewMedia,
   technologyChip: {
     display: 'inline-flex',
     alignItems: 'center',

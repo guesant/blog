@@ -30,7 +30,9 @@ class ReferenceCollection extends Model implements GraphNode
      */
     public function resources(): BelongsToMany
     {
-        return $this->belongsToMany(Resource::class, 'reference_collection_item')->withPivot('note', 'order');
+        return $this->belongsToMany(Resource::class, 'reference_collection_item')
+            ->withPivot('note', 'order')
+            ->orderByPivot('order');
     }
 
     public static function graphKind(): string

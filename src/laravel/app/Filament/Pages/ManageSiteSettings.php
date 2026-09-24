@@ -52,7 +52,7 @@ class ManageSiteSettings extends Page
     {
         return $schema
             ->components([
-                Section::make()
+                Section::make('Site settings')
                     ->columns(2)
                     ->schema([
                         TextInput::make('short_name')
@@ -81,12 +81,13 @@ class ManageSiteSettings extends Page
                     ->schema([
                         Repeater::make('contactProfiles')
                             ->relationship('contactProfiles')
+                            ->orderColumn('order')
+                            ->reorderableWithButtons()
                             ->columns(2)
                             ->schema([
                                 TextInput::make('platform')->required(),
                                 TextInput::make('label')->nullable(),
                                 TextInput::make('url')->required()->url()->columnSpanFull(),
-                                TextInput::make('order')->numeric()->nullable(),
                             ])
                             ->itemLabel(fn (array $state): ?string => $state['platform'] ?? null)
                             ->addActionLabel('Add contact profile')

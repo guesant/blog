@@ -3,6 +3,8 @@
 namespace App\Filament\Concerns;
 
 use Closure;
+use Filament\Schemas\Components\Fieldset;
+use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Tabs;
 use Filament\Schemas\Components\Tabs\Tab;
 
@@ -28,10 +30,31 @@ trait BuildsTranslationTabs
         return Tabs::make('translations')
             ->tabs([
                 Tab::make('English')
-                    ->schema($fieldsFactory('translations.en.')),
+                    ->schema(static::translationTabSchema($fieldsFactory('translations.en.'))),
                 Tab::make('Português')
-                    ->schema($fieldsFactory('translations.pt-BR.')),
+                    ->schema(static::translationTabSchema($fieldsFactory('translations.pt-BR.'))),
             ])
             ->columnSpanFull();
+    }
+
+    private static function translationTabSchema(array $components): array
+    {
+        $content = array_values(array_filter(
+            $components,
+            static fn (mixed $component): bool => ! $component instanceof Fieldset,
+        ));
+        $fieldsets = array_values(array_filter(
+            $components,
+            static fn (mixed $component): bool => $component instanceof Fieldset,
+        ));
+
+        return [
+            ...($content === [] ? [] : [
+                Section::make('Content')
+                    ->schema($content)
+                    ->columnSpanFull(),
+            ]),
+            ...$fieldsets,
+        ];
     }
 }

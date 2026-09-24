@@ -10,7 +10,7 @@ type ResumePdfButtonGroupProps = ResumePdfActionsProps & {
 
 export function ResumePdfButtonGroup(props: ResumePdfButtonGroupProps) {
   return (
-    <ButtonGroup variant="outlined" size="small">
+    <ButtonGroup variant="outlined" size="small" visualVariant="resumePdf">
       <Button
         component="a"
         href={props.pdfUrls[props.locale]}

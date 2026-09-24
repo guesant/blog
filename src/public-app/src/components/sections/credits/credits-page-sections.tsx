@@ -17,7 +17,10 @@ export function CreditsPageSections(props: CreditsPageSectionsProps) {
   return (
     <>
       <CollectionPagination meta={props.content.credits.meta} action="/credits" />
-      <CreditsEntrySection entries={groups.acknowledgements} heading={props.t('eyebrow')} />
+      <CreditsEntrySection
+        entries={groups.acknowledgements}
+        heading={props.t('acknowledgementsHeading')}
+      />
       <CreditsReferences entries={groups.references} heading={props.t('referencesHeading')} />
       <CreditsEntrySection
         entries={groups.infrastructure}

@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\ResourceFindings\Tables;
 
+use App\Filament\Concerns\ConfiguresRecordOrdering;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
@@ -11,9 +12,11 @@ use Filament\Tables\Table;
 
 class ResourceFindingsTable
 {
+    use ConfiguresRecordOrdering;
+
     public static function configure(Table $table): Table
     {
-        return $table
+        return static::configureRecordOrdering($table
             ->defaultSort('order')
             ->columns([
                 TextColumn::make('slug')->searchable()->sortable(),
@@ -34,6 +37,6 @@ class ResourceFindingsTable
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
                 ]),
-            ]);
+            ]));
     }
 }

@@ -68,13 +68,4 @@ export const boxVariants7: Record<string, SxProps<Theme>> = {
   feedSection,
   feedSectionDivider: { ...feedSection, borderTop: 1, borderColor: 'divider' },
   sourcePreviewDetailsFeed: sourcePreviewDetails,
-  sourcePreviewDetailsDetail: {
-    display: 'grid',
-    alignContent: 'start',
-    gap: 'var(--site-space-4)',
-    padding: 'var(--site-space-5)',
-    minWidth: 0,
-    overflow: 'hidden',
-  },
-  sourcePreviewDetailsTable: { ...sourcePreviewDetails, padding: 'var(--site-space-2)' },
 };

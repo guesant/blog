@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\ReferenceCollections\Tables;
 
+use App\Filament\Concerns\ConfiguresRecordOrdering;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
@@ -11,14 +12,15 @@ use Filament\Tables\Table;
 
 class ReferenceCollectionsTable
 {
+    use ConfiguresRecordOrdering;
+
     public static function configure(Table $table): Table
     {
-        return $table
+        return static::configureRecordOrdering($table
             ->defaultSort('order')
             ->columns([
                 TextColumn::make('slug')->searchable()->sortable(),
                 IconColumn::make('hidden')->boolean()->sortable(),
-                TextColumn::make('order')->sortable(),
                 TextColumn::make('title_en')
                     ->label('Title (EN)')
                     ->getStateUsing(fn ($record) => $record->translation('en')?->title),
@@ -33,6 +35,6 @@ class ReferenceCollectionsTable
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
                 ]),
-            ]);
+            ]));
     }
 }

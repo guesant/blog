@@ -154,6 +154,7 @@
   --site-border: var(--mui-palette-divider, light-dark(#e5e5e5, #303339));
   --site-border-strong: var(--mui-palette-divider, light-dark(#d4d4d4, #43464e));
   --site-accent-bg: var(--mui-palette-action-selected, light-dark(#eef3f8, #17263c));
+  --site-source-preview-surface: light-dark(#f7faff, #1e2025);
   --site-accent-border: var(--mui-palette-action-focus, light-dark(#86b7fe, #3f68a8));
   --site-text-primary: var(--mui-palette-text-primary, light-dark(#1a1a1a, #eef0f3));
   --site-text-secondary: var(--mui-palette-text-secondary, light-dark(#6b6b6b, #a1a6b0));

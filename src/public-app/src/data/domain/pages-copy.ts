@@ -2,7 +2,6 @@ import type { RichTextContent, TechnologyBadge, WithSeo } from './content';
 import type { ContentReference } from './resume';
 
 export type PageIntroduction = WithSeo & {
-  eyebrow: string;
   title: string;
   description: string;
 };
@@ -17,32 +16,35 @@ export type HomePageCopy = WithSeo & {
   heroCurrentFocus: string;
   availableLabel: string;
   unavailableLabel: string;
-  workEyebrow: string;
   workTitle: string;
   workDescription: string;
-  projectsEyebrow: string;
   projectsTitle: string;
   projectsDescription: string;
   experimentsSummary: string;
-  experienceEyebrow: string;
   experienceTitle: string;
   experienceDescription: string;
   currentlyExploringLabel: string;
   recurringTechnologiesLabel: string;
-  writingEyebrow: string;
   writingTitle: string;
   writingDescription: string;
-  contactEyebrow: string;
   contactTitle: string;
   contactDescription: string;
 };
 
 export type AboutPageCopy = PageIntroduction & {
+  introduction?: RichTextContent;
   lead: string;
   context: string;
-  storyEyebrow?: string;
-  storyTitle?: string;
+  timelineTitle?: string;
+  timelineDescription?: RichTextContent;
   story?: RichTextContent;
+  sections?: AboutEditorialSection[];
+};
+
+export type AboutEditorialSection = {
+  id: string;
+  title?: string;
+  body: RichTextContent;
 };
 
 export type ProjectsPageCopy = PageIntroduction & {

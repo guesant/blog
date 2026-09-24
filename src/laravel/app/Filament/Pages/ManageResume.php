@@ -67,7 +67,7 @@ class ManageResume extends Page
 
         $data['selected_cases'] = $this->record->selectedCases()
             ->get()
-            ->map(fn ($case) => ['case_study_id' => $case->id, 'order' => $case->pivot->order])
+            ->map(fn ($case) => ['case_study_id' => $case->id])
             ->all();
 
         $data['skills'] = $this->record->skills()
@@ -75,7 +75,6 @@ class ManageResume extends Page
             ->get()
             ->map(fn (ResumeSkill $skill) => [
                 'topic_id' => $skill->topic_id,
-                'order' => $skill->order,
                 'technologies' => $skill->technologies->pluck('id')->all(),
             ])
             ->all();
@@ -110,6 +109,7 @@ class ManageResume extends Page
                 Section::make('Selected Cases')
                     ->schema([
                         Repeater::make('selected_cases')
+                            ->reorderableWithButtons()
                             ->columns(2)
                             ->schema([
                                 Select::make('case_study_id')
@@ -117,7 +117,6 @@ class ManageResume extends Page
                                     ->options(fn () => CaseStudy::query()->pluck('slug', 'id'))
                                     ->searchable()
                                     ->required(),
-                                TextInput::make('order')->numeric()->nullable(),
                             ])
                             ->itemLabel(fn (array $state): ?string => isset($state['case_study_id'])
                                 ? CaseStudy::find($state['case_study_id'])?->slug
@@ -128,6 +127,7 @@ class ManageResume extends Page
                 Section::make('Skills')
                     ->schema([
                         Repeater::make('skills')
+                            ->reorderableWithButtons()
                             ->columns(2)
                             ->schema([
                                 Select::make('topic_id')
@@ -135,7 +135,6 @@ class ManageResume extends Page
                                     ->options(fn () => Topic::query()->where('kind', 'skill')->pluck('slug', 'id'))
                                     ->searchable()
                                     ->required(),
-                                TextInput::make('order')->numeric()->nullable(),
                                 Select::make('technologies')
                                     ->label('Technologies')
                                     ->options(fn () => Technology::query()->pluck('slug', 'id'))
@@ -154,6 +153,8 @@ class ManageResume extends Page
                     ->schema([
                         Repeater::make('languages')
                             ->relationship('languages')
+                            ->orderColumn('order')
+                            ->reorderableWithButtons()
                             ->columns(2)
                             ->schema([
                                 Select::make('language_id')
@@ -161,7 +162,6 @@ class ManageResume extends Page
                                     ->relationship('language', 'slug')
                                     ->required(),
                                 TextInput::make('proficiency')->nullable(),
-                                TextInput::make('order')->numeric()->nullable(),
                             ])
                             ->itemLabel(fn (array $state): ?string => $state['proficiency'] ?? null)
                             ->addActionLabel('Add language')
@@ -263,16 +263,16 @@ class ManageResume extends Page
         $this->persistTranslations();
 
         $this->getRecord()->selectedCases()->sync(
-            collect($this->pendingSelectedCases)->mapWithKeys(fn (array $item) => [
-                $item['case_study_id'] => ['order' => $item['order'] ?? null],
+            collect($this->pendingSelectedCases)->values()->mapWithKeys(fn (array $item, int $order) => [
+                $item['case_study_id'] => ['order' => $order],
             ])
         );
 
         $this->getRecord()->skills()->delete();
-        foreach ($this->pendingSkills as $item) {
+        foreach (array_values($this->pendingSkills) as $order => $item) {
             $skill = $this->getRecord()->skills()->create([
                 'topic_id' => $item['topic_id'],
-                'order' => $item['order'] ?? null,
+                'order' => $order,
             ]);
             $skill->technologies()->sync($item['technologies'] ?? []);
         }

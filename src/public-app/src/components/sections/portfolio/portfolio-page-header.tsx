@@ -13,7 +13,6 @@ export function PortfolioPageHeader(props: PortfolioPageHeaderProps) {
   return (
     <>
       <PageHeader
-        eyebrow={props.page.heroIdentity}
         title={props.profile.name}
         description={props.page.heroExperience}
         breadcrumbs={[{ label: props.tNav('portfolio') }]}

@@ -1,21 +1,24 @@
 import type { SxProps, Theme } from '@mui/material/styles';
 
+const pageLayout: SxProps<Theme> = {
+  display: 'flex',
+  flex: 1,
+  width: '100%',
+  maxWidth: 'var(--site-content-max)',
+  mx: 'auto',
+  minWidth: 0,
+  px: 'var(--site-inset-page)',
+  boxSizing: 'border-box',
+  backgroundColor: 'var(--grid-background)',
+  flexDirection: 'column',
+  gap: 'var(--site-space-6)',
+  pt: 'calc(var(--site-space-2) * 9) !important',
+  pb: 'var(--site-space-6) !important',
+};
+
 export const boxVariants2: Record<string, SxProps<Theme>> = {
-  pageLayout: {
-    display: 'flex',
-    flex: 1,
-    width: '100%',
-    maxWidth: 'var(--site-content-max)',
-    mx: 'auto',
-    minWidth: 0,
-    px: 'var(--site-inset-page)',
-    boxSizing: 'border-box',
-    backgroundColor: 'var(--grid-background)',
-    flexDirection: 'column',
-    gap: 'var(--site-space-6)',
-    pt: 'calc(var(--site-space-2) * 9) !important',
-    pb: 'var(--site-space-6) !important',
-  },
+  pageLayout,
+  aboutPageLayout: { ...pageLayout, gap: 'var(--site-space-2)' },
   maintenanceFrame: {
     minHeight: '100svh',
     display: 'grid',
@@ -85,12 +88,17 @@ export const boxVariants2: Record<string, SxProps<Theme>> = {
     gap: 1,
   },
   statusPage: {
+    width: '100%',
+    maxWidth: 'var(--site-page-max)',
+    mx: 'auto',
+    px: 'var(--site-inset-page)',
+    boxSizing: 'border-box',
     minHeight: { xs: '55vh', md: '60vh' },
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
   },
-  statusContent: { width: '100%' },
+  statusContent: { width: '100%', maxWidth: 'var(--site-lede-max)', mx: 'auto' },
   licenseSection: { mt: { xs: 4, md: 5 }, maxWidth: '60ch' },
   resumeSection: { mt: { xs: 4, md: 5 } },
   resumeArticle: {

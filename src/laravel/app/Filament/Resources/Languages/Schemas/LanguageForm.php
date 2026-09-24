@@ -15,17 +15,13 @@ class LanguageForm
     {
         return $schema
             ->components([
-                Section::make()
+                Section::make('Language settings')
                     ->columns(2)
                     ->schema([
                         TextInput::make('slug')
                             ->required()
                             ->unique(ignoreRecord: true)
                             ->maxLength(255),
-                        TextInput::make('order')
-                            ->numeric()
-                            ->default(0)
-                            ->required(),
                         TextInput::make('code')
                             ->required()
                             ->maxLength(255),

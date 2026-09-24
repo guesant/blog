@@ -1,40 +1,48 @@
-import type { AboutPageCopy, Profile } from '@portfolio/data/domain/types';
-import { useTranslations } from '@/i18n/compat';
-import { calculateAge } from './calculate-age';
-
-export function getProfileBirthInfo(profile: Profile) {
-  const age = profile.birthDate?.trim() ? calculateAge(profile.birthDate) : undefined;
-
-  return { age, hasBirthInfo: age !== undefined || Boolean(profile.birthCity?.trim()) };
-}
+import type {
+  AboutEditorialSection,
+  AboutPageCopy,
+  Profile,
+  RichTextContent,
+} from '@portfolio/data/domain/types';
 
 export type AboutPageContentProps = {
   page: AboutPageCopy;
   profile: Profile;
 };
 
-export type ProfileSummaryProps = {
-  profile: Profile;
-  age: number | undefined;
-  hasBirthInfo: boolean;
-  t: ReturnType<typeof useTranslations>;
-};
-
-export type ProfileBirthDetailsProps = Pick<
-  ProfileSummaryProps,
-  'profile' | 'age' | 'hasBirthInfo' | 't'
->;
-
-export type ProfileTrajectoryProps = {
-  profile: Profile;
-  t: ReturnType<typeof useTranslations>;
-};
-
-export type ProfileMilestonesProps = {
-  profile: Profile;
-  t: ReturnType<typeof useTranslations>;
-};
-
-export type AboutStoryProps = {
+export type AboutEditorialBodyProps = {
   page: AboutPageCopy;
+  profile: Profile;
+};
+
+export type AboutIntroductionProps = {
+  content: RichTextContent;
+};
+
+export type AboutTimelineProps = {
+  profile: Profile;
+  title?: string;
+  description?: RichTextContent;
+  hasFollowingContent: boolean;
+};
+
+export type AboutTimelineHeadingProps = {
+  title?: string;
+  description?: RichTextContent;
+};
+
+export type AboutTimelineItemsProps = {
+  items: Profile['milestones'];
+};
+
+export type AboutTimelineItemProps = {
+  item: Profile['milestones'][number];
+};
+
+export type AboutEditorialSectionsProps = {
+  sections: AboutEditorialSection[];
+};
+
+export type AboutEditorialSectionProps = {
+  section: AboutEditorialSection;
 };

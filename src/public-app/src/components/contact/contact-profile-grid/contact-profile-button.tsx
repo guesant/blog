@@ -7,6 +7,7 @@ import type { ExternalProfile } from '@portfolio/data/domain/types';
 type ContactProfileButtonProps = {
   profile: ExternalProfile;
   tExternalProfiles: (key: string) => string;
+  siteVariant?: 'contact' | 'exploration';
 };
 
 export function ContactProfileButton(props: ContactProfileButtonProps) {
@@ -19,7 +20,7 @@ export function ContactProfileButton(props: ContactProfileButtonProps) {
       target="_blank"
       rel="noopener noreferrer"
       variant="outlined"
-      siteVariant="contact"
+      siteVariant={props.siteVariant ?? 'contact'}
       size="medium"
       startIcon={<ProfileIcon platform={profile.platform} size={16} />}
       endIcon={<Icon name="external" size={12} />}

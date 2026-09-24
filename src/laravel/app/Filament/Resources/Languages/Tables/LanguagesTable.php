@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Languages\Tables;
 
+use App\Filament\Concerns\ConfiguresRecordOrdering;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
@@ -10,14 +11,15 @@ use Filament\Tables\Table;
 
 class LanguagesTable
 {
+    use ConfiguresRecordOrdering;
+
     public static function configure(Table $table): Table
     {
-        return $table
+        return static::configureRecordOrdering($table
             ->defaultSort('order')
             ->columns([
                 TextColumn::make('slug')->searchable()->sortable(),
                 TextColumn::make('code')->sortable(),
-                TextColumn::make('order')->sortable(),
                 TextColumn::make('name_en')
                     ->label('Name (EN)')
                     ->getStateUsing(fn ($record) => $record->translation('en')?->name),
@@ -32,6 +34,6 @@ class LanguagesTable
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
                 ]),
-            ]);
+            ]));
     }
 }

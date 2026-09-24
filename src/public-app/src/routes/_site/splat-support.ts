@@ -14,7 +14,7 @@ export const Route = createFileRoute('/_site/splat-support')({
       request: requestForPath(location.pathname, location.searchStr),
     });
   },
-  head: ({ loaderData }) => siteRouteHead({ loaderData }),
+  head: ({ loaderData, match }) => siteRouteHead({ loaderData, pathname: match.pathname }),
   component: SiteSplatSupportRoute,
 });
 

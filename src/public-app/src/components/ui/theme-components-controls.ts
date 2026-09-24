@@ -9,6 +9,16 @@ export const themeComponentsControls = {
         minHeight: 'var(--site-control-h)',
         height: 'auto',
         whiteSpace: 'normal',
+        minWidth: 0,
+        '& .MuiButton-label': {
+          display: 'block',
+          minWidth: 0,
+          flex: '1 1 auto',
+          overflow: 'hidden',
+          textOverflow: 'ellipsis',
+          whiteSpace: 'nowrap',
+          textAlign: 'inherit',
+        },
         '& .MuiButton-startIcon': {
           marginLeft: 0,
           marginRight: 'var(--site-space-2)',
@@ -34,7 +44,16 @@ export const themeComponentsControls = {
   },
   MuiLink: {
     defaultProps: { color: 'primary' },
-    styleOverrides: { root: { textUnderlineOffset: 'var(--site-space-1)' } },
+    styleOverrides: {
+      root: {
+        textUnderlineOffset: 'var(--site-space-1)',
+        '&[data-site-external-link="true"]': {
+          display: 'inline-flex',
+          alignItems: 'center',
+          gap: 'var(--site-space-2)',
+        },
+      },
+    },
   },
   MuiChip: {
     styleOverrides: {

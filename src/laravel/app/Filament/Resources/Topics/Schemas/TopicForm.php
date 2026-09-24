@@ -16,17 +16,13 @@ class TopicForm
     {
         return $schema
             ->components([
-                Section::make()
+                Section::make('Taxonomy')
                     ->columns(2)
                     ->schema([
                         TextInput::make('slug')
                             ->required()
                             ->unique(ignoreRecord: true)
                             ->maxLength(255),
-                        TextInput::make('order')
-                            ->numeric()
-                            ->default(0)
-                            ->required(),
                         Select::make('kind')
                             ->required()
                             ->default('topic')

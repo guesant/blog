@@ -11,7 +11,7 @@ export const Route = createFileRoute('/_site/$')({
       request: requestForPath(location.pathname, location.searchStr),
     });
   },
-  head: ({ loaderData }) => siteRouteHead({ loaderData }),
+  head: ({ loaderData, match }) => siteRouteHead({ loaderData, pathname: match.pathname }),
   component: SiteSplatRoute,
 });
 

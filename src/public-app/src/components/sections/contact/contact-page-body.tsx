@@ -5,7 +5,6 @@ import { ContactDetails } from './contact-details';
 import { ConditionalContent } from '../../primitives/conditional-content';
 
 type ContactPageBodyProps = {
-  page: ContactPageContentProps['page'];
   site: ContactPageContentProps['site'];
   t: ReturnType<typeof useTranslations>;
   tCommon: ReturnType<typeof useTranslations>;
@@ -29,11 +28,9 @@ export function ContactPageBody(props: ContactPageBodyProps) {
         condition={hasContact}
         content={
           <ContactDetails
-            page={props.page}
             site={props.site}
             hasEmail={hasEmail}
             t={props.t}
-            tCommon={props.tCommon}
             tExternalProfiles={props.tExternalProfiles}
           />
         }

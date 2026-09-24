@@ -75,14 +75,11 @@ export type CreditsPageContent = {
 };
 
 export type PortfolioPageCopy = WithSeo & {
-  heroIdentity: string;
   heroExperience: string;
   heroCurrentFocus: string;
   availableLabel: string;
-  workEyebrow: string;
   workTitle: string;
   workDescription: string;
-  projectsEyebrow: string;
   projectsTitle: string;
   projectsDescription: string;
   experimentsSummary: string;

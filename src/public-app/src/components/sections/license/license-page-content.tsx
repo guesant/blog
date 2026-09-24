@@ -17,7 +17,6 @@ export function LicensePageContent(props: LicensePageContentProps) {
   return (
     <>
       <PageHeader
-        eyebrow={page.eyebrow}
         title={page.title}
         description={page.description}
         breadcrumbs={[{ label: tFooter('license') }]}

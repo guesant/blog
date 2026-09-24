@@ -26,7 +26,7 @@ class PageForm
             $field = "{$prefix}fields.{$key}";
             $label = str($key)->headline()->toString();
 
-            if ($key === 'story' || str_ends_with($key, '_body') || str_ends_with($key, '_description') || in_array($key, ['context', 'intro', 'lead'], true)) {
+            if ($key === 'story' || str_ends_with($key, '_body') || str_ends_with($key, '_description') || in_array($key, ['context', 'intro', 'introduction', 'lead'], true)) {
                 return MarkdownEditor::make($field)->label($label)->nullable();
             }
 
@@ -42,7 +42,7 @@ class PageForm
     {
         return $schema
             ->components([
-                Section::make()
+                Section::make('Page settings')
                     ->schema([
                         TextInput::make('slug')
                             ->required()
@@ -52,6 +52,7 @@ class PageForm
                 Section::make('Featured Cases')
                     ->schema([
                         Repeater::make('featured_cases')
+                            ->reorderableWithButtons()
                             ->columns(2)
                             ->schema([
                                 Select::make('case_study_id')
@@ -59,7 +60,6 @@ class PageForm
                                     ->options(fn () => CaseStudy::query()->pluck('slug', 'id'))
                                     ->searchable()
                                     ->required(),
-                                TextInput::make('order')->numeric()->nullable(),
                             ])
                             ->itemLabel(fn (array $state): ?string => isset($state['case_study_id'])
                                 ? CaseStudy::find($state['case_study_id'])?->slug
@@ -70,6 +70,7 @@ class PageForm
                 Section::make('Featured Projects')
                     ->schema([
                         Repeater::make('featured_projects')
+                            ->reorderableWithButtons()
                             ->columns(2)
                             ->schema([
                                 Select::make('project_id')
@@ -77,7 +78,6 @@ class PageForm
                                     ->options(fn () => Project::query()->pluck('slug', 'id'))
                                     ->searchable()
                                     ->required(),
-                                TextInput::make('order')->numeric()->nullable(),
                             ])
                             ->itemLabel(fn (array $state): ?string => isset($state['project_id'])
                                 ? Project::find($state['project_id'])?->slug
@@ -88,6 +88,7 @@ class PageForm
                 Section::make('Featured Writings')
                     ->schema([
                         Repeater::make('featured_writings')
+                            ->reorderableWithButtons()
                             ->columns(2)
                             ->schema([
                                 Select::make('writing_id')
@@ -95,7 +96,6 @@ class PageForm
                                     ->options(fn () => Writing::query()->pluck('slug', 'id'))
                                     ->searchable()
                                     ->required(),
-                                TextInput::make('order')->numeric()->nullable(),
                             ])
                             ->itemLabel(fn (array $state): ?string => isset($state['writing_id'])
                                 ? Writing::find($state['writing_id'])?->slug

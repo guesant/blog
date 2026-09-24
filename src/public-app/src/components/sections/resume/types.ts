@@ -16,8 +16,6 @@ export type CredentialSection = {
   items: ResumeContent['resume']['certificates'];
 };
 
-export type ResumeProfile = ResumeContent['site']['contact']['profiles'][number];
-
 export type ResumeSkillGroup = ResumeContent['resume']['skills'][number];
 
 export type ResumePdfActionsProps = {
@@ -106,7 +104,6 @@ export type ResumeHeaderProps = {
   profile: ResumeContent['profile'];
   site: ResumeContent['site'];
   hasEmail: boolean;
-  hasProfiles: boolean;
   locale: string;
   pdfUrls: Record<string, string>;
   t: ReturnType<typeof useTranslations>;

@@ -17,7 +17,7 @@ class CreditEntryForm
     {
         return $schema
             ->components([
-                Section::make()
+                Section::make('Credit metadata')
                     ->columns(2)
                     ->schema([
                         TextInput::make('url')
@@ -32,10 +32,6 @@ class CreditEntryForm
                                 'font' => 'font',
                                 'library' => 'library',
                             ]),
-                        TextInput::make('order')
-                            ->numeric()
-                            ->default(0)
-                            ->required(),
                     ]),
                 static::translationTabs(fn (string $prefix) => [
                     TextInput::make("{$prefix}name")

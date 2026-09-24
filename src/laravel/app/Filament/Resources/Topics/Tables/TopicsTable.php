@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Topics\Tables;
 
+use App\Filament\Concerns\ConfiguresRecordOrdering;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
@@ -10,14 +11,15 @@ use Filament\Tables\Table;
 
 class TopicsTable
 {
+    use ConfiguresRecordOrdering;
+
     public static function configure(Table $table): Table
     {
-        return $table
+        return static::configureRecordOrdering($table
             ->defaultSort('order')
             ->columns([
                 TextColumn::make('slug')->searchable()->sortable(),
                 TextColumn::make('kind')->sortable(),
-                TextColumn::make('order')->sortable(),
                 TextColumn::make('parent.slug')
                     ->label('Parent')
                     ->sortable(),
@@ -35,6 +37,6 @@ class TopicsTable
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
                 ]),
-            ]);
+            ]));
     }
 }

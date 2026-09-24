@@ -15,9 +15,6 @@ export function MaintenancePage(props: MaintenancePageProps) {
 
   return (
     <MaintenanceFrame>
-      <Typography variant="overline" color="secondary.main">
-        {site.maintenance.eyebrow}
-      </Typography>
       <Typography component="h1" variant="h1" visualVariant="maintenanceTitle">
         {site.maintenance.title}
       </Typography>

@@ -18,7 +18,7 @@ export function FollowPageContent(props: FollowPageContentProps) {
 
   return (
     <>
-      <PageHeader eyebrow={page.eyebrow} title={page.title} description={page.intro} />
+      <PageHeader title={page.title} description={page.intro} />
       <Typography variant="overline" color="text.secondary">
         {page.sectionLabel}
       </Typography>

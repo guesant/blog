@@ -106,7 +106,6 @@
     "unavailable": "I’m not currently available for new opportunities.",
     "reveal": "Email",
     "revealing": "Verifying…",
-    "revealHint": "This keeps bots from scraping the address off the page. Your browser runs a quick calculation first, then the email shows up here.",
     "revealedIntro": "Here it is:",
     "revealError": "That didn't work. Try again, or use one of the profiles below.",
     "revealNoScript": "JavaScript is required to reveal the address. Use one of the profiles below instead.",
@@ -209,8 +208,6 @@
     },
     "projects": {
       "back": "All projects",
-      "projectEyebrow": "Independent project",
-      "experimentEyebrow": "Experiment",
       "problem": "Problem explored",
       "currentFocus": "Current focus",
       "technologies": "Technologies",
@@ -351,7 +348,6 @@
       }
     },
     "topics": {
-      "eyebrow": "Topic",
       "metaDescription": "References tagged with {name}.",
       "indexTitle": "Topics",
       "indexDescription": "Browse Findings by topic."
@@ -369,7 +365,6 @@
       "noResults": "No nodes match this filter."
     },
     "collections": {
-      "eyebrow": "Collection",
       "indexTitle": "Collections",
       "indexDescription": "Curated paths through the Findings catalog."
     },
@@ -381,7 +376,6 @@
       "trajectory": "Trajectory",
       "milestones": "Milestones",
       "githubStatistics": {
-        "eyebrow": "GitHub statistics",
         "title": "Public development activity, at a glance.",
         "description": "A versioned snapshot collected from GitHub and rendered directly by this portfolio.",
         "contributionsLastYear": "Contributions in the last year",
@@ -429,7 +423,6 @@
       "pdfOptions": "PDF options"
     },
     "license": {
-      "eyebrow": "Legal",
       "title": "License and reuse.",
       "description": "This site separates two things: the software that runs it, and the personal content published on it. Each has a different license.",
       "codeHeading": "Source code",
@@ -441,23 +434,28 @@
       "contact": "Questions about reuse or licensing? Reach out at:"
     },
     "credits": {
-      "eyebrow": "Acknowledgements",
+      "acknowledgementsHeading": "Acknowledgements",
       "referencesHeading": "References",
       "infrastructureHeading": "Infrastructure and tooling",
       "librariesHeading": "Libraries",
       "toolsHeading": "Tools"
     },
     "notFound": {
-      "eyebrow": "404",
       "title": "This page wandered off.",
       "description": "The address may be outdated, or the page may never have existed. You can head back home or report a problem if something looks wrong.",
       "home": "Back Home",
       "issue": "Report a Problem"
     },
     "error": {
-      "eyebrow": "Something went wrong",
       "title": "This page could not load.",
       "description": "An unexpected error interrupted the page. Try again, or report it so I can take a look.",
+      "retry": "Try again",
+      "home": "Back Home",
+      "issue": "Report an Issue"
+    },
+    "apiUnavailable": {
+      "title": "The site is temporarily unavailable.",
+      "description": "The public API could not be reached. Try again in a moment.",
       "retry": "Try again",
       "home": "Back Home",
       "issue": "Report an Issue"

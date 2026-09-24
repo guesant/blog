@@ -1,7 +1,7 @@
 import type { ExternalLink } from './refs-links';
 import type { Reference } from './refs-details';
 
-export type RichTextContent = Record<string, unknown>;
+export type RichTextContent = string | Record<string, unknown>;
 
 type SeoMetadata = {
   title?: string;

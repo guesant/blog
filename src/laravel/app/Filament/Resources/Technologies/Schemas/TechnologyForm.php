@@ -15,17 +15,13 @@ class TechnologyForm
     {
         return $schema
             ->components([
-                Section::make()
+                Section::make('Technology settings')
                     ->columns(2)
                     ->schema([
                         TextInput::make('slug')
                             ->required()
                             ->unique(ignoreRecord: true)
                             ->maxLength(255),
-                        TextInput::make('order')
-                            ->numeric()
-                            ->default(0)
-                            ->required(),
                         TextInput::make('code')
                             ->maxLength(255)
                             ->helperText('Optional short code, e.g. a version label.'),

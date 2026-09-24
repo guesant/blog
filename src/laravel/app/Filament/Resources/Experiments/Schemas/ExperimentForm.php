@@ -21,7 +21,7 @@ class ExperimentForm
     {
         return $schema
             ->components([
-                Section::make()
+                Section::make('Publishing')
                     ->columns(2)
                     ->schema([
                         TextInput::make('slug')
@@ -30,10 +30,6 @@ class ExperimentForm
                             ->maxLength(255),
                         Toggle::make('hidden')
                             ->default(false),
-                        TextInput::make('order')
-                            ->numeric()
-                            ->default(0)
-                            ->required(),
                         TextInput::make('href')
                             ->nullable()
                             ->url(),

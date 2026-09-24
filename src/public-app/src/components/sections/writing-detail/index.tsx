@@ -30,7 +30,6 @@ export function WritingDetailContent(props: WritingDetailContentProps) {
     <Box component="article">
       <DetailHeader
         breadcrumbs={[{ label: tNav('writing'), href: '/writing' }, { label: item.title }]}
-        eyebrow={joinDefined([item.language?.toUpperCase(), item.type, item.subject])}
         title={item.title}
         description={item.excerpt}
         meta={joinDefined([item.readingTime, formattedDate])}

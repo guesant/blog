@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Technologies\Tables;
 
+use App\Filament\Concerns\ConfiguresRecordOrdering;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
@@ -10,9 +11,11 @@ use Filament\Tables\Table;
 
 class TechnologiesTable
 {
+    use ConfiguresRecordOrdering;
+
     public static function configure(Table $table): Table
     {
-        return $table
+        return static::configureRecordOrdering($table
             ->defaultSort('order')
             ->columns([
                 TextColumn::make('slug')->searchable()->sortable(),
@@ -20,7 +23,6 @@ class TechnologiesTable
                     ->label('Name (EN)')
                     ->getStateUsing(fn ($record) => $record->translation('en')?->name),
                 TextColumn::make('logo')->label('Icon slug'),
-                TextColumn::make('order')->sortable(),
             ])
             ->filters([
                 //
@@ -32,6 +34,6 @@ class TechnologiesTable
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
                 ]),
-            ]);
+            ]));
     }
 }

@@ -18,7 +18,6 @@ export function SnippetsPageContent(props: SnippetsPageContentProps) {
   return (
     <>
       <PageHeader
-        eyebrow={tNav('snippets')}
         title={tNav('snippets')}
         description={tNav('snippetsDescription')}
         breadcrumbs={[{ label: tNav('snippets') }]}

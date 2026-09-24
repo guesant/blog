@@ -22,7 +22,9 @@ class Resume extends Model
      */
     public function selectedCases(): BelongsToMany
     {
-        return $this->belongsToMany(CaseStudy::class, 'resume_selected_case')->withPivot('order');
+        return $this->belongsToMany(CaseStudy::class, 'resume_selected_case')
+            ->withPivot('order')
+            ->orderByPivot('order');
     }
 
     /**
@@ -30,7 +32,7 @@ class Resume extends Model
      */
     public function skills(): HasMany
     {
-        return $this->hasMany(ResumeSkill::class);
+        return $this->hasMany(ResumeSkill::class)->orderBy('order');
     }
 
     /**
@@ -38,6 +40,6 @@ class Resume extends Model
      */
     public function languages(): HasMany
     {
-        return $this->hasMany(ResumeLanguage::class);
+        return $this->hasMany(ResumeLanguage::class)->orderBy('order');
     }
 }

@@ -116,7 +116,11 @@ trait SyncsTranslations
     private function simpleRepeater(?array $values): array
     {
         return collect($values ?? [])
-            ->map(fn (mixed $value): array => is_array($value) ? ['value' => $value['value'] ?? ''] : ['value' => $value])
+            ->map(fn (mixed $value): string => match (true) {
+                is_array($value) => (string) ($value['value'] ?? ''),
+                is_scalar($value) => (string) $value,
+                default => '',
+            })
             ->all();
     }
 }

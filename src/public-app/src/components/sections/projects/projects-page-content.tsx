@@ -17,7 +17,6 @@ export function ProjectsPageContent(props: ProjectsPageContentProps) {
   return (
     <>
       <PageHeader
-        eyebrow={page.eyebrow}
         title={page.title}
         breadcrumbs={[{ label: tNav('projects') }]}
         description={page.description}

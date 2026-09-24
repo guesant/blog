@@ -86,14 +86,6 @@ export const boxVariants6: Record<string, SxProps<Theme>> = {
   },
   technologyMarquee: { mt: 5 },
   technologyMarquee2: { mt: 2, display: 'grid', gap: 1.5 },
-  contactProfileGrid: {
-    display: 'grid',
-    gridTemplateColumns: {
-      xs: 'minmax(0, 1fr)',
-      sm: 'repeat(2, minmax(0, 1fr))',
-    },
-    gap: 'var(--site-space-3)',
-  },
   revealDialogRevealed: {
     display: 'flex',
     flexDirection: 'column',

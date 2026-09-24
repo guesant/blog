@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\NavItems\Tables;
 
+use App\Filament\Concerns\ConfiguresRecordOrdering;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
@@ -10,16 +11,17 @@ use Filament\Tables\Table;
 
 class NavItemsTable
 {
+    use ConfiguresRecordOrdering;
+
     public static function configure(Table $table): Table
     {
-        return $table
+        return static::configureRecordOrdering($table
             ->defaultSort('order')
             ->columns([
                 TextColumn::make('route_name')->searchable()->sortable(),
                 TextColumn::make('parent.route_name')->label('Parent')->sortable(),
                 TextColumn::make('placement')->sortable(),
                 TextColumn::make('sidebar_group')->sortable(),
-                TextColumn::make('order')->sortable(),
             ])
             ->filters([
                 //
@@ -31,6 +33,6 @@ class NavItemsTable
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
                 ]),
-            ]);
+            ]));
     }
 }

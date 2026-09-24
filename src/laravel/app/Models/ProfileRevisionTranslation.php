@@ -11,7 +11,7 @@ class ProfileRevisionTranslation extends RevisionTranslation
 
     public function getPersonalInterestsAttribute(): array
     {
-        return $this->rows('profile_revision_interests');
+        return $this->values('profile_revision_interests');
     }
 
     public function getTrajectoryAttribute(): array

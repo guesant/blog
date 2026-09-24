@@ -6,7 +6,6 @@ export async function getLicensePageCopy(locale?: string) {
 
   return {
     ...page,
-    eyebrow: stringValue(page.eyebrow),
     title: stringValue(page.title),
     description: stringValue(page.description),
     sectionLabel: stringValue(page.section_label),

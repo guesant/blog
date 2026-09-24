@@ -22,7 +22,6 @@ export function ProjectDetailContent(props: ProjectDetailContentProps) {
     <DetailArticle>
       <DetailHeader
         breadcrumbs={[{ label: tNav('projects'), href: '/projects' }, { label: project.name }]}
-        eyebrow={t('projectEyebrow')}
         title={project.name}
         description={project.purpose}
         meta={project.status}

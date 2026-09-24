@@ -53,7 +53,7 @@ class ManageProfile extends Page
     {
         return $schema
             ->components([
-                Section::make()
+                Section::make('Profile settings')
                     ->columns(2)
                     ->schema([
                         TextInput::make('name')

@@ -1,12 +1,10 @@
 import { Button } from '../../ui';
 import { Icon } from '../../primitives/icon';
 import type { SourcePreviewData, SourcePreviewTranslator } from './types';
-import type { SourcePreviewVariant } from './source-preview-variant';
 
 type SourcePreviewListItemActionProps = {
   data: SourcePreviewData;
   t: SourcePreviewTranslator;
-  variant: SourcePreviewVariant;
 };
 
 export function SourcePreviewListItemAction(props: SourcePreviewListItemActionProps) {
@@ -19,7 +17,7 @@ export function SourcePreviewListItemAction(props: SourcePreviewListItemActionPr
       target="_blank"
       rel="noopener noreferrer"
       siteVariant="action"
-      size={props.variant === 'detail' ? 'medium' : 'small'}
+      size="small"
       variant="outlined"
       startIcon={<Icon name="external" size={14} />}
       visualVariant="sourcePreviewOpen"

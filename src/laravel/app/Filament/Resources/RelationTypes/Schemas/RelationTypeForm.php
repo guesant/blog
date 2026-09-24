@@ -14,7 +14,7 @@ class RelationTypeForm
     {
         return $schema
             ->components([
-                Section::make()
+                Section::make('Definition')
                     ->columns(2)
                     ->schema([
                         TextInput::make('key')
@@ -32,6 +32,10 @@ class RelationTypeForm
                             )
                             ->maxLength(255),
                         Toggle::make('symmetric'),
+                    ]),
+                Section::make('Labels')
+                    ->columns(2)
+                    ->schema([
                         TextInput::make('outbound_label_en')
                             ->label('Outbound label (EN)')
                             ->required()

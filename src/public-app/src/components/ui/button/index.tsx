@@ -17,7 +17,7 @@ export type { ButtonProps } from '@mui/material/Button';
 
 const ButtonImplementation = forwardRef<HTMLButtonElement, MuiButtonProps>(
   function Button(props, ref) {
-    const { siteVariant, visualVariant, sx, variant, ...muiProps } = props;
+    const { children, siteVariant, visualVariant, sx, variant, ...muiProps } = props;
 
     const normalizedSiteVariant = (siteVariant ?? 'default') as SiteButtonVariant;
 
@@ -29,7 +29,11 @@ const ButtonImplementation = forwardRef<HTMLButtonElement, MuiButtonProps>(
       ...(Array.isArray(sx) ? sx : [sx]),
     ] as SxProps<Theme>;
 
-    return <MuiButton ref={ref} {...muiProps} variant={effectiveVariant} sx={composedSx} />;
+    return (
+      <MuiButton ref={ref} {...muiProps} variant={effectiveVariant} sx={composedSx}>
+        <span className="MuiButton-label">{children}</span>
+      </MuiButton>
+    );
   },
 );
 

@@ -2,6 +2,10 @@
 
 namespace Tests\Feature;
 
+use App\Models\SiteSettings;
+use Illuminate\Auth\Middleware\Authenticate;
+use Illuminate\Auth\Middleware\Authorize;
+use Illuminate\Routing\Middleware\ThrottleRequests;
 use Illuminate\Support\Facades\Route;
 use Tests\TestCase;
 
@@ -28,6 +32,43 @@ class SeoAndSecurityTest extends TestCase
         $response->assertJsonPath('error.message', 'The requested resource was not found.');
         $response->assertJsonPath('error.status', 404);
         $response->assertJsonPath('error.details', []);
+    }
+
+    public function test_versioned_api_routes_have_explicit_access_control(): void
+    {
+        $routes = collect(Route::getRoutes())
+            ->filter(fn ($route): bool => str_starts_with($route->uri(), 'api/v1/'));
+
+        $this->assertNotEmpty($routes);
+
+        foreach ($routes as $route) {
+            $middleware = app('router')->gatherRouteMiddleware($route);
+            $isPublic = collect($middleware)
+                ->contains(fn (string $value): bool => str_starts_with($value, ThrottleRequests::class.':public-api'));
+            $hasAuthentication = collect($middleware)
+                ->contains(fn (string $value): bool => str_starts_with($value, Authenticate::class));
+            $hasAuthorization = collect($middleware)
+                ->contains(fn (string $value): bool => str_starts_with($value, Authorize::class.':access-private-api'));
+
+            $this->assertTrue(
+                $isPublic || ($hasAuthentication && $hasAuthorization),
+                "API route [{$route->uri()}] has no explicit access policy.",
+            );
+
+            if ($isPublic) {
+                $this->assertFalse($hasAuthentication);
+                $this->assertFalse($hasAuthorization);
+            }
+        }
+    }
+
+    public function test_livewire_transport_is_not_blocked_during_public_maintenance(): void
+    {
+        SiteSettings::factory()->create(['maintenance_enabled' => true]);
+
+        $response = $this->postJson('/livewire/update');
+
+        $this->assertNotSame(503, $response->status());
     }
 
     public function test_public_metadata_routes_are_available(): void

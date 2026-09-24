@@ -14,11 +14,11 @@ class PageRevisionTranslation extends RevisionTranslation
         'content_body', 'content_heading', 'context', 'currently_exploring_label', 'description', 'estudando',
         'experience_description', 'experience_eyebrow', 'experience_title', 'experiments_summary',
         'experiments_title', 'eyebrow', 'future_label', 'future_title', 'hero_current_focus', 'hero_experience',
-        'hero_identity', 'intro', 'jsonfeed_description', 'jsonfeed_title', 'lead', 'lendo', 'ouvindo',
+        'hero_identity', 'intro', 'introduction', 'jsonfeed_description', 'jsonfeed_title', 'lead', 'lendo', 'ouvindo',
         'planned_label', 'planned_title', 'projects_description', 'projects_eyebrow', 'projects_title',
         'recurring_technologies_label', 'robots_description', 'robots_title', 'rss_description', 'rss_title',
         'section_label', 'section_title', 'selected_label', 'sitemap_description', 'sitemap_title', 'story',
-        'story_eyebrow', 'story_title', 'title', 'trabalhando', 'unavailable_label', 'webfinger_description',
+        'story_eyebrow', 'story_title', 'timeline_eyebrow', 'timeline_title', 'timeline_description', 'title', 'trabalhando', 'unavailable_label', 'webfinger_description',
         'webfinger_title', 'webmention_description', 'webmention_title', 'websub_description', 'websub_title',
         'work_description', 'work_eyebrow', 'work_title', 'writing_description', 'writing_eyebrow', 'writing_title',
     ];

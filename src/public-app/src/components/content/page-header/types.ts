@@ -3,11 +3,11 @@ import type { ReactNode } from 'react';
 import type { BreadcrumbItem } from '../../navigation/breadcrumbs';
 
 export type PageHeaderProps = {
-  eyebrow: string;
   title: string;
   description?: string;
   actions?: ReactNode;
   breadcrumbs?: BreadcrumbItem[];
+  visualVariant?: string;
 };
 
 export type EditablePageHeaderProps = {
@@ -16,7 +16,6 @@ export type EditablePageHeaderProps = {
 };
 
 export type DetailHeaderProps = {
-  eyebrow: string;
   title: string;
   description?: string;
   meta?: string;

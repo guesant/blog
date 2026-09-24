@@ -21,7 +21,7 @@ class WritingForm
     {
         return $schema
             ->components([
-                Section::make()
+                Section::make('Publishing')
                     ->columns(2)
                     ->schema([
                         TextInput::make('slug')

@@ -4,16 +4,13 @@ import type { DetailHeaderProps } from './types';
 import { ConditionalContent } from '../../primitives/conditional-content';
 
 export function DetailHeader(props: DetailHeaderProps) {
-  const { eyebrow, title, description, meta, actions, breadcrumbs } = props;
+  const { title, description, meta, actions, breadcrumbs } = props;
 
   return (
     <Box component="header" visualVariant="detailHeader">
       <ConditionalContent condition={Boolean(breadcrumbs)}>
         <Breadcrumbs trail={breadcrumbs ?? []} />
       </ConditionalContent>
-      <Typography variant="overline" color="text.secondary" visualVariant="detailHeader">
-        {eyebrow}
-      </Typography>
       <Typography variant="h1" visualVariant="detailHeader2">
         {title}
       </Typography>

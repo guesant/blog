@@ -9,6 +9,10 @@ use Illuminate\Support\HtmlString;
 
 class Login extends BaseLogin
 {
+    protected array $extraBodyAttributes = [
+        'class' => 'portfolio-admin-login',
+    ];
+
     public function form(Schema $schema): Schema
     {
         return $schema->components([]);

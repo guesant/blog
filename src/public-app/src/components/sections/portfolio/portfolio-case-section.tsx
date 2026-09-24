@@ -1,4 +1,3 @@
-import { Typography } from '../../ui';
 import { CaseShowcase } from '../../content/case-showcase';
 import { ConditionalContent } from '../../primitives/conditional-content';
 import type { PortfolioPageContentProps } from './types';
@@ -29,9 +28,6 @@ export function PortfolioCaseSection(props: PortfolioCaseSectionProps) {
       condition={progressive.items.length > 0}
       content={
         <PortfolioWorkSection>
-          <Typography variant="overline" color="text.secondary">
-            {props.page.workEyebrow}
-          </Typography>
           <PortfolioSectionTitle>{props.page.workTitle}</PortfolioSectionTitle>
           <PortfolioSectionDescription>{props.page.workDescription}</PortfolioSectionDescription>
           <CaseShowcase cases={progressive.items} />

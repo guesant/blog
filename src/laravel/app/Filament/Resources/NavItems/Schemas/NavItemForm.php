@@ -14,7 +14,7 @@ class NavItemForm
     {
         return $schema
             ->components([
-                Section::make()
+                Section::make('Navigation item')
                     ->columns(2)
                     ->schema([
                         Select::make('route_name')
@@ -34,10 +34,6 @@ class NavItemForm
                         TextInput::make('sidebar_group')
                             ->numeric()
                             ->nullable(),
-                        TextInput::make('order')
-                            ->numeric()
-                            ->default(0)
-                            ->required(),
                     ]),
             ]);
     }

@@ -1,10 +1,8 @@
-import type { NavigationItem, SiteText } from '@portfolio/data/domain/types';
+import type { SiteText } from '@portfolio/data/domain/types';
 import type { Translator } from '@/i18n/compat-support';
 import { buildLeftSidebarAboutItems } from './build-left-sidebar-about-items';
 import { isAboutRoute } from './is-about-route';
-import { isContentSidebarRoute } from './is-content-sidebar-route';
 import { navigationItem } from './navigation-item';
-import { routeSegment } from './route-segment';
 import { visibleAboutRoutes } from './visible-about-routes';
 
 type BuildLeftSidebarDataProps = {
@@ -41,9 +39,6 @@ export function buildLeftSidebarData(props: BuildLeftSidebarDataProps) {
     homeItem: navigationItem('/', props.tNav('home')),
     currentPathname: props.currentPathname,
     routeSegments: props.currentPathname.split('/').filter(Boolean),
-    contentGroupLabel: (items: NavigationItem[]) =>
-      items.some((item) => isContentSidebarRoute(routeSegment(item.route)))
-        ? 'groupContent'
-        : 'groupTools',
+    contentGroupLabel: () => 'groupContent',
   };
 }

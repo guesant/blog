@@ -1,6 +1,6 @@
 'use client';
 
-import type { FormEvent } from 'react';
+import type { FormEvent, ReactNode } from 'react';
 import { Box } from '../../ui';
 import { ContentFeedFilters } from './content-feed-filters';
 import { ContentFeedHeader } from './content-feed-header';
@@ -36,6 +36,7 @@ export type ContentFeedViewProps = {
   nextLabel: string;
   lastLabel: string;
   onPageChange: (page: number) => void;
+  beforeExplore?: ReactNode;
 };
 
 export function ContentFeedView(props: ContentFeedViewProps) {

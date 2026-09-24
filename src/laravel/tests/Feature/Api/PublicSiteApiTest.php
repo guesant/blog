@@ -214,6 +214,20 @@ class PublicSiteApiTest extends TestCase
             ->assertJsonCount(1, 'data');
     }
 
+    public function test_finding_identifier_keeps_working_after_slug_changes(): void
+    {
+        $resource = $this->createResource('old-finding-slug');
+        $revision = $resource->refresh()->currentRevision;
+        $identifier = $revision->public_id.'-old-finding-slug';
+
+        $revision->update(['slug' => 'new-finding-slug']);
+
+        $this->getJson("/api/v1/findings/{$identifier}?locale=en")
+            ->assertOk()
+            ->assertJsonPath('slug', 'new-finding-slug')
+            ->assertJsonPath('url', "/findings/{$revision->public_id}-new-finding-slug");
+    }
+
     public function test_home_feed_is_paginated_and_server_ordered(): void
     {
         $this->createResource('first-feed-finding');

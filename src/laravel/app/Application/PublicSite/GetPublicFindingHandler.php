@@ -12,7 +12,7 @@ final class GetPublicFindingHandler
 
     public function handle(GetPublicFinding $query): ?PublicFindingReadResult
     {
-        $resource = $this->resources->findBySlug($query->slug, $query->locale);
+        $resource = $this->resources->findByIdentifier($query->identifier, $query->locale);
 
         return $resource === null ? null : new PublicFindingReadResult($resource);
     }

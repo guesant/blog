@@ -25,7 +25,7 @@ export function CaseDetailContent(props: CaseDetailContentProps) {
         actions={
           <ContentActions
             title={item.title}
-            url={`/cases/${item.slug}`}
+            url={item.url ?? `/cases/${item.slug}`}
             body={item.body}
             placement="hero"
           />

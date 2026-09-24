@@ -112,11 +112,11 @@ check: tools-build format api-check frontend-lint frontend-typecheck frontend-co
 
 format: frontend-install tools-build
     {{node_run}} 'corepack pnpm format'
-    {{tools_run}} 'shfmt -i 2 -ci -d .tools/scripts src/laravel/scripts src/laravel/docker .docker src/public-app/audits'
+    {{tools_run}} 'shfmt -i 2 -ci -d .tools/scripts src/laravel/docker .docker src/public-app/audits'
 
 format-fix: frontend-install tools-build
     {{node_run}} 'corepack pnpm format:fix'
-    {{tools_run}} 'shfmt -i 2 -ci -w .tools/scripts src/laravel/scripts src/laravel/docker .docker src/public-app/audits'
+    {{tools_run}} 'shfmt -i 2 -ci -w .tools/scripts src/laravel/docker .docker src/public-app/audits'
 
 lint: frontend-check
 
@@ -130,7 +130,7 @@ local-links: tools-build
 repository-lint: tools-build
     {{tools_compose}} run --rm yamllint -c /workspace/.config/yamllint.yml /workspace/.github /workspace/.docker /workspace/.tools
     {{tools_compose}} run --rm hadolint --config /workspace/.config/hadolint.yaml .docker/*.Dockerfile .tools/docker/*.Dockerfile src/laravel/docker/*.Dockerfile
-    {{tools_compose}} run --rm shellcheck .tools/scripts/*.sh src/laravel/scripts/*.sh src/laravel/docker/*.sh
+    {{tools_compose}} run --rm shellcheck .tools/scripts/*.sh src/laravel/docker/*.sh
 
 security: tools-build
     {{tools_compose}} run --rm gitleaks detect --source=/workspace --log-opts='-1' --redact --no-banner

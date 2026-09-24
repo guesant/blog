@@ -18,7 +18,12 @@ export function AchadoTopicsSection(props: AchadoTopicsSectionProps) {
         <FindingSection title={props.t('topicsHeading')}>
           <Stack flexWrap="wrap" gap="var(--site-space-2)">
             {props.item.topics.map((topic, index) => (
-              <TopicChip key={topic} name={topic} slug={props.item.topicSlugs?.[index] ?? ''} />
+              <TopicChip
+                key={topic}
+                name={topic}
+                slug={props.item.topicSlugs?.[index] ?? ''}
+                url={props.item.topicUrls?.[index]}
+              />
             ))}
           </Stack>
         </FindingSection>

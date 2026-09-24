@@ -10,6 +10,7 @@ import { topicLabel } from './public-site-source-topic-label';
 import { topicSlug } from './public-site-source-topic-slug';
 import { firstValue } from './public-site-source-first-value';
 import { numberValue } from './public-site-source-number-value';
+import { stringValue } from './public-site-source-string-value';
 
 export function referenceContentFields(
   item: RecordValue,
@@ -17,6 +18,7 @@ export function referenceContentFields(
   Reference,
   | 'topics'
   | 'topicSlugs'
+  | 'topicUrls'
   | 'links'
   | 'popularity'
   | 'featured'
@@ -27,6 +29,7 @@ export function referenceContentFields(
   return {
     topics: listValue<RecordValue>(item.topics).map(topicLabel),
     topicSlugs: listValue<RecordValue>(item.topics).map(topicSlug),
+    topicUrls: listValue<RecordValue>(item.topics).map((topic) => stringValue(topic.url)),
     links: listValue<RecordValue>(item.links).map(referenceLink),
     popularity: referencePopularity(item.popularity),
     featured: item.featured === true,

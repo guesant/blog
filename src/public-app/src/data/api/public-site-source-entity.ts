@@ -37,6 +37,7 @@ const entityBuilders: Record<ContentCollection, (item: RecordValue) => RecordVal
       stringValue(topic.name ?? topic.slug),
     ),
     topicSlugs: recordList<RecordValue>(item.topics).map((topic) => stringValue(topic.slug)),
+    topicUrls: recordList<RecordValue>(item.topics).map((topic) => stringValue(topic.url)),
   }),
   references: (item) => Object.fromEntries(Object.entries(reference(item))),
   collections: (item) => ({
@@ -46,6 +47,7 @@ const entityBuilders: Record<ContentCollection, (item: RecordValue) => RecordVal
   credits: (item) => ({ ...item }),
   topics: (item) => ({
     slug: stringValue(item.slug),
+    url: stringValue(item.url) || undefined,
     name: stringValue(item.name ?? item.slug),
     kind: item.kind === 'skill' ? 'topic' : item.kind,
     parentSlug: item.parent,

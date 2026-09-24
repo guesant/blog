@@ -37,14 +37,19 @@ class ReferenceCollectionQuery
         return $query->paginate($perPage);
     }
 
-    public function findBySlug(string $slug): ?ReferenceCollection
+    public function findByIdentifier(string $identifier): ?ReferenceCollection
     {
-        $collection = ReferenceCollection::where('slug', $slug)
+        $collection = PublicIdentifier::constrain(ReferenceCollection::query(), $identifier)
             ->where('hidden', false)
             ->with('translations')
             ->first();
 
         return $collection;
+    }
+
+    public function findBySlug(string $slug): ?ReferenceCollection
+    {
+        return $this->findByIdentifier($slug);
     }
 
     public function resourcesPaginated(ReferenceCollection $collection, int $perPage = 20, int $page = 1): LengthAwarePaginator

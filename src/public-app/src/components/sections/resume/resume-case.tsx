@@ -15,7 +15,11 @@ export function ResumeCase(props: ResumeCaseProps) {
   return (
     <Box>
       <Box visualVariant="resumeCase">
-        <Link component={LocaleLink} href={`/cases/${item.slug}`} visualVariant="resumeCaseLink">
+        <Link
+          component={LocaleLink}
+          href={item.url ?? `/cases/${item.slug}`}
+          visualVariant="resumeCaseLink"
+        >
           {item.title}
         </Link>
         <Typography variant="body2" color="text.secondary">
@@ -28,7 +32,11 @@ export function ResumeCase(props: ResumeCaseProps) {
       <Typography variant="body2" visualVariant="resumeCase2">
         {item.role}
       </Typography>
-      <Link component={LocaleLink} href={`/cases/${item.slug}`} visualVariant="resumeCaseAction">
+      <Link
+        component={LocaleLink}
+        href={item.url ?? `/cases/${item.slug}`}
+        visualVariant="resumeCaseAction"
+      >
         {t('caseLink')}
       </Link>
     </Box>

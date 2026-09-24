@@ -20,7 +20,6 @@
     <php>
         <env name="APP_ENV" value="testing" force="true"/>
         <env name="APP_DEBUG" value="false" force="true"/>
-        <!-- Keep tests away from a production/dev config cache that points at the real SQLite file. -->
         <env name="APP_CONFIG_CACHE" value="/tmp/portfolio-phpunit-config.php" force="true"/>
         <env name="APP_MAINTENANCE_DRIVER" value="file"/>
         <env name="BCRYPT_ROUNDS" value="4"/>

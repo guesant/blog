@@ -62,6 +62,7 @@ export type Reference = WithSeo & {
   hidden?: boolean;
   order: number;
   slug: string;
+  url?: string;
   type: string;
   language?: string;
   image?: string;
@@ -80,6 +81,7 @@ export type Reference = WithSeo & {
   reasonFound?: string;
   topics: string[];
   topicSlugs?: string[];
+  topicUrls?: string[];
   topicMemberships?: TopicMembership[];
   links: ExternalLink[];
   popularity?: {
@@ -106,6 +108,7 @@ type TopicRelation = {
 
 export type Topic = {
   slug: string;
+  url?: string;
   name: string;
   kind?: 'topic' | 'category';
   parentSlug?: string;
@@ -126,6 +129,7 @@ export type ReferenceCollection = WithSeo & {
   hidden?: boolean;
   order: number;
   slug: string;
+  url?: string;
   image?: string;
   title: string;
   description: string;

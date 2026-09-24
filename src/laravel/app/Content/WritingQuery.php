@@ -44,12 +44,17 @@ class WritingQuery
         return $query->paginate($perPage);
     }
 
-    public function findBySlug(string $slug): ?Writing
+    public function findByIdentifier(string $identifier): ?Writing
     {
-        return Writing::where('slug', $slug)
+        return PublicIdentifier::constrain(Writing::query(), $identifier)
             ->where('hidden', false)
             ->with(['translations', 'topics.translations'])
             ->first();
+    }
+
+    public function findBySlug(string $slug): ?Writing
+    {
+        return $this->findByIdentifier($slug);
     }
 
     public function related(Writing $writing, int $limit = 3): Collection

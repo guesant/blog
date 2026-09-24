@@ -22,7 +22,7 @@ export function AchadoDetailHeader(props: AchadoDetailHeaderProps) {
       </Typography>
       <ContentActions
         title={props.item.title}
-        url={`/findings/${props.item.slug}`}
+        url={props.item.url ?? `/findings/${props.item.slug}`}
         placement="hero"
       />
       <Typography visualVariant="achadoDetailContent2">{props.item.description}</Typography>

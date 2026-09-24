@@ -24,13 +24,18 @@ class ProjectQuery
         return $query->paginate($perPage);
     }
 
-    public function findBySlug(string $slug): ?Project
+    public function findByIdentifier(string $identifier): ?Project
     {
-        return Project::where('slug', $slug)
+        return PublicIdentifier::constrain(Project::query(), $identifier)
             ->where('hidden', false)
             ->where('nda', false)
             ->with(['translations', 'technologies.translations'])
             ->first();
+    }
+
+    public function findBySlug(string $slug): ?Project
+    {
+        return $this->findByIdentifier($slug);
     }
 
     public function listExperimentsPaginated(int $perPage = 20, ?string $sort = null): LengthAwarePaginator
@@ -43,12 +48,17 @@ class ProjectQuery
         return $query->paginate($perPage);
     }
 
-    public function findExperimentBySlug(string $slug): ?Experiment
+    public function findExperimentByIdentifier(string $identifier): ?Experiment
     {
-        return Experiment::where('slug', $slug)
+        return PublicIdentifier::constrain(Experiment::query(), $identifier)
             ->where('hidden', false)
             ->with(['translations', 'technologies.translations'])
             ->first();
+    }
+
+    public function findExperimentBySlug(string $slug): ?Experiment
+    {
+        return $this->findExperimentByIdentifier($slug);
     }
 
     public function related(Project $project, int $limit = 3): Collection

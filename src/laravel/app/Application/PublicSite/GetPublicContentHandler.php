@@ -15,14 +15,14 @@ final class GetPublicContentHandler
     public function handle(GetPublicContent $query): ?PublicContentReadResult
     {
         $item = match ($query->collection) {
-            'cases' => (new CaseStudyQuery)->findBySlug($query->slug),
-            'collections' => (new ReferenceCollectionQuery)->findBySlug($query->slug),
-            'experiments' => (new ProjectQuery)->findExperimentBySlug($query->slug),
-            'projects' => (new ProjectQuery)->findBySlug($query->slug),
-            'snippets' => (new SnippetQuery)->findBySlug($query->slug),
-            'technologies' => (new TechnologyQuery)->findBySlug($query->slug),
-            'topics' => (new TopicQuery)->findBySlug($query->slug),
-            'writing' => (new WritingQuery)->findBySlug($query->slug),
+            'cases' => (new CaseStudyQuery)->findByIdentifier($query->identifier),
+            'collections' => (new ReferenceCollectionQuery)->findByIdentifier($query->identifier),
+            'experiments' => (new ProjectQuery)->findExperimentByIdentifier($query->identifier),
+            'projects' => (new ProjectQuery)->findByIdentifier($query->identifier),
+            'snippets' => (new SnippetQuery)->findByIdentifier($query->identifier),
+            'technologies' => (new TechnologyQuery)->findByIdentifier($query->identifier),
+            'topics' => (new TopicQuery)->findByIdentifier($query->identifier),
+            'writing' => (new WritingQuery)->findByIdentifier($query->identifier),
             default => null,
         };
 

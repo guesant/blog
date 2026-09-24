@@ -54,8 +54,6 @@ return [
 
     'url' => env('APP_URL', 'http://localhost'),
 
-    // Set by scripts/deploy.sh at deploy time (git SHA + timestamp of the
-    // commit being deployed), shown in the footer. Empty in local dev.
     'commit_sha' => env('APP_COMMIT_SHA'),
     'build_time' => env('APP_BUILD_TIME'),
 

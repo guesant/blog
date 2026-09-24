@@ -13,23 +13,13 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
         web: __DIR__.'/../routes/web.php',
         api: __DIR__.'/../routes/api.php',
-        commands: __DIR__.'/../routes/console.php',
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        // Global (not web-group-only): must still run when no route matches,
-        // e.g. a genuine 404, since web-group middleware only attaches to a
-        // matched route. AddSecurityHeaders stays web-group-only below —
-        // promoting it here would also apply the public-site CSP to /admin,
-        // which breaks Filament/Livewire/Alpine (they need 'unsafe-eval').
         $middleware->append([
             SetLocale::class,
         ]);
 
-        // guesant_tema is set by plain client-side JS (saguão/theme
-        // selectors), not by a Laravel response — EncryptCookies would
-        // otherwise fail to decrypt it and request()->cookie() would
-        // silently read null, breaking the footer's "back to theme" link.
         $middleware->encryptCookies(except: ['guesant_tema']);
 
         $middleware->web(prepend: [

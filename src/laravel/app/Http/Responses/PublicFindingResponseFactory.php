@@ -5,6 +5,7 @@ namespace App\Http\Responses;
 use App\Application\PublicSite\PublicFindingReadResult;
 use App\Content\Locale;
 use App\Content\OpenGraphMetadata;
+use App\Content\PublicIdentifier;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 final class PublicFindingResponseFactory
@@ -48,7 +49,7 @@ final class PublicFindingResponseFactory
 
         return [
             'slug' => $resource->slug,
-            'url' => Locale::url("/findings/{$this->key($resource)}", $locale),
+            'url' => Locale::url('/findings/'.PublicIdentifier::key($resource), $locale),
             'type' => $resource->type,
             'authors' => $resource->authors,
             'organizations' => $resource->organizations,
@@ -66,7 +67,7 @@ final class PublicFindingResponseFactory
             'topics' => $resource->topics->map(fn ($topic) => [
                 'slug' => $topic->slug,
                 'name' => $topic->translation($locale)?->name,
-                'url' => Locale::url("/topics/{$this->key($topic)}", $locale),
+                'url' => Locale::url('/topics/'.PublicIdentifier::key($topic), $locale),
             ])->values()->all(),
             'links' => $resource->links->map(function ($link) use ($includeOpenGraph): array {
                 $result = [
@@ -102,10 +103,5 @@ final class PublicFindingResponseFactory
             'featured' => (bool) $resource->featured,
             'featured_order' => $resource->featured_order,
         ];
-    }
-
-    private function key(object $model): string
-    {
-        return $model->public_id ? "{$model->public_id}-{$model->slug}" : $model->slug;
     }
 }

@@ -7,7 +7,6 @@ const detailRoutes: Record<string, string> = {
   snippets: '/snippet-detail',
   topics: '/topic-detail',
   technologies: '/technology-detail',
-  tools: '/tool',
   writing: '/writing-detail',
 };
 

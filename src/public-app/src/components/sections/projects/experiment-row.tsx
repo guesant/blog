@@ -14,7 +14,7 @@ export function ExperimentRow(props: ExperimentRowProps) {
 
   return (
     <NavLink
-      href={`/projects/experiments/${item.slug}`}
+      href={item.url ?? `/projects/experiments/${item.slug}`}
       underline="none"
       color="inherit"
       visualVariant="experimentRow"

@@ -12,7 +12,7 @@ export function FeaturedCaseFooter(props: FeaturedCaseFooterProps) {
       <Typography visualVariant="featuredCaseFooter">
         {props.item.technologies.join(' · ')}
       </Typography>
-      <ReadCaseLink slug={props.item.slug} />
+      <ReadCaseLink href={props.item.url ?? `/cases/${props.item.slug}`} />
     </Box>
   );
 }

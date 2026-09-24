@@ -10,7 +10,6 @@ export const stackVariants: Record<string, SxProps<Theme>> = {
   },
   contactDetails: { minWidth: 0, gap: 2 },
   statusActions: { alignItems: 'flex-start' },
-  legacyToolWorkbench: { mt: 1.5 },
   passwordEntropy: { mt: 2 },
   generatedStringList: { mt: 1 },
   mobileSidebarStack: { overflowY: 'auto', p: 1.5 },

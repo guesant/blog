@@ -11,7 +11,9 @@ export const typographyVariants3: Record<string, SxProps<Theme>> = {
   referenceCardTitle: { fontSize: 'var(--site-text-xl)', transition: 'color .2s' },
   referenceCardDescription: { fontSize: 'var(--site-text-body)', maxWidth: '48ch' },
   contentFeedHeader: {
-    width: '100%',
+    maxWidth: 'var(--site-lede-max)',
+    marginLeft: 'auto',
+    marginRight: 'auto',
     mt: 'var(--site-space-3)',
     textAlign: 'center',
     hyphens: 'auto',
@@ -44,9 +46,11 @@ export const typographyVariants3: Record<string, SxProps<Theme>> = {
   },
   metricItem: { fontWeight: 700 },
   explorationSection: {
-    width: '100%',
+    maxWidth: 'var(--site-lede-max)',
+    marginLeft: 'auto',
+    marginRight: 'auto',
     mt: 'var(--site-space-3)',
-    textAlign: 'justify',
+    textAlign: 'center',
     hyphens: 'auto',
   },
   connectionsSection: {

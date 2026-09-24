@@ -1,11 +1,9 @@
 'use client';
 
 import { ExploreSection } from './explore-section';
-import { ContentFeedResultsState } from './content-feed-results-state';
 import { ContentFeedStatus } from './content-feed-status';
-import { ListingPagination } from '../listing-pagination';
 import type { ContentFeedViewProps } from './content-feed-view';
-import { ConditionalContent } from '../../primitives/conditional-content';
+import { ContentFeedListingResults } from './content-feed-listing-results';
 
 export type ContentFeedListingProps = Pick<
   ContentFeedViewProps,
@@ -28,40 +26,18 @@ export type ContentFeedListingProps = Pick<
   | 'lastLabel'
   | 'onPageChange'
   | 'showPagination'
+  | 'beforeExplore'
 >;
 
 export function ContentFeedListing(props: ContentFeedListingProps) {
   return (
     <>
       <ContentFeedStatus count={props.count} label={props.t('results')} />
-      <ContentFeedResultsState
-        entries={props.visibleEntries}
-        hasActiveFilters={props.hasActiveFilters}
-        noResultsLabel={props.noResultsLabel}
-        emptyLabel={props.emptyLabel}
-        clearLabel={props.clearLabel}
-        onClear={props.onClear}
-        locale={props.locale}
-        t={props.t}
-        onQuickFilter={props.onQuickFilter}
-      />
-      <ConditionalContent
-        condition={props.showPagination}
-        content={
-          <ListingPagination
-            page={props.page}
-            pageCount={props.pageCount}
-            ariaLabel={props.ariaLabel}
-            firstLabel={props.firstLabel}
-            previousLabel={props.previousLabel}
-            nextLabel={props.nextLabel}
-            lastLabel={props.lastLabel}
-            onPageChange={props.onPageChange}
-            scrollTargetId="content-feed"
-          />
-        }
-      />
-      <ExploreSection />
+      <ContentFeedListingResults {...props} />
+      <>
+        {props.beforeExplore}
+        <ExploreSection />
+      </>
     </>
   );
 }

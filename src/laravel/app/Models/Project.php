@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Content\Graph\GraphNode;
 use App\Content\Graph\InteractsWithGraph;
 use App\Content\Locale;
+use App\Content\PublicIdentifier;
 use App\Models\Concerns\Auditable;
 use App\Models\Concerns\HasPublicId;
 use App\Models\Concerns\UsesCurrentRevision;
@@ -59,6 +60,6 @@ class Project extends Model implements GraphNode
 
     public function graphUrl(string $locale): ?string
     {
-        return Locale::url("/projects/{$this->slug}", $locale);
+        return Locale::url('/projects/'.PublicIdentifier::key($this), $locale);
     }
 }

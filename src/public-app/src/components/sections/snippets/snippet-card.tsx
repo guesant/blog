@@ -6,7 +6,7 @@ type SnippetCardProps = Snippet;
 
 export function SnippetCard(props: SnippetCardProps) {
   return (
-    <CatalogCard href={`/snippets/${props.slug}`}>
+    <CatalogCard href={props.url ?? `/snippets/${props.slug}`}>
       <Typography component="h2" variant="h5">
         {props.title}
       </Typography>

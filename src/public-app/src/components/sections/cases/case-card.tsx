@@ -16,7 +16,7 @@ export function CaseCard(props: CaseCardProps) {
   return (
     <Card
       component={NavLink}
-      href={`/cases/${item.slug}`}
+      href={item.url ?? `/cases/${item.slug}`}
       underline="none"
       color="inherit"
       visualVariant="caseCard"

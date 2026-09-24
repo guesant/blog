@@ -13,13 +13,17 @@ export function TopicListItem(props: TopicListItemProps) {
   return (
     <Box visualVariant="topicItem">
       <Typography component="h2" visualVariant="topicTitle">
-        <NavLink href={`/topics/${props.topic.slug}`} underline="none" color="inherit">
+        <NavLink
+          href={props.topic.url ?? `/topics/${props.topic.slug}`}
+          underline="none"
+          color="inherit"
+        >
           {props.topic.name}
         </NavLink>
       </Typography>
       <Button
         component={NavLink}
-        href={`/topics/${props.topic.slug}`}
+        href={props.topic.url ?? `/topics/${props.topic.slug}`}
         size="small"
         variant="outlined"
         endIcon={<ArrowForward visualVariant="topicArrow" />}

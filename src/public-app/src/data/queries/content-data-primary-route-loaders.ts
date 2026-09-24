@@ -21,14 +21,13 @@ import { findingFilters } from './content-data-finding-filters';
 import { collectionRouteLoaders } from './content-data-primary-collection-route-loaders';
 import { resumePdfUrls } from './content-data-resume-pdf-urls';
 import type { RouteLoadContext, RouteLoader } from './content-data-route-loader';
-import { statusData } from './content-data-status-data';
 
 export const primaryRouteLoaders: Record<string, RouteLoader> = {
   ...collectionRouteLoaders,
   '/': async ({ locale, search }, context?: RouteLoadContext) => {
     const [content, feed] = await Promise.all([
       getHomePageContent(locale, context?.shell),
-      getHomeFeedPage(locale, collectionQuery(search, 'page', 6)),
+      getHomeFeedPage(locale, collectionQuery(search, 'page', 4)),
     ]);
 
     return {
@@ -108,6 +107,4 @@ export const primaryRouteLoaders: Record<string, RouteLoader> = {
     content: await getResumePageContent(locale, context?.shell),
     pdfUrls: resumePdfUrls(),
   }),
-  '/tools': async ({ locale }) => statusData(locale, 'notFound'),
-  '/tool': async ({ locale }) => statusData(locale, 'notFound'),
 };

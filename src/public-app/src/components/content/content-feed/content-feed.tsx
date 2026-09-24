@@ -10,5 +10,5 @@ export function ContentFeed(props: ContentFeedProps) {
 
   const viewProps = useContentFeedViewProps({ props, runtime });
 
-  return <ContentFeedView {...viewProps} />;
+  return <ContentFeedView {...viewProps} beforeExplore={props.beforeExplore} />;
 }

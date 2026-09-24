@@ -19,6 +19,6 @@ export function buildFindingEntry(item: Reference): FeedEntry {
     popularityLabel: findingPopularityLabel(item.popularity),
     featured: item.featured,
     sourcePreviews: item.links.flatMap(sourcePreviewEntriesForLink.bind(null, item)),
-    href: `/findings/${item.slug}`,
+    href: item.url ?? `/findings/${item.slug}`,
   };
 }

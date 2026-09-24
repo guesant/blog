@@ -54,6 +54,7 @@ export type CaseStudy = WithSeo & {
   hidden?: boolean;
   order: number;
   slug: string;
+  url?: string;
   number: string;
   title: string;
   status?: string;
@@ -73,6 +74,7 @@ export type Project = WithSeo & {
   hidden?: boolean;
   order: number;
   slug: string;
+  url?: string;
   name: string;
   purpose: string;
   problem?: string;
@@ -90,6 +92,7 @@ export type Experiment = WithSeo & {
   hidden?: boolean;
   order: number;
   slug: string;
+  url?: string;
   name: string;
   purpose: string;
   technologies: string[];
@@ -102,6 +105,7 @@ export type Experiment = WithSeo & {
 export type Writing = WithSeo & {
   hidden?: boolean;
   slug: string;
+  url?: string;
   type: string;
   subject: string;
   tags: string[];
@@ -110,6 +114,7 @@ export type Writing = WithSeo & {
   readingTime: string;
   dateISO: string;
   topicSlugs?: string[];
+  topicUrls?: string[];
   language?: 'en' | 'pt-BR';
   body: RichTextContent;
 };
@@ -121,7 +126,7 @@ export type PublicFeedItem = {
   preview: string;
   date: string;
   readingTime?: string;
-  topics: { name: string; slug?: string }[];
+  topics: { name: string; slug?: string; url?: string }[];
   findingType?: string;
   popularity?: { value: number; kind: string; rank: number };
   featured?: boolean;

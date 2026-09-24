@@ -27,7 +27,7 @@ if test -n "$unpinned_docker_images"; then
 fi
 
 remote_compose_images="$(grep -hREn '^[[:space:]]*image:[[:space:]]+' \
-  .docker/compose*.yaml .tools/docker/compose*.yaml src/laravel/docker-compose*.yml 2>/dev/null |
+  .docker/compose*.yaml .tools/docker/compose*.yaml 2>/dev/null |
   grep -vE 'image:[[:space:]]+portfolio-[A-Za-z0-9._-]+[[:space:]]*$' || true)"
 if test -n "$remote_compose_images"; then
   printf '%s\n' "$remote_compose_images"

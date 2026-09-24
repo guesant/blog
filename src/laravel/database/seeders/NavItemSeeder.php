@@ -102,7 +102,7 @@ class NavItemSeeder extends Seeder
         return [
             [$this->writing(), $this->findings()],
             [$this->topics(), $this->collections()],
-            [$this->snippets(), $this->tools()],
+            [$this->snippets()],
             [$this->about(), $this->agora(), $this->resume(), $this->portfolio()],
         ];
     }
@@ -175,10 +175,5 @@ class NavItemSeeder extends Seeder
     private function follow(): array
     {
         return ['route' => 'follow', 'translations' => ['en' => 'Follow', 'pt-BR' => 'Acompanhe']];
-    }
-
-    private function tools(): array
-    {
-        return ['route' => 'tools', 'translations' => ['en' => 'Tools', 'pt-BR' => 'Ferramentas']];
     }
 }

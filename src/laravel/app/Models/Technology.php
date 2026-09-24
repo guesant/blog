@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Content\Graph\GraphNode;
 use App\Content\Graph\InteractsWithGraph;
 use App\Content\Locale;
+use App\Content\PublicIdentifier;
 use App\Models\Concerns\Auditable;
 use App\Models\Concerns\HasPublicId;
 use App\Models\Concerns\UsesCurrentRevision;
@@ -73,6 +74,6 @@ class Technology extends Model implements GraphNode
 
     public function graphUrl(string $locale): ?string
     {
-        return Locale::url("/technologies/{$this->slug}", $locale);
+        return Locale::url('/technologies/'.PublicIdentifier::key($this), $locale);
     }
 }

@@ -16,8 +16,12 @@ export function buildEntries(
       preview: item.excerpt,
       date: dateValue(item.dateISO),
       readingTime: item.readingTime,
-      topics: item.tags.map((name, index) => ({ name, slug: item.topicSlugs?.[index] })),
-      href: `/writing/${item.slug}`,
+      topics: item.tags.map((name, index) => ({
+        name,
+        slug: item.topicSlugs?.[index],
+        url: item.topicUrls?.[index],
+      })),
+      href: item.url ?? `/writing/${item.slug}`,
     })),
     ...buildFindingEntries(findings),
     ...collections.map((item) => ({
@@ -27,7 +31,7 @@ export function buildEntries(
       preview: item.description,
       date: '',
       topics: [],
-      href: `/collections/${item.slug}`,
+      href: item.url ?? `/collections/${item.slug}`,
     })),
   ];
 }

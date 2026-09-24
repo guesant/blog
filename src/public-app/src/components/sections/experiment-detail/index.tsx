@@ -29,7 +29,7 @@ export function ExperimentDetailContent(props: ExperimentDetailContentProps) {
         actions={
           <ContentActions
             title={experiment.name}
-            url={`/projects/experiments/${experiment.slug}`}
+            url={experiment.url ?? `/projects/experiments/${experiment.slug}`}
             body={experiment.body}
             externalUrl={experiment.href}
             placement="hero"

@@ -37,7 +37,7 @@ export function WritingDetailContent(props: WritingDetailContentProps) {
         actions={
           <ContentActions
             title={item.title}
-            url={`/writing/${item.slug}`}
+            url={item.url ?? `/writing/${item.slug}`}
             body={item.body}
             placement="hero"
           />

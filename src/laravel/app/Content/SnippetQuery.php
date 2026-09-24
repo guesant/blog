@@ -23,17 +23,22 @@ class SnippetQuery implements PublicSnippetReader
         return $query->paginate($perPage);
     }
 
-    public function findBySlug(string $slug): ?Snippet
+    public function findByIdentifier(string $identifier): ?Snippet
     {
-        return Snippet::where('slug', $slug)
+        return PublicIdentifier::constrain(Snippet::query(), $identifier)
             ->where('hidden', false)
             ->with(['translations', 'files'])
             ->first();
     }
 
-    public function findForDownload(string $slug): mixed
+    public function findBySlug(string $slug): ?Snippet
     {
-        return Snippet::where('slug', $slug)
+        return $this->findByIdentifier($slug);
+    }
+
+    public function findForDownload(string $identifier): mixed
+    {
+        return PublicIdentifier::constrain(Snippet::query(), $identifier)
             ->where('hidden', false)
             ->with('files')
             ->first();

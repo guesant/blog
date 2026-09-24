@@ -7,7 +7,7 @@ type TechnologyCardProps = Technology;
 
 export function TechnologyCard(props: TechnologyCardProps) {
   return (
-    <CatalogCard href={`/technologies/${props.slug}`}>
+    <CatalogCard href={props.url ?? `/technologies/${props.slug}`}>
       <Typography component="h2" variant="h5">
         {props.name}
       </Typography>

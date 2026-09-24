@@ -138,7 +138,7 @@ class PublicSiteApiController extends Controller
         $page = max(1, $request->integer('page', 1));
         $result = $handler->handle(new GetPublicContent(
             collection: $collection,
-            slug: $slug,
+            identifier: $slug,
             perPage: $perPage,
             page: $page,
             locale: $locale,

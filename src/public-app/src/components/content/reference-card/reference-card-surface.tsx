@@ -30,7 +30,7 @@ export function ReferenceCardSurface(props: ReferenceCardSurfaceProps) {
         variant="h3"
         visualVariant="referenceCardTitle"
       >
-        <NavLink href={`/findings/${content.slug}`} underline="none" color="inherit">
+        <NavLink href={content.url ?? `/findings/${content.slug}`} underline="none" color="inherit">
           {content.title}
         </NavLink>
       </Typography>

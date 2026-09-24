@@ -23,13 +23,18 @@ class CaseStudyQuery
         return $query->paginate($perPage);
     }
 
-    public function findBySlug(string $slug): ?CaseStudy
+    public function findByIdentifier(string $identifier): ?CaseStudy
     {
-        return CaseStudy::where('slug', $slug)
+        return PublicIdentifier::constrain(CaseStudy::query(), $identifier)
             ->where('hidden', false)
             ->where('nda', false)
             ->with(['translations', 'technologies.translations'])
             ->first();
+    }
+
+    public function findBySlug(string $slug): ?CaseStudy
+    {
+        return $this->findByIdentifier($slug);
     }
 
     public function related(CaseStudy $case, int $limit = 3): Collection

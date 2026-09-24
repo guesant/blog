@@ -16,7 +16,7 @@ export function ProjectRow(props: ProjectRowProps) {
         {item.status}
       </Typography>
       <Typography className="project-row-title" component="h3" visualVariant="projectRow">
-        <NavLink href={`/projects/${item.slug}`} underline="none" color="inherit">
+        <NavLink href={item.url ?? `/projects/${item.slug}`} underline="none" color="inherit">
           {item.name}
         </NavLink>
       </Typography>

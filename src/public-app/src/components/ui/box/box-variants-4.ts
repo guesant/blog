@@ -56,16 +56,6 @@ export const boxVariants4: Record<string, SxProps<Theme>> = {
     borderTop: 1,
     borderColor: 'divider',
   },
-  legacyToolWorkbench: {
-    display: 'grid',
-    gridTemplateColumns: { xs: '1fr', sm: 'repeat(3, 1fr)' },
-    gap: 'var(--site-space-3)',
-  },
-  legacyToolWorkbench2: {
-    display: 'grid',
-    gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, minmax(0, 1fr))' },
-    gap: 'var(--site-space-3)',
-  },
   stickyLeftSidebar: { position: 'sticky', top: 0, height: '100dvh', overflowY: 'auto' },
   sidebarBrandRow: {
     display: 'flex',

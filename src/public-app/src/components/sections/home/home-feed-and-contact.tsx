@@ -37,10 +37,10 @@ export function HomeFeedAndContact(props: HomeFeedAndContactProps) {
         collections={[]}
         contentMeta={props.feedPagination}
         showPagination={false}
+        beforeExplore={<HomeFeedProgressiveFooter progressive={progressive} />}
         copy={{ title: props.tFeed('title'), description: props.tFeed('description') }}
         action="/"
       />
-      <HomeFeedProgressiveFooter progressive={progressive} />
       <HomeContactSection
         page={props.content.page}
         site={props.site}

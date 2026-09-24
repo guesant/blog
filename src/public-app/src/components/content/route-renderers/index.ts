@@ -63,8 +63,6 @@ const routeRendererDefinitions = {
   status: ['status-route-renderer.tsx', 'StatusRouteRenderer'],
   technologies: ['technologies-route-renderer.tsx', 'TechnologiesRouteRenderer'],
   topics: ['topics-route-renderer.tsx', 'TopicsRouteRenderer'],
-  'tools-index': ['status-route-renderer.tsx', 'StatusRouteRenderer'],
-  tool: ['status-route-renderer.tsx', 'StatusRouteRenderer'],
 } satisfies Record<Exclude<RouteData['kind'], 'home'>, readonly [string, string]>;
 
 const lazyRouteRenderers = Object.fromEntries(

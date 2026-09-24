@@ -8,10 +8,6 @@ RUN cp /usr/local/bin/frankenphp /tmp/frankenphp \
     && rm /usr/local/bin/frankenphp \
     && mv /tmp/frankenphp /usr/local/bin/frankenphp
 
-# Filament requires ext-intl, which the base image doesn't ship with.
-# GD (+ freetype) renders the dynamic OG image; fonts-liberation ships
-# Liberation Sans, metrically compatible with Arial — the same fallback the
-# legacy /og route used ('Arial, sans-serif'), so no font-conversion needed.
 RUN apt-get update \
     && apt-get install -y --no-install-recommends libicu-dev libfreetype6-dev libjpeg62-turbo-dev libpng-dev libpq-dev libzip-dev fonts-liberation \
     && install-php-extensions intl gd pdo_pgsql zip \

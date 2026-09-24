@@ -7,6 +7,7 @@ import { firstValue } from './public-site-source-first-value';
 type ReferenceBaseFields = Pick<
   Reference,
   | 'slug'
+  | 'url'
   | 'type'
   | 'authors'
   | 'organizations'
@@ -25,6 +26,7 @@ type ReferenceBaseFields = Pick<
 export function referenceBaseFields(item: RecordValue): ReferenceBaseFields {
   return {
     slug: stringValue(item.slug),
+    url: optionalStringValue(item.url),
     type: stringValue(item.type),
     authors: stringValue(item.authors),
     organizations: stringValue(item.organizations),

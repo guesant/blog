@@ -10,7 +10,6 @@ const routeIcons: Partial<Record<string, IconName>> = {
   collections: 'book',
   technologies: 'wrench',
   snippets: 'document',
-  tools: 'wrench',
   cases: 'briefcase',
   projects: 'layout-grid',
   portfolio: 'layout-grid',

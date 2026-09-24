@@ -20,11 +20,16 @@ class TechnologyQuery
         return $query->paginate($perPage);
     }
 
-    public function findBySlug(string $slug): ?Technology
+    public function findByIdentifier(string $identifier): ?Technology
     {
-        return Technology::where('slug', $slug)
+        return PublicIdentifier::constrain(Technology::query(), $identifier)
             ->where('hidden', false)
             ->with(['translations', 'resumeSkills.topic.translations', 'resumeSkills.topic.parent'])
             ->first();
+    }
+
+    public function findBySlug(string $slug): ?Technology
+    {
+        return $this->findByIdentifier($slug);
     }
 }

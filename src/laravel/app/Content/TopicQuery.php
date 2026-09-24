@@ -20,11 +20,16 @@ class TopicQuery
         return $query->paginate($perPage);
     }
 
-    public function findBySlug(string $slug): ?Topic
+    public function findByIdentifier(string $identifier): ?Topic
     {
-        return Topic::where('slug', $slug)
+        return PublicIdentifier::constrain(Topic::query(), $identifier)
             ->where('hidden', false)
             ->with(['translations', 'parent.translations', 'children.translations'])
             ->first();
+    }
+
+    public function findBySlug(string $slug): ?Topic
+    {
+        return $this->findByIdentifier($slug);
     }
 }

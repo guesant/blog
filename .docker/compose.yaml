@@ -66,11 +66,7 @@ services:
   laravel-worker:
     <<: *laravel
     ports: []
-    command: php artisan queue:work --queue=default,open-graph --sleep=3 --tries=3 --max-time=3600
-  laravel-scheduler:
-    <<: *laravel
-    ports: []
-    command: php artisan schedule:work
+    command: php artisan queue:work --queue=default --sleep=3 --tries=3 --max-time=3600
   start:
     <<: *node-image
     working_dir: /workspace/src/public-app

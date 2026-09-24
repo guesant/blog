@@ -8,9 +8,11 @@ export function HomeHeroTextBody(props: HomeHeroTextBodyProps) {
     <Typography
       component="p"
       sx={{
-        width: '100%',
+        maxWidth: 'var(--site-lede-max)',
+        marginLeft: 'auto',
+        marginRight: 'auto',
         fontFamily: 'var(--site-font-action)',
-        textAlign: 'justify',
+        textAlign: 'center',
         hyphens: 'auto',
         fontSize: 'var(--site-text-lg)',
         fontWeight: 'var(--site-weight-medium)',

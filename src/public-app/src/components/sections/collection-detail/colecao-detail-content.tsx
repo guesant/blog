@@ -22,7 +22,7 @@ export function ColecaoDetailContent(props: ColecaoDetailContentProps) {
         actions={
           <ContentActions
             title={collection.title}
-            url={`/collections/${collection.slug}`}
+            url={collection.url ?? `/collections/${collection.slug}`}
             body={collection.intro}
             placement="hero"
           />

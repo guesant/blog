@@ -9,6 +9,7 @@ export function feedItem(value: Record<string, unknown>): PublicFeedItem {
   const topics = listValue<Record<string, unknown>>(value.topics).map((topic) => ({
     name: stringValue(topic.name ?? topic.slug),
     slug: stringValue(topic.slug) || undefined,
+    url: stringValue(topic.url) || undefined,
   }));
 
   const popularity = referencePopularity(value.popularity);

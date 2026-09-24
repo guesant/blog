@@ -3,7 +3,7 @@
 import { Chip } from '../../ui';
 import { NavLink } from '../../primitives/nav-link';
 
-type FeedTopicChipProps = { topic: { name: string; slug?: string } };
+type FeedTopicChipProps = { topic: { name: string; slug?: string; url?: string } };
 
 export function FeedTopicChip(props: FeedTopicChipProps) {
   const { topic } = props;
@@ -11,7 +11,7 @@ export function FeedTopicChip(props: FeedTopicChipProps) {
   return (
     <Chip
       component={topic.slug ? NavLink : 'div'}
-      href={topic.slug ? `/topics/${topic.slug}` : undefined}
+      href={topic.url ?? (topic.slug ? `/topics/${topic.slug}` : undefined)}
       label={topic.name}
       size="small"
       variant="outlined"

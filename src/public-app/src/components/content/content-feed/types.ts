@@ -4,6 +4,7 @@ import type {
   ReferenceCollection,
   Writing,
 } from '@portfolio/data/domain/types';
+import type { ReactNode } from 'react';
 import type { FindingFacets, FindingListMeta } from '@portfolio/data/services';
 import type { ContentCollectionMeta } from '@portfolio/data/api/public-site-source-support';
 import type { SourcePreviewData } from '../source-preview/types';
@@ -24,7 +25,7 @@ export type FeedEntry = {
   preview: string;
   date: string;
   readingTime?: string;
-  topics: { name: string; slug?: string }[];
+  topics: { name: string; slug?: string; url?: string }[];
   findingType?: string;
   popularityRank?: number;
   popularityLabel?: string;
@@ -54,4 +55,5 @@ export type ContentFeedProps = {
   findingsMeta?: FindingListMeta;
   findingFacets?: FindingFacets;
   contentMeta?: ContentCollectionMeta;
+  beforeExplore?: ReactNode;
 };

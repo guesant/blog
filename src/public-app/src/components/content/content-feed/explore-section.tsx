@@ -1,7 +1,6 @@
 'use client';
 
 import { ExplorationSection, ExplorationTileGrid } from '../exploration-section';
-import { featureFlags } from '@portfolio/data/config/feature-flags';
 import type { IconName } from '../../primitives/icon';
 import { ExploreTile } from './explore-tile';
 import { useTranslations } from '@/i18n/compat';
@@ -16,7 +15,6 @@ export function ExploreSection() {
     { icon: 'layout-grid', label: t('topics'), href: '/topics' },
     { icon: 'folder-git', label: t('projects'), href: '/projects' },
     { icon: 'briefcase', label: t('cases'), href: '/cases' },
-    ...(featureFlags.tools ? [{ icon: 'wrench' as const, label: t('tools'), href: '/tools' }] : []),
   ];
 
   return (

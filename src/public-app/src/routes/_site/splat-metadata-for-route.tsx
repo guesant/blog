@@ -57,9 +57,6 @@ const metadataResolvers: Partial<Record<RouteData['kind'], MetadataResolver>> = 
     data.kind === 'topic-detail'
       ? { title: data.topic.name, description: data.topic.name }
       : defaultMetadata(),
-  tool: (data) =>
-    data.kind === 'tool' ? { title: data.slug, description: data.slug } : defaultMetadata(),
-  'tools-index': kindMetadata,
   snippets: kindMetadata,
   technologies: kindMetadata,
   'finding-type': kindMetadata,

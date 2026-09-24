@@ -3,16 +3,13 @@
 namespace Tests\Unit\Content;
 
 use App\Content\OpenGraphMetadata;
-use App\Jobs\FetchOpenGraphMetadata;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Queue;
 use Tests\TestCase;
 
 class OpenGraphMetadataTest extends TestCase
 {
     public function test_metadata_is_parsed_and_cached(): void
     {
-        Queue::fake();
         Http::fake([
             'https://github.com/*' => Http::response(
                 '<html><head><title>Fallback title</title><meta property="og:title" content="Portfolio"><meta property="og:description" content="A site"><meta property="og:image" content="/preview.png"></head></html>',
@@ -26,9 +23,8 @@ class OpenGraphMetadataTest extends TestCase
 
         $first = $service->forUrl($url);
         $this->assertNull($first);
-        Queue::assertNothingPushed();
 
-        (new FetchOpenGraphMetadata($url))->handle($service);
+        $service->refresh($url);
         $second = $service->forUrl($url);
 
         $this->assertNull($first);

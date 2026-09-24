@@ -4,6 +4,7 @@ namespace App\Http\Responses;
 
 use App\Application\PublicSite\PublicResumeReadResult;
 use App\Content\Locale;
+use App\Content\PublicIdentifier;
 
 final class PublicResumeResponseFactory
 {
@@ -62,7 +63,7 @@ final class PublicResumeResponseFactory
 
         return [
             'slug' => $case->slug,
-            'url' => Locale::url("/cases/{$this->key($case)}", $locale),
+            'url' => Locale::url('/cases/'.PublicIdentifier::key($case), $locale),
             'title' => $translation?->title ?? $case->slug,
             'status' => $translation?->status,
             'summary' => $translation?->summary,
@@ -84,10 +85,5 @@ final class PublicResumeResponseFactory
             'related' => null,
             'updated_at' => $case->updated_at?->format('Y-m-d H:i:s'),
         ];
-    }
-
-    private function key(object $model): string
-    {
-        return $model->public_id ? "{$model->public_id}-{$model->slug}" : $model->slug;
     }
 }

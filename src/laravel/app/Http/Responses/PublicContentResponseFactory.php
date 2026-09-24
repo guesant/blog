@@ -4,6 +4,7 @@ namespace App\Http\Responses;
 
 use App\Application\PublicSite\PublicFeedItem;
 use App\Content\Locale;
+use App\Content\PublicIdentifier;
 use App\Models\CaseStudy;
 use App\Models\Experiment;
 use App\Models\Project;
@@ -90,7 +91,7 @@ final class PublicContentResponseFactory
             'slug' => $snippet->slug,
             'title' => $translation?->title ?? $snippet->slug,
             'description' => $translation?->description,
-            'download_url' => Locale::url("/snippets/{$this->key($snippet)}/download", $locale),
+            'download_url' => Locale::url('/snippets/'.PublicIdentifier::key($snippet).'/download', $locale),
             'files' => [],
             'file_count' => $snippet->files_count ?? 0,
             'updated_at' => $snippet->updated_at?->format('Y-m-d H:i:s'),
@@ -103,7 +104,7 @@ final class PublicContentResponseFactory
 
         return [
             'slug' => $collection->slug,
-            'url' => Locale::url("/collections/{$this->key($collection)}", $locale),
+            'url' => Locale::url('/collections/'.PublicIdentifier::key($collection), $locale),
             'title' => $translation?->title ?? $collection->slug,
             'description' => $translation?->description,
             'intro' => $translation?->intro,
@@ -121,7 +122,7 @@ final class PublicContentResponseFactory
             'slug' => $technology->slug,
             'name' => $technology->translation($locale)?->name ?? $technology->slug,
             'code' => $technology->code ?? '',
-            'url' => Locale::url("/technologies/{$this->key($technology)}", $locale),
+            'url' => Locale::url('/technologies/'.PublicIdentifier::key($technology), $locale),
             'skills' => $technology->resumeSkills
                 ->map(fn ($skill) => $skill->topic?->translation($locale)?->name ?? $skill->topic?->slug)
                 ->filter()
@@ -129,7 +130,7 @@ final class PublicContentResponseFactory
             'resume_skills' => $technology->resumeSkills->map(fn ($skill) => $skill->topic ? [
                 'slug' => $skill->topic->slug,
                 'name' => $skill->topic->translation($locale)?->name ?? $skill->topic->slug,
-                'url' => Locale::url("/topics/{$this->key($skill->topic)}", $locale),
+                'url' => Locale::url('/topics/'.PublicIdentifier::key($skill->topic), $locale),
                 'parent' => $skill->topic->parent?->slug,
                 'kind' => null,
                 'children' => null,
@@ -141,6 +142,7 @@ final class PublicContentResponseFactory
     {
         return [
             'slug' => $topic->slug,
+            'url' => Locale::url('/topics/'.PublicIdentifier::key($topic), $locale),
             'name' => $topic->translation($locale)?->name ?? $topic->slug,
             'kind' => $topic->kind === 'skill' ? 'topic' : $topic->kind,
             'parent' => $topic->parent?->slug,
@@ -248,7 +250,7 @@ final class PublicContentResponseFactory
 
         return [
             'slug' => $project->slug,
-            'url' => Locale::url("/projects/{$this->key($project)}", $locale),
+            'url' => Locale::url('/projects/'.PublicIdentifier::key($project), $locale),
             'name' => $translation?->name ?? $project->slug,
             'purpose' => $translation?->purpose,
             'status' => $translation?->status,
@@ -276,7 +278,7 @@ final class PublicContentResponseFactory
 
         return [
             'slug' => $case->slug,
-            'url' => Locale::url("/cases/{$this->key($case)}", $locale),
+            'url' => Locale::url('/cases/'.PublicIdentifier::key($case), $locale),
             'title' => $translation?->title ?? $case->slug,
             'status' => $translation?->status,
             'summary' => $translation?->summary,
@@ -306,7 +308,7 @@ final class PublicContentResponseFactory
 
         return [
             'slug' => $writing->slug,
-            'url' => Locale::url("/writing/{$this->key($writing)}", $locale),
+            'url' => Locale::url('/writing/'.PublicIdentifier::key($writing), $locale),
             'title' => $translation?->title ?? $writing->slug,
             'excerpt' => $translation?->excerpt,
             'reading_time' => $translation?->reading_time,
@@ -316,7 +318,7 @@ final class PublicContentResponseFactory
             'topics' => $writing->topics->map(fn ($topic) => [
                 'slug' => $topic->slug,
                 'name' => $topic->translation($locale)?->name ?? $topic->slug,
-                'url' => Locale::url("/topics/{$this->key($topic)}", $locale),
+                'url' => Locale::url('/topics/'.PublicIdentifier::key($topic), $locale),
             ])->values(),
             'show_history' => $writing->show_history,
             'history' => null,
@@ -334,7 +336,7 @@ final class PublicContentResponseFactory
 
         return [
             'slug' => $collection->slug,
-            'url' => Locale::url("/collections/{$this->key($collection)}", $locale),
+            'url' => Locale::url('/collections/'.PublicIdentifier::key($collection), $locale),
             'title' => $translation?->title ?? $collection->slug,
             'description' => $translation?->description,
             'intro' => $translation?->intro,
@@ -344,7 +346,7 @@ final class PublicContentResponseFactory
 
                 return [
                     'slug' => $resource->slug,
-                    'url' => Locale::url("/findings/{$this->key($resource)}", $locale),
+                    'url' => Locale::url('/findings/'.PublicIdentifier::key($resource), $locale),
                     'title' => $resourceTranslation?->title ?? $resource->slug,
                     'description' => $resourceTranslation?->description,
                     'type' => $resource->type,
@@ -376,7 +378,7 @@ final class PublicContentResponseFactory
 
         return [
             'slug' => $experiment->slug,
-            'url' => Locale::url("/projects/experiments/{$this->key($experiment)}", $locale),
+            'url' => Locale::url('/projects/experiments/'.PublicIdentifier::key($experiment), $locale),
             'name' => $translation?->name ?? $experiment->slug,
             'purpose' => $translation?->purpose,
             'body' => $translation?->body,
@@ -400,8 +402,8 @@ final class PublicContentResponseFactory
 
         return [
             'slug' => $snippet->slug,
-            'url' => Locale::url("/snippets/{$this->key($snippet)}", $locale),
-            'download_url' => "/api/v1/snippets/{$snippet->slug}/download",
+            'url' => Locale::url('/snippets/'.PublicIdentifier::key($snippet), $locale),
+            'download_url' => '/api/v1/snippets/'.PublicIdentifier::key($snippet).'/download',
             'title' => $translation?->title ?? $snippet->slug,
             'description' => $translation?->description,
             'published_at' => $snippet->published_at?->toDateString(),
@@ -417,10 +419,5 @@ final class PublicContentResponseFactory
             'related' => null,
             'updated_at' => $snippet->updated_at?->format('Y-m-d H:i:s'),
         ];
-    }
-
-    private function key(object $model): string
-    {
-        return $model->public_id ? "{$model->public_id}-{$model->slug}" : $model->slug;
     }
 }

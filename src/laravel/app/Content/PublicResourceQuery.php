@@ -66,10 +66,14 @@ class PublicResourceQuery
         return $query->paginate($perPage);
     }
 
-    public function findBySlug(string $slug, ?string $locale = null): ?ResourceRevision
+    public function findByIdentifier(string $identifier, ?string $locale = null): ?ResourceRevision
     {
-        return $this->baseQuery($locale)
-            ->where('resource_revisions.slug', $slug)
+        return PublicIdentifier::constrain(
+            $this->baseQuery($locale),
+            $identifier,
+            'resource_revisions.public_id',
+            'resource_revisions.slug',
+        )
             ->with([
                 'translations',
                 'topics.translations',
@@ -79,6 +83,11 @@ class PublicResourceQuery
                 'attributions',
             ])
             ->first();
+    }
+
+    public function findBySlug(string $slug, ?string $locale = null): ?ResourceRevision
+    {
+        return $this->findByIdentifier($slug, $locale);
     }
 
     private function baseQuery(?string $locale): Builder

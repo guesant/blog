@@ -29,7 +29,7 @@ export function ProjectDetailContent(props: ProjectDetailContentProps) {
         actions={
           <ContentActions
             title={project.name}
-            url={`/projects/${project.slug}`}
+            url={project.url ?? `/projects/${project.slug}`}
             body={project.body}
             externalUrl={project.href}
             placement="hero"

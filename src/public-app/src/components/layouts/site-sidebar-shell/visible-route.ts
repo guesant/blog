@@ -1,5 +1,4 @@
 import type { SiteText } from '@portfolio/data/domain/types';
-import { featureFlags } from '@portfolio/data/config/feature-flags';
 import { routeSegment } from './route-segment';
 
 const routeVisibilityKeys: Record<string, keyof NonNullable<SiteText['visibility']>> = {
@@ -20,10 +19,6 @@ const routeVisibilityKeys: Record<string, keyof NonNullable<SiteText['visibility
 };
 
 export function visibleRoute(route: string, site: SiteText) {
-  if (routeSegment(route) === 'tools') {
-    return featureFlags.tools;
-  }
-
   const visibilityKey = routeVisibilityKeys[routeSegment(route)];
 
   return visibilityKey ? (site.visibility?.[visibilityKey] ?? true) : true;

@@ -2,7 +2,6 @@
 
 namespace App\Content;
 
-use App\Jobs\FetchOpenGraphMetadata;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
@@ -39,34 +38,6 @@ class OpenGraphMetadata
         }
 
         return null;
-    }
-
-    public function queue(string $value): void
-    {
-        if (! config('content.open_graph.enabled')) {
-            return;
-        }
-
-        $url = $this->normalizedUrl($value);
-
-        if ($url === null || ! $this->publicHost((string) parse_url($url, PHP_URL_HOST))) {
-            return;
-        }
-
-        $key = hash('sha256', $url);
-        $store = Cache::store();
-
-        if ($this->cachedEntry($this->cachedEntries($store), $key) !== null) {
-            return;
-        }
-
-        try {
-            $this->rememberPending($store, $key);
-            FetchOpenGraphMetadata::dispatch($url)
-                ->onConnection(config('content.open_graph.queue_connection', 'database'))
-                ->onQueue(config('content.open_graph.queue', 'open-graph'));
-        } catch (Throwable) {
-        }
     }
 
     public function refresh(string $value): void
@@ -116,16 +87,6 @@ class OpenGraphMetadata
         }
 
         return $entry;
-    }
-
-    private function rememberPending($store, string $key): void
-    {
-        $entries = $this->entries($store->get(self::CACHE_KEY));
-        $entries[$key] = [
-            'last_used' => microtime(true),
-            'metadata' => null,
-        ];
-        $this->write($store, $entries);
     }
 
     private function entries(mixed $cache): array

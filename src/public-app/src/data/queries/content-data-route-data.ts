@@ -100,8 +100,6 @@ export type RouteData =
       content: Awaited<ReturnType<typeof getResumePageContent>>;
       pdfUrls: Record<'en' | 'pt-BR', string>;
     }
-  | { kind: 'tools-index' }
-  | { kind: 'tool'; slug: string }
   | { kind: 'snippets'; snippets: Snippet[]; pagination: ContentCollectionMeta }
   | { kind: 'snippet-detail'; snippet: Snippet }
   | { kind: 'technologies'; technologies: Technology[]; pagination: ContentCollectionMeta }

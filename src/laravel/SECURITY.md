@@ -9,11 +9,11 @@
 - Imagens de runtime são referenciadas por digest, nunca por `latest` sem digest.
 - A imagem de produção roda como `www-data`, com `no-new-privileges`, filesystem raiz somente leitura e capacidades Linux removidas.
 - Dados de entrada das ferramentas permanecem no navegador; uploads e telemetria não são requisitos do produto.
-- O entrypoint de produção falha fechado se o SQLite persistente estiver ausente
-  ou vazio; ele não cria um banco silenciosamente. O bootstrap inicial exige
-  `DATABASE_ALLOW_EMPTY_BOOTSTRAP=true` de forma explícita e temporária.
-- Antes de executar migrations em um banco existente, o entrypoint cria um
-  snapshot consistente com `VACUUM INTO` em `storage/app/backups`.
+- A aplicação usa PostgreSQL. O banco de produção é operado pelo CNPG e não faz
+  parte da imagem Laravel.
+- Migrations são executadas pelo fluxo de entrega antes da aplicação receber
+  tráfego. O backup deve ser feito com `just production-db-backup` antes de uma
+  alteração de schema.
 
 ## Artefatos fixados
 
@@ -27,15 +27,8 @@
 
 ## Revisões restantes
 
-- Revisar o acesso ao socket Docker do webhook; ele permanece uma superfície de
-  risco equivalente a acesso privilegiado ao host. A redução futura deve
-  preferir um proxy de socket com allowlist ou um runner de deploy separado.
-- Avaliar restrições de egress da rede do webhook e executar a aplicação de
-  desenvolvimento como usuário não-root quando o bind mount deixar de exigir
-  permissões do host.
-- Configurar o segredo de bootstrap somente durante a primeira implantação e
-  removê-lo imediatamente depois; a ausência do arquivo em implantações
-  seguintes deve interromper o deploy para permitir restauração de backup.
+- O deploy usa imagens publicadas e manifests GitOps. Não há webhook de deploy
+  nem socket Docker exposto pelo runtime Laravel.
 
 O workflow `.github/workflows/quality.yml` executa o gate do repositório,
 que audita as dependências dentro dos containers.

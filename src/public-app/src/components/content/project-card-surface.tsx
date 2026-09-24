@@ -22,7 +22,7 @@ export function ProjectCardSurface(props: ProjectCardSurfaceProps) {
   return (
     <Card
       component={NavLink}
-      href={`/projects/${content.slug}`}
+      href={content.url ?? `/projects/${content.slug}`}
       underline="none"
       color="inherit"
       visualVariant={highlighted ? 'projectCardHighlighted' : 'projectCardPlain'}

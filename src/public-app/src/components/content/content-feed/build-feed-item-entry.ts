@@ -6,7 +6,7 @@ import type { PublicFeedItem } from '@portfolio/data/domain/types';
 
 export function buildFeedItemEntry(item: PublicFeedItem): FeedEntry {
   if (item.reference) {
-    return { ...buildFindingEntry(item.reference), href: item.href };
+    return buildFindingEntry(item.reference);
   }
 
   return {

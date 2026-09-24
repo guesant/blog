@@ -22,7 +22,7 @@ export function TopicoDetailContent(props: TopicoDetailContentProps) {
       title={topic.name}
       references={references}
       pagination={props.pagination}
-      action={`/topics/${topic.slug}`}
+      action={topic.url ?? `/topics/${topic.slug}`}
     />
   );
 }

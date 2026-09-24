@@ -42,7 +42,7 @@ export { OptionSelect, type SelectOption, type SelectOptionChangeEvent } from '.
 
 export { Paper } from './paper';
 
-export { Pagination, type PaginationProps } from './pagination';
+export { Pagination } from './pagination';
 
 export { Stack } from './stack';
 
@@ -60,15 +60,7 @@ export { ArrowForward } from './arrow-forward';
 
 export { BrightnessAuto } from './brightness-auto';
 
-export { ChevronLeft } from './chevron-left';
-
-export { ChevronRight } from './chevron-right';
-
 export { DarkMode } from './dark-mode';
-
-export { FirstPage } from './first-page';
-
-export { LastPage } from './last-page';
 
 export { LightMode } from './light-mode';
 

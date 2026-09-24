@@ -13,6 +13,7 @@ class CheckMaintenanceMode
 {
     private const EXEMPT_PATHS = [
         'api/*',
+        'auth/keycloak/*',
     ];
 
     public function __construct(
@@ -21,7 +22,7 @@ class CheckMaintenanceMode
 
     public function handle(Request $request, Closure $next): Response
     {
-        if ($request->is(self::EXEMPT_PATHS)) {
+        if ($request->is(self::EXEMPT_PATHS) || $request->routeIs('filament.*')) {
             return $next($request);
         }
 

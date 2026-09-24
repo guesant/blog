@@ -113,9 +113,9 @@ trait SyncsTranslations
         ];
     }
 
-    private function simpleRepeater(array $values): array
+    private function simpleRepeater(?array $values): array
     {
-        return collect($values)
+        return collect($values ?? [])
             ->map(fn (mixed $value): array => is_array($value) ? ['value' => $value['value'] ?? ''] : ['value' => $value])
             ->all();
     }

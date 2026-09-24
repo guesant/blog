@@ -69,6 +69,7 @@ export const boxVariants6: Record<string, SxProps<Theme>> = {
   connectionGroup: { display: 'flex', flexWrap: 'wrap', gap: 'var(--site-space-2)' },
   detailHeader: { maxWidth: '52rem' },
   pageHeader: { maxWidth: '46rem', mb: { xs: 7, md: 9 } },
+  contactPageHeader: { maxWidth: '46rem', mb: 'var(--site-space-4)' },
   sourcePreviewListGroup: { display: 'grid', gap: 'var(--site-space-2)' },
   sourcePreviewListMetadata: { display: 'flex', flexWrap: 'wrap', gap: 'var(--site-space-1)' },
   sourcePreviewListItemFallback: {

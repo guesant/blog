@@ -8,7 +8,9 @@ export function RevealedEmailInline(props: RevealedEmailInlineProps) {
   return (
     <Link
       ref={props.ref}
-      href={`mailto:${props.email}`}
+      component="button"
+      type="button"
+      onClick={props.onReveal}
       color={props.color}
       underline={props.underline}
       variant={props.typographyVariant}

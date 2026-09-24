@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslations } from '@/i18n/compat';
 import { Typography } from '../../ui';
 import { CollectionListing } from '../../content/collection-listing';
 import { PageHeader } from '../../content/page-header';
@@ -12,13 +13,19 @@ type FollowPageContentProps = { page: FollowPageCopy };
 export function FollowPageContent(props: FollowPageContentProps) {
   const { page } = props;
 
+  const tNav = useTranslations('Nav');
+
   const entries = page.entries;
 
   const futureEntries = page.futureEntries;
 
   return (
     <>
-      <PageHeader title={page.title} description={page.intro} />
+      <PageHeader
+        title={page.title}
+        description={page.intro}
+        breadcrumbs={[{ label: tNav('follow') }]}
+      />
       <Typography variant="overline" color="text.secondary">
         {page.sectionLabel}
       </Typography>

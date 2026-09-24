@@ -24,7 +24,10 @@ export function ColecaoDetailContent(props: ColecaoDetailContentProps) {
             placement="hero"
           />
         }
-        breadcrumbs={[{ label: tNav('achados'), href: '/findings' }, { label: collection.title }]}
+        breadcrumbs={[
+          { label: tNav('collections'), href: '/collections' },
+          { label: collection.title },
+        ]}
       />
       <CollectionDetailSections collection={collection} tNav={tNav} />
     </>

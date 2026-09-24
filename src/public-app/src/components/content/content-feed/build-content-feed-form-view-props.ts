@@ -11,6 +11,7 @@ export function buildContentFeedFormViewProps(
 
   return {
     copy: props.copy,
+    breadcrumbs: props.breadcrumbs,
     showHeader: props.showHeader ?? true,
     showPagination: buildContentFeedShowPagination({
       showPagination: props.showPagination,

@@ -2,7 +2,6 @@ import type { LinkProps } from '../../ui';
 import type { SiteButtonVariant } from '../../ui';
 import type { ProtectedEmailChallenge } from '@portfolio/data/domain/protected-email';
 import { useTranslations } from '@/i18n/compat';
-import type { Ref } from 'react';
 
 export type RevealState = 'idle' | 'working' | 'revealed' | 'error';
 
@@ -51,6 +50,7 @@ export type RevealTriggerProps = {
 
 export type RevealedEmailProps = {
   email: string;
+  onReveal: () => void;
   label: string;
   variant: RevealVariant;
   visualVariant?: string;
@@ -59,7 +59,7 @@ export type RevealedEmailProps = {
   color?: LinkProps['color'];
   underline?: LinkProps['underline'];
   typographyVariant?: LinkProps['variant'];
-  ref?: Ref<HTMLAnchorElement>;
+  ref?: (element: HTMLElement | null) => void;
 };
 
 export type RevealDialogProps = {

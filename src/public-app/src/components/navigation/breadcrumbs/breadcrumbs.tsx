@@ -17,7 +17,7 @@ export function Breadcrumbs(props: BreadcrumbsProps) {
       <Button
         component={LocaleLink}
         href="/"
-        siteVariant="breadcrumb"
+        siteVariant="breadcrumb-home"
         startIcon={<Icon name="home" size={15} />}
       >
         {t('home')}

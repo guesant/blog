@@ -8,13 +8,12 @@ export function RevealedEmailSidebar(props: RevealedEmailSidebarProps) {
   return (
     <Button
       ref={props.ref}
-      component="a"
-      href={`mailto:${props.email}`}
       variant="outlined"
       siteVariant={props.buttonSiteVariant ?? 'sidebar'}
       visualVariant={props.visualVariant}
       size="small"
       startIcon={<Icon name="mail" size={14} />}
+      onClick={props.onReveal}
     >
       {props.showAddress ? props.email : props.label}
     </Button>

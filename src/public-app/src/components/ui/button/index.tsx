@@ -15,13 +15,18 @@ declare module '@mui/material/Button' {
 
 export type { ButtonProps } from '@mui/material/Button';
 
+const siteVariantOverrides: Partial<Record<SiteButtonVariant, MuiButtonProps['variant']>> = {
+  breadcrumb: 'text',
+  'breadcrumb-home': 'text',
+};
+
 const ButtonImplementation = forwardRef<HTMLButtonElement, MuiButtonProps>(
   function Button(props, ref) {
     const { children, siteVariant, visualVariant, sx, variant, ...muiProps } = props;
 
     const normalizedSiteVariant = (siteVariant ?? 'default') as SiteButtonVariant;
 
-    const effectiveVariant = siteVariant === 'breadcrumb' ? 'text' : variant;
+    const effectiveVariant = siteVariantOverrides[siteVariant as SiteButtonVariant] ?? variant;
 
     const composedSx = [
       siteButtonVariants[normalizedSiteVariant],

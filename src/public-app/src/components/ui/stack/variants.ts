@@ -34,21 +34,6 @@ export const stackVariants: Record<string, SxProps<Theme>> = {
     letterSpacing: 'var(--site-letter-label)',
     textTransform: 'uppercase',
   },
-  listingPagination: {
-    mt: 'var(--site-space-6)',
-    gap: 0,
-    justifyContent: 'center',
-    alignItems: { xs: 'stretch', sm: 'center' },
-    width: { xs: '100%', sm: 'auto' },
-    maxWidth: '100%',
-    '& > .MuiButton-root': {
-      width: { xs: '100%', sm: 'auto' },
-    },
-    '& > .MuiButton-root + .MuiButton-root': {
-      marginLeft: { xs: 0, sm: 'var(--site-overlap)' },
-      marginTop: { xs: 'var(--site-overlap)', sm: 0 },
-    },
-  },
   listingList: { gap: 'var(--site-space-4)' },
   progressiveFooter: {
     alignItems: 'center',

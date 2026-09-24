@@ -15,7 +15,7 @@ export function ProtectedEmail(props: ProtectedEmailProps) {
     return null;
   }
 
-  if (controller.state === 'revealed' && !controller.open) {
+  if (controller.state === 'revealed') {
     return <ProtectedEmailRevealed props={props} controller={controller} />;
   }
 

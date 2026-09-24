@@ -13,7 +13,7 @@ export function HomeGallerySectionAction(props: HomeGallerySectionActionProps) {
       sx={{
         display: 'flex',
         justifyContent: 'center',
-        pt: 'var(--site-space-3)',
+        py: 'var(--site-space-6)',
         px: 'var(--site-action-px)',
       }}
     >

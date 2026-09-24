@@ -13,7 +13,7 @@ export function HomeGallerySectionHeader(props: HomeGallerySectionHeaderProps) {
         alignItems: 'center',
         justifyContent: 'center',
         gap: 2,
-        mb: 3,
+        mb: 'var(--site-space-6)',
         textAlign: 'center',
       }}
     >

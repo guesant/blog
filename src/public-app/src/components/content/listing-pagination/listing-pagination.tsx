@@ -1,35 +1,42 @@
 'use client';
 
-import { Stack } from '../../ui';
-import { paginationItems, type ListingPaginationProps } from './types';
-import { PaginationPageButton } from './pagination-page-button';
-import { ListingPaginationStartControls } from './listing-pagination-start-controls';
-import { ListingPaginationEndControls } from './listing-pagination-end-controls';
+import { Pagination } from '../../ui';
+import { listingPaginationAriaLabel } from './listing-pagination-aria-label';
+import type { ListingPaginationProps } from './types';
+import { goToListingPage } from './go-to-listing-page';
 
 export function ListingPagination(props: ListingPaginationProps) {
-  const { page, pageCount, ariaLabel } = props;
-
-  if (pageCount <= 1) {
+  if (props.pageCount <= 1) {
     return null;
   }
 
   return (
-    <Stack
-      component="nav"
-      aria-label={ariaLabel}
-      direction={{ xs: 'column', sm: 'row' }}
+    <Pagination
+      count={props.pageCount}
+      page={props.page}
+      aria-label={props.ariaLabel}
       visualVariant="listingPagination"
-    >
-      <ListingPaginationStartControls pagination={props} />
-      {paginationItems(page, pageCount).map((value, index) => (
-        <PaginationPageButton
-          key={value === 'ellipsis' ? `ellipsis-${index}` : value}
-          value={value}
-          page={page}
-          goToPage={props.onPageChange}
-        />
-      ))}
-      <ListingPaginationEndControls pagination={props} />
-    </Stack>
+      variant="outlined"
+      shape="rounded"
+      size="small"
+      showFirstButton
+      showLastButton
+      boundaryCount={2}
+      siblingCount={1}
+      onChange={(_event, nextPage) =>
+        goToListingPage({ ...props, nextPage: nextPage ?? props.page })
+      }
+      getItemAriaLabel={(type, page) =>
+        listingPaginationAriaLabel({
+          type,
+          page: page ?? props.page,
+          ariaLabel: props.ariaLabel,
+          firstLabel: props.firstLabel,
+          previousLabel: props.previousLabel,
+          nextLabel: props.nextLabel,
+          lastLabel: props.lastLabel,
+        })
+      }
+    />
   );
 }

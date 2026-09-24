@@ -1,27 +1,28 @@
 'use client';
 
-import { Box, Typography } from '../../ui';
 import type { FeedPageCopy } from './types';
 import { ConditionalContent } from '../../primitives/conditional-content';
+import type { BreadcrumbItem } from '../../navigation/breadcrumbs';
+import { PageHeader } from '../page-header';
 
-type ContentFeedHeaderProps = { copy: FeedPageCopy; visible: boolean };
+type ContentFeedHeaderProps = {
+  copy: FeedPageCopy;
+  breadcrumbs?: BreadcrumbItem[];
+  visible: boolean;
+};
 
 export function ContentFeedHeader(props: ContentFeedHeaderProps) {
   return (
     <ConditionalContent
       condition={props.visible}
       content={
-        <Box component="header" visualVariant="contentFeedHeader">
-          <Typography variant="h1">{props.copy.title}</Typography>
-          <ConditionalContent
-            condition={Boolean(props.copy.description)}
-            content={
-              <Typography color="text.secondary" visualVariant="contentFeedDescription">
-                {props.copy.description}
-              </Typography>
-            }
-          />
-        </Box>
+        <PageHeader
+          title={props.copy.title}
+          description={props.copy.description}
+          breadcrumbs={props.breadcrumbs}
+          visualVariant="contentFeedHeader"
+          descriptionVisualVariant="contentFeedDescription"
+        />
       }
     />
   );

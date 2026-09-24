@@ -42,6 +42,8 @@ export { OptionSelect, type SelectOption, type SelectOptionChangeEvent } from '.
 
 export { Paper } from './paper';
 
+export { Pagination, type PaginationProps } from './pagination';
+
 export { Stack } from './stack';
 
 export { TextField } from './text-field';

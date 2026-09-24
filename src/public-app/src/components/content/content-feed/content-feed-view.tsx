@@ -8,10 +8,12 @@ import { ContentFeedDisplayControls } from './content-feed-display-controls';
 import { ContentFeedHeader } from './content-feed-header';
 import { ContentFeedListing } from './content-feed-listing';
 import type { FeedSelectDefinition } from './feed-select.types';
-import type { ContentFeedDisplayMode, FeedEntry, FeedQuickFilter } from './types';
+import type { ContentFeedDisplayMode, FeedEntry, FeedPageCopy, FeedQuickFilter } from './types';
+import type { BreadcrumbItem } from '../../navigation/breadcrumbs';
 
 export type ContentFeedViewProps = {
-  copy: { title: string; description: string };
+  copy: FeedPageCopy;
+  breadcrumbs?: BreadcrumbItem[];
   showHeader: boolean;
   showPagination: boolean;
   selects: FeedSelectDefinition[];
@@ -59,7 +61,7 @@ export type ContentFeedViewProps = {
 export function ContentFeedView(props: ContentFeedViewProps) {
   return (
     <Box id="content-feed" component="section" visualVariant="feedSection">
-      <ContentFeedHeader copy={props.copy} visible={props.showHeader} />
+      <ContentFeedHeader {...props} visible={props.showHeader} />
       <ContentFeedFilters
         selects={props.selects}
         pendingSearch={props.pendingSearch}

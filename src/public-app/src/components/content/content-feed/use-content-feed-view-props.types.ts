@@ -12,6 +12,7 @@ export type UseContentFeedViewPropsInput = {
 export type ContentFeedFormViewProps = Pick<
   ContentFeedViewProps,
   | 'copy'
+  | 'breadcrumbs'
   | 'showHeader'
   | 'showPagination'
   | 'selects'

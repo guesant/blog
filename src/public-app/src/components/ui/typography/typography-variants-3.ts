@@ -1,15 +1,18 @@
 import type { SxProps, Theme } from '@mui/material/styles';
 
+const justifiedText = {
+  textAlign: 'justify',
+  hyphens: 'auto',
+};
+
 const homeReadingText = {
   display: 'block',
   width: '100%',
   maxWidth: '100%',
   marginLeft: 'auto',
   marginRight: 'auto',
-  px: 'var(--site-inset-page)',
   boxSizing: 'border-box',
-  textAlign: 'justify',
-  hyphens: 'auto',
+  ...justifiedText,
 };
 
 export const typographyVariants3: Record<string, SxProps<Theme>> = {
@@ -93,7 +96,12 @@ export const typographyVariants3: Record<string, SxProps<Theme>> = {
   detailHeader4: { mt: 2, fontSize: '.8125rem' },
   pageHeader: { display: 'block', mb: 1.5 },
   pageHeader2: { fontSize: 'var(--site-text-3xl)' },
-  pageHeader3: { maxWidth: '60ch', mt: 2, fontSize: '1rem' },
+  pageHeader3: {
+    maxWidth: '60ch',
+    mt: 2,
+    fontSize: '1rem',
+    ...justifiedText,
+  },
   sourcePreviewListMetadataItem: {
     minWidth: 0,
     maxWidth: '100%',

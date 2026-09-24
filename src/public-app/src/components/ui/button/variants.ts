@@ -31,7 +31,6 @@ export const buttonVariants: Record<string, SxProps<Theme>> = {
     textTransform: 'none',
     '&:hover': { backgroundColor: 'transparent', textDecoration: 'none' },
   },
-  paginationFirst: { marginLeft: 0 },
   sourcePreviewOpen: { justifySelf: 'start' },
   topicExplore: { whiteSpace: 'nowrap', textTransform: 'none' },
   fullWidth: { width: '100%' },

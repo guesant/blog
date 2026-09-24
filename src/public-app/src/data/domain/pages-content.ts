@@ -1,22 +1,34 @@
-import type { CaseStudy, Experiment, Project, TechnologyBadge } from './content';
+import type { CaseStudy, TechnologyBadge } from './content';
 import type { WithSeo } from './content';
 import type { Profile, ResumeContent } from './resume';
 import type { SiteText } from './site';
 import type { HomePageCopy, PageIntroduction, ResumePageCopy } from './pages-copy';
 import type { ContentCollectionMeta } from '../api/public-site-source-support';
 
+export type HomeGalleryEntryKind = 'cases' | 'projects' | 'writing' | 'finding' | 'collection';
+
+export type HomeGalleryEntry = Record<string, unknown> & {
+  kind: HomeGalleryEntryKind;
+  slug: string;
+  title: string;
+  description: string;
+  href: string;
+};
+
+export type HomeGallery = {
+  highlights: HomeGalleryEntry[];
+  recent: HomeGalleryEntry[];
+  popular: HomeGalleryEntry[];
+  collections: HomeGalleryEntry[];
+  projects: HomeGalleryEntry[];
+};
+
 export type HomePageContent = {
-  cases: CaseStudy[];
-  casesPagination: ContentCollectionMeta;
-  projects: Project[];
-  projectsPagination: ContentCollectionMeta;
-  experiments: Experiment[];
-  experimentsCount: number;
-  experimentsPagination: ContentCollectionMeta;
   profile: Profile;
   page: HomePageCopy;
   site: SiteText;
   recurringTechnologies: TechnologyBadge[];
+  gallery: HomeGallery;
 };
 
 export type ResumePageContent = {

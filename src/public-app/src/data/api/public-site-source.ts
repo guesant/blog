@@ -8,9 +8,9 @@ export { fetchFindingList } from './public-site-source-fetch-finding-list';
 
 export { getContentCollectionPage } from './public-site-source-get-content-collection';
 
-export { getContentDocument } from './public-site-source-get-content-document';
+export { getPublicHomeGallery } from './public-site-source-get-home-gallery';
 
-export { getFeaturedContent } from './public-site-source-get-featured-content';
+export { getContentDocument } from './public-site-source-get-content-document';
 
 export { getSelectedResumeCases } from './public-site-source-get-selected-resume-cases';
 

@@ -3,8 +3,8 @@
 import { type DefaultError, type InfiniteData, infiniteQueryOptions, queryOptions, type UseMutationOptions } from '@tanstack/react-query';
 
 import { client } from '../client.gen';
-import { findingApiIndex, findingApiShow, type Options, publicSiteApiChrome, publicSiteApiCollection, publicSiteApiDocument, publicSiteApiPage, publicSiteApiProtectedEmailChallenge, publicSiteApiResumeData, publicSiteApiResumePdf, snippetDownload } from '../sdk.gen';
-import type { FindingApiIndexData, FindingApiIndexError, FindingApiIndexResponse, FindingApiShowData, FindingApiShowError, FindingApiShowResponse, PublicSiteApiChromeData, PublicSiteApiChromeError, PublicSiteApiChromeResponse, PublicSiteApiCollectionData, PublicSiteApiCollectionError, PublicSiteApiCollectionResponse, PublicSiteApiDocumentData, PublicSiteApiDocumentError, PublicSiteApiDocumentResponse, PublicSiteApiPageData, PublicSiteApiPageError, PublicSiteApiPageResponse, PublicSiteApiProtectedEmailChallengeData, PublicSiteApiProtectedEmailChallengeError, PublicSiteApiProtectedEmailChallengeResponse, PublicSiteApiResumeDataData, PublicSiteApiResumeDataResponse, PublicSiteApiResumePdfData, PublicSiteApiResumePdfError, PublicSiteApiResumePdfResponse, SnippetDownloadData, SnippetDownloadError, SnippetDownloadResponse } from '../types.gen';
+import { findingApiIndex, findingApiShow, type Options, publicSiteApiChrome, publicSiteApiCollection, publicSiteApiDocument, publicSiteApiHomeGallery, publicSiteApiPage, publicSiteApiProtectedEmailChallenge, publicSiteApiResumeData, publicSiteApiResumePdf, snippetDownload } from '../sdk.gen';
+import type { FindingApiIndexData, FindingApiIndexError, FindingApiIndexResponse, FindingApiShowData, FindingApiShowError, FindingApiShowResponse, PublicSiteApiChromeData, PublicSiteApiChromeError, PublicSiteApiChromeResponse, PublicSiteApiCollectionData, PublicSiteApiCollectionError, PublicSiteApiCollectionResponse, PublicSiteApiDocumentData, PublicSiteApiDocumentError, PublicSiteApiDocumentResponse, PublicSiteApiHomeGalleryData, PublicSiteApiHomeGalleryError, PublicSiteApiHomeGalleryResponse, PublicSiteApiPageData, PublicSiteApiPageError, PublicSiteApiPageResponse, PublicSiteApiProtectedEmailChallengeData, PublicSiteApiProtectedEmailChallengeError, PublicSiteApiProtectedEmailChallengeResponse, PublicSiteApiResumeDataData, PublicSiteApiResumeDataResponse, PublicSiteApiResumePdfData, PublicSiteApiResumePdfError, PublicSiteApiResumePdfResponse, SnippetDownloadData, SnippetDownloadError, SnippetDownloadResponse } from '../types.gen';
 
 export type QueryKey<TOptions extends Options> = [
     Pick<TOptions, 'baseUrl' | 'body' | 'headers' | 'path' | 'query'> & {
@@ -82,6 +82,21 @@ export const publicSiteApiChromeOptions = (options?: Options<PublicSiteApiChrome
         return data;
     },
     queryKey: publicSiteApiChromeQueryKey(options)
+});
+
+export const publicSiteApiHomeGalleryQueryKey = (options?: Options<PublicSiteApiHomeGalleryData>) => createQueryKey('publicSiteApiHomeGallery', options);
+
+export const publicSiteApiHomeGalleryOptions = (options?: Options<PublicSiteApiHomeGalleryData>) => queryOptions<PublicSiteApiHomeGalleryResponse, PublicSiteApiHomeGalleryError, PublicSiteApiHomeGalleryResponse, ReturnType<typeof publicSiteApiHomeGalleryQueryKey>>({
+    queryFn: async ({ queryKey, signal }) => {
+        const { data } = await publicSiteApiHomeGallery({
+            ...options,
+            ...queryKey[0],
+            signal,
+            throwOnError: true
+        });
+        return data;
+    },
+    queryKey: publicSiteApiHomeGalleryQueryKey(options)
 });
 
 export const publicSiteApiPageQueryKey = (options: Options<PublicSiteApiPageData>) => createQueryKey('publicSiteApiPage', options);

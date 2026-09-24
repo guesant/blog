@@ -2,8 +2,7 @@
 
 import type { HomePageContent, PublicFeedItem, SiteText } from '@portfolio/data/domain/types';
 import { HomeFeedAndContact } from './home-feed-and-contact';
-import { HomeExperienceOptionalSection } from './home-experience-optional-section';
-import { HomeFeaturedSections } from './home-featured-sections';
+import { HomeEditorialGallery } from './home-editorial-gallery';
 import type { Translator } from '@/i18n/compat-support';
 import type { ContentCollectionMeta } from '@portfolio/data/api/public-site-source-support';
 
@@ -23,8 +22,7 @@ type HomeSectionsAfterHeroProps = {
 export function HomeSectionsAfterHero(props: HomeSectionsAfterHeroProps) {
   return (
     <>
-      <HomeFeaturedSections content={props.content} t={props.t} />
-      <HomeExperienceOptionalSection content={props.content} t={props.t} />
+      <HomeEditorialGallery gallery={props.content.gallery} t={props.t} />
       <HomeFeedAndContact
         content={props.content}
         feedItems={props.feedItems}

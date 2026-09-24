@@ -217,6 +217,61 @@ export type PublicSiteApiChromeResponses = {
 
 export type PublicSiteApiChromeResponse = PublicSiteApiChromeResponses[keyof PublicSiteApiChromeResponses];
 
+export type PublicSiteApiHomeGalleryData = {
+    body?: never;
+    path?: never;
+    query?: {
+        locale?: string;
+    };
+    url: '/site/home-gallery';
+};
+
+export type PublicSiteApiHomeGalleryErrors = {
+    /**
+     * The service is temporarily unavailable.
+     */
+    503: {
+        error: {
+            code: string;
+            message: string;
+            status: number;
+            details: string;
+        };
+    };
+};
+
+export type PublicSiteApiHomeGalleryError = PublicSiteApiHomeGalleryErrors[keyof PublicSiteApiHomeGalleryErrors];
+
+export type PublicSiteApiHomeGalleryResponses = {
+    200: {
+        highlights: Array<{
+            kind: string;
+            item: {
+                [key: string]: unknown;
+            };
+        }>;
+        recent: {
+            feed: Array<{
+                [key: string]: unknown;
+            }>;
+            projects: Array<{
+                [key: string]: unknown;
+            }>;
+        };
+        popular: Array<{
+            [key: string]: unknown;
+        }>;
+        collections: Array<{
+            [key: string]: unknown;
+        }>;
+        projects: Array<{
+            [key: string]: unknown;
+        }>;
+    };
+};
+
+export type PublicSiteApiHomeGalleryResponse = PublicSiteApiHomeGalleryResponses[keyof PublicSiteApiHomeGalleryResponses];
+
 export type PublicSiteApiPageData = {
     body?: never;
     path: {

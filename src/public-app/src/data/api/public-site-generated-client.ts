@@ -6,6 +6,8 @@ export { publicSiteApiChrome as getSiteChrome } from './generated/sdk.gen';
 
 export { publicSiteApiPage as getSitePage } from './generated/sdk.gen';
 
+export { publicSiteApiHomeGallery as getHomeGallery } from './generated/sdk.gen';
+
 export { publicSiteApiResumeData as getSiteResume } from './generated/sdk.gen';
 
 export { publicSiteApiProtectedEmailChallengeMutation as createProtectedEmailChallengeMutation } from './generated/@tanstack/react-query.gen';

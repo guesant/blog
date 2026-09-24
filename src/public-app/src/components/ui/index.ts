@@ -80,8 +80,6 @@ export { MotionDiv } from './motion-div';
 
 export { TechnicalGridSurface } from './technical-grid';
 
-export { TechnologyMarqueeSurface } from './technology-marquee';
-
 export { NoScript } from './no-script';
 
 export { RichTextElement } from './rich-text-element';

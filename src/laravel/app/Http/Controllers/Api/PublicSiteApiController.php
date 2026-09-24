@@ -6,6 +6,8 @@ use App\Application\PublicSite\GetPublicContent;
 use App\Application\PublicSite\GetPublicContentHandler;
 use App\Application\PublicSite\GetPublicEmailChallenge;
 use App\Application\PublicSite\GetPublicEmailChallengeHandler;
+use App\Application\PublicSite\GetPublicHomeGallery;
+use App\Application\PublicSite\GetPublicHomeGalleryHandler;
 use App\Application\PublicSite\GetPublicPage;
 use App\Application\PublicSite\GetPublicPageHandler;
 use App\Application\PublicSite\GetPublicResume;
@@ -25,6 +27,7 @@ use App\Http\Responses\PublicContentDetailResponseDto;
 use App\Http\Responses\PublicContentListResponseDto;
 use App\Http\Responses\PublicContentResponseFactory;
 use App\Http\Responses\PublicEmailChallengeResponseDto;
+use App\Http\Responses\PublicHomeGalleryResponseDto;
 use App\Http\Responses\PublicListMetaDto;
 use App\Http\Responses\PublicPageResponseDto;
 use App\Http\Responses\PublicResumeResponseFactory;
@@ -307,6 +310,30 @@ class PublicSiteApiController extends Controller
 
         return response()->json(PublicPageResponseDto::fromResult($result)->toArray())
             ->header('Cache-Control', 'public, max-age=60, stale-while-revalidate=300');
+    }
+
+    #[ScrambleResponse(200, type: 'array{highlights: list<array{kind: string, item: array<string, mixed>}>, recent: array{feed: list<array<string, mixed>>, projects: list<array<string, mixed>>}, popular: list<array<string, mixed>>, collections: list<array<string, mixed>>, projects: list<array<string, mixed>>}')]
+    #[ScrambleResponse(503, 'The service is temporarily unavailable.', type: 'array{error: array{code: string, message: string, status: int, details: string}}')]
+    public function homeGallery(
+        Request $request,
+        GetPublicHomeGalleryHandler $handler,
+        IsPublicSiteInMaintenanceHandler $maintenance,
+        PublicContentResponseFactory $presenter,
+    ): JsonResponse {
+        if ($maintenance->handle(new IsPublicSiteInMaintenance)) {
+            return ApiErrorResponse::make(
+                ApiErrorCode::Maintenance,
+                503,
+                'The service is temporarily unavailable.',
+            )->header('Retry-After', (string) 3600);
+        }
+
+        $locale = Locale::normalize($request->query('locale'));
+        $result = $handler->handle(new GetPublicHomeGallery($locale));
+
+        return response()->json(
+            PublicHomeGalleryResponseDto::fromResult($result, $presenter, $locale)->toArray(),
+        )->header('Cache-Control', 'public, max-age=60, stale-while-revalidate=300');
     }
 
     /**

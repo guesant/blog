@@ -243,6 +243,21 @@ class PublicSiteApiTest extends TestCase
             ->assertJsonCount(1, 'data');
     }
 
+    public function test_home_gallery_returns_server_ordered_sections(): void
+    {
+        $response = $this->getJson('/api/v1/site/home-gallery?locale=en');
+
+        $response
+            ->assertOk()
+            ->assertJsonStructure([
+                'highlights',
+                'recent' => ['feed', 'projects'],
+                'popular',
+                'collections',
+                'projects',
+            ]);
+    }
+
     public function test_collection_detail_returns_a_paginated_resource_page(): void
     {
         $collection = ReferenceCollection::factory()->create([

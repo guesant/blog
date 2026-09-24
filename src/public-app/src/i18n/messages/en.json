@@ -121,6 +121,23 @@
     "data": "Data"
   },
   "Home": {
+    "highlights": "Highlights",
+    "recent": "Recent",
+    "popular": "Popular",
+    "collections": "Collections",
+    "projects": "Projects and work",
+    "viewHighlights": "Explore highlights",
+    "viewRecent": "View recent",
+    "viewPopular": "View popular findings",
+    "viewCollections": "Explore collections",
+    "viewProjects": "View projects",
+    "kind": {
+      "cases": "Case study",
+      "projects": "Project",
+      "writing": "Writing",
+      "finding": "Finding",
+      "collection": "Collection"
+    },
     "selectedWork": "Selected work",
     "aboutMe": "About me",
     "workAction": "All case studies",

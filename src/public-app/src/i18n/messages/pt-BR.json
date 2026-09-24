@@ -121,6 +121,23 @@
     "data": "Dados"
   },
   "Home": {
+    "highlights": "Destaques",
+    "recent": "Recentes",
+    "popular": "Populares",
+    "collections": "Coleções",
+    "projects": "Projetos e trabalhos",
+    "viewHighlights": "Explorar destaques",
+    "viewRecent": "Ver recentes",
+    "viewPopular": "Ver achados populares",
+    "viewCollections": "Explorar coleções",
+    "viewProjects": "Ver projetos",
+    "kind": {
+      "cases": "Projeto profissional",
+      "projects": "Projeto",
+      "writing": "Escrito",
+      "finding": "Achado",
+      "collection": "Coleção"
+    },
     "selectedWork": "Trabalhos selecionados",
     "aboutMe": "Sobre mim",
     "workAction": "Todos os projetos profissionais",

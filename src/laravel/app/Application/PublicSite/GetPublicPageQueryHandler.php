@@ -18,7 +18,9 @@ final class GetPublicPageQueryHandler
             return null;
         }
 
-        $fields = $page->translation($query->locale)?->fields ?? [];
+        $translation = $page->translation($query->locale);
+        $fields = $translation?->fields ?? [];
+        $fields['seo'] = $translation?->seo;
         if ($page->updated_at) {
             $fields['updated_at'] = $page->updated_at->format('Y-m-d H:i:s');
         }

@@ -11,6 +11,8 @@ use App\Listeners\InvalidatePublicSiteChrome;
 use App\Models\CaseStudy;
 use App\Models\CaseStudyRevisionTranslation;
 use App\Models\Page;
+use App\Models\Profile;
+use App\Models\ProfileRevisionTranslation;
 use App\Models\ReferenceCollection;
 use App\Models\ReferenceCollectionRevisionTranslation;
 use App\Models\Resource;
@@ -58,15 +60,44 @@ class PublicSiteApiTest extends TestCase
             ->assertHeader('X-Public-Site-Cache', 'hit');
     }
 
+    public function test_site_chrome_keeps_profile_identity_when_revision_is_hidden(): void
+    {
+        Cache::flush();
+        $profile = Profile::factory()->create(['name' => 'Gabriel R. Antunes']);
+        ProfileRevisionTranslation::factory()->create([
+            'profile_id' => $profile->id,
+            'locale' => 'en',
+        ]);
+        $profile->refresh()->currentRevision()->update(['hidden' => true]);
+
+        $response = $this->getJson('/api/v1/site/chrome?locale=en')
+            ->assertOk()
+            ->assertJsonPath('profile.name', 'Gabriel R. Antunes')
+            ->assertJsonPath('visibility.about', false);
+    }
+
     public function test_home_page_returns_server_computed_recurring_technologies(): void
     {
         $page = Page::factory()->create(['slug' => 'home']);
         app(EditorialRevisionPublisher::class)->publish($page, [
-            'en' => ['title' => 'Home'],
+            'en' => [
+                'title' => 'Home',
+                'description' => 'The home page.',
+                'seo' => [
+                    'title' => 'Home SEO',
+                    'description' => 'The SEO description.',
+                    'canonical' => 'https://example.com/home',
+                    'keywords' => ['home'],
+                ],
+            ],
         ]);
 
         $this->getJson('/api/v1/site/pages/home?locale=en')
             ->assertOk()
+            ->assertJsonPath('title', 'Home')
+            ->assertJsonPath('description', 'The home page.')
+            ->assertJsonPath('seo.title', 'Home SEO')
+            ->assertJsonPath('seo.description', 'The SEO description.')
             ->assertJsonPath('recurringTechnologies', []);
     }
 

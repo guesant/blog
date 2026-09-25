@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Cache;
 
 final class PublicSiteChromeCache
 {
-    public const VERSION = 'v1';
+    public const VERSION = 'v2';
 
     public const TTL_MINUTES = 5;
 

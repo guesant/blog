@@ -51,6 +51,8 @@ class PortfolioPageSeeder extends Seeder
     {
         return [
             'en' => [
+                'title' => 'Portfolio',
+                'description' => 'A curated view of selected work and independent projects.',
                 'heroIdentity' => 'software engineer',
                 'heroExperience' => 'building products end to end, from architecture to interface.',
                 'heroCurrentFocus' => 'currently focused on turning ambiguous problems into shipped software.',
@@ -64,6 +66,8 @@ class PortfolioPageSeeder extends Seeder
                 'experimentsSummary' => 'plus {count} experiments living at the projects page.',
             ],
             'pt-BR' => [
+                'title' => 'Portfólio',
+                'description' => 'Uma visão curada de trabalhos selecionados e projetos independentes.',
                 'heroIdentity' => 'engenheiro de software',
                 'heroExperience' => 'construindo produtos de ponta a ponta, da arquitetura à interface.',
                 'heroCurrentFocus' => 'focado em transformar problemas ambíguos em software entregue.',

@@ -25,7 +25,6 @@
   --site-gap-stack: var(--site-space-4);
   --site-gap-section: var(--site-space-6);
   --site-sidebar-gap: var(--site-space-4);
-  --site-sidebar-gap-half: calc(var(--site-sidebar-gap) / 2);
   --site-inset-control: var(--site-space-2) var(--site-space-3);
   --site-inset-card: var(--site-space-4);
   --site-inset-page: var(--site-space-6);
@@ -128,6 +127,7 @@
   --site-tile-min-w: 12rem;
   --site-feed-accent-w: 0.25rem;
   --site-tile-min-h: 5rem;
+  --site-source-preview-mobile-min-h: 8rem;
 
   --site-state-hover: 8%;
   --site-state-focus: 12%;

@@ -7,26 +7,25 @@ use Illuminate\Support\Str;
 
 final class PublicSiteProfileReader
 {
-    public function read(string $locale): ?array
+    public function read(string $locale): PublicSiteProfileReadResult
     {
         $profile = DB::table('profiles')
-            ->select(['id', 'name', 'birth_date', 'current_revision_id'])
-            ->where(function ($query): void {
-                $query
-                    ->whereNull('current_revision_id')
-                    ->orWhereExists(function ($revisionQuery): void {
-                        $revisionQuery->selectRaw('1')
-                            ->from('profile_revisions')
-                            ->whereColumn('profile_revisions.id', 'profiles.current_revision_id')
-                            ->where(fn ($visibility) => $visibility
-                                ->where('profile_revisions.hidden', false)
-                                ->orWhereNull('profile_revisions.hidden'));
-                    });
-            })
+            ->leftJoin('profile_revisions', 'profile_revisions.id', '=', 'profiles.current_revision_id')
+            ->select([
+                'profiles.id',
+                'profiles.name',
+                'profiles.birth_date',
+                'profiles.current_revision_id',
+                'profile_revisions.hidden as revision_hidden',
+            ])
             ->first();
 
-        if ($profile === null || $profile->current_revision_id === null) {
-            return $profile === null ? null : [
+        if ($profile === null) {
+            return new PublicSiteProfileReadResult(null, false);
+        }
+
+        if ($profile->current_revision_id === null || (bool) $profile->revision_hidden) {
+            return new PublicSiteProfileReadResult([
                 'name' => $profile->name,
                 'title' => null,
                 'location' => null,
@@ -37,12 +36,12 @@ final class PublicSiteProfileReader
                 'interests' => null,
                 'learning' => null,
                 'personal_interests' => [],
-            ];
+            ], false);
         }
 
         $translation = $this->translation($profile->current_revision_id, $locale);
 
-        return [
+        return new PublicSiteProfileReadResult([
             'name' => $profile->name,
             'title' => $translation?->title,
             'location' => $translation?->location,
@@ -58,7 +57,7 @@ final class PublicSiteProfileReader
             'interests' => $translation?->interests,
             'learning' => $translation?->learning,
             'personal_interests' => $this->values($translation?->id),
-        ];
+        ], true);
     }
 
     private function translation(?int $revisionId, string $locale): ?object

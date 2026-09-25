@@ -16,10 +16,7 @@ export function PageHeader(props: PageHeaderProps) {
       </Typography>
       {actions}
       <ConditionalContent condition={Boolean(description)}>
-        <Typography
-          color="text.secondary"
-          visualVariant={props.descriptionVisualVariant ?? 'pageHeader3'}
-        >
+        <Typography color="text.secondary" visualVariant="pageHeader3">
           {description}
         </Typography>
       </ConditionalContent>

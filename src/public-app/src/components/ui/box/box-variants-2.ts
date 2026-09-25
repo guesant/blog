@@ -11,14 +11,14 @@ const pageLayout: SxProps<Theme> = {
   boxSizing: 'border-box',
   backgroundColor: 'var(--grid-background)',
   flexDirection: 'column',
-  gap: 'var(--site-space-6)',
-  pt: 'calc(var(--site-space-2) * 9) !important',
+  gap: 'var(--site-space-3)',
+  pt: 'var(--site-space-3) !important',
   pb: 'var(--site-space-6) !important',
 };
 
 export const boxVariants2: Record<string, SxProps<Theme>> = {
   pageLayout,
-  aboutPageLayout: { ...pageLayout, gap: 'var(--site-space-2)' },
+  aboutPageLayout: pageLayout,
   maintenanceFrame: {
     minHeight: '100svh',
     display: 'grid',

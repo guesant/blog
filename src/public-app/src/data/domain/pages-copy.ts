@@ -7,6 +7,8 @@ export type PageIntroduction = WithSeo & {
 };
 
 export type HomePageCopy = WithSeo & {
+  title: string;
+  description: string;
   recurringTechnologies?: TechnologyBadge[];
   featuredCases: ContentReference[];
   featuredProjects: ContentReference[];

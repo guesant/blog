@@ -14,7 +14,7 @@ const sourcePreviewMedia = {
   display: 'grid',
   placeItems: 'center',
   height: '100%',
-  minHeight: { xs: 'var(--site-space-12)', sm: 'var(--site-tile-min-h)' },
+  minHeight: { xs: 'var(--site-source-preview-mobile-min-h)', sm: 'var(--site-tile-min-h)' },
   overflow: 'hidden',
   backgroundColor: 'var(--site-accent-bg)',
 };

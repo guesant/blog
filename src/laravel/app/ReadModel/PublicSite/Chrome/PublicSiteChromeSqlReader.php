@@ -18,7 +18,8 @@ final class PublicSiteChromeSqlReader implements PublicSiteChromeReader
     public function read(GetPublicSiteChromeQuery $query): GetPublicSiteChromeQueryResult
     {
         $settings = $this->settings->read($query->locale);
-        $profile = $this->profile->read($query->locale);
+        $profileRead = $this->profile->read($query->locale);
+        $profile = $profileRead->profile;
         $profileName = $profile['name'] ?? null;
         $copyright = $this->copyright($settings['copyright_template'], $profileName, $settings['short_name']);
 
@@ -45,7 +46,7 @@ final class PublicSiteChromeSqlReader implements PublicSiteChromeReader
             ],
             visibility: $this->availability->read(
                 $query->locale,
-                $profile !== null,
+                $profileRead->isPublic,
                 $settings['contact_available'],
             ),
         );

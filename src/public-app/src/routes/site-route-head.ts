@@ -1,6 +1,4 @@
 import type { RouteData } from '../data/queries';
-import { getMessages } from '../i18n/messages';
-import { lookup } from '../i18n/compat-lookup';
 import { metadataForRoute } from './_site/splat-metadata-for-route';
 import { routeContext } from './site-route-context';
 
@@ -10,17 +8,13 @@ export type SiteRouteHeadProps = {
 };
 
 export function siteRouteHead(props: SiteRouteHeadProps) {
-  const metadata = metadataForRoute(props.loaderData);
+  const { locale } = routeContext(props.pathname);
 
-  const { locale, pathname } = routeContext(props.pathname);
-
-  const homeTitle = lookup(getMessages(locale), 'Nav.home');
-
-  const title = pathname === '/' && typeof homeTitle === 'string' ? homeTitle : metadata.title;
+  const metadata = metadataForRoute(props.loaderData, locale);
 
   return {
     meta: [
-      { title: `${title} - guesant.net` },
+      { title: `${metadata.title} - guesant.net` },
       { name: 'description', content: metadata.description },
       { property: 'og:title', content: metadata.title },
       { property: 'og:description', content: metadata.description },

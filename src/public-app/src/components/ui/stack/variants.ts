@@ -1,6 +1,6 @@
 import type { SxProps, Theme } from '@mui/material/styles';
 
-const sidebarGroup = { gap: 'var(--site-sidebar-gap-half)', mt: 'var(--site-sidebar-gap-half)' };
+const sidebarGroup = { gap: 'var(--site-sidebar-gap)', mt: 'var(--site-sidebar-gap)' };
 
 export const stackVariants: Record<string, SxProps<Theme>> = {
   listingToolbarContent: {
@@ -12,7 +12,11 @@ export const stackVariants: Record<string, SxProps<Theme>> = {
   statusActions: { alignItems: 'flex-start' },
   passwordEntropy: { mt: 2 },
   generatedStringList: { mt: 1 },
-  mobileSidebarStack: { overflowY: 'auto', p: 1.5 },
+  mobileSidebarStack: {
+    overflowY: 'auto',
+    gap: 'var(--site-sidebar-gap)',
+    p: 'var(--site-space-3)',
+  },
   sidebarGroup,
   sidebarSection: sidebarGroup,
   rightSidebar: { gap: 'var(--site-sidebar-gap)' },
@@ -58,8 +62,8 @@ export const stackVariants: Record<string, SxProps<Theme>> = {
   sidebarSubnav: {
     display: 'flex',
     flexDirection: 'column',
-    gap: 'var(--site-sidebar-gap-half)',
-    mt: 'var(--site-sidebar-gap-half)',
+    gap: 'var(--site-sidebar-gap)',
+    mt: 'var(--site-sidebar-gap)',
     ml: 'var(--site-space-3)',
     pl: 'var(--site-space-3)',
     borderLeft: 'var(--site-border-width) solid',

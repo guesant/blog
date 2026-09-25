@@ -72,10 +72,6 @@ export const typographyVariants3: Record<string, SxProps<Theme>> = {
     ...homeReadingText,
     mt: 'var(--site-space-3)',
   },
-  contentFeedDescription: {
-    ...homeReadingText,
-    mt: 'var(--site-space-3)',
-  },
   connectionsSection: {
     margin: 0,
     fontSize: 'var(--site-text-2xl)',

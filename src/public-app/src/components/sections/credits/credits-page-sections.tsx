@@ -11,8 +11,8 @@ type CreditsPageSectionsProps = {
 export function CreditsPageSections(props: CreditsPageSectionsProps) {
   return (
     <>
-      <CollectionPagination meta={props.content.credits.meta} action="/credits" />
       <CreditsList entries={props.content.credits.entries} t={props.t} />
+      <CollectionPagination meta={props.content.credits.meta} action="/credits" />
     </>
   );
 }

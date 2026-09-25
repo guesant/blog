@@ -12,7 +12,6 @@ export const linkVariants: Record<string, SxProps<Theme>> = {
     fontWeight: 600,
   },
   creditEntryItem: { fontWeight: 700 },
-  packageCreditItem: { fontWeight: 700 },
   statusActions: { py: 1 },
   editableItemName: { fontWeight: 700 },
   recommendationEntry: { fontWeight: 700 },

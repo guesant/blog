@@ -6,6 +6,7 @@ export const homeGalleryFeedSectionTemplates = [
     href: '/writing',
     source: 'recent',
     kind: 'writing',
+    mode: 'grid',
   },
   {
     id: 'recent-findings',
@@ -14,6 +15,7 @@ export const homeGalleryFeedSectionTemplates = [
     href: '/findings',
     source: 'recent',
     kind: 'finding',
+    mode: 'list',
   },
   {
     id: 'recent-collections',
@@ -22,6 +24,7 @@ export const homeGalleryFeedSectionTemplates = [
     href: '/collections',
     source: 'recent',
     kind: 'collection',
+    mode: 'grid',
   },
   {
     id: 'popular-writing',
@@ -30,6 +33,7 @@ export const homeGalleryFeedSectionTemplates = [
     href: '/writing',
     source: 'popular',
     kind: 'writing',
+    mode: 'grid',
   },
   {
     id: 'popular-findings',
@@ -38,6 +42,7 @@ export const homeGalleryFeedSectionTemplates = [
     href: '/findings?sort=popular',
     source: 'popular',
     kind: 'finding',
+    mode: 'list',
   },
   {
     id: 'popular-collections',
@@ -46,5 +51,6 @@ export const homeGalleryFeedSectionTemplates = [
     href: '/collections',
     source: 'popular',
     kind: 'collection',
+    mode: 'grid',
   },
 ] as const;

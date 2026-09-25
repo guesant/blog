@@ -3,7 +3,6 @@ import { useTranslations } from '@/i18n/compat';
 import { ProfileIcon } from '../../primitives/profile-icon';
 import { Icon } from '../../primitives/icon';
 import { SidebarAction } from './sidebar-action';
-import { sidebarSubnavVisualVariant } from '../sidebar-action';
 import { externalProfileLabel } from '@portfolio/data/config/external-profiles';
 import type { SiteText } from '@portfolio/data/domain/types';
 
@@ -15,7 +14,7 @@ export function RightSidebarContactProfiles(props: RightSidebarContactProfilesPr
   const tExternalProfiles = useTranslations('ExternalProfiles');
 
   return (
-    <Stack visualVariant={sidebarSubnavVisualVariant}>
+    <Stack visualVariant="sidebarContactProfiles">
       {props.site.contact.profiles.map((item) => (
         <SidebarAction
           key={item.url}

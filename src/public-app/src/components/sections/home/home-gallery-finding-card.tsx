@@ -15,5 +15,5 @@ export function HomeGalleryFindingCard(props: HomeGalleryFindingCardProps) {
 
   const entry = buildFeedItemEntry(feedItem({ ...props.entry, kind: 'achado' }));
 
-  return <FeedCard entry={entry} locale={locale} t={props.t} showSourcePreviews={false} />;
+  return <FeedCard entry={entry} locale={locale} t={props.t} />;
 }

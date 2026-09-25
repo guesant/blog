@@ -58,20 +58,9 @@ export type CreditsPageCopy = WithSeo & {
   description: string;
 };
 
-export type PackageCredit = {
-  name: string;
-  version?: string;
-  description?: string;
-  license?: string;
-  author?: string;
-  repositoryUrl?: string;
-};
-
 export type CreditsPageContent = {
   page: CreditsPageCopy;
   credits: CreditsContent;
-  libraries: PackageCredit[];
-  tools: PackageCredit[];
 };
 
 export type PortfolioPageCopy = WithSeo & {

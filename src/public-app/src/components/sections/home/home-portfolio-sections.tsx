@@ -24,7 +24,7 @@ export function HomePortfolioSections(props: HomePortfolioSectionsProps) {
           action={props.t(section.actionKey)}
           href={section.href}
           entries={section.entries}
-          mode="carousel"
+          mode={section.key === 'credits' ? 'list' : 'carousel'}
           t={props.t}
         />
       ))}

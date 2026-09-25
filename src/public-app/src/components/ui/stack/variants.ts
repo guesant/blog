@@ -2,6 +2,17 @@ import type { SxProps, Theme } from '@mui/material/styles';
 
 const sidebarGroup = { gap: 'var(--site-sidebar-gap)', mt: 'var(--site-sidebar-gap)' };
 
+const sidebarSubnav = {
+  display: 'flex',
+  flexDirection: 'column',
+  gap: 'var(--site-sidebar-gap)',
+  mt: 'var(--site-sidebar-gap)',
+  ml: 'var(--site-space-3)',
+  pl: 'var(--site-space-3)',
+  borderLeft: 'var(--site-border-width) solid',
+  borderColor: 'divider',
+};
+
 export const stackVariants: Record<string, SxProps<Theme>> = {
   listingToolbarContent: {
     columnGap: { xs: 'var(--site-space-2)', md: 'var(--site-space-3)' },
@@ -59,16 +70,8 @@ export const stackVariants: Record<string, SxProps<Theme>> = {
     flexWrap: 'wrap',
     gap: 'var(--site-space-2)',
   },
-  sidebarSubnav: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: 'var(--site-sidebar-gap)',
-    mt: 'var(--site-sidebar-gap)',
-    ml: 'var(--site-space-3)',
-    pl: 'var(--site-space-3)',
-    borderLeft: 'var(--site-border-width) solid',
-    borderColor: 'divider',
-  },
+  sidebarSubnav,
+  sidebarContactProfiles: { ...sidebarSubnav, mt: 0 },
   sidebarNavStack: { gap: 'var(--site-sidebar-gap)', flex: 1, minHeight: 0 },
   sidebarNavStackCompact: { gap: 'var(--site-sidebar-gap)' },
 };

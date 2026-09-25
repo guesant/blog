@@ -29,6 +29,9 @@ export const boxVariants6: Record<string, SxProps<Theme>> = {
     mb: 0,
     textAlign: 'center',
   },
+  creditsPageHeader: {
+    ...pageHeaderLayout,
+  },
   feedCard: {
     mt: 'var(--site-space-2)',
     pt: 'var(--site-space-4)',

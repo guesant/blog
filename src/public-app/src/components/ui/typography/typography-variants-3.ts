@@ -103,6 +103,11 @@ export const typographyVariants3: Record<string, SxProps<Theme>> = {
     fontSize: '1rem',
     ...justifiedText,
   },
+  pageHeader3Wide: {
+    margin: 0,
+    fontSize: '1rem',
+    ...justifiedText,
+  },
   sourcePreviewListMetadataItem: {
     minWidth: 0,
     maxWidth: '100%',

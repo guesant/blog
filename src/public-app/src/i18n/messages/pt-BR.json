@@ -434,11 +434,13 @@
       "contact": "Dúvidas sobre reutilização ou licenciamento? Entre em contato por:"
     },
     "credits": {
-      "acknowledgementsHeading": "Agradecimentos",
-      "referencesHeading": "Referências",
-      "infrastructureHeading": "Infraestrutura e ferramentas",
-      "librariesHeading": "Bibliotecas",
-      "toolsHeading": "Ferramentas"
+      "categories": {
+        "reference": "Referências",
+        "infrastructure": "Infraestrutura e ferramentas",
+        "library": "Bibliotecas",
+        "font": "Fontes",
+        "tool": "Ferramentas"
+      }
     },
     "notFound": {
       "title": "Esta página saiu do caminho.",

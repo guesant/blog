@@ -16,6 +16,8 @@ export function CreditsPageContent(props: CreditsPageContentProps) {
         title={content.page.title}
         description={content.page.description}
         breadcrumbs={[{ label: tFooter('credits') }]}
+        visualVariant="creditsPageHeader"
+        descriptionVisualVariant="pageHeader3Wide"
       />
       <CreditsPageSections content={content} t={t} />
     </>

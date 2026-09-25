@@ -8,6 +8,7 @@ export type PageHeaderProps = {
   actions?: ReactNode;
   breadcrumbs?: BreadcrumbItem[];
   visualVariant?: string;
+  descriptionVisualVariant?: string;
 };
 
 export type EditablePageHeaderProps = {

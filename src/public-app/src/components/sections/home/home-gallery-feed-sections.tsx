@@ -15,6 +15,7 @@ type HomeGalleryFeedSection = {
   actionKey: string;
   href: string;
   entries: HomeGalleryFeedCategories[keyof HomeGalleryFeedCategories];
+  mode: 'grid' | 'list';
 };
 
 export function HomeGalleryFeedSections(props: HomeGalleryFeedSectionsProps) {
@@ -33,6 +34,7 @@ export function HomeGalleryFeedSections(props: HomeGalleryFeedSectionsProps) {
           action={props.t(section.actionKey)}
           href={section.href}
           entries={section.entries}
+          mode={section.mode}
           t={props.t}
         />
       ))}

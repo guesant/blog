@@ -58,8 +58,6 @@ export const boxVariants7: Record<string, SxProps<Theme>> = {
     flexDirection: 'column',
   },
   sidebarNavCompact: { p: 2, minWidth: 0 },
-  creditsSection: { mt: { xs: 4, md: 5 }, maxWidth: '60ch' },
-  creditsSectionFull: { mt: { xs: 4, md: 5 }, maxWidth: 'none' },
   metricsGrid,
   metricsGridMargin4: { ...metricsGrid, mt: 4 },
   metricsGridMargin6: { ...metricsGrid, mt: 6 },

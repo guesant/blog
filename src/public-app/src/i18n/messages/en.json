@@ -434,11 +434,13 @@
       "contact": "Questions about reuse or licensing? Reach out at:"
     },
     "credits": {
-      "acknowledgementsHeading": "Acknowledgements",
-      "referencesHeading": "References",
-      "infrastructureHeading": "Infrastructure and tooling",
-      "librariesHeading": "Libraries",
-      "toolsHeading": "Tools"
+      "categories": {
+        "reference": "References",
+        "infrastructure": "Infrastructure and tooling",
+        "library": "Libraries",
+        "font": "Fonts",
+        "tool": "Tools"
+      }
     },
     "notFound": {
       "title": "This page wandered off.",

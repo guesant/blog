@@ -12,14 +12,22 @@ type HomeGallerySectionProps = {
   action: string;
   href: string;
   entries: HomeGalleryEntry[];
+  total?: number;
   mode?: 'grid' | 'carousel' | 'list';
   t: Translator;
 };
 
 export function HomeGallerySection(props: HomeGallerySectionProps) {
+  const total = props.total ?? props.entries.length;
+
+  const summary =
+    total > props.entries.length
+      ? props.t('showing', { visible: props.entries.length, total })
+      : undefined;
+
   return (
     <HomeSectionSurface id={props.id}>
-      <HomeGallerySectionHeader title={props.title} />
+      <HomeGallerySectionHeader title={props.title} summary={summary} />
       <HomeGalleryRow mode={props.mode}>
         <HomeGalleryCards entries={props.entries} t={props.t} />
       </HomeGalleryRow>

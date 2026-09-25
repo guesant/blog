@@ -9,6 +9,7 @@ type HomeGalleryOptionalSectionProps = {
   action: string;
   href: string;
   entries: HomeGalleryEntry[];
+  total?: number;
   mode?: 'grid' | 'carousel' | 'list';
   t: Translator;
 };

@@ -1,7 +1,9 @@
 import { Box, Typography } from '../../../ui';
+import { ConditionalContent } from '../../../primitives/conditional-content';
 
 type HomeGallerySectionHeaderProps = {
   title: string;
+  summary?: string;
 };
 
 export function HomeGallerySectionHeader(props: HomeGallerySectionHeaderProps) {
@@ -10,6 +12,7 @@ export function HomeGallerySectionHeader(props: HomeGallerySectionHeaderProps) {
       component="header"
       sx={{
         display: 'flex',
+        flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
         gap: 2,
@@ -20,6 +23,14 @@ export function HomeGallerySectionHeader(props: HomeGallerySectionHeaderProps) {
       <Typography component="h2" variant="h2">
         {props.title}
       </Typography>
+      <ConditionalContent
+        condition={Boolean(props.summary)}
+        content={
+          <Typography variant="body2" color="text.secondary">
+            {props.summary}
+          </Typography>
+        }
+      />
     </Box>
   );
 }

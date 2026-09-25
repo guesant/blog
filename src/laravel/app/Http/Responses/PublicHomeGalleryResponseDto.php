@@ -33,6 +33,7 @@ final readonly class PublicHomeGalleryResponseDto
                 fn (array $showcase): array => self::collectionShowcase($showcase, $presenter, $locale),
                 $result->collectionShowcases,
             )),
+            'totals' => $result->totals,
         ]);
     }
 

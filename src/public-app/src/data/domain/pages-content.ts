@@ -13,6 +13,9 @@ export type {
   HomeGalleryEntryKind,
   HomeGalleryFeedCategories,
   HomeGalleryPortfolio,
+  HomeGalleryPortfolioTotals,
+  HomeGallerySectionTotals,
+  HomeGalleryTotals,
 } from './pages-gallery';
 
 export type HomePageContent = {

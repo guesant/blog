@@ -372,6 +372,30 @@ export type PublicSiteApiHomeGalleryResponses = {
                 [key: string]: unknown;
             }>;
         }>;
+        totals: {
+            highlights: number;
+            recent: {
+                writing: number;
+                finding: number;
+                collection: number;
+            };
+            popular: {
+                writing: number;
+                finding: number;
+                collection: number;
+            };
+            portfolio: {
+                cases: number;
+                projects: number;
+                experiments: number;
+                collections: number;
+                snippets: number;
+                technologies: number;
+                topics: number;
+                credits: number;
+            };
+            collection_showcases: number;
+        };
     };
 };
 

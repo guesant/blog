@@ -10,5 +10,6 @@ final readonly class GetPublicHomeGalleryQueryResult
         public array $popular,
         public array $portfolio,
         public array $collectionShowcases,
+        public array $totals,
     ) {}
 }

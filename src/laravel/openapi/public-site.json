@@ -963,6 +963,101 @@
                                                     "items"
                                                 ]
                                             }
+                                        },
+                                        "totals": {
+                                            "type": "object",
+                                            "properties": {
+                                                "highlights": {
+                                                    "type": "integer"
+                                                },
+                                                "recent": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "writing": {
+                                                            "type": "integer"
+                                                        },
+                                                        "finding": {
+                                                            "type": "integer"
+                                                        },
+                                                        "collection": {
+                                                            "type": "integer"
+                                                        }
+                                                    },
+                                                    "required": [
+                                                        "writing",
+                                                        "finding",
+                                                        "collection"
+                                                    ]
+                                                },
+                                                "popular": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "writing": {
+                                                            "type": "integer"
+                                                        },
+                                                        "finding": {
+                                                            "type": "integer"
+                                                        },
+                                                        "collection": {
+                                                            "type": "integer"
+                                                        }
+                                                    },
+                                                    "required": [
+                                                        "writing",
+                                                        "finding",
+                                                        "collection"
+                                                    ]
+                                                },
+                                                "portfolio": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "cases": {
+                                                            "type": "integer"
+                                                        },
+                                                        "projects": {
+                                                            "type": "integer"
+                                                        },
+                                                        "experiments": {
+                                                            "type": "integer"
+                                                        },
+                                                        "collections": {
+                                                            "type": "integer"
+                                                        },
+                                                        "snippets": {
+                                                            "type": "integer"
+                                                        },
+                                                        "technologies": {
+                                                            "type": "integer"
+                                                        },
+                                                        "topics": {
+                                                            "type": "integer"
+                                                        },
+                                                        "credits": {
+                                                            "type": "integer"
+                                                        }
+                                                    },
+                                                    "required": [
+                                                        "cases",
+                                                        "projects",
+                                                        "experiments",
+                                                        "collections",
+                                                        "snippets",
+                                                        "technologies",
+                                                        "topics",
+                                                        "credits"
+                                                    ]
+                                                },
+                                                "collection_showcases": {
+                                                    "type": "integer"
+                                                }
+                                            },
+                                            "required": [
+                                                "highlights",
+                                                "recent",
+                                                "popular",
+                                                "portfolio",
+                                                "collection_showcases"
+                                            ]
                                         }
                                     },
                                     "required": [
@@ -970,7 +1065,8 @@
                                         "recent",
                                         "popular",
                                         "portfolio",
-                                        "collection_showcases"
+                                        "collection_showcases",
+                                        "totals"
                                     ]
                                 }
                             }

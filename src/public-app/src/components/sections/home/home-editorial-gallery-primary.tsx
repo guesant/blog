@@ -17,12 +17,14 @@ export function HomeEditorialGalleryPrimary(props: HomeEditorialGalleryPrimaryPr
         action={props.t('viewHighlights')}
         href="/portfolio"
         entries={props.gallery.highlights}
+        total={props.gallery.totals.highlights}
         mode="carousel"
         t={props.t}
       />
       <HomeGalleryFeedSections
         recent={props.gallery.recent}
         popular={props.gallery.popular}
+        totals={props.gallery.totals}
         t={props.t}
       />
     </>

@@ -124,6 +124,7 @@
   },
   "Home": {
     "highlights": "Highlights",
+    "showing": "Showing {visible} of {total}",
     "recent": "Recent",
     "popular": "Popular",
     "collections": "Collections",

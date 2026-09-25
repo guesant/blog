@@ -346,6 +346,22 @@ class PublicSiteApiTest extends TestCase
                     'credits',
                 ],
                 'collection_showcases',
+                'totals' => [
+                    'highlights',
+                    'recent' => ['writing', 'finding', 'collection'],
+                    'popular' => ['writing', 'finding', 'collection'],
+                    'portfolio' => [
+                        'cases',
+                        'projects',
+                        'experiments',
+                        'collections',
+                        'snippets',
+                        'technologies',
+                        'topics',
+                        'credits',
+                    ],
+                    'collection_showcases',
+                ],
             ]);
 
         foreach (['recent', 'popular'] as $group) {
@@ -361,6 +377,20 @@ class PublicSiteApiTest extends TestCase
         foreach ($response->json('collection_showcases') as $showcase) {
             $this->assertLessThanOrEqual(6, count($showcase['items']));
         }
+    }
+
+    public function test_home_gallery_returns_totals_for_limited_sections(): void
+    {
+        foreach (range(1, 7) as $index) {
+            $this->createResource("home-gallery-finding-{$index}");
+        }
+
+        $this->getJson('/api/v1/site/home-gallery?locale=en')
+            ->assertOk()
+            ->assertJsonCount(6, 'recent.finding')
+            ->assertJsonPath('totals.recent.finding', 7)
+            ->assertJsonCount(6, 'popular.finding')
+            ->assertJsonPath('totals.popular.finding', 7);
     }
 
     public function test_home_gallery_returns_items_for_each_visible_collection(): void

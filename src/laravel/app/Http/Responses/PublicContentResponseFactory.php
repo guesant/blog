@@ -13,12 +13,14 @@ use App\Models\Snippet;
 use App\Models\Technology;
 use App\Models\Topic;
 use App\Models\Writing;
+use App\OpenGraph\OgImageUrlGenerator;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 final class PublicContentResponseFactory
 {
     public function __construct(
         private readonly PublicFindingResponseFactory $findings,
+        private readonly OgImageUrlGenerator $ogImages,
     ) {}
 
     public function feedItem(PublicFeedItem $item, string $locale): array
@@ -91,6 +93,11 @@ final class PublicContentResponseFactory
             'slug' => $snippet->slug,
             'title' => $translation?->title ?? $snippet->slug,
             'description' => $translation?->description,
+            'og_image_url' => $this->ogImages->generate(
+                'article',
+                $translation?->title ?? $snippet->slug,
+                $translation?->description,
+            ),
             'url' => Locale::url('/snippets/'.PublicIdentifier::key($snippet), $locale),
             'download_url' => Locale::url('/snippets/'.PublicIdentifier::key($snippet).'/download', $locale),
             'files' => [],
@@ -108,6 +115,11 @@ final class PublicContentResponseFactory
             'url' => Locale::url('/collections/'.PublicIdentifier::key($collection), $locale),
             'title' => $translation?->title ?? $collection->slug,
             'description' => $translation?->description,
+            'og_image_url' => $this->ogImages->generate(
+                'article',
+                $translation?->title ?? $collection->slug,
+                $translation?->description,
+            ),
             'intro' => $translation?->intro,
             'published_at' => $collection->published_at?->toDateString(),
             'resources_count' => $collection->resources_count ?? 0,
@@ -124,6 +136,10 @@ final class PublicContentResponseFactory
             'name' => $technology->translation($locale)?->name ?? $technology->slug,
             'code' => $technology->code ?? '',
             'url' => Locale::url('/technologies/'.PublicIdentifier::key($technology), $locale),
+            'og_image_url' => $this->ogImages->generate(
+                'article',
+                $technology->translation($locale)?->name ?? $technology->slug,
+            ),
             'skills' => $technology->resumeSkills
                 ->map(fn ($skill) => $skill->topic?->translation($locale)?->name ?? $skill->topic?->slug)
                 ->filter()
@@ -145,6 +161,10 @@ final class PublicContentResponseFactory
             'slug' => $topic->slug,
             'url' => Locale::url('/topics/'.PublicIdentifier::key($topic), $locale),
             'name' => $topic->translation($locale)?->name ?? $topic->slug,
+            'og_image_url' => $this->ogImages->generate(
+                'article',
+                $topic->translation($locale)?->name ?? $topic->slug,
+            ),
             'kind' => $topic->kind === 'skill' ? 'topic' : $topic->kind,
             'parent' => $topic->parent?->slug,
             'children' => $topic->children->where('hidden', false)->map(fn ($child) => [
@@ -161,6 +181,11 @@ final class PublicContentResponseFactory
             'category' => $credit->category,
             'name' => $credit->translation($locale)?->name ?? $credit->category,
             'description' => $credit->translation($locale)?->description,
+            'og_image_url' => $this->ogImages->generate(
+                'article',
+                $credit->translation($locale)?->name ?? $credit->category,
+                $credit->translation($locale)?->description,
+            ),
             'url' => $credit->url,
             'package_manager' => $credit->package_manager,
             'package_name' => $credit->package_name,
@@ -255,6 +280,11 @@ final class PublicContentResponseFactory
             'url' => Locale::url('/projects/'.PublicIdentifier::key($project), $locale),
             'name' => $translation?->name ?? $project->slug,
             'purpose' => $translation?->purpose,
+            'og_image_url' => $this->ogImages->generate(
+                'project',
+                $translation?->name ?? $project->slug,
+                $translation?->purpose,
+            ),
             'status' => $translation?->status,
             'published_at' => $project->published_at?->toDateString(),
             'external' => $project->external,
@@ -284,6 +314,11 @@ final class PublicContentResponseFactory
             'title' => $translation?->title ?? $case->slug,
             'status' => $translation?->status,
             'summary' => $translation?->summary,
+            'og_image_url' => $this->ogImages->generate(
+                'project',
+                $translation?->title ?? $case->slug,
+                $translation?->summary,
+            ),
             'published_at' => $case->published_at?->toDateString(),
             'external' => $case->external,
             'meta' => $translation?->meta,
@@ -313,6 +348,11 @@ final class PublicContentResponseFactory
             'url' => Locale::url('/writing/'.PublicIdentifier::key($writing), $locale),
             'title' => $translation?->title ?? $writing->slug,
             'excerpt' => $translation?->excerpt,
+            'og_image_url' => $this->ogImages->generate(
+                'article',
+                $translation?->title ?? $writing->slug,
+                $translation?->excerpt,
+            ),
             'reading_time' => $translation?->reading_time,
             'body' => $translation?->body,
             'type' => $writing->type,
@@ -351,6 +391,11 @@ final class PublicContentResponseFactory
                     'url' => Locale::url('/findings/'.PublicIdentifier::key($resource), $locale),
                     'title' => $resourceTranslation?->title ?? $resource->slug,
                     'description' => $resourceTranslation?->description,
+                    'og_image_url' => $this->ogImages->generate(
+                        'article',
+                        $resourceTranslation?->title ?? $resource->slug,
+                        $resourceTranslation?->description,
+                    ),
                     'type' => $resource->type,
                     'rating' => $resource->rating,
                     'note' => $resource->pivot->note,
@@ -383,6 +428,11 @@ final class PublicContentResponseFactory
             'url' => Locale::url('/projects/experiments/'.PublicIdentifier::key($experiment), $locale),
             'name' => $translation?->name ?? $experiment->slug,
             'purpose' => $translation?->purpose,
+            'og_image_url' => $this->ogImages->generate(
+                'project',
+                $translation?->name ?? $experiment->slug,
+                $translation?->purpose,
+            ),
             'body' => $translation?->body,
             'published_at' => $experiment->published_at?->toDateString(),
             'external' => $experiment->external,
@@ -408,6 +458,11 @@ final class PublicContentResponseFactory
             'download_url' => '/api/v1/snippets/'.PublicIdentifier::key($snippet).'/download',
             'title' => $translation?->title ?? $snippet->slug,
             'description' => $translation?->description,
+            'og_image_url' => $this->ogImages->generate(
+                'article',
+                $translation?->title ?? $snippet->slug,
+                $translation?->description,
+            ),
             'published_at' => $snippet->published_at?->toDateString(),
             'files' => $snippet->files->map(fn ($file) => [
                 'path' => $file->path,

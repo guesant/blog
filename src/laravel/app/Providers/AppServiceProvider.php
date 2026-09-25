@@ -89,5 +89,9 @@ class AppServiceProvider extends ServiceProvider
         RateLimiter::for('public-api', function (Request $request) {
             return Limit::perMinute(60)->by($request->ip());
         });
+
+        RateLimiter::for('og-images', function (Request $request) {
+            return Limit::perMinute((int) config('og.rate_limit_per_minute', 60))->by($request->ip());
+        });
     }
 }

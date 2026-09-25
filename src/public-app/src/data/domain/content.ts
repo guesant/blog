@@ -14,6 +14,7 @@ type SeoMetadata = {
 
 export type WithSeo = {
   seo?: SeoMetadata;
+  ogImageUrl?: string;
 };
 
 type MetricItem = {

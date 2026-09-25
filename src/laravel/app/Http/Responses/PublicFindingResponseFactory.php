@@ -6,12 +6,14 @@ use App\Application\PublicSite\GetPublicFindingQueryResult;
 use App\Content\Locale;
 use App\Content\OpenGraphMetadata;
 use App\Content\PublicIdentifier;
+use App\OpenGraph\OgImageUrlGenerator;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 final class PublicFindingResponseFactory
 {
     public function __construct(
         private readonly OpenGraphMetadata $openGraph,
+        private readonly OgImageUrlGenerator $ogImages,
     ) {}
 
     public function list(
@@ -63,6 +65,11 @@ final class PublicFindingResponseFactory
             'description' => $translation?->description,
             'personal_note' => $translation?->personal_note,
             'reason_found' => $translation?->reason_found,
+            'og_image_url' => $this->ogImages->generate(
+                'article',
+                $translation?->title ?? $resource->slug,
+                $translation?->description,
+            ),
             'updated_date' => optional($resource->updated_at)->toDateString(),
             'topics' => $resource->topics->map(fn ($topic) => [
                 'slug' => $topic->slug,

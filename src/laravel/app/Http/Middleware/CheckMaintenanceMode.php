@@ -14,6 +14,7 @@ class CheckMaintenanceMode
     private const EXEMPT_PATHS = [
         'api/*',
         'auth/keycloak/*',
+        'og/*',
         'livewire/update',
         'livewire/upload-file',
     ];

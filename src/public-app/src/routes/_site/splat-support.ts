@@ -5,7 +5,12 @@ import { siteRouteLoader } from '../site-route-loader';
 import { requestForPath } from './splat-request-for-path';
 import { SplatRoute } from './splat--splat-route';
 
-export type RouteMetadata = { title: string; description: string; type?: string };
+export type RouteMetadata = {
+  title: string;
+  description: string;
+  type?: string;
+  image?: string;
+};
 
 export const Route = createFileRoute('/_site/splat-support')({
   loader: async ({ context, location }) => {

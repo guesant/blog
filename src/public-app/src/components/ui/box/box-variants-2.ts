@@ -12,7 +12,7 @@ const pageLayout: SxProps<Theme> = {
   backgroundColor: 'var(--grid-background)',
   flexDirection: 'column',
   gap: 'var(--site-space-3)',
-  pt: 'var(--site-space-3) !important',
+  pt: 'var(--site-space-2) !important',
   pb: 'var(--site-space-6) !important',
 };
 

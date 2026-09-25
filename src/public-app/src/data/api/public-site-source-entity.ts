@@ -3,6 +3,7 @@ import { recordList } from './public-site-source-list';
 import { snippet } from './public-site-source-snippet';
 import { stringValue } from './public-site-source-string-value';
 import { technologyFields } from './public-site-source-technology-fields';
+import { optionalStringValue } from './public-site-source-optional-string-value';
 import type { ContentCollection, RecordValue } from './public-site-source-support';
 
 const entityBuilders: Record<ContentCollection, (item: RecordValue) => RecordValue> = {
@@ -56,5 +57,10 @@ const entityBuilders: Record<ContentCollection, (item: RecordValue) => RecordVal
 };
 
 export function entity(collection: ContentCollection, item: RecordValue): RecordValue {
-  return entityBuilders[collection](item);
+  const result = entityBuilders[collection](item);
+
+  return {
+    ...result,
+    ogImageUrl: optionalStringValue(result.og_image_url ?? result.ogImageUrl),
+  };
 }

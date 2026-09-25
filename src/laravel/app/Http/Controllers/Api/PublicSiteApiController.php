@@ -32,6 +32,7 @@ use App\Http\Responses\PublicListMetaDto;
 use App\Http\Responses\PublicPageResponseDto;
 use App\Http\Responses\PublicResumeResponseFactory;
 use App\Http\Responses\PublicSiteChromeResponseDto;
+use App\OpenGraph\OgImageUrlGenerator;
 use Dedoc\Scramble\Attributes\Response as ScrambleResponse;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -300,15 +301,19 @@ class PublicSiteApiController extends Controller
     }
 
     #[ScrambleResponse(200, type: 'array')]
-    public function page(Request $request, string $slug, GetPublicPageQueryHandler $handler): JsonResponse
-    {
+    public function page(
+        Request $request,
+        string $slug,
+        GetPublicPageQueryHandler $handler,
+        OgImageUrlGenerator $ogImages,
+    ): JsonResponse {
         $result = $handler->handle(new GetPublicPageQuery(
             slug: $slug,
             locale: Locale::normalize($request->query('locale')),
         ));
         abort_unless($result !== null, 404);
 
-        return response()->json(PublicPageResponseDto::fromResult($result)->toArray())
+        return response()->json(PublicPageResponseDto::fromResult($result, $ogImages)->toArray())
             ->header('Cache-Control', 'public, max-age=60, stale-while-revalidate=300');
     }
 

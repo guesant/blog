@@ -12,6 +12,13 @@ export function siteRouteHead(props: SiteRouteHeadProps) {
 
   const metadata = metadataForRoute(props.loaderData, locale);
 
+  const imageMeta = metadata.image
+    ? [
+        { property: 'og:image', content: metadata.image },
+        { name: 'twitter:image', content: metadata.image },
+      ]
+    : [];
+
   return {
     meta: [
       { title: `${metadata.title} - guesant.net` },
@@ -19,6 +26,8 @@ export function siteRouteHead(props: SiteRouteHeadProps) {
       { property: 'og:title', content: metadata.title },
       { property: 'og:description', content: metadata.description },
       { property: 'og:type', content: metadata.type ?? 'website' },
+      { name: 'twitter:card', content: metadata.image ? 'summary_large_image' : 'summary' },
+      ...imageMeta,
     ],
   };
 }

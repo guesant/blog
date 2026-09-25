@@ -11,6 +11,18 @@ final class PublicSiteProfileReader
     {
         $profile = DB::table('profiles')
             ->select(['id', 'name', 'birth_date', 'current_revision_id'])
+            ->where(function ($query): void {
+                $query
+                    ->whereNull('current_revision_id')
+                    ->orWhereExists(function ($revisionQuery): void {
+                        $revisionQuery->selectRaw('1')
+                            ->from('profile_revisions')
+                            ->whereColumn('profile_revisions.id', 'profiles.current_revision_id')
+                            ->where(fn ($visibility) => $visibility
+                                ->where('profile_revisions.hidden', false)
+                                ->orWhereNull('profile_revisions.hidden'));
+                    });
+            })
             ->first();
 
         if ($profile === null || $profile->current_revision_id === null) {
@@ -39,7 +51,7 @@ final class PublicSiteProfileReader
                 'profile_revision_milestones',
                 'profile_revision_translation_id',
                 $translation?->id,
-                ['year', 'title', 'description', 'hidden'],
+                ['year', 'title', 'description'],
             ),
             'birth_date' => $profile->birth_date ?? '',
             'birth_city' => $translation?->birth_city,
@@ -81,6 +93,9 @@ final class PublicSiteProfileReader
         return DB::table($table)
             ->select($columns)
             ->where($foreignKey, $translationId)
+            ->where(fn ($visibility) => $visibility
+                ->where('hidden', false)
+                ->orWhereNull('hidden'))
             ->orderBy('sort_order')
             ->get()
             ->map(static fn (object $row): array => collect((array) $row)

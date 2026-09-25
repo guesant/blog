@@ -67,6 +67,14 @@ final class PublicSiteAvailabilityReader
         return DB::table('resumes as r')
             ->selectRaw('1')
             ->whereNotNull('r.current_revision_id')
+            ->whereExists(function (Builder $query): void {
+                $query->selectRaw('1')
+                    ->from('resume_revisions as rr')
+                    ->whereColumn('rr.id', 'r.current_revision_id')
+                    ->where(fn ($visibility) => $visibility
+                        ->where('rr.hidden', false)
+                        ->orWhereNull('rr.hidden'));
+            })
             ->whereExists(function (Builder $query) use ($locale): void {
                 $query->selectRaw('1')
                     ->from('resume_revision_translations as rt')
@@ -95,6 +103,14 @@ final class PublicSiteAvailabilityReader
         return DB::table('profiles as p')
             ->selectRaw('1')
             ->whereNotNull('p.current_revision_id')
+            ->whereExists(function (Builder $query): void {
+                $query->selectRaw('1')
+                    ->from('profile_revisions as pr')
+                    ->whereColumn('pr.id', 'p.current_revision_id')
+                    ->where(fn ($visibility) => $visibility
+                        ->where('pr.hidden', false)
+                        ->orWhereNull('pr.hidden'));
+            })
             ->whereExists(function (Builder $query) use ($locale): void {
                 $query->selectRaw('1')
                     ->from('profile_revision_translations as pt')
@@ -114,7 +130,10 @@ final class PublicSiteAvailabilityReader
                     ->whereExists(function (Builder $query): void {
                         $query->selectRaw('1')
                             ->from('profile_revision_trajectory as trajectory')
-                            ->whereColumn('trajectory.profile_revision_translation_id', 'pt.id');
+                            ->whereColumn('trajectory.profile_revision_translation_id', 'pt.id')
+                            ->where(fn ($visibility) => $visibility
+                                ->where('trajectory.hidden', false)
+                                ->orWhereNull('trajectory.hidden'));
                     });
             })
             ->limit(1);
@@ -133,7 +152,18 @@ final class PublicSiteAvailabilityReader
         return DB::table('pages as p')
             ->selectRaw('1')
             ->where('p.slug', $slug)
+            ->where(fn ($visibility) => $visibility
+                ->where('p.hidden', false)
+                ->orWhereNull('p.hidden'))
             ->whereNotNull('p.current_revision_id')
+            ->whereExists(function (Builder $query): void {
+                $query->selectRaw('1')
+                    ->from('page_revisions as pr')
+                    ->whereColumn('pr.id', 'p.current_revision_id')
+                    ->where(fn ($visibility) => $visibility
+                        ->where('pr.hidden', false)
+                        ->orWhereNull('pr.hidden'));
+            })
             ->where(function (Builder $query) use ($locale, $fields): void {
                 $query->whereExists($this->pageTranslationWithFields($locale, $fields))
                     ->orWhere(function (Builder $query) use ($locale, $fields): void {

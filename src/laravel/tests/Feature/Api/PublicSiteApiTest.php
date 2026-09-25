@@ -15,6 +15,8 @@ use App\Models\ReferenceCollection;
 use App\Models\ReferenceCollectionRevisionTranslation;
 use App\Models\Resource;
 use App\Models\ResourceRevisionTranslation;
+use App\Models\Resume;
+use App\Models\ResumeRevisionTranslation;
 use Illuminate\Database\Events\QueryExecuted;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
@@ -216,6 +218,51 @@ class PublicSiteApiTest extends TestCase
             ->assertJsonPath('meta.total', 2)
             ->assertJsonPath('meta.last_page', 2)
             ->assertJsonCount(1, 'data');
+    }
+
+    public function test_hidden_resume_revision_is_not_returned_by_the_public_api(): void
+    {
+        $resume = Resume::factory()->create();
+        ResumeRevisionTranslation::factory()->create([
+            'resume_id' => $resume->id,
+            'locale' => 'en',
+            'summary' => 'Private summary',
+        ]);
+        $resume->refresh()->currentRevision()->update(['hidden' => true]);
+
+        $this->getJson('/api/v1/site/resume?locale=en')
+            ->assertOk()
+            ->assertJsonPath('summary', null)
+            ->assertJsonPath('selected_cases', [])
+            ->assertJsonPath('skills', [])
+            ->assertJsonPath('languages', []);
+    }
+
+    public function test_hidden_resume_rows_are_not_returned_by_the_public_api(): void
+    {
+        $resume = Resume::factory()->create();
+        $translation = ResumeRevisionTranslation::factory()->create([
+            'resume_id' => $resume->id,
+            'locale' => 'en',
+            'summary' => 'Public summary',
+        ]);
+        DB::table('resume_revision_education')->insert([
+            'resume_revision_translation_id' => $translation->id,
+            'institution' => 'Hidden institution',
+            'hidden' => true,
+            'sort_order' => 1,
+        ]);
+        DB::table('resume_revision_education')->insert([
+            'resume_revision_translation_id' => $translation->id,
+            'institution' => 'Visible institution',
+            'hidden' => false,
+            'sort_order' => 2,
+        ]);
+
+        $this->getJson('/api/v1/site/resume?locale=en')
+            ->assertOk()
+            ->assertJsonCount(1, 'education')
+            ->assertJsonPath('education.0.institution', 'Visible institution');
     }
 
     public function test_finding_identifier_keeps_working_after_slug_changes(): void

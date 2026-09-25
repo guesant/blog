@@ -58,10 +58,13 @@ class ResumeRevisionTranslation extends RevisionTranslation
     {
         return DB::table('resume_revision_'.$kind)
             ->where('resume_revision_translation_id', $this->id)
+            ->where(fn ($visibility) => $visibility
+                ->where('hidden', false)
+                ->orWhereNull('hidden'))
             ->orderBy('sort_order')
             ->get()
             ->map(fn (object $row): array => collect((array) $row)
-                ->except(['resume_revision_translation_id', 'sort_order', 'created_at', 'updated_at'])
+                ->except(['resume_revision_translation_id', 'sort_order', 'created_at', 'updated_at', 'hidden'])
                 ->mapWithKeys(fn (mixed $value, string $key): array => [Str::camel($key) => $value])
                 ->all())
             ->all();

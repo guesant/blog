@@ -5,6 +5,7 @@ export const themeComponentsControls = {
       root: {
         borderRadius: 0,
         fontFamily: 'var(--site-font-action)',
+        textAlign: 'left' as const,
         padding: 'var(--site-action-py) var(--site-action-px)',
         minHeight: 'var(--site-control-h)',
         height: 'auto',

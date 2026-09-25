@@ -20,8 +20,8 @@ export function FeedCardHeader(props: FeedCardHeaderProps) {
       <Chip
         label={props.t(kindMessageKey)}
         size="small"
-        clickable
-        onClick={() => props.onQuickFilter({ kind: props.entry.kind })}
+        clickable={Boolean(props.onQuickFilter)}
+        onClick={() => props.onQuickFilter?.({ kind: props.entry.kind })}
         visualVariant="feedCardKind"
       />
       <Box component="span">{metadata}</Box>

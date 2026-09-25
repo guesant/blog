@@ -77,6 +77,14 @@ final class HomeGalleryReader
     {
         $revision = Page::query()
             ->where('slug', 'portfolio')
+            ->where(fn ($visibility) => $visibility
+                ->where('pages.hidden', false)
+                ->orWhereNull('pages.hidden'))
+            ->whereHas('currentRevision', static function ($query): void {
+                $query->where(fn ($visibility) => $visibility
+                    ->where('hidden', false)
+                    ->orWhereNull('hidden'));
+            })
             ->with([
                 'currentRevision.featuredCases' => static fn ($query) => $query
                     ->where('hidden', false)

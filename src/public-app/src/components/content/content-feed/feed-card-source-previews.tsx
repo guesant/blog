@@ -3,12 +3,15 @@ import { SourcePreviewListGroup } from '../source-preview/source-preview-list-gr
 import { handleSourceKindClick } from './handle-source-kind-click';
 import type { FeedCardProps } from './feed-card-types';
 
-type FeedCardSourcePreviewsProps = Pick<FeedCardProps, 'entry' | 'onQuickFilter'>;
+type FeedCardSourcePreviewsProps = Pick<
+  FeedCardProps,
+  'entry' | 'onQuickFilter' | 'showSourcePreviews'
+>;
 
 export function FeedCardSourcePreviews(props: FeedCardSourcePreviewsProps) {
   return (
     <ConditionalContent
-      condition={Boolean(props.entry.sourcePreviews?.length)}
+      condition={props.showSourcePreviews !== false && Boolean(props.entry.sourcePreviews?.length)}
       content={
         <SourcePreviewListGroup
           entries={props.entry.sourcePreviews ?? []}

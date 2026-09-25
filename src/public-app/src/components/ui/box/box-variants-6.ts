@@ -1,4 +1,5 @@
 import type { SxProps, Theme } from '@mui/material/styles';
+import { pageHeaderLayout } from './page-header-layout';
 
 export const boxVariants6: Record<string, SxProps<Theme>> = {
   secondaryCaseGrid: {
@@ -23,8 +24,9 @@ export const boxVariants6: Record<string, SxProps<Theme>> = {
     flex: '1 1 100%',
   },
   contentFeedHeader: {
+    ...pageHeaderLayout,
     maxWidth: 'var(--site-content-max)',
-    mb: 'var(--site-space-6)',
+    mb: 0,
     textAlign: 'center',
   },
   feedCard: {
@@ -67,9 +69,16 @@ export const boxVariants6: Record<string, SxProps<Theme>> = {
   },
   connectionsSection2: { display: 'flex', flexDirection: 'column', gap: 'var(--site-space-4)' },
   connectionGroup: { display: 'flex', flexWrap: 'wrap', gap: 'var(--site-space-2)' },
-  detailHeader: { maxWidth: '52rem' },
-  pageHeader: { maxWidth: '46rem', mb: { xs: 7, md: 9 } },
-  contactPageHeader: { maxWidth: '46rem', mb: 'var(--site-space-4)' },
+  detailHeader: {
+    ...pageHeaderLayout,
+    maxWidth: '52rem',
+  },
+  pageHeader: {
+    ...pageHeaderLayout,
+    maxWidth: '46rem',
+    mb: 0,
+  },
+  contactPageHeader: { ...pageHeaderLayout, maxWidth: '46rem', mb: 0 },
   sourcePreviewListGroup: { display: 'grid', gap: 'var(--site-space-2)' },
   sourcePreviewListMetadata: { display: 'flex', flexWrap: 'wrap', gap: 'var(--site-space-1)' },
   sourcePreviewListItemFallback: {

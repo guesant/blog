@@ -1,7 +1,8 @@
 import type { SxProps, Theme } from '@mui/material/styles';
+import { pageHeaderLayout } from './page-header-layout';
 
 export const boxVariantsAbout: Record<string, SxProps<Theme>> = {
-  aboutPageHeader: { maxWidth: '46rem', mb: 0 },
+  aboutPageHeader: { ...pageHeaderLayout, maxWidth: '46rem', mb: 0 },
   aboutEditorialPage: {
     width: '100%',
     maxWidth: 'var(--site-content-max)',

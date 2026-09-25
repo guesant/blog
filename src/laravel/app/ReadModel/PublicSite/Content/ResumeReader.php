@@ -15,13 +15,26 @@ class ResumeReader
 {
     public function find(): ?Resume
     {
-        $resume = Resume::with([
-            'currentRevision.translations',
-            'selectedCases.translations',
-            'skills.topic',
-            'skills.technologies',
-            'languages.language',
-        ])->first();
+        $resume = Resume::query()
+            ->whereHas('currentRevision', static function ($query): void {
+                $query->where(fn ($visibility) => $visibility
+                    ->where('hidden', false)
+                    ->orWhereNull('hidden'));
+            })
+            ->with([
+                'currentRevision' => static function ($query): void {
+                    $query
+                        ->where(fn ($visibility) => $visibility
+                            ->where('hidden', false)
+                            ->orWhereNull('hidden'))
+                        ->with('translations');
+                },
+                'selectedCases.translations',
+                'skills.topic',
+                'skills.technologies',
+                'languages.language',
+            ])
+            ->first();
 
         if ($resume?->currentRevision === null) {
             return $resume;
@@ -45,12 +58,20 @@ class ResumeReader
             ->orderBy('sort_order')
             ->get();
         $topicIds = $rows->pluck('topic_id')->unique()->values();
-        $topics = Topic::whereIn('id', $topicIds)->get()->keyBy('id');
+        $topics = Topic::whereIn('id', $topicIds)
+            ->where(fn ($visibility) => $visibility
+                ->where('hidden', false)
+                ->orWhereNull('hidden'))
+            ->get()
+            ->keyBy('id');
         $technologyRows = DB::table('resume_revision_skill_technologies')
             ->where('resume_revision_id', $revisionId)
             ->orderBy('sort_order')
             ->get();
         $technologies = Technology::whereIn('id', $technologyRows->pluck('technology_id')->unique())
+            ->where(fn ($visibility) => $visibility
+                ->where('hidden', false)
+                ->orWhereNull('hidden'))
             ->get()
             ->keyBy('id');
 

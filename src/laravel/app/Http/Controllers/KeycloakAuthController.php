@@ -41,9 +41,12 @@ class KeycloakAuthController extends Controller
             ],
         );
 
-        Auth::login($user, true);
+        $expiresIn = (int) Arr::get($keycloakUser->accessTokenResponseBody ?? [], 'expires_in', 0);
+
+        Auth::login($user);
         $request->session()->regenerate();
         $request->session()->put('admin_oidc_authorized', true);
+        $request->session()->put('admin_oidc_expires_at', now()->addSeconds($expiresIn)->timestamp);
         $request->session()->put(
             'admin_oidc_id_token',
             Arr::get($keycloakUser->accessTokenResponseBody ?? [], 'id_token'),

@@ -30,7 +30,11 @@ class User extends Authenticatable implements FilamentUser
             return true;
         }
 
-        return session()->get('admin_oidc_authorized') === true;
+        $expiresAt = session()->get('admin_oidc_expires_at');
+
+        return session()->get('admin_oidc_authorized') === true
+            && is_numeric($expiresAt)
+            && (int) $expiresAt > now()->timestamp;
     }
 
     /**

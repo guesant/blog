@@ -60,10 +60,6 @@ export type NavTranslationKey = TranslationKey<'Nav'>;
 
 export type SidebarTranslationKey = TranslationKey<'Sidebar'>;
 
-export type CommonTranslationKey = TranslationKey<'Common'>;
-
-export type FeedTranslationKey = TranslationKey<'Pages.feed'>;
-
 export type NavTranslator = NamespaceTranslator<'Nav'>;
 
 export type SidebarTranslator = NamespaceTranslator<'Sidebar'>;
@@ -72,31 +68,17 @@ export type CommonTranslator = NamespaceTranslator<'Common'>;
 
 export type ExternalProfilesTranslator = NamespaceTranslator<'ExternalProfiles'>;
 
-export type FooterTranslator = NamespaceTranslator<'Footer'>;
-
 export type IllustrationTranslator = NamespaceTranslator<'Illustration'>;
-
-export type CaseShowcaseTranslator = NamespaceTranslator<'CaseShowcase'>;
 
 export type ContentActionsTranslator = NamespaceTranslator<'Pages.contentActions'>;
 
-export type FeedTranslator = NamespaceTranslator<'Pages.feed'>;
-
-export type ErrorTranslator = NamespaceTranslator<'Pages.error'>;
-
-export type StatusTranslationKey = 'title' | 'description' | 'retry' | 'home' | 'issue';
+type StatusTranslationKey = 'title' | 'description' | 'retry' | 'home' | 'issue';
 
 export type StatusTranslator = NamespaceTranslator<'Pages.error', StatusTranslationKey>;
-
-export type AboutTranslator = NamespaceTranslator<'Pages.about'>;
 
 export type CasesTranslator = NamespaceTranslator<'Pages.cases'>;
 
 export type ProjectsTranslator = NamespaceTranslator<'Pages.projects'>;
-
-export type TopicsTranslator = NamespaceTranslator<'Pages.topics'>;
-
-export type CollectionsTranslator = NamespaceTranslator<'Pages.collections'>;
 
 export type ContactTranslator = NamespaceTranslator<'Pages.contact'>;
 
@@ -109,7 +91,7 @@ export type FieldsTranslator = NamespaceTranslator<'Pages.achados.fields'>;
 export type SourcePreviewTranslationKey = Extract<AchadosTranslationKey, `sourcePreview.${string}`>;
 // jscpd:ignore-end
 
-export type NamespaceTranslationKey<Namespace extends TranslationNamespace> =
+type NamespaceTranslationKey<Namespace extends TranslationNamespace> =
   Namespace extends 'Pages.achados' ? AchadosTranslationKey : TranslationKey<Namespace>;
 
 export type NamespaceTranslator<

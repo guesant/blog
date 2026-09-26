@@ -9,13 +9,17 @@ type FeedCardSourcePreviewsProps = Pick<
 >;
 
 export function FeedCardSourcePreviews(props: FeedCardSourcePreviewsProps) {
+  const onKindClick = props.onQuickFilter
+    ? handleSourceKindClick.bind(null, props.onQuickFilter)
+    : undefined;
+
   return (
     <ConditionalContent
       condition={props.showSourcePreviews !== false && Boolean(props.entry.sourcePreviews?.length)}
       content={
         <SourcePreviewListGroup
           entries={props.entry.sourcePreviews ?? []}
-          onKindClick={handleSourceKindClick.bind(null, props.onQuickFilter)}
+          onKindClick={onKindClick}
         />
       }
     />

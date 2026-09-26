@@ -3,7 +3,7 @@ import type { Reference } from '@portfolio/data/domain/types';
 
 export type TypeSpecificFieldValue = string | number | undefined;
 
-export type TypeSpecificFieldReader = (item: Reference) => TypeSpecificFieldValue;
+type TypeSpecificFieldReader = (item: Reference) => TypeSpecificFieldValue;
 
 export type TypeSpecificFieldDefinition = readonly [
   Parameters<FieldsTranslator>[0],

@@ -10,7 +10,9 @@ type CatalogParityError =
   | Exclude<EnglishMessageKeys, PortugueseMessageKeys>
   | Exclude<PortugueseMessageKeys, EnglishMessageKeys>;
 
-export const catalogParity: CatalogParityError extends never ? true : never = true;
+const catalogParity: CatalogParityError extends never ? true : never = true;
+
+void catalogParity;
 
 const catalogs: Record<Locale, InterfaceMessages> = {
   en: en as InterfaceMessages,

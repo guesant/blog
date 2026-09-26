@@ -10,12 +10,6 @@ export type EducationItem = ResumeContent['resume']['education'][number];
 
 export type RecommendationItem = ResumeContent['resume']['recommendations'][number];
 
-export type CredentialSection = {
-  key: string;
-  title: string;
-  items: ResumeContent['resume']['certificates'];
-};
-
 export type ResumeSkillGroup = ResumeContent['resume']['skills'][number];
 
 export type ResumePdfActionsProps = {

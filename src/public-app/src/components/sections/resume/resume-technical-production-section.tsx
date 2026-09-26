@@ -1,20 +1,15 @@
 import type { ResumeCredentialsProps } from './types';
-import { ResumeOptionalSection } from './resume-optional-section';
-import { ResumeSection } from './resume-section';
 import { TechnicalProductionEntries } from './technical-production-entries';
+import { ResumeCredentialSection } from './resume-credential-section';
 
 type ResumeTechnicalProductionSectionProps = ResumeCredentialsProps;
 
 export function ResumeTechnicalProductionSection(props: ResumeTechnicalProductionSectionProps) {
   return (
-    <ResumeOptionalSection
+    <ResumeCredentialSection
       condition={props.resume.technicalProductions.length > 0}
-      content={
-        <ResumeSection
-          title={props.t('technicalProductions')}
-          children={<TechnicalProductionEntries items={props.resume.technicalProductions} />}
-        />
-      }
+      title={props.t('technicalProductions')}
+      entries={<TechnicalProductionEntries items={props.resume.technicalProductions} />}
     />
   );
 }

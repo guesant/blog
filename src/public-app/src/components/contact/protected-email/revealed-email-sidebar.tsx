@@ -1,21 +1,15 @@
-import { Button } from '../../ui';
-import { Icon } from '../../primitives/icon';
+import { RevealedEmailAction } from './revealed-email-action';
 import type { RevealedEmailProps } from './types';
 
 type RevealedEmailSidebarProps = RevealedEmailProps;
 
 export function RevealedEmailSidebar(props: RevealedEmailSidebarProps) {
   return (
-    <Button
-      ref={props.ref}
-      variant="outlined"
+    <RevealedEmailAction
+      {...props}
+      iconSize={14}
       siteVariant={props.buttonSiteVariant ?? 'sidebar'}
-      visualVariant={props.visualVariant}
       size="small"
-      startIcon={<Icon name="mail" size={14} />}
-      onClick={props.onReveal}
-    >
-      {props.showAddress ? props.email : props.label}
-    </Button>
+    />
   );
 }

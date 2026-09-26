@@ -1,8 +1,8 @@
 import type { Project } from '@portfolio/data/domain/types';
-import { Typography } from '../ui';
 import { Icon } from '../primitives/icon';
-import { ConditionalContent } from '../primitives/conditional-content';
+import { Typography } from '../ui';
 import type { CommonTranslator } from '@/i18n/compat-support';
+import { ProjectSummary } from './project-summary';
 
 type ProjectCardDetailsProps = {
   project: Project;
@@ -13,29 +13,17 @@ type ProjectCardDetailsProps = {
 export function ProjectCardDetails(props: ProjectCardDetailsProps) {
   return (
     <>
-      <Typography variant="overline" color="text.secondary">
-        {props.project.status}
-      </Typography>
-      <Typography
-        className="project-card-title"
-        component={props.headingLevel}
-        variant="h3"
-        visualVariant="projectCardSurface"
-      >
-        {props.project.name}
-      </Typography>
-      <Typography color="text.secondary" visualVariant="projectCardSurface2">
-        {props.project.purpose}
-      </Typography>
-      <ConditionalContent
-        condition={Boolean(props.project.problem)}
-        content={
-          <Typography visualVariant="projectCardSurface3">{props.project.problem}</Typography>
-        }
+      <ProjectSummary
+        project={props.project}
+        headingLevel={props.headingLevel}
+        titleContent={props.project.name}
+        titleVariant="h3"
+        titleClassName="project-card-title"
+        titleVisualVariant="projectCardSurface"
+        purposeVisualVariant="projectCardSurface2"
+        problemVisualVariant="projectCardSurface3"
+        technologiesVisualVariant="projectCardSurface4"
       />
-      <Typography visualVariant="projectCardSurface4">
-        {props.project.technologies.join(' · ')}
-      </Typography>
       <Typography color="secondary" visualVariant="projectCardSurface5">
         {props.t('explore')} <Icon name="north-east" size={15} />
       </Typography>

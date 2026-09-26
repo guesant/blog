@@ -1,8 +1,8 @@
 import type { ReactNode } from 'react';
-import { PageTransitionFallback } from './page-transition-fallback';
+import { Box } from '../ui';
 
 type PageTransitionProps = { children: ReactNode };
 
 export function PageTransition(props: PageTransitionProps) {
-  return <PageTransitionFallback {...props} />;
+  return <Box visualVariant="pageTransition">{props.children}</Box>;
 }

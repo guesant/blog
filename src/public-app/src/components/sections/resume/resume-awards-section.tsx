@@ -1,20 +1,15 @@
 import type { ResumeCredentialsProps } from './types';
 import { AwardEntries } from './award-entries';
-import { ResumeOptionalSection } from './resume-optional-section';
-import { ResumeSection } from './resume-section';
+import { ResumeCredentialSection } from './resume-credential-section';
 
 type ResumeAwardsSectionProps = ResumeCredentialsProps;
 
 export function ResumeAwardsSection(props: ResumeAwardsSectionProps) {
   return (
-    <ResumeOptionalSection
+    <ResumeCredentialSection
       condition={props.resume.awards.length > 0}
-      content={
-        <ResumeSection
-          title={props.t('awards')}
-          children={<AwardEntries items={props.resume.awards} />}
-        />
-      }
+      title={props.t('awards')}
+      entries={<AwardEntries items={props.resume.awards} />}
     />
   );
 }

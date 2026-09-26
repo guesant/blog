@@ -1,17 +1,6 @@
 import { RightSidebarContactSection } from './right-sidebar-contact-section';
 import { RightSidebarSecondarySections } from './right-sidebar-secondary-sections';
-import type { SiteText } from '@portfolio/data/domain/types';
-import type { buildRightSidebarData } from './build-right-sidebar-data';
-import type { SidebarTranslator } from '@/i18n/compat-support';
-
-type RightSidebarSectionsProps = {
-  site: SiteText;
-  pathname: string;
-  locale: string;
-  onNavigate?: () => void;
-  t: SidebarTranslator;
-  data: ReturnType<typeof buildRightSidebarData>;
-};
+import type { RightSidebarSectionsProps } from './right-sidebar-sections-props';
 
 export function RightSidebarSections(props: RightSidebarSectionsProps) {
   return (

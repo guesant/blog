@@ -1,0 +1,19 @@
+id: index-files-must-only-reexport
+language: TypeScript
+severity: error
+message: Index files may only re-export existing bindings.
+files:
+  - src/**/index.ts
+ignores:
+  - src/data/api/generated/**
+rule:
+  any:
+    - kind: import_statement
+    - kind: function_declaration
+    - kind: class_declaration
+    - kind: interface_declaration
+    - kind: type_alias_declaration
+    - kind: enum_declaration
+    - kind: lexical_declaration
+    - kind: variable_declaration
+    - kind: expression_statement

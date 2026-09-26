@@ -1,41 +1,50 @@
 import type { AchadosTranslator, CommonTranslator, NavTranslator } from '@/i18n/compat-support';
+import { translateLabelMap } from './translate-label-map';
 
 type BuildContentFeedTranslationsProps = {
-  tNav: NavTranslator;
   tCommon: CommonTranslator;
+  tNav: NavTranslator;
   tPages: AchadosTranslator;
 };
+
+const navLabelKeys = {
+  contentLabel: 'content',
+  writingLabel: 'writing',
+  findingsLabel: 'achados',
+  collectionsLabel: 'collections',
+  topicLabel: 'topics',
+} as const;
+
+const pageLabelKeys = {
+  typeLabel: 'typeFilterLabel',
+  sortLabel: 'sortBy',
+  newestLabel: 'newest',
+  oldestLabel: 'oldest',
+  alphabeticalLabel: 'alphabetical',
+  popularLabel: 'mostPopular',
+  searchLabel: 'searchPlaceholder',
+  applyLabel: 'apply',
+  clearLabel: 'clearFilters',
+  noResultsLabel: 'noResults',
+  resultsLabel: 'results',
+  paginationLabel: 'pagination',
+  firstLabel: 'first',
+  previousLabel: 'previous',
+  nextLabel: 'next',
+  lastLabel: 'last',
+  modeLabel: 'displayMode',
+  paginationModeLabel: 'paginationMode',
+  infiniteModeLabel: 'infiniteMode',
+  perPageLabel: 'perPage',
+} as const;
 
 export function buildContentFeedTranslations(props: BuildContentFeedTranslationsProps) {
   return {
     tNav: props.tNav,
     tCommon: props.tCommon,
     tPages: props.tPages,
-    contentLabel: props.tNav('content'),
-    writingLabel: props.tNav('writing'),
-    findingsLabel: props.tNav('achados'),
-    collectionsLabel: props.tNav('collections'),
-    topicLabel: props.tNav('topics'),
-    typeLabel: props.tPages('typeFilterLabel'),
-    sortLabel: props.tPages('sortBy'),
-    newestLabel: props.tPages('newest'),
-    oldestLabel: props.tPages('oldest'),
-    alphabeticalLabel: props.tPages('alphabetical'),
-    popularLabel: props.tPages('mostPopular'),
-    searchLabel: props.tPages('searchPlaceholder'),
-    applyLabel: props.tPages('apply'),
-    clearLabel: props.tPages('clearFilters'),
-    noResultsLabel: props.tPages('noResults'),
+    ...translateLabelMap(props.tNav, navLabelKeys),
+    ...translateLabelMap(props.tPages, pageLabelKeys),
     emptyLabel: props.tCommon('emptyAchados'),
-    resultsLabel: props.tPages('results'),
-    paginationLabel: props.tPages('pagination'),
-    firstLabel: props.tPages('first'),
-    previousLabel: props.tPages('previous'),
-    nextLabel: props.tPages('next'),
-    lastLabel: props.tPages('last'),
-    modeLabel: props.tPages('displayMode'),
-    paginationModeLabel: props.tPages('paginationMode'),
-    infiniteModeLabel: props.tPages('infiniteMode'),
-    perPageLabel: props.tPages('perPage'),
   };
 }

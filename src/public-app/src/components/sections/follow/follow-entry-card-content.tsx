@@ -11,7 +11,7 @@ export function FollowEntryCardContent(props: FollowEntryCardContentProps) {
       <Typography component="h2" variant="h5">
         {props.entry.title}
       </Typography>
-      <Typography color="text.secondary" visualVariant="renderFollowEntryCard">
+      <Typography color="text.secondary" visualVariant="followEntryCard">
         {props.entry.description}
       </Typography>
     </>

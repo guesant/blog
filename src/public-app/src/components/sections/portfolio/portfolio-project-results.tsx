@@ -1,14 +1,13 @@
 'use client';
 
 import type { Project } from '@portfolio/data/domain/types';
-import { collectionQuery } from '../../../data/queries/content-data-collection-query';
-import { useProgressiveCollection } from '../../../data/queries/use-progressive-collection';
 import type { ContentCollectionMeta } from '@portfolio/data/api/public-site-source-support';
 import { Box } from '../../ui';
 import { ConditionalContent } from '../../primitives/conditional-content';
 import { ProjectCard } from '../../content/project-card';
 import { ProgressiveCollectionFooter } from '../../content/progressive-collection/progressive-collection-footer';
 import { PortfolioProjectGrid } from './ui/project-grid';
+import { usePortfolioProgressiveCollection } from './use-portfolio-progressive-collection';
 
 type PortfolioProjectResultsProps = {
   projects: Project[];
@@ -17,11 +16,12 @@ type PortfolioProjectResultsProps = {
 };
 
 export function PortfolioProjectResults(props: PortfolioProjectResultsProps) {
-  const progressive = useProgressiveCollection<Project>({
+  const progressive = usePortfolioProgressiveCollection<Project>({
     collection: 'projects',
-    query: collectionQuery(props.search, 'portfolio_page', 3),
-    initialPage: { items: props.projects, meta: props.pagination },
-    queryKey: ['portfolio', 'projects', props.search],
+    items: props.projects,
+    pagination: props.pagination,
+    queryKey: 'projects',
+    search: props.search,
     getKey: (item) => item.slug,
   });
 

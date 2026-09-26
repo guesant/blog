@@ -4,10 +4,9 @@ import type { PortfolioPageContentProps } from './types';
 import { PortfolioSectionDescription } from './ui/section-description';
 import { PortfolioSectionTitle } from './ui/section-title';
 import { PortfolioWorkSection } from './portfolio-work-section';
-import { useProgressiveCollection } from '../../../data/queries/use-progressive-collection';
-import { collectionQuery } from '../../../data/queries/content-data-collection-query';
 import type { CaseStudy } from '@portfolio/data/domain/types';
 import { ProgressiveCollectionFooter } from '../../content/progressive-collection/progressive-collection-footer';
+import { usePortfolioProgressiveCollection } from './use-portfolio-progressive-collection';
 
 type PortfolioCaseSectionProps = Pick<
   PortfolioPageContentProps,
@@ -15,11 +14,12 @@ type PortfolioCaseSectionProps = Pick<
 >;
 
 export function PortfolioCaseSection(props: PortfolioCaseSectionProps) {
-  const progressive = useProgressiveCollection<CaseStudy>({
+  const progressive = usePortfolioProgressiveCollection<CaseStudy>({
     collection: 'cases',
-    query: collectionQuery(props.search, 'portfolio_page', 3),
-    initialPage: { items: props.cases, meta: props.casesPagination },
-    queryKey: ['portfolio', 'cases', props.search],
+    items: props.cases,
+    pagination: props.casesPagination,
+    queryKey: 'cases',
+    search: props.search,
     getKey: (item) => item.slug,
   });
 

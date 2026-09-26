@@ -1,0 +1,31 @@
+id: index-files-must-only-reexport
+snapshots:
+  ? |
+    import { Button } from './button';
+    export { Button };
+  : labels:
+      - source: import { Button } from './button';
+        style: primary
+        start: 0
+        end: 34
+  ? |
+    export const Button = createButton();
+  : labels:
+      - source: const Button = createButton();
+        style: primary
+        start: 7
+        end: 37
+  ? |
+    export type ButtonProps = { label: string };
+  : labels:
+      - source: 'type ButtonProps = { label: string };'
+        style: primary
+        start: 7
+        end: 44
+  ? |
+    registerButton();
+  : labels:
+      - source: registerButton();
+        style: primary
+        start: 0
+        end: 17

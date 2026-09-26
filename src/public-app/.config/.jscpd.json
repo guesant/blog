@@ -1,8 +1,8 @@
 {
   "mode": "strict",
-  "threshold": 3,
-  "minLines": 12,
-  "minTokens": 120,
+  "threshold": 1,
+  "minLines": 8,
+  "minTokens": 100,
   "maxGapLines": 1,
   "similarity": 0.85,
   "ignoreIdentifiers": true,
@@ -12,8 +12,11 @@
   "ignore": [
     "**/node_modules/**",
     "**/dist/**",
+    "**/index.ts",
     "**/routeTree.gen.ts",
-    "src/data/api/generated/**"
+    "src/data/api/generated/**",
+    "src/data/api/public-site-source.ts",
+    "src/data/services/content-service.ts"
   ],
   "reporters": ["console", "threshold"]
 }

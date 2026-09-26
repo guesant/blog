@@ -1,7 +1,8 @@
 import type { CreditsTranslator, TranslationKey } from '@/i18n/compat-support';
-import { Card, Chip, Typography } from '../../ui';
+import { Chip, Typography } from '../../ui';
 import { ConditionalContent } from '../../primitives/conditional-content';
 import { ExternalLink } from '../../primitives/external-link';
+import { CatalogCard } from '../../content/catalog-card';
 import type { CreditEntry } from './types';
 
 type CreditCardProps = {
@@ -23,7 +24,7 @@ export function CreditCard(props: CreditCardProps) {
   const category = categoryMessageKey ? props.t(categoryMessageKey) : props.entry.category;
 
   return (
-    <Card component="article" visualVariant="referenceCard">
+    <CatalogCard>
       <Chip label={category} size="small" visualVariant="feedCardKind" />
       <ConditionalContent
         condition={Boolean(props.entry.url)}
@@ -45,6 +46,6 @@ export function CreditCard(props: CreditCardProps) {
           </Typography>
         }
       />
-    </Card>
+    </CatalogCard>
   );
 }

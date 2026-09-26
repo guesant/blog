@@ -3,7 +3,7 @@ import { Icon } from '../../primitives/icon';
 import { ConditionalContent } from '../../primitives/conditional-content';
 import { toMessageKey } from '@portfolio/data/config/achados';
 import type { FeedCardProps } from './feed-card-types';
-import { FeedTopicChip } from './feed-topic-chip';
+import { FeedCardTopics } from './feed-card-topics';
 
 type FeedCardTagItemsProps = Pick<FeedCardProps, 'entry' | 't'>;
 
@@ -33,9 +33,7 @@ export function FeedCardTagItems(props: FeedCardTagItemsProps) {
         condition={Boolean(props.entry.featured)}
         content={<Chip label={props.t('featured')} size="small" color="info" />}
       />
-      {props.entry.topics.map((topic) => (
-        <FeedTopicChip key={`${topic.slug ?? topic.name}-${topic.name}`} topic={topic} />
-      ))}
+      <FeedCardTopics topics={props.entry.topics} />
     </Box>
   );
 }

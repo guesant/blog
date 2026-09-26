@@ -49,14 +49,10 @@ export const cardVariants: Record<string, SxProps<Theme>> = {
     },
     '&:hover .case-title': { color: 'secondary.main' },
   },
-  renderFollowEntryCard: {
+  followEntryCard: {
     p: 'var(--site-inset-card)',
     color: 'inherit',
     textDecoration: 'none',
-    borderLeft: 'var(--site-feed-accent-w) solid var(--site-primary)',
-  },
-  renderFollowEntryCard2: {
-    p: 'var(--site-inset-card)',
     borderLeft: 'var(--site-feed-accent-w) solid var(--site-primary)',
   },
   catalogEntry: {

@@ -1,6 +1,5 @@
-import { ConditionalContent } from '../../primitives/conditional-content';
 import { SidebarNavItem } from './sidebar-nav-item';
-import { SidebarSection } from './sidebar-section';
+import { RightSidebarConditionalSection } from './right-sidebar-conditional-section';
 import type { NavigationItem, SiteText } from '@portfolio/data/domain/types';
 
 type RightSidebarUpdatesSectionProps = {
@@ -15,19 +14,14 @@ type RightSidebarUpdatesSectionProps = {
 
 export function RightSidebarUpdatesSection(props: RightSidebarUpdatesSectionProps) {
   return (
-    <ConditionalContent
-      condition={props.visible}
-      content={
-        <SidebarSection label={props.label}>
-          <SidebarNavItem
-            item={props.item}
-            pathname={props.pathname}
-            locale={props.locale}
-            site={props.site}
-            onNavigate={props.onNavigate}
-          />
-        </SidebarSection>
-      }
-    />
+    <RightSidebarConditionalSection visible={props.visible} label={props.label}>
+      <SidebarNavItem
+        item={props.item}
+        pathname={props.pathname}
+        locale={props.locale}
+        site={props.site}
+        onNavigate={props.onNavigate}
+      />
+    </RightSidebarConditionalSection>
   );
 }

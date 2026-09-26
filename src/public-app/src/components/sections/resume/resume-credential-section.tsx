@@ -1,17 +1,18 @@
-'use client';
-
-import type { CredentialSection } from './types';
+import type { ReactNode } from 'react';
+import { ConditionalContent } from '../../primitives/conditional-content';
 import { ResumeSection } from './resume-section';
-import { CredentialEntries } from './credential-entries';
 
 type ResumeCredentialSectionProps = {
-  section: CredentialSection;
+  condition: boolean;
+  entries: ReactNode;
+  title: string;
 };
 
 export function ResumeCredentialSection(props: ResumeCredentialSectionProps) {
   return (
-    <ResumeSection key={props.section.key} title={props.section.title}>
-      <CredentialEntries items={props.section.items} />
-    </ResumeSection>
+    <ConditionalContent
+      condition={props.condition}
+      content={<ResumeSection title={props.title} children={props.entries} />}
+    />
   );
 }

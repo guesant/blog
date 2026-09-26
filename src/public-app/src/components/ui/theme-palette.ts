@@ -1,41 +1,86 @@
 export type { ResolvedThemeMode } from '@portfolio/data/config/theme';
 
-export const lightPalette = {
-  primary: { main: '#1D4ED8', light: '#EEF3F8', dark: '#163DA9', contrastText: '#FFFFFF' },
-  secondary: { main: '#1D4ED8', light: '#EEF3F8', dark: '#163DA9', contrastText: '#FFFFFF' },
-  success: { main: '#146C43', light: '#D1E7DD', dark: '#146C43', contrastText: '#FFFFFF' },
-  warning: { main: '#997404', light: '#FFF3CD', dark: '#997404', contrastText: '#1A1A1A' },
-  error: { main: '#B02A37', light: '#F8D7DA', dark: '#B02A37', contrastText: '#FFFFFF' },
-  info: { main: '#087990', light: '#CFF4FC', dark: '#087990', contrastText: '#FFFFFF' },
-  background: { default: '#FFFFFF', paper: '#FFFFFF' },
-  text: { primary: '#1A1A1A', secondary: '#6B6B6B', disabled: '#404040' },
-  divider: '#E5E5E5',
-  action: {
-    active: '#1A1A1A',
-    hover: '#F7F7F7',
-    selected: '#EEF3F8',
-    focus: '#86B7FE',
-    disabled: '#6B6B6B',
-    disabledBackground: '#F2F2F2',
-  },
+type ColorTuple = readonly [string, string, string, string];
+
+type PaletteTokens = {
+  background: readonly [string, string];
+  text: readonly [string, string, string];
+  divider: string;
+  action: readonly [string, string, string, string, string, string];
 };
 
-export const darkPalette = {
-  primary: { main: '#6D97EF', light: '#17263C', dark: '#8FB0F4', contrastText: '#0B1120' },
-  secondary: { main: '#6D97EF', light: '#17263C', dark: '#8FB0F4', contrastText: '#0B1120' },
-  success: { main: '#85CF9E', light: '#143323', dark: '#85CF9E', contrastText: '#17181C' },
-  warning: { main: '#E3C05A', light: '#3A2E0C', dark: '#E3C05A', contrastText: '#17181C' },
-  error: { main: '#F19891', light: '#3C1C1E', dark: '#F19891', contrastText: '#17181C' },
-  info: { main: '#7CD2E8', light: '#12303A', dark: '#7CD2E8', contrastText: '#17181C' },
-  background: { default: '#17181C', paper: '#17181C' },
-  text: { primary: '#EEF0F3', secondary: '#A1A6B0', disabled: '#C3C7D0' },
-  divider: '#303339',
-  action: {
-    active: '#EEF0F3',
-    hover: '#24262C',
-    selected: '#17263C',
-    focus: '#3F68A8',
-    disabled: '#A1A6B0',
-    disabledBackground: '#1E2025',
+const primaryColorTokens = [
+  ['#1D4ED8', '#EEF3F8', '#163DA9', '#FFFFFF'],
+  ['#6D97EF', '#17263C', '#8FB0F4', '#0B1120'],
+] satisfies readonly [ColorTuple, ColorTuple];
+
+const colorTokens = [
+  primaryColorTokens,
+  primaryColorTokens,
+  [
+    ['#146C43', '#D1E7DD', '#146C43', '#FFFFFF'],
+    ['#85CF9E', '#143323', '#85CF9E', '#17181C'],
+  ],
+  [
+    ['#997404', '#FFF3CD', '#997404', '#1A1A1A'],
+    ['#E3C05A', '#3A2E0C', '#E3C05A', '#17181C'],
+  ],
+  [
+    ['#B02A37', '#F8D7DA', '#B02A37', '#FFFFFF'],
+    ['#F19891', '#3C1C1E', '#F19891', '#17181C'],
+  ],
+  [
+    ['#087990', '#CFF4FC', '#087990', '#FFFFFF'],
+    ['#7CD2E8', '#12303A', '#7CD2E8', '#17181C'],
+  ],
+] satisfies readonly (readonly [ColorTuple, ColorTuple])[];
+
+const paletteTokens = {
+  light: {
+    background: ['#FFFFFF', '#FFFFFF'],
+    text: ['#1A1A1A', '#6B6B6B', '#404040'],
+    divider: '#E5E5E5',
+    action: ['#1A1A1A', '#F7F7F7', '#EEF3F8', '#86B7FE', '#6B6B6B', '#F2F2F2'],
   },
+  dark: {
+    background: ['#17181C', '#17181C'],
+    text: ['#EEF0F3', '#A1A6B0', '#C3C7D0'],
+    divider: '#303339',
+    action: ['#EEF0F3', '#24262C', '#17263C', '#3F68A8', '#A1A6B0', '#1E2025'],
+  },
+} satisfies Record<'light' | 'dark', PaletteTokens>;
+
+const createPalette = (mode: keyof typeof paletteTokens) => {
+  const tokens = paletteTokens[mode];
+
+  const modeIndex = mode === 'light' ? 0 : 1;
+
+  const [primary, secondary, success, warning, error, info] = colorTokens.map((colors) => {
+    const [main, light, dark, contrastText] = colors[modeIndex];
+
+    return { main, light, dark, contrastText };
+  });
+
+  const [backgroundDefault, backgroundPaper] = tokens.background;
+
+  const [textPrimary, textSecondary, textDisabled] = tokens.text;
+
+  const [active, hover, selected, focus, disabled, disabledBackground] = tokens.action;
+
+  return {
+    primary,
+    secondary,
+    success,
+    warning,
+    error,
+    info,
+    background: { default: backgroundDefault, paper: backgroundPaper },
+    text: { primary: textPrimary, secondary: textSecondary, disabled: textDisabled },
+    divider: tokens.divider,
+    action: { active, hover, selected, focus, disabled, disabledBackground },
+  };
 };
+
+export const lightPalette = createPalette('light');
+
+export const darkPalette = createPalette('dark');

@@ -1,18 +1,9 @@
 import { RightSidebarLegalSection } from './right-sidebar-legal-section';
 import { RightSidebarSourceSection } from './right-sidebar-source-section';
 import { RightSidebarUpdatesSection } from './right-sidebar-updates-section';
-import type { SiteText } from '@portfolio/data/domain/types';
-import type { buildRightSidebarData } from './build-right-sidebar-data';
-import type { SidebarTranslator } from '@/i18n/compat-support';
+import type { RightSidebarSectionsProps } from './right-sidebar-sections-props';
 
-type RightSidebarSecondarySectionsProps = {
-  site: SiteText;
-  pathname: string;
-  locale: string;
-  onNavigate?: () => void;
-  t: SidebarTranslator;
-  data: ReturnType<typeof buildRightSidebarData>;
-};
+type RightSidebarSecondarySectionsProps = RightSidebarSectionsProps;
 
 export function RightSidebarSecondarySections(props: RightSidebarSecondarySectionsProps) {
   return (

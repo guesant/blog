@@ -1,22 +1,15 @@
-import { Button } from '../../ui';
-import { Icon } from '../../primitives/icon';
+import { RevealTriggerAction } from './reveal-trigger-action';
 import type { RevealTriggerProps } from './types';
 
 type RevealTriggerButtonProps = RevealTriggerProps;
 
 export function RevealTriggerButton(props: RevealTriggerButtonProps) {
   return (
-    <Button
-      type="button"
-      onClick={props.onReveal}
-      disabled={props.busy}
-      variant="outlined"
+    <RevealTriggerAction
+      {...props}
+      iconSize={18}
       siteVariant={props.buttonSiteVariant ?? 'contact'}
-      visualVariant={props.visualVariant}
       size="medium"
-      startIcon={<Icon name="mail" size={18} />}
-    >
-      {props.label}
-    </Button>
+    />
   );
 }

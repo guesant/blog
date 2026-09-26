@@ -4,20 +4,15 @@ import type { RevealedEmailProps } from './types';
 import { RevealedEmailButton } from './revealed-email-button';
 import { RevealedEmailInline } from './revealed-email-inline';
 import { RevealedEmailSidebar } from './revealed-email-sidebar';
-import { ConditionalContent } from '../../primitives/conditional-content';
+import { ProtectedEmailVariantRenderer } from './protected-email-variant-renderer';
 
 export function RevealedEmail(props: RevealedEmailProps) {
   return (
-    <>
-      <ConditionalContent condition={props.variant === 'button'}>
-        <RevealedEmailButton {...props} />
-      </ConditionalContent>
-      <ConditionalContent condition={props.variant === 'sidebar'}>
-        <RevealedEmailSidebar {...props} />
-      </ConditionalContent>
-      <ConditionalContent condition={props.variant === 'inline'}>
-        <RevealedEmailInline {...props} />
-      </ConditionalContent>
-    </>
+    <ProtectedEmailVariantRenderer
+      variant={props.variant}
+      button={<RevealedEmailButton {...props} />}
+      sidebar={<RevealedEmailSidebar {...props} />}
+      inline={<RevealedEmailInline {...props} />}
+    />
   );
 }

@@ -1,12 +1,12 @@
 'use client';
 
-import { Card, Typography } from '../../ui';
-import { NavLink } from '../../primitives/nav-link';
+import { Card } from '../../ui';
 import type { ReferenceCardProps } from './types';
 import { ReferenceCardMeta } from './reference-card-meta';
 import { ReferenceCardTopics } from './reference-card-topics';
 import { SourcePreviewListGroup } from '../source-preview/source-preview-list-group';
 import { sourcePreviewDataForLink } from '../source-preview/source-preview-data-for-link';
+import { FindingCardSummary } from '../finding-card-summary';
 
 type ReferenceCardSurfaceProps = ReferenceCardProps;
 
@@ -24,19 +24,16 @@ export function ReferenceCardSurface(props: ReferenceCardSurfaceProps) {
   return (
     <Card visualVariant="referenceCard">
       <ReferenceCardMeta reference={content} />
-      <Typography
-        className="reference-card-title"
-        component={headingLevel}
-        variant="h3"
-        visualVariant="referenceCardTitle"
-      >
-        <NavLink href={content.url ?? `/findings/${content.slug}`} underline="none" color="inherit">
-          {content.title}
-        </NavLink>
-      </Typography>
-      <Typography color="text.secondary" visualVariant="referenceCardDescription">
-        {content.description}
-      </Typography>
+      <FindingCardSummary
+        title={content.title}
+        href={content.url ?? `/findings/${content.slug}`}
+        description={content.description}
+        headingLevel={headingLevel}
+        titleVariant="h3"
+        titleClassName="reference-card-title"
+        titleVisualVariant="referenceCardTitle"
+        descriptionVisualVariant="referenceCardDescription"
+      />
       {sourcePreviews.length > 0 && <SourcePreviewListGroup entries={sourcePreviews} />}
       {content.topics.length > 0 && <ReferenceCardTopics topics={content.topics} />}
     </Card>

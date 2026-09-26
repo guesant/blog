@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { createEmailChallenge } from './create.server.ts';
+import { createTamperedChallenge } from './create-tampered-challenge.ts';
 import { ProtectedEmailChallengeError, solveEmailChallenge } from './index.ts';
 import { DEFAULT_ARGON2ID_PARAMS, MAX_ARGON2ID_PARAMS } from './params.ts';
 import type { ProtectedEmailChallenge } from './types.ts';
@@ -15,39 +16,15 @@ test('createEmailChallenge/solveEmailChallenge roundtrip returns the original ad
   assert.equal(solved, email);
 });
 
-test('rejects a tampered ciphertext', async () => {
-  const challenge = await createEmailChallenge(email);
+for (const field of ['ciphertext', 'iv', 'salt'] as const) {
+  test(`rejects a tampered ${field}`, async () => {
+    const challenge = await createEmailChallenge(email);
 
-  const tampered: ProtectedEmailChallenge = {
-    ...challenge,
-    ciphertext:
-      challenge.ciphertext.slice(0, -2) + (challenge.ciphertext.at(-2) === 'A' ? 'B' : 'A'),
-  };
+    const tampered = createTamperedChallenge(challenge, field);
 
-  await assert.rejects(() => solveEmailChallenge(tampered));
-});
-
-test('rejects a tampered iv', async () => {
-  const challenge = await createEmailChallenge(email);
-
-  const tampered: ProtectedEmailChallenge = {
-    ...challenge,
-    iv: challenge.iv.slice(0, -2) + (challenge.iv.at(-2) === 'A' ? 'B' : 'A'),
-  };
-
-  await assert.rejects(() => solveEmailChallenge(tampered));
-});
-
-test('rejects a tampered salt', async () => {
-  const challenge = await createEmailChallenge(email);
-
-  const tampered: ProtectedEmailChallenge = {
-    ...challenge,
-    salt: challenge.salt.slice(0, -2) + (challenge.salt.at(-2) === 'A' ? 'B' : 'A'),
-  };
-
-  await assert.rejects(() => solveEmailChallenge(tampered));
-});
+    await assert.rejects(() => solveEmailChallenge(tampered));
+  });
+}
 
 test('rejects an unsupported challenge version', async () => {
   const challenge = await createEmailChallenge(email);

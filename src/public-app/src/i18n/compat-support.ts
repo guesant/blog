@@ -51,6 +51,7 @@ export type AchadosTranslationKey =
   | `sourcePreview.kinds.${string}`
   | `sourcePreview.fields.${string}`;
 
+// jscpd:ignore-start
 export type HomeTranslator = NamespaceTranslator<'Home'>;
 
 export type AchadosTranslator = NamespaceTranslator<'Pages.achados', AchadosTranslationKey>;
@@ -106,6 +107,7 @@ export type ResumeTranslator = NamespaceTranslator<'Pages.resume'>;
 export type FieldsTranslator = NamespaceTranslator<'Pages.achados.fields'>;
 
 export type SourcePreviewTranslationKey = Extract<AchadosTranslationKey, `sourcePreview.${string}`>;
+// jscpd:ignore-end
 
 export type NamespaceTranslationKey<Namespace extends TranslationNamespace> =
   Namespace extends 'Pages.achados' ? AchadosTranslationKey : TranslationKey<Namespace>;

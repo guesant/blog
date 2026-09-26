@@ -1,28 +1,14 @@
-import { Box, Typography } from '../../ui';
-import { Breadcrumbs } from '../../navigation/breadcrumbs';
 import type { DetailHeaderProps } from './types';
-import { ConditionalContent } from '../../primitives/conditional-content';
+import { PageHeader } from './page-header';
 
 export function DetailHeader(props: DetailHeaderProps) {
-  const { title, description, meta, actions, breadcrumbs } = props;
-
   return (
-    <Box component="header" visualVariant="detailHeader">
-      <ConditionalContent condition={Boolean(breadcrumbs)}>
-        <Breadcrumbs trail={breadcrumbs ?? []} />
-      </ConditionalContent>
-      <Typography variant="h1" visualVariant="detailHeader2">
-        {title}
-      </Typography>
-      {actions}
-      <ConditionalContent condition={Boolean(description)}>
-        <Typography visualVariant="detailHeader3">{description}</Typography>
-      </ConditionalContent>
-      <ConditionalContent condition={Boolean(meta)}>
-        <Typography color="text.secondary" visualVariant="detailHeader4">
-          {meta}
-        </Typography>
-      </ConditionalContent>
-    </Box>
+    <PageHeader
+      {...props}
+      visualVariant="detailHeader"
+      titleVisualVariant="detailHeader2"
+      descriptionVisualVariant="detailHeader3"
+      metaVisualVariant="detailHeader4"
+    />
   );
 }

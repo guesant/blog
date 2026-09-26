@@ -1,0 +1,18 @@
+id: index-files-must-only-reexport
+valid:
+  - |
+    export { Button } from './button';
+  - |
+    export type { ButtonProps } from './button';
+  - |
+    export { default as Button } from './button';
+invalid:
+  - |
+    import { Button } from './button';
+    export { Button };
+  - |
+    export const Button = createButton();
+  - |
+    export type ButtonProps = { label: string };
+  - |
+    registerButton();

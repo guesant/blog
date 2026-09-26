@@ -105,7 +105,7 @@ export const typographyVariants1: Record<string, SxProps<Theme>> = {
   profileSummarySection: { mt: 1, fontSize: '.875rem' },
   profileBirthDetails: { mt: 0.25, fontSize: '.875rem' },
   collectionReferenceItem: { mt: 1.5, fontStyle: 'italic', maxWidth: '52ch' },
-  renderFollowEntryCard: { mt: 1 },
+  followEntryCard: { mt: 1 },
   followSectionTitle: { mt: 1, mb: 3 },
   followFutureTitle: { mt: 1, mb: 3 },
   snippetFile: {

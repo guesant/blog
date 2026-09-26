@@ -1,58 +1,20 @@
-export const homePortfolioSectionTemplates = [
-  {
-    id: 'portfolio-cases',
-    titleKey: 'portfolioCases',
-    actionKey: 'viewCases',
-    href: '/cases',
-    key: 'cases',
-  },
-  {
-    id: 'portfolio-projects',
-    titleKey: 'portfolioProjects',
-    actionKey: 'viewProjects',
-    href: '/projects',
-    key: 'projects',
-  },
-  {
-    id: 'portfolio-experiments',
-    titleKey: 'portfolioExperiments',
-    actionKey: 'viewExperiments',
-    href: '/projects',
-    key: 'experiments',
-  },
-  {
-    id: 'portfolio-collections',
-    titleKey: 'portfolioCollections',
-    actionKey: 'viewCollections',
-    href: '/collections',
-    key: 'collections',
-  },
-  {
-    id: 'portfolio-snippets',
-    titleKey: 'portfolioSnippets',
-    actionKey: 'viewSnippets',
-    href: '/snippets',
-    key: 'snippets',
-  },
-  {
-    id: 'portfolio-technologies',
-    titleKey: 'portfolioTechnologies',
-    actionKey: 'viewTechnologies',
-    href: '/technologies',
-    key: 'technologies',
-  },
-  {
-    id: 'portfolio-topics',
-    titleKey: 'portfolioTopics',
-    actionKey: 'viewTopics',
-    href: '/topics',
-    key: 'topics',
-  },
-  {
-    id: 'portfolio-credits',
-    titleKey: 'portfolioCredits',
-    actionKey: 'viewCredits',
-    href: '/credits',
-    key: 'credits',
-  },
+const portfolioSectionDefinitions = [
+  ['cases', 'portfolioCases', 'viewCases', '/cases'],
+  ['projects', 'portfolioProjects', 'viewProjects', '/projects'],
+  ['experiments', 'portfolioExperiments', 'viewExperiments', '/projects'],
+  ['collections', 'portfolioCollections', 'viewCollections', '/collections'],
+  ['snippets', 'portfolioSnippets', 'viewSnippets', '/snippets'],
+  ['technologies', 'portfolioTechnologies', 'viewTechnologies', '/technologies'],
+  ['topics', 'portfolioTopics', 'viewTopics', '/topics'],
+  ['credits', 'portfolioCredits', 'viewCredits', '/credits'],
 ] as const;
+
+export const homePortfolioSectionTemplates = portfolioSectionDefinitions.map(
+  ([key, titleKey, actionKey, href]) => ({
+    id: `portfolio-${key}`,
+    titleKey,
+    actionKey,
+    href,
+    key,
+  }),
+);

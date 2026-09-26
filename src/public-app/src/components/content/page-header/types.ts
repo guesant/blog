@@ -5,10 +5,13 @@ import type { BreadcrumbItem } from '../../navigation/breadcrumbs';
 export type PageHeaderProps = {
   title: string;
   description?: string;
+  meta?: string;
   actions?: ReactNode;
   breadcrumbs?: BreadcrumbItem[];
   visualVariant?: string;
+  titleVisualVariant?: string;
   descriptionVisualVariant?: string;
+  metaVisualVariant?: string;
 };
 
 export type EditablePageHeaderProps = {
@@ -16,10 +19,7 @@ export type EditablePageHeaderProps = {
   breadcrumbs?: BreadcrumbItem[];
 };
 
-export type DetailHeaderProps = {
-  title: string;
-  description?: string;
-  meta?: string;
-  actions?: ReactNode;
-  breadcrumbs?: BreadcrumbItem[];
-};
+export type DetailHeaderProps = Pick<
+  PageHeaderProps,
+  'title' | 'description' | 'meta' | 'actions' | 'breadcrumbs'
+>;

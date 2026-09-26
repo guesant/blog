@@ -4,23 +4,26 @@ import type { PageHeaderProps } from './types';
 import { ConditionalContent } from '../../primitives/conditional-content';
 
 export function PageHeader(props: PageHeaderProps) {
-  const { title, description, actions, breadcrumbs } = props;
-
   return (
     <Box component="header" visualVariant={props.visualVariant ?? 'pageHeader'}>
-      <ConditionalContent condition={Boolean(breadcrumbs)}>
-        <Breadcrumbs trail={breadcrumbs ?? []} />
+      <ConditionalContent condition={Boolean(props.breadcrumbs)}>
+        <Breadcrumbs trail={props.breadcrumbs ?? []} />
       </ConditionalContent>
-      <Typography variant="h1" visualVariant="pageHeader2">
-        {title}
+      <Typography variant="h1" visualVariant={props.titleVisualVariant ?? 'pageHeader2'}>
+        {props.title}
       </Typography>
-      {actions}
-      <ConditionalContent condition={Boolean(description)}>
+      {props.actions}
+      <ConditionalContent condition={Boolean(props.description)}>
         <Typography
           color="text.secondary"
           visualVariant={props.descriptionVisualVariant ?? 'pageHeader3'}
         >
-          {description}
+          {props.description}
+        </Typography>
+      </ConditionalContent>
+      <ConditionalContent condition={Boolean(props.meta)}>
+        <Typography color="text.secondary" visualVariant={props.metaVisualVariant}>
+          {props.meta}
         </Typography>
       </ConditionalContent>
     </Box>

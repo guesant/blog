@@ -5,9 +5,9 @@ import { Box } from '../../ui';
 import { LinkList } from './link-list';
 import { SourcePreview } from './source-preview/source-preview';
 import { sourcePreviewDataForLink } from '../../content/source-preview/source-preview-data-for-link';
-import type { SourcePreviewTranslator } from '../../content/source-preview/types';
+import type { AchadosTranslator } from '@/i18n/compat-support';
 
-type LinkSectionContentProps = { item: Reference; t: SourcePreviewTranslator };
+type LinkSectionContentProps = { item: Reference; t: AchadosTranslator };
 
 export function LinkSectionContent(props: LinkSectionContentProps) {
   const entries = props.item.links.map((link) => ({

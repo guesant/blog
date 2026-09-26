@@ -1,8 +1,8 @@
-import type { Translator } from '@/i18n/compat-support';
+import type { NavTranslationKey, NavTranslator } from '@/i18n/compat-support';
 import type { NavigationItem } from '@portfolio/data/domain/types';
 import { routeSegment } from './route-segment';
 
-const navigationTranslationKeys: Record<string, string> = {
+const navigationTranslationKeys: Record<string, NavTranslationKey> = {
   '': 'home',
   about: 'about',
   cases: 'cases',
@@ -23,7 +23,7 @@ const navigationTranslationKeys: Record<string, string> = {
 
 type LocalizeNavigationItemProps = {
   item: NavigationItem;
-  t: Translator;
+  t: NavTranslator;
 };
 
 export function localizeNavigationItem(props: LocalizeNavigationItemProps): NavigationItem {

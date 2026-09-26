@@ -4,6 +4,7 @@ import { SidebarLinkList } from './sidebar-link-list';
 import { LeftSidebarAboutGroup } from './left-sidebar-about-group';
 import { LeftSidebarContentGroups } from './left-sidebar-content-groups';
 import type { NavigationItem, SiteText } from '@portfolio/data/domain/types';
+import type { SidebarTranslationKey, SidebarTranslator } from '@/i18n/compat-support';
 
 type LeftSidebarMainNavigationProps = {
   backHref?: string;
@@ -12,8 +13,8 @@ type LeftSidebarMainNavigationProps = {
   contentGroups: NavigationItem[][];
   aboutVisible: boolean;
   aboutItem: NavigationItem;
-  groupLabel: (items: NavigationItem[]) => string;
-  t: (key: string) => string;
+  groupLabel: (items: NavigationItem[]) => SidebarTranslationKey;
+  t: SidebarTranslator;
   pathname: string;
   locale: string;
   site: SiteText;

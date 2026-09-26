@@ -3,12 +3,12 @@
 import { Box } from '../../ui';
 import { SourcePreviewListItemDetails } from './source-preview-list-item-details';
 import { SourcePreviewListItemMedia } from './source-preview-list-item-media';
-import type { SourcePreviewData } from './types';
+import type { SourcePreviewData, SourcePreviewTranslator } from './types';
 
 type SourcePreviewListItemProps = {
   data: SourcePreviewData;
   onKindClick?: (data: SourcePreviewData) => void;
-  t?: (key: string, values?: Record<string, string | number>) => string;
+  t?: SourcePreviewTranslator;
 };
 
 export function SourcePreviewListItem(props: SourcePreviewListItemProps) {

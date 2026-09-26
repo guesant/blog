@@ -1,11 +1,11 @@
 import type { HomeGallery } from '@portfolio/data/domain/types';
-import type { Translator } from '@/i18n/compat-support';
+import type { HomeTranslator } from '@/i18n/compat-support';
 import { HomeCollectionShowcases } from './home-collection-showcases';
 import { HomePortfolioSections } from './home-portfolio-sections';
 
 type HomeEditorialGallerySecondaryProps = {
   gallery: HomeGallery;
-  t: Translator;
+  t: HomeTranslator;
 };
 
 export function HomeEditorialGallerySecondary(props: HomeEditorialGallerySecondaryProps) {

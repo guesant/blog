@@ -1,10 +1,10 @@
 import type { NavigationItem } from '@portfolio/data/domain/types';
-import type { Translator } from '@/i18n/compat-support';
+import type { SidebarTranslator } from '@/i18n/compat-support';
 
 type BuildFollowWithFeedsProps = {
   item: NavigationItem;
   locale: string;
-  t: Translator;
+  t: SidebarTranslator;
 };
 
 export function buildFollowWithFeeds(props: BuildFollowWithFeedsProps): NavigationItem {

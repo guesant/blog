@@ -1,12 +1,12 @@
 import { Typography } from '../../ui';
 import type { Reference } from '@portfolio/data/domain/types';
-import type { useTranslations } from '@/i18n/compat';
+import type { AchadosTranslator } from '@/i18n/compat-support';
 import { FindingSection } from './finding-section';
 import { ConditionalContent } from '../../primitives/conditional-content';
 
 type AchadoNotesSectionProps = {
   item: Reference;
-  t: ReturnType<typeof useTranslations>;
+  t: AchadosTranslator;
 };
 
 export function AchadoNotesSection(props: AchadoNotesSectionProps) {

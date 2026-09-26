@@ -1,5 +1,5 @@
 import type { HomeHeroProps } from '../types';
-import type { Translator } from '@/i18n/compat-support';
+import type { NavTranslator } from '@/i18n/compat-support';
 import { homeVisibilityEnabled } from './home-visibility-enabled';
 
 export type HomeHeroRoute = {
@@ -13,7 +13,7 @@ type BuildHomeHeroRoutesProps = Pick<HomeHeroProps, 'site' | 'showContact' | 't'
 
 export function buildHomeHeroRoutes(
   props: BuildHomeHeroRoutesProps,
-  tNav: Translator,
+  tNav: NavTranslator,
 ): HomeHeroRoute[] {
   return [
     {

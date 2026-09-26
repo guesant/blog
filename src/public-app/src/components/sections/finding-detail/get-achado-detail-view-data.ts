@@ -1,5 +1,5 @@
 import type { Reference } from '@portfolio/data/domain/types';
-import type { useTranslations } from '@/i18n/compat';
+import type { AchadosTranslator, FieldsTranslator, NavTranslator } from '@/i18n/compat-support';
 import type { BreadcrumbItem } from '../../navigation/breadcrumbs';
 import type { DetailEntry } from './types';
 import { joinDefined } from './join-defined';
@@ -11,9 +11,9 @@ import { typeSpecificEntries } from './type-specific-entries';
 type AchadoDetailViewDataOptions = {
   item: Reference;
   locale: string;
-  t: ReturnType<typeof useTranslations>;
-  tFields: ReturnType<typeof useTranslations>;
-  tNav: ReturnType<typeof useTranslations>;
+  t: AchadosTranslator;
+  tFields: FieldsTranslator;
+  tNav: NavTranslator;
 };
 
 export function getAchadoDetailViewData(props: AchadoDetailViewDataOptions) {

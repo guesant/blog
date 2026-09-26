@@ -2,7 +2,7 @@ import type {
   HomeGalleryFeedCategories,
   HomeGallerySectionTotals,
 } from '@portfolio/data/domain/types';
-import type { Translator } from '@/i18n/compat-support';
+import type { HomeTranslator, HomeTranslationKey } from '@/i18n/compat-support';
 import { HomeGalleryOptionalSection } from './home-gallery-optional-section';
 import { homeGalleryFeedSectionTemplates } from './home-gallery-feed-section-templates';
 
@@ -13,13 +13,13 @@ export type HomeGalleryFeedSectionsProps = {
     recent: HomeGallerySectionTotals;
     popular: HomeGallerySectionTotals;
   };
-  t: Translator;
+  t: HomeTranslator;
 };
 
 type HomeGalleryFeedSection = {
   id: string;
-  titleKey: string;
-  actionKey: string;
+  titleKey: HomeTranslationKey;
+  actionKey: HomeTranslationKey;
   href: string;
   entries: HomeGalleryFeedCategories[keyof HomeGalleryFeedCategories];
   total: number;

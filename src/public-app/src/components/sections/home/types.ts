@@ -1,13 +1,13 @@
 import type { HomePageContent } from '@portfolio/data/domain/types';
-import { useTranslations } from '@/i18n/compat';
+import type { ExternalProfilesTranslator, HomeTranslator } from '@/i18n/compat-support';
 
 export type HomeContactSectionProps = {
   page: HomePageContent['page'];
   site: HomePageContent['site'];
   showContact: boolean;
   hasEmail: boolean;
-  t: ReturnType<typeof useTranslations>;
-  tExternalProfiles: ReturnType<typeof useTranslations>;
+  t: HomeTranslator;
+  tExternalProfiles: ExternalProfilesTranslator;
 };
 
 export type HomeAvailabilityProps = {
@@ -21,5 +21,5 @@ export type HomeHeroProps = {
   showContact: boolean;
   site: HomePageContent['site'];
   workTarget: string | null;
-  t: ReturnType<typeof useTranslations>;
+  t: HomeTranslator;
 };

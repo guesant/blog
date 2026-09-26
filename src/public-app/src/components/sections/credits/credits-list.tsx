@@ -1,11 +1,11 @@
-import type { Translator } from '@/i18n/compat-support';
+import type { CreditsTranslator } from '@/i18n/compat-support';
 import { CollectionListing } from '../../content/collection-listing';
 import type { CreditEntry } from './types';
 import { CreditCard } from './credit-card';
 
 type CreditsListProps = {
   entries: CreditEntry[];
-  t: Translator;
+  t: CreditsTranslator;
 };
 
 export function CreditsList(props: CreditsListProps) {

@@ -1,6 +1,6 @@
 import type { Experiment, Project, ProjectsPageCopy } from '@portfolio/data/domain/types';
 import type { ContentCollectionMeta } from '@portfolio/data/api/public-site-source-support';
-import { useTranslations } from '@/i18n/compat';
+import type { CommonTranslator } from '@/i18n/compat-support';
 
 export type ExperimentRowProps = { item: Experiment };
 
@@ -11,7 +11,7 @@ export type ExperimentsSectionProps = {
   pagination: ContentCollectionMeta;
   hasProjects: boolean;
   page: ProjectsPageCopy;
-  tCommon: ReturnType<typeof useTranslations>;
+  tCommon: CommonTranslator;
 };
 
 export type ProjectsPageContentProps = {

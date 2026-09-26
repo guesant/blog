@@ -1,11 +1,11 @@
 import { SvgElement } from '../../ui';
-import type { Translator } from '@/i18n/compat-support';
+import type { IllustrationTranslator } from '@/i18n/compat-support';
 import { ProcessStep } from './process-step';
 import type { IllustrationAccent } from './types';
 
 export type ProcessIllustrationProps = {
   accent: IllustrationAccent;
-  t: Translator;
+  t: IllustrationTranslator;
 };
 
 export function ProcessIllustration(props: ProcessIllustrationProps) {

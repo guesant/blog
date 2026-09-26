@@ -1,11 +1,11 @@
 import type { PageIntroduction, SiteText } from '@portfolio/data/domain/types';
-import { useTranslations } from '@/i18n/compat';
+import type { ContactTranslator, ExternalProfilesTranslator } from '@/i18n/compat-support';
 
 export type ContactDetailsProps = {
   site: SiteText;
   hasEmail: boolean;
-  t: ReturnType<typeof useTranslations>;
-  tExternalProfiles: ReturnType<typeof useTranslations>;
+  t: ContactTranslator;
+  tExternalProfiles: ExternalProfilesTranslator;
 };
 
 export type ContactPageContentProps = { page: PageIntroduction; site: SiteText };

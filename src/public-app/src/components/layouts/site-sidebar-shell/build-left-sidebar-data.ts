@@ -1,5 +1,5 @@
 import type { SiteText } from '@portfolio/data/domain/types';
-import type { Translator } from '@/i18n/compat-support';
+import type { NavTranslator, SidebarTranslationKey } from '@/i18n/compat-support';
 import { buildLeftSidebarAboutItems } from './build-left-sidebar-about-items';
 import { isAboutRoute } from './is-about-route';
 import { localizeNavigationItem } from './localize-navigation-item';
@@ -9,7 +9,7 @@ import { visibleAboutRoutes } from './visible-about-routes';
 type BuildLeftSidebarDataProps = {
   site: SiteText;
   currentPathname: string;
-  tNav: Translator;
+  tNav: NavTranslator;
 };
 
 export function buildLeftSidebarData(props: BuildLeftSidebarDataProps) {
@@ -42,6 +42,6 @@ export function buildLeftSidebarData(props: BuildLeftSidebarDataProps) {
     homeItem: navigationItem('/', props.tNav('home')),
     currentPathname: props.currentPathname,
     routeSegments: props.currentPathname.split('/').filter(Boolean),
-    contentGroupLabel: () => 'groupContent',
+    contentGroupLabel: (): SidebarTranslationKey => 'groupContent',
   };
 }

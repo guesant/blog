@@ -1,10 +1,11 @@
 import { SidebarGroup } from './sidebar-group';
 import type { NavigationItem, SiteText } from '@portfolio/data/domain/types';
+import type { SidebarTranslationKey, SidebarTranslator } from '@/i18n/compat-support';
 
 type LeftSidebarContentGroupsProps = {
   groups: NavigationItem[][];
-  groupLabel: (items: NavigationItem[]) => string;
-  t: (key: string) => string;
+  groupLabel: (items: NavigationItem[]) => SidebarTranslationKey;
+  t: SidebarTranslator;
   pathname: string;
   locale: string;
   site: SiteText;

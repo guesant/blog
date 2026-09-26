@@ -1,6 +1,16 @@
 import en from './messages/en.json';
 import ptBR from './messages/pt-BR.json';
-import type { InterfaceMessages, Locale } from './compat-support';
+import type { InterfaceMessages, Locale, MessageKeyPaths } from './compat-support';
+
+type EnglishMessageKeys = MessageKeyPaths<typeof en>;
+
+type PortugueseMessageKeys = MessageKeyPaths<typeof ptBR>;
+
+type CatalogParityError =
+  | Exclude<EnglishMessageKeys, PortugueseMessageKeys>
+  | Exclude<PortugueseMessageKeys, EnglishMessageKeys>;
+
+export const catalogParity: CatalogParityError extends never ? true : never = true;
 
 const catalogs: Record<Locale, InterfaceMessages> = {
   en: en as InterfaceMessages,

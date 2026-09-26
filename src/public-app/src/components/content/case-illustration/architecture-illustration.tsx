@@ -2,11 +2,11 @@ import { ArchitectureApi } from './architecture-api';
 import { ArchitectureApplication } from './architecture-application';
 import { ArchitectureData } from './architecture-data';
 import type { IllustrationAccent } from './types';
-import type { Translator } from '@/i18n/compat-support';
+import type { IllustrationTranslator } from '@/i18n/compat-support';
 
 export type ArchitectureIllustrationProps = {
   accent: IllustrationAccent;
-  t: Translator;
+  t: IllustrationTranslator;
 };
 
 export function ArchitectureIllustration(props: ArchitectureIllustrationProps) {

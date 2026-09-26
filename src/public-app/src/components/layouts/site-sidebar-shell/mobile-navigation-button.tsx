@@ -1,10 +1,10 @@
 import { Button } from '../../ui';
 import { Icon } from '../../primitives/icon';
-import { useTranslations } from '@/i18n/compat';
+import type { SidebarTranslator } from '@/i18n/compat-support';
 
 type MobileNavigationButtonProps = {
   onOpen: () => void;
-  t: ReturnType<typeof useTranslations>;
+  t: SidebarTranslator;
 };
 
 export function MobileNavigationButton(props: MobileNavigationButtonProps) {

@@ -1,8 +1,9 @@
 import type { Reference } from '@portfolio/data/domain/types';
+import type { FieldsTranslator } from '@/i18n/compat-support';
 
 export function typeSpecificBookFields(
   item: Reference,
-  tFields: (key: string) => string,
+  tFields: FieldsTranslator,
 ): Array<[string, string | number | undefined]> {
   return [
     [tFields('publisher'), item.book?.publisher],

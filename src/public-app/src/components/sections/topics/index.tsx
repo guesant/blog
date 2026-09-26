@@ -26,7 +26,7 @@ export function TopicosPageContent(props: TopicosPageContentProps) {
       <CollectionListing
         items={topics}
         getKey={(item) => item.slug}
-        renderListItem={(topic) => <TopicListItem topic={topic} t={tPages} />}
+        renderListItem={(topic) => <TopicListItem topic={topic} t={t} />}
         pagination={{ meta: props.pagination, action: '/topics' }}
       />
     </AchadosIndexLayout>

@@ -1,14 +1,14 @@
 import { Button } from '../ui';
 import { Icon } from '../primitives/icon';
 import { downloadFile } from './download-file';
-import type { Translator } from '@/i18n/compat-support';
+import type { ContentActionsTranslator } from '@/i18n/compat-support';
 
 type ContentActionsPrimaryProps = {
   text: string;
   copy: (value: string, kind: 'text' | 'url') => void;
   url: string;
   filename: string;
-  t: Translator;
+  t: ContentActionsTranslator;
   copied: string | null;
 };
 

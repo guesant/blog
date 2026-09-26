@@ -1,12 +1,12 @@
 import type { DetailEntry } from './types';
-import type { useTranslations } from '@/i18n/compat';
+import type { AchadosTranslator } from '@/i18n/compat-support';
 import { FactGrid } from './fact-grid';
 import { FindingSection } from './finding-section';
 import { ConditionalContent } from '../../primitives/conditional-content';
 
 type AchadoDetailsSectionProps = {
   entries: DetailEntry[];
-  t: ReturnType<typeof useTranslations>;
+  t: AchadosTranslator;
 };
 
 export function AchadoDetailsSection(props: AchadoDetailsSectionProps) {

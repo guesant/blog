@@ -1,12 +1,12 @@
 import { Button } from '../ui';
 import { Icon } from '../primitives/icon';
 import { ConditionalContent } from '../primitives/conditional-content';
-import type { Translator } from '@/i18n/compat-support';
+import type { ContentActionsTranslator } from '@/i18n/compat-support';
 
 type ContentActionsSecondaryProps = {
   externalUrl?: string;
   downloadUrl?: string;
-  t: Translator;
+  t: ContentActionsTranslator;
 };
 
 export function ContentActionsSecondary(props: ContentActionsSecondaryProps) {

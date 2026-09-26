@@ -2,14 +2,14 @@ import type {
   HomeGalleryPortfolio,
   HomeGalleryPortfolioTotals,
 } from '@portfolio/data/domain/types';
-import type { Translator } from '@/i18n/compat-support';
+import type { HomeTranslator } from '@/i18n/compat-support';
 import { HomeGalleryOptionalSection } from './home-gallery-optional-section';
 import { homePortfolioSectionTemplates } from './home-portfolio-section-templates';
 
 type HomePortfolioSectionsProps = {
   portfolio: HomeGalleryPortfolio;
   totals: HomeGalleryPortfolioTotals;
-  t: Translator;
+  t: HomeTranslator;
 };
 
 export function HomePortfolioSections(props: HomePortfolioSectionsProps) {

@@ -11,6 +11,8 @@ export function ColecaoDetailContent(props: ColecaoDetailContentProps) {
 
   const tNav = useTranslations('Nav');
 
+  const tCommon = useTranslations('Common');
+
   return (
     <>
       <PageHeader
@@ -29,7 +31,7 @@ export function ColecaoDetailContent(props: ColecaoDetailContentProps) {
           { label: collection.title },
         ]}
       />
-      <CollectionDetailSections collection={collection} tNav={tNav} />
+      <CollectionDetailSections collection={collection} tCommon={tCommon} />
     </>
   );
 }

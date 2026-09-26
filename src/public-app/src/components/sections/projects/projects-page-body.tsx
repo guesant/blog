@@ -1,4 +1,4 @@
-import type { useTranslations } from '@/i18n/compat';
+import type { CommonTranslator } from '@/i18n/compat-support';
 import type { ProjectsPageContentProps } from './types';
 import { ExperimentsSection } from './experiments-section';
 import { ProjectsPageResults } from './projects-page-results';
@@ -9,7 +9,7 @@ type ProjectsPageBodyProps = {
   projectsPagination: ProjectsPageContentProps['projectsPagination'];
   experiments: ProjectsPageContentProps['experiments'];
   experimentsPagination: ProjectsPageContentProps['experimentsPagination'];
-  tCommon: ReturnType<typeof useTranslations>;
+  tCommon: CommonTranslator;
 };
 
 export function ProjectsPageBody(props: ProjectsPageBodyProps) {

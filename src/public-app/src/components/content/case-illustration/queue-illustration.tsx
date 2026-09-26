@@ -1,11 +1,11 @@
 import { SvgElement } from '../../ui';
-import type { Translator } from '@/i18n/compat-support';
+import type { IllustrationTranslator } from '@/i18n/compat-support';
 import { QueueRow } from './queue-row';
 import type { IllustrationAccent } from './types';
 
 export type QueueIllustrationProps = {
   accent: IllustrationAccent;
-  t: Translator;
+  t: IllustrationTranslator;
 };
 
 export function QueueIllustration(props: QueueIllustrationProps) {

@@ -1,11 +1,11 @@
 'use client';
 
 import { ToggleButton, ToggleButtonGroup, BrightnessAuto, DarkMode, LightMode } from '../../ui';
-import { useTranslations } from '@/i18n/compat';
+import type { SidebarTranslator } from '@/i18n/compat-support';
 import { useThemeMode } from '../../ui/theme-registry';
 import type { ThemeMode } from '@portfolio/data/config/theme';
 
-type SidebarThemeButtonProps = { t: ReturnType<typeof useTranslations> };
+type SidebarThemeButtonProps = { t: SidebarTranslator };
 
 export function SidebarThemeButton(props: SidebarThemeButtonProps) {
   const { t } = props;

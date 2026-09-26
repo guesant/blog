@@ -5,6 +5,7 @@ import { useTranslations } from '@/i18n/compat';
 import { PageHeader } from '../../content/page-header';
 import { Icon } from '../../primitives/icon';
 import { StatusActions } from './status-actions';
+import type { StatusTranslator } from '@/i18n/compat-support';
 import type { StatusPageKind } from './status-page-kind';
 
 type StatusContentProps = {
@@ -14,7 +15,7 @@ type StatusContentProps = {
 };
 
 export function StatusContent(props: StatusContentProps) {
-  const t = useTranslations(`Pages.${props.kind}`);
+  const t: StatusTranslator = useTranslations(`Pages.${props.kind}`);
 
   return (
     <Box visualVariant="statusContent">

@@ -1,10 +1,10 @@
 import type { HomeGalleryEntry } from '@portfolio/data/domain/types';
-import type { Translator } from '@/i18n/compat-support';
+import type { HomeTranslator } from '@/i18n/compat-support';
 import { HomeGalleryCard } from './home-gallery-card';
 
 type HomeGalleryCardsProps = {
   entries: HomeGalleryEntry[];
-  t: Translator;
+  t: HomeTranslator;
 };
 
 export function HomeGalleryCards(props: HomeGalleryCardsProps) {

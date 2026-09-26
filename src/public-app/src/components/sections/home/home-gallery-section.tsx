@@ -1,5 +1,5 @@
 import type { HomeGalleryEntry } from '@portfolio/data/domain/types';
-import type { Translator } from '@/i18n/compat-support';
+import type { HomeTranslator } from '@/i18n/compat-support';
 import { HomeSectionSurface } from './ui/home-section-surface';
 import { HomeGalleryCards } from './home-gallery-cards';
 import { HomeGalleryRow } from './ui/home-gallery-row';
@@ -14,7 +14,7 @@ type HomeGallerySectionProps = {
   entries: HomeGalleryEntry[];
   total?: number;
   mode?: 'grid' | 'carousel' | 'list';
-  t: Translator;
+  t: HomeTranslator;
 };
 
 export function HomeGallerySection(props: HomeGallerySectionProps) {

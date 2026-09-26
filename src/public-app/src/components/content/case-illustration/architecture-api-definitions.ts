@@ -1,4 +1,4 @@
-import type { Translator } from '@/i18n/compat-support';
+import type { IllustrationTranslator } from '@/i18n/compat-support';
 import type { ArchitectureDiagramDefinition } from './architecture-diagram-element';
 import type { ArchitectureDiagramTemplate } from './architecture-diagram-element';
 import { resolveArchitectureDiagram } from './resolve-architecture-diagram';
@@ -6,7 +6,7 @@ import type { IllustrationAccent } from './types';
 
 type CreateArchitectureApiDefinitionsOptions = {
   accent: IllustrationAccent;
-  t: Translator;
+  t: IllustrationTranslator;
 };
 
 const architectureApiTemplate: ArchitectureDiagramTemplate[] = [

@@ -5,13 +5,14 @@ import { LeftSidebarPreferencesArea } from './left-sidebar-preferences-area';
 import type { SiteText } from '@portfolio/data/domain/types';
 import type { buildLeftSidebarBackNavigation } from './build-left-sidebar-back-navigation';
 import type { buildLeftSidebarData } from './build-left-sidebar-data';
+import type { SidebarTranslator } from '@/i18n/compat-support';
 
 type LeftSidebarShellViewProps = {
   site: SiteText;
   locale: string;
   onNavigate?: () => void;
   showPreferences: boolean;
-  t: (key: string) => string;
+  t: SidebarTranslator;
   data: ReturnType<typeof buildLeftSidebarData>;
   back: ReturnType<typeof buildLeftSidebarBackNavigation>;
 };

@@ -1,12 +1,12 @@
 import { Typography } from '../../ui';
 import { PageHeader } from '../../content/page-header';
-import type { useTranslations } from '@/i18n/compat';
+import type { NavTranslator } from '@/i18n/compat-support';
 import type { PortfolioPageContentProps } from './types';
 import { PortfolioAvailabilityCard } from './ui/availability-card';
 import { PortfolioFocus } from './ui/focus';
 
 type PortfolioPageHeaderProps = Pick<PortfolioPageContentProps, 'page' | 'profile'> & {
-  tNav: ReturnType<typeof useTranslations>;
+  tNav: NavTranslator;
 };
 
 export function PortfolioPageHeader(props: PortfolioPageHeaderProps) {

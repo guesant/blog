@@ -2,13 +2,13 @@ import { Box } from '../../ui';
 import { ContentRichText } from '../../content/content-rich-text';
 import { EmptyState } from '../../content/empty-state';
 import type { ReferenceCollectionDetail } from '@portfolio/data/domain/types';
-import type { useTranslations } from '@/i18n/compat';
+import type { CommonTranslator } from '@/i18n/compat-support';
 import { CollectionReferenceItem } from './collection-reference-item';
 import { ConditionalContent } from '../../primitives/conditional-content';
 
 type CollectionDetailSectionsProps = {
   collection: ReferenceCollectionDetail;
-  tNav: ReturnType<typeof useTranslations>;
+  tCommon: CommonTranslator;
 };
 
 export function CollectionDetailSections(props: CollectionDetailSectionsProps) {
@@ -24,7 +24,7 @@ export function CollectionDetailSections(props: CollectionDetailSectionsProps) {
       />
       <ConditionalContent
         condition={props.collection.items.length === 0}
-        content={<EmptyState icon="problem">{props.tNav('emptyCollections')}</EmptyState>}
+        content={<EmptyState icon="problem">{props.tCommon('emptyCollections')}</EmptyState>}
       />
       <ConditionalContent
         condition={props.collection.items.length > 0}

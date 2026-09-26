@@ -1,14 +1,18 @@
 import { EmptyState } from '../../content/empty-state';
 import type { ContactPageContentProps } from './types';
-import type { useTranslations } from '@/i18n/compat';
+import type {
+  CommonTranslator,
+  ContactTranslator,
+  ExternalProfilesTranslator,
+} from '@/i18n/compat-support';
 import { ContactDetails } from './contact-details';
 import { ConditionalContent } from '../../primitives/conditional-content';
 
 type ContactPageBodyProps = {
   site: ContactPageContentProps['site'];
-  t: ReturnType<typeof useTranslations>;
-  tCommon: ReturnType<typeof useTranslations>;
-  tExternalProfiles: ReturnType<typeof useTranslations>;
+  t: ContactTranslator;
+  tCommon: CommonTranslator;
+  tExternalProfiles: ExternalProfilesTranslator;
 };
 
 export function ContactPageBody(props: ContactPageBodyProps) {

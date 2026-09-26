@@ -1,12 +1,12 @@
 import type { NavigationItem, SiteVisibility } from '@portfolio/data/domain/types';
-import type { Translator } from '@/i18n/compat-support';
+import type { SidebarTranslator } from '@/i18n/compat-support';
 import { buildSidebarLegalItem } from './build-sidebar-legal-item';
 import { sidebarVisibilityEnabled } from './sidebar-visibility-enabled';
 
 type BuildSidebarLegalItemsProps = {
   visibility: SiteVisibility | undefined;
   showContact: boolean;
-  t: Translator;
+  t: SidebarTranslator;
 };
 
 export function buildSidebarLegalItems(props: BuildSidebarLegalItemsProps): NavigationItem[] {

@@ -2,13 +2,13 @@ import { Box, Typography } from '../../ui';
 import { ContentRichText } from '../../content/content-rich-text';
 import { MetricsGrid } from '../../content/detail-layout';
 import type { CaseStudy } from '@portfolio/data/domain/types';
-import type { useTranslations } from '@/i18n/compat';
+import type { CasesTranslator } from '@/i18n/compat-support';
 import { CaseDetailMetric } from './case-detail-metric';
 import { ConditionalContent } from '../../primitives/conditional-content';
 
 type CaseDetailBodyProps = {
   item: CaseStudy;
-  t: ReturnType<typeof useTranslations>;
+  t: CasesTranslator;
 };
 
 export function CaseDetailBody(props: CaseDetailBodyProps) {

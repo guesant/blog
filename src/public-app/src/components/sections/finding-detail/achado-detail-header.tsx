@@ -2,7 +2,7 @@ import { Box, Typography } from '../../ui';
 import { ContentActions } from '../../content/content-actions';
 import { Breadcrumbs, type BreadcrumbItem } from '../../navigation/breadcrumbs';
 import type { Reference } from '@portfolio/data/domain/types';
-import type { useTranslations } from '@/i18n/compat';
+import type { AchadosTranslator } from '@/i18n/compat-support';
 import { ConditionalContent } from '../../primitives/conditional-content';
 
 type AchadoDetailHeaderProps = {
@@ -10,7 +10,7 @@ type AchadoDetailHeaderProps = {
   authors: string;
   breadcrumbTrail: BreadcrumbItem[];
   formattedPublishedDate: string | undefined;
-  t: ReturnType<typeof useTranslations>;
+  t: AchadosTranslator;
 };
 
 export function AchadoDetailHeader(props: AchadoDetailHeaderProps) {

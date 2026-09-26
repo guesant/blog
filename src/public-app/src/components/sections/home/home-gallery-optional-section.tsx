@@ -1,5 +1,5 @@
 import type { HomeGalleryEntry } from '@portfolio/data/domain/types';
-import type { Translator } from '@/i18n/compat-support';
+import type { HomeTranslator } from '@/i18n/compat-support';
 import { ConditionalContent } from '../../primitives/conditional-content';
 import { HomeGallerySection } from './home-gallery-section';
 
@@ -11,7 +11,7 @@ type HomeGalleryOptionalSectionProps = {
   entries: HomeGalleryEntry[];
   total?: number;
   mode?: 'grid' | 'carousel' | 'list';
-  t: Translator;
+  t: HomeTranslator;
 };
 
 export function HomeGalleryOptionalSection(props: HomeGalleryOptionalSectionProps) {

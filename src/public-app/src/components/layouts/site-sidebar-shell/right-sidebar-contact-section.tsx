@@ -4,7 +4,7 @@ import { SidebarLink } from './sidebar-link';
 import { SidebarSection } from './sidebar-section';
 import { RightSidebarContactProfiles } from './right-sidebar-contact-profiles';
 import type { SiteText } from '@portfolio/data/domain/types';
-import type { Translator } from '@/i18n/compat-support';
+import type { SidebarTranslator } from '@/i18n/compat-support';
 
 type RightSidebarContactSectionProps = {
   showContact: boolean;
@@ -12,7 +12,7 @@ type RightSidebarContactSectionProps = {
   pathname: string;
   locale: string;
   onNavigate?: () => void;
-  t: Translator;
+  t: SidebarTranslator;
 };
 
 export function RightSidebarContactSection(props: RightSidebarContactSectionProps) {

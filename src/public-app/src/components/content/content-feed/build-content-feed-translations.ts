@@ -1,9 +1,9 @@
-import type { Translator } from '@/i18n/compat-support';
+import type { AchadosTranslator, CommonTranslator, NavTranslator } from '@/i18n/compat-support';
 
 type BuildContentFeedTranslationsProps = {
-  tNav: Translator;
-  tCommon: Translator;
-  tPages: Translator;
+  tNav: NavTranslator;
+  tCommon: CommonTranslator;
+  tPages: AchadosTranslator;
 };
 
 export function buildContentFeedTranslations(props: BuildContentFeedTranslationsProps) {

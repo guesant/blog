@@ -2,12 +2,12 @@ import type { Project } from '@portfolio/data/domain/types';
 import { Typography } from '../ui';
 import { Icon } from '../primitives/icon';
 import { ConditionalContent } from '../primitives/conditional-content';
-import type { Translator } from '@/i18n/compat-support';
+import type { CommonTranslator } from '@/i18n/compat-support';
 
 type ProjectCardDetailsProps = {
   project: Project;
   headingLevel: 'h2' | 'h3';
-  t: Translator;
+  t: CommonTranslator;
 };
 
 export function ProjectCardDetails(props: ProjectCardDetailsProps) {

@@ -3,10 +3,11 @@ import { externalProfileLabel } from '@portfolio/data/config/external-profiles';
 import { Icon } from '../../primitives/icon';
 import { ProfileIcon } from '../../primitives/profile-icon';
 import type { ExternalProfile } from '@portfolio/data/domain/types';
+import type { ExternalProfilesTranslator } from '@/i18n/compat-support';
 
 type ContactProfileButtonProps = {
   profile: ExternalProfile;
-  tExternalProfiles: (key: string) => string;
+  tExternalProfiles: ExternalProfilesTranslator;
   siteVariant?: 'contact' | 'exploration';
 };
 

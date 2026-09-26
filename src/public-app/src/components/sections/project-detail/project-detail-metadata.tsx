@@ -1,12 +1,12 @@
 import { Box } from '../../ui';
-import type { useTranslations } from '@/i18n/compat';
+import type { ProjectsTranslator } from '@/i18n/compat-support';
 import type { ProjectDetailContentProps } from './types';
 import { ProjectDetailSource } from './project-detail-source';
 import { ProjectDetailTechnologies } from './project-detail-technologies';
 
 type ProjectDetailMetadataProps = {
   project: ProjectDetailContentProps['project'];
-  t: ReturnType<typeof useTranslations>;
+  t: ProjectsTranslator;
 };
 
 export function ProjectDetailMetadata(props: ProjectDetailMetadataProps) {

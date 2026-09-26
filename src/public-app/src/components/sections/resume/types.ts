@@ -1,5 +1,5 @@
 import type { CaseStudy, ResumePageContent as ResumeContent } from '@portfolio/data/domain/types';
-import { useTranslations } from '@/i18n/compat';
+import type { ExternalProfilesTranslator, ResumeTranslator } from '@/i18n/compat-support';
 import type { ReactNode } from 'react';
 
 export const pdfLocaleLabels: Record<string, string> = { en: 'English', 'pt-BR': 'Português' };
@@ -21,7 +21,7 @@ export type ResumeSkillGroup = ResumeContent['resume']['skills'][number];
 export type ResumePdfActionsProps = {
   locale: string;
   pdfUrls: Record<string, string>;
-  t: (key: string) => string;
+  t: ResumeTranslator;
 };
 
 export type ResumeSectionProps = { title: string; children: ReactNode };
@@ -96,7 +96,7 @@ export type ResumeCaseProps = { staticItem: CaseStudy };
 
 export type ResumeCredentialsProps = {
   resume: ResumeContent['resume'];
-  t: ReturnType<typeof useTranslations>;
+  t: ResumeTranslator;
 };
 
 export type ResumeHeaderProps = {
@@ -106,13 +106,13 @@ export type ResumeHeaderProps = {
   hasEmail: boolean;
   locale: string;
   pdfUrls: Record<string, string>;
-  t: ReturnType<typeof useTranslations>;
-  tExternalProfiles: ReturnType<typeof useTranslations>;
+  t: ResumeTranslator;
+  tExternalProfiles: ExternalProfilesTranslator;
 };
 
 export type ResumeOverviewSectionsProps = {
   resume: ResumeContent['resume'];
-  t: ReturnType<typeof useTranslations>;
+  t: ResumeTranslator;
 };
 
 type ResumeExperienceItem = {
@@ -122,12 +122,12 @@ type ResumeExperienceItem = {
 export type ResumeWorkSectionsProps = {
   cases: CaseStudy[];
   experience: ResumeExperienceItem[];
-  t: ReturnType<typeof useTranslations>;
+  t: ResumeTranslator;
 };
 
 export type ResumeQualificationSectionsProps = {
   resume: ResumeContent['resume'];
-  t: ReturnType<typeof useTranslations>;
+  t: ResumeTranslator;
 };
 
 export type ResumePageContentProps = {

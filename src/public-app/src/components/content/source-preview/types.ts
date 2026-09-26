@@ -1,4 +1,5 @@
 import type { IconName } from '../../primitives/icon';
+import type { SourcePreviewTranslationKey } from '@/i18n/compat-support';
 
 type SourcePreviewKind =
   'repository' | 'organization' | 'user' | 'video' | 'playlist' | 'channel' | 'link';
@@ -32,6 +33,6 @@ export type SourcePreviewData = {
 };
 
 export type SourcePreviewTranslator = (
-  key: string,
+  key: SourcePreviewTranslationKey,
   values?: Record<string, string | number>,
 ) => string;

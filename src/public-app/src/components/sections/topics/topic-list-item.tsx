@@ -1,12 +1,12 @@
 import { Box, Button, Typography } from '../../ui';
 import type { Topic } from '@portfolio/data/domain/types';
-import type { useTranslations } from '@/i18n/compat';
+import type { CommonTranslator } from '@/i18n/compat-support';
 import { ArrowForward } from '../../ui';
 import { NavLink } from '../../primitives/nav-link';
 
 type TopicListItemProps = {
   topic: Topic;
-  t: ReturnType<typeof useTranslations>;
+  t: CommonTranslator;
 };
 
 export function TopicListItem(props: TopicListItemProps) {

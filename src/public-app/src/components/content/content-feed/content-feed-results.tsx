@@ -2,13 +2,13 @@
 
 import { CollectionListing } from '../collection-listing';
 import type { FeedEntry, FeedQuickFilter } from './types';
-import { useTranslations } from '@/i18n/compat';
+import type { AchadosTranslator } from '@/i18n/compat-support';
 import { FeedCard } from './feed-card';
 
 type ContentFeedResultsProps = {
   entries: FeedEntry[];
   locale: string;
-  t: ReturnType<typeof useTranslations>;
+  t: AchadosTranslator;
   onQuickFilter: (filter: FeedQuickFilter) => void;
 };
 

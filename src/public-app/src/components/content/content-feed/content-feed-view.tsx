@@ -10,6 +10,7 @@ import { ContentFeedListing } from './content-feed-listing';
 import type { FeedSelectDefinition } from './feed-select.types';
 import type { ContentFeedDisplayMode, FeedEntry, FeedPageCopy, FeedQuickFilter } from './types';
 import type { BreadcrumbItem } from '../../navigation/breadcrumbs';
+import type { AchadosTranslator } from '@/i18n/compat-support';
 
 export type ContentFeedViewProps = {
   copy: FeedPageCopy;
@@ -29,7 +30,7 @@ export type ContentFeedViewProps = {
   noResultsLabel: string;
   emptyLabel: string;
   locale: string;
-  t: (key: string) => string;
+  t: AchadosTranslator;
   onClear: () => void;
   onQuickFilter: (filter: FeedQuickFilter) => void;
   page: number;

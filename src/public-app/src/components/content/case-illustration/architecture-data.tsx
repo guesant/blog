@@ -1,11 +1,11 @@
 import { ArchitectureDiagram } from './architecture-diagram';
 import { createArchitectureDataDefinitions } from './architecture-data-definitions';
 import type { IllustrationAccent } from './types';
-import type { Translator } from '@/i18n/compat-support';
+import type { IllustrationTranslator } from '@/i18n/compat-support';
 
 type ArchitectureDataProps = {
   accent: IllustrationAccent;
-  t: Translator;
+  t: IllustrationTranslator;
 };
 
 export function ArchitectureData(props: ArchitectureDataProps) {

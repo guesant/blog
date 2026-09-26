@@ -1,12 +1,12 @@
 import type { NavigationItem } from '@portfolio/data/domain/types';
-import type { Translator } from '@/i18n/compat-support';
+import type { NavTranslator } from '@/i18n/compat-support';
 import { aboutRoutes } from './types';
 import { routeSegment } from './route-segment';
 
 type BuildLeftSidebarAboutItemsProps = {
   aboutGroup: NavigationItem[];
   visibleRoutes: string[];
-  tNav: Translator;
+  tNav: NavTranslator;
 };
 
 export function buildLeftSidebarAboutItems(

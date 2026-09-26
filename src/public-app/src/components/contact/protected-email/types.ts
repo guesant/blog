@@ -1,13 +1,13 @@
 import type { LinkProps } from '../../ui';
 import type { SiteButtonVariant } from '../../ui';
 import type { ProtectedEmailChallenge } from '@portfolio/data/domain/protected-email';
-import { useTranslations } from '@/i18n/compat';
+import type { CommonTranslator } from '@/i18n/compat-support';
 
 export type RevealState = 'idle' | 'working' | 'revealed' | 'error';
 
 type RevealVariant = 'button' | 'inline' | 'sidebar';
 
-export type Translate = ReturnType<typeof useTranslations>;
+export type Translate = CommonTranslator;
 
 export type SettleReveal = (next: RevealState, address: string) => void;
 

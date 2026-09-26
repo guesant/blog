@@ -1,7 +1,8 @@
 'use client';
 
 import { ToggleButtonGroup } from '../../ui';
-import { useRouter, useTranslations } from '@/i18n/compat';
+import { useRouter } from '@/i18n/compat';
+import type { SidebarTranslator } from '@/i18n/compat-support';
 import { routing } from '../../../i18n/routing';
 import { SidebarThemeButton } from './sidebar-theme-button';
 import { SidebarLocaleToggle } from './sidebar-locale-toggle';
@@ -11,7 +12,7 @@ import { handleSidebarLocaleChange } from './handle-sidebar-locale-change';
 type SidebarPreferencesProps = {
   pathname: string;
   locale: string;
-  t: ReturnType<typeof useTranslations>;
+  t: SidebarTranslator;
 };
 
 export function SidebarPreferences(props: SidebarPreferencesProps) {

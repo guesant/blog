@@ -1,10 +1,11 @@
 import { ListSubheader, MenuItem } from '../../ui';
+import type { ResumeTranslator } from '@/i18n/compat-support';
 import { pdfLocaleLabels } from './types';
 
 type ResumePdfLocaleItemsProps = {
   locale: string;
   href: string;
-  t: (key: string) => string;
+  t: ResumeTranslator;
   onClose: () => void;
 };
 

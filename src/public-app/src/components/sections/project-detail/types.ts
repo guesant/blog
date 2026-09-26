@@ -1,5 +1,5 @@
 import type { Project } from '@portfolio/data/domain/types';
-import { useTranslations } from '@/i18n/compat';
+import type { ProjectsTranslator } from '@/i18n/compat-support';
 
 export function hasProjectOverview(project: Project) {
   return Boolean(project.problem || project.currentFocus);
@@ -7,7 +7,7 @@ export function hasProjectOverview(project: Project) {
 
 export type ProjectOverviewProps = {
   project: Project;
-  t: ReturnType<typeof useTranslations>;
+  t: ProjectsTranslator;
 };
 
 export type ProjectDetailContentProps = { project: Project };

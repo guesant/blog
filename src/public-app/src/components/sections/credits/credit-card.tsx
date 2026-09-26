@@ -1,4 +1,4 @@
-import type { Translator } from '@/i18n/compat-support';
+import type { CreditsTranslator, TranslationKey } from '@/i18n/compat-support';
 import { Card, Chip, Typography } from '../../ui';
 import { ConditionalContent } from '../../primitives/conditional-content';
 import { ExternalLink } from '../../primitives/external-link';
@@ -6,10 +6,10 @@ import type { CreditEntry } from './types';
 
 type CreditCardProps = {
   entry: CreditEntry;
-  t: Translator;
+  t: CreditsTranslator;
 };
 
-const categoryMessageKeys: Record<string, string> = {
+const categoryMessageKeys: Record<string, TranslationKey<'Pages.credits'>> = {
   reference: 'categories.reference',
   infrastructure: 'categories.infrastructure',
   library: 'categories.library',

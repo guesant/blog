@@ -1,4 +1,4 @@
-import type { useTranslations } from '@/i18n/compat';
+import type { ResumeTranslator } from '@/i18n/compat-support';
 import type { ResumePageContentProps } from './types';
 import { ResumeCredentials } from './resume-credentials';
 import { ResumeOverviewSections } from './resume-overview-sections';
@@ -7,7 +7,7 @@ import { ResumeWorkSections } from './resume-work-sections';
 
 type ResumePageSectionsProps = {
   content: ResumePageContentProps['content'];
-  t: ReturnType<typeof useTranslations>;
+  t: ResumeTranslator;
 };
 
 export function ResumePageSections(props: ResumePageSectionsProps) {

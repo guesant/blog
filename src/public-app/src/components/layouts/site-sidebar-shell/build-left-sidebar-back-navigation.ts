@@ -1,8 +1,8 @@
-import type { Translator } from '@/i18n/compat-support';
+import type { NavTranslator } from '@/i18n/compat-support';
 
 type BuildLeftSidebarBackNavigationProps = {
   pathname: string;
-  tNav: Translator;
+  tNav: NavTranslator;
 };
 
 export function buildLeftSidebarBackNavigation(props: BuildLeftSidebarBackNavigationProps) {

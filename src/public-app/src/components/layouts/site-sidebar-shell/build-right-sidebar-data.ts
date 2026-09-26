@@ -1,5 +1,5 @@
 import type { SiteText } from '@portfolio/data/domain/types';
-import type { Translator } from '@/i18n/compat-support';
+import type { SidebarTranslator } from '@/i18n/compat-support';
 import { buildFollowWithFeeds } from './build-follow-with-feeds';
 import { buildSidebarBuildUrl } from './build-sidebar-build-url';
 import { buildSidebarLegalItems } from './build-sidebar-legal-items';
@@ -12,7 +12,7 @@ import { routeSegment } from './route-segment';
 type BuildRightSidebarDataProps = {
   site: SiteText;
   locale: string;
-  t: Translator;
+  t: SidebarTranslator;
 };
 
 export function buildRightSidebarData(props: BuildRightSidebarDataProps) {

@@ -1,7 +1,7 @@
 import { Link } from '../../ui';
 import { CollectionPagination } from '../../content/collection-pagination';
 import { NavLink } from '../../primitives/nav-link';
-import { useTranslations } from '@/i18n/compat';
+import type { HomeTranslator } from '@/i18n/compat-support';
 import type { PortfolioPageContentProps } from './types';
 import { PortfolioAction } from './ui/action';
 import { PortfolioCaseSection } from './portfolio-case-section';
@@ -9,7 +9,7 @@ import { PortfolioProjectsSection } from './portfolio-projects-section';
 import { portfolioPaginationMeta } from './portfolio-pagination-meta';
 
 type PortfolioPageBodyProps = PortfolioPageContentProps & {
-  tHome: ReturnType<typeof useTranslations>;
+  tHome: HomeTranslator;
 };
 
 export function PortfolioPageBody(props: PortfolioPageBodyProps) {

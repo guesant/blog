@@ -1,7 +1,8 @@
 import type { ExternalProfile } from '@portfolio/data/domain/types';
+import type { ExternalProfilesTranslator } from '@/i18n/compat-support';
 import { trimmedLabel } from './trimmed-label';
 
-type TranslateProfileLabel = (key: string) => string;
+type TranslateProfileLabel = ExternalProfilesTranslator;
 
 export function externalProfileLabel(profile: ExternalProfile, t: TranslateProfileLabel): string {
   const label = trimmedLabel(profile.label);

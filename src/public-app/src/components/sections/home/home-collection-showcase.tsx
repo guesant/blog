@@ -1,10 +1,10 @@
 import type { HomeCollectionShowcase as HomeCollectionShowcaseData } from '@portfolio/data/domain/types';
-import type { Translator } from '@/i18n/compat-support';
+import type { HomeTranslator } from '@/i18n/compat-support';
 import { HomeGalleryOptionalSection } from './home-gallery-optional-section';
 
 type HomeCollectionShowcaseProps = {
   showcase: HomeCollectionShowcaseData;
-  t: Translator;
+  t: HomeTranslator;
 };
 
 export function HomeCollectionShowcase(props: HomeCollectionShowcaseProps) {

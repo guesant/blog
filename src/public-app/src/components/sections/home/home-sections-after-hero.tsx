@@ -3,13 +3,13 @@
 import type { HomePageContent, SiteText } from '@portfolio/data/domain/types';
 import { HomeEditorialGallery } from './home-editorial-gallery';
 import { HomeContactSection } from './home-contact-section';
-import type { Translator } from '@/i18n/compat-support';
+import type { ExternalProfilesTranslator, HomeTranslator } from '@/i18n/compat-support';
 
 type HomeSectionsAfterHeroProps = {
   content: HomePageContent;
   site: SiteText;
-  t: Translator;
-  tExternalProfiles: Translator;
+  t: HomeTranslator;
+  tExternalProfiles: ExternalProfilesTranslator;
   showContact: boolean;
   hasEmail: boolean;
 };

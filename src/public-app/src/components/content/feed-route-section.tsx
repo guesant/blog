@@ -9,8 +9,6 @@ type FeedRouteSectionProps = {
 export function FeedRouteSection(props: FeedRouteSectionProps) {
   const t = useTranslations('Pages.feed');
 
-  const tNav = useTranslations('Nav');
-
   return (
     <ContentFeed
       feedItems={props.data.feedItems}
@@ -18,7 +16,7 @@ export function FeedRouteSection(props: FeedRouteSectionProps) {
       findings={[]}
       collections={[]}
       copy={{ title: t('title'), description: t('description') }}
-      breadcrumbs={[{ label: tNav('feed') }]}
+      breadcrumbs={[{ label: t('title') }]}
       contentMeta={props.data.feedPagination}
       action="/feed"
       displayControls

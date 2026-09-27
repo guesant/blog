@@ -2,11 +2,13 @@
 
 namespace App\Filament\Resources\Pages\Schemas;
 
+use App\Content\HomeGallerySection;
 use App\Filament\Concerns\BuildsTranslationTabs;
 use App\Models\CaseStudy;
 use App\Models\PageRevisionTranslation;
 use App\Models\Project;
 use App\Models\Writing;
+use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\MarkdownEditor;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
@@ -14,6 +16,7 @@ use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Group;
 use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Schema;
 
 class PageForm
@@ -48,6 +51,15 @@ class PageForm
                             ->required()
                             ->unique(ignoreRecord: true)
                             ->maxLength(255),
+                    ]),
+                Section::make('Home gallery')
+                    ->visible(fn (Get $get): bool => $get('slug') === 'home')
+                    ->schema([
+                        CheckboxList::make('home_sections')
+                            ->label('Visible sections')
+                            ->options(HomeGallerySection::LABELS)
+                            ->default(array_keys(array_filter(HomeGallerySection::DEFAULTS)))
+                            ->columns(2),
                     ]),
                 Section::make('Featured Cases')
                     ->schema([

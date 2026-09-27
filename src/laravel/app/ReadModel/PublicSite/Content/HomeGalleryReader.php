@@ -3,12 +3,16 @@
 namespace App\ReadModel\PublicSite\Content;
 
 use App\Application\PublicSite\GetPublicHomeGalleryQueryResult;
+use App\Content\HomeGallerySection;
 use App\Models\Page;
+use App\Models\PageRevision;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 final class HomeGalleryReader
 {
     private const LIMIT = 6;
+
+    private const FINDING_LIMIT = 3;
 
     public function __construct(
         private readonly CaseStudyReader $cases,
@@ -23,89 +27,117 @@ final class HomeGalleryReader
 
     public function find(string $locale): GetPublicHomeGalleryQueryResult
     {
+        $homeRevision = $this->homeRevision();
+        $portfolioRevision = $this->portfolioRevision();
+        $sectionStates = $homeRevision?->homeSections
+            ->mapWithKeys(fn ($section): array => [$section->section_key => $section->enabled])
+            ->all() ?? [];
+
         $recent = $this->pageResults([
-            'writing' => $this->feedPage($locale, 'desc', 'post'),
-            'finding' => $this->feedPage($locale, 'desc', 'achado'),
-            'collection' => $this->feedPage($locale, 'desc', 'colecao'),
+            'writing' => $this->sectionEnabled($sectionStates, 'recent-writing')
+                ? $this->feedPage($locale, 'desc', 'post')
+                : null,
+            'finding' => $this->sectionEnabled($sectionStates, 'recent-findings')
+                ? $this->feedPage($locale, 'desc', 'achado', self::FINDING_LIMIT)
+                : null,
+            'collection' => $this->sectionEnabled($sectionStates, 'recent-collections')
+                ? $this->feedPage($locale, 'desc', 'colecao')
+                : null,
         ]);
-        $popularFinding = $this->feedPage($locale, 'popular', 'achado');
-        $popular = [
-            'items' => [
-                'writing' => [],
-                'finding' => $popularFinding->getCollection()->all(),
-                'collection' => [],
-            ],
-            'totals' => [
-                'writing' => 0,
-                'finding' => $popularFinding->total(),
-                'collection' => 0,
-            ],
-        ];
-        $collectionsPage = $this->collections->listPaginated(self::LIMIT, 'desc', $locale);
+
+        $popular = $this->pageResults([
+            'writing' => $this->sectionEnabled($sectionStates, 'popular-writing')
+                ? $this->feedPage($locale, 'popular', 'post')
+                : null,
+            'finding' => $this->sectionEnabled($sectionStates, 'popular-findings')
+                ? $this->feedPage($locale, 'popular', 'achado', self::FINDING_LIMIT)
+                : null,
+            'collection' => $this->sectionEnabled($sectionStates, 'popular-collections')
+                ? $this->feedPage($locale, 'popular', 'colecao')
+                : null,
+        ]);
+
+        $collectionsPage = $this->sectionEnabled($sectionStates, 'portfolio-collections')
+            || $this->sectionEnabled($sectionStates, 'collection-showcases')
+            ? $this->collections->listPaginated(self::LIMIT, 'desc', $locale)
+            : null;
         $portfolio = $this->pageResults([
-            'cases' => $this->cases->listPaginated(self::LIMIT, 'desc'),
-            'projects' => $this->projects->listPaginated(self::LIMIT, 'desc'),
-            'experiments' => $this->projects->listExperimentsPaginated(self::LIMIT, 'desc'),
-            'collections' => $collectionsPage,
-            'snippets' => $this->snippets->listPaginated(self::LIMIT, 'desc'),
-            'technologies' => $this->technologies->listPaginated(self::LIMIT, 'order'),
-            'topics' => $this->topics->listPaginated(self::LIMIT, 'alpha'),
-            'credits' => $this->credits->listPaginated(self::LIMIT, 'desc'),
+            'cases' => $this->sectionEnabled($sectionStates, 'portfolio-cases')
+                ? $this->cases->listPaginated(self::LIMIT, 'desc')
+                : null,
+            'projects' => $this->sectionEnabled($sectionStates, 'portfolio-projects')
+                ? $this->projects->listPaginated(self::LIMIT, 'desc')
+                : null,
+            'experiments' => $this->sectionEnabled($sectionStates, 'portfolio-experiments')
+                ? $this->projects->listExperimentsPaginated(self::LIMIT, 'desc')
+                : null,
+            'collections' => $this->sectionEnabled($sectionStates, 'portfolio-collections')
+                ? $collectionsPage
+                : null,
+            'snippets' => $this->sectionEnabled($sectionStates, 'portfolio-snippets')
+                ? $this->snippets->listPaginated(self::LIMIT, 'desc')
+                : null,
+            'technologies' => $this->sectionEnabled($sectionStates, 'portfolio-technologies')
+                ? $this->technologies->listPaginated(self::LIMIT, 'order')
+                : null,
+            'topics' => $this->sectionEnabled($sectionStates, 'portfolio-topics')
+                ? $this->topics->listPaginated(self::LIMIT, 'alpha')
+                : null,
+            'credits' => $this->sectionEnabled($sectionStates, 'portfolio-credits')
+                ? $this->credits->listPaginated(self::LIMIT, 'desc')
+                : null,
         ]);
-        $highlights = $this->highlights();
+        $highlights = $this->sectionEnabled($sectionStates, 'highlights')
+            ? $this->highlights($portfolioRevision)
+            : ['items' => [], 'total' => 0];
+        $collectionItems = $collectionsPage?->getCollection()->all() ?? [];
+        $collectionShowcases = $this->sectionEnabled($sectionStates, 'collection-showcases')
+            ? array_map(
+                fn ($collection): array => [
+                    'collection' => $collection,
+                    'resources' => $this->collections->resourcesForHome($collection, self::LIMIT)->all(),
+                ],
+                $collectionItems,
+            )
+            : [];
 
         return new GetPublicHomeGalleryQueryResult(
             highlights: $highlights['items'],
             recent: $recent['items'],
             popular: $popular['items'],
             portfolio: $portfolio['items'],
-            collectionShowcases: array_map(
-                fn ($collection): array => [
-                    'collection' => $collection,
-                    'resources' => $this->collections->resourcesForHome($collection, self::LIMIT)->all(),
-                ],
-                $portfolio['items']['collections'],
-            ),
+            collectionShowcases: $collectionShowcases,
             totals: [
                 'highlights' => $highlights['total'],
                 'recent' => $recent['totals'],
                 'popular' => $popular['totals'],
                 'portfolio' => $portfolio['totals'],
-                'collection_showcases' => $collectionsPage->total(),
+                'collection_showcases' => $collectionsPage?->total() ?? 0,
             ],
         );
     }
 
-    private function pageResults(array $pages): array
+    private function homeRevision(): ?PageRevision
     {
-        $items = [];
-        $totals = [];
-
-        foreach ($pages as $key => $page) {
-            $items[$key] = $page->getCollection()->all();
-            $totals[$key] = $page->total();
-        }
-
-        return ['items' => $items, 'totals' => $totals];
+        return Page::query()
+            ->where('slug', 'home')
+            ->where(fn ($visibility) => $visibility
+                ->where('pages.hidden', false)
+                ->orWhereNull('pages.hidden'))
+            ->whereHas('currentRevision', static function ($query): void {
+                $query->where(fn ($visibility) => $visibility
+                    ->where('hidden', false)
+                    ->orWhereNull('hidden'));
+            })
+            ->with([
+                'currentRevision.homeSections',
+            ])
+            ->first()?->currentRevision;
     }
 
-    private function feedPage(string $locale, string $sort, string $kind): LengthAwarePaginator
+    private function portfolioRevision(): ?PageRevision
     {
-        return $this->feed->listPaginated(
-            self::LIMIT,
-            1,
-            $sort,
-            $kind,
-            $locale,
-            null,
-            null,
-            null,
-        );
-    }
-
-    private function highlights(): array
-    {
-        $revision = Page::query()
+        return Page::query()
             ->where('slug', 'portfolio')
             ->where(fn ($visibility) => $visibility
                 ->where('pages.hidden', false)
@@ -129,7 +161,46 @@ final class HomeGalleryReader
                     ->with(['translations', 'topics.translations']),
             ])
             ->first()?->currentRevision;
+    }
 
+    private function pageResults(array $pages): array
+    {
+        $items = [];
+        $totals = [];
+
+        foreach ($pages as $key => $page) {
+            $items[$key] = $page?->getCollection()->all() ?? [];
+            $totals[$key] = $page?->total() ?? 0;
+        }
+
+        return ['items' => $items, 'totals' => $totals];
+    }
+
+    private function sectionEnabled(array $states, string $key): bool
+    {
+        return $states[$key] ?? HomeGallerySection::DEFAULTS[$key] ?? true;
+    }
+
+    private function feedPage(
+        string $locale,
+        string $sort,
+        string $kind,
+        int $limit = self::LIMIT,
+    ): LengthAwarePaginator {
+        return $this->feed->listPaginated(
+            $limit,
+            1,
+            $sort,
+            $kind,
+            $locale,
+            null,
+            null,
+            null,
+        );
+    }
+
+    private function highlights(?PageRevision $revision): array
+    {
         if ($revision === null) {
             return ['items' => [], 'total' => 0];
         }

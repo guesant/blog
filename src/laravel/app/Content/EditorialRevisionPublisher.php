@@ -97,14 +97,14 @@ class EditorialRevisionPublisher
         PublicSiteContentChanged::dispatch();
     }
 
-    public function syncPageRelations(Model $record): void
+    public function syncPageRelations(Model $record, ?array $homeSections = null): void
     {
         if ($record->getTable() !== 'pages' || $record->current_revision_id === null) {
             return;
         }
 
         $revisionId = $record->current_revision_id;
-        DB::transaction(function () use ($record, $revisionId): void {
+        DB::transaction(function () use ($record, $revisionId, $homeSections): void {
             $relations = [
                 ['relation' => 'featuredCases', 'table' => 'page_revision_featured_cases', 'column' => 'case_study_id'],
                 ['relation' => 'featuredProjects', 'table' => 'page_revision_featured_projects', 'column' => 'project_id'],
@@ -118,6 +118,23 @@ class EditorialRevisionPublisher
                         'page_revision_id' => $revisionId,
                         $relation['column'] => $item->id,
                         'sort_order' => $item->pivot->order ?? 0,
+                    ]);
+                }
+            }
+
+            if ($homeSections !== null && $record->getAttribute('slug') === 'home') {
+                DB::table('page_revision_home_sections')
+                    ->where('page_revision_id', $revisionId)
+                    ->delete();
+
+                foreach (array_keys(HomeGallerySection::DEFAULTS) as $sortOrder => $sectionKey) {
+                    DB::table('page_revision_home_sections')->insert([
+                        'page_revision_id' => $revisionId,
+                        'section_key' => $sectionKey,
+                        'enabled' => in_array($sectionKey, $homeSections, true),
+                        'sort_order' => $sortOrder,
+                        'created_at' => now(),
+                        'updated_at' => now(),
                     ]);
                 }
             }

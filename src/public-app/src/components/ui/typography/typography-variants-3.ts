@@ -123,6 +123,15 @@ export const typographyVariants3: Record<string, SxProps<Theme>> = {
     textOverflow: 'ellipsis',
     whiteSpace: 'nowrap',
   },
+  sourcePreviewListMetadataItemIdentifier: {
+    display: 'block',
+    minWidth: 0,
+    maxWidth: '100%',
+    color: 'var(--site-text-secondary)',
+    fontSize: 'var(--site-text-xs)',
+    overflowWrap: 'anywhere',
+    whiteSpace: 'normal',
+  },
   caseIllustration: {
     position: 'absolute',
     zIndex: 1,
@@ -135,14 +144,4 @@ export const typographyVariants3: Record<string, SxProps<Theme>> = {
   caseLinkTitleCompact: { mt: 1.5, fontSize: '1.25rem', transition: 'color .2s' },
   caseLinkTitleFull: { mt: 1.5, fontSize: '1.5rem', transition: 'color .2s' },
   explorationTitle: { mt: 'var(--site-space-2)' },
-  sourcePreviewTitleFeed: {
-    margin: 0,
-    color: 'var(--site-text-primary)',
-    fontSize: 'var(--site-text-sm)',
-    fontWeight: 'var(--site-weight-bold)',
-    lineHeight: 'var(--site-leading-tight)',
-    overflow: 'hidden',
-    textOverflow: 'ellipsis',
-    whiteSpace: 'nowrap',
-  },
 };

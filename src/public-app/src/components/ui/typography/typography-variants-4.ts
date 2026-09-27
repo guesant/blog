@@ -1,6 +1,16 @@
 import type { SxProps, Theme } from '@mui/material/styles';
 
 export const typographyVariants4: Record<string, SxProps<Theme>> = {
+  sourcePreviewTitleFeed: {
+    margin: 0,
+    color: 'var(--site-text-primary)',
+    fontSize: 'var(--site-text-sm)',
+    fontWeight: 'var(--site-weight-bold)',
+    lineHeight: 'var(--site-leading-tight)',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  },
   sourcePreviewDescriptionFeed: {
     margin: 0,
     color: 'var(--site-text-secondary)',

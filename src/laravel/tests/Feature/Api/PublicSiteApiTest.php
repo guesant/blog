@@ -4,6 +4,7 @@ namespace Tests\Feature\Api;
 
 use App\Application\PublicSite\GetPublicSiteChromeQueryHandler;
 use App\Content\EditorialRevisionPublisher;
+use App\Content\HomeGallerySection;
 use App\Content\PublicSiteChromeCache;
 use App\Events\PublicSiteContentChanged;
 use App\Jobs\WarmPublicSiteChrome;
@@ -366,7 +367,8 @@ class PublicSiteApiTest extends TestCase
 
         foreach (['recent', 'popular'] as $group) {
             foreach (['writing', 'finding', 'collection'] as $kind) {
-                $this->assertLessThanOrEqual(6, count($response->json("{$group}.{$kind}")));
+                $limit = $kind === 'finding' ? 3 : 6;
+                $this->assertLessThanOrEqual($limit, count($response->json("{$group}.{$kind}")));
             }
         }
         foreach (
@@ -387,9 +389,32 @@ class PublicSiteApiTest extends TestCase
 
         $this->getJson('/api/v1/site/home-gallery?locale=en')
             ->assertOk()
-            ->assertJsonCount(6, 'recent.finding')
+            ->assertJsonCount(3, 'recent.finding')
             ->assertJsonPath('totals.recent.finding', 7)
-            ->assertJsonCount(6, 'popular.finding')
+            ->assertJsonCount(0, 'popular.finding')
+            ->assertJsonPath('totals.popular.finding', 0);
+    }
+
+    public function test_home_gallery_popular_findings_can_be_enabled_in_cms(): void
+    {
+        $page = Page::factory()->create(['slug' => 'home']);
+        app(EditorialRevisionPublisher::class)->publish($page, [
+            'en' => [
+                'title' => 'Home',
+            ],
+        ]);
+
+        $sections = array_keys(HomeGallerySection::DEFAULTS);
+        $sections[] = 'popular-findings';
+        app(EditorialRevisionPublisher::class)->syncPageRelations($page->refresh(), $sections);
+
+        foreach (range(1, 7) as $index) {
+            $this->createResource("popular-home-gallery-finding-{$index}");
+        }
+
+        $this->getJson('/api/v1/site/home-gallery?locale=en')
+            ->assertOk()
+            ->assertJsonCount(3, 'popular.finding')
             ->assertJsonPath('totals.popular.finding', 7);
     }
 

@@ -11,7 +11,7 @@ export function HomeGallerySections(props: HomeGallerySectionsProps) {
       sx={{
         '& > section + section': {
           borderTop: 'var(--site-border-width) solid var(--site-border)',
-          paddingTop: 'var(--site-space-6)',
+          paddingTop: 'var(--site-space-8)',
         },
       }}
     >

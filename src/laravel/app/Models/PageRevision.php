@@ -24,6 +24,11 @@ class PageRevision extends Model
         return $this->hasMany(PageRevisionTranslation::class);
     }
 
+    public function homeSections(): HasMany
+    {
+        return $this->hasMany(PageRevisionHomeSection::class)->orderBy('sort_order');
+    }
+
     public function translation(?string $locale = null): ?PageRevisionTranslation
     {
         $normalized = Locale::normalize($locale);

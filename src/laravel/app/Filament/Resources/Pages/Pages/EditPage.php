@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Pages\Pages;
 
 use App\Content\EditorialRevisionPublisher;
+use App\Content\HomeGallerySection;
 use App\Filament\Concerns\SyncsTranslations;
 use App\Filament\Resources\Pages\PageResource;
 use Filament\Resources\Pages\EditRecord;
@@ -21,6 +22,8 @@ class EditPage extends EditRecord
     protected array $pendingFeaturedProjects = [];
 
     protected array $pendingFeaturedWritings = [];
+
+    protected array $pendingHomeSections = [];
 
     protected function mutateFormDataBeforeFill(array $data): array
     {
@@ -44,6 +47,13 @@ class EditPage extends EditRecord
             ->map(fn ($writing) => ['writing_id' => $writing->id])
             ->all();
 
+        if ($this->getRecord()->slug === 'home') {
+            $sections = $this->getRecord()->currentRevision?->homeSections()->get();
+            $data['home_sections'] = $sections?->isNotEmpty()
+                ? $sections->where('enabled', true)->pluck('section_key')->all()
+                : array_keys(array_filter(HomeGallerySection::DEFAULTS));
+        }
+
         return $data;
     }
 
@@ -52,7 +62,8 @@ class EditPage extends EditRecord
         $this->pendingFeaturedCases = $data['featured_cases'] ?? [];
         $this->pendingFeaturedProjects = $data['featured_projects'] ?? [];
         $this->pendingFeaturedWritings = $data['featured_writings'] ?? [];
-        unset($data['featured_cases'], $data['featured_projects'], $data['featured_writings']);
+        $this->pendingHomeSections = $data['home_sections'] ?? [];
+        unset($data['featured_cases'], $data['featured_projects'], $data['featured_writings'], $data['home_sections']);
 
         return $this->extractTranslationsBeforeSave($data);
     }
@@ -79,6 +90,9 @@ class EditPage extends EditRecord
             ])
         );
 
-        app(EditorialRevisionPublisher::class)->syncPageRelations($this->getRecord());
+        app(EditorialRevisionPublisher::class)->syncPageRelations(
+            $this->getRecord(),
+            $this->getRecord()->slug === 'home' ? $this->pendingHomeSections : null,
+        );
     }
 }

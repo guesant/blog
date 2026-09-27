@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Pages\Pages;
 
 use App\Content\EditorialRevisionPublisher;
+use App\Content\HomeGallerySection;
 use App\Filament\Concerns\SyncsTranslations;
 use App\Filament\Resources\Pages\PageResource;
 use Filament\Resources\Pages\CreateRecord;
@@ -22,12 +23,16 @@ class CreatePage extends CreateRecord
 
     protected array $pendingFeaturedWritings = [];
 
+    protected array $pendingHomeSections = [];
+
     protected function mutateFormDataBeforeCreate(array $data): array
     {
         $this->pendingFeaturedCases = $data['featured_cases'] ?? [];
         $this->pendingFeaturedProjects = $data['featured_projects'] ?? [];
         $this->pendingFeaturedWritings = $data['featured_writings'] ?? [];
-        unset($data['featured_cases'], $data['featured_projects'], $data['featured_writings']);
+        $this->pendingHomeSections = $data['home_sections']
+            ?? array_keys(array_filter(HomeGallerySection::DEFAULTS));
+        unset($data['featured_cases'], $data['featured_projects'], $data['featured_writings'], $data['home_sections']);
 
         return $this->extractTranslationsBeforeSave($data);
     }
@@ -54,6 +59,9 @@ class CreatePage extends CreateRecord
             ])
         );
 
-        app(EditorialRevisionPublisher::class)->syncPageRelations($this->getRecord());
+        app(EditorialRevisionPublisher::class)->syncPageRelations(
+            $this->getRecord(),
+            $this->getRecord()->slug === 'home' ? $this->pendingHomeSections : null,
+        );
     }
 }

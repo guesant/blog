@@ -26,6 +26,7 @@ COPY --from=dependencies /app/node_modules ./node_modules
 COPY --from=build /app/dist ./dist
 COPY --from=build /app/packages/tools/start-production.mjs ./packages/tools/start-production.mjs
 COPY --from=build /app/packages/tools/production-compression-middleware.mjs ./packages/tools/production-compression-middleware.mjs
+COPY --from=build /app/packages/tools/production-security-middleware.mjs ./packages/tools/production-security-middleware.mjs
 COPY --from=build /app/packages/tools/production-static-middleware.mjs ./packages/tools/production-static-middleware.mjs
 COPY --chown=node:node .docker/entrypoint.prod.sh /usr/local/bin/entrypoint.prod.sh
 RUN chmod 0555 /usr/local/bin/entrypoint.prod.sh

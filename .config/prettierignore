@@ -5,6 +5,7 @@
 **/wwwroot/lib/**
 package-lock.json
 **/playwright-report/**
+**/test-results/**
 **/dist/**
 **/generated/**
 **/routeTree.gen.ts

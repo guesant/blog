@@ -19,7 +19,7 @@ export function SiteSidebarShell(props: SiteSidebarShellProps) {
 
   const [open, setOpen] = useState(false);
 
-  const showRight = site.visibility?.rightSidebar ?? true;
+  const showRight = true;
 
   const copyright = site.copyrightTemplate
     .replace('{year}', String(new Date().getFullYear()))

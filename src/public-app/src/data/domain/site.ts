@@ -21,6 +21,7 @@ export type ExternalProfile = {
 };
 
 type ContactInformation = {
+  enabled: boolean;
   hasEmail: boolean;
   emailChallenge?: ProtectedEmailChallenge;
   profiles: ExternalProfile[];
@@ -62,6 +63,15 @@ export type SiteVisibility = {
   rightSidebar: boolean;
 };
 
+export type SiteFeatureFlags = {
+  contentActions: {
+    copyText: boolean;
+    copyUrl: boolean;
+    downloadText: boolean;
+  };
+  contextualCursor: boolean;
+};
+
 type SiteBuild = {
   commitSha?: string;
 };
@@ -74,6 +84,7 @@ export type SiteText = WithSeo & {
   maintenance: MaintenanceContent;
   contact: ContactInformation;
   sourceRepositoryUrl?: string;
+  featureFlags: SiteFeatureFlags;
   navigation?: SiteNavigation;
   visibility?: SiteVisibility;
   build?: SiteBuild;

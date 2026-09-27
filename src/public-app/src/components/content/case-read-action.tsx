@@ -1,5 +1,5 @@
-import { Icon } from '../primitives/icon';
 import { Typography } from '../ui';
+import { ContentNavigationActionIcon } from './content-navigation-action-icon';
 
 type CaseReadActionProps = {
   label: string;
@@ -9,7 +9,7 @@ type CaseReadActionProps = {
 export function CaseReadAction(props: CaseReadActionProps) {
   return (
     <Typography color="secondary" visualVariant={props.visualVariant}>
-      {props.label} <Icon name="north-east" size={15} />
+      {props.label} <ContentNavigationActionIcon direction="external" size={15} />
     </Typography>
   );
 }

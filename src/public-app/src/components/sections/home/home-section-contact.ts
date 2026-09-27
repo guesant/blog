@@ -3,6 +3,7 @@ import type { SiteText } from '@portfolio/data/domain/types';
 type HomeSectionContact = {
   hasEmail: boolean;
   showContact: boolean;
+  showAvailability: boolean;
 };
 
 export function homeSectionContact(site: SiteText): HomeSectionContact {
@@ -10,6 +11,7 @@ export function homeSectionContact(site: SiteText): HomeSectionContact {
 
   return {
     hasEmail,
-    showContact: site.contact.available && (hasEmail || site.contact.profiles.length > 0),
+    showContact: site.contact.enabled && (hasEmail || site.contact.profiles.length > 0),
+    showAvailability: site.contact.enabled && site.contact.available,
   };
 }

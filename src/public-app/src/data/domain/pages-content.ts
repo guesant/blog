@@ -42,18 +42,9 @@ export type CreditEntry = {
   packageManager?: string;
 };
 
-type CreditsGroups = {
-  acknowledgements: CreditEntry[];
-  references: CreditEntry[];
-  infrastructure: CreditEntry[];
-  libraries: CreditEntry[];
-  tools: CreditEntry[];
-};
-
 export type CreditsContent = {
   entries: CreditEntry[];
   meta: ContentCollectionMeta;
-  groups: CreditsGroups;
 };
 
 export type CreditsPageCopy = WithSeo & {

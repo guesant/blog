@@ -14,6 +14,12 @@ export function LicensePageContent(props: LicensePageContentProps) {
 
   const tCommon = useTranslations('Common');
 
+  const sections = [
+    { heading: page.codeHeading, body: page.codeBody },
+    { heading: page.contentHeading, body: page.contentBody },
+    { heading: page.aiHeading, body: page.aiBody },
+  ].filter(({ heading, body }) => Boolean(heading || body));
+
   return (
     <>
       <PageHeader
@@ -21,9 +27,13 @@ export function LicensePageContent(props: LicensePageContentProps) {
         description={page.description}
         breadcrumbs={[{ label: tFooter('license') }]}
       />
-      <LicenseSection heading={page.codeHeading}>{page.codeBody}</LicenseSection>
-      <LicenseSection heading={page.contentHeading}>{page.contentBody}</LicenseSection>
-      <LicenseSection heading={page.aiHeading}>{page.aiBody}</LicenseSection>
+      {sections.map((section) => (
+        <LicenseSection
+          key={section.heading}
+          heading={section.heading ?? ''}
+          body={section.body ?? ''}
+        />
+      ))}
       <ConditionalContent
         condition={Boolean(emailChallenge)}
         content={

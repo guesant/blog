@@ -48,6 +48,8 @@ services:
       CACHE_STORE: database
       SESSION_DRIVER: database
       QUEUE_CONNECTION: database
+      FILESYSTEM_DISK: public
+      PORTFOLIO_PUBLIC_API_RATE_LIMIT: 10000
       COMPOSER_CACHE_DIR: /composer-cache
       PORTFOLIO_RESUME_PDF_ROOT: /data/resume-cache
       TECTONIC_BUNDLE: https://data1.fullyjustified.net/tlextras-2022.0r0.tar
@@ -74,9 +76,8 @@ services:
     volumes:
       - ..:/workspace
       - start-node-modules:/workspace/src/public-app/node_modules
-      - start-node-modules:/workspace/src/node_modules
     environment:
-      PORTFOLIO_CONTENT_API_URL: http://laravel:8000/api/v1/public-site
+      PORTFOLIO_CONTENT_API_URL: http://laravel:8000/api/v1
       PORTFOLIO_PUBLIC_API_URL: /api/v1
       SITE_URL: http://localhost:3000
       HOME: /tmp
@@ -111,7 +112,7 @@ services:
     environment:
       HOME: /tmp
       CHROME_PATH: /usr/bin/chromium
-      PORTFOLIO_CONTENT_API_URL: http://laravel:8000/api/v1/public-site
+      PORTFOLIO_CONTENT_API_URL: http://laravel:8000/api/v1
       PORTFOLIO_PUBLIC_API_URL: /api/v1
       SITE_URL: http://127.0.0.1:3000
     depends_on:

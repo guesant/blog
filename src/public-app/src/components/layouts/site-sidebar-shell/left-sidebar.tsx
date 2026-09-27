@@ -13,6 +13,7 @@ type LeftSidebarProps = {
   locale: string;
   onNavigate?: () => void;
   showPreferences?: boolean;
+  showBrand?: boolean;
 };
 
 export function LeftSidebar(props: LeftSidebarProps) {
@@ -35,6 +36,7 @@ export function LeftSidebar(props: LeftSidebarProps) {
       t={t}
       data={data}
       back={back}
+      showBrand={props.showBrand}
     />
   );
 }

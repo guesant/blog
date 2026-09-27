@@ -22,6 +22,7 @@ export function LocaleLayout() {
       <ThemeRegistry
         initialMode={themeState.mode}
         initialResolvedMode={themeState.resolvedMode ?? undefined}
+        contextualCursorEnabled={shell?.site.featureFlags.contextualCursor ?? false}
       >
         <LocaleLayoutState
           shell={shell}

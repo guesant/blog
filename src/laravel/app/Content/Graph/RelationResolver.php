@@ -16,13 +16,13 @@ class RelationResolver
 
         $outbound = collect(ContentRelation::where('subject_type', $node->getMorphClass())
             ->where('subject_id', $node->getKey())
-            ->with(['relationType', 'object'])
+            ->with(['relationType.translations', 'object'])
             ->get())
             ->map(fn (ContentRelation $relation) => $this->resolve($relation, $relation->object, 'outbound', $locale));
 
         $inbound = collect(ContentRelation::where('object_type', $node->getMorphClass())
             ->where('object_id', $node->getKey())
-            ->with(['relationType', 'subject'])
+            ->with(['relationType.translations', 'subject'])
             ->get())
             ->map(fn (ContentRelation $relation) => $this->resolve($relation, $relation->subject, 'inbound', $locale));
 
@@ -60,14 +60,20 @@ class RelationResolver
 
     private function resolveLabel(RelationType $relationType, string $direction, string $locale): string
     {
-        $suffix = $locale === 'pt-BR' ? 'pt_br' : 'en';
+        $translation = $relationType->translation($locale);
 
-        if ($relationType->symmetric) {
-            $field = "outbound_label_{$suffix}";
-        } else {
-            $field = $direction === 'outbound' ? "outbound_label_{$suffix}" : "inbound_label_{$suffix}";
+        if ($translation === null) {
+            return $relationType->key;
         }
 
-        return $relationType->{$field} ?? $relationType->key;
+        if ($relationType->symmetric) {
+            return $translation->outbound_label ?: $relationType->key;
+        }
+
+        $label = $direction === 'outbound'
+            ? $translation->outbound_label
+            : $translation->inbound_label;
+
+        return $label ?: $relationType->key;
     }
 }

@@ -2,10 +2,15 @@
 
 namespace App\Filament\Pages;
 
+use App\Content\PublicSiteChromeCache;
 use App\Filament\Concerns\BuildsStructuredFields;
 use App\Filament\Concerns\BuildsTranslationTabs;
 use App\Filament\Concerns\HasSingleSaveAction;
 use App\Filament\Concerns\SyncsTranslations;
+use App\Filament\Support\AutocompleteField;
+use App\Filament\Support\FilamentOptionCatalog;
+use App\Models\ContactProfile;
+use App\Models\ResourceLink;
 use App\Models\SiteSettings;
 use BackedEnum;
 use Filament\Forms\Components\Repeater;
@@ -14,6 +19,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
+use Filament\Schemas\Components\Fieldset;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -50,6 +56,12 @@ class ManageSiteSettings extends Page
 
     public function form(Schema $schema): Schema
     {
+        $platforms = [
+            ...array_keys(FilamentOptionCatalog::PLATFORMS),
+            ...ContactProfile::query()->distinct()->pluck('platform')->all(),
+            ...ResourceLink::query()->distinct()->pluck('platform')->all(),
+        ];
+
         return $schema
             ->components([
                 Section::make('Site settings')
@@ -68,7 +80,13 @@ class ManageSiteSettings extends Page
                             ->email()
                             ->nullable()
                             ->maxLength(255),
+                        Toggle::make('contact_enabled')
+                            ->label('Show Contact')
+                            ->helperText('Controls whether the public contact section and links are shown.')
+                            ->default(true),
                         Toggle::make('contact_available')
+                            ->label('Available for Opportunities')
+                            ->helperText('Controls only the public availability indicator.')
                             ->default(false),
                         TextInput::make('source_repository_url')
                             ->label('URL do repositório')
@@ -76,6 +94,22 @@ class ManageSiteSettings extends Page
                             ->url()
                             ->nullable()
                             ->maxLength(255),
+                    ]),
+                Section::make('Public feature flags')
+                    ->columns(2)
+                    ->schema([
+                        Toggle::make('content_actions_copy_text')
+                            ->label('Show Copy Text')
+                            ->default(false),
+                        Toggle::make('content_actions_copy_url')
+                            ->label('Show Copy Link')
+                            ->default(false),
+                        Toggle::make('content_actions_download_text')
+                            ->label('Show Download Text')
+                            ->default(false),
+                        Toggle::make('contextual_cursor_enabled')
+                            ->label('Enable Contextual Cursor')
+                            ->default(false),
                     ]),
                 Section::make('Contact Profiles')
                     ->schema([
@@ -85,7 +119,12 @@ class ManageSiteSettings extends Page
                             ->reorderableWithButtons()
                             ->columns(2)
                             ->schema([
-                                TextInput::make('platform')->required(),
+                                AutocompleteField::make(
+                                    'platform',
+                                    'Platform',
+                                    $platforms,
+                                    true,
+                                ),
                                 TextInput::make('label')->nullable(),
                                 TextInput::make('url')->required()->url()->columnSpanFull(),
                             ])
@@ -94,21 +133,29 @@ class ManageSiteSettings extends Page
                             ->defaultItems(0),
                     ]),
                 static::translationTabs(fn (string $prefix) => [
-                    Textarea::make("{$prefix}copyright_template")
-                        ->label('Copyright Template')
-                        ->nullable()
-                        ->helperText('Use {year} and {name} as placeholders.'),
-                    TextInput::make("{$prefix}maintenance_eyebrow")
-                        ->label('Maintenance Eyebrow')
-                        ->nullable()
-                        ->maxLength(255),
-                    TextInput::make("{$prefix}maintenance_title")
-                        ->label('Maintenance Title')
-                        ->nullable()
-                        ->maxLength(255),
-                    Textarea::make("{$prefix}maintenance_description")
-                        ->label('Maintenance Description')
-                        ->nullable(),
+                    Fieldset::make('Maintenance messages')
+                        ->columns(2)
+                        ->schema([
+                            TextInput::make("{$prefix}maintenance_eyebrow")
+                                ->label('Maintenance Eyebrow')
+                                ->nullable()
+                                ->maxLength(255),
+                            TextInput::make("{$prefix}maintenance_title")
+                                ->label('Maintenance Title')
+                                ->nullable()
+                                ->maxLength(255),
+                            Textarea::make("{$prefix}maintenance_description")
+                                ->label('Maintenance Description')
+                                ->nullable()
+                                ->columnSpanFull(),
+                        ]),
+                    Fieldset::make('Copyright')
+                        ->schema([
+                            Textarea::make("{$prefix}copyright_template")
+                                ->label('Copyright Template')
+                                ->nullable()
+                                ->helperText('Use {year} and {name} as placeholders.'),
+                        ]),
                     static::seoFieldset($prefix),
                 ]),
             ])
@@ -125,6 +172,7 @@ class ManageSiteSettings extends Page
 
         $this->getRecord()->update($data);
         $this->persistTranslations();
+        app(PublicSiteChromeCache::class)->forgetAll();
 
         Notification::make()->success()->title('Saved')->send();
     }

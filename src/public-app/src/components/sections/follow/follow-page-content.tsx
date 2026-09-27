@@ -1,12 +1,14 @@
 'use client';
 
 import { useTranslations } from '@/i18n/compat';
-import { Typography } from '../../ui';
 import { CollectionListing } from '../../content/collection-listing';
 import { PageHeader } from '../../content/page-header';
 import type { FollowPageCopy } from '@portfolio/data/domain/types';
 import { renderFollowEntryCard } from './render-follow-entry-card';
 import { FollowFutureSection } from './follow-future-section';
+import { FollowCurrentSection } from './follow-current-section';
+import { hasCurrentFollowSection } from './has-current-follow-section';
+import { hasFutureFollowSection } from './has-future-follow-section';
 
 type FollowPageContentProps = { page: FollowPageCopy };
 
@@ -19,6 +21,10 @@ export function FollowPageContent(props: FollowPageContentProps) {
 
   const futureEntries = page.futureEntries;
 
+  const hasCurrentSection = hasCurrentFollowSection(page);
+
+  const hasFutureSection = hasFutureFollowSection(page);
+
   return (
     <>
       <PageHeader
@@ -26,24 +32,21 @@ export function FollowPageContent(props: FollowPageContentProps) {
         description={page.intro}
         breadcrumbs={[{ label: tNav('follow') }]}
       />
-      <Typography variant="overline" color="text.secondary">
-        {page.sectionLabel}
-      </Typography>
-      <Typography component="h2" variant="h2" visualVariant="followSectionTitle">
-        {page.sectionTitle}
-      </Typography>
+      {hasCurrentSection ? (
+        <FollowCurrentSection label={page.sectionLabel} title={page.sectionTitle} />
+      ) : null}
       <CollectionListing
         items={entries}
         getKey={(entry) => entry.key}
         renderListItem={renderFollowEntryCard}
       />
-      <FollowFutureSection label={page.futureLabel} title={page.futureTitle}>
-        <CollectionListing
-          items={futureEntries}
-          getKey={(entry) => entry.key}
-          renderListItem={renderFollowEntryCard}
+      {hasFutureSection ? (
+        <FollowFutureSection
+          entries={futureEntries}
+          label={page.futureLabel}
+          title={page.futureTitle}
         />
-      </FollowFutureSection>
+      ) : null}
     </>
   );
 }

@@ -3,77 +3,64 @@
 namespace App\OpenGraph;
 
 use Illuminate\Contracts\Cache\Factory as CacheFactory;
-use Illuminate\Filesystem\Filesystem;
+use Illuminate\Contracts\Filesystem\Factory as FilesystemFactory;
+use Illuminate\Filesystem\FilesystemAdapter;
 
 final class OgImageCache
 {
     public function __construct(
         private readonly CacheFactory $cache,
-        private readonly Filesystem $filesystem,
+        private readonly FilesystemFactory $filesystem,
     ) {}
 
     public function get(string $key): ?string
     {
-        $path = $this->path($key);
-        if (! is_file($path)) {
+        try {
+            $disk = $this->disk();
+            $path = $this->path($key);
+            if (! $disk->exists($path)) {
+                return null;
+            }
+
+            if ($disk->lastModified($path) + $this->ttl() < time()) {
+                $disk->delete($path);
+
+                return null;
+            }
+
+            return $disk->get($path);
+        } catch (\Throwable) {
             return null;
         }
-
-        if (filemtime($path) + $this->ttl() < time()) {
-            $this->filesystem->delete($path);
-
-            return null;
-        }
-
-        $contents = file_get_contents($path);
-        if (! is_string($contents)) {
-            return null;
-        }
-
-        touch($path);
-
-        return $contents;
     }
 
     public function put(string $key, string $contents): void
     {
-        $directory = $this->directory();
-        if (! is_dir($directory)) {
-            mkdir($directory, 0770, true);
-        }
-
-        $lock = $this->cache->store()->lock('og:image-cache-write', 10);
-        $lock->block(2, function () use ($key, $contents, $directory): void {
-            $temporary = tempnam($directory, 'og-');
-            if ($temporary === false) {
-                throw new \RuntimeException('The OG image cache temporary file could not be created.');
-            }
-
-            try {
-                if (file_put_contents($temporary, $contents, LOCK_EX) === false) {
+        try {
+            $lock = $this->cache->store()->lock('og:image-cache-write', 10);
+            $lock->block(2, function () use ($key, $contents): void {
+                if (! $this->disk()->put($this->path($key), $contents)) {
                     throw new \RuntimeException('The OG image cache could not be written.');
                 }
 
-                rename($temporary, $this->path($key));
                 $this->evict($key);
-            } finally {
-                if (is_file($temporary)) {
-                    $this->filesystem->delete($temporary);
-                }
-            }
-        });
+            });
+        } catch (\Throwable) {
+            return;
+        }
     }
 
     private function evict(string $currentKey): void
     {
-        $files = glob($this->directory().'/*.png') ?: [];
+        $disk = $this->disk();
+        $files = $disk->files($this->prefix());
         $now = time();
         $entries = [];
 
         foreach ($files as $file) {
-            $modified = filemtime($file);
-            if ($modified === false || $modified + $this->ttl() < $now) {
-                $this->filesystem->delete($file);
+            $modified = $disk->lastModified($file);
+            if ($modified + $this->ttl() < $now) {
+                $disk->delete($file);
 
                 continue;
             }
@@ -82,7 +69,7 @@ final class OgImageCache
                 'path' => $file,
                 'key' => pathinfo($file, PATHINFO_FILENAME),
                 'modified' => $modified,
-                'size' => filesize($file) ?: 0,
+                'size' => $disk->size($file),
             ];
         }
 
@@ -101,7 +88,7 @@ final class OgImageCache
             }
 
             $bytes -= $entry['size'];
-            $this->filesystem->delete($entry['path']);
+            $disk->delete($entry['path']);
         }
     }
 
@@ -111,12 +98,17 @@ final class OgImageCache
             throw new \InvalidArgumentException('The OG cache key is invalid.');
         }
 
-        return $this->directory().'/'.$key.'.png';
+        return $this->prefix().'/'.$key.'.png';
     }
 
-    private function directory(): string
+    private function disk(): FilesystemAdapter
     {
-        return rtrim((string) config('og.cache_path'), '/');
+        return $this->filesystem->disk((string) config('og.cache_disk'));
+    }
+
+    private function prefix(): string
+    {
+        return trim((string) config('og.cache_prefix'), '/');
     }
 
     private function ttl(): int

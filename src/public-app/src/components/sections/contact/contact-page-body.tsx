@@ -20,7 +20,7 @@ export function ContactPageBody(props: ContactPageBodyProps) {
 
   const hasProfiles = props.site.contact.profiles.length > 0;
 
-  const hasContact = hasEmail || hasProfiles;
+  const hasContact = props.site.contact.enabled && (hasEmail || hasProfiles);
 
   return (
     <>

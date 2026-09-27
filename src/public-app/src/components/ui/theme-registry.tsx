@@ -16,6 +16,7 @@ type ThemeRegistryProps = {
   children: ReactNode;
   initialMode?: ThemeMode;
   initialResolvedMode?: ResolvedThemeMode;
+  contextualCursorEnabled?: boolean;
 };
 
 export function ThemeRegistry(props: ThemeRegistryProps) {
@@ -52,7 +53,9 @@ export function ThemeRegistry(props: ThemeRegistryProps) {
 
   return (
     <ThemeModeContext.Provider value={{ mode, setMode }}>
-      <ThemeRuntime theme={theme}>{children}</ThemeRuntime>
+      <ThemeRuntime theme={theme} contextualCursorEnabled={props.contextualCursorEnabled ?? false}>
+        {children}
+      </ThemeRuntime>
     </ThemeModeContext.Provider>
   );
 }

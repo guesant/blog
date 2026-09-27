@@ -8,6 +8,9 @@
     "audits/**/*.ts"
   ],
   "project": ["src/**/*.{ts,tsx}", "../packages/tools/**/*.mjs", "audits/**/*.ts"],
+  "stylelint": {
+    "config": [".config/stylelint.config.mjs"]
+  },
   "ignoreDependencies": ["srvx"],
   "ignore": ["src/data/api/generated/**"]
 }

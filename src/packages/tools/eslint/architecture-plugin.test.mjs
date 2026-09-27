@@ -1,8 +1,12 @@
 import assert from 'node:assert/strict';
+import { createRequire } from 'node:module';
 import test from 'node:test';
-import babelParser from '@babel/eslint-parser';
-import { Linter, RuleTester } from 'eslint';
+import { resolve } from 'node:path';
 import architecture from './architecture-plugin.mjs';
+
+const require = createRequire(resolve(process.cwd(), 'package.json'));
+const babelParser = require('@babel/eslint-parser');
+const { Linter, RuleTester } = require('eslint');
 
 const languageOptions = {
   parser: babelParser,

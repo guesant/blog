@@ -8,5 +8,6 @@ export const pageHeaderLayout: SxProps<Theme> = {
 export const pageIntroLayout: SxProps<Theme> = {
   ...pageHeaderLayout,
   rowGap: 'var(--site-space-4)',
-  my: 'var(--site-space-8)',
+  marginBlockStart: 0,
+  marginBlockEnd: 'var(--site-page-content-offset)',
 };

@@ -4,8 +4,9 @@ import type { BreadcrumbItem } from '../../navigation/breadcrumbs';
 
 export type PageHeaderProps = {
   title: string;
-  description?: string;
+  description?: ReactNode;
   meta?: string;
+  metadata?: ReactNode;
   actions?: ReactNode;
   breadcrumbs?: BreadcrumbItem[];
   visualVariant?: string;
@@ -21,5 +22,5 @@ export type EditablePageHeaderProps = {
 
 export type DetailHeaderProps = Pick<
   PageHeaderProps,
-  'title' | 'description' | 'meta' | 'actions' | 'breadcrumbs'
+  'title' | 'description' | 'meta' | 'metadata' | 'actions' | 'breadcrumbs'
 >;

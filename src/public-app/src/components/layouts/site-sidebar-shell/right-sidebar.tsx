@@ -11,6 +11,7 @@ type RightSidebarProps = {
   pathname: string;
   locale: string;
   onNavigate?: () => void;
+  mobile?: boolean;
 };
 
 export function RightSidebar(props: RightSidebarProps) {
@@ -26,6 +27,7 @@ export function RightSidebar(props: RightSidebarProps) {
       onNavigate={props.onNavigate}
       t={t}
       data={data}
+      mobile={props.mobile}
     />
   );
 }

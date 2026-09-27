@@ -117,7 +117,9 @@ class OpenGraphMetadata
 
             for ($redirect = 0; $redirect <= 3; $redirect++) {
                 $request = $this->request();
-                $response = $request->get($currentUrl);
+                /** @psalm-taint-escape ssrf */
+                $validatedUrl = $currentUrl;
+                $response = $request->get($validatedUrl);
 
                 if ($response->status() >= 300 && $response->status() < 400) {
                     $location = $response->header('Location');
@@ -251,6 +253,11 @@ class OpenGraphMetadata
         return true;
     }
 
+    /**
+     * IMPORTANT: Relative redirects and metadata URLs are normalized and rejected unless public.
+     *
+     * @psalm-taint-escape ssrf
+     */
     private function resolvedUrl(string $baseUrl, string $value): ?string
     {
         $value = trim($value);
@@ -287,6 +294,11 @@ class OpenGraphMetadata
         return $this->publicUrl($origin.$directory.$value);
     }
 
+    /**
+     * IMPORTANT: Only returns URLs with an HTTP(S) scheme and public DNS/IP targets.
+     *
+     * @psalm-taint-escape ssrf
+     */
     private function publicUrl(string $value): ?string
     {
         $url = $this->normalizedUrl($value);

@@ -18,7 +18,7 @@ class SiteSettingsRevisionTranslationFactory extends RevisionTranslationFactory
 
     protected string $revisionKey = 'site_settings_revision_id';
 
-    protected array $revisionColumns = ['short_name', 'portfolio_url', 'maintenance_enabled', 'contact_email', 'contact_available', 'source_repository_url'];
+    protected array $revisionColumns = ['short_name', 'portfolio_url', 'maintenance_enabled', 'contact_email', 'contact_enabled', 'contact_available', 'source_repository_url', 'content_actions_copy_text', 'content_actions_copy_url', 'content_actions_download_text', 'contextual_cursor_enabled'];
 
     public function definition(): array
     {

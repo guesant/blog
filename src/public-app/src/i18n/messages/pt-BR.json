@@ -186,6 +186,10 @@
     "readFullCase": "Ver Projeto"
   },
   "Pages": {
+    "maintenance": {
+      "title": "Site em manutenção.",
+      "description": "O site está temporariamente indisponível enquanto a manutenção é realizada."
+    },
     "feed": {
       "title": "Feed",
       "description": "Escritos, achados, coleções e trabalhos selecionados"

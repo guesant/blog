@@ -7,6 +7,7 @@ import { ReferenceCardTopics } from './reference-card-topics';
 import { SourcePreviewListGroup } from '../source-preview/source-preview-list-group';
 import { sourcePreviewDataForLink } from '../source-preview/source-preview-data-for-link';
 import { FindingCardSummary } from '../finding-card-summary';
+import { FindingCardPresentation } from '../finding-card-presentation';
 
 type ReferenceCardSurfaceProps = ReferenceCardProps;
 
@@ -23,19 +24,29 @@ export function ReferenceCardSurface(props: ReferenceCardSurfaceProps) {
 
   return (
     <Card visualVariant="referenceCard">
-      <ReferenceCardMeta reference={content} />
-      <FindingCardSummary
-        title={content.title}
-        href={content.url ?? `/findings/${content.slug}`}
-        description={content.description}
-        headingLevel={headingLevel}
-        titleVariant="h3"
-        titleClassName="reference-card-title"
-        titleVisualVariant="referenceCardTitle"
-        descriptionVisualVariant="referenceCardDescription"
+      <FindingCardPresentation
+        metadata={<ReferenceCardMeta reference={content} />}
+        summary={
+          <FindingCardSummary
+            title={content.title}
+            href={content.url ?? `/findings/${content.slug}`}
+            description={content.description}
+            headingLevel={headingLevel}
+            titleVariant="h3"
+            titleClassName="reference-card-title"
+            titleVisualVariant="referenceCardTitle"
+            descriptionVisualVariant="referenceCardDescription"
+          />
+        }
+        previews={
+          sourcePreviews.length > 0 ? (
+            <SourcePreviewListGroup entries={sourcePreviews} />
+          ) : undefined
+        }
+        topics={
+          content.topics.length > 0 ? <ReferenceCardTopics topics={content.topics} /> : undefined
+        }
       />
-      {sourcePreviews.length > 0 && <SourcePreviewListGroup entries={sourcePreviews} />}
-      {content.topics.length > 0 && <ReferenceCardTopics topics={content.topics} />}
     </Card>
   );
 }

@@ -1,53 +1,2437 @@
 parameters:
 	ignoreErrors:
-		# $pivot is genuinely present at runtime (Eloquent hydrates it on every
-		# row loaded through a BelongsToMany::withPivot() relation), but
-		# Illuminate\Database\Eloquent\Relations\Pivot itself declares no
-		# properties, so accessing a pivot column (here: `order`) is unresolvable
-		# to Larastan without a dedicated Pivot subclass wired via
-		# ->using(CustomPivot::class) on each of these four relations
-		# (Page::featuredCases/featuredProjects/featuredWritings,
-		# ReferenceCollection::resources). That's a real structural change
-		# (new Pivot model classes + relation wiring), not a one-line fix, so
-		# it's left out of scope for this lint pass rather than rushed.
 		-
-			message: '#^Access to an undefined property App\\Models\\CaseStudy\:\:\$pivot\.$#'
+			message: '#^Parameter \#2 \$resources of class App\\Application\\PublicSite\\GetPublicContentQueryResult constructor expects Illuminate\\Pagination\\LengthAwarePaginator\|null, Illuminate\\Contracts\\Pagination\\LengthAwarePaginator\|null given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Application/PublicSite/GetPublicContentQueryHandler.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$featuredCases\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Application/PublicSite/GetPublicPageQueryHandler.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$featuredProjects\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Application/PublicSite/GetPublicPageQueryHandler.php
+
+		-
+			message: '#^If condition is always true\.$#'
+			identifier: if.alwaysTrue
+			count: 1
+			path: app/Application/PublicSite/GetPublicPageQueryHandler.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>featuredCases" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Application/PublicSite/GetPublicPageQueryHandler.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>featuredProjects" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Application/PublicSite/GetPublicPageQueryHandler.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>fields" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Application/PublicSite/GetPublicPageQueryHandler.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>name" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Application/PublicSite/GetPublicPageQueryHandler.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:featuredCases\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Application/PublicSite/ListPublicContentQueryHandler.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:featuredProjects\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Application/PublicSite/ListPublicContentQueryHandler.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:featuredWritings\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Application/PublicSite/ListPublicContentQueryHandler.php
+
+		-
+			message: '#^Parameter \#1 \$page of class App\\Application\\PublicSite\\ListPublicContentQueryResult constructor expects Illuminate\\Pagination\\LengthAwarePaginator, Illuminate\\Contracts\\Pagination\\LengthAwarePaginator given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Application/PublicSite/ListPublicContentQueryHandler.php
+
+		-
+			message: '#^Parameter \$page of class App\\Application\\PublicSite\\ListPublicFindingsQueryResult constructor expects Illuminate\\Pagination\\LengthAwarePaginator, Illuminate\\Contracts\\Pagination\\LengthAwarePaginator given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Application/PublicSite/ListPublicFindingsQueryHandler.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$current_revision_id\.$#'
+			identifier: property.notFound
+			count: 3
+			path: app/Content/EditorialRevisionPublisher.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:authorTopics\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Content/EditorialRevisionPublisher.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:featuredCases\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Content/EditorialRevisionPublisher.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:featuredProjects\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Content/EditorialRevisionPublisher.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:featuredWritings\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Content/EditorialRevisionPublisher.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:identifiers\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Content/EditorialRevisionPublisher.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:languages\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Content/EditorialRevisionPublisher.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:links\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Content/EditorialRevisionPublisher.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:publisherTopics\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Content/EditorialRevisionPublisher.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:referenceCollections\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Content/EditorialRevisionPublisher.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:resources\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Content/EditorialRevisionPublisher.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:selectedCases\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Content/EditorialRevisionPublisher.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:skills\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Content/EditorialRevisionPublisher.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:topics\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Content/EditorialRevisionPublisher.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>name" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Content/EditorialRevisionPublisher.php
+
+		-
+			message: '#^Access to an undefined property App\\Content\\Graph\\GraphNode\:\:\$slug\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Content/Graph/RelationResolver.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\RelationType\:\:\$key\.$#'
+			identifier: property.notFound
+			count: 4
+			path: app/Content/Graph/RelationResolver.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\RelationType\:\:\$symmetric\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Content/Graph/RelationResolver.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Contracts\\Cache\\Repository\:\:lock\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Content/OpenGraphMetadata.php
+
+		-
+			message: '#^Method Illuminate\\Http\\Client\\Response\:\:header\(\) invoked with 2 parameters, 1 required\.$#'
+			identifier: arguments.count
+			count: 1
+			path: app/Content/OpenGraphMetadata.php
+
+		-
+			message: '#^Offset ''og\:title'' on array\{''og\:title''\: string, ''og\:description''\?\: non\-empty\-string, ''og\:image''\?\: non\-empty\-string, ''og\:site_name''\?\: non\-empty\-string, ''og\:type''\?\: non\-empty\-string, ''og\:url''\?\: non\-empty\-string\} on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.offset
+			count: 1
+			path: app/Content/OpenGraphMetadata.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$birth_city\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Pages/ManageProfile.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$description\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Pages/ManageProfile.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$fortunes\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Pages/ManageProfile.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$interests\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Pages/ManageProfile.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$learning\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Pages/ManageProfile.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$location\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Pages/ManageProfile.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$title\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Pages/ManageProfile.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ResumeRevisionTranslation\:\:\$summary\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Pages/ManageProfile.php
+
+		-
+			message: '#^Unreachable statement \- code above always terminates\.$#'
+			identifier: deadCode.unreachable
+			count: 1
+			path: app/Filament/Pages/ManageProfile.php
+
+		-
+			message: '#^Unsafe call to private method App\\Filament\\Pages\\ManageProfile\:\:translationTabSchema\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 2
+			path: app/Filament/Pages/ManageProfile.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$birth_city\.$#'
 			identifier: property.notFound
 			count: 1
 			path: app/Filament/Pages/ManageResume.php
 
 		-
-			message: '#^Access to an undefined property App\\Models\\CaseStudy\:\:\$pivot\.$#'
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$description\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Pages/ManageResume.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$fortunes\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Pages/ManageResume.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$interests\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Pages/ManageResume.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$learning\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Pages/ManageResume.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$location\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Pages/ManageResume.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$title\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Pages/ManageResume.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ResumeRevisionTranslation\:\:\$summary\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Pages/ManageResume.php
+
+		-
+			message: '#^Unreachable statement \- code above always terminates\.$#'
+			identifier: deadCode.unreachable
+			count: 1
+			path: app/Filament/Pages/ManageResume.php
+
+		-
+			message: '#^Unsafe call to private method App\\Filament\\Pages\\ManageResume\:\:translationTabSchema\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 2
+			path: app/Filament/Pages/ManageResume.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$birth_city\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Pages/ManageSiteSettings.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$description\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Pages/ManageSiteSettings.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$fortunes\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Pages/ManageSiteSettings.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$interests\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Pages/ManageSiteSettings.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$learning\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Pages/ManageSiteSettings.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$location\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Pages/ManageSiteSettings.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$title\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Pages/ManageSiteSettings.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ResumeRevisionTranslation\:\:\$summary\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Pages/ManageSiteSettings.php
+
+		-
+			message: '#^Unsafe call to private method App\\Filament\\Pages\\ManageSiteSettings\:\:translationTabSchema\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 2
+			path: app/Filament/Pages/ManageSiteSettings.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$birth_city\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/CaseStudies/Pages/CreateCaseStudy.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$description\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/CaseStudies/Pages/CreateCaseStudy.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$fortunes\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/CaseStudies/Pages/CreateCaseStudy.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$interests\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/CaseStudies/Pages/CreateCaseStudy.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$learning\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/CaseStudies/Pages/CreateCaseStudy.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$location\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/CaseStudies/Pages/CreateCaseStudy.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$title\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/CaseStudies/Pages/CreateCaseStudy.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ResumeRevisionTranslation\:\:\$summary\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/CaseStudies/Pages/CreateCaseStudy.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$birth_city\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/CaseStudies/Pages/EditCaseStudy.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$description\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/CaseStudies/Pages/EditCaseStudy.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$fortunes\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/CaseStudies/Pages/EditCaseStudy.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$interests\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/CaseStudies/Pages/EditCaseStudy.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$learning\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/CaseStudies/Pages/EditCaseStudy.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$location\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/CaseStudies/Pages/EditCaseStudy.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$title\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/CaseStudies/Pages/EditCaseStudy.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ResumeRevisionTranslation\:\:\$summary\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/CaseStudies/Pages/EditCaseStudy.php
+
+		-
+			message: '#^Unsafe call to private method App\\Filament\\Resources\\CaseStudies\\Schemas\\CaseStudyForm\:\:translationTabSchema\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 2
+			path: app/Filament/Resources/CaseStudies/Schemas/CaseStudyForm.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$birth_city\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/CreditEntries/Pages/CreateCreditEntry.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$description\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/CreditEntries/Pages/CreateCreditEntry.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$fortunes\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/CreditEntries/Pages/CreateCreditEntry.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$interests\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/CreditEntries/Pages/CreateCreditEntry.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$learning\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/CreditEntries/Pages/CreateCreditEntry.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$location\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/CreditEntries/Pages/CreateCreditEntry.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$title\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/CreditEntries/Pages/CreateCreditEntry.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ResumeRevisionTranslation\:\:\$summary\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/CreditEntries/Pages/CreateCreditEntry.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$birth_city\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/CreditEntries/Pages/EditCreditEntry.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$description\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/CreditEntries/Pages/EditCreditEntry.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$fortunes\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/CreditEntries/Pages/EditCreditEntry.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$interests\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/CreditEntries/Pages/EditCreditEntry.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$learning\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/CreditEntries/Pages/EditCreditEntry.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$location\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/CreditEntries/Pages/EditCreditEntry.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$title\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/CreditEntries/Pages/EditCreditEntry.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ResumeRevisionTranslation\:\:\$summary\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/CreditEntries/Pages/EditCreditEntry.php
+
+		-
+			message: '#^Unsafe call to private method App\\Filament\\Resources\\CreditEntries\\Schemas\\CreditEntryForm\:\:translationTabSchema\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 2
+			path: app/Filament/Resources/CreditEntries/Schemas/CreditEntryForm.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$birth_city\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Experiments/Pages/CreateExperiment.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$description\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Experiments/Pages/CreateExperiment.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$fortunes\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Experiments/Pages/CreateExperiment.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$interests\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Experiments/Pages/CreateExperiment.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$learning\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Experiments/Pages/CreateExperiment.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$location\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Experiments/Pages/CreateExperiment.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$title\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Experiments/Pages/CreateExperiment.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ResumeRevisionTranslation\:\:\$summary\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Experiments/Pages/CreateExperiment.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$birth_city\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Experiments/Pages/EditExperiment.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$description\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Experiments/Pages/EditExperiment.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$fortunes\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Experiments/Pages/EditExperiment.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$interests\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Experiments/Pages/EditExperiment.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$learning\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Experiments/Pages/EditExperiment.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$location\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Experiments/Pages/EditExperiment.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$title\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Experiments/Pages/EditExperiment.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ResumeRevisionTranslation\:\:\$summary\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Experiments/Pages/EditExperiment.php
+
+		-
+			message: '#^Unsafe call to private method App\\Filament\\Resources\\Experiments\\Schemas\\ExperimentForm\:\:translationTabSchema\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 2
+			path: app/Filament/Resources/Experiments/Schemas/ExperimentForm.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$birth_city\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Languages/Pages/CreateLanguage.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$description\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Languages/Pages/CreateLanguage.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$fortunes\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Languages/Pages/CreateLanguage.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$interests\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Languages/Pages/CreateLanguage.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$learning\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Languages/Pages/CreateLanguage.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$location\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Languages/Pages/CreateLanguage.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$title\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Languages/Pages/CreateLanguage.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ResumeRevisionTranslation\:\:\$summary\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Languages/Pages/CreateLanguage.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$birth_city\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Languages/Pages/EditLanguage.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$description\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Languages/Pages/EditLanguage.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$fortunes\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Languages/Pages/EditLanguage.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$interests\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Languages/Pages/EditLanguage.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$learning\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Languages/Pages/EditLanguage.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$location\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Languages/Pages/EditLanguage.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$title\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Languages/Pages/EditLanguage.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ResumeRevisionTranslation\:\:\$summary\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Languages/Pages/EditLanguage.php
+
+		-
+			message: '#^Unsafe call to private method App\\Filament\\Resources\\Languages\\Schemas\\LanguageForm\:\:translationTabSchema\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 2
+			path: app/Filament/Resources/Languages/Schemas/LanguageForm.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$birth_city\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/NavItems/Pages/CreateNavItem.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$description\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/NavItems/Pages/CreateNavItem.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$fortunes\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/NavItems/Pages/CreateNavItem.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$interests\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/NavItems/Pages/CreateNavItem.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$learning\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/NavItems/Pages/CreateNavItem.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$location\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/NavItems/Pages/CreateNavItem.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$title\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/NavItems/Pages/CreateNavItem.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ResumeRevisionTranslation\:\:\$summary\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/NavItems/Pages/CreateNavItem.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$metrics\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/NavItems/Pages/CreateNavItem.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$seo\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/NavItems/Pages/CreateNavItem.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$birth_city\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/NavItems/Pages/EditNavItem.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$description\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/NavItems/Pages/EditNavItem.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$fortunes\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/NavItems/Pages/EditNavItem.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$interests\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/NavItems/Pages/EditNavItem.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$learning\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/NavItems/Pages/EditNavItem.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$location\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/NavItems/Pages/EditNavItem.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$title\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/NavItems/Pages/EditNavItem.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ResumeRevisionTranslation\:\:\$summary\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/NavItems/Pages/EditNavItem.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$metrics\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/NavItems/Pages/EditNavItem.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$seo\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/NavItems/Pages/EditNavItem.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$birth_city\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Pages/Pages/CreatePage.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$description\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Pages/Pages/CreatePage.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$fortunes\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Pages/Pages/CreatePage.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$interests\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Pages/Pages/CreatePage.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$learning\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Pages/Pages/CreatePage.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$location\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Pages/Pages/CreatePage.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$title\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Pages/Pages/CreatePage.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ResumeRevisionTranslation\:\:\$summary\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Pages/Pages/CreatePage.php
+
+		-
+			message: '#^Unreachable statement \- code above always terminates\.$#'
+			identifier: deadCode.unreachable
+			count: 1
+			path: app/Filament/Resources/Pages/Pages/CreatePage.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$birth_city\.$#'
 			identifier: property.notFound
 			count: 1
 			path: app/Filament/Resources/Pages/Pages/EditPage.php
 
 		-
-			message: '#^Access to an undefined property App\\Models\\Project\:\:\$pivot\.$#'
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$description\.$#'
 			identifier: property.notFound
 			count: 1
 			path: app/Filament/Resources/Pages/Pages/EditPage.php
 
 		-
-			message: '#^Access to an undefined property App\\Models\\Writing\:\:\$pivot\.$#'
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$fortunes\.$#'
 			identifier: property.notFound
 			count: 1
 			path: app/Filament/Resources/Pages/Pages/EditPage.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$interests\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Pages/Pages/EditPage.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$learning\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Pages/Pages/EditPage.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$location\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Pages/Pages/EditPage.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$title\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Pages/Pages/EditPage.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ResumeRevisionTranslation\:\:\$summary\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Pages/Pages/EditPage.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:homeSections\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Filament/Resources/Pages/Pages/EditPage.php
+
+		-
+			message: '#^Unreachable statement \- code above always terminates\.$#'
+			identifier: deadCode.unreachable
+			count: 1
+			path: app/Filament/Resources/Pages/Pages/EditPage.php
+
+		-
+			message: '#^Parameter \#1 \$callback of method Illuminate\\Support\\Collection\<\(int\|string\),Illuminate\\Support\\Collection\<int, string\>\>\:\:flatMap\(\) expects callable\(Illuminate\\Support\\Collection\<int, string\>, int\|string\)\: \(array\<int, Filament\\Forms\\Components\\MarkdownEditor\|Filament\\Forms\\Components\\Textarea\|Filament\\Forms\\Components\\TextInput\|Filament\\Schemas\\Components\\Fieldset\>\|Illuminate\\Support\\Collection\<int, Filament\\Forms\\Components\\MarkdownEditor\|Filament\\Forms\\Components\\Textarea\|Filament\\Forms\\Components\\TextInput\|Filament\\Schemas\\Components\\Fieldset\>\), Closure\(array, string\)\: array\<int, Filament\\Forms\\Components\\MarkdownEditor\|Filament\\Forms\\Components\\Textarea\|Filament\\Forms\\Components\\TextInput\|Filament\\Schemas\\Components\\Fieldset\> given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Filament/Resources/Pages/Schemas/PageForm.php
+
+		-
+			message: '#^Unsafe call to private method App\\Filament\\Resources\\Pages\\Schemas\\PageForm\:\:translationTabSchema\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 2
+			path: app/Filament/Resources/Pages/Schemas/PageForm.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$birth_city\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Projects/Pages/CreateProject.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$description\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Projects/Pages/CreateProject.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$fortunes\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Projects/Pages/CreateProject.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$interests\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Projects/Pages/CreateProject.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$learning\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Projects/Pages/CreateProject.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$location\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Projects/Pages/CreateProject.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$title\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Projects/Pages/CreateProject.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ResumeRevisionTranslation\:\:\$summary\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Projects/Pages/CreateProject.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$birth_city\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Projects/Pages/EditProject.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$description\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Projects/Pages/EditProject.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$fortunes\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Projects/Pages/EditProject.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$interests\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Projects/Pages/EditProject.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$learning\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Projects/Pages/EditProject.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$location\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Projects/Pages/EditProject.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$title\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Projects/Pages/EditProject.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ResumeRevisionTranslation\:\:\$summary\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Projects/Pages/EditProject.php
+
+		-
+			message: '#^Unsafe call to private method App\\Filament\\Resources\\Projects\\Schemas\\ProjectForm\:\:translationTabSchema\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 2
+			path: app/Filament/Resources/Projects/Schemas/ProjectForm.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$birth_city\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/ReferenceCollections/Pages/CreateReferenceCollection.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$description\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/ReferenceCollections/Pages/CreateReferenceCollection.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$fortunes\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/ReferenceCollections/Pages/CreateReferenceCollection.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$interests\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/ReferenceCollections/Pages/CreateReferenceCollection.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$learning\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/ReferenceCollections/Pages/CreateReferenceCollection.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$location\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/ReferenceCollections/Pages/CreateReferenceCollection.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$title\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/ReferenceCollections/Pages/CreateReferenceCollection.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ResumeRevisionTranslation\:\:\$summary\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/ReferenceCollections/Pages/CreateReferenceCollection.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$birth_city\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/ReferenceCollections/Pages/EditReferenceCollection.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$description\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/ReferenceCollections/Pages/EditReferenceCollection.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$fortunes\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/ReferenceCollections/Pages/EditReferenceCollection.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$interests\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/ReferenceCollections/Pages/EditReferenceCollection.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$learning\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/ReferenceCollections/Pages/EditReferenceCollection.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$location\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/ReferenceCollections/Pages/EditReferenceCollection.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$title\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/ReferenceCollections/Pages/EditReferenceCollection.php
 
 		-
 			message: '#^Access to an undefined property App\\Models\\Resource\:\:\$pivot\.$#'
 			identifier: property.notFound
-			count: 2
+			count: 1
 			path: app/Filament/Resources/ReferenceCollections/Pages/EditReferenceCollection.php
 
-		# Real rule (env() should only be read from config/*.php so cached
-		# config keeps working), but the fix means adding a `tectonic.bundle`
-		# key to config/services.php and switching this call site to
-		# config('tectonic.bundle') — this task is scoped to app/ plus the two
-		# phpstan config files, so touching config/ is out of scope here.
-		# Left as a known, real follow-up rather than silently ignored.
+		-
+			message: '#^Access to an undefined property App\\Models\\ResumeRevisionTranslation\:\:\$summary\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/ReferenceCollections/Pages/EditReferenceCollection.php
+
+		-
+			message: '#^Unsafe call to private method App\\Filament\\Resources\\ReferenceCollections\\Schemas\\ReferenceCollectionForm\:\:translationTabSchema\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 2
+			path: app/Filament/Resources/ReferenceCollections/Schemas/ReferenceCollectionForm.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:translation\(\)\.$#'
+			identifier: method.notFound
+			count: 2
+			path: app/Filament/Resources/RelationTypes/Pages/CreateRelationType.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:translations\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Filament/Resources/RelationTypes/Pages/CreateRelationType.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:translation\(\)\.$#'
+			identifier: method.notFound
+			count: 2
+			path: app/Filament/Resources/RelationTypes/Pages/EditRelationType.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:translations\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Filament/Resources/RelationTypes/Pages/EditRelationType.php
+
+		-
+			message: '#^Unsafe call to private method App\\Filament\\Resources\\RelationTypes\\Schemas\\RelationTypeForm\:\:translationTabSchema\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 2
+			path: app/Filament/Resources/RelationTypes/Schemas/RelationTypeForm.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$birth_city\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/ResourceFindings/Pages/CreateResourceFinding.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$description\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/ResourceFindings/Pages/CreateResourceFinding.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$fortunes\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/ResourceFindings/Pages/CreateResourceFinding.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$interests\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/ResourceFindings/Pages/CreateResourceFinding.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$learning\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/ResourceFindings/Pages/CreateResourceFinding.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$location\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/ResourceFindings/Pages/CreateResourceFinding.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$title\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/ResourceFindings/Pages/CreateResourceFinding.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ResumeRevisionTranslation\:\:\$summary\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/ResourceFindings/Pages/CreateResourceFinding.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$birth_city\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/ResourceFindings/Pages/EditResourceFinding.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$description\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/ResourceFindings/Pages/EditResourceFinding.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$fortunes\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/ResourceFindings/Pages/EditResourceFinding.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$interests\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/ResourceFindings/Pages/EditResourceFinding.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$learning\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/ResourceFindings/Pages/EditResourceFinding.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$location\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/ResourceFindings/Pages/EditResourceFinding.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$title\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/ResourceFindings/Pages/EditResourceFinding.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ResumeRevisionTranslation\:\:\$summary\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/ResourceFindings/Pages/EditResourceFinding.php
+
+		-
+			message: '#^Unsafe call to private method App\\Filament\\Resources\\ResourceFindings\\Schemas\\ResourceFindingForm\:\:translationTabSchema\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 2
+			path: app/Filament/Resources/ResourceFindings/Schemas/ResourceFindingForm.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$birth_city\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Snippets/Pages/CreateSnippet.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$description\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Snippets/Pages/CreateSnippet.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$fortunes\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Snippets/Pages/CreateSnippet.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$interests\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Snippets/Pages/CreateSnippet.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$learning\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Snippets/Pages/CreateSnippet.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$location\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Snippets/Pages/CreateSnippet.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$title\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Snippets/Pages/CreateSnippet.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ResumeRevisionTranslation\:\:\$summary\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Snippets/Pages/CreateSnippet.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$birth_city\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Snippets/Pages/EditSnippet.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$description\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Snippets/Pages/EditSnippet.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$fortunes\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Snippets/Pages/EditSnippet.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$interests\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Snippets/Pages/EditSnippet.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$learning\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Snippets/Pages/EditSnippet.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$location\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Snippets/Pages/EditSnippet.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$title\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Snippets/Pages/EditSnippet.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ResumeRevisionTranslation\:\:\$summary\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Snippets/Pages/EditSnippet.php
+
+		-
+			message: '#^Unsafe call to private method App\\Filament\\Resources\\Snippets\\Schemas\\SnippetForm\:\:translationTabSchema\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 2
+			path: app/Filament/Resources/Snippets/Schemas/SnippetForm.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$birth_city\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Technologies/Pages/CreateTechnology.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$description\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Technologies/Pages/CreateTechnology.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$fortunes\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Technologies/Pages/CreateTechnology.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$interests\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Technologies/Pages/CreateTechnology.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$learning\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Technologies/Pages/CreateTechnology.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$location\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Technologies/Pages/CreateTechnology.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$title\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Technologies/Pages/CreateTechnology.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ResumeRevisionTranslation\:\:\$summary\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Technologies/Pages/CreateTechnology.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$birth_city\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Technologies/Pages/EditTechnology.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$description\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Technologies/Pages/EditTechnology.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$fortunes\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Technologies/Pages/EditTechnology.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$interests\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Technologies/Pages/EditTechnology.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$learning\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Technologies/Pages/EditTechnology.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$location\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Technologies/Pages/EditTechnology.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$title\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Technologies/Pages/EditTechnology.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ResumeRevisionTranslation\:\:\$summary\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Technologies/Pages/EditTechnology.php
+
+		-
+			message: '#^Unsafe call to private method App\\Filament\\Resources\\Technologies\\Schemas\\TechnologyForm\:\:translationTabSchema\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 2
+			path: app/Filament/Resources/Technologies/Schemas/TechnologyForm.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$birth_city\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Topics/Pages/CreateTopic.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$description\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Topics/Pages/CreateTopic.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$fortunes\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Topics/Pages/CreateTopic.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$interests\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Topics/Pages/CreateTopic.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$learning\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Topics/Pages/CreateTopic.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$location\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Topics/Pages/CreateTopic.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$title\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Topics/Pages/CreateTopic.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ResumeRevisionTranslation\:\:\$summary\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Topics/Pages/CreateTopic.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$birth_city\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Topics/Pages/EditTopic.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$description\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Topics/Pages/EditTopic.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$fortunes\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Topics/Pages/EditTopic.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$interests\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Topics/Pages/EditTopic.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$learning\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Topics/Pages/EditTopic.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$location\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Topics/Pages/EditTopic.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$title\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Topics/Pages/EditTopic.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ResumeRevisionTranslation\:\:\$summary\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Topics/Pages/EditTopic.php
+
+		-
+			message: '#^Unsafe call to private method App\\Filament\\Resources\\Topics\\Schemas\\TopicForm\:\:translationTabSchema\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 2
+			path: app/Filament/Resources/Topics/Schemas/TopicForm.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$birth_city\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Writings/Pages/CreateWriting.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$description\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Writings/Pages/CreateWriting.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$fortunes\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Writings/Pages/CreateWriting.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$interests\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Writings/Pages/CreateWriting.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$learning\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Writings/Pages/CreateWriting.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$location\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Writings/Pages/CreateWriting.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$title\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Writings/Pages/CreateWriting.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ResumeRevisionTranslation\:\:\$summary\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Writings/Pages/CreateWriting.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$birth_city\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Writings/Pages/EditWriting.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$description\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Writings/Pages/EditWriting.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$fortunes\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Writings/Pages/EditWriting.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$interests\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Writings/Pages/EditWriting.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$learning\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Writings/Pages/EditWriting.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$location\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Writings/Pages/EditWriting.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$title\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Writings/Pages/EditWriting.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ResumeRevisionTranslation\:\:\$summary\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Writings/Pages/EditWriting.php
+
+		-
+			message: '#^Unsafe call to private method App\\Filament\\Resources\\Writings\\Schemas\\WritingForm\:\:translationTabSchema\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 2
+			path: app/Filament/Resources/Writings/Schemas/WritingForm.php
+
+		-
+			message: '#^Call to an undefined method Laravel\\Socialite\\Contracts\\Provider\:\:enablePKCE\(\)\.$#'
+			identifier: method.notFound
+			count: 2
+			path: app/Http/Controllers/KeycloakAuthController.php
+
+		-
+			message: '#^Call to an undefined method Laravel\\Socialite\\Contracts\\Provider\:\:getLogoutUrl\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/KeycloakAuthController.php
+
+		-
+			message: '#^Called ''env'' outside of the config directory which returns null when the config is cached, use ''config''\.$#'
+			identifier: larastan.noEnvCallsOutsideOfConfig
+			count: 1
+			path: app/Http/Controllers/PublicMetadataController.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>email" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Http/Middleware/EnsureAdminOidcSession.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\CaseStudyRevisionTranslation\:\:\$body\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Responses/PublicContentResponseFactory.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\CaseStudyRevisionTranslation\:\:\$context\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Responses/PublicContentResponseFactory.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\CaseStudyRevisionTranslation\:\:\$meta\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Responses/PublicContentResponseFactory.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\CaseStudyRevisionTranslation\:\:\$result\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Responses/PublicContentResponseFactory.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\CaseStudyRevisionTranslation\:\:\$role\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Responses/PublicContentResponseFactory.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\CaseStudyRevisionTranslation\:\:\$status\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Responses/PublicContentResponseFactory.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\CaseStudyRevisionTranslation\:\:\$summary\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Http/Responses/PublicContentResponseFactory.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\CaseStudyRevisionTranslation\:\:\$title\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Http/Responses/PublicContentResponseFactory.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ExperimentRevisionTranslation\:\:\$body\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Responses/PublicContentResponseFactory.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ExperimentRevisionTranslation\:\:\$name\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Http/Responses/PublicContentResponseFactory.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ExperimentRevisionTranslation\:\:\$purpose\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Http/Responses/PublicContentResponseFactory.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProjectRevisionTranslation\:\:\$body\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Responses/PublicContentResponseFactory.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProjectRevisionTranslation\:\:\$current_focus\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Responses/PublicContentResponseFactory.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProjectRevisionTranslation\:\:\$name\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Http/Responses/PublicContentResponseFactory.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProjectRevisionTranslation\:\:\$problem\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Responses/PublicContentResponseFactory.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProjectRevisionTranslation\:\:\$purpose\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Http/Responses/PublicContentResponseFactory.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ProjectRevisionTranslation\:\:\$status\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Responses/PublicContentResponseFactory.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ReferenceCollectionRevisionTranslation\:\:\$description\.$#'
+			identifier: property.notFound
+			count: 3
+			path: app/Http/Responses/PublicContentResponseFactory.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ReferenceCollectionRevisionTranslation\:\:\$intro\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Http/Responses/PublicContentResponseFactory.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\ReferenceCollectionRevisionTranslation\:\:\$title\.$#'
+			identifier: property.notFound
+			count: 3
+			path: app/Http/Responses/PublicContentResponseFactory.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\SnippetRevisionTranslation\:\:\$description\.$#'
+			identifier: property.notFound
+			count: 4
+			path: app/Http/Responses/PublicContentResponseFactory.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\SnippetRevisionTranslation\:\:\$title\.$#'
+			identifier: property.notFound
+			count: 4
+			path: app/Http/Responses/PublicContentResponseFactory.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\TechnologyRevisionTranslation\:\:\$name\.$#'
+			identifier: property.notFound
+			count: 5
+			path: app/Http/Responses/PublicContentResponseFactory.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\TopicRevisionTranslation\:\:\$name\.$#'
+			identifier: property.notFound
+			count: 6
+			path: app/Http/Responses/PublicContentResponseFactory.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\WritingRevisionTranslation\:\:\$body\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Responses/PublicContentResponseFactory.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\WritingRevisionTranslation\:\:\$excerpt\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Http/Responses/PublicContentResponseFactory.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\WritingRevisionTranslation\:\:\$reading_time\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Responses/PublicContentResponseFactory.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\WritingRevisionTranslation\:\:\$title\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Http/Responses/PublicContentResponseFactory.php
+
+		-
+			message: '#^Match expression does not handle remaining value\: string$#'
+			identifier: match.unhandled
+			count: 3
+			path: app/Http/Responses/PublicContentResponseFactory.php
+
+		-
+			message: '#^Parameter \#1 \$callback of method Illuminate\\Database\\Eloquent\\Collection\<int,App\\Models\\ResumeSkill\>\:\:map\(\) contains unresolvable type\.$#'
+			identifier: argument.unresolvableType
+			count: 1
+			path: app/Http/Responses/PublicContentResponseFactory.php
+
+		-
+			message: '#^Parameter \#1 \$callback of method Illuminate\\Database\\Eloquent\\Collection\<int,App\\Models\\Technology\>\:\:map\(\) contains unresolvable type\.$#'
+			identifier: argument.unresolvableType
+			count: 3
+			path: app/Http/Responses/PublicContentResponseFactory.php
+
+		-
+			message: '#^Parameter \#1 \$callback of method Illuminate\\Database\\Eloquent\\Collection\<int,App\\Models\\Topic\>\:\:map\(\) contains unresolvable type\.$#'
+			identifier: argument.unresolvableType
+			count: 2
+			path: app/Http/Responses/PublicContentResponseFactory.php
+
+		-
+			message: '#^Using nullsafe method call on non\-nullable type Carbon\\Carbon\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 17
+			path: app/Http/Responses/PublicContentResponseFactory.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>name" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 18
+			path: app/Http/Responses/PublicContentResponseFactory.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>title" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 13
+			path: app/Http/Responses/PublicContentResponseFactory.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>title" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Http/Responses/PublicFindingResponseFactory.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>awards" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Http/Responses/PublicResumeResponseFactory.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>certificates" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Http/Responses/PublicResumeResponseFactory.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>certifications" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Http/Responses/PublicResumeResponseFactory.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>education" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Http/Responses/PublicResumeResponseFactory.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>events" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Http/Responses/PublicResumeResponseFactory.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>leadership" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Http/Responses/PublicResumeResponseFactory.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>name" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 4
+			path: app/Http/Responses/PublicResumeResponseFactory.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>publications" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Http/Responses/PublicResumeResponseFactory.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>recommendations" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Http/Responses/PublicResumeResponseFactory.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>technical_productions" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Http/Responses/PublicResumeResponseFactory.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>title" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Http/Responses/PublicResumeResponseFactory.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>trajectory" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Http/Responses/PublicResumeResponseFactory.php
+
+		-
+			message: '#^Class App\\Models\\Resource referenced with incorrect case\: App\\Models\\resource\.$#'
+			identifier: class.nameCase
+			count: 1
+			path: app/Models/Language.php
+
+		-
+			message: '#^Method App\\Models\\Language\:\:resources\(\) should return Illuminate\\Database\\Eloquent\\Relations\\HasMany\<App\\Models\\Resource, \$this\(App\\Models\\Language\)\> but returns Illuminate\\Database\\Eloquent\\Relations\\HasMany\<App\\Models\\Resource, \$this\(App\\Models\\Language\)\>\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Models/Language.php
+
+		-
+			message: '#^Method App\\Models\\LanguageRevision\:\:translation\(\) should return App\\Models\\LanguageRevisionTranslation\|null but returns Illuminate\\Database\\Eloquent\\Model\|null\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Models/LanguageRevision.php
+
+		-
+			message: '#^Method App\\Models\\PageRevision\:\:translation\(\) should return App\\Models\\PageRevisionTranslation\|null but returns Illuminate\\Database\\Eloquent\\Model\|null\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Models/PageRevision.php
+
+		-
+			message: '#^Method App\\Models\\ProfileRevision\:\:translation\(\) should return App\\Models\\ProfileRevisionTranslation\|null but returns Illuminate\\Database\\Eloquent\\Model\|null\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Models/ProfileRevision.php
+
+		-
+			message: '#^Class App\\Models\\Resource referenced with incorrect case\: App\\Models\\resource\.$#'
+			identifier: class.nameCase
+			count: 1
+			path: app/Models/ReferenceCollection.php
+
+		-
+			message: '#^Method App\\Models\\ReferenceCollection\:\:resources\(\) should return Illuminate\\Database\\Eloquent\\Relations\\BelongsToMany\<App\\Models\\Resource, \$this\(App\\Models\\ReferenceCollection\), Illuminate\\Database\\Eloquent\\Relations\\Pivot, ''pivot''\> but returns Illuminate\\Database\\Eloquent\\Relations\\BelongsToMany\<App\\Models\\Resource, \$this\(App\\Models\\ReferenceCollection\), Illuminate\\Database\\Eloquent\\Relations\\Pivot, ''pivot''\>\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Models/ReferenceCollection.php
+
+		-
+			message: '#^Class App\\Models\\Resource referenced with incorrect case\: App\\Models\\resource\.$#'
+			identifier: class.nameCase
+			count: 1
+			path: app/Models/ResourceIdentifier.php
+
+		-
+			message: '#^Method App\\Models\\ResourceIdentifier\:\:resource\(\) should return Illuminate\\Database\\Eloquent\\Relations\\BelongsTo\<App\\Models\\Resource, \$this\(App\\Models\\ResourceIdentifier\)\> but returns Illuminate\\Database\\Eloquent\\Relations\\BelongsTo\<App\\Models\\Resource, \$this\(App\\Models\\ResourceIdentifier\)\>\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Models/ResourceIdentifier.php
+
+		-
+			message: '#^Class App\\Models\\Resource referenced with incorrect case\: App\\Models\\resource\.$#'
+			identifier: class.nameCase
+			count: 1
+			path: app/Models/ResourceLink.php
+
+		-
+			message: '#^Method App\\Models\\ResourceLink\:\:resource\(\) should return Illuminate\\Database\\Eloquent\\Relations\\BelongsTo\<App\\Models\\Resource, \$this\(App\\Models\\ResourceLink\)\> but returns Illuminate\\Database\\Eloquent\\Relations\\BelongsTo\<App\\Models\\Resource, \$this\(App\\Models\\ResourceLink\)\>\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Models/ResourceLink.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$channel\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Models/ResourceRevision.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$conference\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Models/ResourceRevision.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$duration\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Models/ResourceRevision.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$edition\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Models/ResourceRevision.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$isbn\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Models/ResourceRevision.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$language\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Models/ResourceRevision.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$license\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Models/ResourceRevision.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$name\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Models/ResourceRevision.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$organization\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Models/ResourceRevision.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$pages\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Models/ResourceRevision.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$publisher\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Models/ResourceRevision.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$year\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Models/ResourceRevision.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$youtube_id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Models/ResourceRevision.php
+
+		-
+			message: '#^Method App\\Models\\ResourceRevision\:\:translation\(\) should return App\\Models\\ResourceRevisionTranslation\|null but returns Illuminate\\Database\\Eloquent\\Model\|null\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Models/ResourceRevision.php
+
+		-
+			message: '#^Method App\\Models\\ResumeRevision\:\:translation\(\) should return App\\Models\\ResumeRevisionTranslation\|null but returns Illuminate\\Database\\Eloquent\\Model\|null\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Models/ResumeRevision.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\RevisionTranslation\:\:\$id\.$#'
+			identifier: property.notFound
+			count: 3
+			path: app/Models/RevisionTranslation.php
+
+		-
+			message: '#^Class App\\Models\\Resource referenced with incorrect case\: App\\Models\\resource\.$#'
+			identifier: class.nameCase
+			count: 1
+			path: app/Models/Topic.php
+
+		-
+			message: '#^Method App\\Models\\Topic\:\:findings\(\) should return Illuminate\\Database\\Eloquent\\Relations\\MorphToMany\<App\\Models\\Resource, \$this\(App\\Models\\Topic\), Illuminate\\Database\\Eloquent\\Relations\\MorphPivot, ''pivot''\> but returns Illuminate\\Database\\Eloquent\\Relations\\MorphToMany\<App\\Models\\Resource, \$this\(App\\Models\\Topic\), Illuminate\\Database\\Eloquent\\Relations\\MorphPivot, ''pivot''\>\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Models/Topic.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Contracts\\Cache\\Repository\:\:lock\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/OpenGraph/OgImageCache.php
+
+		-
+			message: '#^Method App\\OpenGraph\\OgImageCache\:\:disk\(\) should return Illuminate\\Filesystem\\FilesystemAdapter but returns Illuminate\\Contracts\\Filesystem\\Filesystem\.$#'
+			identifier: return.type
+			count: 1
+			path: app/OpenGraph/OgImageCache.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Contracts\\Cache\\Repository\:\:lock\(\)\.$#'
+			identifier: method.notFound
+			count: 4
+			path: app/OpenGraph/OgRenderCoordinator.php
+
+		-
+			message: '#^Method App\\ReadModel\\PublicSite\\Content\\CaseStudyReader\:\:findByIdentifier\(\) should return App\\Models\\CaseStudy\|null but returns Illuminate\\Database\\Eloquent\\Model\|null\.$#'
+			identifier: return.type
+			count: 1
+			path: app/ReadModel/PublicSite/Content/CaseStudyReader.php
+
+		-
+			message: '#^Parameter \#1 \$array \(array\{\}\|list\{0\: Illuminate\\Database\\Query\\Builder, 1\?\: Illuminate\\Database\\Query\\Builder, 2\?\: Illuminate\\Database\\Query\\Builder\}\) to function array_filter does not contain falsy values, the array will always stay the same\.$#'
+			identifier: arrayFilter.same
+			count: 1
+			path: app/ReadModel/PublicSite/Content/FeedReader.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$enabled\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/ReadModel/PublicSite/Content/HomeGalleryReader.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$section_key\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/ReadModel/PublicSite/Content/HomeGalleryReader.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Contracts\\Pagination\\LengthAwarePaginator\:\:getCollection\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/ReadModel/PublicSite/Content/HomeGalleryReader.php
+
+		-
+			message: '#^Method App\\ReadModel\\PublicSite\\Content\\HomeGalleryReader\:\:homeRevision\(\) should return App\\Models\\PageRevision\|null but returns Illuminate\\Database\\Eloquent\\Model\|null\.$#'
+			identifier: return.type
+			count: 1
+			path: app/ReadModel/PublicSite/Content/HomeGalleryReader.php
+
+		-
+			message: '#^Method App\\ReadModel\\PublicSite\\Content\\HomeGalleryReader\:\:portfolioRevision\(\) should return App\\Models\\PageRevision\|null but returns Illuminate\\Database\\Eloquent\\Model\|null\.$#'
+			identifier: return.type
+			count: 1
+			path: app/ReadModel/PublicSite/Content/HomeGalleryReader.php
+
+		-
+			message: '#^Method App\\ReadModel\\PublicSite\\Content\\ProjectReader\:\:findByIdentifier\(\) should return App\\Models\\Project\|null but returns Illuminate\\Database\\Eloquent\\Model\|null\.$#'
+			identifier: return.type
+			count: 1
+			path: app/ReadModel/PublicSite/Content/ProjectReader.php
+
+		-
+			message: '#^Method App\\ReadModel\\PublicSite\\Content\\ProjectReader\:\:findExperimentByIdentifier\(\) should return App\\Models\\Experiment\|null but returns Illuminate\\Database\\Eloquent\\Model\|null\.$#'
+			identifier: return.type
+			count: 1
+			path: app/ReadModel/PublicSite/Content/ProjectReader.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\TopicRevisionTranslation\:\:\$name\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/ReadModel/PublicSite/Content/PublicResourceReader.php
+
+		-
+			message: '#^Method App\\ReadModel\\PublicSite\\Content\\PublicResourceReader\:\:findByIdentifier\(\) should return App\\Models\\ResourceRevision\|null but returns Illuminate\\Database\\Eloquent\\Model\|null\.$#'
+			identifier: return.type
+			count: 1
+			path: app/ReadModel/PublicSite/Content/PublicResourceReader.php
+
+		-
+			message: '#^Parameter \#1 \$callback of method Illuminate\\Database\\Eloquent\\Collection\<int,App\\Models\\Topic\>\:\:map\(\) contains unresolvable type\.$#'
+			identifier: argument.unresolvableType
+			count: 1
+			path: app/ReadModel/PublicSite/Content/PublicResourceReader.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>name" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/ReadModel/PublicSite/Content/PublicResourceReader.php
+
+		-
+			message: '#^Method App\\ReadModel\\PublicSite\\Content\\ReferenceCollectionReader\:\:findByIdentifier\(\) should return App\\Models\\ReferenceCollection\|null but returns Illuminate\\Database\\Eloquent\\Model\|null\.$#'
+			identifier: return.type
+			count: 1
+			path: app/ReadModel/PublicSite/Content/ReferenceCollectionReader.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\TopicRevisionTranslation\:\:\$name\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/ReadModel/PublicSite/Content/ResourceReader.php
+
+		-
+			message: '#^Parameter \#1 \$callback of method Illuminate\\Database\\Eloquent\\Collection\<int,App\\Models\\Topic\>\:\:map\(\) contains unresolvable type\.$#'
+			identifier: argument.unresolvableType
+			count: 1
+			path: app/ReadModel/PublicSite/Content/ResourceReader.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>name" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/ReadModel/PublicSite/Content/ResourceReader.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$id\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/ReadModel/PublicSite/Content/ResumeReader.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:selectedCases\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/ReadModel/PublicSite/Content/ResumeReader.php
+
+		-
+			message: '#^Method App\\ReadModel\\PublicSite\\Content\\SnippetReader\:\:findByIdentifier\(\) should return App\\Models\\Snippet\|null but returns Illuminate\\Database\\Eloquent\\Model\|null\.$#'
+			identifier: return.type
+			count: 1
+			path: app/ReadModel/PublicSite/Content/SnippetReader.php
+
+		-
+			message: '#^Method App\\ReadModel\\PublicSite\\Content\\TechnologyReader\:\:findByIdentifier\(\) should return App\\Models\\Technology\|null but returns Illuminate\\Database\\Eloquent\\Model\|null\.$#'
+			identifier: return.type
+			count: 1
+			path: app/ReadModel/PublicSite/Content/TechnologyReader.php
+
+		-
+			message: '#^Method App\\ReadModel\\PublicSite\\Content\\TopicReader\:\:findByIdentifier\(\) should return App\\Models\\Topic\|null but returns Illuminate\\Database\\Eloquent\\Model\|null\.$#'
+			identifier: return.type
+			count: 1
+			path: app/ReadModel/PublicSite/Content/TopicReader.php
+
+		-
+			message: '#^Method App\\ReadModel\\PublicSite\\Content\\WritingReader\:\:findByIdentifier\(\) should return App\\Models\\Writing\|null but returns Illuminate\\Database\\Eloquent\\Model\|null\.$#'
+			identifier: return.type
+			count: 1
+			path: app/ReadModel/PublicSite/Content/WritingReader.php
+
 		-
 			message: '#^Called ''env'' outside of the config directory which returns null when the config is cached, use ''config''\.$#'
 			identifier: larastan.noEnvCallsOutsideOfConfig
 			count: 1
 			path: app/Support/ResumePdf/DocumentRenderer.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\CaseStudyRevisionTranslation\:\:\$title\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Support/ResumePdf/ResumePdfBuilder.php

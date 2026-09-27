@@ -1,6 +1,6 @@
 import { Box } from '../../ui';
 import { ConditionalContent } from '../../primitives/conditional-content';
-import { LeftSidebarMainNavigation } from './left-sidebar-main-navigation';
+import { LeftSidebarShellNavigation } from './left-sidebar-shell-navigation';
 import { LeftSidebarPreferencesArea } from './left-sidebar-preferences-area';
 import type { SiteText } from '@portfolio/data/domain/types';
 import type { buildLeftSidebarBackNavigation } from './build-left-sidebar-back-navigation';
@@ -15,6 +15,7 @@ type LeftSidebarShellViewProps = {
   t: SidebarTranslator;
   data: ReturnType<typeof buildLeftSidebarData>;
   back: ReturnType<typeof buildLeftSidebarBackNavigation>;
+  showBrand?: boolean;
 };
 
 export function LeftSidebarShellView(props: LeftSidebarShellViewProps) {
@@ -24,20 +25,15 @@ export function LeftSidebarShellView(props: LeftSidebarShellViewProps) {
       aria-label={props.t('navigation')}
       visualVariant={props.showPreferences ? 'sidebarNav' : 'sidebarNavCompact'}
     >
-      <LeftSidebarMainNavigation
-        backHref={props.back.backHref}
-        backLabel={props.back.backLabel}
-        homeItem={props.data.homeItem}
-        contentGroups={props.data.contentGroups}
-        aboutVisible={props.data.aboutVisible}
-        aboutItem={props.data.aboutItem}
-        groupLabel={props.data.contentGroupLabel}
-        t={props.t}
-        pathname={props.data.currentPathname}
-        locale={props.locale}
+      <LeftSidebarShellNavigation
         site={props.site}
+        locale={props.locale}
         onNavigate={props.onNavigate}
+        t={props.t}
+        data={props.data}
+        back={props.back}
         compact={!props.showPreferences}
+        showBrand={props.showBrand}
       />
       <ConditionalContent
         condition={props.showPreferences}

@@ -1,0 +1,67 @@
+rules:
+  - id: laravel-banned-process-execution
+    languages:
+      - php
+    message: Use an approved, validated application service instead of a direct process execution API.
+    severity: ERROR
+    metadata:
+      category: security
+      confidence: high
+      technology:
+        - laravel
+    pattern-either:
+      - pattern: shell_exec(...)
+      - pattern: exec(...)
+      - pattern: system(...)
+      - pattern: passthru(...)
+      - pattern: proc_open(...)
+      - pattern: popen(...)
+      - pattern: eval(...)
+
+  - id: laravel-controller-direct-database-access
+    languages:
+      - php
+    message: Controllers must delegate database access to an application or read-model service.
+    severity: ERROR
+    metadata:
+      category: architecture
+      confidence: high
+      technology:
+        - laravel
+    paths:
+      include:
+        - '**/app/Http/Controllers/**'
+    pattern-either:
+      - pattern: DB::table(...)
+      - pattern: DB::select(...)
+      - pattern: DB::statement(...)
+      - pattern: DB::unprepared(...)
+      - pattern: DB::raw(...)
+      - pattern: \Illuminate\Support\Facades\DB::table(...)
+      - pattern: \Illuminate\Support\Facades\DB::select(...)
+      - pattern: \Illuminate\Support\Facades\DB::statement(...)
+      - pattern: \Illuminate\Support\Facades\DB::unprepared(...)
+      - pattern: \Illuminate\Support\Facades\DB::raw(...)
+
+  - id: laravel-interpolated-raw-sql
+    languages:
+      - php
+    message: Raw SQL must use bindings instead of interpolated values.
+    severity: ERROR
+    metadata:
+      category: security
+      confidence: high
+      technology:
+        - laravel
+    pattern-either:
+      - pattern: $QUERY->whereRaw($PREFIX . $VALUE . $SUFFIX, ...)
+      - pattern: $QUERY->havingRaw($PREFIX . $VALUE . $SUFFIX, ...)
+      - pattern: $QUERY->orderByRaw($PREFIX . $VALUE . $SUFFIX, ...)
+      - pattern: $QUERY->selectRaw($PREFIX . $VALUE . $SUFFIX, ...)
+      - pattern: $QUERY->joinRaw($PREFIX . $VALUE . $SUFFIX, ...)
+      - pattern: DB::select($PREFIX . $VALUE . $SUFFIX, ...)
+      - pattern: DB::statement($PREFIX . $VALUE . $SUFFIX, ...)
+      - pattern: DB::raw($PREFIX . $VALUE . $SUFFIX)
+      - pattern: \Illuminate\Support\Facades\DB::select($PREFIX . $VALUE . $SUFFIX, ...)
+      - pattern: \Illuminate\Support\Facades\DB::statement($PREFIX . $VALUE . $SUFFIX, ...)
+      - pattern: \Illuminate\Support\Facades\DB::raw($PREFIX . $VALUE . $SUFFIX)

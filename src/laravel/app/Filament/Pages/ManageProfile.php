@@ -15,6 +15,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
+use Filament\Schemas\Components\Fieldset;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -63,27 +64,35 @@ class ManageProfile extends Page
                             ->nullable(),
                     ]),
                 static::translationTabs(fn (string $prefix) => [
-                    TextInput::make("{$prefix}title")
-                        ->label('Title')
-                        ->nullable()
-                        ->maxLength(255),
-                    TextInput::make("{$prefix}location")
-                        ->label('Location')
-                        ->nullable()
-                        ->maxLength(255),
-                    TextInput::make("{$prefix}birth_city")
-                        ->label('Birth City')
-                        ->nullable()
-                        ->maxLength(255),
-                    Textarea::make("{$prefix}description")
-                        ->label('Description')
-                        ->nullable(),
-                    Textarea::make("{$prefix}interests")
-                        ->label('Interests')
-                        ->nullable(),
-                    Textarea::make("{$prefix}learning")
-                        ->label('Learning')
-                        ->nullable(),
+                    Fieldset::make('Profile identity')
+                        ->columns(2)
+                        ->schema([
+                            TextInput::make("{$prefix}title")
+                                ->label('Title')
+                                ->nullable()
+                                ->maxLength(255),
+                            TextInput::make("{$prefix}location")
+                                ->label('Location')
+                                ->nullable()
+                                ->maxLength(255),
+                            TextInput::make("{$prefix}birth_city")
+                                ->label('Birth City')
+                                ->nullable()
+                                ->maxLength(255),
+                        ]),
+                    Fieldset::make('Profile narrative')
+                        ->columns(2)
+                        ->schema([
+                            Textarea::make("{$prefix}description")
+                                ->label('Description')
+                                ->nullable(),
+                            Textarea::make("{$prefix}interests")
+                                ->label('Interests')
+                                ->nullable(),
+                            Textarea::make("{$prefix}learning")
+                                ->label('Learning')
+                                ->nullable(),
+                        ]),
                     static::stringListRepeater("{$prefix}personal_interests", 'Personal Interests', 'Add interest'),
                     static::stringListRepeater("{$prefix}fortunes", 'Fortunes', 'Add fortune'),
                     static::stringListRepeater("{$prefix}personal_facts", 'Personal Facts', 'Add fact'),

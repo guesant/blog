@@ -1,0 +1,1361 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<files psalm-version="6.18.1@79465b8dc674127f442ae31ea114c11bc4dd7ed6">
+  <file src="app/Application/PublicSite/DownloadPublicSnippetQueryHandler.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="app/Application/PublicSite/GetPublicContentQuery.php">
+    <PossiblyUnusedProperty>
+      <code><![CDATA[$locale]]></code>
+    </PossiblyUnusedProperty>
+  </file>
+  <file src="app/Application/PublicSite/GetPublicContentQueryHandler.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="app/Application/PublicSite/GetPublicEmailChallengeQueryHandler.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
+    <UnusedParam>
+      <code><![CDATA[$query]]></code>
+    </UnusedParam>
+  </file>
+  <file src="app/Application/PublicSite/GetPublicFindingQueryHandler.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="app/Application/PublicSite/GetPublicHomeGalleryQueryHandler.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="app/Application/PublicSite/GetPublicPageQueryHandler.php">
+    <InvalidMethodCall>
+      <code><![CDATA[format]]></code>
+    </InvalidMethodCall>
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="app/Application/PublicSite/GetPublicPageQueryResult.php">
+    <PossiblyUnusedProperty>
+      <code><![CDATA[$locale]]></code>
+    </PossiblyUnusedProperty>
+  </file>
+  <file src="app/Application/PublicSite/GetPublicResumeQueryHandler.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="app/Application/PublicSite/IsPublicSiteInMaintenanceQueryHandler.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
+    <UnusedParam>
+      <code><![CDATA[$query]]></code>
+    </UnusedParam>
+  </file>
+  <file src="app/Application/PublicSite/ListPublicContentQueryHandler.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="app/Application/PublicSite/ListPublicContentQueryResult.php">
+    <PossiblyUnusedProperty>
+      <code><![CDATA[$collection]]></code>
+    </PossiblyUnusedProperty>
+  </file>
+  <file src="app/Application/PublicSite/ListPublicFindingsQueryHandler.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="app/Content/Concerns/RelatesByTechnology.php">
+    <InvalidDocblock>
+      <code><![CDATA[Builder<*>]]></code>
+    </InvalidDocblock>
+    <InvalidReturnType>
+      <code><![CDATA[Collection<int, mixed>]]></code>
+    </InvalidReturnType>
+  </file>
+  <file src="app/Content/Concerns/SortsListings.php">
+    <InvalidDocblock>
+      <code><![CDATA[Builder<*>]]></code>
+      <code><![CDATA[Builder<*>]]></code>
+    </InvalidDocblock>
+  </file>
+  <file src="app/Content/Graph/GraphNode.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[graphMeta]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="app/Content/Graph/InteractsWithGraph.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[graphId]]></code>
+      <code><![CDATA[graphId]]></code>
+      <code><![CDATA[graphId]]></code>
+      <code><![CDATA[graphId]]></code>
+      <code><![CDATA[graphId]]></code>
+      <code><![CDATA[graphId]]></code>
+      <code><![CDATA[graphId]]></code>
+      <code><![CDATA[graphId]]></code>
+      <code><![CDATA[graphId]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="app/Content/Graph/NodeRegistry.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[classFor]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="app/Content/Graph/RelationResolver.php">
+    <NoInterfaceProperties>
+      <code><![CDATA[$target->slug]]></code>
+    </NoInterfaceProperties>
+    <UndefinedMagicPropertyFetch>
+      <code><![CDATA[$relationType->key]]></code>
+      <code><![CDATA[$relationType->key]]></code>
+      <code><![CDATA[$relationType->key]]></code>
+    </UndefinedMagicPropertyFetch>
+  </file>
+  <file src="app/Content/Locale.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[baseRouteName]]></code>
+      <code><![CDATA[routeName]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="app/Content/OpenGraphMetadata.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[refresh]]></code>
+    </PossiblyUnusedMethod>
+    <TooManyArguments>
+      <code><![CDATA[header]]></code>
+    </TooManyArguments>
+  </file>
+  <file src="app/Filament/Concerns/SyncsTranslations.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[afterDelete]]></code>
+      <code><![CDATA[afterDelete]]></code>
+      <code><![CDATA[afterDelete]]></code>
+      <code><![CDATA[afterDelete]]></code>
+      <code><![CDATA[afterDelete]]></code>
+      <code><![CDATA[afterDelete]]></code>
+      <code><![CDATA[afterDelete]]></code>
+      <code><![CDATA[afterDelete]]></code>
+      <code><![CDATA[afterDelete]]></code>
+      <code><![CDATA[afterDelete]]></code>
+      <code><![CDATA[afterDelete]]></code>
+      <code><![CDATA[afterDelete]]></code>
+      <code><![CDATA[afterDelete]]></code>
+      <code><![CDATA[afterDelete]]></code>
+      <code><![CDATA[afterDelete]]></code>
+      <code><![CDATA[afterDelete]]></code>
+      <code><![CDATA[afterDelete]]></code>
+      <code><![CDATA[afterDelete]]></code>
+      <code><![CDATA[afterDelete]]></code>
+      <code><![CDATA[afterDelete]]></code>
+      <code><![CDATA[afterDelete]]></code>
+      <code><![CDATA[afterDelete]]></code>
+      <code><![CDATA[afterDelete]]></code>
+      <code><![CDATA[afterDelete]]></code>
+      <code><![CDATA[afterDelete]]></code>
+      <code><![CDATA[afterDelete]]></code>
+      <code><![CDATA[afterDelete]]></code>
+      <code><![CDATA[afterDelete]]></code>
+      <code><![CDATA[afterDelete]]></code>
+    </PossiblyUnusedMethod>
+    <UndefinedMagicPropertyFetch>
+      <code><![CDATA[$translation->birth_city]]></code>
+      <code><![CDATA[$translation->description]]></code>
+      <code><![CDATA[$translation->fortunes]]></code>
+      <code><![CDATA[$translation->interests]]></code>
+      <code><![CDATA[$translation->learning]]></code>
+      <code><![CDATA[$translation->location]]></code>
+      <code><![CDATA[$translation->summary]]></code>
+      <code><![CDATA[$translation->title]]></code>
+    </UndefinedMagicPropertyFetch>
+  </file>
+  <file src="app/Filament/Pages/ManageProfile.php">
+    <MissingTemplateParam>
+      <code><![CDATA[ManageProfile]]></code>
+    </MissingTemplateParam>
+    <PossiblyUnusedMethod>
+      <code><![CDATA[form]]></code>
+      <code><![CDATA[mount]]></code>
+      <code><![CDATA[save]]></code>
+    </PossiblyUnusedMethod>
+    <PossiblyUnusedProperty>
+      <code><![CDATA[$data]]></code>
+    </PossiblyUnusedProperty>
+  </file>
+  <file src="app/Filament/Pages/ManageResume.php">
+    <MissingTemplateParam>
+      <code><![CDATA[ManageResume]]></code>
+    </MissingTemplateParam>
+    <PossiblyUnusedMethod>
+      <code><![CDATA[form]]></code>
+      <code><![CDATA[mount]]></code>
+      <code><![CDATA[save]]></code>
+    </PossiblyUnusedMethod>
+    <PossiblyUnusedProperty>
+      <code><![CDATA[$data]]></code>
+    </PossiblyUnusedProperty>
+  </file>
+  <file src="app/Filament/Pages/ManageSiteSettings.php">
+    <MissingTemplateParam>
+      <code><![CDATA[ManageSiteSettings]]></code>
+    </MissingTemplateParam>
+    <PossiblyUnusedMethod>
+      <code><![CDATA[form]]></code>
+      <code><![CDATA[mount]]></code>
+      <code><![CDATA[save]]></code>
+    </PossiblyUnusedMethod>
+    <PossiblyUnusedProperty>
+      <code><![CDATA[$data]]></code>
+    </PossiblyUnusedProperty>
+  </file>
+  <file src="app/Filament/Resources/CaseStudies/CaseStudyResource.php">
+    <MissingTemplateParam>
+      <code><![CDATA[CaseStudyResource]]></code>
+    </MissingTemplateParam>
+  </file>
+  <file src="app/Filament/Resources/CaseStudies/Pages/CreateCaseStudy.php">
+    <MissingTemplateParam>
+      <code><![CDATA[CreateCaseStudy]]></code>
+    </MissingTemplateParam>
+    <PossiblyUnusedMethod>
+      <code><![CDATA[afterCreate]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="app/Filament/Resources/CaseStudies/Pages/EditCaseStudy.php">
+    <MissingTemplateParam>
+      <code><![CDATA[EditCaseStudy]]></code>
+    </MissingTemplateParam>
+    <PossiblyUnusedMethod>
+      <code><![CDATA[afterSave]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="app/Filament/Resources/ContentRelations/ContentRelationResource.php">
+    <MissingTemplateParam>
+      <code><![CDATA[ContentRelationResource]]></code>
+    </MissingTemplateParam>
+  </file>
+  <file src="app/Filament/Resources/ContentRelations/Pages/CreateContentRelation.php">
+    <MissingTemplateParam>
+      <code><![CDATA[CreateContentRelation]]></code>
+    </MissingTemplateParam>
+  </file>
+  <file src="app/Filament/Resources/ContentRelations/Pages/EditContentRelation.php">
+    <MissingTemplateParam>
+      <code><![CDATA[EditContentRelation]]></code>
+    </MissingTemplateParam>
+  </file>
+  <file src="app/Filament/Resources/CreditEntries/CreditEntryResource.php">
+    <MissingTemplateParam>
+      <code><![CDATA[CreditEntryResource]]></code>
+    </MissingTemplateParam>
+  </file>
+  <file src="app/Filament/Resources/CreditEntries/Pages/CreateCreditEntry.php">
+    <MissingTemplateParam>
+      <code><![CDATA[CreateCreditEntry]]></code>
+    </MissingTemplateParam>
+    <PossiblyUnusedMethod>
+      <code><![CDATA[afterCreate]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="app/Filament/Resources/CreditEntries/Pages/EditCreditEntry.php">
+    <MissingTemplateParam>
+      <code><![CDATA[EditCreditEntry]]></code>
+    </MissingTemplateParam>
+    <PossiblyUnusedMethod>
+      <code><![CDATA[afterSave]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="app/Filament/Resources/Experiments/ExperimentResource.php">
+    <MissingTemplateParam>
+      <code><![CDATA[ExperimentResource]]></code>
+    </MissingTemplateParam>
+  </file>
+  <file src="app/Filament/Resources/Experiments/Pages/CreateExperiment.php">
+    <MissingTemplateParam>
+      <code><![CDATA[CreateExperiment]]></code>
+    </MissingTemplateParam>
+    <PossiblyUnusedMethod>
+      <code><![CDATA[afterCreate]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="app/Filament/Resources/Experiments/Pages/EditExperiment.php">
+    <MissingTemplateParam>
+      <code><![CDATA[EditExperiment]]></code>
+    </MissingTemplateParam>
+    <PossiblyUnusedMethod>
+      <code><![CDATA[afterSave]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="app/Filament/Resources/Languages/LanguageResource.php">
+    <MissingTemplateParam>
+      <code><![CDATA[LanguageResource]]></code>
+    </MissingTemplateParam>
+  </file>
+  <file src="app/Filament/Resources/Languages/Pages/CreateLanguage.php">
+    <MissingTemplateParam>
+      <code><![CDATA[CreateLanguage]]></code>
+    </MissingTemplateParam>
+    <PossiblyUnusedMethod>
+      <code><![CDATA[afterCreate]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="app/Filament/Resources/Languages/Pages/EditLanguage.php">
+    <MissingTemplateParam>
+      <code><![CDATA[EditLanguage]]></code>
+    </MissingTemplateParam>
+    <PossiblyUnusedMethod>
+      <code><![CDATA[afterSave]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="app/Filament/Resources/NavItems/NavItemResource.php">
+    <MissingTemplateParam>
+      <code><![CDATA[NavItemResource]]></code>
+    </MissingTemplateParam>
+  </file>
+  <file src="app/Filament/Resources/NavItems/Pages/CreateNavItem.php">
+    <MissingTemplateParam>
+      <code><![CDATA[CreateNavItem]]></code>
+    </MissingTemplateParam>
+    <PossiblyUnusedMethod>
+      <code><![CDATA[afterCreate]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="app/Filament/Resources/NavItems/Pages/EditNavItem.php">
+    <MissingTemplateParam>
+      <code><![CDATA[EditNavItem]]></code>
+    </MissingTemplateParam>
+    <PossiblyUnusedMethod>
+      <code><![CDATA[afterSave]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="app/Filament/Resources/Pages/PageResource.php">
+    <MissingTemplateParam>
+      <code><![CDATA[PageResource]]></code>
+    </MissingTemplateParam>
+  </file>
+  <file src="app/Filament/Resources/Pages/Pages/CreatePage.php">
+    <MissingTemplateParam>
+      <code><![CDATA[CreatePage]]></code>
+    </MissingTemplateParam>
+    <PossiblyUnusedMethod>
+      <code><![CDATA[afterCreate]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="app/Filament/Resources/Pages/Pages/EditPage.php">
+    <MissingTemplateParam>
+      <code><![CDATA[EditPage]]></code>
+    </MissingTemplateParam>
+    <PossiblyUnusedMethod>
+      <code><![CDATA[afterSave]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="app/Filament/Resources/Pages/Schemas/PageForm.php">
+    <InvalidArgument>
+      <code><![CDATA[function (array $keys, string $group) use ($fields): array {
+                $components = collect($keys)
+                    ->map(fn (string $key) => $fields->get($key))
+                    ->filter()
+                    ->values()
+                    ->all();
+
+                if ($group === '' || count($keys) < 2) {
+                    return $components;
+                }
+
+                return [
+                    Fieldset::make(self::FIELDSET_LABELS[$group] ?? str($group)->headline()->toString())
+                        ->columns(2)
+                        ->schema($components),
+                ];
+            }]]></code>
+    </InvalidArgument>
+  </file>
+  <file src="app/Filament/Resources/Projects/Pages/CreateProject.php">
+    <MissingTemplateParam>
+      <code><![CDATA[CreateProject]]></code>
+    </MissingTemplateParam>
+    <PossiblyUnusedMethod>
+      <code><![CDATA[afterCreate]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="app/Filament/Resources/Projects/Pages/EditProject.php">
+    <MissingTemplateParam>
+      <code><![CDATA[EditProject]]></code>
+    </MissingTemplateParam>
+    <PossiblyUnusedMethod>
+      <code><![CDATA[afterSave]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="app/Filament/Resources/Projects/ProjectResource.php">
+    <MissingTemplateParam>
+      <code><![CDATA[ProjectResource]]></code>
+    </MissingTemplateParam>
+  </file>
+  <file src="app/Filament/Resources/ReferenceCollections/Pages/CreateReferenceCollection.php">
+    <MissingTemplateParam>
+      <code><![CDATA[CreateReferenceCollection]]></code>
+    </MissingTemplateParam>
+    <PossiblyUnusedMethod>
+      <code><![CDATA[afterCreate]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="app/Filament/Resources/ReferenceCollections/Pages/EditReferenceCollection.php">
+    <MissingTemplateParam>
+      <code><![CDATA[EditReferenceCollection]]></code>
+    </MissingTemplateParam>
+    <PossiblyUnusedMethod>
+      <code><![CDATA[afterSave]]></code>
+    </PossiblyUnusedMethod>
+    <UndefinedMagicPropertyFetch>
+      <code><![CDATA[$resource->pivot]]></code>
+    </UndefinedMagicPropertyFetch>
+  </file>
+  <file src="app/Filament/Resources/ReferenceCollections/ReferenceCollectionResource.php">
+    <MissingTemplateParam>
+      <code><![CDATA[ReferenceCollectionResource]]></code>
+    </MissingTemplateParam>
+  </file>
+  <file src="app/Filament/Resources/RelationTypes/Pages/CreateRelationType.php">
+    <MissingTemplateParam>
+      <code><![CDATA[CreateRelationType]]></code>
+    </MissingTemplateParam>
+    <PossiblyUnusedMethod>
+      <code><![CDATA[afterCreate]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="app/Filament/Resources/RelationTypes/Pages/EditRelationType.php">
+    <MissingTemplateParam>
+      <code><![CDATA[EditRelationType]]></code>
+    </MissingTemplateParam>
+    <PossiblyUnusedMethod>
+      <code><![CDATA[afterSave]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="app/Filament/Resources/RelationTypes/RelationTypeResource.php">
+    <MissingTemplateParam>
+      <code><![CDATA[RelationTypeResource]]></code>
+    </MissingTemplateParam>
+  </file>
+  <file src="app/Filament/Resources/ResourceFindings/Pages/CreateResourceFinding.php">
+    <MissingTemplateParam>
+      <code><![CDATA[CreateResourceFinding]]></code>
+    </MissingTemplateParam>
+    <PossiblyUnusedMethod>
+      <code><![CDATA[afterCreate]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="app/Filament/Resources/ResourceFindings/Pages/EditResourceFinding.php">
+    <MissingTemplateParam>
+      <code><![CDATA[EditResourceFinding]]></code>
+    </MissingTemplateParam>
+    <PossiblyUnusedMethod>
+      <code><![CDATA[afterSave]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="app/Filament/Resources/ResourceFindings/ResourceFindingResource.php">
+    <MissingTemplateParam>
+      <code><![CDATA[ResourceFindingResource]]></code>
+    </MissingTemplateParam>
+  </file>
+  <file src="app/Filament/Resources/Snippets/Pages/CreateSnippet.php">
+    <MissingTemplateParam>
+      <code><![CDATA[CreateSnippet]]></code>
+    </MissingTemplateParam>
+    <PossiblyUnusedMethod>
+      <code><![CDATA[afterCreate]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="app/Filament/Resources/Snippets/Pages/EditSnippet.php">
+    <MissingTemplateParam>
+      <code><![CDATA[EditSnippet]]></code>
+    </MissingTemplateParam>
+    <PossiblyUnusedMethod>
+      <code><![CDATA[afterSave]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="app/Filament/Resources/Snippets/SnippetResource.php">
+    <MissingTemplateParam>
+      <code><![CDATA[SnippetResource]]></code>
+    </MissingTemplateParam>
+  </file>
+  <file src="app/Filament/Resources/Technologies/Pages/CreateTechnology.php">
+    <MissingTemplateParam>
+      <code><![CDATA[CreateTechnology]]></code>
+    </MissingTemplateParam>
+    <PossiblyUnusedMethod>
+      <code><![CDATA[afterCreate]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="app/Filament/Resources/Technologies/Pages/EditTechnology.php">
+    <MissingTemplateParam>
+      <code><![CDATA[EditTechnology]]></code>
+    </MissingTemplateParam>
+    <PossiblyUnusedMethod>
+      <code><![CDATA[afterSave]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="app/Filament/Resources/Technologies/TechnologyResource.php">
+    <MissingTemplateParam>
+      <code><![CDATA[TechnologyResource]]></code>
+    </MissingTemplateParam>
+  </file>
+  <file src="app/Filament/Resources/Topics/Pages/CreateTopic.php">
+    <MissingTemplateParam>
+      <code><![CDATA[CreateTopic]]></code>
+    </MissingTemplateParam>
+    <PossiblyUnusedMethod>
+      <code><![CDATA[afterCreate]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="app/Filament/Resources/Topics/Pages/EditTopic.php">
+    <MissingTemplateParam>
+      <code><![CDATA[EditTopic]]></code>
+    </MissingTemplateParam>
+    <PossiblyUnusedMethod>
+      <code><![CDATA[afterSave]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="app/Filament/Resources/Topics/TopicResource.php">
+    <MissingTemplateParam>
+      <code><![CDATA[TopicResource]]></code>
+    </MissingTemplateParam>
+  </file>
+  <file src="app/Filament/Resources/Writings/Pages/CreateWriting.php">
+    <MissingTemplateParam>
+      <code><![CDATA[CreateWriting]]></code>
+    </MissingTemplateParam>
+    <PossiblyUnusedMethod>
+      <code><![CDATA[afterCreate]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="app/Filament/Resources/Writings/Pages/EditWriting.php">
+    <MissingTemplateParam>
+      <code><![CDATA[EditWriting]]></code>
+    </MissingTemplateParam>
+    <PossiblyUnusedMethod>
+      <code><![CDATA[afterSave]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="app/Filament/Resources/Writings/WritingResource.php">
+    <MissingTemplateParam>
+      <code><![CDATA[WritingResource]]></code>
+    </MissingTemplateParam>
+  </file>
+  <file src="app/Http/Controllers/Api/FindingApiController.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[index]]></code>
+      <code><![CDATA[show]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="app/Http/Controllers/Api/PublicSiteApiController.php">
+    <InvalidOperand>
+      <code><![CDATA[$duration]]></code>
+      <code><![CDATA[$duration]]></code>
+    </InvalidOperand>
+    <PossiblyUnusedMethod>
+      <code><![CDATA[chrome]]></code>
+      <code><![CDATA[collection]]></code>
+      <code><![CDATA[document]]></code>
+      <code><![CDATA[homeGallery]]></code>
+      <code><![CDATA[page]]></code>
+      <code><![CDATA[protectedEmailChallenge]]></code>
+      <code><![CDATA[resumeData]]></code>
+      <code><![CDATA[resumePdf]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="app/Http/Controllers/KeycloakAuthController.php">
+    <InvalidReturnStatement>
+      <code><![CDATA[redirect(Socialite::driver('keycloak')->getLogoutUrl(
+            url('/'),
+            config('services.keycloak.client_id'),
+            $idToken,
+        ))]]></code>
+    </InvalidReturnStatement>
+    <InvalidReturnType>
+      <code><![CDATA[RedirectResponse]]></code>
+    </InvalidReturnType>
+    <PossiblyUnusedMethod>
+      <code><![CDATA[callback]]></code>
+      <code><![CDATA[logout]]></code>
+      <code><![CDATA[redirect]]></code>
+    </PossiblyUnusedMethod>
+    <UndefinedInterfaceMethod>
+      <code><![CDATA[enablePKCE]]></code>
+      <code><![CDATA[enablePKCE]]></code>
+      <code><![CDATA[getLogoutUrl]]></code>
+    </UndefinedInterfaceMethod>
+  </file>
+  <file src="app/Http/Controllers/OgImageController.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
+    <TypeDoesNotContainType>
+      <code><![CDATA[config('og.secret') === '']]></code>
+    </TypeDoesNotContainType>
+  </file>
+  <file src="app/Http/Controllers/PublicMetadataController.php">
+    <InvalidCast>
+      <code><![CDATA[$account]]></code>
+      <code><![CDATA[$account]]></code>
+    </InvalidCast>
+    <NoEnvOutsideConfig>
+      <code><![CDATA[env]]></code>
+    </NoEnvOutsideConfig>
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+      <code><![CDATA[robots]]></code>
+      <code><![CDATA[sitemap]]></code>
+      <code><![CDATA[webfinger]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="app/Http/Middleware/AddSecurityHeaders.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[handle]]></code>
+    </PossiblyUnusedMethod>
+    <TypeDoesNotContainType>
+      <code><![CDATA[config('services.google.analytics_id')]]></code>
+      <code><![CDATA[config('services.google.tag_manager_id')]]></code>
+    </TypeDoesNotContainType>
+  </file>
+  <file src="app/Http/Middleware/CacheOpenApiDocumentation.php">
+    <InvalidCast>
+      <code><![CDATA[$file]]></code>
+    </InvalidCast>
+    <PossiblyUnusedMethod>
+      <code><![CDATA[handle]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="app/Http/Middleware/CheckMaintenanceMode.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+      <code><![CDATA[handle]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="app/Http/Middleware/EnsureAdminOidcSession.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[handle]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="app/Http/Middleware/RequestAuditMiddleware.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[handle]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="app/Http/Middleware/SetLocale.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[handle]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="app/Http/Responses/PublicContentResponseFactory.php">
+    <InvalidMethodCall>
+      <code><![CDATA[format]]></code>
+      <code><![CDATA[format]]></code>
+      <code><![CDATA[format]]></code>
+      <code><![CDATA[format]]></code>
+      <code><![CDATA[format]]></code>
+      <code><![CDATA[format]]></code>
+      <code><![CDATA[format]]></code>
+      <code><![CDATA[format]]></code>
+      <code><![CDATA[format]]></code>
+      <code><![CDATA[format]]></code>
+    </InvalidMethodCall>
+    <InvalidTemplateParam>
+      <code><![CDATA[$technology->resumeSkills
+                ->map(fn ($skill) => $skill->topic?->translation($locale)?->name ?? $skill->topic?->slug)
+                ->filter()
+                ->values()]]></code>
+    </InvalidTemplateParam>
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
+    <TypeDoesNotContainType>
+      <code><![CDATA[0]]></code>
+      <code><![CDATA[0]]></code>
+    </TypeDoesNotContainType>
+    <UndefinedMagicPropertyFetch>
+      <code><![CDATA[$translation?->body]]></code>
+      <code><![CDATA[$translation?->body]]></code>
+      <code><![CDATA[$translation?->body]]></code>
+      <code><![CDATA[$translation?->body]]></code>
+      <code><![CDATA[$translation?->context]]></code>
+      <code><![CDATA[$translation?->current_focus]]></code>
+      <code><![CDATA[$translation?->description]]></code>
+      <code><![CDATA[$translation?->description]]></code>
+      <code><![CDATA[$translation?->description]]></code>
+      <code><![CDATA[$translation?->description]]></code>
+      <code><![CDATA[$translation?->description]]></code>
+      <code><![CDATA[$translation?->description]]></code>
+      <code><![CDATA[$translation?->description]]></code>
+      <code><![CDATA[$translation?->excerpt]]></code>
+      <code><![CDATA[$translation?->excerpt]]></code>
+      <code><![CDATA[$translation?->intro]]></code>
+      <code><![CDATA[$translation?->intro]]></code>
+      <code><![CDATA[$translation?->meta]]></code>
+      <code><![CDATA[$translation?->problem]]></code>
+      <code><![CDATA[$translation?->purpose]]></code>
+      <code><![CDATA[$translation?->purpose]]></code>
+      <code><![CDATA[$translation?->purpose]]></code>
+      <code><![CDATA[$translation?->purpose]]></code>
+      <code><![CDATA[$translation?->reading_time]]></code>
+      <code><![CDATA[$translation?->result]]></code>
+      <code><![CDATA[$translation?->role]]></code>
+      <code><![CDATA[$translation?->status]]></code>
+      <code><![CDATA[$translation?->status]]></code>
+      <code><![CDATA[$translation?->summary]]></code>
+      <code><![CDATA[$translation?->summary]]></code>
+    </UndefinedMagicPropertyFetch>
+  </file>
+  <file src="app/Http/Responses/PublicFindingResponseFactory.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="app/Jobs/GenerateResumePdf.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
+    <PossiblyUnusedProperty>
+      <code><![CDATA[$timeout]]></code>
+    </PossiblyUnusedProperty>
+  </file>
+  <file src="app/Jobs/GenerateSnippetZip.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
+    <PossiblyUnusedProperty>
+      <code><![CDATA[$timeout]]></code>
+    </PossiblyUnusedProperty>
+  </file>
+  <file src="app/Jobs/WarmPublicSiteChrome.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+      <code><![CDATA[uniqueId]]></code>
+    </PossiblyUnusedMethod>
+    <PossiblyUnusedProperty>
+      <code><![CDATA[$timeout]]></code>
+      <code><![CDATA[$tries]]></code>
+      <code><![CDATA[$uniqueFor]]></code>
+    </PossiblyUnusedProperty>
+  </file>
+  <file src="app/Listeners/InvalidatePublicSiteChrome.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[handle]]></code>
+    </PossiblyUnusedMethod>
+    <UnusedParam>
+      <code><![CDATA[$event]]></code>
+    </UnusedParam>
+  </file>
+  <file src="app/Models/CaseStudy.php">
+    <MissingTemplateParam>
+      <code><![CDATA[BelongsToMany<Page, $this>]]></code>
+      <code><![CDATA[BelongsToMany<Resume, $this>]]></code>
+      <code><![CDATA[BelongsToMany<Technology, $this>]]></code>
+    </MissingTemplateParam>
+  </file>
+  <file src="app/Models/Experiment.php">
+    <MissingTemplateParam>
+      <code><![CDATA[BelongsToMany<Technology, $this>]]></code>
+    </MissingTemplateParam>
+  </file>
+  <file src="app/Models/Language.php">
+    <InvalidReturnStatement>
+      <code><![CDATA[$this->hasMany(Resource::class)]]></code>
+    </InvalidReturnStatement>
+    <InvalidReturnType>
+      <code><![CDATA[HasMany<resource, $this>]]></code>
+    </InvalidReturnType>
+    <InvalidTemplateParam>
+      <code><![CDATA[HasMany<resource, $this>]]></code>
+    </InvalidTemplateParam>
+  </file>
+  <file src="app/Models/LanguageRevision.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[translation]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="app/Models/Page.php">
+    <MissingTemplateParam>
+      <code><![CDATA[BelongsToMany<CaseStudy, $this>]]></code>
+      <code><![CDATA[BelongsToMany<Project, $this>]]></code>
+      <code><![CDATA[BelongsToMany<Writing, $this>]]></code>
+    </MissingTemplateParam>
+  </file>
+  <file src="app/Models/PageRevision.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[translation]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="app/Models/PageRevisionTranslation.php">
+    <PublicModelAccessor>
+      <code><![CDATA[getFieldsAttribute]]></code>
+    </PublicModelAccessor>
+  </file>
+  <file src="app/Models/ProfileRevision.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[translation]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="app/Models/ProfileRevisionTranslation.php">
+    <PublicModelAccessor>
+      <code><![CDATA[getMilestonesAttribute]]></code>
+      <code><![CDATA[getPersonalFactsAttribute]]></code>
+      <code><![CDATA[getPersonalInterestsAttribute]]></code>
+      <code><![CDATA[getPersonalThingsAttribute]]></code>
+      <code><![CDATA[getTrajectoryAttribute]]></code>
+    </PublicModelAccessor>
+    <UndefinedThisPropertyFetch>
+      <code><![CDATA[$this->id]]></code>
+      <code><![CDATA[$this->id]]></code>
+    </UndefinedThisPropertyFetch>
+  </file>
+  <file src="app/Models/Project.php">
+    <MissingTemplateParam>
+      <code><![CDATA[BelongsToMany<Page, $this>]]></code>
+      <code><![CDATA[BelongsToMany<Technology, $this>]]></code>
+    </MissingTemplateParam>
+  </file>
+  <file src="app/Models/ReferenceCollection.php">
+    <InvalidReturnStatement>
+      <code><![CDATA[$this->belongsToMany(Resource::class, 'reference_collection_item')
+            ->withPivot('note', 'order')
+            ->orderByPivot('order')]]></code>
+    </InvalidReturnStatement>
+    <InvalidReturnType>
+      <code><![CDATA[BelongsToMany<resource, $this>]]></code>
+    </InvalidReturnType>
+    <InvalidTemplateParam>
+      <code><![CDATA[BelongsToMany<resource, $this>]]></code>
+    </InvalidTemplateParam>
+    <MissingTemplateParam>
+      <code><![CDATA[BelongsToMany<resource, $this>]]></code>
+    </MissingTemplateParam>
+  </file>
+  <file src="app/Models/Resource.php">
+    <InvalidArgument>
+      <code><![CDATA['key']]></code>
+    </InvalidArgument>
+    <MissingTemplateParam>
+      <code><![CDATA[BelongsToMany<ReferenceCollection, $this>]]></code>
+      <code><![CDATA[BelongsToMany<Topic, $this>]]></code>
+      <code><![CDATA[BelongsToMany<Topic, $this>]]></code>
+      <code><![CDATA[BelongsToMany<Topic, $this>]]></code>
+      <code><![CDATA[MorphToMany<Topic, $this>]]></code>
+    </MissingTemplateParam>
+  </file>
+  <file src="app/Models/ResourceIdentifier.php">
+    <InvalidReturnStatement>
+      <code><![CDATA[$this->belongsTo(Resource::class)]]></code>
+    </InvalidReturnStatement>
+    <InvalidReturnType>
+      <code><![CDATA[BelongsTo<resource, $this>]]></code>
+    </InvalidReturnType>
+    <InvalidTemplateParam>
+      <code><![CDATA[BelongsTo<resource, $this>]]></code>
+    </InvalidTemplateParam>
+  </file>
+  <file src="app/Models/ResourceLink.php">
+    <InvalidReturnStatement>
+      <code><![CDATA[$this->belongsTo(Resource::class)]]></code>
+    </InvalidReturnStatement>
+    <InvalidReturnType>
+      <code><![CDATA[BelongsTo<resource, $this>]]></code>
+    </InvalidReturnType>
+    <InvalidTemplateParam>
+      <code><![CDATA[BelongsTo<resource, $this>]]></code>
+    </InvalidTemplateParam>
+  </file>
+  <file src="app/Models/ResourceRevision.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[translation]]></code>
+    </PossiblyUnusedMethod>
+    <PublicModelAccessor>
+      <code><![CDATA[getAuthorsAttribute]]></code>
+      <code><![CDATA[getOrganizationsAttribute]]></code>
+      <code><![CDATA[getTypeDetailsAttribute]]></code>
+    </PublicModelAccessor>
+    <UndefinedMagicPropertyFetch>
+      <code><![CDATA[$details->channel]]></code>
+      <code><![CDATA[$details->conference]]></code>
+      <code><![CDATA[$details->duration]]></code>
+      <code><![CDATA[$details->edition]]></code>
+      <code><![CDATA[$details->isbn]]></code>
+      <code><![CDATA[$details->language]]></code>
+      <code><![CDATA[$details->license]]></code>
+      <code><![CDATA[$details->name]]></code>
+      <code><![CDATA[$details->organization]]></code>
+      <code><![CDATA[$details->pages]]></code>
+      <code><![CDATA[$details->publisher]]></code>
+      <code><![CDATA[$details->year]]></code>
+      <code><![CDATA[$details->youtube_id]]></code>
+    </UndefinedMagicPropertyFetch>
+  </file>
+  <file src="app/Models/Resume.php">
+    <MissingTemplateParam>
+      <code><![CDATA[BelongsToMany<CaseStudy, $this>]]></code>
+    </MissingTemplateParam>
+  </file>
+  <file src="app/Models/ResumeRevision.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[translation]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="app/Models/ResumeRevisionTranslation.php">
+    <PublicModelAccessor>
+      <code><![CDATA[getAwardsAttribute]]></code>
+      <code><![CDATA[getCertificatesAttribute]]></code>
+      <code><![CDATA[getCertificationsAttribute]]></code>
+      <code><![CDATA[getEducationAttribute]]></code>
+      <code><![CDATA[getEventsAttribute]]></code>
+      <code><![CDATA[getLeadershipAttribute]]></code>
+      <code><![CDATA[getPublicationsAttribute]]></code>
+      <code><![CDATA[getRecommendationsAttribute]]></code>
+      <code><![CDATA[getTechnicalProductionsAttribute]]></code>
+    </PublicModelAccessor>
+    <UndefinedThisPropertyFetch>
+      <code><![CDATA[$this->id]]></code>
+    </UndefinedThisPropertyFetch>
+  </file>
+  <file src="app/Models/ResumeSkill.php">
+    <MissingTemplateParam>
+      <code><![CDATA[BelongsToMany<Technology, $this>]]></code>
+    </MissingTemplateParam>
+  </file>
+  <file src="app/Models/RevisionTranslation.php">
+    <PublicModelAccessor>
+      <code><![CDATA[getMetricsAttribute]]></code>
+      <code><![CDATA[getSeoAttribute]]></code>
+    </PublicModelAccessor>
+    <UndefinedThisPropertyFetch>
+      <code><![CDATA[$this->id]]></code>
+      <code><![CDATA[$this->id]]></code>
+    </UndefinedThisPropertyFetch>
+  </file>
+  <file src="app/Models/Snippet.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[fileTree]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="app/Models/Technology.php">
+    <MissingTemplateParam>
+      <code><![CDATA[BelongsToMany<CaseStudy, $this>]]></code>
+      <code><![CDATA[BelongsToMany<Experiment, $this>]]></code>
+      <code><![CDATA[BelongsToMany<Project, $this>]]></code>
+      <code><![CDATA[BelongsToMany<ResumeSkill, $this>]]></code>
+    </MissingTemplateParam>
+  </file>
+  <file src="app/Models/Topic.php">
+    <InvalidReturnStatement>
+      <code><![CDATA[$this->morphedByMany(Resource::class, 'topicable')->withPivot('role')]]></code>
+    </InvalidReturnStatement>
+    <InvalidReturnType>
+      <code><![CDATA[MorphToMany<resource, $this>]]></code>
+    </InvalidReturnType>
+    <InvalidTemplateParam>
+      <code><![CDATA[MorphToMany<resource, $this>]]></code>
+    </InvalidTemplateParam>
+    <MissingTemplateParam>
+      <code><![CDATA[MorphToMany<Writing, $this>]]></code>
+      <code><![CDATA[MorphToMany<resource, $this>]]></code>
+    </MissingTemplateParam>
+  </file>
+  <file src="app/Models/Writing.php">
+    <MissingTemplateParam>
+      <code><![CDATA[BelongsToMany<Page, $this>]]></code>
+      <code><![CDATA[MorphToMany<Topic, $this>]]></code>
+    </MissingTemplateParam>
+  </file>
+  <file src="app/OpenGraph/OgImageCache.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
+    <UndefinedInterfaceMethod>
+      <code><![CDATA[lock]]></code>
+    </UndefinedInterfaceMethod>
+  </file>
+  <file src="app/OpenGraph/OgImageRenderer.php">
+    <InvalidOperand>
+      <code><![CDATA[$baseline + $index * (int) ($size * 1.35)]]></code>
+      <code><![CDATA[$index]]></code>
+      <code><![CDATA[$size * 1.35]]></code>
+    </InvalidOperand>
+    <InvalidReturnStatement>
+      <code><![CDATA[abs($box[2] - $box[0])]]></code>
+    </InvalidReturnStatement>
+    <InvalidReturnType>
+      <code><![CDATA[int]]></code>
+    </InvalidReturnType>
+    <InvalidScalarArgument>
+      <code><![CDATA[$baseline + $index * (int) ($size * 1.35)]]></code>
+    </InvalidScalarArgument>
+  </file>
+  <file src="app/OpenGraph/OgImageUrlGenerator.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="app/OpenGraph/OgImageUrlSigner.php">
+    <NoValue>
+      <code><![CDATA[return $secret;]]></code>
+    </NoValue>
+    <TypeDoesNotContainType>
+      <code><![CDATA[$secret === '']]></code>
+    </TypeDoesNotContainType>
+  </file>
+  <file src="app/OpenGraph/OgRenderCoordinator.php">
+    <InvalidOperand>
+      <code><![CDATA[microtime(true) + max(0, (float) config('og.queue_wait_seconds'))]]></code>
+    </InvalidOperand>
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
+    <UndefinedInterfaceMethod>
+      <code><![CDATA[lock]]></code>
+      <code><![CDATA[lock]]></code>
+      <code><![CDATA[lock]]></code>
+      <code><![CDATA[lock]]></code>
+    </UndefinedInterfaceMethod>
+  </file>
+  <file src="app/ReadModel/PublicSite/Chrome/PublicNavigationReader.php">
+    <InvalidArgument>
+      <code><![CDATA[$children->where('parent_id', $item->id)]]></code>
+    </InvalidArgument>
+    <InvalidTemplateParam>
+      <code><![CDATA[$presented
+                ->filter(static fn (array $item): bool => $item['placement'] === 'sidebar')
+                ->groupBy(static fn (array $item): mixed => $item['sidebar_group'])
+                ->map(fn (Collection $group): array => $group
+                    ->map(fn (array $item): array => $this->withoutGroup($item))
+                    ->values()
+                    ->all())]]></code>
+    </InvalidTemplateParam>
+  </file>
+  <file src="app/ReadModel/PublicSite/Chrome/PublicSiteChromeSqlReader.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="app/ReadModel/PublicSite/Content/CaseStudyReader.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[findBySlug]]></code>
+      <code><![CDATA[related]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="app/ReadModel/PublicSite/Content/FeedReader.php">
+    <InvalidArgument>
+      <code><![CDATA[$pageResult->getCollection()]]></code>
+    </InvalidArgument>
+    <UnusedParam>
+      <code><![CDATA[$topic]]></code>
+    </UnusedParam>
+  </file>
+  <file src="app/ReadModel/PublicSite/Content/HomeGalleryReader.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
+    <UndefinedInterfaceMethod>
+      <code><![CDATA[getCollection]]></code>
+    </UndefinedInterfaceMethod>
+  </file>
+  <file src="app/ReadModel/PublicSite/Content/ProjectReader.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[findBySlug]]></code>
+      <code><![CDATA[findExperimentBySlug]]></code>
+      <code><![CDATA[related]]></code>
+      <code><![CDATA[relatedExperiments]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="app/ReadModel/PublicSite/Content/PublicResourceReader.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[buildFacetOptions]]></code>
+      <code><![CDATA[findBySlug]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="app/ReadModel/PublicSite/Content/ReferenceCollectionReader.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[findBySlug]]></code>
+      <code><![CDATA[related]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="app/ReadModel/PublicSite/Content/ResourceReader.php">
+    <UnusedClass>
+      <code><![CDATA[ResourceReader]]></code>
+    </UnusedClass>
+  </file>
+  <file src="app/ReadModel/PublicSite/Content/SnippetReader.php">
+    <ParamNameMismatch>
+      <code><![CDATA[$identifier]]></code>
+    </ParamNameMismatch>
+    <PossiblyUnusedMethod>
+      <code><![CDATA[findBySlug]]></code>
+      <code><![CDATA[related]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="app/ReadModel/PublicSite/Content/TechnologyReader.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[findBySlug]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="app/ReadModel/PublicSite/Content/TopicReader.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[findBySlug]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="app/ReadModel/PublicSite/Content/WritingReader.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[findBySlug]]></code>
+      <code><![CDATA[related]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="app/Support/PersonSchema.php">
+    <UnusedClass>
+      <code><![CDATA[PersonSchema]]></code>
+    </UnusedClass>
+  </file>
+  <file src="app/Support/ResumePdf/DocumentRenderer.php">
+    <NoEnvOutsideConfig>
+      <code><![CDATA[env]]></code>
+    </NoEnvOutsideConfig>
+  </file>
+  <file src="app/Support/ResumePdf/ResumePdfBuilder.php">
+    <InvalidNullableReturnType>
+      <code><![CDATA[string]]></code>
+    </InvalidNullableReturnType>
+    <NullableReturnStatement>
+      <code><![CDATA[preg_replace('#^https?://#', '', $url)]]></code>
+    </NullableReturnStatement>
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
+    <UndefinedMagicPropertyFetch>
+      <code><![CDATA[$translation->title]]></code>
+    </UndefinedMagicPropertyFetch>
+    <UnusedParam>
+      <code><![CDATA[$siteSettingsTranslation]]></code>
+    </UnusedParam>
+  </file>
+  <file src="database/factories/CaseStudyFactory.php">
+    <UnusedClass>
+      <code><![CDATA[CaseStudyFactory]]></code>
+    </UnusedClass>
+  </file>
+  <file src="database/factories/CaseStudyRevisionTranslationFactory.php">
+    <UnusedClass>
+      <code><![CDATA[CaseStudyRevisionTranslationFactory]]></code>
+    </UnusedClass>
+  </file>
+  <file src="database/factories/ContactProfileFactory.php">
+    <UnusedClass>
+      <code><![CDATA[ContactProfileFactory]]></code>
+    </UnusedClass>
+  </file>
+  <file src="database/factories/ContentRelationFactory.php">
+    <UnusedClass>
+      <code><![CDATA[ContentRelationFactory]]></code>
+    </UnusedClass>
+  </file>
+  <file src="database/factories/CreditEntryFactory.php">
+    <UnusedClass>
+      <code><![CDATA[CreditEntryFactory]]></code>
+    </UnusedClass>
+  </file>
+  <file src="database/factories/CreditEntryRevisionTranslationFactory.php">
+    <UnusedClass>
+      <code><![CDATA[CreditEntryRevisionTranslationFactory]]></code>
+    </UnusedClass>
+  </file>
+  <file src="database/factories/ExperimentFactory.php">
+    <UnusedClass>
+      <code><![CDATA[ExperimentFactory]]></code>
+    </UnusedClass>
+  </file>
+  <file src="database/factories/ExperimentRevisionTranslationFactory.php">
+    <UnusedClass>
+      <code><![CDATA[ExperimentRevisionTranslationFactory]]></code>
+    </UnusedClass>
+  </file>
+  <file src="database/factories/LanguageFactory.php">
+    <UnusedClass>
+      <code><![CDATA[LanguageFactory]]></code>
+    </UnusedClass>
+  </file>
+  <file src="database/factories/LanguageRevisionTranslationFactory.php">
+    <UnusedClass>
+      <code><![CDATA[LanguageRevisionTranslationFactory]]></code>
+    </UnusedClass>
+  </file>
+  <file src="database/factories/PageFactory.php">
+    <UnusedClass>
+      <code><![CDATA[PageFactory]]></code>
+    </UnusedClass>
+  </file>
+  <file src="database/factories/PageRevisionTranslationFactory.php">
+    <UnusedClass>
+      <code><![CDATA[PageRevisionTranslationFactory]]></code>
+    </UnusedClass>
+  </file>
+  <file src="database/factories/ProfileFactory.php">
+    <UnusedClass>
+      <code><![CDATA[ProfileFactory]]></code>
+    </UnusedClass>
+  </file>
+  <file src="database/factories/ProfileRevisionTranslationFactory.php">
+    <UnusedClass>
+      <code><![CDATA[ProfileRevisionTranslationFactory]]></code>
+    </UnusedClass>
+  </file>
+  <file src="database/factories/ProjectFactory.php">
+    <UnusedClass>
+      <code><![CDATA[ProjectFactory]]></code>
+    </UnusedClass>
+  </file>
+  <file src="database/factories/ProjectRevisionTranslationFactory.php">
+    <UnusedClass>
+      <code><![CDATA[ProjectRevisionTranslationFactory]]></code>
+    </UnusedClass>
+  </file>
+  <file src="database/factories/ReferenceCollectionFactory.php">
+    <UnusedClass>
+      <code><![CDATA[ReferenceCollectionFactory]]></code>
+    </UnusedClass>
+  </file>
+  <file src="database/factories/ReferenceCollectionRevisionTranslationFactory.php">
+    <UnusedClass>
+      <code><![CDATA[ReferenceCollectionRevisionTranslationFactory]]></code>
+    </UnusedClass>
+  </file>
+  <file src="database/factories/ResourceFactory.php">
+    <UnusedClass>
+      <code><![CDATA[ResourceFactory]]></code>
+    </UnusedClass>
+  </file>
+  <file src="database/factories/ResourceIdentifierFactory.php">
+    <UnusedClass>
+      <code><![CDATA[ResourceIdentifierFactory]]></code>
+    </UnusedClass>
+  </file>
+  <file src="database/factories/ResourceLinkFactory.php">
+    <UnusedClass>
+      <code><![CDATA[ResourceLinkFactory]]></code>
+    </UnusedClass>
+  </file>
+  <file src="database/factories/ResourceRevisionTranslationFactory.php">
+    <UnusedClass>
+      <code><![CDATA[ResourceRevisionTranslationFactory]]></code>
+    </UnusedClass>
+  </file>
+  <file src="database/factories/ResumeFactory.php">
+    <UnusedClass>
+      <code><![CDATA[ResumeFactory]]></code>
+    </UnusedClass>
+  </file>
+  <file src="database/factories/ResumeLanguageFactory.php">
+    <UnusedClass>
+      <code><![CDATA[ResumeLanguageFactory]]></code>
+    </UnusedClass>
+  </file>
+  <file src="database/factories/ResumeRevisionTranslationFactory.php">
+    <UnusedClass>
+      <code><![CDATA[ResumeRevisionTranslationFactory]]></code>
+    </UnusedClass>
+  </file>
+  <file src="database/factories/ResumeSkillFactory.php">
+    <UnusedClass>
+      <code><![CDATA[ResumeSkillFactory]]></code>
+    </UnusedClass>
+  </file>
+  <file src="database/factories/SiteSettingsFactory.php">
+    <UnusedClass>
+      <code><![CDATA[SiteSettingsFactory]]></code>
+    </UnusedClass>
+  </file>
+  <file src="database/factories/SiteSettingsRevisionTranslationFactory.php">
+    <UnusedClass>
+      <code><![CDATA[SiteSettingsRevisionTranslationFactory]]></code>
+    </UnusedClass>
+  </file>
+  <file src="database/factories/SnippetFactory.php">
+    <UnusedClass>
+      <code><![CDATA[SnippetFactory]]></code>
+    </UnusedClass>
+  </file>
+  <file src="database/factories/SnippetFileFactory.php">
+    <UnusedClass>
+      <code><![CDATA[SnippetFileFactory]]></code>
+    </UnusedClass>
+  </file>
+  <file src="database/factories/SnippetRevisionTranslationFactory.php">
+    <UnusedClass>
+      <code><![CDATA[SnippetRevisionTranslationFactory]]></code>
+    </UnusedClass>
+  </file>
+  <file src="database/factories/TechnologyFactory.php">
+    <UnusedClass>
+      <code><![CDATA[TechnologyFactory]]></code>
+    </UnusedClass>
+  </file>
+  <file src="database/factories/TechnologyRevisionTranslationFactory.php">
+    <UnusedClass>
+      <code><![CDATA[TechnologyRevisionTranslationFactory]]></code>
+    </UnusedClass>
+  </file>
+  <file src="database/factories/TopicFactory.php">
+    <UnusedClass>
+      <code><![CDATA[TopicFactory]]></code>
+    </UnusedClass>
+  </file>
+  <file src="database/factories/TopicRevisionTranslationFactory.php">
+    <UnusedClass>
+      <code><![CDATA[TopicRevisionTranslationFactory]]></code>
+    </UnusedClass>
+  </file>
+  <file src="database/factories/UserFactory.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[unverified]]></code>
+    </PossiblyUnusedMethod>
+    <UnusedClosureParam>
+      <code><![CDATA[$attributes]]></code>
+    </UnusedClosureParam>
+  </file>
+  <file src="database/factories/WritingFactory.php">
+    <UnusedClass>
+      <code><![CDATA[WritingFactory]]></code>
+    </UnusedClass>
+  </file>
+  <file src="database/factories/WritingRevisionTranslationFactory.php">
+    <UnusedClass>
+      <code><![CDATA[WritingRevisionTranslationFactory]]></code>
+    </UnusedClass>
+  </file>
+  <file src="database/seeders/CiResumePdfSeeder.php">
+    <UnusedClass>
+      <code><![CDATA[CiResumePdfSeeder]]></code>
+    </UnusedClass>
+  </file>
+  <file src="database/seeders/DatabaseSeeder.php">
+    <UnusedClass>
+      <code><![CDATA[DatabaseSeeder]]></code>
+    </UnusedClass>
+  </file>
+  <file src="database/seeders/NavItemSeeder.php">
+    <UnusedClass>
+      <code><![CDATA[NavItemSeeder]]></code>
+    </UnusedClass>
+  </file>
+  <file src="database/seeders/PortfolioPageSeeder.php">
+    <InvalidOperand>
+      <code><![CDATA[$defaults]]></code>
+    </InvalidOperand>
+    <UnusedClass>
+      <code><![CDATA[PortfolioPageSeeder]]></code>
+    </UnusedClass>
+  </file>
+</files>

@@ -1,5 +1,6 @@
-import { ArrowForward, Box, Button } from '../../../ui';
+import { Box, Button } from '../../../ui';
 import { NavLink } from '../../../primitives/nav-link';
+import { ContentNavigationActionIcon } from '../../../content/content-navigation-action-icon';
 
 type HomeGallerySectionActionProps = {
   action: string;
@@ -27,7 +28,7 @@ export function HomeGallerySectionAction(props: HomeGallerySectionActionProps) {
           paddingInline: 'var(--site-action-px)',
           whiteSpace: 'normal',
         }}
-        endIcon={<ArrowForward />}
+        endIcon={<ContentNavigationActionIcon direction="forward" />}
       >
         {props.action}
       </Button>

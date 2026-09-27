@@ -17,7 +17,7 @@ class RelationResolverTest extends TestCase
 {
     public function test_outbound_relation_uses_outbound_label(): void
     {
-        $relationType = RelationType::factory()->create([
+        $relationType = $this->relationType([
             'key' => 'depends-on',
             'symmetric' => false,
             'outbound_label_en' => 'depends on',
@@ -48,7 +48,7 @@ class RelationResolverTest extends TestCase
 
     public function test_inbound_relation_uses_inbound_label(): void
     {
-        $relationType = RelationType::factory()->create([
+        $relationType = $this->relationType([
             'key' => 'depends-on',
             'symmetric' => false,
             'outbound_label_en' => 'depends on',
@@ -79,7 +79,7 @@ class RelationResolverTest extends TestCase
 
     public function test_symmetric_relation_uses_outbound_label_on_both_ends(): void
     {
-        $relationType = RelationType::factory()->create([
+        $relationType = $this->relationType([
             'key' => 'related-to',
             'symmetric' => true,
             'outbound_label_en' => 'related to',
@@ -109,7 +109,7 @@ class RelationResolverTest extends TestCase
 
     public function test_cross_type_relation_resolves_on_both_ends(): void
     {
-        $relationType = RelationType::factory()->create([
+        $relationType = $this->relationType([
             'key' => 'cites',
             'symmetric' => false,
             'outbound_label_en' => 'cites',
@@ -147,7 +147,7 @@ class RelationResolverTest extends TestCase
 
     public function test_hidden_target_is_excluded(): void
     {
-        $relationType = RelationType::factory()->create(['key' => 'depends-on']);
+        $relationType = $this->relationType(['key' => 'depends-on']);
 
         $source = Resource::factory()->create(['slug' => 'source', 'hidden' => false, 'visibility' => 'public']);
         ResourceRevisionTranslation::factory()->create(['resource_id' => $source->id, 'locale' => 'en']);
@@ -170,7 +170,7 @@ class RelationResolverTest extends TestCase
 
     public function test_private_relation_is_excluded(): void
     {
-        $relationType = RelationType::factory()->create(['key' => 'depends-on']);
+        $relationType = $this->relationType(['key' => 'depends-on']);
 
         $source = Resource::factory()->create(['slug' => 'source', 'hidden' => false, 'visibility' => 'public']);
         ResourceRevisionTranslation::factory()->create(['resource_id' => $source->id, 'locale' => 'en']);
@@ -194,7 +194,7 @@ class RelationResolverTest extends TestCase
 
     public function test_technology_target_resolves_its_graph_url(): void
     {
-        $relationType = RelationType::factory()->create([
+        $relationType = $this->relationType([
             'key' => 'uses',
             'symmetric' => false,
             'outbound_label_en' => 'uses',
@@ -221,5 +221,32 @@ class RelationResolverTest extends TestCase
         $this->assertEquals('technology', $relations[0]['targetKind']);
         $this->assertEquals('PHP', $relations[0]['targetTitle']);
         $this->assertEquals($technology->graphUrl('en'), $relations[0]['targetUrl']);
+    }
+
+    private function relationType(array $attributes = []): RelationType
+    {
+        $legacyLabelKeys = [
+            'outbound_label_en',
+            'outbound_label_pt_br',
+            'inbound_label_en',
+            'inbound_label_pt_br',
+        ];
+        $labels = [
+            'en' => [
+                'outbound_label' => $attributes['outbound_label_en'] ?? 'outbound',
+                'inbound_label' => $attributes['inbound_label_en'] ?? 'inbound',
+            ],
+            'pt-BR' => [
+                'outbound_label' => $attributes['outbound_label_pt_br'] ?? 'saída',
+                'inbound_label' => $attributes['inbound_label_pt_br'] ?? 'entrada',
+            ],
+        ];
+        $relationType = RelationType::factory()->create(array_diff_key($attributes, array_flip($legacyLabelKeys)));
+
+        foreach ($labels as $locale => $translation) {
+            $relationType->translations()->where('locale', $locale)->update($translation);
+        }
+
+        return $relationType;
     }
 }

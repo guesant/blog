@@ -38,7 +38,6 @@ export type ContentCollectionMeta = {
 export type ContentCollectionPage<T> = {
   items: T[];
   meta: ContentCollectionMeta;
-  groups?: RecordValue;
 };
 
 export type FindingListQuery = {

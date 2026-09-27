@@ -11,11 +11,12 @@ type RightSidebarViewProps = {
   onNavigate?: () => void;
   t: SidebarTranslator;
   data: ReturnType<typeof buildRightSidebarData>;
+  mobile?: boolean;
 };
 
 export function RightSidebarView(props: RightSidebarViewProps) {
   return (
-    <Box component="aside" visualVariant="rightSidebar">
+    <Box component="aside" visualVariant={props.mobile ? 'rightSidebarMobile' : 'rightSidebar'}>
       <Stack visualVariant="rightSidebar">
         <RightSidebarSections {...props} />
       </Stack>

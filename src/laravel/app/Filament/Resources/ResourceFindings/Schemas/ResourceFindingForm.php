@@ -4,6 +4,11 @@ namespace App\Filament\Resources\ResourceFindings\Schemas;
 
 use App\Filament\Concerns\BuildsStructuredFields;
 use App\Filament\Concerns\BuildsTranslationTabs;
+use App\Filament\Support\AutocompleteField;
+use App\Filament\Support\FilamentOptionCatalog;
+use App\Models\Resource as ResourceModel;
+use App\Models\ResourceIdentifier;
+use App\Models\ResourceLink;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\KeyValue;
 use Filament\Forms\Components\Repeater;
@@ -20,7 +25,7 @@ class ResourceFindingForm
 
     protected const TYPES = [
         'book', 'article', 'paper', 'repo', 'site', 'docs', 'tool',
-        'course', 'video', 'playlist', 'channel', 'podcast', 'film', 'other',
+        'course', 'video', 'playlist', 'channel', 'podcast', 'film',
     ];
 
     protected const CONSUMPTION_STATES = [
@@ -44,15 +49,32 @@ class ResourceFindingForm
     protected const LINK_PURPOSES = [
         'official-source', 'reading', 'viewing', 'purchase', 'download',
         'documentation', 'repository', 'demo', 'translation', 'archived-version',
-        'review', 'discussion', 'author-page', 'publisher-page', 'other',
+        'review', 'discussion', 'author-page', 'publisher-page',
     ];
 
     protected const IDENTIFIER_KINDS = [
-        'isbn', 'doi', 'issn', 'imdb', 'tmdb', 'youtube', 'other',
+        'isbn', 'doi', 'issn', 'imdb', 'tmdb', 'youtube',
     ];
 
     public static function configure(Schema $schema): Schema
     {
+        $types = [
+            ...self::TYPES,
+            ...ResourceModel::query()->distinct()->pluck('type')->all(),
+        ];
+        $linkPlatforms = [
+            ...array_keys(FilamentOptionCatalog::PLATFORMS),
+            ...ResourceLink::query()->distinct()->pluck('platform')->all(),
+        ];
+        $linkPurposes = [
+            ...self::LINK_PURPOSES,
+            ...ResourceLink::query()->distinct()->pluck('purpose')->all(),
+        ];
+        $identifierKinds = [
+            ...self::IDENTIFIER_KINDS,
+            ...ResourceIdentifier::query()->distinct()->pluck('kind')->all(),
+        ];
+
         return $schema
             ->components([
                 Section::make('Publishing')
@@ -64,9 +86,12 @@ class ResourceFindingForm
                             ->maxLength(255),
                         Toggle::make('hidden')
                             ->default(false),
-                        Select::make('type')
-                            ->required()
-                            ->options(array_combine(self::TYPES, self::TYPES)),
+                        AutocompleteField::make(
+                            'type',
+                            'Type',
+                            $types,
+                            true,
+                        ),
                         Select::make('language_id')
                             ->label('Language')
                             ->relationship('language', 'slug')
@@ -129,10 +154,16 @@ class ResourceFindingForm
                             ->schema([
                                 TextInput::make('url')->required()->url()->columnSpanFull(),
                                 TextInput::make('label')->nullable(),
-                                TextInput::make('platform')->nullable(),
-                                Select::make('purpose')
-                                    ->options(array_combine(self::LINK_PURPOSES, self::LINK_PURPOSES))
-                                    ->nullable(),
+                                AutocompleteField::make(
+                                    'platform',
+                                    'Platform',
+                                    $linkPlatforms,
+                                ),
+                                AutocompleteField::make(
+                                    'purpose',
+                                    'Purpose',
+                                    $linkPurposes,
+                                ),
                                 Select::make('language_id')
                                     ->label('Language')
                                     ->relationship('language', 'slug')
@@ -151,9 +182,12 @@ class ResourceFindingForm
                             ->relationship('identifiers')
                             ->columns(2)
                             ->schema([
-                                Select::make('kind')
-                                    ->options(array_combine(self::IDENTIFIER_KINDS, self::IDENTIFIER_KINDS))
-                                    ->required(),
+                                AutocompleteField::make(
+                                    'kind',
+                                    'Kind',
+                                    $identifierKinds,
+                                    true,
+                                ),
                                 TextInput::make('value')->required(),
                             ])
                             ->itemLabel(fn (array $state): ?string => isset($state['kind']) ? "{$state['kind']}: ".($state['value'] ?? '') : null)

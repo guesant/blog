@@ -13,7 +13,7 @@ class ResourceReaderTest extends TestCase
 {
     public function test_find_by_slug_returns_resource_with_relations(): void
     {
-        $relationType = RelationType::factory()->create([
+        $relationType = $this->relationType([
             'key' => 'depends-on',
             'symmetric' => false,
             'outbound_label_en' => 'depends on',
@@ -54,7 +54,7 @@ class ResourceReaderTest extends TestCase
 
     public function test_inbound_relations_use_correct_label(): void
     {
-        $relationType = RelationType::factory()->create([
+        $relationType = $this->relationType([
             'key' => 'depends-on',
             'symmetric' => false,
             'outbound_label_en' => 'depends on',
@@ -88,7 +88,7 @@ class ResourceReaderTest extends TestCase
 
     public function test_hidden_target_resource_is_excluded(): void
     {
-        $relationType = RelationType::factory()->create(['key' => 'depends-on']);
+        $relationType = $this->relationType(['key' => 'depends-on']);
 
         $resourceA = Resource::factory()->create(['slug' => 'resource-a', 'hidden' => false, 'visibility' => 'public']);
         ResourceRevisionTranslation::factory()->create(['resource_id' => $resourceA->id, 'locale' => 'en']);
@@ -112,7 +112,7 @@ class ResourceReaderTest extends TestCase
 
     public function test_non_public_visibility_target_is_excluded(): void
     {
-        $relationType = RelationType::factory()->create(['key' => 'depends-on']);
+        $relationType = $this->relationType(['key' => 'depends-on']);
 
         $resourceA = Resource::factory()->create(['slug' => 'resource-a', 'hidden' => false, 'visibility' => 'public']);
         ResourceRevisionTranslation::factory()->create(['resource_id' => $resourceA->id, 'locale' => 'en']);
@@ -132,5 +132,32 @@ class ResourceReaderTest extends TestCase
 
         $this->assertIsArray($result);
         $this->assertCount(0, $result['relations']);
+    }
+
+    private function relationType(array $attributes = []): RelationType
+    {
+        $legacyLabelKeys = [
+            'outbound_label_en',
+            'outbound_label_pt_br',
+            'inbound_label_en',
+            'inbound_label_pt_br',
+        ];
+        $labels = [
+            'en' => [
+                'outbound_label' => $attributes['outbound_label_en'] ?? 'outbound',
+                'inbound_label' => $attributes['inbound_label_en'] ?? 'inbound',
+            ],
+            'pt-BR' => [
+                'outbound_label' => $attributes['outbound_label_pt_br'] ?? 'saída',
+                'inbound_label' => $attributes['inbound_label_pt_br'] ?? 'entrada',
+            ],
+        ];
+        $relationType = RelationType::factory()->create(array_diff_key($attributes, array_flip($legacyLabelKeys)));
+
+        foreach ($labels as $locale => $translation) {
+            $relationType->translations()->where('locale', $locale)->update($translation);
+        }
+
+        return $relationType;
     }
 }

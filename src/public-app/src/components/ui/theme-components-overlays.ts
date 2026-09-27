@@ -1,7 +1,13 @@
 export const themeComponentsOverlays = {
   MuiSelect: {
     styleOverrides: {
-      select: { borderRadius: 0 },
+      select: {
+        borderRadius: 0,
+        '&:focus': {
+          outline: 'var(--site-border-width-focus) solid var(--site-primary)',
+          outlineOffset: 3,
+        },
+      },
     },
   },
   MuiFormLabel: {

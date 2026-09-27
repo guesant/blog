@@ -23,7 +23,7 @@ export default defineConfig({
   },
   webServer: {
     ...baseConfig.webServer,
-    command: `HOSTNAME=0.0.0.0 PORT=${performancePort} ${process.execPath} ../dist/server/server.js`,
+    command: `cd .. && HOSTNAME=0.0.0.0 PORT=${performancePort} ${process.execPath} ../packages/tools/start-production.mjs`,
     url: performanceBaseURL,
   },
 });

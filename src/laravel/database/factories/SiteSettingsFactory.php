@@ -16,7 +16,12 @@ class SiteSettingsFactory extends Factory
             'portfolio_url' => $this->faker->optional()->url(),
             'maintenance_enabled' => $this->faker->boolean(),
             'contact_email' => $this->faker->optional()->safeEmail(),
+            'contact_enabled' => true,
             'contact_available' => $this->faker->boolean(),
+            'content_actions_copy_text' => false,
+            'content_actions_copy_url' => false,
+            'content_actions_download_text' => false,
+            'contextual_cursor_enabled' => false,
         ];
     }
 }

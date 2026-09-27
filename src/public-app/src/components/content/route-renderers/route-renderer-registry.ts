@@ -11,6 +11,7 @@ type RouteRendererModule = Record<string, ComponentType<RouteRendererProps>>;
 
 const routeRendererModules = import.meta.glob<RouteRendererModule>([
   './*-route-renderer.tsx',
+  '!./create-route-renderer.tsx',
   '!./home-route-renderer.tsx',
 ]);
 

@@ -16,6 +16,7 @@
     "format:fix": "prettier --config ../../.config/prettierrc.json --ignore-path ../../.config/prettierignore --write '**/*.{css,js,jsx,ts,tsx,mjs,cjs,json,md}' '../packages/tools/**/*.mjs'",
     "lint": "eslint --config .config/eslint.config.mjs . --max-warnings 0",
     "lint:fix": "eslint --config .config/eslint.config.mjs . --fix --max-warnings 0",
+    "lint:styles": "stylelint --config .config/stylelint.config.mjs 'src/**/*.css'",
     "lint:architecture:test": "node --test ../packages/tools/eslint/*.test.mjs",
     "preview": "vite preview",
     "start": "node ../packages/tools/start-production.mjs"
@@ -63,6 +64,8 @@
     "jscpd": "5.2.0",
     "knip": "6.32.0",
     "prettier": "3.9.6",
+    "stylelint": "17.15.0",
+    "stylelint-config-standard": "40.0.0",
     "typescript": "^7.0.2",
     "vite": "^8.0.14"
   },

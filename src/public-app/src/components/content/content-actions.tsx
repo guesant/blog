@@ -8,6 +8,7 @@ import { copyContentAction } from './copy-content-action';
 import { plainText } from './plain-text';
 import { ContentActionsPrimary } from './content-actions-primary';
 import { ContentActionsSecondary } from './content-actions-secondary';
+import { useSiteFeatureFlags } from './use-site-feature-flags';
 
 type ContentActionsProps = {
   title: string;
@@ -22,6 +23,8 @@ export function ContentActions(props: ContentActionsProps) {
   const { title, url, body, externalUrl, downloadUrl, placement = 'section' } = props;
 
   const t = useTranslations('Pages.contentActions');
+
+  const featureFlags = useSiteFeatureFlags();
 
   const [copied, setCopied] = useState<string | null>(null);
 
@@ -47,6 +50,7 @@ export function ContentActions(props: ContentActionsProps) {
         filename={filename}
         t={t}
         copied={copied}
+        featureFlags={featureFlags.contentActions}
       />
       <ContentActionsSecondary externalUrl={externalUrl} downloadUrl={downloadUrl} t={t} />
     </Stack>

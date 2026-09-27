@@ -24,7 +24,7 @@ export function ContactPageContent(props: ContactPageContentProps) {
     <>
       <PageHeader
         title={page.title}
-        description={site.contact.available ? page.description : undefined}
+        description={site.contact.enabled ? page.description : undefined}
         breadcrumbs={[{ label: tNav('contact') }]}
         visualVariant="contactPageHeader"
       />

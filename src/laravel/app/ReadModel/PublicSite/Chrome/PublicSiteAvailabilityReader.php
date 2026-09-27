@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\DB;
 
 final class PublicSiteAvailabilityReader
 {
-    public function read(string $locale, bool $hasProfile, bool $contactAvailable): array
+    public function read(string $locale, bool $hasProfile, bool $contactEnabled): array
     {
         $result = DB::query()
             ->selectSub($this->resumeWithContent($locale), 'has_resume_content')
@@ -48,7 +48,7 @@ final class PublicSiteAvailabilityReader
                 || $this->boolean($result?->has_profile_trajectory),
             'portfolio' => $hasPortfolio,
             'cases' => $hasCases,
-            'contact' => $contactAvailable,
+            'contact' => $contactEnabled,
             'license' => $this->boolean($result?->has_license),
             'credits' => $this->boolean($result?->has_credits),
             'follow' => $this->boolean($result?->has_follow),
@@ -58,7 +58,7 @@ final class PublicSiteAvailabilityReader
             'topics' => $this->boolean($result?->has_topics),
             'collections' => $this->boolean($result?->has_collections),
             'snippets' => $this->boolean($result?->has_snippets),
-            'right_sidebar' => $contactAvailable,
+            'right_sidebar' => $contactEnabled,
         ];
     }
 

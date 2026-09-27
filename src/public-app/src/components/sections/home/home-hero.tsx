@@ -9,7 +9,7 @@ import { HomeHeroSurface } from './ui/home-hero-surface';
 import { HomeHeroText } from './ui/home-hero-text';
 
 export function HomeHero(props: HomeHeroProps) {
-  const { page, profile, showContact, workTarget, t } = props;
+  const { page, profile, showContact, showAvailability, workTarget, t } = props;
 
   return (
     <HomeHeroSurface showContact={showContact}>
@@ -25,7 +25,7 @@ export function HomeHero(props: HomeHeroProps) {
           t={t}
         />
       </HomeHeroContent>
-      <HomeAvailability page={page} showContact={showContact} />
+      <HomeAvailability page={page} showAvailability={showAvailability} />
     </HomeHeroSurface>
   );
 }

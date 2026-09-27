@@ -12,13 +12,14 @@ export type HomeContactSectionProps = {
 
 export type HomeAvailabilityProps = {
   page: HomePageContent['page'];
-  showContact: boolean;
+  showAvailability: boolean;
 };
 
 export type HomeHeroProps = {
   page: HomePageContent['page'];
   profile: HomePageContent['profile'];
   showContact: boolean;
+  showAvailability: boolean;
   site: HomePageContent['site'];
   workTarget: string | null;
   t: HomeTranslator;

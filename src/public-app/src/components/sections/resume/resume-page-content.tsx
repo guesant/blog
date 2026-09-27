@@ -6,7 +6,6 @@ import type { ResumePageContentProps } from './types';
 import { ResumeHeader } from './resume-header';
 import { ResumePageSections } from './resume-page-sections';
 import { ResumeArticle } from './ui/article';
-import { ResumeBreadcrumbs } from './ui/breadcrumbs';
 
 export function ResumePageContent(props: ResumePageContentProps) {
   const { content: staticContent, pdfUrls } = props;
@@ -29,9 +28,7 @@ export function ResumePageContent(props: ResumePageContentProps) {
 
   return (
     <ResumeArticle>
-      <ResumeBreadcrumbs>
-        <Breadcrumbs trail={[{ label: tNav('resume') }]} />
-      </ResumeBreadcrumbs>
+      <Breadcrumbs trail={[{ label: tNav('resume') }]} containerVisualVariant="resumeBreadcrumbs" />
       <ResumeHeader
         page={page}
         profile={profile}

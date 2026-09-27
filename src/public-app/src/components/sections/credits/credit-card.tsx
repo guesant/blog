@@ -1,8 +1,8 @@
 import type { CreditsTranslator, TranslationKey } from '@/i18n/compat-support';
-import { Chip, Typography } from '../../ui';
-import { ConditionalContent } from '../../primitives/conditional-content';
-import { ExternalLink } from '../../primitives/external-link';
+import { Chip } from '../../ui';
 import { CatalogCard } from '../../content/catalog-card';
+import { CatalogEntrySummary } from '../../content/catalog-entry-summary';
+import { CreditEntryTitle } from './credit-entry-title';
 import type { CreditEntry } from './types';
 
 type CreditCardProps = {
@@ -25,26 +25,12 @@ export function CreditCard(props: CreditCardProps) {
 
   return (
     <CatalogCard>
-      <Chip label={category} size="small" visualVariant="feedCardKind" />
-      <ConditionalContent
-        condition={Boolean(props.entry.url)}
-        content={
-          <ExternalLink href={props.entry.url} visualVariant="creditEntryItem">
-            {props.entry.name}
-          </ExternalLink>
-        }
-      />
-      <ConditionalContent
-        condition={!props.entry.url}
-        content={<Typography variant="h3">{props.entry.name}</Typography>}
-      />
-      <ConditionalContent
-        condition={Boolean(props.entry.description)}
-        content={
-          <Typography color="text.secondary" visualVariant="referenceCardDescription">
-            {props.entry.description}
-          </Typography>
-        }
+      <CatalogEntrySummary
+        meta={<Chip label={category} size="small" visualVariant="feedCardKind" />}
+        title={<CreditEntryTitle entry={props.entry} />}
+        description={props.entry.description}
+        titleVariant={props.entry.url ? 'h5' : 'h3'}
+        descriptionVisualVariant="referenceCardDescription"
       />
     </CatalogCard>
   );

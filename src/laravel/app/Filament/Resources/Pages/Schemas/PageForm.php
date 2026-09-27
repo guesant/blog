@@ -14,7 +14,7 @@ use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
-use Filament\Schemas\Components\Group;
+use Filament\Schemas\Components\Fieldset;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Schema;
@@ -23,22 +23,97 @@ class PageForm
 {
     use BuildsTranslationTabs;
 
+    private const FIELD_LABELS = [
+        'activitypub_description' => 'ActivityPub description',
+        'activitypub_title' => 'ActivityPub title',
+        'ai_body' => 'AI body',
+        'ai_heading' => 'AI heading',
+        'api_description' => 'API description',
+        'api_title' => 'API title',
+        'atom_description' => 'Atom description',
+        'atom_title' => 'Atom title',
+        'jsonfeed_description' => 'JSON Feed description',
+        'jsonfeed_title' => 'JSON Feed title',
+        'robots_description' => 'robots.txt description',
+        'robots_title' => 'robots.txt title',
+        'rss_description' => 'RSS description',
+        'rss_title' => 'RSS title',
+        'sitemap_description' => 'Sitemap description',
+        'sitemap_title' => 'Sitemap title',
+        'webfinger_description' => 'WebFinger description',
+        'webfinger_title' => 'WebFinger title',
+        'webmention_description' => 'Webmention description',
+        'webmention_title' => 'Webmention title',
+        'websub_description' => 'WebSub description',
+        'websub_title' => 'WebSub title',
+    ];
+
+    private const FIELDSET_LABELS = [
+        'activitypub' => 'ActivityPub',
+        'ai' => 'AI',
+        'api' => 'API',
+        'atom' => 'Atom',
+        'code' => 'Code license',
+        'contact' => 'Contact',
+        'content' => 'Content license',
+        'experiments' => 'Experiments',
+        'experience' => 'Experience',
+        'hero' => 'Hero',
+        'jsonfeed' => 'JSON Feed',
+        'projects' => 'Projects',
+        'robots' => 'robots.txt',
+        'rss' => 'RSS',
+        'section' => 'Section',
+        'sitemap' => 'Sitemap',
+        'story' => 'Story',
+        'timeline' => 'Timeline',
+        'webfinger' => 'WebFinger',
+        'webmention' => 'Webmention',
+        'websub' => 'WebSub',
+        'work' => 'Work',
+        'writing' => 'Writing',
+    ];
+
     protected static function pageFieldInputs(string $prefix): array
     {
-        return collect(PageRevisionTranslation::FIELDS)->map(function (string $key) use ($prefix) {
+        $fields = collect(PageRevisionTranslation::FIELDS)->mapWithKeys(function (string $key) use ($prefix) {
             $field = "{$prefix}fields.{$key}";
-            $label = str($key)->headline()->toString();
+            $label = self::FIELD_LABELS[$key] ?? str($key)->headline()->toString();
 
             if ($key === 'story' || str_ends_with($key, '_body') || str_ends_with($key, '_description') || in_array($key, ['context', 'intro', 'introduction', 'lead'], true)) {
-                return MarkdownEditor::make($field)->label($label)->nullable();
+                $component = MarkdownEditor::make($field);
+            } elseif (str_ends_with($key, '_title') || str_ends_with($key, '_label') || in_array($key, ['hero_identity', 'hero_experience', 'hero_current_focus', 'title', 'eyebrow'], true)) {
+                $component = TextInput::make($field);
+            } else {
+                $component = Textarea::make($field)->rows(3);
             }
 
-            if (str_ends_with($key, '_title') || str_ends_with($key, '_label') || in_array($key, ['hero_identity', 'hero_experience', 'hero_current_focus', 'title', 'eyebrow'], true)) {
-                return TextInput::make($field)->label($label)->nullable();
-            }
+            return [$key => $component->label($label)->nullable()];
+        });
 
-            return Textarea::make($field)->label($label)->rows(3)->nullable();
-        })->all();
+        return collect(PageRevisionTranslation::FIELDS)
+            ->groupBy(fn (string $key): string => str_contains($key, '_')
+                ? str($key)->before('_')->toString()
+                : '')
+            ->flatMap(function (array $keys, string $group) use ($fields): array {
+                $components = collect($keys)
+                    ->map(fn (string $key) => $fields->get($key))
+                    ->filter()
+                    ->values()
+                    ->all();
+
+                if ($group === '' || count($keys) < 2) {
+                    return $components;
+                }
+
+                return [
+                    Fieldset::make(self::FIELDSET_LABELS[$group] ?? str($group)->headline()->toString())
+                        ->columns(2)
+                        ->schema($components),
+                ];
+            })
+            ->values()
+            ->all();
     }
 
     public static function configure(Schema $schema): Schema
@@ -115,10 +190,7 @@ class PageForm
                             ->addActionLabel('Add writing')
                             ->defaultItems(0),
                     ]),
-                static::translationTabs(fn (string $prefix) => [
-                    Group::make()
-                        ->schema(fn () => static::pageFieldInputs($prefix)),
-                ]),
+                static::translationTabs(fn (string $prefix) => static::pageFieldInputs($prefix)),
             ]);
     }
 }

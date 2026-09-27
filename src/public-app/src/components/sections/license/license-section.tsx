@@ -2,7 +2,7 @@ import { Box, Typography } from '../../ui';
 import type { LicenseSectionProps } from './types';
 
 export function LicenseSection(props: LicenseSectionProps) {
-  const { heading, children } = props;
+  const { heading, body } = props;
 
   return (
     <Box component="section" visualVariant="licenseSection">
@@ -10,7 +10,7 @@ export function LicenseSection(props: LicenseSectionProps) {
         {heading}
       </Typography>
       <Typography color="text.secondary" visualVariant="licenseSection2">
-        {children}
+        {body}
       </Typography>
     </Box>
   );

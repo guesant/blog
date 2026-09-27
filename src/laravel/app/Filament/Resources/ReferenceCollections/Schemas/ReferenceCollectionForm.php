@@ -49,7 +49,8 @@ class ReferenceCollectionForm
                                     ->label('Finding')
                                     ->options(fn () => ResourceModel::query()->pluck('slug', 'id'))
                                     ->searchable()
-                                    ->required(),
+                                    ->required()
+                                    ->columnSpanFull(),
                                 Textarea::make('note')
                                     ->columnSpanFull()
                                     ->nullable(),

@@ -26,6 +26,7 @@ export function PageHeader(props: PageHeaderProps) {
           {props.meta}
         </Typography>
       </ConditionalContent>
+      <ConditionalContent condition={Boolean(props.metadata)} content={props.metadata} />
     </Box>
   );
 }

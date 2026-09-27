@@ -14,6 +14,7 @@ type ProjectSummaryProps = {
   problemVisualVariant?: string;
   technologiesVisualVariant?: string;
   technologiesColor?: string;
+  action?: ReactNode;
 };
 
 export function ProjectSummary(props: ProjectSummaryProps) {
@@ -44,6 +45,7 @@ export function ProjectSummary(props: ProjectSummaryProps) {
       <Typography color={props.technologiesColor} visualVariant={props.technologiesVisualVariant}>
         {props.project.technologies.join(' · ')}
       </Typography>
+      {props.action}
     </>
   );
 }

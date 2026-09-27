@@ -1,20 +1,17 @@
-import { Box } from '../../ui';
 import type { ExplorationSectionProps } from './types';
-import { ExplorationSectionHeader } from './exploration-section-header';
+import { EditorialSectionLayout } from '../editorial-section-layout';
 
 export function ExplorationSection(props: ExplorationSectionProps) {
   return (
-    <Box
-      component="section"
+    <EditorialSectionLayout
       id={props.id}
-      visualVariant={props.divider ? 'explorationSection' : 'explorationSectionSpaced'}
+      title={props.title}
+      description={props.description}
+      divider={props.divider}
+      titleVisualVariant={!props.divider ? 'explorationTitle' : undefined}
+      descriptionVisualVariant="explorationSection"
     >
-      <ExplorationSectionHeader
-        title={props.title}
-        description={props.description}
-        divider={props.divider}
-      />
       {props.children}
-    </Box>
+    </EditorialSectionLayout>
   );
 }

@@ -4,9 +4,9 @@ import { Button, Stack } from '../../../ui';
 import type { HomeAvailabilityProps } from '../types';
 
 export function HomeAvailability(props: HomeAvailabilityProps) {
-  const { page, showContact } = props;
+  const { page, showAvailability } = props;
 
-  if (!showContact) {
+  if (!showAvailability) {
     return null;
   }
   return (

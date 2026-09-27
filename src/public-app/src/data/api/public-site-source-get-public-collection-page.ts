@@ -43,6 +43,5 @@ export async function getPublicCollectionPage<T>(
       query,
       locale,
     }),
-    groups: objectValue(payload?.groups),
   };
 }

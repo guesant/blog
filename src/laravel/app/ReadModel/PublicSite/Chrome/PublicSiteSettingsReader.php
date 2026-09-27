@@ -15,8 +15,13 @@ final class PublicSiteSettingsReader
                 'portfolio_url',
                 'source_repository_url',
                 'contact_email',
+                'contact_enabled',
                 'contact_available',
                 'maintenance_enabled',
+                'content_actions_copy_text',
+                'content_actions_copy_url',
+                'content_actions_download_text',
+                'contextual_cursor_enabled',
                 'current_revision_id',
             ])
             ->first();
@@ -27,6 +32,8 @@ final class PublicSiteSettingsReader
                 'portfolio_url' => '',
                 'source_repository_url' => '',
                 'contact_email' => null,
+                'contact_email_available' => false,
+                'contact_enabled' => true,
                 'contact_available' => false,
                 'maintenance_enabled' => false,
                 'maintenance_eyebrow' => null,
@@ -35,6 +42,14 @@ final class PublicSiteSettingsReader
                 'copyright_template' => null,
                 'seo' => null,
                 'contact_profiles' => [],
+                'feature_flags' => [
+                    'content_actions' => [
+                        'copy_text' => false,
+                        'copy_url' => false,
+                        'download_text' => false,
+                    ],
+                    'contextual_cursor' => false,
+                ],
             ];
         }
 
@@ -57,8 +72,18 @@ final class PublicSiteSettingsReader
             'portfolio_url' => $settings->portfolio_url ?? '',
             'source_repository_url' => $settings->source_repository_url ?? '',
             'contact_email' => $settings->contact_email,
+            'contact_email_available' => is_string($settings->contact_email) && $settings->contact_email !== '',
+            'contact_enabled' => (bool) $settings->contact_enabled,
             'contact_available' => (bool) $settings->contact_available,
             'maintenance_enabled' => (bool) $settings->maintenance_enabled,
+            'feature_flags' => [
+                'content_actions' => [
+                    'copy_text' => (bool) $settings->content_actions_copy_text,
+                    'copy_url' => (bool) $settings->content_actions_copy_url,
+                    'download_text' => (bool) $settings->content_actions_download_text,
+                ],
+                'contextual_cursor' => (bool) $settings->contextual_cursor_enabled,
+            ],
             'maintenance_eyebrow' => $translation?->maintenance_eyebrow,
             'maintenance_title' => $translation?->maintenance_title,
             'maintenance_description' => $translation?->maintenance_description,

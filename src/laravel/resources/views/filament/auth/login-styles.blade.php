@@ -7,7 +7,7 @@
         --admin-login-border: rgb(15 23 42 / 16%);
         --admin-login-text: #172033;
         --admin-login-muted: #5b6577;
-        --admin-login-accent: #2457d6;
+        --admin-login-accent: #1d4ed8;
         --admin-login-accent-contrast: #ffffff;
         --admin-login-space: 2rem;
         --admin-login-mobile-space: 1rem;
@@ -54,7 +54,7 @@
         --admin-login-border: rgb(255 255 255 / 17%);
         --admin-login-text: #f4f7fb;
         --admin-login-muted: #aab3c2;
-        --admin-login-accent: #7da2ff;
+        --admin-login-accent: #6d97ef;
         --admin-login-accent-contrast: #0d1016;
         --admin-login-shadow: 0.5rem 0.5rem 0 rgb(0 0 0 / 30%);
     }

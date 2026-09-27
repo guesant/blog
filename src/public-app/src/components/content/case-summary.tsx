@@ -1,9 +1,10 @@
 import type { CaseStudy } from '@portfolio/data/domain/types';
+import type { ReactNode } from 'react';
 import { Typography } from '../ui';
 
 type CaseSummaryProps = {
   item: CaseStudy;
-  meta: string;
+  meta: ReactNode;
   headingLevel: 'h2' | 'h3';
   titleClassName?: string;
   titleVisualVariant?: string;

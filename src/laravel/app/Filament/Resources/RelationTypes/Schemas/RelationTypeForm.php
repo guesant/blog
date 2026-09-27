@@ -2,14 +2,18 @@
 
 namespace App\Filament\Resources\RelationTypes\Schemas;
 
+use App\Filament\Concerns\BuildsTranslationTabs;
 use App\Models\RelationType;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
+use Filament\Schemas\Components\Fieldset;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 
 class RelationTypeForm
 {
+    use BuildsTranslationTabs;
+
     public static function configure(Schema $schema): Schema
     {
         return $schema
@@ -33,26 +37,20 @@ class RelationTypeForm
                             ->maxLength(255),
                         Toggle::make('symmetric'),
                     ]),
-                Section::make('Labels')
-                    ->columns(2)
-                    ->schema([
-                        TextInput::make('outbound_label_en')
-                            ->label('Outbound label (EN)')
-                            ->required()
-                            ->maxLength(255),
-                        TextInput::make('outbound_label_pt_br')
-                            ->label('Outbound label (PT-BR)')
-                            ->required()
-                            ->maxLength(255),
-                        TextInput::make('inbound_label_en')
-                            ->label('Inbound label (EN)')
-                            ->required()
-                            ->maxLength(255),
-                        TextInput::make('inbound_label_pt_br')
-                            ->label('Inbound label (PT-BR)')
-                            ->required()
-                            ->maxLength(255),
-                    ]),
+                static::translationTabs(fn (string $prefix) => [
+                    Fieldset::make('Localized labels')
+                        ->columns(2)
+                        ->schema([
+                            TextInput::make("{$prefix}outbound_label")
+                                ->label('Outbound label')
+                                ->required()
+                                ->maxLength(255),
+                            TextInput::make("{$prefix}inbound_label")
+                                ->label('Inbound label')
+                                ->required()
+                                ->maxLength(255),
+                        ]),
+                ]),
             ]);
     }
 }

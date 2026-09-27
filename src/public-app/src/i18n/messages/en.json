@@ -186,6 +186,10 @@
     "readFullCase": "View Project"
   },
   "Pages": {
+    "maintenance": {
+      "title": "Site under maintenance.",
+      "description": "The site is temporarily unavailable while maintenance is in progress."
+    },
     "feed": {
       "title": "Feed",
       "description": "Writing, findings, collections, and selected work"

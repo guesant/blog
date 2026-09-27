@@ -7,9 +7,12 @@ use App\Filament\Concerns\BuildsStructuredFields;
 use App\Filament\Concerns\BuildsTranslationTabs;
 use App\Filament\Concerns\HasSingleSaveAction;
 use App\Filament\Concerns\SyncsTranslations;
+use App\Filament\Support\AutocompleteField;
+use App\Filament\Support\FilamentOptionCatalog;
 use App\Jobs\GenerateResumePdf as GenerateResumePdfJob;
 use App\Models\CaseStudy;
 use App\Models\Resume;
+use App\Models\ResumeLanguage;
 use App\Models\ResumeSkill;
 use App\Models\Technology;
 use App\Models\Topic;
@@ -25,6 +28,7 @@ use Filament\Pages\Page;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
+use Illuminate\Support\Facades\DB;
 
 /**
  * @property-read Schema $form
@@ -104,6 +108,15 @@ class ManageResume extends Page
 
     public function form(Schema $schema): Schema
     {
+        $proficiencies = [
+            ...array_keys(FilamentOptionCatalog::PROFICIENCIES),
+            ...ResumeLanguage::query()->distinct()->pluck('proficiency')->all(),
+        ];
+        $technicalProductionKinds = [
+            ...array_keys(FilamentOptionCatalog::TECHNICAL_PRODUCTION_KINDS),
+            ...DB::table('resume_revision_technical_productions')->distinct()->pluck('kind')->all(),
+        ];
+
         return $schema
             ->components([
                 Section::make('Selected Cases')
@@ -134,7 +147,8 @@ class ManageResume extends Page
                                     ->label('Topic')
                                     ->options(fn () => Topic::query()->where('kind', 'skill')->pluck('slug', 'id'))
                                     ->searchable()
-                                    ->required(),
+                                    ->required()
+                                    ->columnSpanFull(),
                                 Select::make('technologies')
                                     ->label('Technologies')
                                     ->options(fn () => Technology::query()->pluck('slug', 'id'))
@@ -161,7 +175,11 @@ class ManageResume extends Page
                                     ->label('Language')
                                     ->relationship('language', 'slug')
                                     ->required(),
-                                TextInput::make('proficiency')->nullable(),
+                                AutocompleteField::make(
+                                    'proficiency',
+                                    'Proficiency',
+                                    $proficiencies,
+                                ),
                             ])
                             ->itemLabel(fn (array $state): ?string => $state['proficiency'] ?? null)
                             ->addActionLabel('Add language')
@@ -219,7 +237,7 @@ class ManageResume extends Page
                     static::entryRepeater("{$prefix}technical_productions", 'Technical Productions', [
                         TextInput::make('name')->required(),
                         TextInput::make('period')->required(),
-                        TextInput::make('kind')->nullable(),
+                        AutocompleteField::make('kind', 'Kind', $technicalProductionKinds),
                         TextInput::make('url')->url()->nullable(),
                         Textarea::make('description')->rows(2)->nullable()->columnSpanFull(),
                         Toggle::make('includeInPdf')->label('Include in PDF')->inline(false),

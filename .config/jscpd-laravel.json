@@ -1,0 +1,17 @@
+{
+  "mode": "strict",
+  "threshold": 5,
+  "minLines": 15,
+  "minTokens": 300,
+  "maxGapLines": 1,
+  "ignoreIdentifiers": true,
+  "ignoreLiterals": true,
+  "ignoreAnnotations": true,
+  "format": ["php"],
+  "ignore": [
+    "**/vendor/**",
+    "**/storage/**",
+    "**/bootstrap/cache/**"
+  ],
+  "reporters": ["console", "threshold"]
+}

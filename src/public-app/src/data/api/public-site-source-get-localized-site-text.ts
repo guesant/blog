@@ -9,6 +9,7 @@ import { recordOrEmpty } from './public-site-source-record-or-empty';
 import { siteBuild } from './public-site-source-site-build';
 import { getLocalizedSiteChrome } from './public-site-source-get-localized-site-chrome';
 import type { RecordValue } from './public-site-source-support';
+import { siteFeatureFlags } from './public-site-source-site-feature-flags';
 
 export async function getLocalizedSiteText(
   locale?: string,
@@ -28,6 +29,7 @@ export async function getLocalizedSiteText(
     maintenanceEnabled: site.maintenance_enabled === true,
     maintenance: siteMaintenance(site),
     contact: siteContact(site, undefined),
+    featureFlags: siteFeatureFlags(recordOrEmpty(site.feature_flags)),
     navigation: siteNavigation(resolvedChrome.navigation),
     visibility: siteVisibility(recordOrEmpty(resolvedChrome.visibility)),
     build: siteBuild(objectValue(resolvedChrome.build)),

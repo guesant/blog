@@ -1,8 +1,10 @@
-import type { ReactNode } from 'react';
 import { Box, Typography } from '../../ui';
+import { CollectionListing } from '../../content/collection-listing';
+import { renderFollowEntryCard } from './render-follow-entry-card';
+import type { FollowEntry } from './types';
 
 type FollowFutureSectionProps = {
-  children: ReactNode;
+  entries: FollowEntry[];
   label: string;
   title: string;
 };
@@ -16,7 +18,11 @@ export function FollowFutureSection(props: FollowFutureSectionProps) {
       <Typography component="h2" variant="h2" visualVariant="followFutureTitle">
         {props.title}
       </Typography>
-      {props.children}
+      <CollectionListing
+        items={props.entries}
+        getKey={(entry) => entry.key}
+        renderListItem={renderFollowEntryCard}
+      />
     </Box>
   );
 }

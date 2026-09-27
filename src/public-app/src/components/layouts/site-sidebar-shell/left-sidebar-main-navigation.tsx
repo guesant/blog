@@ -20,12 +20,15 @@ type LeftSidebarMainNavigationProps = {
   site: SiteText;
   onNavigate?: () => void;
   compact?: boolean;
+  showBrand?: boolean;
 };
 
 export function LeftSidebarMainNavigation(props: LeftSidebarMainNavigationProps) {
   return (
     <Stack visualVariant={props.compact ? 'sidebarNavStackCompact' : 'sidebarNavStack'}>
-      <SidebarBrandRow backHref={props.backHref} backLabel={props.backLabel} />
+      {props.showBrand !== false && (
+        <SidebarBrandRow backHref={props.backHref} backLabel={props.backLabel} />
+      )}
       <Divider />
       <SidebarLinkList
         items={[props.homeItem]}

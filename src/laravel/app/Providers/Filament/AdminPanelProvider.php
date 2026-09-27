@@ -32,6 +32,10 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path(config('admin.path'))
             ->brandName('Admin - guesant.net')
+            ->colors([
+                'primary' => '#1D4ED8',
+            ])
+            ->favicon(asset('favicon.svg'))
             ->font('Roboto Slab')
             ->login(Login::class)
             ->renderHook(

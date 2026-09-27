@@ -23,10 +23,12 @@ export function ProjectCardDetails(props: ProjectCardDetailsProps) {
         purposeVisualVariant="projectCardSurface2"
         problemVisualVariant="projectCardSurface3"
         technologiesVisualVariant="projectCardSurface4"
+        action={
+          <Typography color="secondary" visualVariant="projectCardSurface5">
+            {props.t('explore')} <Icon name="north-east" size={15} />
+          </Typography>
+        }
       />
-      <Typography color="secondary" visualVariant="projectCardSurface5">
-        {props.t('explore')} <Icon name="north-east" size={15} />
-      </Typography>
     </>
   );
 }

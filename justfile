@@ -64,6 +64,7 @@ api-check: api-spec
 
 frontend-lint: frontend-install frontend-architecture
     {{node_run}} 'corepack pnpm lint'
+    {{node_run}} 'corepack pnpm lint:styles'
 
 frontend-lint-fix: frontend-install frontend-architecture
     {{node_run}} 'corepack pnpm lint:fix'
@@ -87,6 +88,9 @@ frontend-dead-code: frontend-install
 frontend-build: frontend-install
     {{node_run}} 'corepack pnpm build'
 
+frontend-e2e: frontend-build frontend-install
+    {{compose}} run --build --rm lighthouse sh -lc 'corepack pnpm exec playwright test --config audits/playwright.config.ts'
+
 public-site-benchmark:
     just frontend-install
     {{compose_run}} --no-deps \
@@ -102,11 +106,35 @@ ci: check
 action-test:
     {{node_run}} 'node --test ../../.github/actions/push-profile/test/*.test.mjs'
 
-laravel-check:
+laravel-check: laravel-quality
     if [[ "${CI:-}" == "true" ]]; then {{compose_run}} -v "$PWD/src/laravel/.env.example:/app/.env:ro" laravel php artisan migrate --force; fi
     {{compose_run}} -v "$PWD/src/laravel/.env.example:/app/.env:ro" laravel php artisan migrate:status
     {{compose_run}} -v "$PWD/src/laravel/.env.example:/app/.env:ro" laravel ./vendor/bin/pint --test
     {{compose_run}} -v "$PWD/src/laravel/.env.example:/app/.env:ro" laravel php -d memory_limit=512M vendor/bin/phpunit --configuration phpunit.xml
+
+laravel-static-analysis:
+    {{compose_run}} --no-deps laravel php -d memory_limit=512M vendor/bin/phpstan analyse --configuration=phpstan.neon --memory-limit=512M --no-progress
+    {{compose_run}} --no-deps laravel php -d memory_limit=512M vendor/bin/psalm --config=psalm.xml --no-diff --no-progress
+    {{compose_run}} --no-deps laravel php -d memory_limit=512M vendor/bin/psalm --config=psalm.xml --taint-analysis --ignore-baseline --no-diff --no-progress
+
+laravel-syntax:
+    {{compose_run}} --no-deps laravel sh -lc 'find app bootstrap config database public routes tests -type f -name "*.php" -print0 | xargs -0 -n1 php -l && php -l artisan'
+    {{compose_run}} --no-deps laravel php artisan view:cache
+    {{compose_run}} --no-deps laravel php artisan view:clear
+
+laravel-migrations:
+    {{tools_run}} 'sh /workspace/.tools/scripts/lint-laravel-migrations.sh'
+
+laravel-dead-code:
+    {{compose_run}} --no-deps laravel php -d memory_limit=768M vendor/bin/psalm --config=psalm.xml --use-baseline=psalm-dead-code-baseline.xml --find-unused-code=always --no-diff --no-progress
+
+laravel-complexity: tools-build
+    {{tools_compose}} run --rm lizard -l php -C 70 -L 160 -w /workspace/src/laravel/app
+
+laravel-duplication: tools-build
+    {{tools_compose}} run --rm jscpd --config /workspace/.config/jscpd-laravel.json /workspace/src/laravel/app/Application /workspace/src/laravel/app/ReadModel /workspace/src/laravel/app/Http /workspace/src/laravel/app/Content /workspace/src/laravel/app/OpenGraph /workspace/src/laravel/app/Support
+
+laravel-quality: laravel-static-analysis laravel-syntax laravel-migrations laravel-dead-code laravel-complexity laravel-duplication
 
 check: tools-build format api-check frontend-lint frontend-typecheck frontend-complexity frontend-dead-code duplication local-links repository-lint security quality-report lint-actions action-test laravel-check frontend-build
 
@@ -145,10 +173,10 @@ security: tools-build
     {{tools_compose}} run --rm gitleaks dir --redact --no-banner /workspace/src/laravel/docker
     {{tools_compose}} run --rm osv-scanner scan source --config=/workspace/src/public-app/.config/osv-scanner.toml --recursive /workspace/src/public-app /workspace/src/laravel /workspace/src/packages
     {{tools_compose}} run --rm trivy fs --no-progress --scanners vuln,secret --severity CRITICAL,HIGH --exit-code 1 --skip-dirs /workspace/src/public-app/node_modules --skip-dirs /workspace/src/public-app/dist --skip-dirs /workspace/src/laravel/node_modules --skip-dirs /workspace/src/laravel/vendor --skip-files '**/*.dockerignore' /workspace
-    {{tools_compose}} run --rm semgrep scan --config auto --error --exclude 'node_modules/**' --exclude 'dist/**' /workspace/src/public-app/src /workspace/src/packages/tools /workspace/src/laravel/app /workspace/src/laravel/config /workspace/src/laravel/routes
+    {{tools_compose}} run --rm semgrep scan --config auto --config /workspace/.config/semgrep/laravel.yml --error --exclude 'node_modules/**' --exclude 'dist/**' --exclude 'vendor/**' --exclude 'storage/**' --exclude 'bootstrap/cache/**' /workspace/src/public-app/src /workspace/src/packages/tools /workspace/src/laravel/app /workspace/src/laravel/config /workspace/src/laravel/routes /workspace/src/laravel/database /workspace/src/laravel/tests
 
 quality-report: tools-build
-    {{tools_compose}} run --rm qlty check --all --no-cache --no-upgrade-check || true
+    {{tools_compose}} run --rm qlty check --all --no-cache --no-upgrade-check
     {{tools_compose}} run --rm scorecard --local /workspace || true
 
 audit: frontend-build frontend-install

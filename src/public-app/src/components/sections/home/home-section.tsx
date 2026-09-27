@@ -32,6 +32,7 @@ export function HomeSection(props: HomeSectionProps) {
         profile={profile}
         site={site}
         showContact={contact.showContact}
+        showAvailability={contact.showAvailability}
         workTarget={null}
         t={t}
       />

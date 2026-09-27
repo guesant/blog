@@ -62,7 +62,12 @@ export const boxVariants6: Record<string, SxProps<Theme>> = {
     flexWrap: 'wrap',
     gap: 'var(--site-space-2)',
   },
-  detailArticle: { py: { xs: 8, md: 10 }, maxWidth: '52rem', mx: 'auto' },
+  detailArticle: {
+    paddingBlockStart: 0,
+    paddingBlockEnd: { xs: 8, md: 10 },
+    maxWidth: '52rem',
+    mx: 'auto',
+  },
   explorationTileGrid,
   connectionsSection: {
     display: 'grid',
@@ -86,14 +91,14 @@ export const boxVariants6: Record<string, SxProps<Theme>> = {
     position: 'relative',
     isolation: 'isolate',
     overflow: 'hidden',
-    pt: 'var(--site-space-8)',
+    pt: 0,
     pb: 'var(--site-space-8)',
   },
   homeHeroSurfaceWithContact: {
     position: 'relative',
     isolation: 'isolate',
     overflow: 'hidden',
-    pt: 'var(--site-space-8)',
+    pt: 0,
     pb: 0,
   },
   homeHeroContent: {

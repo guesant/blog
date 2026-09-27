@@ -3,7 +3,7 @@ import { hydrate } from '@tanstack/react-query';
 import type { QueryClient } from '@tanstack/react-query';
 import { parsePersistedQueryState } from './parse-persisted-query-state';
 
-export const queryPersistenceBuster = 'public-app-query-cache-v1';
+export const queryPersistenceBuster = 'public-app-query-cache-v2';
 
 const queryPersistenceKey = 'guesant:public-app:query-cache:v1';
 

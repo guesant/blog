@@ -12,7 +12,14 @@ export type SiteButtonVariant =
   | 'breadcrumb-home'
   | 'compact-icon';
 
+const textButtonContentSx = {
+  justifyContent: 'flex-start',
+  textAlign: 'left',
+  '& .MuiButton-endIcon': { marginLeft: 'auto' },
+};
+
 const actionButtonSx: SxProps<Theme> = {
+  ...textButtonContentSx,
   color: 'var(--site-primary)',
   borderColor: 'var(--site-primary)',
   '&:hover': {
@@ -24,21 +31,20 @@ const actionButtonSx: SxProps<Theme> = {
 
 export const siteButtonVariants: Record<SiteButtonVariant, SxProps<Theme>> = {
   default: {
+    ...textButtonContentSx,
     minWidth: 0,
     overflow: 'hidden',
     textOverflow: 'ellipsis',
     whiteSpace: 'nowrap',
     textTransform: 'none',
-    justifyContent: 'flex-start',
   },
   sidebar: {
+    ...textButtonContentSx,
     width: '100%',
     minWidth: 0,
-    justifyContent: 'flex-start',
     padding: 'var(--site-action-py) var(--site-space-3)',
     color: 'var(--site-primary-muted)',
     borderColor: 'var(--site-primary-muted)',
-    textAlign: 'left',
     '&:hover': {
       color: 'var(--site-primary)',
       borderColor: 'var(--site-primary)',
@@ -47,8 +53,6 @@ export const siteButtonVariants: Record<SiteButtonVariant, SxProps<Theme>> = {
   },
   action: {
     ...actionButtonSx,
-    justifyContent: 'flex-start',
-    '& .MuiButton-endIcon': { marginLeft: 'auto' },
   },
   'action-icon': {
     ...actionButtonSx,
@@ -62,10 +66,10 @@ export const siteButtonVariants: Record<SiteButtonVariant, SxProps<Theme>> = {
     flex: '0 0 auto',
   },
   availability: {
+    ...textButtonContentSx,
     color: 'var(--site-success)',
     borderColor: 'var(--site-success)',
     padding: 'var(--site-action-py) var(--site-action-px)',
-    justifyContent: 'flex-start',
     whiteSpace: 'nowrap',
     fontSize: {
       xs: 'var(--site-text-xs)',
@@ -79,9 +83,9 @@ export const siteButtonVariants: Record<SiteButtonVariant, SxProps<Theme>> = {
     },
   },
   exploration: {
+    ...textButtonContentSx,
     width: '100%',
     minWidth: 0,
-    justifyContent: 'flex-start',
     textTransform: 'none',
     color: 'var(--site-text-primary)',
     borderColor: 'var(--site-border)',
@@ -91,12 +95,11 @@ export const siteButtonVariants: Record<SiteButtonVariant, SxProps<Theme>> = {
       borderColor: 'var(--site-primary)',
       backgroundColor: 'var(--site-surface-hover)',
     },
-    '& .MuiButton-endIcon': { marginLeft: 'auto' },
   },
   contact: {
+    ...textButtonContentSx,
     width: '100%',
     minWidth: 0,
-    justifyContent: 'flex-start',
     color: 'var(--site-primary)',
     borderColor: 'var(--site-primary)',
     '&:hover': {
@@ -106,6 +109,7 @@ export const siteButtonVariants: Record<SiteButtonVariant, SxProps<Theme>> = {
     },
   },
   breadcrumb: {
+    ...textButtonContentSx,
     minHeight: 'var(--site-control-h-xs)',
     padding: 'var(--site-action-py) var(--site-action-px)',
     color: 'var(--site-text-secondary)',
@@ -120,6 +124,7 @@ export const siteButtonVariants: Record<SiteButtonVariant, SxProps<Theme>> = {
     },
   },
   'breadcrumb-home': {
+    ...textButtonContentSx,
     minHeight: 'var(--site-control-h-xs)',
     padding: 'var(--site-action-py) var(--site-action-px) var(--site-action-py) 0',
     color: 'var(--site-text-secondary)',

@@ -7,6 +7,7 @@ use App\Support\ResumePdf\ResumePdfBuilder;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 
 class GenerateResumePdf implements ShouldQueue
 {
@@ -28,11 +29,14 @@ class GenerateResumePdf implements ShouldQueue
 
         $renderer->renderTexToPdf($texPath, $workDir);
 
-        $publicDir = storage_path('app/public');
-        File::ensureDirectoryExists($publicDir);
-
         $generatedPdf = "{$workDir}/resume-{$this->locale}.pdf";
-        File::copy($generatedPdf, "{$publicDir}/resume-{$this->locale}.pdf");
-        File::copy($texPath, "{$publicDir}/resume-{$this->locale}.tex");
+        $disk = Storage::disk((string) config('filesystems.default'));
+        if (! $disk->put("resume/resume-{$this->locale}.pdf", File::get($generatedPdf))) {
+            throw new \RuntimeException('The generated resume PDF could not be stored.');
+        }
+
+        if (! $disk->put("resume/resume-{$this->locale}.tex", File::get($texPath))) {
+            throw new \RuntimeException('The generated resume source could not be stored.');
+        }
     }
 }

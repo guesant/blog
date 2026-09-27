@@ -2,19 +2,18 @@
 
 import { useRef } from 'react';
 import { Box } from '../ui';
-
-const CONTEXTUAL_CURSOR_ENABLED = false;
-
 import { useCursorController } from './use-cursor-controller';
 
-export function ContextualCursor() {
+type ContextualCursorProps = { enabled: boolean };
+
+export function ContextualCursor(props: ContextualCursorProps) {
   const dotRef = useRef<HTMLDivElement>(null);
 
   const frameRef = useRef<HTMLDivElement>(null);
 
-  useCursorController(dotRef, frameRef, CONTEXTUAL_CURSOR_ENABLED);
+  useCursorController(dotRef, frameRef, props.enabled);
 
-  if (!CONTEXTUAL_CURSOR_ENABLED) {
+  if (!props.enabled) {
     return null;
   }
 

@@ -1,9 +1,10 @@
 'use client';
 
-import { Breadcrumbs as UiBreadcrumbs, Button } from '../../ui';
+import { Breadcrumbs as UiBreadcrumbs, Button, Box } from '../../ui';
 import { useTranslations } from '@/i18n/compat';
 import { Link as LocaleLink } from '../../../i18n/navigation';
 import { Icon } from '../../primitives/icon';
+import { ConditionalContent } from '../../primitives/conditional-content';
 import type { BreadcrumbsProps } from './types';
 import { BreadcrumbTrailItem } from './breadcrumb-trail-item';
 
@@ -12,7 +13,7 @@ export function Breadcrumbs(props: BreadcrumbsProps) {
 
   const t = useTranslations('Nav');
 
-  return (
+  const breadcrumbs = (
     <UiBreadcrumbs aria-label={t('home')} separator="/" visualVariant="breadcrumbs">
       <Button
         component={LocaleLink}
@@ -26,5 +27,14 @@ export function Breadcrumbs(props: BreadcrumbsProps) {
         <BreadcrumbTrailItem key={item.href ?? item.label} item={item} />
       ))}
     </UiBreadcrumbs>
+  );
+
+  return (
+    <ConditionalContent
+      condition={Boolean(props.containerVisualVariant)}
+      content={<Box visualVariant={props.containerVisualVariant}>{breadcrumbs}</Box>}
+    >
+      {breadcrumbs}
+    </ConditionalContent>
   );
 }

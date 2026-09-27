@@ -51,7 +51,8 @@ class SnippetForm
                                 TextInput::make('language')
                                     ->label('Language')
                                     ->placeholder('typescript')
-                                    ->nullable(),
+                                    ->nullable()
+                                    ->columnSpanFull(),
                                 Textarea::make('content')
                                     ->label('Content')
                                     ->required()

@@ -16,9 +16,9 @@ class SiteSettings extends Model
 
     protected $table = 'site_settings';
 
-    protected $fillable = ['short_name', 'portfolio_url', 'maintenance_enabled', 'contact_email', 'contact_available', 'source_repository_url'];
+    protected $fillable = ['short_name', 'portfolio_url', 'maintenance_enabled', 'contact_email', 'contact_enabled', 'contact_available', 'source_repository_url', 'content_actions_copy_text', 'content_actions_copy_url', 'content_actions_download_text', 'contextual_cursor_enabled'];
 
-    protected $casts = ['maintenance_enabled' => 'boolean', 'contact_available' => 'boolean'];
+    protected $casts = ['maintenance_enabled' => 'boolean', 'contact_enabled' => 'boolean', 'contact_available' => 'boolean', 'content_actions_copy_text' => 'boolean', 'content_actions_copy_url' => 'boolean', 'content_actions_download_text' => 'boolean', 'contextual_cursor_enabled' => 'boolean'];
 
     /**
      * @return HasMany<ContactProfile, $this>

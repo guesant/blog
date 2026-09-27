@@ -20,6 +20,7 @@ use App\Models\Resource;
 use App\Models\ResourceRevisionTranslation;
 use App\Models\Resume;
 use App\Models\ResumeRevisionTranslation;
+use App\Models\SiteSettings;
 use Illuminate\Database\Events\QueryExecuted;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
@@ -59,6 +60,72 @@ class PublicSiteApiTest extends TestCase
         $this->getJson('/api/v1/site/chrome?locale=en')
             ->assertOk()
             ->assertHeader('X-Public-Site-Cache', 'hit');
+    }
+
+    public function test_site_chrome_returns_maintenance_state_without_blocking_the_shell(): void
+    {
+        Cache::flush();
+        SiteSettings::factory()->create(['maintenance_enabled' => true]);
+
+        $response = $this->getJson('/api/v1/site/chrome?locale=en');
+
+        $response
+            ->assertOk()
+            ->assertJsonPath('site.maintenance_enabled', true);
+        $this->assertStringContainsString('no-store', (string) $response->headers->get('Cache-Control'));
+    }
+
+    public function test_site_chrome_exposes_feature_flags_from_site_settings(): void
+    {
+        Cache::flush();
+        SiteSettings::factory()->create([
+            'content_actions_copy_text' => true,
+            'content_actions_copy_url' => true,
+            'content_actions_download_text' => false,
+            'contextual_cursor_enabled' => true,
+        ]);
+
+        $this->getJson('/api/v1/site/chrome?locale=en')
+            ->assertOk()
+            ->assertJsonPath('site.feature_flags.content_actions.copy_text', true)
+            ->assertJsonPath('site.feature_flags.content_actions.copy_url', true)
+            ->assertJsonPath('site.feature_flags.content_actions.download_text', false)
+            ->assertJsonPath('site.feature_flags.contextual_cursor', true);
+    }
+
+    public function test_contact_visibility_is_independent_from_opportunity_availability(): void
+    {
+        Cache::flush();
+        SiteSettings::factory()->create([
+            'contact_enabled' => true,
+            'contact_available' => false,
+            'contact_email' => 'contact@example.com',
+        ]);
+
+        $this->getJson('/api/v1/site/chrome?locale=en')
+            ->assertOk()
+            ->assertJsonPath('site.contact_enabled', true)
+            ->assertJsonPath('site.contact_email_available', true)
+            ->assertJsonPath('site.contact_available', false)
+            ->assertJsonPath('visibility.contact', true)
+            ->assertJsonPath('visibility.right_sidebar', true);
+    }
+
+    public function test_disabled_contact_is_hidden_even_when_opportunities_are_available(): void
+    {
+        Cache::flush();
+        SiteSettings::factory()->create([
+            'contact_enabled' => false,
+            'contact_available' => true,
+            'contact_email' => 'contact@example.com',
+        ]);
+
+        $this->getJson('/api/v1/site/chrome?locale=en')
+            ->assertOk()
+            ->assertJsonPath('site.contact_enabled', false)
+            ->assertJsonPath('site.contact_available', true)
+            ->assertJsonPath('visibility.contact', false)
+            ->assertJsonPath('visibility.right_sidebar', false);
     }
 
     public function test_site_chrome_keeps_profile_identity_when_revision_is_hidden(): void

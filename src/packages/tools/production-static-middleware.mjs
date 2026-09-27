@@ -1,5 +1,8 @@
+import { createRequire } from 'node:module';
 import { resolve } from 'node:path';
-import { serveStatic } from 'srvx/static';
+
+const nodeRequire = createRequire(resolve(process.cwd(), 'package.json'));
+const { serveStatic } = nodeRequire('srvx/static');
 
 const staticMiddleware = serveStatic({ dir: resolve(process.cwd(), 'dist/client') });
 

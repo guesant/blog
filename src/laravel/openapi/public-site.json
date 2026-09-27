@@ -271,6 +271,12 @@
                                                 "source_repository_url": {
                                                     "type": "string"
                                                 },
+                                                "contact_enabled": {
+                                                    "type": "boolean"
+                                                },
+                                                "contact_email_available": {
+                                                    "type": "boolean"
+                                                },
                                                 "contact_available": {
                                                     "type": "boolean"
                                                 },
@@ -318,6 +324,37 @@
                                                     "type": [
                                                         "string",
                                                         "null"
+                                                    ]
+                                                },
+                                                "feature_flags": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "content_actions": {
+                                                            "type": "object",
+                                                            "properties": {
+                                                                "copy_text": {
+                                                                    "type": "boolean"
+                                                                },
+                                                                "copy_url": {
+                                                                    "type": "boolean"
+                                                                },
+                                                                "download_text": {
+                                                                    "type": "boolean"
+                                                                }
+                                                            },
+                                                            "required": [
+                                                                "copy_text",
+                                                                "copy_url",
+                                                                "download_text"
+                                                            ]
+                                                        },
+                                                        "contextual_cursor": {
+                                                            "type": "boolean"
+                                                        }
+                                                    },
+                                                    "required": [
+                                                        "content_actions",
+                                                        "contextual_cursor"
                                                     ]
                                                 },
                                                 "seo": {
@@ -388,6 +425,8 @@
                                                 "short_name",
                                                 "portfolio_url",
                                                 "source_repository_url",
+                                                "contact_enabled",
+                                                "contact_email_available",
                                                 "contact_available",
                                                 "contact_profiles",
                                                 "protected_email",
@@ -395,6 +434,7 @@
                                                 "maintenance_eyebrow",
                                                 "maintenance_title",
                                                 "maintenance_description",
+                                                "feature_flags",
                                                 "seo"
                                             ]
                                         },
@@ -1933,6 +1973,39 @@
                                 "schema": {
                                     "type": "string",
                                     "format": "binary"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "Transfer-Encoding": {
+                                "required": true,
+                                "schema": {
+                                    "type": "string",
+                                    "enum": [
+                                        "chunked"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "503": {
+                        "description": "An error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "description": "Error overview.",
+                                            "examples": [
+                                                ""
+                                            ]
+                                        }
+                                    },
+                                    "required": [
+                                        "message"
+                                    ]
                                 }
                             }
                         }

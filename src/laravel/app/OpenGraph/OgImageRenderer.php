@@ -29,14 +29,14 @@ final class OgImageRenderer
         $regularFont = (string) config('og.font_regular');
         $boldFont = (string) config('og.font_bold');
         $label = strtoupper($payload->template);
-        $this->text($image, $label, $regularFont, $muted, 22, 72, 92, 1040, 1);
-        $this->text($image, $payload->title, $boldFont, $foreground, 52, 72, 202, 1040, 2);
+        $this->text($image, $label, $regularFont, $muted, 24, 72, 92, 1040, 1);
+        $this->text($image, $payload->title, $boldFont, $foreground, 64, 72, 208, 1040, 2);
 
         if ($payload->description !== null) {
-            $this->text($image, $payload->description, $regularFont, $muted, 26, 72, 390, 1040, 4);
+            $this->text($image, $payload->description, $regularFont, $muted, 30, 72, 360, 1040, 5);
         }
 
-        $this->text($image, 'guesant.net', $boldFont, $foreground, 24, 72, $height - 34, 1040, 1);
+        $this->text($image, 'guesant.net', $boldFont, $foreground, 28, 72, $height - 34, 1040, 1);
 
         ob_start();
         imagepng($image, null, 6);
@@ -62,33 +62,90 @@ final class OgImageRenderer
         int $maxLines,
     ): void {
         if (! is_file($font)) {
-            imagestring($image, 5, $x, max(0, $baseline - $size), $value, $color);
-
-            return;
+            throw new \RuntimeException("The OG font file does not exist: {$font}");
         }
 
+        $lines = $this->wrap($value, $font, $size, $maxWidth);
+        $truncated = count($lines) > $maxLines;
+        $lines = array_slice($lines, 0, $maxLines);
+        if ($truncated && $lines !== []) {
+            $last = array_pop($lines);
+            $lines[] = $this->appendEllipsis((string) $last, $font, $size, $maxWidth);
+        }
+
+        foreach ($lines as $index => $text) {
+            imagettftext($image, $size, 0, $x, $baseline + $index * (int) ($size * 1.35), $color, $font, $text);
+        }
+    }
+
+    private function wrap(string $value, string $font, int $size, int $maxWidth): array
+    {
         $lines = [];
         $line = '';
+
         foreach (preg_split('/\s+/u', trim($value)) ?: [] as $word) {
-            $candidate = $line === '' ? $word : $line.' '.$word;
-            $box = imagettfbbox($size, 0, $font, $candidate);
-            $candidateWidth = abs($box[2] - $box[0]);
-            if ($line !== '' && $candidateWidth > $maxWidth) {
-                $lines[] = $line;
-                $line = $word;
+            foreach ($this->splitWord($word, $font, $size, $maxWidth) as $part) {
+                $candidate = $line === '' ? $part : $line.' '.$part;
+                if ($line !== '' && $this->textWidth($candidate, $font, $size) > $maxWidth) {
+                    $lines[] = $line;
+                    $line = $part;
 
-                continue;
+                    continue;
+                }
+
+                $line = $candidate;
             }
-
-            $line = $candidate;
         }
 
         if ($line !== '') {
             $lines[] = $line;
         }
 
-        foreach (array_slice($lines, 0, $maxLines) as $index => $text) {
-            imagettftext($image, $size, 0, $x, $baseline + $index * (int) ($size * 1.35), $color, $font, $text);
+        return $lines;
+    }
+
+    private function splitWord(string $word, string $font, int $size, int $maxWidth): array
+    {
+        if ($this->textWidth($word, $font, $size) <= $maxWidth) {
+            return [$word];
         }
+
+        $parts = [];
+        $part = '';
+        foreach (preg_split('//u', $word, -1, PREG_SPLIT_NO_EMPTY) ?: [] as $character) {
+            $candidate = $part.$character;
+            if ($part !== '' && $this->textWidth($candidate, $font, $size) > $maxWidth) {
+                $parts[] = $part;
+                $part = $character;
+
+                continue;
+            }
+
+            $part = $candidate;
+        }
+
+        if ($part !== '') {
+            $parts[] = $part;
+        }
+
+        return $parts;
+    }
+
+    private function appendEllipsis(string $line, string $font, int $size, int $maxWidth): string
+    {
+        $ellipsis = '...';
+        $characters = preg_split('//u', $line, -1, PREG_SPLIT_NO_EMPTY) ?: [];
+        while ($characters !== [] && $this->textWidth(implode('', $characters).$ellipsis, $font, $size) > $maxWidth) {
+            array_pop($characters);
+        }
+
+        return rtrim(implode('', $characters)).$ellipsis;
+    }
+
+    private function textWidth(string $value, string $font, int $size): int
+    {
+        $box = imagettfbbox($size, 0, $font, $value);
+
+        return abs($box[2] - $box[0]);
     }
 }

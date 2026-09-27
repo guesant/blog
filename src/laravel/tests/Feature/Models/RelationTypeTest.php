@@ -14,5 +14,8 @@ class RelationTypeTest extends TestCase
         $this->assertInstanceOf(RelationType::class, $relationType);
         $this->assertNotNull($relationType->id);
         $this->assertNotNull($relationType->key);
+        $this->assertCount(2, $relationType->translations);
+        $this->assertNotNull($relationType->translation('en'));
+        $this->assertNotNull($relationType->translation('pt-BR'));
     }
 }

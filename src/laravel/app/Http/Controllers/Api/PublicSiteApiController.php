@@ -36,6 +36,7 @@ use App\OpenGraph\OgImageUrlGenerator;
 use Dedoc\Scramble\Attributes\Response as ScrambleResponse;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -106,12 +107,10 @@ class PublicSiteApiController extends Controller
                 ? $presenter->feedItem($item, $locale)
                 : $presenter->collectionItem($collection, $item, $locale))
             ->values();
-        $groups = $collection === 'credits' ? $presenter->creditGroups($data->all()) : null;
 
         return response()->json(PublicContentListResponseDto::fromPage(
             $data->all(),
             PublicListMetaDto::fromPage($items->page, $locale),
-            $groups,
         )->toArray())->header('Cache-Control', 'public, max-age=60, stale-while-revalidate=300');
     }
 
@@ -167,14 +166,27 @@ class PublicSiteApiController extends Controller
             abort(404);
         }
 
-        $path = storage_path("app/public/resume-{$locale}.pdf");
-        if (! is_file($path)) {
+        $disk = Storage::disk((string) config('filesystems.default'));
+        $path = "resume/resume-{$locale}.pdf";
+        if (! $disk->exists($path)) {
             abort(404);
         }
 
-        return response()->file($path, [
+        $stream = $disk->readStream($path);
+        if (! is_resource($stream)) {
+            abort(503);
+        }
+
+        return response()->stream(function () use ($stream): void {
+            try {
+                fpassthru($stream);
+            } finally {
+                fclose($stream);
+            }
+        }, 200, [
             'Cache-Control' => 'public, max-age=3600',
             'Content-Type' => 'application/pdf',
+            'Content-Disposition' => "inline; filename=resume-{$locale}.pdf",
         ]);
     }
 
@@ -204,6 +216,8 @@ class PublicSiteApiController extends Controller
      *     short_name: string|null,
      *     portfolio_url: string,
      *     source_repository_url: string,
+     *     contact_enabled: bool,
+     *     contact_email_available: bool,
      *     contact_available: bool,
      *     contact_profiles: array<int, array{platform: string, label: string, url: string}>,
      *     protected_email: null,
@@ -211,6 +225,14 @@ class PublicSiteApiController extends Controller
      *     maintenance_eyebrow: string|null,
      *     maintenance_title: string|null,
      *     maintenance_description: string|null,
+     *     feature_flags: array{
+     *       content_actions: array{
+     *         copy_text: bool,
+     *         copy_url: bool,
+     *         download_text: bool
+     *       },
+     *       contextual_cursor: bool
+     *     },
      *     seo: array{
      *       title: string|null,
      *       description: string|null,
@@ -284,20 +306,20 @@ class PublicSiteApiController extends Controller
             );
         }
 
-        if (($data['site']['maintenance_enabled'] ?? false) === true) {
-            return ApiErrorResponse::make(
-                ApiErrorCode::Maintenance,
-                503,
-                'The service is temporarily unavailable.',
-            )->header('Retry-After', (string) 3600)
+        $maintenanceEnabled = ($data['site']['maintenance_enabled'] ?? false) === true;
+        $duration = (hrtime(true) - $startedAt) / 1_000_000;
+
+        if ($maintenanceEnabled) {
+            return response()->json($data)
+                ->header('Cache-Control', 'no-store, no-cache, must-revalidate')
                 ->header('X-Public-Site-Cache', $cacheState)
-                ->header('Server-Timing', 'public-site-chrome;dur='.((hrtime(true) - $startedAt) / 1_000_000));
+                ->header('Server-Timing', 'public-site-chrome;dur='.$duration);
         }
 
         return response()->json($data)
             ->header('Cache-Control', 'public, max-age=60, stale-while-revalidate=300')
             ->header('X-Public-Site-Cache', $cacheState)
-            ->header('Server-Timing', 'public-site-chrome;dur='.((hrtime(true) - $startedAt) / 1_000_000));
+            ->header('Server-Timing', 'public-site-chrome;dur='.$duration);
     }
 
     #[ScrambleResponse(200, type: 'array')]

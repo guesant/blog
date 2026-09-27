@@ -193,32 +193,6 @@ final class PublicContentResponseFactory
         ];
     }
 
-    public function creditGroups(array $credits): array
-    {
-        return [
-            'acknowledgements' => array_values(array_filter(
-                $credits,
-                static fn (array $credit): bool => $credit['category'] === 'reference' && empty($credit['url']),
-            )),
-            'references' => array_values(array_filter(
-                $credits,
-                static fn (array $credit): bool => $credit['category'] === 'reference' && filled($credit['url']),
-            )),
-            'infrastructure' => array_values(array_filter(
-                $credits,
-                static fn (array $credit): bool => $credit['category'] === 'infrastructure',
-            )),
-            'libraries' => array_values(array_filter(
-                $credits,
-                static fn (array $credit): bool => in_array($credit['category'], ['library', 'font'], true),
-            )),
-            'tools' => array_values(array_filter(
-                $credits,
-                static fn (array $credit): bool => $credit['category'] === 'tool',
-            )),
-        ];
-    }
-
     private function feedWriting(array $item): array
     {
         return [

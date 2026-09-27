@@ -4,7 +4,8 @@ return [
     'enabled' => (bool) env('OG_IMAGE_ENABLED', false),
     'secret' => env('OG_IMAGE_SECRET'),
     'base_url' => env('OG_IMAGE_BASE_URL'),
-    'cache_path' => env('OG_IMAGE_CACHE_PATH', storage_path('app/cache/og')),
+    'cache_disk' => env('OG_IMAGE_DISK', env('FILESYSTEM_DISK', 'local')),
+    'cache_prefix' => env('OG_IMAGE_CACHE_PREFIX', 'cache/og'),
     'cache_ttl' => (int) env('OG_IMAGE_CACHE_TTL', 31536000),
     'cache_max_bytes' => (int) env('OG_IMAGE_CACHE_MAX_BYTES', 268435456),
     'cache_max_entries' => (int) env('OG_IMAGE_CACHE_MAX_ENTRIES', 1024),
@@ -23,10 +24,10 @@ return [
     'height' => 630,
     'font_regular' => env(
         'OG_IMAGE_FONT_REGULAR',
-        '/usr/share/fonts/truetype/liberation2/LiberationSans-Regular.ttf',
+        '/usr/share/fonts/truetype/liberation/LiberationSans-Regular.ttf',
     ),
     'font_bold' => env(
         'OG_IMAGE_FONT_BOLD',
-        '/usr/share/fonts/truetype/liberation2/LiberationSans-Bold.ttf',
+        '/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf',
     ),
 ];

@@ -1,7 +1,7 @@
-import { Button } from '../ui';
-import { Icon } from '../primitives/icon';
-import { downloadFile } from './download-file';
 import type { ContentActionsTranslator } from '@/i18n/compat-support';
+import type { SiteFeatureFlags } from '@portfolio/data/domain/types';
+import { ContentActionButton } from './content-action-button';
+import { buildContentActionItems } from './build-content-action-items';
 
 type ContentActionsPrimaryProps = {
   text: string;
@@ -10,37 +10,16 @@ type ContentActionsPrimaryProps = {
   filename: string;
   t: ContentActionsTranslator;
   copied: string | null;
+  featureFlags: SiteFeatureFlags['contentActions'];
 };
 
 export function ContentActionsPrimary(props: ContentActionsPrimaryProps) {
-  return (
-    <>
-      <Button
-        variant="outlined"
-        size="small"
-        startIcon={<Icon name={props.copied === 'text' ? 'check' : 'copy'} size={14} />}
-        onClick={() => void props.copy(props.text, 'text')}
-      >
-        {props.copied === 'text' ? props.t('copied') : props.t('copyText')}
-      </Button>
-      <Button
-        variant="outlined"
-        size="small"
-        startIcon={<Icon name={props.copied === 'url' ? 'check' : 'external'} size={14} />}
-        onClick={() => void props.copy(window.location.origin + props.url, 'url')}
-      >
-        {props.copied === 'url' ? props.t('copied') : props.t('copyUrl')}
-      </Button>
-      <Button
-        variant="outlined"
-        size="small"
-        startIcon={<Icon name="download" size={14} />}
-        onClick={() =>
-          downloadFile(`${props.filename}.txt`, props.text, 'text/plain;charset=utf-8')
-        }
-      >
-        {props.t('downloadText')}
-      </Button>
-    </>
-  );
+  return buildContentActionItems(props).map((action) => (
+    <ContentActionButton
+      key={action.key}
+      icon={action.icon}
+      label={action.label}
+      onClick={action.onClick}
+    />
+  ));
 }

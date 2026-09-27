@@ -28,6 +28,8 @@ final class PublicSiteChromeSqlReader implements PublicSiteChromeReader
                 'short_name' => $settings['short_name'],
                 'portfolio_url' => $settings['portfolio_url'],
                 'source_repository_url' => $settings['source_repository_url'],
+                'contact_enabled' => $settings['contact_enabled'],
+                'contact_email_available' => $settings['contact_email_available'],
                 'contact_available' => $settings['contact_available'],
                 'contact_profiles' => $settings['contact_profiles'],
                 'protected_email' => null,
@@ -35,6 +37,7 @@ final class PublicSiteChromeSqlReader implements PublicSiteChromeReader
                 'maintenance_eyebrow' => $settings['maintenance_eyebrow'],
                 'maintenance_title' => $settings['maintenance_title'],
                 'maintenance_description' => $settings['maintenance_description'],
+                'feature_flags' => $settings['feature_flags'],
                 'seo' => $settings['seo'],
             ],
             profile: $profile,
@@ -47,7 +50,7 @@ final class PublicSiteChromeSqlReader implements PublicSiteChromeReader
             visibility: $this->availability->read(
                 $query->locale,
                 $profileRead->isPublic,
-                $settings['contact_available'],
+                $settings['contact_enabled'],
             ),
         );
     }

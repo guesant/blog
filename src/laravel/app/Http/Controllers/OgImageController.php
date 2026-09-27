@@ -24,7 +24,10 @@ final class OgImageController extends Controller
     public function __invoke(Request $request, string $payload, string $signature): Response
     {
         if (! (bool) config('og.enabled')) {
-            return response('OG image generation is disabled.', 404);
+            return response('OG image generation is disabled.', 404, [
+                'Cache-Control' => 'no-store',
+                'X-Content-Type-Options' => 'nosniff',
+            ]);
         }
 
         if (! is_string(config('og.secret')) || config('og.secret') === '') {

@@ -174,6 +174,8 @@ export type PublicSiteApiChromeResponses = {
             short_name: string | null;
             portfolio_url: string;
             source_repository_url: string;
+            contact_enabled: boolean;
+            contact_email_available: boolean;
             contact_available: boolean;
             contact_profiles: Array<{
                 platform: string;
@@ -185,6 +187,14 @@ export type PublicSiteApiChromeResponses = {
             maintenance_eyebrow: string | null;
             maintenance_title: string | null;
             maintenance_description: string | null;
+            feature_flags: {
+                content_actions: {
+                    copy_text: boolean;
+                    copy_url: boolean;
+                    download_text: boolean;
+                };
+                contextual_cursor: boolean;
+            };
             seo: {
                 title: string | null;
                 description: string | null;
@@ -713,6 +723,15 @@ export type PublicSiteApiResumePdfErrors = {
      * Not found
      */
     404: {
+        /**
+         * Error overview.
+         */
+        message: string;
+    };
+    /**
+     * An error
+     */
+    503: {
         /**
          * Error overview.
          */

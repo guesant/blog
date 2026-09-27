@@ -1,4 +1,5 @@
-import { ExplorationSection, ExplorationTileGrid } from '../exploration-section';
+import { ContentSection } from '../content-section';
+import { ExplorationTileGrid } from '../exploration-section';
 import type { ActionSectionProps } from './types';
 
 type ActionSectionWithHeaderProps = ActionSectionProps & {
@@ -7,13 +8,13 @@ type ActionSectionWithHeaderProps = ActionSectionProps & {
 
 export function ActionSectionWithHeader(props: ActionSectionWithHeaderProps) {
   return (
-    <ExplorationSection
+    <ContentSection
       id={props.id}
       title={props.title}
       description={props.description}
       divider={props.divider}
     >
       <ExplorationTileGrid>{props.children}</ExplorationTileGrid>
-    </ExplorationSection>
+    </ContentSection>
   );
 }

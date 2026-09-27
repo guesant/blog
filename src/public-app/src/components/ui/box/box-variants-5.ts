@@ -14,6 +14,20 @@ export const boxVariants5: Record<string, SxProps<Theme>> = {
     borderColor: 'var(--site-border)',
     bgcolor: 'var(--site-surface)',
   },
+  mobileSidebarBrandHeader: {
+    display: 'flex',
+    position: 'relative',
+    alignItems: 'center',
+    justifyContent: 'center',
+    minHeight: 'var(--site-control-h)',
+    minWidth: 0,
+    '& > a': { minWidth: 0, maxWidth: '100%' },
+  },
+  mobileSidebarBackButton: {
+    position: 'absolute',
+    insetInlineStart: 0,
+    display: 'inline-flex',
+  },
   stickyRightSidebar: { position: 'sticky', top: 0, height: '100dvh', overflowY: 'auto' },
   sidebarMainColumn: { minWidth: 0, minHeight: '100dvh', display: 'flex', flexDirection: 'column' },
   sidebarContentFooter: {
@@ -75,6 +89,7 @@ export const boxVariants5: Record<string, SxProps<Theme>> = {
     borderRight: 'var(--site-border-width) solid var(--site-border)',
   },
   rightSidebar: { p: 3, minWidth: 0 },
+  rightSidebarMobile: { minWidth: 0 },
   featuredCaseFacts: {
     display: 'grid',
     gridTemplateColumns: { xs: '1fr', sm: 'repeat(3, 1fr)' },

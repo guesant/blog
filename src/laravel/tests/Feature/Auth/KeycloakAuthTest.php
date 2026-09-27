@@ -11,6 +11,7 @@ class KeycloakAuthTest extends TestCase
     {
         $this->get('/admin/login')
             ->assertOk()
+            ->assertSee('Roboto Slab')
             ->assertSee(route('auth.keycloak.redirect'));
     }
 

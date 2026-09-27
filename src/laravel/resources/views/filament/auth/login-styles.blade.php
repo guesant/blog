@@ -1,5 +1,6 @@
 <style>
     body.portfolio-admin-login {
+        font-family: var(--font-family);
         --admin-login-background: #f4f5f2;
         --admin-login-grid: rgb(15 23 42 / 6%);
         --admin-login-surface: #ffffff;
@@ -108,7 +109,7 @@
 
     body.portfolio-admin-login .fi-logo {
         color: var(--admin-login-accent);
-        font-family: var(--mono-font-family);
+        font-family: var(--font-family);
         font-size: var(--admin-login-logo-size);
         font-weight: 700;
         letter-spacing: var(--admin-login-logo-spacing);
@@ -152,7 +153,7 @@
 
     body.portfolio-admin-login .fi-simple-header-subheading a::after {
         content: 'OPEN';
-        font-family: var(--mono-font-family);
+        font-family: var(--font-family);
         font-size: var(--admin-login-button-label-size);
         letter-spacing: var(--admin-login-logo-spacing);
         line-height: 1;

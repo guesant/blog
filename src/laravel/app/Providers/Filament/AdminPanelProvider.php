@@ -32,11 +32,16 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path(config('admin.path'))
             ->brandName('Admin - guesant.net')
+            ->font('Roboto Slab')
             ->login(Login::class)
             ->renderHook(
                 PanelsRenderHook::HEAD_END,
                 fn (): View => view('filament.auth.login-styles'),
                 scopes: Login::class,
+            )
+            ->renderHook(
+                PanelsRenderHook::STYLES_AFTER,
+                fn (): View => view('filament.auth.font-styles'),
             )
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')

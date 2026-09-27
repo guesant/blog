@@ -6,16 +6,5 @@ type HomeHeroContentProps = {
 };
 
 export function HomeHeroContent(props: HomeHeroContentProps) {
-  return (
-    <Box
-      sx={{
-        position: 'relative',
-        zIndex: 1,
-        width: '100%',
-        textAlign: 'center',
-      }}
-    >
-      {props.children}
-    </Box>
-  );
+  return <Box visualVariant="homeHeroContent">{props.children}</Box>;
 }

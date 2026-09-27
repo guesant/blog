@@ -10,13 +10,7 @@ export function HomeHeroSurface(props: HomeHeroSurfaceProps) {
   return (
     <Box
       component="section"
-      sx={{
-        position: 'relative',
-        isolation: 'isolate',
-        overflow: 'hidden',
-        pt: 0,
-        pb: props.showContact ? 0 : 'var(--site-space-6)',
-      }}
+      visualVariant={props.showContact ? 'homeHeroSurfaceWithContact' : 'homeHeroSurface'}
     >
       {props.children}
     </Box>

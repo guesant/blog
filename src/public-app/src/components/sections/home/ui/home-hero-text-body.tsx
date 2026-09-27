@@ -5,13 +5,7 @@ type HomeHeroTextBodyProps = HomeHeroTextProps;
 
 export function HomeHeroTextBody(props: HomeHeroTextBodyProps) {
   return (
-    <Typography
-      component="p"
-      visualVariant="homeIntro"
-      sx={{
-        mt: props.kind === 'experience' ? 3.5 : 2.5,
-      }}
-    >
+    <Typography component="p" visualVariant="homeIntro">
       {props.children}
     </Typography>
   );

@@ -27,7 +27,6 @@
         --admin-login-subheading-size: 0.9375rem;
         --admin-login-button-padding-block: 0.875rem;
         --admin-login-button-padding-inline: 1rem;
-        --admin-login-button-label-size: 0.6875rem;
         --admin-login-logo-spacing: 0.08em;
         --admin-login-heading-spacing: -0.03em;
         --admin-login-button-lift: 0.125rem;
@@ -149,14 +148,6 @@
         transition:
             filter var(--admin-login-transition-duration) ease,
             transform var(--admin-login-transition-duration) ease;
-    }
-
-    body.portfolio-admin-login .fi-simple-header-subheading a::after {
-        content: 'OPEN';
-        font-family: var(--font-family);
-        font-size: var(--admin-login-button-label-size);
-        letter-spacing: var(--admin-login-logo-spacing);
-        line-height: 1;
     }
 
     body.portfolio-admin-login .fi-simple-header-subheading a:hover {

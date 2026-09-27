@@ -1,5 +1,20 @@
 import type { SxProps, Theme } from '@mui/material/styles';
-import { pageHeaderLayout } from './page-header-layout';
+import { pageHeaderLayout, pageIntroLayout } from './page-header-layout';
+
+const explorationTileGrid: SxProps<Theme> = {
+  display: 'flex',
+  flexWrap: 'wrap',
+  justifyContent: 'center',
+  gap: 'var(--site-space-3)',
+  mt: 'var(--site-space-4)',
+  '& > *, & [data-exploration-item]': {
+    flex: {
+      xs: '0 0 calc((100% - var(--site-space-3)) / 2)',
+      sm: '0 0 calc((100% - (var(--site-space-3) * 3)) / 4)',
+    },
+    minWidth: 0,
+  },
+};
 
 export const boxVariants6: Record<string, SxProps<Theme>> = {
   secondaryCaseGrid: {
@@ -24,13 +39,12 @@ export const boxVariants6: Record<string, SxProps<Theme>> = {
     flex: '1 1 100%',
   },
   contentFeedHeader: {
-    ...pageHeaderLayout,
+    ...pageIntroLayout,
     maxWidth: 'var(--site-content-max)',
-    mb: 0,
     textAlign: 'center',
   },
   creditsPageHeader: {
-    ...pageHeaderLayout,
+    ...pageIntroLayout,
   },
   feedCard: {
     mt: 'var(--site-space-2)',
@@ -49,20 +63,7 @@ export const boxVariants6: Record<string, SxProps<Theme>> = {
     gap: 'var(--site-space-2)',
   },
   detailArticle: { py: { xs: 8, md: 10 }, maxWidth: '52rem', mx: 'auto' },
-  explorationTileGrid: {
-    display: 'flex',
-    flexWrap: 'wrap',
-    justifyContent: 'center',
-    gap: 'var(--site-space-3)',
-    mt: 'var(--site-space-4)',
-    '& > *, & [data-exploration-item]': {
-      flex: {
-        xs: '0 0 calc((100% - var(--site-space-3)) / 2)',
-        sm: '0 0 calc((100% - (var(--site-space-3) * 3)) / 4)',
-      },
-      minWidth: 0,
-    },
-  },
+  explorationTileGrid,
   connectionsSection: {
     display: 'grid',
     gap: 'var(--site-space-4)',
@@ -77,11 +78,33 @@ export const boxVariants6: Record<string, SxProps<Theme>> = {
     maxWidth: '52rem',
   },
   pageHeader: {
-    ...pageHeaderLayout,
+    ...pageIntroLayout,
     maxWidth: '46rem',
-    mb: 0,
   },
-  contactPageHeader: { ...pageHeaderLayout, maxWidth: '46rem', mb: 0 },
+  contactPageHeader: { ...pageIntroLayout, maxWidth: '46rem' },
+  homeHeroSurface: {
+    position: 'relative',
+    isolation: 'isolate',
+    overflow: 'hidden',
+    pt: 'var(--site-space-8)',
+    pb: 'var(--site-space-8)',
+  },
+  homeHeroSurfaceWithContact: {
+    position: 'relative',
+    isolation: 'isolate',
+    overflow: 'hidden',
+    pt: 'var(--site-space-8)',
+    pb: 0,
+  },
+  homeHeroContent: {
+    position: 'relative',
+    zIndex: 1,
+    display: 'grid',
+    rowGap: 'var(--site-space-6)',
+    width: '100%',
+    textAlign: 'center',
+  },
+  homeHeroActions: { ...explorationTileGrid, mt: 0 },
   sourcePreviewListGroup: { display: 'grid', gap: 'var(--site-space-2)' },
   sourcePreviewListMetadata: { display: 'flex', flexWrap: 'wrap', gap: 'var(--site-space-1)' },
   sourcePreviewListItemFallback: {

@@ -12,7 +12,7 @@ export function HomeHeroActions(props: HomeHeroActionsProps) {
   const routes = buildHomeHeroRoutes(props, tNav);
 
   return (
-    <ExplorationTileGrid>
+    <ExplorationTileGrid visualVariant="homeHeroActions">
       <ConditionalContent
         condition={Boolean(props.workTarget)}
         content={

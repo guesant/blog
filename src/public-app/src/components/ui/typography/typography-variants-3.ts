@@ -36,11 +36,17 @@ export const typographyVariants3: Record<string, SxProps<Theme>> = {
   contentFeedStatus: { textAlign: 'center' },
   homeIntro: {
     ...homeReadingText,
+    margin: 0,
     fontFamily: 'var(--site-font-action)',
     fontSize: 'var(--site-text-lg)',
     fontWeight: 'var(--site-weight-medium)',
     lineHeight: 'var(--site-leading-relaxed)',
     color: 'text.secondary',
+  },
+  homeHeroTitle: {
+    margin: 0,
+    width: '100%',
+    fontSize: 'var(--site-text-3xl)',
   },
   feedCard: {
     margin: 0,

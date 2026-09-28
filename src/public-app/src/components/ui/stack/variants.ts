@@ -49,7 +49,7 @@ export const stackVariants: Record<string, SxProps<Theme>> = {
     letterSpacing: 'var(--site-letter-label)',
     textTransform: 'uppercase',
   },
-  listingList: { gap: 'var(--site-space-4)' },
+  listingList: { gap: 'var(--site-space-6)' },
   progressiveFooter: {
     alignItems: 'center',
     mt: 'var(--site-space-4)',

@@ -7,7 +7,14 @@ type SidebarSectionFrameProps = { label: string; children: ReactNode };
 
 const sectionStyles = { display: 'block' };
 
-const contentStyles = { gap: 'var(--site-sidebar-gap)', marginTop: 'var(--site-sidebar-gap)' };
+const contentStyles = {
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'stretch',
+  flexShrink: 0,
+  gap: 'var(--site-sidebar-gap)',
+  marginTop: 'var(--site-sidebar-gap)',
+};
 
 export function SidebarSectionFrame(props: SidebarSectionFrameProps) {
   return (

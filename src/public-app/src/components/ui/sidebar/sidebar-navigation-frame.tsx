@@ -13,9 +13,11 @@ export function SidebarNavigationFrame(props: SidebarNavigationFrameProps) {
       component="nav"
       aria-label={props['aria-label']}
       sx={{
+        width: '100%',
         padding: props.compact ? 0 : 'var(--site-space-3)',
         minWidth: 0,
         minHeight: props.compact ? 0 : '100dvh',
+        flex: props.compact ? '0 0 auto' : undefined,
         display: 'flex',
         flexDirection: 'column',
       }}

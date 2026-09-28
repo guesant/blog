@@ -6,6 +6,7 @@ type SidebarContactProfilesFrameProps = { children: ReactNode };
 const styles = {
   display: 'flex',
   flexDirection: 'column',
+  flexShrink: 0,
   gap: 'var(--site-sidebar-gap)',
   marginLeft: 'var(--site-space-3)',
   paddingLeft: 'var(--site-space-3)',

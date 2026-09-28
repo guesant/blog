@@ -7,6 +7,8 @@ export function SidebarNavigationStack(props: SidebarNavigationStackProps) {
   return (
     <Stack
       sx={{
+        width: '100%',
+        flexShrink: 0,
         gap: 'var(--site-sidebar-gap)',
         flex: props.compact ? undefined : 1,
         minHeight: props.compact ? undefined : 0,

@@ -34,7 +34,7 @@ export function SidebarActionButton(props: SidebarActionButtonProps) {
       endIcon={props.endIcon}
       aria-current={props.ariaCurrent}
       siteVariant="sidebar"
-      sx={props.active ? activeStyles : undefined}
+      sx={props.active ? [{ flexShrink: 0 }, activeStyles] : { flexShrink: 0 }}
     >
       {props.label}
     </Button>

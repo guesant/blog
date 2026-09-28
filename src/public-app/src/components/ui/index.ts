@@ -1,7 +1,5 @@
 export { Box } from './box';
 
-export { Breadcrumbs } from './breadcrumbs';
-
 export { CatalogCardFrame, CatalogEntryContent } from './catalog-card';
 
 export * from './finding-card';
@@ -18,15 +16,9 @@ export { Chip } from './chip';
 
 export { CircularProgress } from './circular-progress';
 
-export { Container } from './container';
-
 export { Dialog } from './dialog';
 
 export { Divider } from './divider';
-
-export { FormControl } from './form-control';
-
-export { IconButton } from './icon-button';
 
 export { IconGlyph } from './icon-glyph';
 
@@ -43,12 +35,6 @@ export { MenuItem } from './menu-item';
 export { OptionSelect, type SelectOption, type SelectOptionChangeEvent } from './option-select';
 
 export { Paper } from './paper';
-
-export { Pagination } from './pagination';
-
-export { Stack } from './stack';
-
-export { TextField } from './text-field';
 
 export { ToggleButton } from './toggle-button';
 
@@ -77,12 +63,6 @@ export { TechnicalGridSurface } from './technical-grid';
 export { NoScript } from './no-script';
 
 export { RichTextElement } from './rich-text-element';
-
-export { Svg } from './svg';
-
-export { SvgElement, type SvgElementProps } from './svg-element';
-
-export { Skeleton } from './skeleton';
 
 export { VisibilitySentinel } from './visibility-sentinel';
 

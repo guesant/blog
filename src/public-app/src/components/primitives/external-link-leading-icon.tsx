@@ -1,4 +1,5 @@
-import { Icon, type IconName } from './icon';
+import { type IconName } from './icon';
+import { MutedIcon } from '../ui/semantic/MutedIcon';
 
 type ExternalLinkLeadingIconProps = {
   name?: IconName;
@@ -10,5 +11,5 @@ export function ExternalLinkLeadingIcon(props: ExternalLinkLeadingIconProps) {
     return null;
   }
 
-  return <Icon name={props.name} size={props.size} visualVariant="muted" />;
+  return <MutedIcon name={props.name} size={props.size} />;
 }

@@ -24,6 +24,7 @@ class ReferenceCollectionForm
         return $schema
             ->components([
                 Section::make('Publishing')
+                    ->columnSpanFull()
                     ->columns(2)
                     ->schema([
                         TextInput::make('slug')
@@ -55,7 +56,7 @@ class ReferenceCollectionForm
                                     ->columnSpanFull()
                                     ->nullable(),
                             ])
-                            ->itemLabel(fn (array $state): ?string => isset($state['resource_id'])
+                            ->itemLabel(fn (mixed $state): ?string => is_array($state) && isset($state['resource_id'])
                                 ? ResourceModel::find($state['resource_id'])?->slug
                                 : null)
                             ->addActionLabel('Add item')

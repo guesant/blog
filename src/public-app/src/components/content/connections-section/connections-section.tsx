@@ -1,9 +1,11 @@
 'use client';
 
-import { Box, Typography } from '../../ui';
 import { useTranslations } from '@/i18n/compat';
 import { groupByLabel, type ConnectionsSectionProps } from './types';
 import { ConnectionGroup } from './connection-group';
+import { ConnectionsSection2Frame } from '../../ui/semantic/ConnectionsSection2Frame';
+import { ConnectionsSectionFrame } from '../../ui/semantic/ConnectionsSectionFrame';
+import { ConnectionsSectionText } from '../../ui/semantic/ConnectionsSectionText';
 
 export function ConnectionsSection(props: ConnectionsSectionProps) {
   const { relations } = props;
@@ -15,15 +17,13 @@ export function ConnectionsSection(props: ConnectionsSectionProps) {
   }
 
   return (
-    <Box component="section" visualVariant="connectionsSection">
-      <Typography component="h2" visualVariant="connectionsSection">
-        {t('connectionsHeading')}
-      </Typography>
-      <Box visualVariant="connectionsSection2">
+    <ConnectionsSectionFrame component="section">
+      <ConnectionsSectionText component="h2">{t('connectionsHeading')}</ConnectionsSectionText>
+      <ConnectionsSection2Frame>
         {[...groupByLabel(relations)].map(([label, items]) => (
           <ConnectionGroup key={label} label={label} items={items} />
         ))}
-      </Box>
-    </Box>
+      </ConnectionsSection2Frame>
+    </ConnectionsSectionFrame>
   );
 }

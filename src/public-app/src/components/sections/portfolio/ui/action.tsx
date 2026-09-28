@@ -1,10 +1,10 @@
 import type { ReactNode } from 'react';
-import { Box } from '../../../ui';
+import { PageSectionStartFrame } from '../../../ui/semantic/PageSectionStartFrame';
 
 type PortfolioActionProps = {
   children: ReactNode;
 };
 
 export function PortfolioAction(props: PortfolioActionProps) {
-  return <Box visualVariant="pageSectionStart">{props.children}</Box>;
+  return <PageSectionStartFrame>{props.children}</PageSectionStartFrame>;
 }

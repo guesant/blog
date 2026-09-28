@@ -1,8 +1,8 @@
-import MuiDialogTitle from '@mui/material/DialogTitle';
-import { createUiComponent, type UiProps } from '../ui-component';
+import type { ComponentProps } from 'react';
+import BaseDialogTitle from '@mui/material/DialogTitle';
 
-export const DialogTitle = createUiComponent<typeof MuiDialogTitle>(function DialogTitle(
-  props: UiProps,
-) {
-  return <MuiDialogTitle {...(props as Record<string, unknown>)} />;
-});
+export type DialogTitleProps = ComponentProps<typeof BaseDialogTitle>;
+
+export function DialogTitle(props: DialogTitleProps) {
+  return <BaseDialogTitle {...props} />;
+}

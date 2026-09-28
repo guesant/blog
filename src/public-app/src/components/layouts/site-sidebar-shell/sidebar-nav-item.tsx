@@ -1,11 +1,12 @@
 'use client';
 
-import { Box, SidebarSubnavigationFrame } from '../../ui';
+import { SidebarSubnavigationFrame } from '../../ui';
 import type { NavigationItem, SiteText } from '@portfolio/data/domain/types';
 import { visibleRoute } from './visible-route';
 import { SidebarLink } from './sidebar-link';
 import { SidebarNavChild } from './sidebar-nav-child';
 import { ConditionalContent } from '../../primitives/conditional-content';
+import { SidebarNavItemFrame } from '../../ui/semantic/SidebarNavItemFrame';
 
 type SidebarNavItemProps = {
   item: NavigationItem;
@@ -21,7 +22,7 @@ export function SidebarNavItem(props: SidebarNavItemProps) {
   const visibleChildren = item.children.filter((child) => visibleRoute(child.route, site));
 
   return (
-    <Box visualVariant="sidebarNavItem">
+    <SidebarNavItemFrame>
       <SidebarLink item={item} pathname={pathname} locale={locale} onNavigate={onNavigate} />
       <ConditionalContent
         condition={visibleChildren.length > 0}
@@ -40,6 +41,6 @@ export function SidebarNavItem(props: SidebarNavItemProps) {
           </SidebarSubnavigationFrame>
         }
       />
-    </Box>
+    </SidebarNavItemFrame>
   );
 }

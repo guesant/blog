@@ -1,9 +1,8 @@
-import MuiBreadcrumbs from '@mui/material/Breadcrumbs';
-import { createUiComponent, type UiProps } from '../ui-component';
-import { breadcrumbsVariants } from './variants';
+import type { ComponentProps } from 'react';
+import BaseBreadcrumbs from '@mui/material/Breadcrumbs';
 
-export const Breadcrumbs = createUiComponent<typeof MuiBreadcrumbs>(function Breadcrumbs(
-  props: UiProps,
-) {
-  return <MuiBreadcrumbs {...(props as Record<string, unknown>)} />;
-}, breadcrumbsVariants);
+export type BreadcrumbsProps = ComponentProps<typeof BaseBreadcrumbs>;
+
+export function Breadcrumbs(props: BreadcrumbsProps) {
+  return <BaseBreadcrumbs {...props} />;
+}

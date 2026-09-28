@@ -1,10 +1,10 @@
 import type { ReactNode } from 'react';
-import { Box } from '../../../ui';
+import { LicenseContactFrame } from '../../../ui/semantic/LicenseContactFrame';
 
 type LicenseContactProps = {
   children: ReactNode;
 };
 
 export function LicenseContact(props: LicenseContactProps) {
-  return <Box visualVariant="licenseContact">{props.children}</Box>;
+  return <LicenseContactFrame>{props.children}</LicenseContactFrame>;
 }

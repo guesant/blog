@@ -71,6 +71,7 @@ frontend-lint-fix: frontend-install frontend-architecture
 
 frontend-architecture: frontend-install tools-build
     {{node_run}} 'corepack pnpm lint:architecture:test'
+    {{node_run}} 'node ../../src/packages/tools/codemods/ui-variant-migration.mjs --check'
     {{tools_compose}} run --rm ast-grep test --config /workspace/.tools/sgconfig.yml
     {{tools_compose}} run --rm ast-grep scan --config /workspace/.tools/sgconfig.yml /workspace/src/public-app/src
 

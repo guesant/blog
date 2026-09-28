@@ -1,9 +1,10 @@
 'use client';
 
-import { Box, Typography } from '../../ui';
+import { Box } from '../../ui';
 import { ReferenceCard } from '../../content/reference-card';
 import type { ReferenceCollectionDetail } from '@portfolio/data/domain/types';
 import { ConditionalContent } from '../../primitives/conditional-content';
+import { CollectionReferenceItemText } from '../../ui/semantic/CollectionReferenceItemText';
 
 type CollectionReferenceItemProps = {
   item: ReferenceCollectionDetail['items'][number];
@@ -18,9 +19,9 @@ export function CollectionReferenceItem(props: CollectionReferenceItemProps) {
       <ConditionalContent
         condition={Boolean(item.note)}
         content={
-          <Typography color="text.secondary" visualVariant="collectionReferenceItem">
+          <CollectionReferenceItemText color="text.secondary">
             {item.note}
-          </Typography>
+          </CollectionReferenceItemText>
         }
       />
     </Box>

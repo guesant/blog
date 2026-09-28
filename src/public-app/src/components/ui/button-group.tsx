@@ -1,8 +1,8 @@
-import MuiButtonGroup from '@mui/material/ButtonGroup';
-import { createUiComponent, type UiProps } from './ui-component';
+import type { ComponentProps } from 'react';
+import BaseButtonGroup from '@mui/material/ButtonGroup';
 
-export const ButtonGroup = createUiComponent<typeof MuiButtonGroup>(function ButtonGroup(
-  props: UiProps,
-) {
-  return <MuiButtonGroup {...(props as Record<string, unknown>)} />;
-});
+export type ButtonGroupProps = ComponentProps<typeof BaseButtonGroup>;
+
+export function ButtonGroup(props: ButtonGroupProps) {
+  return <BaseButtonGroup {...props} />;
+}

@@ -1,14 +1,14 @@
 'use client';
 
-import { Box } from '../../ui';
 import { Icon, type IconName } from '../../primitives/icon';
+import { SourcePreviewListItemFallbackFrame } from '../../ui/semantic/SourcePreviewListItemFallbackFrame';
 
 type SourcePreviewListItemFallbackProps = { icon: IconName };
 
 export function SourcePreviewListItemFallback(props: SourcePreviewListItemFallbackProps) {
   return (
-    <Box visualVariant="sourcePreviewListItemFallback">
+    <SourcePreviewListItemFallbackFrame>
       <Icon name={props.icon} size={20} />
-    </Box>
+    </SourcePreviewListItemFallbackFrame>
   );
 }

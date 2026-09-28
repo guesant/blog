@@ -1,7 +1,8 @@
-import MuiStack from '@mui/material/Stack';
-import { createUiComponent, type UiProps } from '../ui-component';
-import { stackVariants } from './variants';
+import type { ComponentProps } from 'react';
+import BaseStack from '@mui/material/Stack';
 
-export const Stack = createUiComponent<typeof MuiStack>(function Stack(props: UiProps) {
-  return <MuiStack {...(props as Record<string, unknown>)} />;
-}, stackVariants);
+export type StackProps = ComponentProps<typeof BaseStack>;
+
+export function Stack(props: StackProps) {
+  return <BaseStack {...props} />;
+}

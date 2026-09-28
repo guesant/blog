@@ -1026,12 +1026,6 @@ parameters:
 			path: app/Filament/Resources/Pages/Pages/EditPage.php
 
 		-
-			message: '#^Parameter \#1 \$callback of method Illuminate\\Support\\Collection\<\(int\|string\),Illuminate\\Support\\Collection\<int, string\>\>\:\:flatMap\(\) expects callable\(Illuminate\\Support\\Collection\<int, string\>, int\|string\)\: \(array\<int, Filament\\Forms\\Components\\MarkdownEditor\|Filament\\Forms\\Components\\Textarea\|Filament\\Forms\\Components\\TextInput\|Filament\\Schemas\\Components\\Fieldset\>\|Illuminate\\Support\\Collection\<int, Filament\\Forms\\Components\\MarkdownEditor\|Filament\\Forms\\Components\\Textarea\|Filament\\Forms\\Components\\TextInput\|Filament\\Schemas\\Components\\Fieldset\>\), Closure\(array, string\)\: array\<int, Filament\\Forms\\Components\\MarkdownEditor\|Filament\\Forms\\Components\\Textarea\|Filament\\Forms\\Components\\TextInput\|Filament\\Schemas\\Components\\Fieldset\> given\.$#'
-			identifier: argument.type
-			count: 1
-			path: app/Filament/Resources/Pages/Schemas/PageForm.php
-
-		-
 			message: '#^Unsafe call to private method App\\Filament\\Resources\\Pages\\Schemas\\PageForm\:\:translationTabSchema\(\) through static\:\:\.$#'
 			identifier: staticClassAccess.privateMethod
 			count: 2

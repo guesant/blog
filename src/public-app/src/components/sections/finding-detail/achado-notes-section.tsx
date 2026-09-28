@@ -1,8 +1,9 @@
-import { Typography } from '../../ui';
 import type { Reference } from '@portfolio/data/domain/types';
 import type { AchadosTranslator } from '@/i18n/compat-support';
 import { FindingSection } from './finding-section';
 import { ConditionalContent } from '../../primitives/conditional-content';
+import { AchadoDetailContent5Text } from '../../ui/semantic/AchadoDetailContent5Text';
+import { AchadoDetailContent6Text } from '../../ui/semantic/AchadoDetailContent6Text';
 
 type AchadoNotesSectionProps = {
   item: Reference;
@@ -16,7 +17,7 @@ export function AchadoNotesSection(props: AchadoNotesSectionProps) {
         condition={Boolean(props.item.personalNote)}
         content={
           <FindingSection title={props.t('personalNote')}>
-            <Typography visualVariant="achadoDetailContent5">{props.item.personalNote}</Typography>
+            <AchadoDetailContent5Text>{props.item.personalNote}</AchadoDetailContent5Text>
           </FindingSection>
         }
       />
@@ -24,7 +25,7 @@ export function AchadoNotesSection(props: AchadoNotesSectionProps) {
         condition={Boolean(props.item.reasonFound)}
         content={
           <FindingSection title={props.t('whyItWasSaved')}>
-            <Typography visualVariant="achadoDetailContent6">{props.item.reasonFound}</Typography>
+            <AchadoDetailContent6Text>{props.item.reasonFound}</AchadoDetailContent6Text>
           </FindingSection>
         }
       />

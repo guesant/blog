@@ -1,8 +1,8 @@
 'use client';
 
-import { Box } from '../../ui';
 import type { ExternalLink as ExternalLinkData } from '@portfolio/data/domain/types';
 import { ReferenceLinkContent } from './reference-link-content';
+import { ReferenceLinkItemFrame } from '../../ui/semantic/ReferenceLinkItemFrame';
 
 type ReferenceLinkItemProps = {
   link: ExternalLinkData;
@@ -14,8 +14,8 @@ export function ReferenceLinkItem(props: ReferenceLinkItemProps) {
   const { link, freeLabel } = props;
 
   return (
-    <Box component="li" visualVariant="referenceLinkItem">
+    <ReferenceLinkItemFrame component="li">
       <ReferenceLinkContent link={link} freeLabel={freeLabel} />
-    </Box>
+    </ReferenceLinkItemFrame>
   );
 }

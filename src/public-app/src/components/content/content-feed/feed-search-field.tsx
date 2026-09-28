@@ -1,9 +1,9 @@
 'use client';
 
-import { TextField } from '../../ui';
 import type { ChangeEvent } from 'react';
 import { FeedSearchEndAdornment } from './feed-search-end-adornment';
 import { FeedSearchStartAdornment } from './feed-search-start-adornment';
+import { FeedSearchFieldTextField } from '../../ui/semantic/FeedSearchFieldTextField';
 
 type FeedSearchFieldProps = {
   value: string;
@@ -14,7 +14,7 @@ type FeedSearchFieldProps = {
 
 export function FeedSearchField(props: FeedSearchFieldProps) {
   return (
-    <TextField
+    <FeedSearchFieldTextField
       size="small"
       label={props.label}
       value={props.value}
@@ -31,7 +31,6 @@ export function FeedSearchField(props: FeedSearchFieldProps) {
           ),
         },
       }}
-      visualVariant="feedSearchField"
     />
   );
 }

@@ -1,7 +1,13 @@
-import MuiCard from '@mui/material/Card';
-import { createUiComponent, type UiProps } from '../ui-component';
-import { cardVariants } from './variants';
+import type { ElementType } from 'react';
+import BaseCard, { CardProps as MuiCardProps } from '@mui/material/Card';
 
-export const Card = createUiComponent<typeof MuiCard>(function Card(props: UiProps) {
-  return <MuiCard {...(props as Record<string, unknown>)} />;
-}, cardVariants);
+export type CardProps<
+  RootComponent extends ElementType = 'div',
+  AdditionalProps = {},
+> = MuiCardProps<RootComponent, AdditionalProps>;
+
+export function Card<RootComponent extends ElementType = 'div', AdditionalProps = {}>(
+  props: CardProps<RootComponent, AdditionalProps>,
+) {
+  return <BaseCard {...props} />;
+}

@@ -1,12 +1,13 @@
 'use client';
 
-import { Button, Stack } from '../../ui';
+import { Button } from '../../ui';
 import { useTranslations } from '@/i18n/compat';
 import { ConditionalContent } from '../../primitives/conditional-content';
-import { ExternalLink } from '../../primitives/external-link';
 import { NavButton } from '../../primitives/nav-button';
 import type { StatusPageKind } from './status-page-kind';
 import type { StatusTranslator } from '@/i18n/compat-support';
+import { StatusActionsLink } from '../../ui/semantic/StatusActionsLink';
+import { StatusActionsStack } from '../../ui/semantic/StatusActionsStack';
 
 type StatusActionsProps = {
   kind: StatusPageKind;
@@ -24,7 +25,7 @@ export function StatusActions(props: StatusActionsProps) {
     : undefined;
 
   return (
-    <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} visualVariant="statusActions">
+    <StatusActionsStack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
       <ConditionalContent
         condition={Boolean(isError && props.reset)}
         content={<Button variant="contained" onClick={props.reset} children={t('retry')} />}
@@ -35,14 +36,14 @@ export function StatusActions(props: StatusActionsProps) {
       <ConditionalContent
         condition={Boolean(issueReportUrl)}
         content={
-          <ExternalLink
+          <StatusActionsLink
             href={issueReportUrl ?? ''}
             color="text.secondary"
-            visualVariant="statusActions"
+
             children={t('issue')}
           />
         }
       />
-    </Stack>
+    </StatusActionsStack>
   );
 }

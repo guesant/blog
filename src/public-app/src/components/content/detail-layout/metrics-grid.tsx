@@ -1,4 +1,5 @@
-import { Box } from '../../ui';
+import { MetricsGridMargin4Frame } from '../../ui/semantic/MetricsGridMargin4Frame';
+import { MetricsGridMargin6Frame } from '../../ui/semantic/MetricsGridMargin6Frame';
 import type { MetricsGridProps } from './types';
 import { MetricItem } from './metric-item';
 
@@ -9,8 +10,10 @@ export function MetricsGrid(props: MetricsGridProps) {
     return null;
   }
 
+  const Frame = marginTop === 6 ? MetricsGridMargin6Frame : MetricsGridMargin4Frame;
+
   return (
-    <Box visualVariant={marginTop === 6 ? 'metricsGridMargin6' : 'metricsGridMargin4'}>
+    <Frame>
       {metrics.map((metric) => (
         <MetricItem
           key={`${metric.label}-${metric.value}`}
@@ -18,6 +21,6 @@ export function MetricsGrid(props: MetricsGridProps) {
           value={metric.value}
         />
       ))}
-    </Box>
+    </Frame>
   );
 }

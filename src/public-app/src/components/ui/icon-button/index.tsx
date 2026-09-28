@@ -1,9 +1,13 @@
-import MuiIconButton from '@mui/material/IconButton';
-import { createUiComponent, type UiProps } from '../ui-component';
-import { iconButtonVariants } from './variants';
+import type { ElementType } from 'react';
+import BaseIconButton, { IconButtonProps as MuiIconButtonProps } from '@mui/material/IconButton';
 
-export const IconButton = createUiComponent<typeof MuiIconButton>(function IconButton(
-  props: UiProps,
+export type IconButtonProps<
+  RootComponent extends ElementType = 'button',
+  AdditionalProps = {},
+> = MuiIconButtonProps<RootComponent, AdditionalProps>;
+
+export function IconButton<RootComponent extends ElementType = 'button', AdditionalProps = {}>(
+  props: IconButtonProps<RootComponent, AdditionalProps>,
 ) {
-  return <MuiIconButton {...(props as Record<string, unknown>)} />;
-}, iconButtonVariants);
+  return <BaseIconButton {...props} />;
+}

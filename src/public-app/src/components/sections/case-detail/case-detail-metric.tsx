@@ -2,6 +2,7 @@
 
 import { Box, Typography } from '../../ui';
 import { Icon } from '../../primitives/icon';
+import { CaseDetailMetricText } from '../../ui/semantic/CaseDetailMetricText';
 
 type CaseDetailMetricProps = {
   label: string;
@@ -15,10 +16,10 @@ export function CaseDetailMetric(props: CaseDetailMetricProps) {
 
   return (
     <Box>
-      <Typography variant="overline" color="text.secondary" visualVariant="caseDetailMetric">
+      <CaseDetailMetricText variant="overline" color="text.secondary">
         <Icon name={icon} size={15} />
         {label}
-      </Typography>
+      </CaseDetailMetricText>
       <Typography color="text.secondary">{value}</Typography>
     </Box>
   );

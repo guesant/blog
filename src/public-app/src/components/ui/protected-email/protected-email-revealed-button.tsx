@@ -1,5 +1,6 @@
 import { Icon } from '../../primitives/icon';
-import { Button } from '../button';
+import { ContactActionButton } from '../semantic/ContactActionButton';
+import { ProtectedEmailSidebarButton } from '../semantic/ProtectedEmailSidebarButton';
 
 type ProtectedEmailRevealedButtonProps = {
   presentation: 'contact' | 'sidebar';
@@ -13,16 +14,17 @@ type ProtectedEmailRevealedButtonProps = {
 export function ProtectedEmailRevealedButton(props: ProtectedEmailRevealedButtonProps) {
   const contact = props.presentation === 'contact';
 
+  const Frame = contact ? ContactActionButton : ProtectedEmailSidebarButton;
+
   return (
-    <Button
+    <Frame
       ref={props.ref}
       variant="outlined"
-      siteVariant={contact ? 'exploration' : 'sidebar'}
       size={contact ? 'medium' : 'small'}
       startIcon={<Icon name="mail" size={contact ? 18 : 14} />}
       onClick={props.onReveal}
     >
       {props.showAddress ? props.email : props.label}
-    </Button>
+    </Frame>
   );
 }

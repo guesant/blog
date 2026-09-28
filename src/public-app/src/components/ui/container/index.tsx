@@ -1,7 +1,8 @@
-import MuiContainer from '@mui/material/Container';
-import { createUiComponent, type UiProps } from '../ui-component';
-import { containerVariants } from './variants';
+import type { ComponentProps } from 'react';
+import BaseContainer from '@mui/material/Container';
 
-export const Container = createUiComponent<typeof MuiContainer>(function Container(props: UiProps) {
-  return <MuiContainer {...(props as Record<string, unknown>)} />;
-}, containerVariants);
+export type ContainerProps = ComponentProps<typeof BaseContainer>;
+
+export function Container(props: ContainerProps) {
+  return <BaseContainer {...props} />;
+}

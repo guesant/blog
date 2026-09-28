@@ -15,7 +15,7 @@ export function SidebarMobileDrawerFrame(props: SidebarMobileDrawerFrameProps) {
       anchor="right"
       open={props.open}
       onClose={props.onClose}
-      PaperProps={{ sx: paperStyles }}
+      slotProps={{ paper: { sx: paperStyles } }}
     >
       {props.children}
     </Drawer>

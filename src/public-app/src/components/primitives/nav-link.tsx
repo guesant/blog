@@ -9,7 +9,6 @@ type NavigationLocale = (typeof routing.locales)[number];
 type NavLinkProps = Omit<LinkProps, 'component' | 'href'> & {
   href: string;
   locale?: NavigationLocale;
-  visualVariant?: string;
 };
 
 export function NavLink(props: NavLinkProps) {

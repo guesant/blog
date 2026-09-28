@@ -15,7 +15,6 @@ export function ResumePdfOptionsButton(props: ResumePdfOptionsButtonProps) {
       aria-label={props.label}
       aria-haspopup="menu"
       aria-expanded={props.open}
-      siteVariant="action-icon"
       variant="outlined"
     >
       <Icon name="chevron-down" size={16} />

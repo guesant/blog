@@ -1,7 +1,8 @@
-import MuiDivider from '@mui/material/Divider';
-import { createUiComponent, type UiProps } from '../ui-component';
-import { dividerVariants } from './variants';
+import type { ComponentProps } from 'react';
+import BaseDivider from '@mui/material/Divider';
 
-export const Divider = createUiComponent<typeof MuiDivider>(function Divider(props: UiProps) {
-  return <MuiDivider {...(props as Record<string, unknown>)} />;
-}, dividerVariants);
+export type DividerProps = ComponentProps<typeof BaseDivider>;
+
+export function Divider(props: DividerProps) {
+  return <BaseDivider {...props} />;
+}

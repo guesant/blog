@@ -1,10 +1,10 @@
-import { ExplorationTileGrid } from '../../../content/exploration-section';
 import { useTranslations } from '@/i18n/compat';
 import { buildHomeHeroRoutes } from './build-home-hero-routes';
 import type { HomeHeroActionsProps } from './home-hero-actions.types';
 import { HomeHeroSelectedWork } from './home-hero-selected-work';
 import { HomeHeroNavigationButton } from './home-hero-navigation-button';
 import { ConditionalContent } from '../../../primitives/conditional-content';
+import { HomeHeroActionsFrame } from '../../../ui/semantic/HomeHeroActionsFrame';
 
 export function HomeHeroActions(props: HomeHeroActionsProps) {
   const tNav = useTranslations('Nav');
@@ -12,7 +12,7 @@ export function HomeHeroActions(props: HomeHeroActionsProps) {
   const routes = buildHomeHeroRoutes(props, tNav);
 
   return (
-    <ExplorationTileGrid visualVariant="homeHeroActions">
+    <HomeHeroActionsFrame>
       <ConditionalContent
         condition={Boolean(props.workTarget)}
         content={
@@ -29,6 +29,6 @@ export function HomeHeroActions(props: HomeHeroActionsProps) {
             label={route.label}
           />
         ))}
-    </ExplorationTileGrid>
+    </HomeHeroActionsFrame>
   );
 }

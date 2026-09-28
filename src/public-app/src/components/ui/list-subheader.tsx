@@ -1,8 +1,8 @@
-import MuiListSubheader from '@mui/material/ListSubheader';
-import { createUiComponent, type UiProps } from './ui-component';
+import type { ComponentProps } from 'react';
+import BaseListSubheader from '@mui/material/ListSubheader';
 
-export const ListSubheader = createUiComponent<typeof MuiListSubheader>(function ListSubheader(
-  props: UiProps,
-) {
-  return <MuiListSubheader {...(props as Record<string, unknown>)} />;
-});
+export type ListSubheaderProps = ComponentProps<typeof BaseListSubheader>;
+
+export function ListSubheader(props: ListSubheaderProps) {
+  return <BaseListSubheader {...props} />;
+}

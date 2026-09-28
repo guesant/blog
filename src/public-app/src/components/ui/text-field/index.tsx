@@ -1,7 +1,8 @@
-import MuiTextField from '@mui/material/TextField';
-import { createUiComponent, type UiProps } from '../ui-component';
-import { textFieldVariants } from './variants';
+import type { ComponentProps } from 'react';
+import BaseTextField from '@mui/material/TextField';
 
-export const TextField = createUiComponent<typeof MuiTextField>(function TextField(props: UiProps) {
-  return <MuiTextField {...(props as Record<string, unknown>)} />;
-}, textFieldVariants);
+export type TextFieldProps = ComponentProps<typeof BaseTextField>;
+
+export function TextField(props: TextFieldProps) {
+  return <BaseTextField {...props} />;
+}

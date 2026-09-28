@@ -13,7 +13,7 @@ export function ContactActionProfiles(props: ContactActionProfilesProps) {
       key={profile.url}
       profile={profile}
       tExternalProfiles={props.tExternalProfiles}
-      siteVariant="exploration"
+      presentation="exploration"
     />
   ));
 }

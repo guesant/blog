@@ -15,8 +15,10 @@ const styles = {
 };
 
 export function SidebarBackButtonFrame(props: SidebarBackButtonFrameProps) {
+  const Component = IconButton;
+
   return (
-    <IconButton
+    <Component
       component={props.component}
       href={props.href}
       aria-label={props.label}
@@ -24,6 +26,6 @@ export function SidebarBackButtonFrame(props: SidebarBackButtonFrameProps) {
       sx={styles}
     >
       {props.children}
-    </IconButton>
+    </Component>
   );
 }

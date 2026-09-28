@@ -1,17 +1,14 @@
-import { Box } from '../ui';
+import { AboutPageLayoutFrame } from '../ui/semantic/AboutPageLayoutFrame';
+import { PageLayoutFrame } from '../ui/semantic/PageLayoutFrame';
 import type { ReactNode } from 'react';
 
 type PageLayoutProps = {
   children: ReactNode;
-  visualVariant?: string;
+  about?: boolean;
 };
 
 export function PageLayout(props: PageLayoutProps) {
-  const { children } = props;
+  const Frame = props.about ? AboutPageLayoutFrame : PageLayoutFrame;
 
-  return (
-    <Box component="section" visualVariant={props.visualVariant ?? 'pageLayout'}>
-      {children}
-    </Box>
-  );
+  return <Frame>{props.children}</Frame>;
 }

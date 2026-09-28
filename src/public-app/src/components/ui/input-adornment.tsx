@@ -1,10 +1,8 @@
-import MuiInputAdornment from '@mui/material/InputAdornment';
 import type { ComponentProps } from 'react';
-import { createUiComponent } from './ui-component';
+import BaseInputAdornment from '@mui/material/InputAdornment';
 
-export const InputAdornment = createUiComponent<
-  typeof MuiInputAdornment,
-  ComponentProps<typeof MuiInputAdornment>
->(function InputAdornment(props: ComponentProps<typeof MuiInputAdornment>) {
-  return <MuiInputAdornment {...props} />;
-});
+export type InputAdornmentProps = ComponentProps<typeof BaseInputAdornment>;
+
+export function InputAdornment(props: InputAdornmentProps) {
+  return <BaseInputAdornment {...props} />;
+}

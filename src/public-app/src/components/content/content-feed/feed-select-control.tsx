@@ -1,18 +1,19 @@
 'use client';
 
-import { FormControl, InputLabel } from '../../ui';
+import { InputLabel } from '../../ui';
 import type { FeedSelectDefinition } from './feed-select.types';
 import { FeedSelect } from './feed-select';
+import { ListingFieldControl } from '../../ui/semantic/ListingFieldControl';
 
 type FeedSelectControlProps = FeedSelectDefinition & { clearLabel: string };
 
 export function FeedSelectControl(props: FeedSelectControlProps) {
   return (
-    <FormControl size="small" visualVariant="listingField">
+    <ListingFieldControl size="small">
       <InputLabel shrink id={`${props.id}-label`}>
         {props.label}
       </InputLabel>
       <FeedSelect {...props} />
-    </FormControl>
+    </ListingFieldControl>
   );
 }

@@ -1,11 +1,11 @@
 'use client';
 
 import type { Reference } from '@portfolio/data/domain/types';
-import { Box } from '../../ui';
 import { LinkList } from './link-list';
 import { SourcePreview } from './source-preview/source-preview';
 import { sourcePreviewDataForLink } from '../../content/source-preview/source-preview-data-for-link';
 import type { AchadosTranslator } from '@/i18n/compat-support';
+import { LinkSectionContentFrame } from '../../ui/semantic/LinkSectionContentFrame';
 
 type LinkSectionContentProps = { item: Reference; t: AchadosTranslator };
 
@@ -29,13 +29,13 @@ export function LinkSectionContent(props: LinkSectionContentProps) {
   }
 
   return (
-    <Box visualVariant="linkSectionContent">
+    <LinkSectionContentFrame>
       {previews.map((entry) => (
         <SourcePreview key={entry.link.url} data={entry.data} t={props.t} />
       ))}
       {fallbackLinks.length > 0 && (
         <LinkList item={{ ...props.item, links: fallbackLinks }} t={props.t} />
       )}
-    </Box>
+    </LinkSectionContentFrame>
   );
 }

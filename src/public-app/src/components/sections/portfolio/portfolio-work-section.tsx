@@ -1,14 +1,10 @@
 import type { ReactNode } from 'react';
-import { Box } from '../../ui';
+import { PageSectionEndFrame } from '../../ui/semantic/PageSectionEndFrame';
 
 type PortfolioWorkSectionProps = {
   children: ReactNode;
 };
 
 export function PortfolioWorkSection(props: PortfolioWorkSectionProps) {
-  return (
-    <Box component="section" visualVariant="pageSectionEnd">
-      {props.children}
-    </Box>
-  );
+  return <PageSectionEndFrame component="section">{props.children}</PageSectionEndFrame>;
 }

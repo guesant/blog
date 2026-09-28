@@ -1,12 +1,12 @@
 'use client';
 
-import { Box } from '../../ui';
 import { useTranslations } from '@/i18n/compat';
 import { PageHeader } from '../../content/page-header';
-import { Icon } from '../../primitives/icon';
 import { StatusActions } from './status-actions';
 import type { StatusTranslator } from '@/i18n/compat-support';
 import type { StatusPageKind } from './status-page-kind';
+import { StatusContentFrame } from '../../ui/semantic/StatusContentFrame';
+import { StatusIcon } from '../../ui/semantic/StatusIcon';
 
 type StatusContentProps = {
   kind: StatusPageKind;
@@ -18,10 +18,10 @@ export function StatusContent(props: StatusContentProps) {
   const t: StatusTranslator = useTranslations(`Pages.${props.kind}`);
 
   return (
-    <Box visualVariant="statusContent">
-      <Icon name="problem" size={22} visualVariant="status" />
+    <StatusContentFrame>
+      <StatusIcon name="problem" size={22} />
       <PageHeader title={t('title')} description={t('description')} />
       <StatusActions {...props} />
-    </Box>
+    </StatusContentFrame>
   );
 }

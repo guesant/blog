@@ -1,10 +1,8 @@
-import MuiToggleButtonGroup from '@mui/material/ToggleButtonGroup';
-import { createUiComponent, type UiProps } from '../ui-component';
-import { toggleButtonGroupVariants } from './variants';
+import type { ComponentProps } from 'react';
+import BaseToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 
-export const ToggleButtonGroup = createUiComponent<typeof MuiToggleButtonGroup>(
-  function ToggleButtonGroup(props: UiProps) {
-    return <MuiToggleButtonGroup {...(props as Record<string, unknown>)} />;
-  },
-  toggleButtonGroupVariants,
-);
+export type ToggleButtonGroupProps = ComponentProps<typeof BaseToggleButtonGroup>;
+
+export function ToggleButtonGroup(props: ToggleButtonGroupProps) {
+  return <BaseToggleButtonGroup {...props} />;
+}

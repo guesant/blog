@@ -1,11 +1,12 @@
-import { Skeleton, Stack } from '../../ui';
+import { ProgressiveItemSkeleton } from '../../ui/semantic/ProgressiveItemSkeleton';
+import { ProgressiveSkeletonStack } from '../../ui/semantic/ProgressiveSkeletonStack';
 
 export function ProgressiveCollectionSkeleton() {
   return (
-    <Stack visualVariant="progressiveSkeleton" aria-busy="true">
-      <Skeleton visualVariant="progressiveItem" />
-      <Skeleton visualVariant="progressiveItem" />
-      <Skeleton visualVariant="progressiveItem" />
-    </Stack>
+    <ProgressiveSkeletonStack aria-busy="true">
+      <ProgressiveItemSkeleton />
+      <ProgressiveItemSkeleton />
+      <ProgressiveItemSkeleton />
+    </ProgressiveSkeletonStack>
   );
 }

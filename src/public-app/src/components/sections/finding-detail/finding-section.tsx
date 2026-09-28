@@ -1,17 +1,16 @@
 'use client';
 
-import { Box, Typography } from '../../ui';
 import type { ReactNode } from 'react';
+import { FindingSectionFrame } from '../../ui/semantic/FindingSectionFrame';
+import { FindingSectionText } from '../../ui/semantic/FindingSectionText';
 
 type FindingSectionProps = { title: string; children: ReactNode };
 
 export function FindingSection(props: FindingSectionProps) {
   return (
-    <Box component="section" visualVariant="findingSection">
-      <Typography component="h2" visualVariant="findingSection">
-        {props.title}
-      </Typography>
+    <FindingSectionFrame component="section">
+      <FindingSectionText component="h2">{props.title}</FindingSectionText>
       {props.children}
-    </Box>
+    </FindingSectionFrame>
   );
 }

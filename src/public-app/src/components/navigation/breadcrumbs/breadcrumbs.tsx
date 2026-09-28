@@ -1,10 +1,10 @@
-import { Breadcrumbs as UiBreadcrumbs, Button, Box } from '../../ui';
+import { BreadcrumbsFrame } from '../../ui/semantic/BreadcrumbsFrame';
 import { useLocale, useTranslations } from '@/i18n/compat';
 import { localizedPath } from '../../../i18n/navigation';
 import { Icon } from '../../primitives/icon';
-import { ConditionalContent } from '../../primitives/conditional-content';
 import type { BreadcrumbsProps } from './types';
 import { BreadcrumbTrailItem } from './breadcrumb-trail-item';
+import { BreadcrumbHomeButton } from '../../ui/semantic/BreadcrumbHomeButton';
 
 export function Breadcrumbs(props: BreadcrumbsProps) {
   const { trail } = props;
@@ -14,26 +14,20 @@ export function Breadcrumbs(props: BreadcrumbsProps) {
   const t = useTranslations('Nav');
 
   const breadcrumbs = (
-    <UiBreadcrumbs aria-label={t('home')} separator="/" visualVariant="breadcrumbs">
-      <Button
+    <BreadcrumbsFrame aria-label={t('home')} separator="/">
+      <BreadcrumbHomeButton
         component="a"
         href={localizedPath('/', locale)}
-        siteVariant="breadcrumb-home"
+
         startIcon={<Icon name="home" size={15} />}
       >
         {t('home')}
-      </Button>
+      </BreadcrumbHomeButton>
       {trail.map((item) => (
         <BreadcrumbTrailItem key={item.href ?? item.label} item={item} locale={locale} />
       ))}
-    </UiBreadcrumbs>
+    </BreadcrumbsFrame>
   );
 
-  return (
-    <ConditionalContent
-      condition={Boolean(props.containerVisualVariant)}
-      content={<Box visualVariant={props.containerVisualVariant}>{breadcrumbs}</Box>}
-      fallback={breadcrumbs}
-    />
-  );
+  return breadcrumbs;
 }

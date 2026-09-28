@@ -1,9 +1,8 @@
-import MuiFormControl from '@mui/material/FormControl';
-import { createUiComponent, type UiProps } from '../ui-component';
-import { formControlVariants } from './variants';
+import type { ComponentProps } from 'react';
+import BaseFormControl from '@mui/material/FormControl';
 
-export const FormControl = createUiComponent<typeof MuiFormControl>(function FormControl(
-  props: UiProps,
-) {
-  return <MuiFormControl {...(props as Record<string, unknown>)} />;
-}, formControlVariants);
+export type FormControlProps = ComponentProps<typeof BaseFormControl>;
+
+export function FormControl(props: FormControlProps) {
+  return <BaseFormControl {...props} />;
+}

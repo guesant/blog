@@ -1,4 +1,5 @@
 import { Typography } from '../../ui';
+import { FollowSectionTitleText } from '../../ui/semantic/FollowSectionTitleText';
 
 type FollowCurrentSectionProps = {
   label: string;
@@ -11,9 +12,9 @@ export function FollowCurrentSection(props: FollowCurrentSectionProps) {
       <Typography variant="overline" color="text.secondary">
         {props.label}
       </Typography>
-      <Typography component="h2" variant="h2" visualVariant="followSectionTitle">
+      <FollowSectionTitleText component="h2" variant="h2">
         {props.title}
-      </Typography>
+      </FollowSectionTitleText>
     </>
   );
 }

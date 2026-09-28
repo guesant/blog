@@ -1,6 +1,5 @@
 'use client';
 
-import { Box } from '../../ui';
 import { useLocale, useTranslations } from '@/i18n/compat';
 import { ConnectionsSection } from '../../content/connections-section';
 import type { AchadoDetailContentProps } from './types';
@@ -11,6 +10,7 @@ import { AchadoLinksSection } from './achado-links-section';
 import { AchadoNotesSection } from './achado-notes-section';
 import { AchadoTopicsSection } from './achado-topics-section';
 import { getAchadoDetailViewData } from './get-achado-detail-view-data';
+import { AchadoDetailContentFrame } from '../../ui/semantic/AchadoDetailContentFrame';
 
 export function AchadoDetailContent(props: AchadoDetailContentProps) {
   const locale = useLocale();
@@ -30,7 +30,7 @@ export function AchadoDetailContent(props: AchadoDetailContentProps) {
   });
 
   return (
-    <Box component="article" visualVariant="achadoDetailContent">
+    <AchadoDetailContentFrame component="article">
       <AchadoDetailHeader
         item={props.item}
         authors={viewData.authors}
@@ -44,6 +44,6 @@ export function AchadoDetailContent(props: AchadoDetailContentProps) {
       <AchadoDetailsSection entries={viewData.details} t={t} />
       <AchadoLinksSection item={props.item} t={t} />
       <ConnectionsSection relations={props.item.relations} />
-    </Box>
+    </AchadoDetailContentFrame>
   );
 }

@@ -1,6 +1,8 @@
-import MuiDarkMode from '@mui/icons-material/DarkMode';
-import { createUiComponent, type UiProps } from './ui-component';
+import type { ComponentProps } from 'react';
+import BaseDarkMode from '@mui/icons-material/DarkMode';
 
-export const DarkMode = createUiComponent<typeof MuiDarkMode>(function DarkMode(props: UiProps) {
-  return <MuiDarkMode {...(props as Record<string, unknown>)} />;
-});
+export type DarkModeProps = ComponentProps<typeof BaseDarkMode>;
+
+export function DarkMode(props: DarkModeProps) {
+  return <BaseDarkMode {...props} />;
+}

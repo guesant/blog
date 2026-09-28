@@ -1,7 +1,8 @@
-import MuiDrawer from '@mui/material/Drawer';
-import { createUiComponent, type UiProps } from '../ui-component';
-import { drawerVariants } from './variants';
+import type { ComponentProps } from 'react';
+import BaseDrawer from '@mui/material/Drawer';
 
-export const Drawer = createUiComponent<typeof MuiDrawer>(function Drawer(props: UiProps) {
-  return <MuiDrawer {...(props as Record<string, unknown>)} />;
-}, drawerVariants);
+export type DrawerProps = ComponentProps<typeof BaseDrawer>;
+
+export function Drawer(props: DrawerProps) {
+  return <BaseDrawer {...props} />;
+}

@@ -1,6 +1,8 @@
-import { Box, Typography } from '../../ui';
+import { Typography } from '../../ui';
 import type { ProjectsTranslator } from '@/i18n/compat-support';
 import type { ProjectDetailContentProps } from './types';
+import { ProjectDetailContent2Text } from '../../ui/semantic/ProjectDetailContent2Text';
+import { ProjectDetailContentFrame } from '../../ui/semantic/ProjectDetailContentFrame';
 
 type ProjectDetailTechnologiesProps = {
   technologies: ProjectDetailContentProps['project']['technologies'];
@@ -13,13 +15,13 @@ export function ProjectDetailTechnologies(props: ProjectDetailTechnologiesProps)
   }
 
   return (
-    <Box visualVariant="projectDetailContent">
+    <ProjectDetailContentFrame>
       <Typography variant="overline" color="text.secondary">
         {props.t('technologies')}
       </Typography>
-      <Typography color="text.secondary" visualVariant="projectDetailContent2">
+      <ProjectDetailContent2Text color="text.secondary">
         {props.technologies.join(' · ')}
-      </Typography>
-    </Box>
+      </ProjectDetailContent2Text>
+    </ProjectDetailContentFrame>
   );
 }

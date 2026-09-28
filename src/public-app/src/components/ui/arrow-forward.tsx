@@ -1,8 +1,8 @@
-import MuiArrowForward from '@mui/icons-material/ArrowForward';
-import { createUiComponent, type UiProps } from './ui-component';
+import type { ComponentProps } from 'react';
+import BaseArrowForward from '@mui/icons-material/ArrowForward';
 
-export const ArrowForward = createUiComponent<typeof MuiArrowForward>(function ArrowForward(
-  props: UiProps,
-) {
-  return <MuiArrowForward {...(props as Record<string, unknown>)} />;
-});
+export type ArrowForwardProps = ComponentProps<typeof BaseArrowForward>;
+
+export function ArrowForward(props: ArrowForwardProps) {
+  return <BaseArrowForward {...props} />;
+}

@@ -1,6 +1,13 @@
-import MuiMenuItem from '@mui/material/MenuItem';
-import { createUiComponent, type UiProps } from './ui-component';
+import type { ElementType } from 'react';
+import BaseMenuItem, { MenuItemProps as MuiMenuItemProps } from '@mui/material/MenuItem';
 
-export const MenuItem = createUiComponent<typeof MuiMenuItem>(function MenuItem(props: UiProps) {
-  return <MuiMenuItem {...(props as Record<string, unknown>)} />;
-});
+export type MenuItemProps<
+  RootComponent extends ElementType = 'li',
+  AdditionalProps = {},
+> = MuiMenuItemProps<RootComponent, AdditionalProps>;
+
+export function MenuItem<RootComponent extends ElementType = 'li', AdditionalProps = {}>(
+  props: MenuItemProps<RootComponent, AdditionalProps>,
+) {
+  return <BaseMenuItem {...props} />;
+}

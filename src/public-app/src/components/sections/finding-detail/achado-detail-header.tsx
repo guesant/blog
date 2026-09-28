@@ -1,10 +1,11 @@
-import { Typography } from '../../ui';
 import { ContentActions } from '../../content/content-actions';
 import { type BreadcrumbItem } from '../../navigation/breadcrumbs';
 import type { Reference } from '@portfolio/data/domain/types';
 import type { AchadosTranslator } from '@/i18n/compat-support';
 import { ConditionalContent } from '../../primitives/conditional-content';
 import { PageHeader } from '../../content/page-header';
+import { AchadoDetailContent3Text } from '../../ui/semantic/AchadoDetailContent3Text';
+import { AchadoDetailContent4Text } from '../../ui/semantic/AchadoDetailContent4Text';
 
 type AchadoDetailHeaderProps = {
   item: Reference;
@@ -31,14 +32,14 @@ export function AchadoDetailHeader(props: AchadoDetailHeaderProps) {
         <>
           <ConditionalContent
             condition={Boolean(props.authors)}
-            content={<Typography visualVariant="achadoDetailContent3">{props.authors}</Typography>}
+            content={<AchadoDetailContent3Text>{props.authors}</AchadoDetailContent3Text>}
           />
           <ConditionalContent
             condition={Boolean(props.formattedPublishedDate)}
             content={
-              <Typography visualVariant="achadoDetailContent4">
+              <AchadoDetailContent4Text>
                 {props.t('publishedOn', { date: props.formattedPublishedDate ?? '' })}
-              </Typography>
+              </AchadoDetailContent4Text>
             }
           />
         </>

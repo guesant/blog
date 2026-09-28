@@ -1,12 +1,12 @@
 'use client';
 
-import { Box } from '../../ui';
 import { ListingFilters } from '../listing-filters';
 import { ListingFilterActions } from '../listing-filter-actions';
 import type { FormEvent } from 'react';
 import type { FeedSelectDefinition } from './feed-select.types';
 import { FeedSelectControl } from './feed-select-control';
 import { FeedSearchField } from './feed-search-field';
+import { ContentFeedFiltersFrame } from '../../ui/semantic/ContentFeedFiltersFrame';
 
 type ContentFeedFiltersProps = {
   selects: FeedSelectDefinition[];
@@ -30,7 +30,7 @@ export function ContentFeedFilters(props: ContentFeedFiltersProps) {
       {props.selects.map((select) => (
         <FeedSelectControl key={select.id} {...select} clearLabel={props.clearLabel} />
       ))}
-      <Box visualVariant="contentFeedFilters">
+      <ContentFeedFiltersFrame>
         <FeedSearchField
           value={props.pendingSearch}
           label={props.searchLabel}
@@ -38,7 +38,7 @@ export function ContentFeedFilters(props: ContentFeedFiltersProps) {
           onChange={props.onPendingSearchChange}
         />
         <ListingFilterActions applyLabel={props.applyLabel} showClear={false} />
-      </Box>
+      </ContentFeedFiltersFrame>
     </ListingFilters>
   );
 }

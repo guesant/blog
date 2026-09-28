@@ -1,6 +1,8 @@
-import MuiLightMode from '@mui/icons-material/LightMode';
-import { createUiComponent, type UiProps } from './ui-component';
+import type { ComponentProps } from 'react';
+import BaseLightMode from '@mui/icons-material/LightMode';
 
-export const LightMode = createUiComponent<typeof MuiLightMode>(function LightMode(props: UiProps) {
-  return <MuiLightMode {...(props as Record<string, unknown>)} />;
-});
+export type LightModeProps = ComponentProps<typeof BaseLightMode>;
+
+export function LightMode(props: LightModeProps) {
+  return <BaseLightMode {...props} />;
+}

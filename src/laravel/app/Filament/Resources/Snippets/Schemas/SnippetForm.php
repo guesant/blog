@@ -60,7 +60,7 @@ class SnippetForm
                                     ->extraInputAttributes(['style' => 'font-family: ui-monospace, monospace; font-size: 0.8125rem;'])
                                     ->columnSpanFull(),
                             ])
-                            ->itemLabel(fn (array $state): ?string => $state['path'] ?? null)
+                            ->itemLabel(fn (mixed $state): ?string => is_array($state) ? ($state['path'] ?? null) : null)
                             ->addActionLabel('Add file')
                             ->defaultItems(1),
                     ]),

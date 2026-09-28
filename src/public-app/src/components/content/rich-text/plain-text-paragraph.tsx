@@ -1,13 +1,9 @@
-import { Typography } from '../../ui';
+import { RichTextPlainParagraphText } from '../../ui/semantic/RichTextPlainParagraphText';
 
 type PlainTextParagraphProps = {
   text: string;
 };
 
 export function PlainTextParagraph(props: PlainTextParagraphProps) {
-  return (
-    <Typography component="p" visualVariant="richTextPlainParagraph">
-      {props.text}
-    </Typography>
-  );
+  return <RichTextPlainParagraphText component="p">{props.text}</RichTextPlainParagraphText>;
 }

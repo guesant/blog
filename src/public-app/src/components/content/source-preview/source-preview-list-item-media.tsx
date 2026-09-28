@@ -1,8 +1,9 @@
 'use client';
 
-import { Box } from '../../ui';
 import { SourcePreviewListItemFallback } from './source-preview-list-item-fallback';
 import type { SourcePreviewData } from './types';
+import { SourcePreviewListItemMediaFrame } from '../../ui/semantic/SourcePreviewListItemMediaFrame';
+import { SourcePreviewMediaFeedFrame } from '../../ui/semantic/SourcePreviewMediaFeedFrame';
 
 type SourcePreviewListItemMediaProps = {
   data: SourcePreviewData;
@@ -10,19 +11,18 @@ type SourcePreviewListItemMediaProps = {
 
 export function SourcePreviewListItemMedia(props: SourcePreviewListItemMediaProps) {
   return (
-    <Box visualVariant="sourcePreviewMediaFeed">
+    <SourcePreviewMediaFeedFrame>
       {props.data.imageUrl ? (
-        <Box
+        <SourcePreviewListItemMediaFrame
           component="img"
           src={props.data.imageUrl}
           alt=""
           loading="lazy"
           decoding="async"
-          visualVariant="sourcePreviewListItemMedia"
         />
       ) : (
         <SourcePreviewListItemFallback icon={props.data.icon} />
       )}
-    </Box>
+    </SourcePreviewMediaFeedFrame>
   );
 }

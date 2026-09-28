@@ -1,24 +1,20 @@
-import { Typography } from '../../ui';
 import { CollectionListing } from '../../content/collection-listing';
 import type { ExperimentsSectionProps } from './types';
 import { ExperimentRow } from './experiment-row';
+import { ExperimentsSection2Text } from '../../ui/semantic/ExperimentsSection2Text';
+import { ExperimentsSectionText } from '../../ui/semantic/ExperimentsSectionText';
 
 type ExperimentsSectionContentProps = ExperimentsSectionProps;
 
 export function ExperimentsSectionContent(props: ExperimentsSectionContentProps) {
   return (
     <>
-      <Typography
-        id="experiments"
-        variant="overline"
-        color="text.secondary"
-        visualVariant="experimentsSection"
-      >
+      <ExperimentsSectionText id="experiments" variant="overline" color="text.secondary">
         {props.page.archiveLabel}
-      </Typography>
-      <Typography component="h2" variant="h5" visualVariant="experimentsSection2">
+      </ExperimentsSectionText>
+      <ExperimentsSection2Text component="h2" variant="h5">
         {props.page.experimentsTitle}
-      </Typography>
+      </ExperimentsSection2Text>
       <CollectionListing
         items={props.experiments}
         getKey={(item) => item.slug}

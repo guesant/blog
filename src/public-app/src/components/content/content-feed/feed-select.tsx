@@ -1,6 +1,6 @@
 'use client';
 
-import { IconButton, InputAdornment, OptionSelect } from '../../ui';
+import { InputAdornment, OptionSelect } from '../../ui';
 import type { SelectOptionChangeEvent } from '../../ui';
 import type { MouseEvent } from 'react';
 import type { FeedSelectDefinition } from './feed-select.types';
@@ -8,6 +8,7 @@ import { Icon } from '../../primitives/icon';
 import { handleFeedSelectClear } from './handle-feed-select-clear';
 import { ConditionalContent } from '../../primitives/conditional-content';
 import { buildFeedSelectOptions } from './build-feed-select-options';
+import { FeedSelectClearIconButton } from '../../ui/semantic/FeedSelectClearIconButton';
 
 type FeedSelectProps = FeedSelectDefinition & { clearLabel: string };
 
@@ -30,17 +31,16 @@ export function FeedSelect(props: FeedSelectProps) {
           condition={hasValue}
           content={
             <InputAdornment position="end">
-              <IconButton
+              <FeedSelectClearIconButton
                 type="button"
                 size="small"
                 aria-label={`${props.clearLabel}: ${props.label}`}
                 title={`${props.clearLabel}: ${props.label}`}
                 onMouseDown={(event: MouseEvent<HTMLButtonElement>) => event.stopPropagation()}
                 onClick={handleFeedSelectClear.bind(null, props.onChange, clearValue)}
-                visualVariant="feedSelectClear"
               >
                 <Icon name="close" size={14} />
-              </IconButton>
+              </FeedSelectClearIconButton>
             </InputAdornment>
           }
         />

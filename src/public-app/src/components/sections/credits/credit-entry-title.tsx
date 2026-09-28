@@ -1,6 +1,6 @@
 import { ConditionalContent } from '../../primitives/conditional-content';
-import { ExternalLink } from '../../primitives/external-link';
 import type { CreditEntry } from './types';
+import { CreditEntryItemLink } from '../../ui/semantic/CreditEntryItemLink';
 
 type CreditEntryTitleProps = {
   entry: CreditEntry;
@@ -12,9 +12,7 @@ export function CreditEntryTitle(props: CreditEntryTitleProps) {
       <ConditionalContent
         condition={Boolean(props.entry.url)}
         content={
-          <ExternalLink href={props.entry.url ?? ''} visualVariant="creditEntryItem">
-            {props.entry.name}
-          </ExternalLink>
+          <CreditEntryItemLink href={props.entry.url ?? ''}>{props.entry.name}</CreditEntryItemLink>
         }
       />
       <ConditionalContent condition={!props.entry.url} content={props.entry.name} />

@@ -1,7 +1,9 @@
-import { Box, Typography } from '../../ui';
+import { Typography } from '../../ui';
 import { CollectionListing } from '../../content/collection-listing';
 import { renderFollowEntryCard } from './render-follow-entry-card';
 import type { FollowEntry } from './types';
+import { FollowFutureTitleText } from '../../ui/semantic/FollowFutureTitleText';
+import { PageSectionStartFrame } from '../../ui/semantic/PageSectionStartFrame';
 
 type FollowFutureSectionProps = {
   entries: FollowEntry[];
@@ -11,18 +13,18 @@ type FollowFutureSectionProps = {
 
 export function FollowFutureSection(props: FollowFutureSectionProps) {
   return (
-    <Box visualVariant="pageSectionStart">
+    <PageSectionStartFrame>
       <Typography variant="overline" color="text.secondary">
         {props.label}
       </Typography>
-      <Typography component="h2" variant="h2" visualVariant="followFutureTitle">
+      <FollowFutureTitleText component="h2" variant="h2">
         {props.title}
-      </Typography>
+      </FollowFutureTitleText>
       <CollectionListing
         items={props.entries}
         getKey={(entry) => entry.key}
         renderListItem={renderFollowEntryCard}
       />
-    </Box>
+    </PageSectionStartFrame>
   );
 }

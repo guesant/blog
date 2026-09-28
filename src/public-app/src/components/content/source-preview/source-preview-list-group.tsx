@@ -1,8 +1,8 @@
 'use client';
 
-import { Box } from '../../ui';
 import { SourcePreviewListItem } from './source-preview-list-item';
 import type { SourcePreviewData } from './types';
+import { SourcePreviewListGroupFrame } from '../../ui/semantic/SourcePreviewListGroupFrame';
 
 type SourcePreviewListGroupProps = {
   entries: SourcePreviewData[];
@@ -11,10 +11,10 @@ type SourcePreviewListGroupProps = {
 
 export function SourcePreviewListGroup(props: SourcePreviewListGroupProps) {
   return (
-    <Box visualVariant="sourcePreviewListGroup">
+    <SourcePreviewListGroupFrame>
       {props.entries.map((entry) => (
         <SourcePreviewListItem key={entry.url} data={entry} onKindClick={props.onKindClick} />
       ))}
-    </Box>
+    </SourcePreviewListGroupFrame>
   );
 }

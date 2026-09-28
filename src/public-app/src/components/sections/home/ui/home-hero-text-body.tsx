@@ -1,12 +1,8 @@
-import { Typography } from '../../../ui';
 import type { HomeHeroTextProps } from './home-hero-text.types';
+import { HomeIntroText } from '../../../ui/semantic/HomeIntroText';
 
 type HomeHeroTextBodyProps = HomeHeroTextProps;
 
 export function HomeHeroTextBody(props: HomeHeroTextBodyProps) {
-  return (
-    <Typography component="p" visualVariant="homeIntro">
-      {props.children}
-    </Typography>
-  );
+  return <HomeIntroText component="p">{props.children}</HomeIntroText>;
 }

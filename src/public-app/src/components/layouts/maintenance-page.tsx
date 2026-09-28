@@ -1,9 +1,11 @@
 'use client';
 
-import { Typography } from '../ui';
 import type { Profile, SiteText } from '@portfolio/data/domain/types';
 import { useTranslations } from '@/i18n/compat';
 import { MaintenanceFrame } from './maintenance-frame';
+import { MaintenanceDescriptionText } from '../ui/semantic/MaintenanceDescriptionText';
+import { MaintenanceSignatureText } from '../ui/semantic/MaintenanceSignatureText';
+import { MaintenanceTitleText } from '../ui/semantic/MaintenanceTitleText';
 
 type MaintenancePageProps = { site: SiteText; profile: Profile };
 
@@ -12,15 +14,15 @@ export function MaintenancePage(props: MaintenancePageProps) {
 
   return (
     <MaintenanceFrame>
-      <Typography component="h1" variant="h1" visualVariant="maintenanceTitle">
+      <MaintenanceTitleText component="h1" variant="h1">
         {props.site.maintenance.title || t('title')}
-      </Typography>
-      <Typography variant="body1" color="text.secondary" visualVariant="maintenanceDescription">
+      </MaintenanceTitleText>
+      <MaintenanceDescriptionText variant="body1" color="text.secondary">
         {props.site.maintenance.description || t('description')}
-      </Typography>
-      <Typography variant="body2" color="text.secondary" visualVariant="maintenanceSignature">
+      </MaintenanceDescriptionText>
+      <MaintenanceSignatureText variant="body2" color="text.secondary">
         {props.profile.name}
-      </Typography>
+      </MaintenanceSignatureText>
     </MaintenanceFrame>
   );
 }

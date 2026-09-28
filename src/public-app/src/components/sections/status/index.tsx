@@ -1,8 +1,8 @@
 'use client';
 
-import { Box } from '../../ui';
 import { StatusContent } from './status-content';
 import type { StatusPageKind } from './status-page-kind';
+import { StatusPageFrame } from '../../ui/semantic/StatusPageFrame';
 
 type StatusPageProps = {
   kind: StatusPageKind;
@@ -12,8 +12,8 @@ type StatusPageProps = {
 
 export function StatusPage(props: StatusPageProps) {
   return (
-    <Box visualVariant="statusPage">
+    <StatusPageFrame>
       <StatusContent {...props} />
-    </Box>
+    </StatusPageFrame>
   );
 }

@@ -1,8 +1,9 @@
 'use client';
 
-import { Box, Button } from '../ui';
 import { Icon } from '../primitives/icon';
 import { ConditionalContent } from '../primitives/conditional-content';
+import { ActionIconButton } from '../ui/semantic/ActionIconButton';
+import { ListingFilterActionsFrame } from '../ui/semantic/ListingFilterActionsFrame';
 
 type ListingFilterActionsProps = {
   applyLabel: string;
@@ -13,33 +14,33 @@ type ListingFilterActionsProps = {
 
 export function ListingFilterActions(props: ListingFilterActionsProps) {
   return (
-    <Box visualVariant="listingFilterActions">
-      <Button
+    <ListingFilterActionsFrame>
+      <ActionIconButton
         type="submit"
         data-action="apply"
-        siteVariant="action-icon"
+
         size="small"
         aria-label={props.applyLabel}
         title={props.applyLabel}
       >
         <Icon name="search" size={15} />
-      </Button>
+      </ActionIconButton>
       <ConditionalContent
         condition={Boolean(props.showClear !== false && props.onClear && props.clearLabel)}
         content={
-          <Button
+          <ActionIconButton
             type="button"
             onClick={props.onClear}
             data-action="clear"
-            siteVariant="action-icon"
+
             size="small"
             aria-label={props.clearLabel}
             title={props.clearLabel}
           >
             <Icon name="trash" size={15} />
-          </Button>
+          </ActionIconButton>
         }
       />
-    </Box>
+    </ListingFilterActionsFrame>
   );
 }

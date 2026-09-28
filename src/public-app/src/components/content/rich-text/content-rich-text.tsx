@@ -1,7 +1,7 @@
 import type { RichTextNode, ContentRichTextProps } from './types';
-import { Box } from '../../ui';
 import { RichTextChildren } from './rich-text-children';
 import { PlainTextRichText } from './plain-text-rich-text';
+import { RichTextContentFrame } from '../../ui/semantic/RichTextContentFrame';
 
 export function ContentRichText(props: ContentRichTextProps) {
   if (typeof props.content === 'string') {
@@ -13,8 +13,8 @@ export function ContentRichText(props: ContentRichTextProps) {
   const root = content as RichTextNode | undefined;
 
   return (
-    <Box visualVariant="richTextContent">
+    <RichTextContentFrame>
       <RichTextChildren nodes={root?.children} />
-    </Box>
+    </RichTextContentFrame>
   );
 }

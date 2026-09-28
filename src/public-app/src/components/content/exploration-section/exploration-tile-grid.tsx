@@ -1,8 +1,8 @@
-import { Box } from '../../ui';
+import { ExplorationTileGridFrame } from '../../ui/semantic/ExplorationTileGridFrame';
 import type { ReactNode } from 'react';
 
-type ExplorationTileGridProps = { children: ReactNode; visualVariant?: string };
+type ExplorationTileGridProps = { children: ReactNode };
 
 export function ExplorationTileGrid(props: ExplorationTileGridProps) {
-  return <Box visualVariant={props.visualVariant ?? 'explorationTileGrid'}>{props.children}</Box>;
+  return <ExplorationTileGridFrame>{props.children}</ExplorationTileGridFrame>;
 }

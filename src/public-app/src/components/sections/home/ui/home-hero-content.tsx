@@ -1,10 +1,10 @@
 import type { ReactNode } from 'react';
-import { Box } from '../../../ui';
+import { HomeHeroContentFrame } from '../../../ui/semantic/HomeHeroContentFrame';
 
 type HomeHeroContentProps = {
   children: ReactNode;
 };
 
 export function HomeHeroContent(props: HomeHeroContentProps) {
-  return <Box visualVariant="homeHeroContent">{props.children}</Box>;
+  return <HomeHeroContentFrame>{props.children}</HomeHeroContentFrame>;
 }

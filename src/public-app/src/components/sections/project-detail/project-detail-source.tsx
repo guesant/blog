@@ -1,6 +1,6 @@
-import { ExternalLink } from '../../primitives/external-link';
 import type { ProjectsTranslator } from '@/i18n/compat-support';
 import type { ProjectDetailContentProps } from './types';
+import { ProjectDetailContentLink } from '../../ui/semantic/ProjectDetailContentLink';
 
 type ProjectDetailSourceProps = {
   href: ProjectDetailContentProps['project']['href'];
@@ -13,8 +13,8 @@ export function ProjectDetailSource(props: ProjectDetailSourceProps) {
   }
 
   return (
-    <ExternalLink href={props.href} underline="none" visualVariant="projectDetailContent">
+    <ProjectDetailContentLink href={props.href} underline="none">
       {props.t('source')}
-    </ExternalLink>
+    </ProjectDetailContentLink>
   );
 }

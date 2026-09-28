@@ -1,5 +1,5 @@
 import type { ElementType, ReactNode } from 'react';
-import { Button } from '../button';
+import { SidebarButton } from '../semantic/SidebarButton';
 
 type SidebarActionButtonProps = {
   label: ReactNode;
@@ -24,7 +24,7 @@ const activeStyles = {
 
 export function SidebarActionButton(props: SidebarActionButtonProps) {
   return (
-    <Button
+    <SidebarButton
       component={props.component}
       href={props.href}
       onClick={props.onClick}
@@ -33,10 +33,10 @@ export function SidebarActionButton(props: SidebarActionButtonProps) {
       startIcon={props.icon}
       endIcon={props.endIcon}
       aria-current={props.ariaCurrent}
-      siteVariant="sidebar"
+
       sx={props.active ? [{ flexShrink: 0 }, activeStyles] : { flexShrink: 0 }}
     >
       {props.label}
-    </Button>
+    </SidebarButton>
   );
 }

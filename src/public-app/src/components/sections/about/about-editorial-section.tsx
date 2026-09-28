@@ -1,20 +1,21 @@
-import { Box, Typography } from '../../ui';
 import { ContentRichText } from '../../content/content-rich-text';
 import { ConditionalContent } from '../../primitives/conditional-content';
 import type { AboutEditorialSectionProps } from './types';
+import { AboutEditorialSectionFrame } from '../../ui/semantic/AboutEditorialSectionFrame';
+import { AboutEditorialSectionTitleText } from '../../ui/semantic/AboutEditorialSectionTitleText';
 
 export function AboutEditorialSection(props: AboutEditorialSectionProps) {
   return (
-    <Box visualVariant="aboutEditorialSection">
+    <AboutEditorialSectionFrame>
       <ConditionalContent
         condition={Boolean(props.section.title)}
         content={
-          <Typography variant="h2" visualVariant="aboutEditorialSectionTitle">
+          <AboutEditorialSectionTitleText variant="h2">
             {props.section.title}
-          </Typography>
+          </AboutEditorialSectionTitleText>
         }
       />
       <ContentRichText content={props.section.body} />
-    </Box>
+    </AboutEditorialSectionFrame>
   );
 }

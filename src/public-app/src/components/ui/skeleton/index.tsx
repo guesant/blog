@@ -1,7 +1,8 @@
-import MuiSkeleton from '@mui/material/Skeleton';
-import { createUiComponent, type UiProps } from '../ui-component';
-import { skeletonVariants } from './variants';
+import type { ComponentProps } from 'react';
+import BaseSkeleton from '@mui/material/Skeleton';
 
-export const Skeleton = createUiComponent<typeof MuiSkeleton>(function Skeleton(props: UiProps) {
-  return <MuiSkeleton {...(props as Record<string, unknown>)} />;
-}, skeletonVariants);
+export type SkeletonProps = ComponentProps<typeof BaseSkeleton>;
+
+export function Skeleton(props: SkeletonProps) {
+  return <BaseSkeleton {...props} />;
+}

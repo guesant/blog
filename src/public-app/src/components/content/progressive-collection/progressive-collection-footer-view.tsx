@@ -1,7 +1,8 @@
 import type { RefObject } from 'react';
-import { Button, Stack, VisibilitySentinel } from '../../ui';
+import { Button, VisibilitySentinel } from '../../ui';
 import { ConditionalContent } from '../../primitives/conditional-content';
 import { ProgressiveCollectionSkeleton } from './progressive-collection-skeleton';
+import { ProgressiveFooterStack } from '../../ui/semantic/ProgressiveFooterStack';
 
 type ProgressiveCollectionFooterViewProps = {
   hasNextPage: boolean;
@@ -17,7 +18,7 @@ export function ProgressiveCollectionFooterView(props: ProgressiveCollectionFoot
     <ConditionalContent
       condition={props.hasNextPage || props.isFetchingNextPage || props.isFetchNextPageError}
       content={
-        <Stack visualVariant="progressiveFooter">
+        <ProgressiveFooterStack>
           <ConditionalContent
             condition={props.isFetchNextPageError}
             content={
@@ -36,7 +37,7 @@ export function ProgressiveCollectionFooterView(props: ProgressiveCollectionFoot
             }
             content={<VisibilitySentinel ref={props.sentinelRef} />}
           />
-        </Stack>
+        </ProgressiveFooterStack>
       }
     />
   );

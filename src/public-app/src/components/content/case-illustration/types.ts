@@ -13,5 +13,3 @@ export function getIllustrationAccent(visual: CaseStudy['visual']): Illustration
 }
 
 export type CaseIllustrationProps = { visual: CaseStudy['visual']; compact?: boolean };
-
-export type QueueRowProps = { index: number; accent: IllustrationAccent };

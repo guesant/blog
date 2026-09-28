@@ -4,11 +4,13 @@ namespace Tests\Feature\Filament;
 
 use App\Filament\Pages\ManageResume;
 use App\Models\Resume;
+use App\Models\ResumeRevisionTranslation;
 use App\Models\ResumeSkill;
 use App\Models\Technology;
 use App\Models\Topic;
 use App\Models\User;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\DB;
 use Livewire\Livewire;
 use Tests\TestCase;
 
@@ -62,5 +64,24 @@ class ManageResumeTest extends TestCase
 
         $this->assertDatabaseMissing('resume_skills', ['topic_id' => $staleTopic->id]);
         $this->assertDatabaseHas('resume_skills', ['topic_id' => $newTopic->id]);
+    }
+
+    public function test_mount_handles_existing_resume_revision_rows(): void
+    {
+        $this->actingAsAdmin();
+
+        $translation = ResumeRevisionTranslation::factory()->create(['locale' => 'en']);
+
+        DB::table('resume_revision_technical_productions')->insert([
+            'resume_revision_translation_id' => $translation->id,
+            'name' => 'Test production',
+            'kind' => 'software',
+            'period' => '2026',
+            'include_in_pdf' => true,
+            'hidden' => false,
+            'sort_order' => 0,
+        ]);
+
+        Livewire::test(ManageResume::class)->assertHasNoErrors();
     }
 }

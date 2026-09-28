@@ -1,7 +1,8 @@
 'use client';
 
-import { Button, Stack } from '../../../ui';
 import type { HomeAvailabilityProps } from '../types';
+import { AvailabilityButton } from '../../../ui/semantic/AvailabilityButton';
+import { HomeAvailabilityStack } from '../../../ui/semantic/HomeAvailabilityStack';
 
 export function HomeAvailability(props: HomeAvailabilityProps) {
   const { page, showAvailability } = props;
@@ -10,10 +11,10 @@ export function HomeAvailability(props: HomeAvailabilityProps) {
     return null;
   }
   return (
-    <Stack direction="row" visualVariant="homeAvailability">
-      <Button siteVariant="availability" size="small" variant="outlined">
+    <HomeAvailabilityStack direction="row">
+      <AvailabilityButton size="small" variant="outlined">
         {page.availableLabel}
-      </Button>
-    </Stack>
+      </AvailabilityButton>
+    </HomeAvailabilityStack>
   );
 }

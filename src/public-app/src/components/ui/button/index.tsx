@@ -1,43 +1,14 @@
-import MuiButton, { type ButtonProps as MuiButtonProps } from '@mui/material/Button';
-import { forwardRef } from 'react';
-import type { SxProps, Theme } from '@mui/material/styles';
-import { buttonVariants } from './variants';
-import { siteButtonVariants, type SiteButtonVariant } from './site-variants';
+import type { ElementType } from 'react';
+import type { ButtonProps as MuiButtonProps } from '@mui/material/Button';
+import BaseButton from '@mui/material/Button';
 
-declare module '@mui/material/Button' {
-  interface ButtonOwnProps {
-    siteVariant?: SiteButtonVariant;
-    visualVariant?: string;
-  }
+export type ButtonProps<
+  RootComponent extends ElementType = 'button',
+  AdditionalProps = {},
+> = MuiButtonProps<RootComponent, AdditionalProps>;
+
+export function Button<RootComponent extends ElementType = 'button', AdditionalProps = {}>(
+  props: ButtonProps<RootComponent, AdditionalProps>,
+) {
+  return <BaseButton {...props} />;
 }
-
-export type { ButtonProps } from '@mui/material/Button';
-
-const siteVariantOverrides: Partial<Record<SiteButtonVariant, MuiButtonProps['variant']>> = {
-  breadcrumb: 'text',
-  'breadcrumb-home': 'text',
-};
-
-const ButtonImplementation = forwardRef<HTMLButtonElement, MuiButtonProps>(
-  function Button(props, ref) {
-    const { children, siteVariant, visualVariant, sx, variant, ...muiProps } = props;
-
-    const normalizedSiteVariant = (siteVariant ?? 'default') as SiteButtonVariant;
-
-    const effectiveVariant = siteVariantOverrides[siteVariant as SiteButtonVariant] ?? variant;
-
-    const composedSx = [
-      siteButtonVariants[normalizedSiteVariant],
-      buttonVariants[visualVariant ?? ''],
-      ...(Array.isArray(sx) ? sx : [sx]),
-    ] as SxProps<Theme>;
-
-    return (
-      <MuiButton ref={ref} {...muiProps} variant={effectiveVariant} sx={composedSx}>
-        <span className="MuiButton-label">{children}</span>
-      </MuiButton>
-    );
-  },
-);
-
-export const Button = ButtonImplementation as typeof MuiButton;

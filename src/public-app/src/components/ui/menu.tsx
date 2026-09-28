@@ -1,9 +1,8 @@
-import MuiMenu from '@mui/material/Menu';
 import type { ComponentProps } from 'react';
-import { createUiComponent } from './ui-component';
+import BaseMenu from '@mui/material/Menu';
 
-export const Menu = createUiComponent<typeof MuiMenu, ComponentProps<typeof MuiMenu>>(function Menu(
-  props: ComponentProps<typeof MuiMenu>,
-) {
-  return <MuiMenu {...props} />;
-});
+export type MenuProps = ComponentProps<typeof BaseMenu>;
+
+export function Menu(props: MenuProps) {
+  return <BaseMenu {...props} />;
+}

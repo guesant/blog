@@ -29,6 +29,7 @@ use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Illuminate\Support\Facades\DB;
+use Throwable;
 
 /**
  * @property-read Schema $form
@@ -44,10 +45,36 @@ class ManageResume extends Page
             ->columns(2)
             ->collapsed()
             ->schema($fields)
-            ->itemLabel(fn (array $state): ?string => $state[$labelKey] ?? null)
-            ->formatStateUsing(fn ($state) => $state ?? [])
+            ->itemLabel(fn (mixed $state): ?string => is_array($state) ? ($state[$labelKey] ?? null) : null)
+            ->formatStateUsing(fn (mixed $state): array => is_array($state) ? $state : [])
             ->addActionLabel('Add entry')
             ->defaultItems(0);
+    }
+
+    private static function autocompleteOptions(array $values): array
+    {
+        return collect($values)
+            ->filter(fn (mixed $value): bool => is_scalar($value) && filled((string) $value))
+            ->map(fn (mixed $value): string => (string) $value)
+            ->unique()
+            ->values()
+            ->all();
+    }
+
+    private static function proficiencies(): array
+    {
+        return self::autocompleteOptions([
+            ...array_keys(FilamentOptionCatalog::PROFICIENCIES),
+            ...ResumeLanguage::query()->distinct()->pluck('proficiency')->all(),
+        ]);
+    }
+
+    private static function technicalProductionKinds(): array
+    {
+        return self::autocompleteOptions([
+            ...array_keys(FilamentOptionCatalog::TECHNICAL_PRODUCTION_KINDS),
+            ...DB::table('resume_revision_technical_productions')->distinct()->pluck('kind')->all(),
+        ]);
     }
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedDocumentText;
@@ -97,25 +124,27 @@ class ManageResume extends Page
             Action::make('regeneratePdfs')
                 ->label('Regenerate PDFs')
                 ->action(function () {
-                    foreach (['en', 'pt-BR'] as $locale) {
-                        GenerateResumePdfJob::dispatchSync($locale);
-                    }
+                    try {
+                        foreach (['en', 'pt-BR'] as $locale) {
+                            GenerateResumePdfJob::dispatchSync($locale);
+                        }
 
-                    Notification::make()->success()->title('Résumé PDFs regenerated')->send();
+                        Notification::make()->success()->title('Résumé PDFs regenerated')->send();
+                    } catch (Throwable) {
+                        Notification::make()
+                            ->warning()
+                            ->title('Résumé PDFs were not regenerated')
+                            ->body('Complete the profile, résumé and site settings before generating PDFs.')
+                            ->send();
+                    }
                 }),
         ];
     }
 
     public function form(Schema $schema): Schema
     {
-        $proficiencies = [
-            ...array_keys(FilamentOptionCatalog::PROFICIENCIES),
-            ...ResumeLanguage::query()->distinct()->pluck('proficiency')->all(),
-        ];
-        $technicalProductionKinds = [
-            ...array_keys(FilamentOptionCatalog::TECHNICAL_PRODUCTION_KINDS),
-            ...DB::table('resume_revision_technical_productions')->distinct()->pluck('kind')->all(),
-        ];
+        $proficiencies = self::proficiencies();
+        $technicalProductionKinds = self::technicalProductionKinds();
 
         return $schema
             ->components([
@@ -131,7 +160,7 @@ class ManageResume extends Page
                                     ->searchable()
                                     ->required(),
                             ])
-                            ->itemLabel(fn (array $state): ?string => isset($state['case_study_id'])
+                            ->itemLabel(fn (mixed $state): ?string => is_array($state) && isset($state['case_study_id'])
                                 ? CaseStudy::find($state['case_study_id'])?->slug
                                 : null)
                             ->addActionLabel('Add case')
@@ -157,7 +186,7 @@ class ManageResume extends Page
                                     ->preload()
                                     ->columnSpanFull(),
                             ])
-                            ->itemLabel(fn (array $state): ?string => isset($state['topic_id'])
+                            ->itemLabel(fn (mixed $state): ?string => is_array($state) && isset($state['topic_id'])
                                 ? Topic::find($state['topic_id'])?->slug
                                 : null)
                             ->addActionLabel('Add skill category')
@@ -181,7 +210,7 @@ class ManageResume extends Page
                                     $proficiencies,
                                 ),
                             ])
-                            ->itemLabel(fn (array $state): ?string => $state['proficiency'] ?? null)
+                            ->itemLabel(fn (mixed $state): ?string => is_array($state) ? ($state['proficiency'] ?? null) : null)
                             ->addActionLabel('Add language')
                             ->defaultItems(0),
                     ]),

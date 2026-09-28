@@ -103,8 +103,10 @@ class ManageProfile extends Page
                             TextInput::make('label')->required(),
                             TextInput::make('since')->required(),
                         ])
-                        ->itemLabel(fn (array $state): ?string => trim(($state['label'] ?? '').' — '.($state['since'] ?? ''), ' —') ?: null)
-                        ->formatStateUsing(fn ($state) => $state ?? [])
+                        ->itemLabel(fn (mixed $state): ?string => is_array($state)
+                            ? trim(($state['label'] ?? '').' — '.($state['since'] ?? ''), ' —') ?: null
+                            : null)
+                        ->formatStateUsing(fn (mixed $state): array => is_array($state) ? $state : [])
                         ->addActionLabel('Add thing')
                         ->defaultItems(0),
                     Repeater::make("{$prefix}trajectory")
@@ -119,8 +121,10 @@ class ManageProfile extends Page
                             static::stringListRepeater('highlights', 'Highlights', 'Add highlight')->columnSpanFull(),
                             Toggle::make('hidden')->inline(false),
                         ])
-                        ->itemLabel(fn (array $state): ?string => trim(($state['role'] ?? '').' — '.($state['organization'] ?? ''), ' —') ?: null)
-                        ->formatStateUsing(fn ($state) => $state ?? [])
+                        ->itemLabel(fn (mixed $state): ?string => is_array($state)
+                            ? trim(($state['role'] ?? '').' — '.($state['organization'] ?? ''), ' —') ?: null
+                            : null)
+                        ->formatStateUsing(fn (mixed $state): array => is_array($state) ? $state : [])
                         ->addActionLabel('Add trajectory entry')
                         ->defaultItems(0),
                     Repeater::make("{$prefix}milestones")
@@ -133,8 +137,10 @@ class ManageProfile extends Page
                             Textarea::make('description')->rows(2)->columnSpanFull()->nullable(),
                             Toggle::make('hidden')->inline(false),
                         ])
-                        ->itemLabel(fn (array $state): ?string => trim(($state['year'] ?? '').' — '.($state['title'] ?? ''), ' —') ?: null)
-                        ->formatStateUsing(fn ($state) => $state ?? [])
+                        ->itemLabel(fn (mixed $state): ?string => is_array($state)
+                            ? trim(($state['year'] ?? '').' — '.($state['title'] ?? ''), ' —') ?: null
+                            : null)
+                        ->formatStateUsing(fn (mixed $state): array => is_array($state) ? $state : [])
                         ->addActionLabel('Add milestone')
                         ->defaultItems(0),
                 ]),

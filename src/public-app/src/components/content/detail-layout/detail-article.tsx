@@ -1,10 +1,6 @@
-import { Box } from '../../ui';
 import type { DetailArticleProps } from './types';
+import { DetailArticleFrame } from '../../ui/semantic/DetailArticleFrame';
 
 export function DetailArticle(props: DetailArticleProps) {
-  return (
-    <Box component="article" visualVariant="detailArticle">
-      {props.children}
-    </Box>
-  );
+  return <DetailArticleFrame component="article">{props.children}</DetailArticleFrame>;
 }

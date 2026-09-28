@@ -24,7 +24,7 @@ export function RouteView(props: RouteViewProps) {
 
   return (
     <PageLayout
-      visualVariant={props.data.kind === 'about' ? 'aboutPageLayout' : 'pageLayout'}
+      about={props.data.kind === 'about'}
       children={
         <Suspense fallback={fallback}>
           <Renderer data={props.data} />

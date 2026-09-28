@@ -1,17 +1,11 @@
 import type { ButtonProps } from '../button';
-import { Button } from '../button';
+import { ActionIconButton } from '../semantic/ActionIconButton';
 
 type ResumePdfOptionsButtonFrameProps = Pick<
   ButtonProps,
-  | 'aria-expanded'
-  | 'aria-haspopup'
-  | 'aria-label'
-  | 'children'
-  | 'onClick'
-  | 'siteVariant'
-  | 'variant'
+  'aria-expanded' | 'aria-haspopup' | 'aria-label' | 'children' | 'onClick' | 'variant'
 >;
 
 export function ResumePdfOptionsButtonFrame(props: ResumePdfOptionsButtonFrameProps) {
-  return <Button {...props} sx={{ paddingInline: 'var(--site-space-2)' }} />;
+  return <ActionIconButton {...props} sx={{ paddingInline: 'var(--site-space-2)' }} />;
 }

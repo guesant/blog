@@ -1,10 +1,8 @@
-import MuiToggleButton from '@mui/material/ToggleButton';
 import type { ComponentProps } from 'react';
-import { createUiComponent } from './ui-component';
+import BaseToggleButton from '@mui/material/ToggleButton';
 
-export const ToggleButton = createUiComponent<
-  typeof MuiToggleButton,
-  ComponentProps<typeof MuiToggleButton>
->(function ToggleButton(props: ComponentProps<typeof MuiToggleButton>) {
-  return <MuiToggleButton {...props} />;
-});
+export type ToggleButtonProps = ComponentProps<typeof BaseToggleButton>;
+
+export function ToggleButton(props: ToggleButtonProps) {
+  return <BaseToggleButton {...props} />;
+}

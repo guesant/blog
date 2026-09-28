@@ -1,9 +1,14 @@
-import MuiTypography from '@mui/material/Typography';
-import { createUiComponent, type UiProps } from '../ui-component';
-import { typographyVariants } from './variants';
+import type { ElementType } from 'react';
+import type { TypographyProps as MuiTypographyProps } from '@mui/material/Typography';
+import BaseTypography from '@mui/material/Typography';
 
-export const Typography = createUiComponent<typeof MuiTypography>(function Typography(
-  props: UiProps,
+export type TypographyProps<
+  RootComponent extends ElementType = 'span',
+  AdditionalProps = {},
+> = MuiTypographyProps<RootComponent, AdditionalProps>;
+
+export function Typography<RootComponent extends ElementType = 'span', AdditionalProps = {}>(
+  props: TypographyProps<RootComponent, AdditionalProps>,
 ) {
-  return <MuiTypography {...(props as Record<string, unknown>)} />;
-}, typographyVariants);
+  return <BaseTypography {...props} />;
+}

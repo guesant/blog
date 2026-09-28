@@ -1,13 +1,14 @@
-import { Stack, Typography } from '../../ui';
+import { ContentFeedStatusStack } from '../../ui/semantic/ContentFeedStatusStack';
+import { ContentFeedStatusText } from '../../ui/semantic/ContentFeedStatusText';
 
 type ContentFeedStatusProps = { count: number; label: string };
 
 export function ContentFeedStatus(props: ContentFeedStatusProps) {
   return (
-    <Stack visualVariant="contentFeedStatus">
-      <Typography variant="body2" color="text.secondary" visualVariant="contentFeedStatus">
+    <ContentFeedStatusStack>
+      <ContentFeedStatusText variant="body2" color="text.secondary">
         {props.count} {props.label}
-      </Typography>
-    </Stack>
+      </ContentFeedStatusText>
+    </ContentFeedStatusStack>
   );
 }

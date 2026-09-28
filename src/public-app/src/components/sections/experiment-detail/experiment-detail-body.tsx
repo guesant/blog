@@ -1,9 +1,10 @@
-import { Box } from '../../ui';
 import { ContentRichText } from '../../content/content-rich-text';
 import type { Experiment } from '@portfolio/data/domain/types';
 import type { ProjectsTranslator } from '@/i18n/compat-support';
-import { ExternalLink } from '../../primitives/external-link';
 import { ConditionalContent } from '../../primitives/conditional-content';
+import { ExperimentBodyFrame } from '../../ui/semantic/ExperimentBodyFrame';
+import { ExperimentSourceFrame } from '../../ui/semantic/ExperimentSourceFrame';
+import { ExperimentSourceLink } from '../../ui/semantic/ExperimentSourceLink';
 
 type ExperimentDetailBodyProps = {
   experiment: Experiment;
@@ -16,23 +17,19 @@ export function ExperimentDetailBody(props: ExperimentDetailBodyProps) {
       <ConditionalContent
         condition={Boolean(props.experiment.href?.trim())}
         content={
-          <Box visualVariant="experimentSource">
-            <ExternalLink
-              href={props.experiment.href ?? '#'}
-              underline="none"
-              visualVariant="experimentSource"
-            >
+          <ExperimentSourceFrame>
+            <ExperimentSourceLink href={props.experiment.href ?? '#'} underline="none">
               {props.t('source')}
-            </ExternalLink>
-          </Box>
+            </ExperimentSourceLink>
+          </ExperimentSourceFrame>
         }
       />
       <ConditionalContent
         condition={Boolean(props.experiment.body)}
         content={
-          <Box visualVariant="experimentBody">
+          <ExperimentBodyFrame>
             <ContentRichText content={props.experiment.body ?? {}} />
-          </Box>
+          </ExperimentBodyFrame>
         }
       />
     </>

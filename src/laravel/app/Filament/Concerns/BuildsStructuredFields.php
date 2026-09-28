@@ -52,8 +52,10 @@ trait BuildsStructuredFields
                     ->required()
                     ->helperText('What the number means, e.g. "waitlist reduction".'),
             ])
-            ->itemLabel(fn (array $state): ?string => trim(($state['value'] ?? '').' '.($state['label'] ?? '')) ?: null)
-            ->formatStateUsing(fn ($state) => $state ?? [])
+            ->itemLabel(fn (mixed $state): ?string => is_array($state)
+                ? trim(($state['value'] ?? '').' '.($state['label'] ?? '')) ?: null
+                : null)
+            ->formatStateUsing(fn (mixed $state): array => is_array($state) ? $state : [])
             ->addActionLabel('Add metric')
             ->defaultItems(0);
     }

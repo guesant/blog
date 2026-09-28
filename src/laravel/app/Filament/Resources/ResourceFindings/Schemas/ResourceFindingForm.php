@@ -77,42 +77,7 @@ class ResourceFindingForm
 
         return $schema
             ->components([
-                Section::make('Publishing')
-                    ->columns(2)
-                    ->schema([
-                        TextInput::make('slug')
-                            ->required()
-                            ->unique(ignoreRecord: true)
-                            ->maxLength(255),
-                        Toggle::make('hidden')
-                            ->default(false),
-                        AutocompleteField::make(
-                            'type',
-                            'Type',
-                            $types,
-                            true,
-                        ),
-                        Select::make('language_id')
-                            ->label('Language')
-                            ->relationship('language', 'slug')
-                            ->nullable(),
-                        DatePicker::make('published_date_iso')
-                            ->label('Published date'),
-                        DatePicker::make('found_date_iso')
-                            ->label('Found date'),
-                        Select::make('consumption_state')
-                            ->options(array_combine(self::CONSUMPTION_STATES, self::CONSUMPTION_STATES))
-                            ->nullable(),
-                        Select::make('rating')
-                            ->options(array_combine(self::RATINGS, self::RATINGS))
-                            ->nullable(),
-                        Select::make('editorial_state')
-                            ->options(array_combine(self::EDITORIAL_STATES, self::EDITORIAL_STATES))
-                            ->nullable(),
-                        Select::make('visibility')
-                            ->options(array_combine(self::VISIBILITIES, self::VISIBILITIES))
-                            ->nullable(),
-                    ]),
+                static::publishingSection($types),
                 Section::make('Type details')
                     ->columnSpanFull()
                     ->schema([
@@ -171,7 +136,9 @@ class ResourceFindingForm
                                 Toggle::make('is_primary')->label('Primary link'),
                                 Toggle::make('is_free')->label('Free'),
                             ])
-                            ->itemLabel(fn (array $state): ?string => $state['label'] ?? $state['url'] ?? null)
+                            ->itemLabel(fn (mixed $state): ?string => is_array($state)
+                                ? ($state['label'] ?? $state['url'] ?? null)
+                                : null)
                             ->addActionLabel('Add link')
                             ->defaultItems(0),
                     ]),
@@ -190,7 +157,9 @@ class ResourceFindingForm
                                 ),
                                 TextInput::make('value')->required(),
                             ])
-                            ->itemLabel(fn (array $state): ?string => isset($state['kind']) ? "{$state['kind']}: ".($state['value'] ?? '') : null)
+                            ->itemLabel(fn (mixed $state): ?string => is_array($state) && isset($state['kind'])
+                                ? "{$state['kind']}: ".($state['value'] ?? '')
+                                : null)
                             ->addActionLabel('Add identifier')
                             ->defaultItems(0),
                     ]),
@@ -214,6 +183,47 @@ class ResourceFindingForm
                         ->nullable(),
                     static::seoFieldset($prefix),
                 ]),
+            ]);
+    }
+
+    protected static function publishingSection(array $types): Section
+    {
+        return Section::make('Publishing')
+            ->columnSpanFull()
+            ->columns(2)
+            ->schema([
+                TextInput::make('slug')
+                    ->required()
+                    ->unique(ignoreRecord: true)
+                    ->maxLength(255),
+                Toggle::make('hidden')
+                    ->default(false),
+                AutocompleteField::make(
+                    'type',
+                    'Type',
+                    $types,
+                    true,
+                ),
+                Select::make('language_id')
+                    ->label('Language')
+                    ->relationship('language', 'slug')
+                    ->nullable(),
+                DatePicker::make('published_date_iso')
+                    ->label('Published date'),
+                DatePicker::make('found_date_iso')
+                    ->label('Found date'),
+                Select::make('consumption_state')
+                    ->options(array_combine(self::CONSUMPTION_STATES, self::CONSUMPTION_STATES))
+                    ->nullable(),
+                Select::make('rating')
+                    ->options(array_combine(self::RATINGS, self::RATINGS))
+                    ->nullable(),
+                Select::make('editorial_state')
+                    ->options(array_combine(self::EDITORIAL_STATES, self::EDITORIAL_STATES))
+                    ->nullable(),
+                Select::make('visibility')
+                    ->options(array_combine(self::VISIBILITIES, self::VISIBILITIES))
+                    ->nullable(),
             ]);
     }
 }

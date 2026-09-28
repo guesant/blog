@@ -181,27 +181,6 @@
       <code><![CDATA[EditPage]]></code>
     </MissingTemplateParam>
   </file>
-  <file src="app/Filament/Resources/Pages/Schemas/PageForm.php">
-    <InvalidArgument>
-      <code><![CDATA[function (array $keys, string $group) use ($fields): array {
-                $components = collect($keys)
-                    ->map(fn (string $key) => $fields->get($key))
-                    ->filter()
-                    ->values()
-                    ->all();
-
-                if ($group === '' || count($keys) < 2) {
-                    return $components;
-                }
-
-                return [
-                    Fieldset::make(self::FIELDSET_LABELS[$group] ?? str($group)->headline()->toString())
-                        ->columns(2)
-                        ->schema($components),
-                ];
-            }]]></code>
-    </InvalidArgument>
-  </file>
   <file src="app/Filament/Resources/Projects/Pages/CreateProject.php">
     <MissingTemplateParam>
       <code><![CDATA[CreateProject]]></code>

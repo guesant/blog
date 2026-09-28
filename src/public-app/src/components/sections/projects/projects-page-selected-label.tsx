@@ -1,6 +1,6 @@
-import { Typography } from '../../ui';
 import type { ProjectsPageContentProps } from './types';
 import { ConditionalContent } from '../../primitives/conditional-content';
+import { SelectedProjectsLabelText } from '../../ui/semantic/SelectedProjectsLabelText';
 
 type ProjectsPageSelectedLabelProps = {
   page: ProjectsPageContentProps['page'];
@@ -12,9 +12,9 @@ export function ProjectsPageSelectedLabel(props: ProjectsPageSelectedLabelProps)
     <ConditionalContent
       condition={props.visible}
       content={
-        <Typography variant="overline" color="text.secondary" visualVariant="selectedProjectsLabel">
+        <SelectedProjectsLabelText variant="overline" color="text.secondary">
           {props.page.selectedLabel}
-        </Typography>
+        </SelectedProjectsLabelText>
       }
     />
   );

@@ -1,8 +1,10 @@
-import { Box, Button, Typography } from '../../ui';
 import type { Topic } from '@portfolio/data/domain/types';
 import type { CommonTranslator } from '@/i18n/compat-support';
-import { ArrowForward } from '../../ui';
 import { NavLink } from '../../primitives/nav-link';
+import { TopicArrowArrow } from '../../ui/semantic/TopicArrowArrow';
+import { TopicExploreButton } from '../../ui/semantic/TopicExploreButton';
+import { TopicItemFrame } from '../../ui/semantic/TopicItemFrame';
+import { TopicTitleText } from '../../ui/semantic/TopicTitleText';
 
 type TopicListItemProps = {
   topic: Topic;
@@ -11,8 +13,8 @@ type TopicListItemProps = {
 
 export function TopicListItem(props: TopicListItemProps) {
   return (
-    <Box visualVariant="topicItem">
-      <Typography component="h2" visualVariant="topicTitle">
+    <TopicItemFrame>
+      <TopicTitleText component="h2">
         <NavLink
           href={props.topic.url ?? `/topics/${props.topic.slug}`}
           underline="none"
@@ -20,17 +22,16 @@ export function TopicListItem(props: TopicListItemProps) {
         >
           {props.topic.name}
         </NavLink>
-      </Typography>
-      <Button
+      </TopicTitleText>
+      <TopicExploreButton
         component={NavLink}
         href={props.topic.url ?? `/topics/${props.topic.slug}`}
         size="small"
         variant="outlined"
-        endIcon={<ArrowForward visualVariant="topicArrow" />}
-        visualVariant="topicExplore"
+        endIcon={<TopicArrowArrow />}
       >
         {props.t('explore')}
-      </Button>
-    </Box>
+      </TopicExploreButton>
+    </TopicItemFrame>
   );
 }

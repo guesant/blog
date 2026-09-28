@@ -1,6 +1,7 @@
-import { Box, Button } from '../../../ui';
+import { Box } from '../../../ui';
 import { NavLink } from '../../../primitives/nav-link';
 import { ContentNavigationActionIcon } from '../../../content/content-navigation-action-icon';
+import { ActionButton } from '../../../ui/semantic/ActionButton';
 
 type HomeGallerySectionActionProps = {
   action: string;
@@ -17,10 +18,10 @@ export function HomeGallerySectionAction(props: HomeGallerySectionActionProps) {
         px: 'var(--site-action-px)',
       }}
     >
-      <Button
+      <ActionButton
         component={NavLink}
         href={props.href}
-        siteVariant="action"
+
         sx={{
           maxWidth: '100%',
           minWidth: 0,
@@ -30,7 +31,7 @@ export function HomeGallerySectionAction(props: HomeGallerySectionActionProps) {
         endIcon={<ContentNavigationActionIcon direction="forward" />}
       >
         {props.action}
-      </Button>
+      </ActionButton>
     </Box>
   );
 }

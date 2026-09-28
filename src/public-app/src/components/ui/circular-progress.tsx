@@ -1,8 +1,8 @@
-import MuiCircularProgress from '@mui/material/CircularProgress';
-import { createUiComponent, type UiProps } from './ui-component';
+import type { ComponentProps } from 'react';
+import BaseCircularProgress from '@mui/material/CircularProgress';
 
-export const CircularProgress = createUiComponent<typeof MuiCircularProgress>(
-  function CircularProgress(props: UiProps) {
-    return <MuiCircularProgress {...(props as Record<string, unknown>)} />;
-  },
-);
+export type CircularProgressProps = ComponentProps<typeof BaseCircularProgress>;
+
+export function CircularProgress(props: CircularProgressProps) {
+  return <BaseCircularProgress {...props} />;
+}

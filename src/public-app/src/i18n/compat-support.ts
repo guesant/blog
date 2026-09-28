@@ -37,7 +37,7 @@ type MessageAtPath<T, Path extends string> = Path extends `${infer Head}.${infer
 
 export type TranslationNamespace = NamespacePaths<typeof en>;
 
-export type TranslationKey<Namespace extends TranslationNamespace> = MessageKeyPaths<
+type TranslationKey<Namespace extends TranslationNamespace> = MessageKeyPaths<
   Extract<MessageAtPath<typeof en, Namespace>, object>
 >;
 

@@ -3,6 +3,9 @@
 import { Box, Typography } from '../../ui';
 import { hasProjectOverview, type ProjectOverviewProps } from './types';
 import { ConditionalContent } from '../../primitives/conditional-content';
+import { ProjectOverview2Text } from '../../ui/semantic/ProjectOverview2Text';
+import { ProjectOverviewFrame } from '../../ui/semantic/ProjectOverviewFrame';
+import { ProjectOverviewProblemText } from '../../ui/semantic/ProjectOverviewProblemText';
 
 export function ProjectOverview(props: ProjectOverviewProps) {
   const { project, t } = props;
@@ -11,7 +14,7 @@ export function ProjectOverview(props: ProjectOverviewProps) {
     return null;
   }
   return (
-    <Box visualVariant="projectOverview">
+    <ProjectOverviewFrame>
       <ConditionalContent
         condition={Boolean(project.problem)}
         content={
@@ -19,7 +22,7 @@ export function ProjectOverview(props: ProjectOverviewProps) {
             <Typography variant="overline" color="text.secondary">
               {t('problem')}
             </Typography>
-            <Typography visualVariant="projectOverview">{project.problem}</Typography>
+            <ProjectOverviewProblemText>{project.problem}</ProjectOverviewProblemText>
           </Box>
         }
       />
@@ -30,10 +33,10 @@ export function ProjectOverview(props: ProjectOverviewProps) {
             <Typography variant="overline" color="text.secondary">
               {t('currentFocus')}
             </Typography>
-            <Typography visualVariant="projectOverview2">{project.currentFocus}</Typography>
+            <ProjectOverview2Text>{project.currentFocus}</ProjectOverview2Text>
           </Box>
         }
       />
-    </Box>
+    </ProjectOverviewFrame>
   );
 }

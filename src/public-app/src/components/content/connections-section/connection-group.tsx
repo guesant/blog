@@ -1,8 +1,10 @@
 'use client';
 
-import { Box, Typography } from '../../ui';
+import { Box } from '../../ui';
 import { RelationChip } from '../relation-chip';
 import type { ReferenceRelation } from '@portfolio/data/domain/types';
+import { ConnectionGroupFrame } from '../../ui/semantic/ConnectionGroupFrame';
+import { ConnectionGroupText } from '../../ui/semantic/ConnectionGroupText';
 
 type ConnectionGroupProps = { label: string; items: ReferenceRelation[] };
 
@@ -11,15 +13,15 @@ export function ConnectionGroup(props: ConnectionGroupProps) {
 
   return (
     <Box>
-      <Typography visualVariant="connectionGroup">{label}</Typography>
-      <Box visualVariant="connectionGroup">
+      <ConnectionGroupText>{label}</ConnectionGroupText>
+      <ConnectionGroupFrame>
         {items.map((relation) => (
           <RelationChip
             key={`${relation.relationType}-${relation.direction}-${relation.targetSlug}`}
             relation={relation}
           />
         ))}
-      </Box>
+      </ConnectionGroupFrame>
     </Box>
   );
 }

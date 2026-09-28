@@ -1,7 +1,8 @@
-import { Button, ResumePdfButtonGroupFrame } from '../../ui';
+import { ResumePdfButtonGroupFrame } from '../../ui';
 import type { MouseEvent } from 'react';
 import type { ResumePdfActionsProps } from './types';
 import { ResumePdfOptionsButton } from './resume-pdf-options-button';
+import { ActionButton } from '../../ui/semantic/ActionButton';
 
 type ResumePdfButtonGroupProps = ResumePdfActionsProps & {
   open: boolean;
@@ -11,15 +12,14 @@ type ResumePdfButtonGroupProps = ResumePdfActionsProps & {
 export function ResumePdfButtonGroup(props: ResumePdfButtonGroupProps) {
   return (
     <ResumePdfButtonGroupFrame>
-      <Button
+      <ActionButton
         component="a"
         href={props.pdfUrls[props.locale]}
         target="_blank"
         rel="noopener noreferrer"
-        siteVariant="action"
       >
         {props.t('viewPdf')}
-      </Button>
+      </ActionButton>
       <ResumePdfOptionsButton
         open={props.open}
         label={props.t('pdfOptions')}

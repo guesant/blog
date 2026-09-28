@@ -1,12 +1,13 @@
-import { Box, CircularProgress } from '../../ui';
+import { CircularProgress } from '../../ui';
 import { useTranslations } from '@/i18n/compat';
+import { StatusPageFrame } from '../../ui/semantic/StatusPageFrame';
 
 export function LoadingPage() {
   const t = useTranslations('Common');
 
   return (
-    <Box visualVariant="statusPage" aria-busy="true">
+    <StatusPageFrame aria-busy="true">
       <CircularProgress aria-label={t('loading')} color="primary" />
-    </Box>
+    </StatusPageFrame>
   );
 }

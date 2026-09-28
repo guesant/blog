@@ -1,6 +1,7 @@
 'use client';
 
-import { Stack } from '../ui';
+import { ContentActionsHeroStack } from '../ui/semantic/ContentActionsHeroStack';
+import { ContentActionsSectionStack } from '../ui/semantic/ContentActionsSectionStack';
 import type { RichTextContent } from '@portfolio/data/domain/types';
 import { useTranslations } from '@/i18n/compat';
 import { useState } from 'react';
@@ -38,11 +39,10 @@ export function ContentActions(props: ContentActionsProps) {
       .replace(/[^a-z0-9]+/g, '-')
       .replace(/^-|-$/g, '') || 'content';
 
+  const ActionsFrame = placement === 'hero' ? ContentActionsHeroStack : ContentActionsSectionStack;
+
   return (
-    <Stack
-      direction="row"
-      visualVariant={placement === 'hero' ? 'contentActionsHero' : 'contentActionsSection'}
-    >
+    <ActionsFrame direction="row">
       <ContentActionsPrimary
         text={text}
         copy={copy}
@@ -53,6 +53,6 @@ export function ContentActions(props: ContentActionsProps) {
         featureFlags={featureFlags.contentActions}
       />
       <ContentActionsSecondary externalUrl={externalUrl} downloadUrl={downloadUrl} t={t} />
-    </Stack>
+    </ActionsFrame>
   );
 }

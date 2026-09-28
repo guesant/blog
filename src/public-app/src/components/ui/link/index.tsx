@@ -1,9 +1,14 @@
-import MuiLink from '@mui/material/Link';
-import { createUiComponent, type UiProps } from '../ui-component';
-import { linkVariants } from './variants';
+import type { ElementType } from 'react';
+import type { LinkProps as MuiLinkProps } from '@mui/material/Link';
+import BaseLink from '@mui/material/Link';
 
-export type { LinkProps } from '@mui/material/Link';
+export type LinkProps<RootComponent extends ElementType = 'a', AdditionalProps = {}> = MuiLinkProps<
+  RootComponent,
+  AdditionalProps
+>;
 
-export const Link = createUiComponent<typeof MuiLink>(function Link(props: UiProps) {
-  return <MuiLink {...(props as Record<string, unknown>)} />;
-}, linkVariants);
+export function Link<RootComponent extends ElementType = 'a', AdditionalProps = {}>(
+  props: LinkProps<RootComponent, AdditionalProps>,
+) {
+  return <BaseLink {...props} />;
+}

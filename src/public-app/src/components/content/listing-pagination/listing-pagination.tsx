@@ -1,9 +1,10 @@
 'use client';
 
-import { Pagination } from '../../ui';
 import { listingPaginationAriaLabel } from './listing-pagination-aria-label';
 import type { ListingPaginationProps } from './types';
+import type { ChangeEvent } from 'react';
 import { goToListingPage } from './go-to-listing-page';
+import { ListingPaginationPagination } from '../../ui/semantic/ListingPaginationPagination';
 
 export function ListingPagination(props: ListingPaginationProps) {
   if (props.pageCount <= 1) {
@@ -11,11 +12,11 @@ export function ListingPagination(props: ListingPaginationProps) {
   }
 
   return (
-    <Pagination
+    <ListingPaginationPagination
       count={props.pageCount}
       page={props.page}
       aria-label={props.ariaLabel}
-      visualVariant="listingPagination"
+
       variant="outlined"
       shape="rounded"
       size="small"
@@ -23,10 +24,10 @@ export function ListingPagination(props: ListingPaginationProps) {
       showLastButton
       boundaryCount={2}
       siblingCount={1}
-      onChange={(_event, nextPage) =>
+      onChange={(_event: ChangeEvent<unknown>, nextPage: number) =>
         goToListingPage({ ...props, nextPage: nextPage ?? props.page })
       }
-      getItemAriaLabel={(type, page) =>
+      getItemAriaLabel={(type: string, page: number | null) =>
         listingPaginationAriaLabel({
           type,
           page: page ?? props.page,

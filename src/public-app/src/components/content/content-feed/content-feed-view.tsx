@@ -1,7 +1,7 @@
 'use client';
 
 import type { FormEvent, ReactNode } from 'react';
-import { Box } from '../../ui';
+import { ContentFeedSectionFrame } from '../../ui/semantic/ContentFeedSectionFrame';
 import { ConditionalContent } from '../../primitives/conditional-content';
 import { ContentFeedFilters } from './content-feed-filters';
 import { ContentFeedDisplayControls } from './content-feed-display-controls';
@@ -61,7 +61,7 @@ export type ContentFeedViewProps = {
 
 export function ContentFeedView(props: ContentFeedViewProps) {
   return (
-    <Box id="content-feed" component="section" visualVariant="feedSection">
+    <ContentFeedSectionFrame id="content-feed">
       <ContentFeedHeader {...props} visible={props.showHeader} />
       <ContentFeedFilters
         selects={props.selects}
@@ -88,6 +88,6 @@ export function ContentFeedView(props: ContentFeedViewProps) {
         }
       />
       <ContentFeedListing {...props} />
-    </Box>
+    </ContentFeedSectionFrame>
   );
 }

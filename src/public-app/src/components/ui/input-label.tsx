@@ -1,8 +1,8 @@
-import MuiInputLabel from '@mui/material/InputLabel';
-import { createUiComponent, type UiProps } from './ui-component';
+import type { ComponentProps } from 'react';
+import BaseInputLabel from '@mui/material/InputLabel';
 
-export const InputLabel = createUiComponent<typeof MuiInputLabel>(function InputLabel(
-  props: UiProps,
-) {
-  return <MuiInputLabel {...(props as Record<string, unknown>)} />;
-});
+export type InputLabelProps = ComponentProps<typeof BaseInputLabel>;
+
+export function InputLabel(props: InputLabelProps) {
+  return <BaseInputLabel {...props} />;
+}

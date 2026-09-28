@@ -1,9 +1,8 @@
-import MuiDialog from '@mui/material/Dialog';
 import type { ComponentProps } from 'react';
-import { createUiComponent } from './ui-component';
+import BaseDialog from '@mui/material/Dialog';
 
-export const Dialog = createUiComponent<typeof MuiDialog, ComponentProps<typeof MuiDialog>>(
-  function Dialog(props: ComponentProps<typeof MuiDialog>) {
-    return <MuiDialog {...props} />;
-  },
-);
+export type DialogProps = ComponentProps<typeof BaseDialog>;
+
+export function Dialog(props: DialogProps) {
+  return <BaseDialog {...props} />;
+}

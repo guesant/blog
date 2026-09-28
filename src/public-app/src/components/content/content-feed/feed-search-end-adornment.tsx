@@ -1,6 +1,7 @@
-import { IconButton, InputAdornment } from '../../ui';
+import { InputAdornment } from '../../ui';
 import { Icon } from '../../primitives/icon';
 import { ConditionalContent } from '../../primitives/conditional-content';
+import { ContentFeedSearchClearIconButton } from '../../ui/semantic/ContentFeedSearchClearIconButton';
 
 type FeedSearchEndAdornmentProps = {
   value: string;
@@ -14,16 +15,15 @@ export function FeedSearchEndAdornment(props: FeedSearchEndAdornmentProps) {
       condition={Boolean(props.value)}
       content={
         <InputAdornment position="end">
-          <IconButton
+          <ContentFeedSearchClearIconButton
             type="button"
             size="small"
             aria-label={props.clearLabel}
             title={props.clearLabel}
             onClick={props.onClear}
-            visualVariant="contentFeedSearchClear"
           >
             <Icon name="close" size={14} />
-          </IconButton>
+          </ContentFeedSearchClearIconButton>
         </InputAdornment>
       }
     />

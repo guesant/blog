@@ -18,6 +18,7 @@ use Filament\Schemas\Components\Fieldset;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Schema;
+use Illuminate\Support\Collection;
 
 class PageForm
 {
@@ -95,7 +96,7 @@ class PageForm
             ->groupBy(fn (string $key): string => str_contains($key, '_')
                 ? str($key)->before('_')->toString()
                 : '')
-            ->flatMap(function (array $keys, string $group) use ($fields): array {
+            ->flatMap(function (Collection $keys, string $group) use ($fields): array {
                 $components = collect($keys)
                     ->map(fn (string $key) => $fields->get($key))
                     ->filter()
@@ -148,7 +149,7 @@ class PageForm
                                     ->searchable()
                                     ->required(),
                             ])
-                            ->itemLabel(fn (array $state): ?string => isset($state['case_study_id'])
+                            ->itemLabel(fn (mixed $state): ?string => is_array($state) && isset($state['case_study_id'])
                                 ? CaseStudy::find($state['case_study_id'])?->slug
                                 : null)
                             ->addActionLabel('Add case')
@@ -166,7 +167,7 @@ class PageForm
                                     ->searchable()
                                     ->required(),
                             ])
-                            ->itemLabel(fn (array $state): ?string => isset($state['project_id'])
+                            ->itemLabel(fn (mixed $state): ?string => is_array($state) && isset($state['project_id'])
                                 ? Project::find($state['project_id'])?->slug
                                 : null)
                             ->addActionLabel('Add project')
@@ -184,7 +185,7 @@ class PageForm
                                     ->searchable()
                                     ->required(),
                             ])
-                            ->itemLabel(fn (array $state): ?string => isset($state['writing_id'])
+                            ->itemLabel(fn (mixed $state): ?string => is_array($state) && isset($state['writing_id'])
                                 ? Writing::find($state['writing_id'])?->slug
                                 : null)
                             ->addActionLabel('Add writing')

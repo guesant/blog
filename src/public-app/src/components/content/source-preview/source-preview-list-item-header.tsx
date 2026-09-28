@@ -1,7 +1,7 @@
-import { Chip } from '../../ui';
 import { Icon } from '../../primitives/icon';
 import { handleSourcePreviewKindClick } from './handle-source-preview-kind-click';
 import type { SourcePreviewData, SourcePreviewTranslator } from './types';
+import { SourcePreviewKindChip } from '../../ui/semantic/SourcePreviewKindChip';
 
 type SourcePreviewListItemHeaderProps = {
   data: SourcePreviewData;
@@ -17,7 +17,7 @@ export function SourcePreviewListItemHeader(props: SourcePreviewListItemHeaderPr
   const canClick = Boolean(props.onKindClick && props.data.filterType);
 
   return (
-    <Chip
+    <SourcePreviewKindChip
       icon={<Icon name={props.data.icon} size={12} />}
       label={`${provider} · ${props.t(`sourcePreview.kinds.${props.data.kind}`)}`}
       size="small"
@@ -27,7 +27,6 @@ export function SourcePreviewListItemHeader(props: SourcePreviewListItemHeaderPr
           ? handleSourcePreviewKindClick.bind(null, props.onKindClick, props.data)
           : undefined
       }
-      visualVariant="sourcePreviewKind"
     />
   );
 }

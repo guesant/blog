@@ -22,6 +22,7 @@ class CaseStudyForm
         return $schema
             ->components([
                 Section::make('Publishing')
+                    ->columnSpanFull()
                     ->columns(2)
                     ->schema([
                         TextInput::make('slug')

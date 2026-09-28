@@ -2,11 +2,12 @@
 
 import { Icon } from '../../primitives/icon';
 import { ConditionalContent } from '../../primitives/conditional-content';
-import { Stack, ToggleButton, ToggleButtonGroup } from '../../ui';
+import { ToggleButton, ToggleButtonGroup } from '../../ui';
 import { FeedSelectControl } from './feed-select-control';
 import { buildContentFeedPerPageSelect } from './build-content-feed-per-page-select';
 import { handleFeedDisplayModeChange } from './handle-feed-display-mode-change';
 import type { ContentFeedDisplayMode } from './types';
+import { ContentFeedDisplayControlsStack } from '../../ui/semantic/ContentFeedDisplayControlsStack';
 
 type ContentFeedDisplayControlsProps = {
   displayMode: ContentFeedDisplayMode;
@@ -27,7 +28,7 @@ export function ContentFeedDisplayControls(props: ContentFeedDisplayControlsProp
   });
 
   return (
-    <Stack direction="row" visualVariant="contentFeedDisplayControls">
+    <ContentFeedDisplayControlsStack direction="row">
       <ToggleButtonGroup
         exclusive
         value={props.displayMode}
@@ -47,6 +48,6 @@ export function ContentFeedDisplayControls(props: ContentFeedDisplayControlsProp
         condition={props.displayMode === 'pagination'}
         content={<FeedSelectControl {...perPageSelect} clearLabel={props.perPageLabel} />}
       />
-    </Stack>
+    </ContentFeedDisplayControlsStack>
   );
 }

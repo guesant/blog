@@ -1,4 +1,5 @@
 import { Box, Typography } from '../../ui';
+import { MetricItemText } from '../../ui/semantic/MetricItemText';
 
 type MetricItemProps = { label: string; value: string };
 
@@ -7,9 +8,7 @@ export function MetricItem(props: MetricItemProps) {
 
   return (
     <Box>
-      <Typography variant="h5" visualVariant="metricItem">
-        {value}
-      </Typography>
+      <MetricItemText variant="h5">{value}</MetricItemText>
       <Typography variant="body2" color="text.secondary">
         {label}
       </Typography>

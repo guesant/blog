@@ -36,7 +36,7 @@ class ListNavItems extends ListRecords
                             Hidden::make('label'),
                             Hidden::make('items'),
                         ])
-                        ->itemLabel(fn (array $state): ?string => $state['label'] ?? null)
+                        ->itemLabel(fn (mixed $state): ?string => is_array($state) ? ($state['label'] ?? null) : null)
                         ->reorderable()
                         ->reorderableWithButtons()
                         ->addable(false)

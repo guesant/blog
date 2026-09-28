@@ -1,6 +1,8 @@
-import { Box, Typography } from '../../ui';
+import { Box } from '../../ui';
 import { ConditionalContent } from '../../primitives/conditional-content';
 import type { SourcePreviewData } from './types';
+import { SourcePreviewDescriptionFeedText } from '../../ui/semantic/SourcePreviewDescriptionFeedText';
+import { SourcePreviewTitleFeedText } from '../../ui/semantic/SourcePreviewTitleFeedText';
 
 type SourcePreviewListItemTextProps = {
   data: SourcePreviewData;
@@ -9,13 +11,11 @@ type SourcePreviewListItemTextProps = {
 export function SourcePreviewListItemText(props: SourcePreviewListItemTextProps) {
   return (
     <Box>
-      <Typography component="p" visualVariant="sourcePreviewTitleFeed">
-        {props.data.title}
-      </Typography>
+      <SourcePreviewTitleFeedText component="p">{props.data.title}</SourcePreviewTitleFeedText>
       <ConditionalContent condition={Boolean(props.data.description)}>
-        <Typography visualVariant="sourcePreviewDescriptionFeed">
+        <SourcePreviewDescriptionFeedText>
           {props.data.description}
-        </Typography>
+        </SourcePreviewDescriptionFeedText>
       </ConditionalContent>
     </Box>
   );

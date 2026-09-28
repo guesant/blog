@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
-import { Box } from '../../../ui';
+import { HomeHeroSurfaceFrame } from '../../../ui/semantic/HomeHeroSurfaceFrame';
+import { HomeHeroSurfaceWithContactFrame } from '../../../ui/semantic/HomeHeroSurfaceWithContactFrame';
 
 type HomeHeroSurfaceProps = {
   children: ReactNode;
@@ -7,12 +8,7 @@ type HomeHeroSurfaceProps = {
 };
 
 export function HomeHeroSurface(props: HomeHeroSurfaceProps) {
-  return (
-    <Box
-      component="section"
-      visualVariant={props.showContact ? 'homeHeroSurfaceWithContact' : 'homeHeroSurface'}
-    >
-      {props.children}
-    </Box>
-  );
+  const Frame = props.showContact ? HomeHeroSurfaceWithContactFrame : HomeHeroSurfaceFrame;
+
+  return <Frame>{props.children}</Frame>;
 }

@@ -1,15 +1,15 @@
 'use client';
 
-import { Box } from '../../ui';
 import type { CaseShowcaseProps } from './types';
 import { FeaturedCaseCard } from './featured-case-card';
 import { SecondaryCaseGrid } from './secondary-case-grid';
+import { CaseShowcaseFrame } from '../../ui/semantic/CaseShowcaseFrame';
 
 export function CaseShowcase(props: CaseShowcaseProps) {
   return (
-    <Box visualVariant="caseShowcase">
+    <CaseShowcaseFrame>
       <FeaturedCaseCard item={props.cases[0]} />
       <SecondaryCaseGrid items={props.cases.slice(1)} />
-    </Box>
+    </CaseShowcaseFrame>
   );
 }

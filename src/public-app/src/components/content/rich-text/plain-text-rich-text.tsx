@@ -1,5 +1,5 @@
-import { Box } from '../../ui';
 import { PlainTextParagraph } from './plain-text-paragraph';
+import { RichTextPlainFrame } from '../../ui/semantic/RichTextPlainFrame';
 
 type PlainTextRichTextProps = {
   content: string;
@@ -12,10 +12,10 @@ export function PlainTextRichText(props: PlainTextRichTextProps) {
     .filter(Boolean);
 
   return (
-    <Box visualVariant="richTextPlain">
+    <RichTextPlainFrame>
       {paragraphs.map((paragraph, index) => (
         <PlainTextParagraph key={`${paragraph}-${index}`} text={paragraph} />
       ))}
-    </Box>
+    </RichTextPlainFrame>
   );
 }

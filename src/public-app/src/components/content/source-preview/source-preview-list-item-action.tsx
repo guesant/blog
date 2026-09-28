@@ -1,6 +1,6 @@
-import { Button } from '../../ui';
 import { Icon } from '../../primitives/icon';
 import type { SourcePreviewData, SourcePreviewTranslator } from './types';
+import { SourcePreviewOpenActionButton } from '../../ui/semantic/SourcePreviewOpenActionButton';
 
 type SourcePreviewListItemActionProps = {
   data: SourcePreviewData;
@@ -11,18 +11,17 @@ export function SourcePreviewListItemAction(props: SourcePreviewListItemActionPr
   const providerLabels = { github: 'GitHub', youtube: 'YouTube', generic: 'Link' } as const;
 
   return (
-    <Button
+    <SourcePreviewOpenActionButton
       component="a"
       href={props.data.url}
       target="_blank"
       rel="noopener noreferrer"
-      siteVariant="action"
+
       size="small"
       variant="outlined"
       startIcon={<Icon name="external" size={14} />}
-      visualVariant="sourcePreviewOpen"
     >
       {props.t('sourcePreview.open', { provider: providerLabels[props.data.provider] })}
-    </Button>
+    </SourcePreviewOpenActionButton>
   );
 }

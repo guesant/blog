@@ -1,6 +1,6 @@
-import { Box } from '../../ui';
 import { ContentRichText } from '../../content/content-rich-text';
 import type { ProjectDetailContentProps } from './types';
+import { ProjectDetailContent2Frame } from '../../ui/semantic/ProjectDetailContent2Frame';
 
 type ProjectDetailBodyProps = {
   body: ProjectDetailContentProps['project']['body'];
@@ -12,8 +12,8 @@ export function ProjectDetailBody(props: ProjectDetailBodyProps) {
   }
 
   return (
-    <Box visualVariant="projectDetailContent2">
+    <ProjectDetailContent2Frame>
       <ContentRichText content={props.body} />
-    </Box>
+    </ProjectDetailContent2Frame>
   );
 }

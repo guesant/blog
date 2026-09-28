@@ -1,6 +1,7 @@
-import { Box, Divider } from '../../ui';
 import { AboutEditorialSection } from './about-editorial-section';
 import type { AboutEditorialSectionsProps } from './types';
+import { AboutEditorialSectionsFrame } from '../../ui/semantic/AboutEditorialSectionsFrame';
+import { AboutSectionDividerDivider } from '../../ui/semantic/AboutSectionDividerDivider';
 
 export function AboutEditorialSections(props: AboutEditorialSectionsProps) {
   if (props.sections.length === 0) {
@@ -8,11 +9,11 @@ export function AboutEditorialSections(props: AboutEditorialSectionsProps) {
   }
 
   return (
-    <Box visualVariant="aboutEditorialSections">
+    <AboutEditorialSectionsFrame>
       {props.sections.map((section) => (
         <AboutEditorialSection key={section.id} section={section} />
       ))}
-      <Divider visualVariant="aboutSectionDivider" />
-    </Box>
+      <AboutSectionDividerDivider />
+    </AboutEditorialSectionsFrame>
   );
 }

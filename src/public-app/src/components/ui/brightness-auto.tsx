@@ -1,8 +1,8 @@
-import MuiBrightnessAuto from '@mui/icons-material/BrightnessAuto';
-import { createUiComponent, type UiProps } from './ui-component';
+import type { ComponentProps } from 'react';
+import BaseBrightnessAuto from '@mui/icons-material/BrightnessAuto';
 
-export const BrightnessAuto = createUiComponent<typeof MuiBrightnessAuto>(function BrightnessAuto(
-  props: UiProps,
-) {
-  return <MuiBrightnessAuto {...(props as Record<string, unknown>)} />;
-});
+export type BrightnessAutoProps = ComponentProps<typeof BaseBrightnessAuto>;
+
+export function BrightnessAuto(props: BrightnessAutoProps) {
+  return <BaseBrightnessAuto {...props} />;
+}

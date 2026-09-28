@@ -1,7 +1,7 @@
 import { ArrowForward } from '../arrow-forward';
-import { Button } from '../button';
 import { VisuallyHidden } from '../visually-hidden';
 import { NavLink } from '../../primitives/nav-link';
+import { ActionButton } from '../semantic/ActionButton';
 
 type FindingCardReadActionProps = {
   href: string;
@@ -26,11 +26,11 @@ const actionStyles = {
 
 export function FindingCardReadAction(props: FindingCardReadActionProps) {
   return (
-    <Button
+    <ActionButton
       component={NavLink}
       href={props.href}
       data-action="read-more"
-      siteVariant="action"
+
       size="small"
       variant="outlined"
       aria-label={`${props.label}: ${props.title}`}
@@ -39,6 +39,6 @@ export function FindingCardReadAction(props: FindingCardReadActionProps) {
     >
       {props.children}
       <VisuallyHidden>{props.title}</VisuallyHidden>
-    </Button>
+    </ActionButton>
   );
 }

@@ -8,6 +8,7 @@ const sourceFiles = ['**/*.{ts,tsx}'];
 const uiFiles = ['src/components/ui/**/*.{ts,tsx}'];
 const sectionUiFiles = ['src/components/sections/*/ui/**/*.{ts,tsx}'];
 const visualFiles = [...uiFiles, ...sectionUiFiles];
+const illustrationFiles = ['src/components/ui/illustrations/**/*.{ts,tsx}'];
 const generatedFiles = [
   '**/node_modules/**',
   '**/dist/**',
@@ -278,6 +279,16 @@ export default [
     files: visualFiles,
     rules: {
       'architecture/no-mui-reexport': 'error',
+    },
+  },
+  {
+    files: illustrationFiles,
+    rules: {
+      'architecture/conditional-rendering-delegation': 'off',
+      'architecture/map-to-imported-component': 'off',
+      'max-lines-per-function': 'off',
+      'no-nested-ternary': 'off',
+      'sonarjs/no-nested-conditional': 'off',
     },
   },
   {

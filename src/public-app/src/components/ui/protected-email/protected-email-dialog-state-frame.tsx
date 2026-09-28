@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import { Box } from '../box';
 
-export type ProtectedEmailDialogStateLayout = 'stacked' | 'inline';
+type ProtectedEmailDialogStateLayout = 'stacked' | 'inline';
 
 type ProtectedEmailDialogStateFrameProps = {
   layout: ProtectedEmailDialogStateLayout;

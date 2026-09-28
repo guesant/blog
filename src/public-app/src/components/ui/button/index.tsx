@@ -4,8 +4,6 @@ import type { SxProps, Theme } from '@mui/material/styles';
 import { buttonVariants } from './variants';
 import { siteButtonVariants, type SiteButtonVariant } from './site-variants';
 
-export type { SiteButtonVariant } from './site-variants';
-
 declare module '@mui/material/Button' {
   interface ButtonOwnProps {
     siteVariant?: SiteButtonVariant;

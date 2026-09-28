@@ -8,14 +8,12 @@ export { ProtectedEmailDialogLiveRegionFrame } from './protected-email-dialog-li
 
 export {
   ProtectedEmailDialogStateFrame,
-  type ProtectedEmailDialogStateLayout,
 } from './protected-email-dialog-state-frame';
 
 export { ProtectedEmailDialogTitleFrame } from './protected-email-dialog-title-frame';
 
 export {
   ProtectedEmailInlineAction,
-  type ProtectedEmailInlineActionMode,
 } from './protected-email-inline-action';
 
 export { ProtectedEmailPanelFrame } from './protected-email-panel-frame';

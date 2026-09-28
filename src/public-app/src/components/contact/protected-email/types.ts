@@ -5,7 +5,7 @@ import type { ReactNode } from 'react';
 
 export type RevealState = 'idle' | 'working' | 'revealed' | 'error';
 
-export type Translate = CommonTranslator;
+type Translate = CommonTranslator;
 
 export type SettleReveal = (next: RevealState, address: string) => void;
 

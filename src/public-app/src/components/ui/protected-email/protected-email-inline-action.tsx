@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import { Link, type LinkProps } from '../link';
 
-export type ProtectedEmailInlineActionMode = 'revealed' | 'trigger' | 'triggerBusy';
+type ProtectedEmailInlineActionMode = 'revealed' | 'trigger' | 'triggerBusy';
 
 type ProtectedEmailInlineActionProps = {
   mode: ProtectedEmailInlineActionMode;

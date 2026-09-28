@@ -42,6 +42,10 @@ trait SyncsTranslations
 
     protected function fillTranslationsIntoData(array $data): array
     {
+        if ($this->getRecord()->getTable() === 'nav_items') {
+            return $data;
+        }
+
         $data['translations'] = collect(['en', 'pt-BR'])
             ->mapWithKeys(fn (string $locale): array => [$locale => $this->translationFields($locale)])
             ->all();

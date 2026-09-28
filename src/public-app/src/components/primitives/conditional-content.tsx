@@ -8,7 +8,5 @@ type ConditionalContentProps = {
 };
 
 export function ConditionalContent(props: ConditionalContentProps) {
-  return props.condition
-    ? (props.content ?? props.children ?? null)
-    : (props.fallback ?? null);
+  return props.condition ? (props.content ?? props.children ?? null) : (props.fallback ?? null);
 }

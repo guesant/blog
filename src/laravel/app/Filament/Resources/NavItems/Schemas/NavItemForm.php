@@ -3,7 +3,6 @@
 namespace App\Filament\Resources\NavItems\Schemas;
 
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Illuminate\Support\Facades\Route;
@@ -30,9 +29,6 @@ class NavItemForm
                                 'sidebar' => 'sidebar',
                                 'footer_links' => 'footer_links',
                             ])
-                            ->nullable(),
-                        TextInput::make('sidebar_group')
-                            ->numeric()
                             ->nullable(),
                     ]),
             ]);

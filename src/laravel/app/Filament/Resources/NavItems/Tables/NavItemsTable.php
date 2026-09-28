@@ -21,7 +21,10 @@ class NavItemsTable
                 TextColumn::make('route_name')->searchable()->sortable(),
                 TextColumn::make('parent.route_name')->label('Parent')->sortable(),
                 TextColumn::make('placement')->sortable(),
-                TextColumn::make('sidebar_group')->sortable(),
+                TextColumn::make('sidebar_group')
+                    ->label('Sidebar group')
+                    ->formatStateUsing(fn (?int $state): string => $state === null ? 'Unassigned' : 'Group '.($state + 1))
+                    ->sortable(),
             ])
             ->filters([
                 //

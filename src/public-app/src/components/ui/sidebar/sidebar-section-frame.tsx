@@ -5,7 +5,7 @@ import { Typography } from '../typography';
 
 type SidebarSectionFrameProps = { label: string; children: ReactNode };
 
-const sectionStyles = { display: 'block' };
+const sectionStyles = { display: 'grid', gap: 'var(--site-sidebar-gap)' };
 
 const contentStyles = {
   display: 'flex',
@@ -13,13 +13,12 @@ const contentStyles = {
   alignItems: 'stretch',
   flexShrink: 0,
   gap: 'var(--site-sidebar-gap)',
-  marginTop: 'var(--site-sidebar-gap)',
 };
 
 export function SidebarSectionFrame(props: SidebarSectionFrameProps) {
   return (
-    <Box>
-      <Typography variant="overline" color="text.secondary" sx={sectionStyles}>
+    <Box sx={sectionStyles}>
+      <Typography variant="overline" color="text.secondary">
         {props.label}
       </Typography>
       <Stack sx={contentStyles}>{props.children}</Stack>

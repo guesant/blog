@@ -9,7 +9,6 @@ type FindingCardDescriptionProps = {
 
 const descriptionStyles = {
   feed: {
-    marginBlockStart: 'var(--site-space-2)',
     color: 'var(--site-text-primary)',
     fontSize: 'var(--site-text-body)',
     lineHeight: 'var(--site-leading-relaxed)',

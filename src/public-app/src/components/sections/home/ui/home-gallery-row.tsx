@@ -15,7 +15,7 @@ export function HomeGalleryRow(props: HomeGalleryRowProps) {
       display: 'grid',
       gridAutoColumns: { xs: '85%', sm: '48%', md: '32%' },
       gridAutoFlow: 'column',
-      gap: 2,
+      gap: 'var(--site-gap-stack)',
       overflowX: 'auto',
       pb: 1,
     };
@@ -23,13 +23,13 @@ export function HomeGalleryRow(props: HomeGalleryRowProps) {
     rowStyles = {
       display: 'grid',
       gridTemplateColumns: '1fr',
-      gap: 2,
+      gap: 'var(--site-gap-stack)',
     };
   } else {
     rowStyles = {
       display: 'grid',
       gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, minmax(0, 1fr))' },
-      gap: 2,
+      gap: 'var(--site-gap-stack)',
     };
   }
 

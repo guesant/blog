@@ -5,14 +5,11 @@ type CaseCardTechnologiesProps = CaseCardTextProps;
 
 const technologiesStyles = {
   listing: {
-    marginBlockStart: 'var(--site-space-2)',
-    paddingBlockStart: 'var(--site-space-3)',
     color: 'text.secondary',
     fontSize: 'var(--site-text-sm)',
   },
   showcase: {
     marginBlockStart: 'auto',
-    paddingBlockStart: 'var(--site-space-6)',
     color: 'text.secondary',
     fontSize: '.8rem',
   },

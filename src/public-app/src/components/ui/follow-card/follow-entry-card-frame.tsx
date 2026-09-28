@@ -7,6 +7,8 @@ type FollowEntryCardFrameProps = {
 };
 
 const frameStyles = {
+  display: 'grid',
+  gap: 'var(--site-space-1)',
   padding: 'var(--site-inset-card)',
   color: 'inherit',
   textDecoration: 'none',

@@ -8,7 +8,6 @@ const styles = {
   flexDirection: 'column',
   flexShrink: 0,
   gap: 'var(--site-sidebar-gap)',
-  marginTop: 'var(--site-sidebar-gap)',
   marginLeft: 'var(--site-space-3)',
   paddingLeft: 'var(--site-space-3)',
   borderLeft: 'var(--site-border-width) solid',

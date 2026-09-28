@@ -4,7 +4,8 @@ const explorationTileGrid: SxProps<Theme> = {
   display: 'flex',
   flexWrap: 'wrap',
   justifyContent: 'center',
-  gap: 'var(--site-space-3)',
+  rowGap: 'var(--site-gap-stack)',
+  columnGap: 'var(--site-gap-cluster)',
   mt: 'var(--site-space-4)',
   '& > *, & [data-exploration-item]': {
     flex: {

@@ -4,5 +4,5 @@ import { Box } from '../box';
 type CaseFactFrameProps = { children: ReactNode };
 
 export function CaseFactFrame(props: CaseFactFrameProps) {
-  return <Box>{props.children}</Box>;
+  return <Box sx={{ display: 'grid', gap: 'var(--site-space-2)' }}>{props.children}</Box>;
 }

@@ -13,28 +13,24 @@ type ProjectCardContentProps = {
 };
 
 const titleStyles = {
-  marginBlockStart: 'var(--site-space-3)',
   fontSize: '1.25rem',
   transition: 'color .2s',
 };
 
 const purposeStyles = {
-  marginBlockStart: 'var(--site-space-2)',
   fontSize: '.9rem',
   maxWidth: '48ch',
 };
 
-const problemStyles = { marginBlockStart: 'var(--site-space-4)', fontSize: '.85rem' };
+const problemStyles = { fontSize: '.85rem' };
 
 const technologiesStyles = {
   marginBlockStart: 'auto',
-  paddingBlockStart: 'var(--site-space-6)',
   color: 'text.secondary',
   fontSize: '.8rem',
 };
 
 const actionStyles = {
-  marginBlockStart: 'var(--site-space-4)',
   display: 'inline-flex',
   alignItems: 'center',
   gap: 'var(--site-space-2)',

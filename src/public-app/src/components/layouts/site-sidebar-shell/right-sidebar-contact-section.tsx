@@ -34,7 +34,7 @@ export function RightSidebarContactSection(props: RightSidebarContactSectionProp
                 <SidebarProtectedEmail
                   challenge={props.site.contact.emailChallenge}
                   available={props.site.contact.hasEmail}
-                  label={props.t('contact')}
+                  label={props.t('email')}
                 />
               ) : undefined
             }

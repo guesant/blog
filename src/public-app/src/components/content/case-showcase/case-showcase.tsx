@@ -7,7 +7,7 @@ import { SecondaryCaseGrid } from './secondary-case-grid';
 
 export function CaseShowcase(props: CaseShowcaseProps) {
   return (
-    <Box>
+    <Box visualVariant="caseShowcase">
       <FeaturedCaseCard item={props.cases[0]} />
       <SecondaryCaseGrid items={props.cases.slice(1)} />
     </Box>

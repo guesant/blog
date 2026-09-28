@@ -17,8 +17,6 @@ const titleStyles = {
 
 const purposeStyles = { color: 'var(--site-text-secondary)' };
 
-const problemStyles = { marginBlockStart: 'var(--site-space-2)' };
-
 const technologiesStyles = { color: 'var(--site-text-secondary)' };
 
 export function ProjectRowContent(props: ProjectRowContentProps) {
@@ -33,7 +31,7 @@ export function ProjectRowContent(props: ProjectRowContentProps) {
       <Typography sx={purposeStyles}>{props.purpose}</Typography>
       <ConditionalContent
         condition={Boolean(props.problem)}
-        content={<Typography sx={problemStyles}>{props.problem}</Typography>}
+        content={<Typography>{props.problem}</Typography>}
       />
       <Typography sx={technologiesStyles}>{props.technologies}</Typography>
     </>

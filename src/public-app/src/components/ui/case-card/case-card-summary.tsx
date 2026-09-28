@@ -5,16 +5,14 @@ type CaseCardSummaryProps = CaseCardTextProps;
 
 const summaryStyles = {
   listing: {
-    marginBlockStart: 'var(--site-space-1)',
     maxWidth: '58ch',
     fontSize: 'var(--site-text-body)',
   },
   showcase: {
-    marginBlockStart: 'var(--site-space-3)',
     maxWidth: '52ch',
     fontSize: '.9rem',
   },
-  featured: { marginBlockStart: 'var(--site-space-2)', maxWidth: '56ch' },
+  featured: { maxWidth: '56ch' },
 };
 
 export function CaseCardSummary(props: CaseCardSummaryProps) {

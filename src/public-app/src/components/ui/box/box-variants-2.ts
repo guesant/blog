@@ -11,7 +11,7 @@ const pageLayout: SxProps<Theme> = {
   boxSizing: 'border-box',
   backgroundColor: 'var(--grid-background)',
   flexDirection: 'column',
-  gap: 'var(--site-space-3)',
+  gap: 'var(--site-page-content-offset)',
   pt: 'var(--site-page-content-offset) !important',
   pb: 'var(--site-space-6) !important',
 };

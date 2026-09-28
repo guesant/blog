@@ -9,7 +9,6 @@ type ResumeCaseActionProps = {
 
 const actionStyles = {
   display: 'inline-block',
-  marginBlockStart: 'var(--site-space-3)',
   fontSize: 'var(--site-text-sm)',
 };
 

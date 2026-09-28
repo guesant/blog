@@ -7,7 +7,6 @@ const gridStyles = {
   display: 'grid',
   gridTemplateColumns: { xs: '1fr', md: 'repeat(2, 1fr)' },
   gap: 2,
-  marginBlockStart: 2,
 };
 
 export function CaseShowcaseGridFrame(props: CaseShowcaseGridFrameProps) {

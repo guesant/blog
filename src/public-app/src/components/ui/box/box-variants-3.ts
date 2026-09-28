@@ -53,7 +53,7 @@ export const boxVariants3: Record<string, SxProps<Theme>> = {
   findingSection: {
     display: 'grid',
     gap: 'var(--site-space-4)',
-    paddingBlock: 'var(--site-space-6)',
+    paddingBlock: 0,
     paddingInline: 0,
     borderRadius: 0,
     backgroundColor: 'var(--site-surface)',

@@ -14,7 +14,6 @@ export function HomeGallerySectionAction(props: HomeGallerySectionActionProps) {
       sx={{
         display: 'flex',
         justifyContent: 'center',
-        py: 'var(--site-space-6)',
         px: 'var(--site-action-px)',
       }}
     >

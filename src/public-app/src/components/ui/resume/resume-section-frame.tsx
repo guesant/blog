@@ -9,10 +9,12 @@ type ResumeSectionFrameProps = {
 };
 
 const sectionStyles = {
-  display: 'block',
-  marginBlockStart: { xs: 'var(--site-space-4)', md: 'var(--site-space-5)' },
+  display: 'grid',
+  gap: 'var(--site-space-4)',
   color: 'var(--site-text-primary)',
 };
+
+const headingStyles = { display: 'grid', gap: 'var(--site-space-1)' };
 
 const titleStyles = {
   display: 'block',
@@ -21,17 +23,18 @@ const titleStyles = {
 };
 
 const dividerStyles = {
-  marginBlockStart: 'var(--site-space-1)',
-  marginBlockEnd: 'var(--site-space-4)',
+  margin: 0,
 };
 
 export function ResumeSectionFrame(props: ResumeSectionFrameProps) {
   return (
     <Box component="section" sx={sectionStyles}>
-      <Typography component="h2" variant="overline" sx={titleStyles}>
-        {props.title}
-      </Typography>
-      <Divider sx={dividerStyles} />
+      <Box sx={headingStyles}>
+        <Typography component="h2" variant="overline" sx={titleStyles}>
+          {props.title}
+        </Typography>
+        <Divider sx={dividerStyles} />
+      </Box>
       {props.children}
     </Box>
   );

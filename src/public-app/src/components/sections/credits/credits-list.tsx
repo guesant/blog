@@ -1,11 +1,9 @@
-import type { CreditsTranslator } from '@/i18n/compat-support';
 import { CollectionListing } from '../../content/collection-listing';
 import type { CreditEntry } from './types';
 import { CreditCard } from './credit-card';
 
 type CreditsListProps = {
   entries: CreditEntry[];
-  t: CreditsTranslator;
 };
 
 export function CreditsList(props: CreditsListProps) {
@@ -13,7 +11,7 @@ export function CreditsList(props: CreditsListProps) {
     <CollectionListing
       items={props.entries}
       getKey={(entry) => `${entry.category}-${entry.url}-${entry.name}`}
-      renderListItem={(entry) => <CreditCard entry={entry} t={props.t} />}
+      renderListItem={(entry) => <CreditCard entry={entry} />}
     />
   );
 }

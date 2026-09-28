@@ -15,6 +15,7 @@ const sharedStyles = {
   padding: 'var(--site-space-6)',
   display: 'flex',
   flexDirection: 'column',
+  gap: 'var(--site-gap-stack)',
   transition: 'border-color .2s, background-color .2s, transform .2s',
   '&:hover': {
     borderColor: 'rgba(29,95,167,.55)',

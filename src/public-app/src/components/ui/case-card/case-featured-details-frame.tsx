@@ -7,6 +7,7 @@ const detailsStyles = {
   padding: { xs: 3, md: 4 },
   display: 'flex',
   flexDirection: 'column',
+  gap: 'var(--site-gap-stack)',
 };
 
 export function CaseFeaturedDetailsFrame(props: CaseFeaturedDetailsFrameProps) {

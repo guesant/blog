@@ -15,7 +15,8 @@ export const stackVariants: Record<string, SxProps<Theme>> = {
   contentFeedDisplayControls: {
     alignItems: 'center',
     flexWrap: 'wrap',
-    gap: 'var(--site-space-3)',
+    rowGap: 'var(--site-gap-stack)',
+    columnGap: 'var(--site-gap-cluster)',
     mb: 'var(--site-space-4)',
   },
   progressiveFooter: {

@@ -6,6 +6,7 @@ type CaseShowcaseCardFrameProps = CaseCardFrameProps & { compact?: boolean };
 const showcaseStyles = {
   display: 'flex',
   flexDirection: 'column',
+  gap: 'var(--site-gap-stack)',
   padding: 'var(--site-space-6)',
   color: 'text.primary',
   textDecoration: 'none',

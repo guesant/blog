@@ -21,7 +21,7 @@ export function SidebarNavItem(props: SidebarNavItemProps) {
   const visibleChildren = item.children.filter((child) => visibleRoute(child.route, site));
 
   return (
-    <Box>
+    <Box visualVariant="sidebarNavItem">
       <SidebarLink item={item} pathname={pathname} locale={locale} onNavigate={onNavigate} />
       <ConditionalContent
         condition={visibleChildren.length > 0}

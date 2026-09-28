@@ -6,5 +6,5 @@ export type ListingListFrameProps = {
 };
 
 export function ListingListFrame(props: ListingListFrameProps) {
-  return <Stack sx={{ gap: 'var(--site-space-6)' }}>{props.children}</Stack>;
+  return <Stack sx={{ rowGap: 'var(--site-gap-stack)' }}>{props.children}</Stack>;
 }

@@ -26,7 +26,6 @@ export function ContactPageContent(props: ContactPageContentProps) {
         title={page.title}
         description={site.contact.enabled ? page.description : undefined}
         breadcrumbs={[{ label: tNav('contact') }]}
-        layout="contact"
       />
       <ContactPageBody site={site} t={t} tCommon={tCommon} tExternalProfiles={tExternalProfiles} />
     </>

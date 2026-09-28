@@ -5,14 +5,12 @@ type CaseCardReadActionProps = CaseCardTextProps;
 
 const actionStyles = {
   listing: {
-    marginBlockStart: 'var(--site-space-2)',
     display: 'inline-flex',
     gap: 'var(--site-space-1)',
     alignItems: 'center',
     fontWeight: 'var(--site-weight-semibold)',
   },
   showcase: {
-    marginBlockStart: 'var(--site-space-6)',
     display: 'inline-flex',
     gap: 'var(--site-space-2)',
     alignItems: 'center',

@@ -37,7 +37,6 @@ const explorationDescriptionStyles = {
   width: '100%',
   maxWidth: '100%',
   marginInline: 'auto',
-  marginBlockStart: 'var(--site-space-3)',
   boxSizing: 'border-box',
   textAlign: 'justify',
   hyphens: 'auto',
@@ -53,11 +52,7 @@ export function EditorialSection(props: EditorialSectionProps) {
         content={<Divider sx={{ width: '100%', borderColor: 'var(--site-border)' }} />}
       />
       <Box component="header" sx={headerStyles}>
-        <Typography
-          component="h2"
-          variant="h2"
-          sx={isExploration ? { marginBlockStart: 'var(--site-space-2)' } : undefined}
-        >
+        <Typography component="h2" variant="h2">
           {props.title}
         </Typography>
         <ConditionalContent

@@ -6,8 +6,6 @@ import { CreditsPageSections } from './credits-page-sections';
 export function CreditsPageContent(props: CreditsPageContentProps) {
   const { content } = props;
 
-  const t = useTranslations('Pages.credits');
-
   const tFooter = useTranslations('Footer');
 
   return (
@@ -16,9 +14,8 @@ export function CreditsPageContent(props: CreditsPageContentProps) {
         title={content.page.title}
         description={content.page.description}
         breadcrumbs={[{ label: tFooter('credits') }]}
-        layout="credits"
       />
-      <CreditsPageSections content={content} t={t} />
+      <CreditsPageSections content={content} />
     </>
   );
 }

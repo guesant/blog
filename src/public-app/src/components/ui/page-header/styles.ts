@@ -1,13 +1,11 @@
 import type { SxProps, Theme } from '@mui/material/styles';
 
-export type PageHeaderLayout =
-  'standard' | 'detail' | 'contentFeed' | 'credits' | 'about' | 'contact' | 'findingDetail';
+export type PageHeaderLayout = 'standard' | 'detail' | 'contentFeed' | 'about' | 'findingDetail';
 
 const pageIntroLayout: SxProps<Theme> = {
   display: 'grid',
   rowGap: 'var(--site-space-4)',
   marginBlockStart: 0,
-  marginBlockEnd: 'var(--site-page-content-offset)',
 };
 
 export const pageHeaderLayoutStyles: Record<PageHeaderLayout, SxProps<Theme>> = {
@@ -22,9 +20,7 @@ export const pageHeaderLayoutStyles: Record<PageHeaderLayout, SxProps<Theme>> = 
     maxWidth: 'var(--site-content-max)',
     textAlign: 'center',
   },
-  credits: pageIntroLayout,
   about: { ...pageIntroLayout, maxWidth: 'var(--site-page-header-max)' },
-  contact: { ...pageIntroLayout, maxWidth: 'var(--site-page-header-max)' },
   findingDetail: {
     display: 'grid',
     rowGap: 'var(--site-space-3)',
@@ -67,18 +63,11 @@ export const pageHeaderSlotStyles: Record<
       ...standardDescription,
       maxWidth: 'var(--site-lede-max)',
       marginInline: 'auto',
-      marginBlockStart: 'var(--site-space-3)',
       textAlign: 'center',
     },
     meta: { margin: 0 },
   },
-  credits: {
-    title: standardTitle,
-    description: { ...standardDescription, maxWidth: '100%' },
-    meta: { margin: 0 },
-  },
   about: { title: standardTitle, description: standardDescription, meta: { margin: 0 } },
-  contact: { title: standardTitle, description: standardDescription, meta: { margin: 0 } },
   findingDetail: {
     title: {
       ...standardTitle,

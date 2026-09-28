@@ -7,12 +7,14 @@ import { Typography } from '../typography';
 
 type SidebarGroupFrameProps = { label?: string; children: ReactNode };
 
-const stackStyles = { gap: 'var(--site-sidebar-gap)', marginTop: 'var(--site-sidebar-gap)' };
+const groupStyles = { display: 'grid', gap: 'var(--site-sidebar-gap)' };
+
+const stackStyles = { gap: 'var(--site-sidebar-gap)' };
 
 export function SidebarGroupFrame(props: SidebarGroupFrameProps) {
   return (
-    <Box>
-      <Divider sx={{ marginTop: 0, marginBottom: 'var(--site-sidebar-gap)' }} />
+    <Box sx={groupStyles}>
+      <Divider sx={{ margin: 0 }} />
       <ConditionalContent
         condition={Boolean(props.label)}
         content={

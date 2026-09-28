@@ -5,16 +5,13 @@ type CaseCardTitleProps = CaseCardTextProps & { component: 'h2' | 'h3' };
 
 const titleStyles = {
   listing: {
-    marginBlockStart: 'var(--site-space-1)',
     fontSize: 'var(--site-text-xl)',
     transition: 'color .2s',
   },
   showcase: {
-    marginBlockStart: 'var(--site-space-3)',
     transition: 'color .2s',
   },
   featured: {
-    marginBlockStart: 'var(--site-space-3)',
     fontSize: { xs: '1.5rem', md: '1.75rem' },
   },
 };

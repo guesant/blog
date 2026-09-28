@@ -20,6 +20,7 @@ export function SidebarNavigationFrame(props: SidebarNavigationFrameProps) {
         flex: props.compact ? '0 0 auto' : undefined,
         display: 'flex',
         flexDirection: 'column',
+        gap: 'var(--site-sidebar-gap)',
       }}
     >
       {props.children}

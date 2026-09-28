@@ -1,5 +1,3 @@
-'use client';
-
 import type { BreadcrumbItem } from './types';
 import { BreadcrumbCurrentItem } from './breadcrumb-current-item';
 import { BreadcrumbLinkItem } from './breadcrumb-link-item';

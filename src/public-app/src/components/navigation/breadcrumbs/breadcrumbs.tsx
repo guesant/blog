@@ -1,5 +1,3 @@
-'use client';
-
 import { Breadcrumbs as UiBreadcrumbs, Button, Box } from '../../ui';
 import { useTranslations } from '@/i18n/compat';
 import { Link as LocaleLink } from '../../../i18n/navigation';

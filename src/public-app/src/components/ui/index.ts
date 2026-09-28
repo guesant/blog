@@ -86,10 +86,7 @@ export { Skeleton } from './skeleton';
 
 export { VisibilitySentinel } from './visibility-sentinel';
 
-export {
-  EditorialSection,
-  type EditorialSectionPresentation,
-} from './editorial-section';
+export { EditorialSection, type EditorialSectionPresentation } from './editorial-section';
 
 export { ListingListFrame, ListingViewFrame } from './listing-view';
 

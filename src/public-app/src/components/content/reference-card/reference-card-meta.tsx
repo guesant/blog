@@ -1,6 +1,6 @@
 'use client';
 
-import { Box, Typography } from '../../ui';
+import { FindingReferenceMetaFrame, Typography } from '../../ui';
 import { toMessageKey } from '@portfolio/data/config/achados';
 import type { Reference } from '@portfolio/data/domain/types';
 import { useTranslations } from '@/i18n/compat';
@@ -14,7 +14,7 @@ export function ReferenceCardMeta(props: ReferenceCardMetaProps) {
   const t = useTranslations('Pages.achados');
 
   return (
-    <Box visualVariant="referenceCardMeta">
+    <FindingReferenceMetaFrame>
       <Typography variant="overline" color="secondary">
         {t(`types.${toMessageKey(props.reference.type)}`)}
       </Typography>
@@ -26,6 +26,6 @@ export function ReferenceCardMeta(props: ReferenceCardMetaProps) {
           </Typography>
         }
       />
-    </Box>
+    </FindingReferenceMetaFrame>
   );
 }

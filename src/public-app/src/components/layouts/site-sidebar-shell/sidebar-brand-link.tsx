@@ -1,10 +1,10 @@
-import { Link } from '../../ui';
+import { SidebarBrandLinkFrame } from '../../ui';
 import { Link as LocaleLink } from '../../../i18n/navigation';
 
 export function SidebarBrandLink() {
   return (
-    <Link component={LocaleLink} href="/" visualVariant="siteBrand">
+    <SidebarBrandLinkFrame component={LocaleLink} href="/">
       guesant.net
-    </Link>
+    </SidebarBrandLinkFrame>
   );
 }

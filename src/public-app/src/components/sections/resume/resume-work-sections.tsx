@@ -1,6 +1,6 @@
 'use client';
 
-import { Box } from '../../ui';
+import { ResumeWorkListFrame } from '../../ui';
 import { ConditionalContent } from '../../primitives/conditional-content';
 import type { ResumeWorkSectionsProps } from './types';
 import { ResumeSection } from './resume-section';
@@ -28,11 +28,11 @@ export function ResumeWorkSections(props: ResumeWorkSectionsProps) {
           <ResumeSection
             title={t('selectedWork')}
             children={
-              <Box visualVariant="resumeWorkSections">
+              <ResumeWorkListFrame>
                 {cases.map((item) => (
                   <ResumeCase key={item.slug} staticItem={item} />
                 ))}
-              </Box>
+              </ResumeWorkListFrame>
             }
           />
         }

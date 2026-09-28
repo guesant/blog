@@ -1,33 +1,25 @@
 import { NavLink } from '../primitives/nav-link';
-import { Typography } from '../ui';
+import { FindingCardDescription, FindingCardTitle, type FindingCardPresentation } from '../ui';
 
 type FindingCardSummaryProps = {
   title: string;
   href: string;
   description: string;
   headingLevel: 'h2' | 'h3';
-  titleVariant?: 'h3';
-  titleClassName?: string;
-  titleVisualVariant?: string;
-  descriptionVisualVariant?: string;
+  presentation: FindingCardPresentation;
 };
 
 export function FindingCardSummary(props: FindingCardSummaryProps) {
   return (
     <>
-      <Typography
-        className={props.titleClassName}
-        component={props.headingLevel}
-        variant={props.titleVariant}
-        visualVariant={props.titleVisualVariant}
-      >
+      <FindingCardTitle component={props.headingLevel} presentation={props.presentation}>
         <NavLink href={props.href} underline="none" color="inherit">
           {props.title}
         </NavLink>
-      </Typography>
-      <Typography color="text.secondary" visualVariant={props.descriptionVisualVariant}>
+      </FindingCardTitle>
+      <FindingCardDescription presentation={props.presentation}>
         {props.description}
-      </Typography>
+      </FindingCardDescription>
     </>
   );
 }

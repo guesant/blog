@@ -20,7 +20,7 @@ export function ContentFeedHeader(props: ContentFeedHeaderProps) {
           title={props.copy.title}
           description={props.copy.description}
           breadcrumbs={props.breadcrumbs}
-          visualVariant="contentFeedHeader"
+          layout="contentFeed"
         />
       }
     />

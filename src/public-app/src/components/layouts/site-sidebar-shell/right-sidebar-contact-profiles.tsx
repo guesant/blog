@@ -1,4 +1,4 @@
-import { Stack } from '../../ui';
+import { SidebarContactProfilesFrame } from '../../ui';
 import { useTranslations } from '@/i18n/compat';
 import { ProfileIcon } from '../../primitives/profile-icon';
 import { Icon } from '../../primitives/icon';
@@ -14,7 +14,7 @@ export function RightSidebarContactProfiles(props: RightSidebarContactProfilesPr
   const tExternalProfiles = useTranslations('ExternalProfiles');
 
   return (
-    <Stack visualVariant="sidebarContactProfiles">
+    <SidebarContactProfilesFrame>
       {props.site.contact.profiles.map((item) => (
         <SidebarAction
           key={item.url}
@@ -27,6 +27,6 @@ export function RightSidebarContactProfiles(props: RightSidebarContactProfilesPr
           endIcon={<Icon name="external" size={12} />}
         />
       ))}
-    </Stack>
+    </SidebarContactProfilesFrame>
   );
 }

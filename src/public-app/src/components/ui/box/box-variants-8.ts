@@ -74,5 +74,4 @@ export const boxVariants8: Record<string, SxProps<Theme>> = {
     p: { xs: 2, md: 4 },
     aspectRatio: '4 / 3',
   },
-  protectedEmailDialogIcon: { display: 'inline-flex' },
 };

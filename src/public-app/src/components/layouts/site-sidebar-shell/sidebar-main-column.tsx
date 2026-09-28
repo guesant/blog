@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { Box } from '../../ui';
+import { SidebarMainColumnFrame } from '../../ui';
 import { useTranslations } from '@/i18n/compat';
 import { MobileSidebarTopbar } from './mobile-sidebar-topbar';
 import { SidebarMainContent } from './sidebar-main-content';
@@ -14,9 +14,9 @@ export function SidebarMainColumn(props: SidebarMainColumnProps) {
   const t = useTranslations('Sidebar');
 
   return (
-    <Box visualVariant="sidebarMainColumn">
+    <SidebarMainColumnFrame>
       <MobileSidebarTopbar onOpen={props.onOpen} t={t} />
       <SidebarMainContent copyright={props.copyright}>{props.children}</SidebarMainContent>
-    </Box>
+    </SidebarMainColumnFrame>
   );
 }

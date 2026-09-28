@@ -1,4 +1,4 @@
-import { Typography } from '../../ui';
+import { ResumeAwardIssuer } from '../../ui';
 import type { AwardEntriesProps } from './types';
 
 type AwardEntryMetaProps = {
@@ -6,9 +6,5 @@ type AwardEntryMetaProps = {
 };
 
 export function AwardEntryMeta(props: AwardEntryMetaProps) {
-  return (
-    <Typography variant="body2" color="text.secondary" visualVariant="awardEntries">
-      {props.item.issuer}
-    </Typography>
-  );
+  return <ResumeAwardIssuer>{props.item.issuer}</ResumeAwardIssuer>;
 }

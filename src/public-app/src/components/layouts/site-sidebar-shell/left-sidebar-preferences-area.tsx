@@ -1,4 +1,4 @@
-import { Box } from '../../ui';
+import { SidebarPreferencesFrame } from '../../ui';
 import { SidebarPreferences } from './sidebar-preferences';
 import type { SidebarTranslator } from '@/i18n/compat-support';
 
@@ -10,8 +10,8 @@ type LeftSidebarPreferencesAreaProps = {
 
 export function LeftSidebarPreferencesArea(props: LeftSidebarPreferencesAreaProps) {
   return (
-    <Box visualVariant="leftSidebar">
+    <SidebarPreferencesFrame>
       <SidebarPreferences pathname={props.pathname} locale={props.locale} t={props.t} />
-    </Box>
+    </SidebarPreferencesFrame>
   );
 }

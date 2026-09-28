@@ -17,9 +17,7 @@ export function FeedCardBody(props: FeedCardBodyProps) {
           href={props.entry.href}
           description={props.entry.preview}
           headingLevel="h2"
-          titleClassName="content-feed-title"
-          titleVisualVariant="feedCard"
-          descriptionVisualVariant="feedCard2"
+          presentation="feed"
         />
       }
       previews={<FeedCardSourcePreviews {...props} />}

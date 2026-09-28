@@ -1,4 +1,4 @@
-import { Card } from '../../ui';
+import { FollowEntryCardFrame } from '../../ui';
 import type { FollowEntry } from './types';
 import { FollowEntryCardContent } from './follow-entry-card-content';
 
@@ -7,13 +7,9 @@ type FollowEntryCardProps = {
 };
 
 export function FollowEntryCard(props: FollowEntryCardProps) {
-  const linkProps = props.entry.url
-    ? { component: 'a', href: props.entry.url }
-    : { component: 'article' };
-
   return (
-    <Card {...linkProps} variant="outlined" visualVariant="followEntryCard">
+    <FollowEntryCardFrame href={props.entry.url}>
       <FollowEntryCardContent entry={props.entry} />
-    </Card>
+    </FollowEntryCardFrame>
   );
 }

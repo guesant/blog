@@ -1,6 +1,6 @@
 'use client';
 
-import { ToggleButtonGroup } from '../../ui';
+import { SidebarToggleGroup } from '../../ui';
 import { useRouter } from '@/i18n/compat';
 import type { SidebarTranslator } from '@/i18n/compat-support';
 import { routing } from '../../../i18n/routing';
@@ -22,18 +22,17 @@ export function SidebarPreferences(props: SidebarPreferencesProps) {
 
   return (
     <SidebarSection label={t('preferences')}>
-      <ToggleButtonGroup
+      <SidebarToggleGroup
         exclusive
         size="small"
         value={locale}
         onChange={handleSidebarLocaleChange.bind(null, { router, pathname })}
         aria-label={t('language')}
-        visualVariant="sidebarToggleGroup"
       >
         {routing.locales.map((item) => (
           <SidebarLocaleToggle key={item} item={item} />
         ))}
-      </ToggleButtonGroup>
+      </SidebarToggleGroup>
       <SidebarThemeButton t={t} />
     </SidebarSection>
   );

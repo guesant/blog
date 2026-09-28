@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import { ProtectedEmailDialog } from './protected-email-dialog';
 import { RevealPanel } from './reveal-panel';
 import type { ProtectedEmailProps } from './types';
@@ -6,6 +7,7 @@ import type { useProtectedEmailController } from './use-protected-email-controll
 type ProtectedEmailPromptProps = {
   props: ProtectedEmailProps;
   controller: ReturnType<typeof useProtectedEmailController>;
+  renderTrigger: (busy: boolean) => ReactNode;
 };
 
 export function ProtectedEmailPrompt(props: ProtectedEmailPromptProps) {
@@ -13,14 +15,8 @@ export function ProtectedEmailPrompt(props: ProtectedEmailPromptProps) {
     <>
       <RevealPanel
         state={props.controller.state}
-        variant={props.props.variant ?? 'inline'}
-        visualVariant={props.props.visualVariant}
-        buttonSiteVariant={props.props.buttonSiteVariant}
-        color={props.props.color}
-        underline={props.props.underline}
-        typographyVariant={props.props.typographyVariant}
-        onReveal={props.controller.handleTrigger}
         t={props.controller.t}
+        renderTrigger={props.renderTrigger}
       />
       <ProtectedEmailDialog controller={props.controller} />
     </>

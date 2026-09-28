@@ -2,18 +2,6 @@ import type { SxProps, Theme } from '@mui/material/styles';
 import { richTextBody } from './rich-text-body';
 
 export const boxVariants4: Record<string, SxProps<Theme>> = {
-  projectRow: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: 'var(--site-space-2)',
-    p: 'var(--site-inset-card)',
-    borderLeft: 'var(--site-feed-accent-w) solid var(--site-primary)',
-    borderTop: 'var(--site-border-width) solid var(--site-border)',
-    borderRight: 'var(--site-border-width) solid var(--site-border)',
-    borderBottom: 'var(--site-border-width) solid var(--site-border)',
-    backgroundColor: 'var(--site-surface)',
-    '&:hover .project-row-title': { color: 'var(--site-primary)' },
-  },
   writingBody: {
     mt: 7,
     pt: 5,
@@ -55,18 +43,5 @@ export const boxVariants4: Record<string, SxProps<Theme>> = {
     pt: 4,
     borderTop: 1,
     borderColor: 'divider',
-  },
-  stickyLeftSidebar: { position: 'sticky', top: 0, height: '100dvh', overflowY: 'auto' },
-  sidebarBrandRow: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    position: 'relative',
-    minHeight: '2rem',
-  },
-  desktopLeftSidebar: {
-    display: { xs: 'none', md: 'block' },
-    borderRight: 'var(--site-border-width) solid',
-    borderColor: 'var(--site-border-strong)',
   },
 };

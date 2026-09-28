@@ -1,11 +1,9 @@
 'use client';
 
-import { Box, Divider, Typography } from '../../ui';
-import { Stack } from '../../ui';
+import { SidebarGroupFrame } from '../../ui';
 import type { NavigationItem, SiteText } from '@portfolio/data/domain/types';
 import { visibleRoute } from './visible-route';
 import { SidebarNavItem } from './sidebar-nav-item';
-import { ConditionalContent } from '../../primitives/conditional-content';
 
 type SidebarGroupProps = {
   label?: string;
@@ -25,28 +23,17 @@ export function SidebarGroup(props: SidebarGroupProps) {
     return null;
   }
   return (
-    <Box>
-      <Divider visualVariant="sidebarGroup" />
-      <ConditionalContent
-        condition={Boolean(label)}
-        content={
-          <Typography variant="overline" color="text.secondary">
-            {label}
-          </Typography>
-        }
-      />
-      <Stack visualVariant="sidebarGroup">
-        {visibleItems.map((item) => (
-          <SidebarNavItem
-            key={item.route}
-            item={item}
-            pathname={pathname}
-            locale={locale}
-            site={site}
-            onNavigate={onNavigate}
-          />
-        ))}
-      </Stack>
-    </Box>
+    <SidebarGroupFrame label={label}>
+      {visibleItems.map((item) => (
+        <SidebarNavItem
+          key={item.route}
+          item={item}
+          pathname={pathname}
+          locale={locale}
+          site={site}
+          onNavigate={onNavigate}
+        />
+      ))}
+    </SidebarGroupFrame>
   );
 }

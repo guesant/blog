@@ -1,4 +1,8 @@
-import { Box, Stack } from '../../ui';
+import {
+  SidebarMobileBackButtonFrame,
+  SidebarMobileBrandHeaderFrame,
+  SidebarMobileStackFrame,
+} from '../../ui';
 import { ConditionalContent } from '../../primitives/conditional-content';
 import { useTranslations } from '@/i18n/compat';
 import { SidebarBackButton } from './sidebar-back-button';
@@ -27,18 +31,18 @@ export function MobileSidebarStack(props: MobileSidebarStackProps) {
   const backHref = back.backHref ?? '';
 
   return (
-    <Stack visualVariant="mobileSidebarStack">
-      <Box visualVariant="mobileSidebarBrandHeader">
+    <SidebarMobileStackFrame>
+      <SidebarMobileBrandHeaderFrame>
         <ConditionalContent
           condition={Boolean(back.backHref)}
           content={
-            <Box visualVariant="mobileSidebarBackButton">
+            <SidebarMobileBackButtonFrame>
               <SidebarBackButton href={backHref} label={back.backLabel} />
-            </Box>
+            </SidebarMobileBackButtonFrame>
           }
         />
         <SidebarBrandLink />
-      </Box>
+      </SidebarMobileBrandHeaderFrame>
       <LeftSidebar
         site={props.site}
         pathname={props.pathname}
@@ -52,6 +56,6 @@ export function MobileSidebarStack(props: MobileSidebarStackProps) {
         content={<RightSidebar {...props} onNavigate={props.onClose} mobile />}
       />
       <SidebarPreferences pathname={props.pathname} locale={props.locale} t={t} />
-    </Stack>
+    </SidebarMobileStackFrame>
   );
 }

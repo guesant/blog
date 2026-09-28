@@ -16,23 +16,6 @@ const homeReadingText = {
 };
 
 export const typographyVariants3: Record<string, SxProps<Theme>> = {
-  caseLinkReadMore: {
-    mt: 2,
-    display: 'inline-flex',
-    alignItems: 'center',
-    gap: 0.75,
-    fontWeight: 600,
-  },
-  referenceCardTitle: { fontSize: 'var(--site-text-xl)', transition: 'color .2s' },
-  referenceCardDescription: { fontSize: 'var(--site-text-body)', maxWidth: '48ch' },
-  contentFeedHeader: {
-    maxWidth: 'var(--site-lede-max)',
-    marginLeft: 'auto',
-    marginRight: 'auto',
-    mt: 'var(--site-space-3)',
-    textAlign: 'center',
-    hyphens: 'auto',
-  },
   contentFeedStatus: { textAlign: 'center' },
   homeIntro: {
     ...homeReadingText,
@@ -48,36 +31,7 @@ export const typographyVariants3: Record<string, SxProps<Theme>> = {
     width: '100%',
     fontSize: 'var(--site-text-3xl)',
   },
-  feedCard: {
-    margin: 0,
-    color: 'var(--site-text-primary)',
-    fontSize: 'var(--site-text-xl)',
-    fontWeight: 'var(--site-weight-bold)',
-    letterSpacing: 'var(--site-letter-heading)',
-    lineHeight: 'var(--site-leading-tight)',
-    display: '-webkit-box',
-    WebkitBoxOrient: 'vertical',
-    WebkitLineClamp: 2,
-    overflow: 'hidden',
-    textOverflow: 'ellipsis',
-    transition: 'color .2s',
-  },
-  feedCard2: {
-    mt: 'var(--site-space-2)',
-    color: 'var(--site-text-primary)',
-    fontSize: 'var(--site-text-body)',
-    lineHeight: 'var(--site-leading-relaxed)',
-    display: '-webkit-box',
-    WebkitBoxOrient: 'vertical',
-    WebkitLineClamp: 3,
-    overflow: 'hidden',
-    textOverflow: 'ellipsis',
-  },
   metricItem: { fontWeight: 700 },
-  explorationSection: {
-    ...homeReadingText,
-    mt: 'var(--site-space-3)',
-  },
   connectionsSection: {
     margin: 0,
     fontSize: 'var(--site-text-2xl)',
@@ -91,28 +45,6 @@ export const typographyVariants3: Record<string, SxProps<Theme>> = {
     fontSize: 'var(--site-text-sm)',
     fontWeight: 'var(--site-weight-semibold)',
     textTransform: 'capitalize',
-  },
-  detailHeader: { display: 'block', margin: 0 },
-  detailHeader2: { margin: 0, fontSize: 'var(--site-text-3xl)' },
-  detailHeader3: {
-    margin: 0,
-    maxWidth: '62ch',
-    fontSize: '1.0625rem',
-    lineHeight: 1.65,
-  },
-  detailHeader4: { margin: 0, fontSize: '.8125rem' },
-  pageHeader: { display: 'block', margin: 0 },
-  pageHeader2: { margin: 0, fontSize: 'var(--site-text-3xl)' },
-  pageHeader3: {
-    margin: 0,
-    maxWidth: '60ch',
-    fontSize: '1rem',
-    ...justifiedText,
-  },
-  pageHeader3Wide: {
-    margin: 0,
-    fontSize: '1rem',
-    ...justifiedText,
   },
   sourcePreviewListMetadataItem: {
     minWidth: 0,
@@ -140,8 +72,4 @@ export const typographyVariants3: Record<string, SxProps<Theme>> = {
     color: 'text.disabled',
   },
   breadcrumbTrailItem: { px: 'var(--site-action-px)', py: 'var(--site-action-py)' },
-  revealDialogContentView: { mb: 2.5 },
-  caseLinkTitleCompact: { mt: 1.5, fontSize: '1.25rem', transition: 'color .2s' },
-  caseLinkTitleFull: { mt: 1.5, fontSize: '1.5rem', transition: 'color .2s' },
-  explorationTitle: { mt: 'var(--site-space-2)' },
 };

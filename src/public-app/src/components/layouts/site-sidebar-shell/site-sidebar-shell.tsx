@@ -1,6 +1,6 @@
 'use client';
 
-import { Box } from '../../ui';
+import { SidebarLayoutFrame } from '../../ui';
 import { useLocale } from '@/i18n/compat';
 import { useState } from 'react';
 import { usePathname } from '../../../i18n/navigation';
@@ -26,7 +26,7 @@ export function SiteSidebarShell(props: SiteSidebarShellProps) {
     .replace('{name}', profile.name);
 
   return (
-    <Box visualVariant={showRight ? 'siteSidebarShell' : 'siteSidebarShellWithoutRight'}>
+    <SidebarLayoutFrame withRightSidebar={showRight}>
       <DesktopLeftSidebar site={site} pathname={pathname} locale={locale} />
       <SidebarMainColumn copyright={copyright} onOpen={() => setOpen(true)}>
         {children}
@@ -47,6 +47,6 @@ export function SiteSidebarShell(props: SiteSidebarShellProps) {
         pathname={pathname}
         locale={locale}
       />
-    </Box>
+    </SidebarLayoutFrame>
   );
 }

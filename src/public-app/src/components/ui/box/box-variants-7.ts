@@ -24,40 +24,7 @@ const sourcePreviewDetails = {
 };
 
 export const boxVariants7: Record<string, SxProps<Theme>> = {
-  revealPanel: {
-    display: 'inline-flex',
-    flexDirection: 'column',
-    gap: 'var(--site-space-2)',
-    alignItems: 'start',
-  },
-  revealDialogLiveRegion: { display: 'flex', justifyContent: 'center' },
   listingForm: { mb: 'var(--site-space-4)' },
-  siteSidebarShell: {
-    minHeight: '100dvh',
-    display: 'grid',
-    gridTemplateColumns: {
-      xs: '1fr',
-      md: '16rem minmax(0, 1fr) 16rem',
-    },
-    bgcolor: 'var(--site-surface)',
-  },
-  siteSidebarShellWithoutRight: {
-    minHeight: '100dvh',
-    display: 'grid',
-    gridTemplateColumns: {
-      xs: '1fr',
-      md: '16rem minmax(0, 1fr)',
-    },
-    bgcolor: 'var(--site-surface)',
-  },
-  sidebarNav: {
-    p: 2,
-    minWidth: 0,
-    minHeight: '100dvh',
-    display: 'flex',
-    flexDirection: 'column',
-  },
-  sidebarNavCompact: { p: 0, minWidth: 0 },
   metricsGrid,
   metricsGridMargin4: { ...metricsGrid, mt: 4 },
   metricsGridMargin6: { ...metricsGrid, mt: 6 },

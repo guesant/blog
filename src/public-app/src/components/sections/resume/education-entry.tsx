@@ -1,6 +1,11 @@
 'use client';
 
-import { Box, Typography } from '../../ui';
+import {
+  ResumeEducationDegree,
+  ResumeEducationEntryFrame,
+  ResumeEntryTitle,
+  Typography,
+} from '../../ui';
 import { ConditionalContent } from '../../primitives/conditional-content';
 import type { EducationItem } from './types';
 import { EntryPeriod } from './entry-period';
@@ -11,12 +16,10 @@ export function EducationEntry(props: EducationEntryProps) {
   const { item } = props;
 
   return (
-    <Box visualVariant="educationEntry">
-      <Typography visualVariant="educationEntry">{item.institution}</Typography>
+    <ResumeEducationEntryFrame>
+      <ResumeEntryTitle>{item.institution}</ResumeEntryTitle>
       <EntryPeriod period={item.period} />
-      <Typography variant="body2" visualVariant="educationEntry2">
-        {item.degree}
-      </Typography>
+      <ResumeEducationDegree>{item.degree}</ResumeEducationDegree>
       <ConditionalContent
         condition={Boolean(item.location)}
         content={
@@ -25,6 +28,6 @@ export function EducationEntry(props: EducationEntryProps) {
           </Typography>
         }
       />
-    </Box>
+    </ResumeEducationEntryFrame>
   );
 }

@@ -1,5 +1,4 @@
 import type { SxProps, Theme } from '@mui/material/styles';
-import { pageHeaderLayout, pageIntroLayout } from './page-header-layout';
 
 const explorationTileGrid: SxProps<Theme> = {
   display: 'flex',
@@ -17,19 +16,6 @@ const explorationTileGrid: SxProps<Theme> = {
 };
 
 export const boxVariants6: Record<string, SxProps<Theme>> = {
-  secondaryCaseGrid: {
-    display: 'grid',
-    gridTemplateColumns: { xs: '1fr', md: 'repeat(2, 1fr)' },
-    gap: 2,
-    mt: 2,
-  },
-  referenceCardMeta: { display: 'flex', alignItems: 'center', gap: 1 },
-  referenceCardTopics: {
-    pt: 'var(--site-space-2)',
-    display: 'flex',
-    flexWrap: 'wrap',
-    gap: 'var(--site-space-1)',
-  },
   contentFeedFilters: {
     display: 'flex',
     alignItems: 'stretch',
@@ -37,30 +23,6 @@ export const boxVariants6: Record<string, SxProps<Theme>> = {
     width: '100%',
     minWidth: 0,
     flex: '1 1 100%',
-  },
-  contentFeedHeader: {
-    ...pageIntroLayout,
-    maxWidth: 'var(--site-content-max)',
-    textAlign: 'center',
-  },
-  creditsPageHeader: {
-    ...pageIntroLayout,
-  },
-  feedCard: {
-    mt: 'var(--site-space-2)',
-    pt: 'var(--site-space-4)',
-    display: 'flex',
-    flexWrap: 'wrap',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    gap: 'var(--site-space-3)',
-    borderTop: 'var(--site-border-width) solid var(--site-border)',
-  },
-  feedCard2: {
-    display: 'flex',
-    flex: '1 1 auto',
-    flexWrap: 'wrap',
-    gap: 'var(--site-space-2)',
   },
   detailArticle: {
     paddingBlockStart: 0,
@@ -78,15 +40,6 @@ export const boxVariants6: Record<string, SxProps<Theme>> = {
   },
   connectionsSection2: { display: 'flex', flexDirection: 'column', gap: 'var(--site-space-4)' },
   connectionGroup: { display: 'flex', flexWrap: 'wrap', gap: 'var(--site-space-2)' },
-  detailHeader: {
-    ...pageHeaderLayout,
-    maxWidth: '52rem',
-  },
-  pageHeader: {
-    ...pageIntroLayout,
-    maxWidth: '46rem',
-  },
-  contactPageHeader: { ...pageIntroLayout, maxWidth: '46rem' },
   homeHeroSurface: {
     position: 'relative',
     isolation: 'isolate',
@@ -127,12 +80,4 @@ export const boxVariants6: Record<string, SxProps<Theme>> = {
   },
   technologyMarquee: { mt: 5 },
   technologyMarquee2: { mt: 2, display: 'grid', gap: 1.5 },
-  revealDialogRevealed: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: 1.5,
-    alignItems: 'center',
-  },
-  revealDialogError: { display: 'flex', flexDirection: 'column', gap: 1.5, alignItems: 'center' },
-  revealDialogWorking: { display: 'flex', alignItems: 'center', gap: 1.5 },
 };

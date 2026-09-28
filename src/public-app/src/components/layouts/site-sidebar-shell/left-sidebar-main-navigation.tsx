@@ -1,4 +1,4 @@
-import { Divider, Stack } from '../../ui';
+import { Divider, SidebarNavigationStack } from '../../ui';
 import { SidebarBrandRow } from './sidebar-brand-row';
 import { SidebarLinkList } from './sidebar-link-list';
 import { LeftSidebarAboutGroup } from './left-sidebar-about-group';
@@ -25,7 +25,7 @@ type LeftSidebarMainNavigationProps = {
 
 export function LeftSidebarMainNavigation(props: LeftSidebarMainNavigationProps) {
   return (
-    <Stack visualVariant={props.compact ? 'sidebarNavStackCompact' : 'sidebarNavStack'}>
+    <SidebarNavigationStack compact={Boolean(props.compact)}>
       {props.showBrand !== false && (
         <SidebarBrandRow backHref={props.backHref} backLabel={props.backLabel} />
       )}
@@ -53,6 +53,6 @@ export function LeftSidebarMainNavigation(props: LeftSidebarMainNavigationProps)
         site={props.site}
         onNavigate={props.onNavigate}
       />
-    </Stack>
+    </SidebarNavigationStack>
   );
 }

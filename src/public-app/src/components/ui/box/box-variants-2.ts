@@ -86,23 +86,4 @@ export const boxVariants2: Record<string, SxProps<Theme>> = {
   },
   statusContent: { width: '100%', maxWidth: 'var(--site-lede-max)', mx: 'auto' },
   licenseSection: { mt: { xs: 4, md: 5 }, maxWidth: '60ch' },
-  resumeSection: { mt: { xs: 4, md: 5 } },
-  resumeArticle: {
-    '@media print': { maxWidth: 'none', py: 0 },
-  },
-  resumeBreadcrumbs: {
-    display: 'flex',
-    justifyContent: 'center',
-    '@media print': { display: 'none' },
-  },
-  resumeCase: {
-    display: 'grid',
-    gridTemplateColumns: { xs: '1fr', sm: '1fr auto' },
-    columnGap: 3,
-    rowGap: 0.25,
-  },
-  resumeWorkSections: { display: 'grid', gap: 3 },
-  resumeEntries: { display: 'grid', gap: 2 },
-  educationEntries: { display: 'grid', gap: 2 },
-  trajectoryEntries: { display: 'grid', gap: 3 },
 };

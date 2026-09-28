@@ -1,6 +1,6 @@
 'use client';
 
-import { Box } from '../../ui';
+import { ResumeQualificationListFrame } from '../../ui';
 import { ConditionalContent } from '../../primitives/conditional-content';
 import type { ResumeQualificationSectionsProps } from './types';
 import { ResumeSection } from './resume-section';
@@ -18,14 +18,14 @@ export function ResumeQualificationSections(props: ResumeQualificationSectionsPr
           <ResumeSection
             title={t('skills')}
             children={
-              <Box visualVariant="resumeQualificationSections">
+              <ResumeQualificationListFrame>
                 {resume.skills.map((group) => (
                   <ResumeSkill
                     key={`${group.label || 'skill'}-${(group.items ?? []).join(',')}`}
                     group={group}
                   />
                 ))}
-              </Box>
+              </ResumeQualificationListFrame>
             }
           />
         }

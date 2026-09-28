@@ -1,4 +1,4 @@
-import { Box, Stack } from '../../ui';
+import { SidebarRightColumnFrame, SidebarRightStackFrame } from '../../ui';
 import { RightSidebarSections } from './right-sidebar-sections';
 import type { SiteText } from '@portfolio/data/domain/types';
 import type { buildRightSidebarData } from './build-right-sidebar-data';
@@ -16,10 +16,10 @@ type RightSidebarViewProps = {
 
 export function RightSidebarView(props: RightSidebarViewProps) {
   return (
-    <Box component="aside" visualVariant={props.mobile ? 'rightSidebarMobile' : 'rightSidebar'}>
-      <Stack visualVariant="rightSidebar">
+    <SidebarRightColumnFrame mobile={Boolean(props.mobile)}>
+      <SidebarRightStackFrame>
         <RightSidebarSections {...props} />
-      </Stack>
-    </Box>
+      </SidebarRightStackFrame>
+    </SidebarRightColumnFrame>
   );
 }

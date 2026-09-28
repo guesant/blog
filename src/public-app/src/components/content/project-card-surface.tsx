@@ -2,7 +2,7 @@
 
 import type { Project } from '@portfolio/data/domain/types';
 import { useTranslations } from '@/i18n/compat';
-import { Card } from '../ui';
+import { ProjectCardFrame } from '../ui';
 import { NavLink } from '../primitives/nav-link';
 import { ProjectCardDetails } from './project-card-details';
 
@@ -20,14 +20,14 @@ export function ProjectCardSurface(props: ProjectCardSurfaceProps) {
   const content = project;
 
   return (
-    <Card
+    <ProjectCardFrame
       component={NavLink}
       href={content.url ?? `/projects/${content.slug}`}
       underline="none"
       color="inherit"
-      visualVariant={highlighted ? 'projectCardHighlighted' : 'projectCardPlain'}
+      emphasis={highlighted ? 'highlighted' : 'plain'}
     >
       <ProjectCardDetails project={content} headingLevel={headingLevel} t={t} />
-    </Card>
+    </ProjectCardFrame>
   );
 }

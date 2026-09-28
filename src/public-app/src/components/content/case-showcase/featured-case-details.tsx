@@ -1,6 +1,6 @@
 'use client';
 
-import { Box } from '../../ui';
+import { CaseCardSummary, CaseCardTitle, CaseFeaturedDetailsFrame } from '../../ui';
 import type { CaseStudy } from '@portfolio/data/domain/types';
 import { useTranslations } from '@/i18n/compat';
 import { FeaturedCaseFacts } from './featured-case-facts';
@@ -15,16 +15,17 @@ export function FeaturedCaseDetails(props: FeaturedCaseDetailsProps) {
   const t = useTranslations('CaseShowcase');
 
   return (
-    <Box visualVariant="featuredCaseDetails">
+    <CaseFeaturedDetailsFrame>
       <CaseSummary
         item={props.item}
         meta={`${t('selectedCase')} ${props.item.number} · ${props.item.meta}`}
-        headingLevel="h3"
-        titleVisualVariant="featuredCaseDetails"
-        summaryVisualVariant="featuredCaseDetails2"
       />
+      <CaseCardTitle component="h3" presentation="featured">
+        {props.item.title}
+      </CaseCardTitle>
+      <CaseCardSummary presentation="featured">{props.item.summary}</CaseCardSummary>
       <FeaturedCaseFacts item={props.item} />
       <FeaturedCaseFooter item={props.item} />
-    </Box>
+    </CaseFeaturedDetailsFrame>
   );
 }

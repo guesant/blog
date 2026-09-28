@@ -1,15 +1,15 @@
-import { RevealTriggerAction } from './reveal-trigger-action';
+import { ProtectedEmailTriggerButton } from '../../ui';
 import type { RevealTriggerProps } from './types';
 
 type RevealTriggerSidebarProps = RevealTriggerProps;
 
 export function RevealTriggerSidebar(props: RevealTriggerSidebarProps) {
   return (
-    <RevealTriggerAction
-      {...props}
-      iconSize={14}
-      siteVariant={props.buttonSiteVariant ?? 'sidebar'}
-      size="small"
+    <ProtectedEmailTriggerButton
+      presentation="sidebar"
+      busy={props.busy}
+      label={props.label}
+      onReveal={props.onReveal}
     />
   );
 }

@@ -1,15 +1,17 @@
-import { RevealedEmailAction } from './revealed-email-action';
+import { ProtectedEmailRevealedButton } from '../../ui';
 import type { RevealedEmailProps } from './types';
 
 type RevealedEmailSidebarProps = RevealedEmailProps;
 
 export function RevealedEmailSidebar(props: RevealedEmailSidebarProps) {
   return (
-    <RevealedEmailAction
-      {...props}
-      iconSize={14}
-      siteVariant={props.buttonSiteVariant ?? 'sidebar'}
-      size="small"
+    <ProtectedEmailRevealedButton
+      presentation="sidebar"
+      email={props.email}
+      label={props.label}
+      showAddress={props.showAddress}
+      onReveal={props.onReveal}
+      ref={props.ref}
     />
   );
 }

@@ -1,6 +1,6 @@
 'use client';
 
-import { Box, Typography } from '../../ui';
+import { ResumeSkillLabel, Typography } from '../../ui';
 import type { ResumeSkillGroup } from './types';
 
 type ResumeSkillProps = {
@@ -10,9 +10,7 @@ type ResumeSkillProps = {
 export function ResumeSkill(props: ResumeSkillProps) {
   return (
     <Typography variant="body2" color="text.secondary">
-      <Box component="span" visualVariant="resumeSkill">
-        {props.group.label}:{' '}
-      </Box>
+      <ResumeSkillLabel>{props.group.label}: </ResumeSkillLabel>
       {(props.group.items ?? []).join(' · ')}
     </Typography>
   );

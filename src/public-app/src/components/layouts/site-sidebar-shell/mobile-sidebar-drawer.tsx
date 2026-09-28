@@ -1,4 +1,4 @@
-import { Drawer } from '../../ui';
+import { SidebarMobileDrawerFrame } from '../../ui';
 import { MobileSidebarStack } from './mobile-sidebar-stack';
 import type { SidebarLayoutProps } from './sidebar-layout.types';
 
@@ -10,8 +10,8 @@ type MobileSidebarDrawerProps = SidebarLayoutProps & {
 
 export function MobileSidebarDrawer(props: MobileSidebarDrawerProps) {
   return (
-    <Drawer anchor="right" open={props.open} onClose={props.onClose} visualVariant="mobileSidebar">
+    <SidebarMobileDrawerFrame open={props.open} onClose={props.onClose}>
       <MobileSidebarStack {...props} />
-    </Drawer>
+    </SidebarMobileDrawerFrame>
   );
 }

@@ -1,5 +1,5 @@
 import type { SiteText } from '@portfolio/data/domain/types';
-import { ProtectedEmail } from './protected-email';
+import { ContactProtectedEmail } from './protected-email';
 
 type ContactActionEmailProps = {
   site: SiteText;
@@ -13,13 +13,10 @@ export function ContactActionEmail(props: ContactActionEmailProps) {
   }
 
   return (
-    <ProtectedEmail
+    <ContactProtectedEmail
       challenge={props.site.contact.emailChallenge}
       available={props.hasEmail}
       label={props.label}
-      variant="button"
-      buttonSiteVariant="exploration"
-      visualVariant="fullWidth"
     />
   );
 }

@@ -6,6 +6,18 @@ export { ButtonGroup } from './button-group';
 
 export { Card } from './card';
 
+export { CatalogCardFrame, CatalogEntryContent } from './catalog-card';
+
+export * from './finding-card';
+
+export { FollowEntryCardFrame, FollowEntryDescription } from './follow-card';
+
+export * from './project-card';
+
+export * from './sidebar';
+
+export * from './case-card';
+
 export { Chip } from './chip';
 
 export { CircularProgress } from './circular-progress';
@@ -85,3 +97,17 @@ export { SvgElement, type SvgElementProps } from './svg-element';
 export { Skeleton } from './skeleton';
 
 export { VisibilitySentinel } from './visibility-sentinel';
+
+export {
+  EditorialSection,
+  type EditorialSectionPresentation,
+  type EditorialSectionProps,
+} from './editorial-section';
+
+export { ListingListFrame, ListingViewFrame } from './listing-view';
+
+export { PageHeaderFrame, type PageHeaderFrameProps, type PageHeaderLayout } from './page-header';
+
+export * from './resume';
+
+export * from './protected-email';

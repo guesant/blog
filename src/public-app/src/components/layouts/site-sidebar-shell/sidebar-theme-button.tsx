@@ -1,6 +1,6 @@
 'use client';
 
-import { ToggleButton, ToggleButtonGroup, BrightnessAuto, DarkMode, LightMode } from '../../ui';
+import { ToggleButton, BrightnessAuto, DarkMode, LightMode, SidebarToggleGroup } from '../../ui';
 import type { SidebarTranslator } from '@/i18n/compat-support';
 import { useThemeMode } from '../../ui/theme-registry';
 import type { ThemeMode } from '@portfolio/data/config/theme';
@@ -13,13 +13,12 @@ export function SidebarThemeButton(props: SidebarThemeButtonProps) {
   const { mode, setMode } = useThemeMode();
 
   return (
-    <ToggleButtonGroup
+    <SidebarToggleGroup
       exclusive
       size="small"
       value={mode}
       onChange={(_event: unknown, value: ThemeMode | null) => value && setMode(value)}
       aria-label={t('theme')}
-      visualVariant="sidebarToggleGroup"
     >
       <ToggleButton value="system" aria-label={t('systemTheme')} title={t('systemTheme')}>
         <BrightnessAuto fontSize="small" />
@@ -30,6 +29,6 @@ export function SidebarThemeButton(props: SidebarThemeButtonProps) {
       <ToggleButton value="dark" aria-label={t('darkTheme')} title={t('darkTheme')}>
         <DarkMode fontSize="small" />
       </ToggleButton>
-    </ToggleButtonGroup>
+    </SidebarToggleGroup>
   );
 }

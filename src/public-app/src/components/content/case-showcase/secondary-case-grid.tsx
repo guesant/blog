@@ -1,6 +1,6 @@
 'use client';
 
-import { Box } from '../../ui';
+import { CaseShowcaseGridFrame } from '../../ui';
 import type { CaseStudy } from '@portfolio/data/domain/types';
 import { CaseLink } from './case-link';
 
@@ -11,10 +11,10 @@ export function SecondaryCaseGrid(props: SecondaryCaseGridProps) {
     return null;
   }
   return (
-    <Box visualVariant="secondaryCaseGrid">
+    <CaseShowcaseGridFrame>
       {props.items.map((item) => (
         <CaseLink key={item.slug} item={item} compact />
       ))}
-    </Box>
+    </CaseShowcaseGridFrame>
   );
 }

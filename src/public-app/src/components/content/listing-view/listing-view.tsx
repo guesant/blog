@@ -1,11 +1,11 @@
-import { Stack } from '../../ui';
+import { ListingViewFrame } from '../../ui';
 import type { ListingViewProps } from './types';
 import { ListingList } from './listing-list';
 
 export function ListingView<T>(props: ListingViewProps<T>) {
   return (
-    <Stack visualVariant="listingView">
+    <ListingViewFrame>
       <ListingList {...props} />
-    </Stack>
+    </ListingViewFrame>
   );
 }

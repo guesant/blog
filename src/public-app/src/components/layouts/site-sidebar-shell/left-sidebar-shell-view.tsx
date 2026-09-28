@@ -1,4 +1,4 @@
-import { Box } from '../../ui';
+import { SidebarNavigationFrame } from '../../ui';
 import { ConditionalContent } from '../../primitives/conditional-content';
 import { LeftSidebarShellNavigation } from './left-sidebar-shell-navigation';
 import { LeftSidebarPreferencesArea } from './left-sidebar-preferences-area';
@@ -20,11 +20,7 @@ type LeftSidebarShellViewProps = {
 
 export function LeftSidebarShellView(props: LeftSidebarShellViewProps) {
   return (
-    <Box
-      component="nav"
-      aria-label={props.t('navigation')}
-      visualVariant={props.showPreferences ? 'sidebarNav' : 'sidebarNavCompact'}
-    >
+    <SidebarNavigationFrame compact={!props.showPreferences} aria-label={props.t('navigation')}>
       <LeftSidebarShellNavigation
         site={props.site}
         locale={props.locale}
@@ -45,6 +41,6 @@ export function LeftSidebarShellView(props: LeftSidebarShellViewProps) {
           />
         }
       />
-    </Box>
+    </SidebarNavigationFrame>
   );
 }

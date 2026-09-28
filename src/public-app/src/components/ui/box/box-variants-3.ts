@@ -1,32 +1,7 @@
 import type { SxProps, Theme } from '@mui/material/styles';
 import { richTextBody } from './rich-text-body';
 
-const resumeEntryGrid = {
-  display: 'grid',
-  gridTemplateColumns: { xs: '1fr', sm: '1fr auto' },
-  columnGap: 3,
-  rowGap: 0.25,
-};
-
 export const boxVariants3: Record<string, SxProps<Theme>> = {
-  recommendationEntries: { display: 'grid', gap: 3 },
-  resumeEntryGrid,
-  resumeHeader: { textAlign: 'center' },
-  resumeHeader2: { mt: 2, '@media print': { display: 'none' } },
-  resumeHeader3: {
-    display: 'flex',
-    justifyContent: 'center',
-    flexWrap: 'wrap',
-    columnGap: 2,
-    rowGap: 0.5,
-    mt: 2,
-  },
-  resumeHeader4: { display: 'contents' },
-  resumePdfActions: { display: 'flex', justifyContent: 'center' },
-  resumeQualificationSections: { display: 'grid', gap: 1.25 },
-  trajectoryEntry: { m: 0, mt: 1, pl: 2.25, color: 'text.secondary' },
-  educationEntry: resumeEntryGrid,
-  resumeSkill: { color: 'text.primary', fontWeight: 700 },
   referenceLinkItem: {
     '& + &': {
       borderTop: 'var(--site-border-width) solid var(--site-border-subtle)',

@@ -1,4 +1,4 @@
-import { DialogContent } from '../../ui';
+import { ProtectedEmailDialogContentFrame } from '../../ui';
 import type { RevealDialogProps } from './types';
 import { RevealDialogLiveRegion } from './reveal-dialog-live-region';
 
@@ -6,8 +6,8 @@ type RevealDialogContentViewProps = Pick<RevealDialogProps, 'state' | 'email' | 
 
 export function RevealDialogContentView(props: RevealDialogContentViewProps) {
   return (
-    <DialogContent visualVariant="revealDialogContentView">
+    <ProtectedEmailDialogContentFrame>
       <RevealDialogLiveRegion {...props} />
-    </DialogContent>
+    </ProtectedEmailDialogContentFrame>
   );
 }

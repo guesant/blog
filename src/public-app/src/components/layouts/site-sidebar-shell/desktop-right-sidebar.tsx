@@ -1,4 +1,4 @@
-import { Box } from '../../ui';
+import { SidebarDesktopColumnFrame } from '../../ui';
 import { StickyRightSidebar } from './sticky-right-sidebar';
 import type { SidebarLayoutProps } from './sidebar-layout.types';
 
@@ -9,8 +9,8 @@ export function DesktopRightSidebar(props: DesktopRightSidebarProps) {
     return null;
   }
   return (
-    <Box visualVariant="desktopRightSidebar">
+    <SidebarDesktopColumnFrame side="right">
       <StickyRightSidebar {...props} />
-    </Box>
+    </SidebarDesktopColumnFrame>
   );
 }

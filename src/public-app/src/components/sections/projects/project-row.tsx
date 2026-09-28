@@ -1,17 +1,15 @@
 'use client';
 
-import { Box } from '../../ui';
+import { ProjectRowContent, ProjectRowFrame } from '../../ui';
 import { NavLink } from '../../primitives/nav-link';
 import type { ProjectRowProps } from './types';
-import { ProjectSummary } from '../../content/project-summary';
 
 export function ProjectRow(props: ProjectRowProps) {
   return (
-    <Box visualVariant="projectRow">
-      <ProjectSummary
-        project={props.item}
-        headingLevel="h3"
-        titleContent={
+    <ProjectRowFrame>
+      <ProjectRowContent
+        status={props.item.status}
+        title={
           <NavLink
             href={props.item.url ?? `/projects/${props.item.slug}`}
             underline="none"
@@ -20,10 +18,10 @@ export function ProjectRow(props: ProjectRowProps) {
             {props.item.name}
           </NavLink>
         }
-        titleClassName="project-row-title"
-        titleVisualVariant="projectRow"
-        technologiesColor="text.secondary"
+        purpose={props.item.purpose}
+        problem={props.item.problem}
+        technologies={props.item.technologies.join(' · ')}
       />
-    </Box>
+    </ProjectRowFrame>
   );
 }

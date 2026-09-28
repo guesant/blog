@@ -1,6 +1,6 @@
 'use client';
 
-import { Box } from '../../ui';
+import { ResumePdfActionsFrame } from '../../ui';
 import { useState } from 'react';
 import type { ResumePdfActionsProps } from './types';
 import { ResumePdfButtonGroup } from './resume-pdf-button-group';
@@ -12,7 +12,7 @@ export function ResumePdfActions(props: ResumePdfActionsProps) {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
 
   return (
-    <Box visualVariant="resumePdfActions">
+    <ResumePdfActionsFrame>
       <ResumePdfButtonGroup
         locale={locale}
         pdfUrls={pdfUrls}
@@ -27,6 +27,6 @@ export function ResumePdfActions(props: ResumePdfActionsProps) {
         anchorEl={anchorEl}
         onClose={() => setAnchorEl(null)}
       />
-    </Box>
+    </ResumePdfActionsFrame>
   );
 }

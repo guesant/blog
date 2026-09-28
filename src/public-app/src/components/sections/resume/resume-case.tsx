@@ -1,6 +1,14 @@
 'use client';
 
-import { Box, Link, Typography } from '../../ui';
+import {
+  ResumeCaseAction,
+  ResumeCaseFrame,
+  ResumeCaseLink,
+  ResumeCaseMeta,
+  ResumeCaseRole,
+  ResumeCaseSummary,
+  ResumeEntryBlockFrame,
+} from '../../ui';
 import { useTranslations } from '@/i18n/compat';
 import { Link as LocaleLink } from '../../../i18n/navigation';
 import type { ResumeCaseProps } from './types';
@@ -13,32 +21,18 @@ export function ResumeCase(props: ResumeCaseProps) {
   const item = staticItem;
 
   return (
-    <Box>
-      <Box visualVariant="resumeCase">
-        <Link
-          component={LocaleLink}
-          href={item.url ?? `/cases/${item.slug}`}
-          visualVariant="resumeCaseLink"
-        >
+    <ResumeEntryBlockFrame>
+      <ResumeCaseFrame>
+        <ResumeCaseLink component={LocaleLink} href={item.url ?? `/cases/${item.slug}`}>
           {item.title}
-        </Link>
-        <Typography variant="body2" color="text.secondary">
-          {item.meta}
-        </Typography>
-      </Box>
-      <Typography variant="body2" color="text.secondary" visualVariant="resumeCase">
-        {item.summary}
-      </Typography>
-      <Typography variant="body2" visualVariant="resumeCase2">
-        {item.role}
-      </Typography>
-      <Link
-        component={LocaleLink}
-        href={item.url ?? `/cases/${item.slug}`}
-        visualVariant="resumeCaseAction"
-      >
+        </ResumeCaseLink>
+        <ResumeCaseMeta>{item.meta}</ResumeCaseMeta>
+      </ResumeCaseFrame>
+      <ResumeCaseSummary>{item.summary}</ResumeCaseSummary>
+      <ResumeCaseRole>{item.role}</ResumeCaseRole>
+      <ResumeCaseAction component={LocaleLink} href={item.url ?? `/cases/${item.slug}`}>
         {t('caseLink')}
-      </Link>
-    </Box>
+      </ResumeCaseAction>
+    </ResumeEntryBlockFrame>
   );
 }

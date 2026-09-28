@@ -1,4 +1,4 @@
-import { Typography } from '../../ui';
+import { ResumeTechnicalProductionMeta } from '../../ui';
 import { ConditionalContent } from '../../primitives/conditional-content';
 import { ExternalLink } from '../../primitives/external-link';
 import type { TechnicalProductionItem } from './types';
@@ -12,11 +12,7 @@ export function TechnicalProductionEntryMeta(props: TechnicalProductionEntryMeta
     <ConditionalContent
       condition={Boolean(props.item.kind)}
       content={
-        <Typography
-          variant="body2"
-          color="text.secondary"
-          visualVariant="technicalProductionEntries"
-        >
+        <ResumeTechnicalProductionMeta>
           {props.item.kind}
           <ConditionalContent
             condition={Boolean(props.item.projectHref?.trim())}
@@ -27,7 +23,7 @@ export function TechnicalProductionEntryMeta(props: TechnicalProductionEntryMeta
               />
             }
           />
-        </Typography>
+        </ResumeTechnicalProductionMeta>
       }
     />
   );

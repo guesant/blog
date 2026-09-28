@@ -6,7 +6,6 @@ import { boxVariants5 } from './box-variants-5';
 import { boxVariants6 } from './box-variants-6';
 import { boxVariants7 } from './box-variants-7';
 import { boxVariants8 } from './box-variants-8';
-import { boxVariants9 } from './box-variants-9';
 import { boxVariantsAbout } from './box-variants-about';
 
 export const boxVariants = {
@@ -18,6 +17,5 @@ export const boxVariants = {
   ...boxVariants6,
   ...boxVariants7,
   ...boxVariants8,
-  ...boxVariants9,
   ...boxVariantsAbout,
 };

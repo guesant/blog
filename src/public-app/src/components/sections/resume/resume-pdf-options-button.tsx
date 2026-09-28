@@ -1,4 +1,4 @@
-import { Button } from '../../ui';
+import { ResumePdfOptionsButtonFrame } from '../../ui';
 import { Icon } from '../../primitives/icon';
 import type { MouseEvent } from 'react';
 
@@ -10,16 +10,15 @@ type ResumePdfOptionsButtonProps = {
 
 export function ResumePdfOptionsButton(props: ResumePdfOptionsButtonProps) {
   return (
-    <Button
+    <ResumePdfOptionsButtonFrame
       onClick={props.onClick}
       aria-label={props.label}
       aria-haspopup="menu"
       aria-expanded={props.open}
       siteVariant="action-icon"
       variant="outlined"
-      visualVariant="resumePdfOptionsButton"
     >
       <Icon name="chevron-down" size={16} />
-    </Button>
+    </ResumePdfOptionsButtonFrame>
   );
 }

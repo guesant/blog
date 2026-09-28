@@ -2,6 +2,7 @@
 
 import { useLocale, useTranslations } from '@/i18n/compat';
 import { Breadcrumbs } from '../../navigation/breadcrumbs';
+import { ResumeBreadcrumbsFrame } from '../../ui';
 import type { ResumePageContentProps } from './types';
 import { ResumeHeader } from './resume-header';
 import { ResumePageSections } from './resume-page-sections';
@@ -28,7 +29,9 @@ export function ResumePageContent(props: ResumePageContentProps) {
 
   return (
     <ResumeArticle>
-      <Breadcrumbs trail={[{ label: tNav('resume') }]} containerVisualVariant="resumeBreadcrumbs" />
+      <ResumeBreadcrumbsFrame>
+        <Breadcrumbs trail={[{ label: tNav('resume') }]} />
+      </ResumeBreadcrumbsFrame>
       <ResumeHeader
         page={page}
         profile={profile}

@@ -1,4 +1,4 @@
-import { Typography } from '../../ui';
+import { FollowEntryDescription, Typography } from '../../ui';
 import type { FollowEntry } from './types';
 
 type FollowEntryCardContentProps = {
@@ -11,9 +11,7 @@ export function FollowEntryCardContent(props: FollowEntryCardContentProps) {
       <Typography component="h2" variant="h5">
         {props.entry.title}
       </Typography>
-      <Typography color="text.secondary" visualVariant="followEntryCard">
-        {props.entry.description}
-      </Typography>
+      <FollowEntryDescription>{props.entry.description}</FollowEntryDescription>
     </>
   );
 }

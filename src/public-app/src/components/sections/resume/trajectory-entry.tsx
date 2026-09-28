@@ -1,9 +1,14 @@
 'use client';
 
-import { Box, Typography } from '../../ui';
+import {
+  ResumeEntryBlockFrame,
+  ResumeEntryGridFrame,
+  ResumeEntryTitle,
+  ResumeHighlightItem,
+  ResumeTrajectoryHighlightsFrame,
+  ResumeTrajectoryRole,
+} from '../../ui';
 import type { TrajectoryItem } from './types';
-import { HighlightItem } from './highlight-item';
-import { ResumeEntryGrid } from './resume-entry-grid';
 import { EntryPeriod } from './entry-period';
 
 type TrajectoryEntryProps = {
@@ -14,19 +19,17 @@ export function TrajectoryEntry(props: TrajectoryEntryProps) {
   const { item } = props;
 
   return (
-    <Box>
-      <ResumeEntryGrid>
-        <Typography visualVariant="trajectoryEntry">{item.organization}</Typography>
+    <ResumeEntryBlockFrame>
+      <ResumeEntryGridFrame>
+        <ResumeEntryTitle>{item.organization}</ResumeEntryTitle>
         <EntryPeriod period={item.period} />
-        <Typography variant="body2" visualVariant="trajectoryEntry2">
-          {item.role}
-        </Typography>
-      </ResumeEntryGrid>
-      <Box component="ul" visualVariant="trajectoryEntry">
+        <ResumeTrajectoryRole>{item.role}</ResumeTrajectoryRole>
+      </ResumeEntryGridFrame>
+      <ResumeTrajectoryHighlightsFrame>
         {(item.highlights ?? []).map((highlight) => (
-          <HighlightItem key={highlight} highlight={highlight} />
+          <ResumeHighlightItem key={highlight} highlight={highlight} />
         ))}
-      </Box>
-    </Box>
+      </ResumeTrajectoryHighlightsFrame>
+    </ResumeEntryBlockFrame>
   );
 }

@@ -2,7 +2,6 @@ import type { SxProps, Theme } from '@mui/material/styles';
 
 export type SiteButtonVariant =
   | 'default'
-  | 'sidebar'
   | 'action'
   | 'action-icon'
   | 'availability'
@@ -37,19 +36,6 @@ export const siteButtonVariants: Record<SiteButtonVariant, SxProps<Theme>> = {
     textOverflow: 'ellipsis',
     whiteSpace: 'nowrap',
     textTransform: 'none',
-  },
-  sidebar: {
-    ...textButtonContentSx,
-    width: '100%',
-    minWidth: 0,
-    padding: 'var(--site-action-py) var(--site-space-3)',
-    color: 'var(--site-primary-muted)',
-    borderColor: 'var(--site-primary-muted)',
-    '&:hover': {
-      color: 'var(--site-primary)',
-      borderColor: 'var(--site-primary)',
-      backgroundColor: 'var(--site-surface-hover)',
-    },
   },
   action: {
     ...actionButtonSx,

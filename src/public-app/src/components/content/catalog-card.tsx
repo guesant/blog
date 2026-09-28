@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { Card, Link } from '../ui';
+import { CatalogCardFrame, Link } from '../ui';
 import { NavLink } from '../primitives/nav-link';
 
 type CatalogCardProps = {
@@ -18,8 +18,8 @@ export function CatalogCard(props: CatalogCardProps) {
   };
 
   return (
-    <Card {...linkProps} variant="outlined" visualVariant="catalogEntry">
+    <CatalogCardFrame {...linkProps} variant="outlined">
       {props.children}
-    </Card>
+    </CatalogCardFrame>
   );
 }

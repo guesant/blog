@@ -1,8 +1,6 @@
 'use client';
 
-import { Box } from '../../ui';
-import { Stack } from '../../ui';
-import { sidebarSubnavVisualVariant } from '../sidebar-action';
+import { Box, SidebarSubnavigationFrame } from '../../ui';
 import type { NavigationItem, SiteText } from '@portfolio/data/domain/types';
 import { visibleRoute } from './visible-route';
 import { SidebarLink } from './sidebar-link';
@@ -28,7 +26,7 @@ export function SidebarNavItem(props: SidebarNavItemProps) {
       <ConditionalContent
         condition={visibleChildren.length > 0}
         content={
-          <Stack visualVariant={sidebarSubnavVisualVariant}>
+          <SidebarSubnavigationFrame>
             {visibleChildren.map((child) => (
               <SidebarNavChild
                 key={child.route}
@@ -39,7 +37,7 @@ export function SidebarNavItem(props: SidebarNavItemProps) {
                 onNavigate={onNavigate}
               />
             ))}
-          </Stack>
+          </SidebarSubnavigationFrame>
         }
       />
     </Box>

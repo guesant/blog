@@ -1,4 +1,4 @@
-import { ProtectedEmail } from '../../contact/protected-email';
+import { SidebarProtectedEmail } from '../../contact/protected-email';
 import { ConditionalContent } from '../../primitives/conditional-content';
 import { SidebarLink } from './sidebar-link';
 import { SidebarSection } from './sidebar-section';
@@ -31,11 +31,10 @@ export function RightSidebarContactSection(props: RightSidebarContactSectionProp
           <ConditionalContent
             condition={props.site.contact.hasEmail}
             content={
-              <ProtectedEmail
+              <SidebarProtectedEmail
                 challenge={props.site.contact.emailChallenge}
                 available={props.site.contact.hasEmail}
                 label={props.t('contact')}
-                variant="sidebar"
               />
             }
           />

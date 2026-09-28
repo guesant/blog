@@ -1,4 +1,4 @@
-import { Box, Chip } from '../../ui';
+import { Chip, FindingCardTagListFrame } from '../../ui';
 import { Icon } from '../../primitives/icon';
 import { ConditionalContent } from '../../primitives/conditional-content';
 import { toMessageKey } from '@portfolio/data/config/achados';
@@ -9,7 +9,7 @@ type FeedCardTagItemsProps = Pick<FeedCardProps, 'entry' | 't'>;
 
 export function FeedCardTagItems(props: FeedCardTagItemsProps) {
   return (
-    <Box visualVariant="feedCard2">
+    <FindingCardTagListFrame>
       <ConditionalContent
         condition={Boolean(props.entry.findingType)}
         content={
@@ -34,6 +34,6 @@ export function FeedCardTagItems(props: FeedCardTagItemsProps) {
         content={<Chip label={props.t('featured')} size="small" color="info" />}
       />
       <FeedCardTopics topics={props.entry.topics} />
-    </Box>
+    </FindingCardTagListFrame>
   );
 }

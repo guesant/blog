@@ -1,14 +1,10 @@
 import type { ReactNode } from 'react';
-import { Box } from '../../../ui';
+import { ResumeArticleFrame } from '../../../ui';
 
 type ResumeArticleProps = {
   children: ReactNode;
 };
 
 export function ResumeArticle(props: ResumeArticleProps) {
-  return (
-    <Box component="article" visualVariant="resumeArticle">
-      {props.children}
-    </Box>
-  );
+  return <ResumeArticleFrame>{props.children}</ResumeArticleFrame>;
 }

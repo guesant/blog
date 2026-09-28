@@ -1,4 +1,4 @@
-import { Box } from '../../ui';
+import { ProtectedEmailDialogLiveRegionFrame } from '../../ui';
 import type { RevealDialogProps } from './types';
 import { RevealDialogBody } from './reveal-dialog-body';
 
@@ -6,8 +6,8 @@ type RevealDialogLiveRegionProps = Pick<RevealDialogProps, 'state' | 'email' | '
 
 export function RevealDialogLiveRegion(props: RevealDialogLiveRegionProps) {
   return (
-    <Box aria-live="polite" visualVariant="revealDialogLiveRegion">
+    <ProtectedEmailDialogLiveRegionFrame>
       <RevealDialogBody {...props} />
-    </Box>
+    </ProtectedEmailDialogLiveRegionFrame>
   );
 }

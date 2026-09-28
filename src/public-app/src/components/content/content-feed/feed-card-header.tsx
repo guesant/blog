@@ -1,4 +1,4 @@
-import { Box, Chip, Stack } from '../../ui';
+import { Box, FindingCardKindChip, FindingCardMetadataRow } from '../../ui';
 import type { FeedCardProps } from './feed-card-types';
 import { formatDate } from '../format-date';
 import type { AchadosTranslationKey } from '@/i18n/compat-support';
@@ -19,15 +19,14 @@ export function FeedCardHeader(props: FeedCardHeaderProps) {
     .join(' · ');
 
   return (
-    <Stack direction="row" visualVariant="feedCard">
-      <Chip
-        label={props.t(kindMessageKey)}
-        size="small"
+    <FindingCardMetadataRow>
+      <FindingCardKindChip
         clickable={Boolean(props.onQuickFilter)}
         onClick={() => props.onQuickFilter?.({ kind: props.entry.kind })}
-        visualVariant="feedCardKind"
-      />
+      >
+        {props.t(kindMessageKey)}
+      </FindingCardKindChip>
       <Box component="span">{metadata}</Box>
-    </Stack>
+    </FindingCardMetadataRow>
   );
 }

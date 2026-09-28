@@ -1,6 +1,6 @@
 'use client';
 
-import { Card } from '../../ui';
+import { FindingReferenceCardFrame } from '../../ui';
 import type { ReferenceCardProps } from './types';
 import { ReferenceCardMeta } from './reference-card-meta';
 import { ReferenceCardTopics } from './reference-card-topics';
@@ -23,7 +23,7 @@ export function ReferenceCardSurface(props: ReferenceCardSurfaceProps) {
   });
 
   return (
-    <Card visualVariant="referenceCard">
+    <FindingReferenceCardFrame>
       <FindingCardPresentation
         metadata={<ReferenceCardMeta reference={content} />}
         summary={
@@ -32,10 +32,7 @@ export function ReferenceCardSurface(props: ReferenceCardSurfaceProps) {
             href={content.url ?? `/findings/${content.slug}`}
             description={content.description}
             headingLevel={headingLevel}
-            titleVariant="h3"
-            titleClassName="reference-card-title"
-            titleVisualVariant="referenceCardTitle"
-            descriptionVisualVariant="referenceCardDescription"
+            presentation="reference"
           />
         }
         previews={
@@ -47,6 +44,6 @@ export function ReferenceCardSurface(props: ReferenceCardSurfaceProps) {
           content.topics.length > 0 ? <ReferenceCardTopics topics={content.topics} /> : undefined
         }
       />
-    </Card>
+    </FindingReferenceCardFrame>
   );
 }

@@ -1,29 +1,26 @@
-import { RevealedEmail } from './revealed-email';
+import type { ReactNode } from 'react';
 import { ProtectedEmailDialog } from './protected-email-dialog';
-import type { ProtectedEmailProps } from './types';
+import type { ProtectedEmailProps, ProtectedEmailRevealedRenderProps } from './types';
 import type { useProtectedEmailController } from './use-protected-email-controller';
 
 type ProtectedEmailRevealedProps = {
   props: ProtectedEmailProps;
   controller: ReturnType<typeof useProtectedEmailController>;
+  renderEmail: (props: ProtectedEmailRevealedRenderProps) => ReactNode;
 };
 
 export function ProtectedEmailRevealed(props: ProtectedEmailRevealedProps) {
   return (
     <>
-      <RevealedEmail
-        ref={props.controller.linkRef}
-        email={props.controller.email}
-        label={props.props.label}
-        variant={props.props.variant ?? 'inline'}
-        visualVariant={props.props.visualVariant}
-        buttonSiteVariant={props.props.buttonSiteVariant}
-        showAddress={props.props.showAddress ?? false}
-        color={props.props.color}
-        underline={props.props.underline}
-        typographyVariant={props.props.typographyVariant}
-        onReveal={props.controller.handleTrigger}
-      />
+      {props.renderEmail({
+        email: props.controller.email,
+        onReveal: props.controller.handleTrigger,
+        label: props.props.label,
+        showAddress: props.props.showAddress ?? false,
+        color: props.props.color,
+        underline: props.props.underline,
+        ref: props.controller.linkRef,
+      })}
       <ProtectedEmailDialog controller={props.controller} />
     </>
   );

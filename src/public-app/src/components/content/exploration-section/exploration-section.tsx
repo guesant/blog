@@ -8,8 +8,7 @@ export function ExplorationSection(props: ExplorationSectionProps) {
       title={props.title}
       description={props.description}
       divider={props.divider}
-      titleVisualVariant={!props.divider ? 'explorationTitle' : undefined}
-      descriptionVisualVariant="explorationSection"
+      presentation="exploration"
     >
       {props.children}
     </EditorialSectionLayout>

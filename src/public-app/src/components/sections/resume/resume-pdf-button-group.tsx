@@ -1,4 +1,4 @@
-import { Button, ButtonGroup } from '../../ui';
+import { Button, ResumePdfButtonGroupFrame } from '../../ui';
 import type { MouseEvent } from 'react';
 import type { ResumePdfActionsProps } from './types';
 import { ResumePdfOptionsButton } from './resume-pdf-options-button';
@@ -10,7 +10,7 @@ type ResumePdfButtonGroupProps = ResumePdfActionsProps & {
 
 export function ResumePdfButtonGroup(props: ResumePdfButtonGroupProps) {
   return (
-    <ButtonGroup variant="outlined" size="small" visualVariant="resumePdf">
+    <ResumePdfButtonGroupFrame>
       <Button
         component="a"
         href={props.pdfUrls[props.locale]}
@@ -25,6 +25,6 @@ export function ResumePdfButtonGroup(props: ResumePdfButtonGroupProps) {
         label={props.t('pdfOptions')}
         onClick={props.onOpen}
       />
-    </ButtonGroup>
+    </ResumePdfButtonGroupFrame>
   );
 }

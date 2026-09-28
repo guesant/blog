@@ -1,11 +1,8 @@
-import { Typography } from '../../ui';
 import { useTranslations } from '@/i18n/compat';
-import { ProtectedEmail } from '../../contact/protected-email';
 import { PageHeader } from '../../content/page-header';
 import type { LicensePageContentProps } from './types';
 import { LicenseSection } from './license-section';
-import { LicenseContact } from './ui/contact';
-import { ConditionalContent } from '../../primitives/conditional-content';
+import { LicenseContactContent } from './ui/contact-content';
 
 export function LicensePageContent(props: LicensePageContentProps) {
   const { page, emailChallenge } = props;
@@ -34,14 +31,10 @@ export function LicensePageContent(props: LicensePageContentProps) {
           body={section.body ?? ''}
         />
       ))}
-      <ConditionalContent
-        condition={Boolean(emailChallenge)}
-        content={
-          <LicenseContact>
-            <Typography color="text.secondary">{page.contact}</Typography>
-            <ProtectedEmail challenge={emailChallenge} label={tCommon('reveal')} showAddress />
-          </LicenseContact>
-        }
+      <LicenseContactContent
+        contact={page.contact}
+        emailChallenge={emailChallenge}
+        revealLabel={tCommon('reveal')}
       />
     </>
   );

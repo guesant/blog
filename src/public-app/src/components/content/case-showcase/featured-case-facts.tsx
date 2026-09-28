@@ -1,6 +1,6 @@
 'use client';
 
-import { Box } from '../../ui';
+import { CaseFeaturedFactsFrame } from '../../ui';
 import type { CaseStudy } from '@portfolio/data/domain/types';
 import { useTranslations } from '@/i18n/compat';
 import { CaseFact } from './case-fact';
@@ -17,10 +17,10 @@ export function FeaturedCaseFacts(props: FeaturedCaseFactsProps) {
   ];
 
   return (
-    <Box visualVariant="featuredCaseFacts">
+    <CaseFeaturedFactsFrame>
       {facts.map((fact) => (
         <CaseFact key={fact.field} {...fact} />
       ))}
-    </Box>
+    </CaseFeaturedFactsFrame>
   );
 }

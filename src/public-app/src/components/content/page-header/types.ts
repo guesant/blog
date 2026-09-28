@@ -1,6 +1,7 @@
 import type { PageIntroduction } from '@portfolio/data/domain/types';
 import type { ReactNode } from 'react';
 import type { BreadcrumbItem } from '../../navigation/breadcrumbs';
+import type { PageHeaderLayout } from '../../ui/page-header';
 
 export type PageHeaderProps = {
   title: string;
@@ -9,10 +10,7 @@ export type PageHeaderProps = {
   metadata?: ReactNode;
   actions?: ReactNode;
   breadcrumbs?: BreadcrumbItem[];
-  visualVariant?: string;
-  titleVisualVariant?: string;
-  descriptionVisualVariant?: string;
-  metaVisualVariant?: string;
+  layout?: PageHeaderLayout;
 };
 
 export type EditablePageHeaderProps = {

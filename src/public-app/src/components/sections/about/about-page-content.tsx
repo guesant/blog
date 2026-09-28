@@ -10,11 +10,7 @@ export function AboutPageContent(props: AboutPageContentProps) {
 
   return (
     <>
-      <PageHeader
-        title={page.title}
-        breadcrumbs={[{ label: tNav('about') }]}
-        visualVariant="aboutPageHeader"
-      />
+      <PageHeader title={page.title} breadcrumbs={[{ label: tNav('about') }]} layout="about" />
       <AboutEditorialBody page={page} profile={profile} />
     </>
   );

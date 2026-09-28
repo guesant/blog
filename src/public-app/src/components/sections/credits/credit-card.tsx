@@ -1,5 +1,5 @@
 import type { CreditsTranslator, TranslationKey } from '@/i18n/compat-support';
-import { Chip } from '../../ui';
+import { FindingCardKindChip } from '../../ui';
 import { CatalogCard } from '../../content/catalog-card';
 import { CatalogEntrySummary } from '../../content/catalog-entry-summary';
 import { CreditEntryTitle } from './credit-entry-title';
@@ -26,11 +26,11 @@ export function CreditCard(props: CreditCardProps) {
   return (
     <CatalogCard>
       <CatalogEntrySummary
-        meta={<Chip label={category} size="small" visualVariant="feedCardKind" />}
+        meta={<FindingCardKindChip>{category}</FindingCardKindChip>}
         title={<CreditEntryTitle entry={props.entry} />}
         description={props.entry.description}
         titleVariant={props.entry.url ? 'h5' : 'h3'}
-        descriptionVisualVariant="referenceCardDescription"
+        descriptionLayout="reference"
       />
     </CatalogCard>
   );

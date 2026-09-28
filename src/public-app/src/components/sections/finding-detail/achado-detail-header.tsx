@@ -43,9 +43,7 @@ export function AchadoDetailHeader(props: AchadoDetailHeaderProps) {
           />
         </>
       }
-      visualVariant="achadoDetailContent2"
-      titleVisualVariant="achadoDetailContent"
-      descriptionVisualVariant="achadoDetailContent2"
+      layout="findingDetail"
     />
   );
 }

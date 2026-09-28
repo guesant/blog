@@ -11,10 +11,10 @@ const styles = {
   display: 'inline-block',
   margin: 0,
   color: 'var(--site-text-primary)',
-  fontFamily: 'var(--site-font-mono)',
-  fontSize: 'var(--site-text-sm)',
+  fontFamily: 'var(--site-font-logo)',
+  fontSize: 'var(--site-text-2xl)',
   fontWeight: 'var(--site-weight-bold)',
-  letterSpacing: 'var(--site-letter-label)',
+  lineHeight: 'var(--site-leading-tight)',
   textDecoration: 'none',
 };
 

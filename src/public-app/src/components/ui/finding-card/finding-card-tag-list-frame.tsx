@@ -7,7 +7,10 @@ const listStyles = {
   display: 'flex',
   flex: '1 1 auto',
   flexWrap: 'wrap',
+  alignItems: 'flex-start',
+  justifyContent: 'flex-start',
   gap: 'var(--site-space-2)',
+  textAlign: 'left',
 };
 
 export function FindingCardTagListFrame(props: FindingCardTagListFrameProps) {

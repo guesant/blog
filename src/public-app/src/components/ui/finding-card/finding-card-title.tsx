@@ -11,11 +11,13 @@ type FindingCardTitleProps = {
 const titleStyles = {
   feed: {
     margin: 0,
+    width: '100%',
     color: 'var(--site-text-primary)',
     fontSize: 'var(--site-text-xl)',
     fontWeight: 'var(--site-weight-bold)',
     letterSpacing: 'var(--site-letter-heading)',
     lineHeight: 'var(--site-leading-tight)',
+    textAlign: 'left',
     display: '-webkit-box',
     WebkitBoxOrient: 'vertical',
     WebkitLineClamp: 2,
@@ -23,7 +25,12 @@ const titleStyles = {
     textOverflow: 'ellipsis',
     transition: 'color .2s',
   },
-  reference: { fontSize: 'var(--site-text-xl)', transition: 'color .2s' },
+  reference: {
+    width: '100%',
+    fontSize: 'var(--site-text-xl)',
+    textAlign: 'left',
+    transition: 'color .2s',
+  },
 };
 
 export function FindingCardTitle(props: FindingCardTitleProps) {

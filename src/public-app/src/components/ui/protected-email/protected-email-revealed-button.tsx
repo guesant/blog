@@ -17,7 +17,7 @@ export function ProtectedEmailRevealedButton(props: ProtectedEmailRevealedButton
     <Button
       ref={props.ref}
       variant="outlined"
-      siteVariant={contact ? 'exploration' : 'default'}
+      siteVariant={contact ? 'exploration' : 'sidebar'}
       size={contact ? 'medium' : 'small'}
       startIcon={<Icon name="mail" size={contact ? 18 : 14} />}
       onClick={props.onReveal}

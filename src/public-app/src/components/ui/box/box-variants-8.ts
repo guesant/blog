@@ -7,6 +7,7 @@ const sourcePreviewSurface = {
   overflow: 'hidden',
   border: 'var(--site-border-width) solid var(--site-border)',
   borderColor: 'var(--site-border)',
+  textAlign: 'left',
 };
 
 const sourcePreviewMedia = {

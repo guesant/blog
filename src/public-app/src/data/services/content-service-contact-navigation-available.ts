@@ -1,7 +1,5 @@
 import type { SiteText } from '../domain/types.ts';
 
 export function contactNavigationAvailable(site: SiteText): boolean {
-  if (!site.contact.enabled) return false;
-
-  return site.contact.hasEmail || site.contact.profiles.length > 0;
+  return site.contact.enabled;
 }

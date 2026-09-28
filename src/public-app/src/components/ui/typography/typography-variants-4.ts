@@ -3,6 +3,7 @@ import type { SxProps, Theme } from '@mui/material/styles';
 export const typographyVariants4: Record<string, SxProps<Theme>> = {
   sourcePreviewTitleFeed: {
     margin: 0,
+    width: '100%',
     color: 'var(--site-text-primary)',
     fontSize: 'var(--site-text-sm)',
     fontWeight: 'var(--site-weight-bold)',
@@ -13,6 +14,7 @@ export const typographyVariants4: Record<string, SxProps<Theme>> = {
   },
   sourcePreviewDescriptionFeed: {
     margin: 0,
+    width: '100%',
     color: 'var(--site-text-secondary)',
     fontSize: 'var(--site-text-xs)',
     lineHeight: 'var(--site-leading-normal)',
@@ -20,5 +22,6 @@ export const typographyVariants4: Record<string, SxProps<Theme>> = {
     WebkitLineClamp: 2,
     WebkitBoxOrient: 'vertical',
     overflow: 'hidden',
+    textAlign: 'left',
   },
 };

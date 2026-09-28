@@ -9,7 +9,7 @@ const footerStyles = {
   display: 'flex',
   flexWrap: 'wrap',
   alignItems: 'center',
-  justifyContent: 'space-between',
+  justifyContent: { xs: 'flex-start', sm: 'space-between' },
   gap: 'var(--site-space-3)',
   borderTop: 'var(--site-border-width) solid var(--site-border)',
 };

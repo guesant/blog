@@ -21,6 +21,7 @@ const sourcePreviewDetails = {
   padding: 'var(--site-space-3)',
   minWidth: 0,
   overflow: 'hidden',
+  textAlign: 'left',
 };
 
 export const boxVariants7: Record<string, SxProps<Theme>> = {

@@ -16,6 +16,7 @@ const frameStyles = {
   overflow: 'hidden',
   backgroundColor: 'var(--site-surface)',
   boxShadow: 'none',
+  textAlign: 'left',
   '&::before': {
     content: '""',
     position: 'absolute',

@@ -4,17 +4,20 @@ import { ProfileIcon } from '../../primitives/profile-icon';
 import { Icon } from '../../primitives/icon';
 import { SidebarAction } from './sidebar-action';
 import { externalProfileLabel } from '@portfolio/data/config/external-profiles';
+import type { ReactNode } from 'react';
 import type { SiteText } from '@portfolio/data/domain/types';
 
-type RightSidebarContactProfilesProps = {
+type RightSidebarContactActionsProps = {
   site: SiteText;
+  email?: ReactNode;
 };
 
-export function RightSidebarContactProfiles(props: RightSidebarContactProfilesProps) {
+export function RightSidebarContactActions(props: RightSidebarContactActionsProps) {
   const tExternalProfiles = useTranslations('ExternalProfiles');
 
   return (
     <SidebarContactProfilesFrame>
+      {props.email}
       {props.site.contact.profiles.map((item) => (
         <SidebarAction
           key={item.url}

@@ -15,7 +15,7 @@ export function SidebarNavigationFrame(props: SidebarNavigationFrameProps) {
       sx={{
         padding: props.compact ? 0 : 'var(--site-space-3)',
         minWidth: 0,
-        minHeight: '100dvh',
+        minHeight: props.compact ? 0 : '100dvh',
         display: 'flex',
         flexDirection: 'column',
       }}

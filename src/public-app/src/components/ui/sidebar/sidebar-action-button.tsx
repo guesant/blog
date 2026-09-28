@@ -14,22 +14,6 @@ type SidebarActionButtonProps = {
   ariaCurrent?: 'page';
 };
 
-const baseStyles = {
-  justifyContent: 'flex-start',
-  textAlign: 'left',
-  '& .MuiButton-endIcon': { marginLeft: 'auto' },
-  width: '100%',
-  minWidth: 0,
-  padding: 'var(--site-action-py) var(--site-space-3)',
-  color: 'var(--site-primary-muted)',
-  borderColor: 'var(--site-primary-muted)',
-  '&:hover': {
-    color: 'var(--site-primary)',
-    borderColor: 'var(--site-primary)',
-    backgroundColor: 'var(--site-surface-hover)',
-  },
-};
-
 const activeStyles = {
   backgroundColor: 'var(--site-accent-bg)',
   '&:hover': {
@@ -49,8 +33,8 @@ export function SidebarActionButton(props: SidebarActionButtonProps) {
       startIcon={props.icon}
       endIcon={props.endIcon}
       aria-current={props.ariaCurrent}
-      siteVariant="default"
-      sx={{ ...baseStyles, ...(props.active ? activeStyles : {}) }}
+      siteVariant="sidebar"
+      sx={props.active ? activeStyles : undefined}
     >
       {props.label}
     </Button>

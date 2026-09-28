@@ -64,7 +64,13 @@ export const boxVariants6: Record<string, SxProps<Theme>> = {
   },
   homeHeroActions: { ...explorationTileGrid, mt: 0 },
   sourcePreviewListGroup: { display: 'grid', gap: 'var(--site-space-2)' },
-  sourcePreviewListMetadata: { display: 'flex', flexWrap: 'wrap', gap: 'var(--site-space-1)' },
+  sourcePreviewListMetadata: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    justifyContent: 'flex-start',
+    gap: 'var(--site-space-1)',
+    textAlign: 'left',
+  },
   sourcePreviewListItemFallback: {
     display: 'grid',
     placeItems: 'center',

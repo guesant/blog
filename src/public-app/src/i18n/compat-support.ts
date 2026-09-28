@@ -82,8 +82,6 @@ export type ProjectsTranslator = NamespaceTranslator<'Pages.projects'>;
 
 export type ContactTranslator = NamespaceTranslator<'Pages.contact'>;
 
-export type CreditsTranslator = NamespaceTranslator<'Pages.credits'>;
-
 export type ResumeTranslator = NamespaceTranslator<'Pages.resume'>;
 
 export type FieldsTranslator = NamespaceTranslator<'Pages.achados.fields'>;

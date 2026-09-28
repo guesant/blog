@@ -39,6 +39,7 @@
     "groupContent": "Content",
     "connect": "Connect",
     "contact": "Contact",
+    "email": "Email",
     "legal": "Legal",
     "updates": "Updates",
     "follow": "Follow",
@@ -437,15 +438,6 @@
       "aiHeading": "Automated crawling and AI training",
       "aiBody": "Text and data mining, including use as training data for machine learning or generative AI models, is not authorized under the content license without prior written permission. This site's robots.txt asks known AI-training crawlers not to collect this content; well-behaved crawlers honor that request.",
       "contact": "Questions about reuse or licensing? Reach out at:"
-    },
-    "credits": {
-      "categories": {
-        "reference": "References",
-        "infrastructure": "Infrastructure and tooling",
-        "library": "Libraries",
-        "font": "Fonts",
-        "tool": "Tools"
-      }
     },
     "notFound": {
       "title": "This page wandered off.",

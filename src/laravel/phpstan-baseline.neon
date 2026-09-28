@@ -581,6 +581,11 @@ parameters:
 			identifier: staticClassAccess.privateMethod
 			count: 2
 			path: app/Filament/Resources/CreditEntries/Schemas/CreditEntryForm.php
+		-
+			message: '#^Unsafe call to private method App\\Filament\\Resources\\CreditCategories\\Schemas\\CreditCategoryForm\:\:translationTabSchema\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 2
+			path: app/Filament/Resources/CreditCategories/Schemas/CreditCategoryForm.php
 
 		-
 			message: '#^Access to an undefined property App\\Models\\ProfileRevisionTranslation\:\:\$birth_city\.$#'

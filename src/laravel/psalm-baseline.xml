@@ -106,6 +106,21 @@
       <code><![CDATA[EditCreditEntry]]></code>
     </MissingTemplateParam>
   </file>
+  <file src="app/Filament/Resources/CreditCategories/CreditCategoryResource.php">
+    <MissingTemplateParam>
+      <code><![CDATA[CreditCategoryResource]]></code>
+    </MissingTemplateParam>
+  </file>
+  <file src="app/Filament/Resources/CreditCategories/Pages/CreateCreditCategory.php">
+    <MissingTemplateParam>
+      <code><![CDATA[CreateCreditCategory]]></code>
+    </MissingTemplateParam>
+  </file>
+  <file src="app/Filament/Resources/CreditCategories/Pages/EditCreditCategory.php">
+    <MissingTemplateParam>
+      <code><![CDATA[EditCreditCategory]]></code>
+    </MissingTemplateParam>
+  </file>
   <file src="app/Filament/Resources/Experiments/ExperimentResource.php">
     <MissingTemplateParam>
       <code><![CDATA[ExperimentResource]]></code>

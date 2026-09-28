@@ -6,6 +6,7 @@ use App\Application\PublicSite\PublicFeedItem;
 use App\Content\Locale;
 use App\Content\PublicIdentifier;
 use App\Models\CaseStudy;
+use App\Models\CreditCategory;
 use App\Models\Experiment;
 use App\Models\Project;
 use App\Models\ReferenceCollection;
@@ -15,9 +16,13 @@ use App\Models\Topic;
 use App\Models\Writing;
 use App\OpenGraph\OgImageUrlGenerator;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
 
 final class PublicContentResponseFactory
 {
+    /** @var Collection<string, CreditCategory>|null */
+    private ?Collection $creditCategories = null;
+
     public function __construct(
         private readonly PublicFindingResponseFactory $findings,
         private readonly OgImageUrlGenerator $ogImages,
@@ -176,14 +181,17 @@ final class PublicContentResponseFactory
 
     private function credit(object $credit, string $locale): array
     {
+        $categoryKey = (string) $credit->category;
+        $categoryName = $this->creditCategoryName($categoryKey, $locale);
+
         return [
-            'slug' => $credit->package_name ?: $credit->category.'-'.$credit->id,
-            'category' => $credit->category,
-            'name' => $credit->translation($locale)?->name ?? $credit->category,
+            'slug' => $credit->package_name ?: $categoryKey.'-'.$credit->id,
+            'category' => $categoryName,
+            'name' => $credit->translation($locale)?->name ?? $categoryName,
             'description' => $credit->translation($locale)?->description,
             'og_image_url' => $this->ogImages->generate(
                 'article',
-                $credit->translation($locale)?->name ?? $credit->category,
+                $credit->translation($locale)?->name ?? $categoryName,
                 $credit->translation($locale)?->description,
             ),
             'url' => $credit->url,
@@ -191,6 +199,20 @@ final class PublicContentResponseFactory
             'package_name' => $credit->package_name,
             'created_at' => $credit->created_at?->format('Y-m-d H:i:s'),
         ];
+    }
+
+    private function creditCategoryName(string $slug, string $locale): string
+    {
+        $this->creditCategories ??= CreditCategory::query()->with('translations')->get()->keyBy('slug');
+
+        $category = $this->creditCategories->get($slug);
+        if ($category === null) {
+            return $slug;
+        }
+
+        $translation = $category->translation($locale);
+
+        return $translation === null ? $slug : $translation->name;
     }
 
     private function feedWriting(array $item): array

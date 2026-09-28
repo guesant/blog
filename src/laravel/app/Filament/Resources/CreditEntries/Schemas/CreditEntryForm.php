@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\CreditEntries\Schemas;
 
 use App\Filament\Concerns\BuildsTranslationTabs;
+use App\Models\CreditCategory;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -26,12 +27,11 @@ class CreditEntryForm
                             ->maxLength(255),
                         Select::make('category')
                             ->required()
-                            ->options([
-                                'reference' => 'reference',
-                                'infrastructure' => 'infrastructure',
-                                'font' => 'font',
-                                'library' => 'library',
-                            ]),
+                            ->options(fn (): array => CreditCategory::query()
+                                ->orderBy('order')
+                                ->orderBy('slug')
+                                ->pluck('slug', 'slug')
+                                ->all()),
                     ]),
                 static::translationTabs(fn (string $prefix) => [
                     TextInput::make("{$prefix}name")

@@ -39,6 +39,7 @@
     "groupContent": "Conteúdo",
     "connect": "Contato",
     "contact": "Contato",
+    "email": "E-mail",
     "legal": "Legal",
     "updates": "Atualizações",
     "follow": "Acompanhar",
@@ -437,15 +438,6 @@
       "aiHeading": "Coleta automatizada e treinamento de IA",
       "aiBody": "Mineração de texto e dados, incluindo uso como dado de treinamento para modelos de aprendizado de máquina ou IA generativa, não é autorizada pela licença de conteúdo sem permissão prévia por escrito. O robots.txt deste site pede aos crawlers de treinamento de IA conhecidos que não coletem esse conteúdo; crawlers bem-comportados respeitam esse pedido.",
       "contact": "Dúvidas sobre reutilização ou licenciamento? Entre em contato por:"
-    },
-    "credits": {
-      "categories": {
-        "reference": "Referências",
-        "infrastructure": "Infraestrutura e ferramentas",
-        "library": "Bibliotecas",
-        "font": "Fontes",
-        "tool": "Ferramentas"
-      }
     },
     "notFound": {
       "title": "Esta página saiu do caminho.",

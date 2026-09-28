@@ -136,10 +136,6 @@ class ManageSiteSettings extends Page
                     Fieldset::make('Maintenance messages')
                         ->columns(2)
                         ->schema([
-                            TextInput::make("{$prefix}maintenance_eyebrow")
-                                ->label('Maintenance Eyebrow')
-                                ->nullable()
-                                ->maxLength(255),
                             TextInput::make("{$prefix}maintenance_title")
                                 ->label('Maintenance Title')
                                 ->nullable()

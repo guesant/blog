@@ -184,7 +184,6 @@ export type PublicSiteApiChromeResponses = {
             }>;
             protected_email: null;
             maintenance_enabled: boolean;
-            maintenance_eyebrow: string | null;
             maintenance_title: string | null;
             maintenance_description: string | null;
             feature_flags: {

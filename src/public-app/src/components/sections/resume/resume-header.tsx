@@ -8,11 +8,10 @@ import type { ResumeHeaderProps } from './types';
 import { ResumePdfActions } from './resume-pdf-actions';
 
 export function ResumeHeader(props: ResumeHeaderProps) {
-  const { page, profile, site, hasEmail, locale, pdfUrls, t, tExternalProfiles } = props;
+  const { profile, site, hasEmail, locale, pdfUrls, t, tExternalProfiles } = props;
 
   return (
     <ResumeHeaderFrame
-      eyebrow={page.title}
       name={profile.name}
       title={profile.title}
       location={profile.location}

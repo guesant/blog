@@ -1,8 +1,8 @@
 'use client';
 
-import { Box } from '../../ui';
 import type { Writing } from '@portfolio/data/domain/types';
 import { useLocale, useTranslations } from '@/i18n/compat';
+import { DetailArticle } from '../../content/detail-layout';
 import { DetailHeader } from '../../content/page-header';
 import { ContentActions } from '../../content/content-actions';
 import { WritingBody } from './writing-body';
@@ -27,7 +27,7 @@ export function WritingDetailContent(props: WritingDetailContentProps) {
   }).format(new Date(item.dateISO));
 
   return (
-    <Box component="article">
+    <DetailArticle>
       <DetailHeader
         breadcrumbs={[{ label: tNav('writing'), href: '/writing' }, { label: item.title }]}
         title={item.title}
@@ -43,6 +43,6 @@ export function WritingDetailContent(props: WritingDetailContentProps) {
         }
       />
       <WritingBody item={item} />
-    </Box>
+    </DetailArticle>
   );
 }

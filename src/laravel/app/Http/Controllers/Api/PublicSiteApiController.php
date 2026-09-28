@@ -222,7 +222,6 @@ class PublicSiteApiController extends Controller
      *     contact_profiles: array<int, array{platform: string, label: string, url: string}>,
      *     protected_email: null,
      *     maintenance_enabled: bool,
-     *     maintenance_eyebrow: string|null,
      *     maintenance_title: string|null,
      *     maintenance_description: string|null,
      *     feature_flags: array{

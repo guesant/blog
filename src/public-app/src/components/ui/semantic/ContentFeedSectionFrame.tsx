@@ -8,7 +8,13 @@ export function ContentFeedSectionFrame(props: ContentFeedSectionFrameProps) {
     <Box
       {...props}
       component="section"
-      sx={{ width: '100%', scrollMarginTop: 'var(--site-topbar-h)', ...props.sx }}
+      sx={{
+        display: 'grid',
+        rowGap: 'var(--site-page-content-offset)',
+        width: '100%',
+        scrollMarginTop: 'var(--site-topbar-h)',
+        ...props.sx,
+      }}
     />
   );
 }

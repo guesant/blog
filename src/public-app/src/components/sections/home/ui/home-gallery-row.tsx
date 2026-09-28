@@ -4,7 +4,7 @@ import { Box } from '../../../ui';
 
 type HomeGalleryRowProps = {
   children: ReactNode;
-  mode?: 'grid' | 'carousel' | 'list';
+  mode?: 'carousel' | 'list';
 };
 
 export function HomeGalleryRow(props: HomeGalleryRowProps) {
@@ -19,17 +19,11 @@ export function HomeGalleryRow(props: HomeGalleryRowProps) {
       overflowX: 'auto',
       pb: 1,
     };
-  } else if (props.mode === 'list') {
-    rowStyles = {
-      display: 'grid',
-      gridTemplateColumns: '1fr',
-      gap: 'var(--site-gap-stack)',
-    };
   } else {
     rowStyles = {
       display: 'grid',
-      gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, minmax(0, 1fr))' },
-      gap: 'var(--site-gap-stack)',
+      gridTemplateColumns: '1fr',
+      gap: 'var(--site-page-content-offset)',
     };
   }
 

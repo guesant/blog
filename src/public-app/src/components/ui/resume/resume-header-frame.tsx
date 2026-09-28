@@ -3,7 +3,6 @@ import { Box } from '../box';
 import { Typography } from '../typography';
 
 type ResumeHeaderFrameProps = {
-  eyebrow: string;
   name: string;
   title: string;
   location: string;
@@ -43,9 +42,6 @@ export function ResumeHeaderFrame(props: ResumeHeaderFrameProps) {
   return (
     <Box component="header" sx={headerStyles}>
       <Box sx={identityStyles}>
-        <Typography variant="overline" color="primary">
-          {props.eyebrow}
-        </Typography>
         <Typography component="h1" variant="h2" sx={nameStyles}>
           {props.name}
         </Typography>

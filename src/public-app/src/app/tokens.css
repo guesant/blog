@@ -28,7 +28,7 @@
   --site-inset-control: var(--site-space-2) var(--site-space-3);
   --site-inset-card: var(--site-space-4);
   --site-inset-page: var(--site-space-6);
-  --site-page-content-offset: var(--site-space-8);
+  --site-page-content-offset: 3rem;
   --site-action-py: var(--site-space-2);
   --site-action-px: var(--site-space-3);
 

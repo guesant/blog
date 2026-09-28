@@ -36,7 +36,6 @@ final class PublicSiteSettingsReader
                 'contact_enabled' => true,
                 'contact_available' => false,
                 'maintenance_enabled' => false,
-                'maintenance_eyebrow' => null,
                 'maintenance_title' => null,
                 'maintenance_description' => null,
                 'copyright_template' => null,
@@ -84,7 +83,6 @@ final class PublicSiteSettingsReader
                 ],
                 'contextual_cursor' => (bool) $settings->contextual_cursor_enabled,
             ],
-            'maintenance_eyebrow' => $translation?->maintenance_eyebrow,
             'maintenance_title' => $translation?->maintenance_title,
             'maintenance_description' => $translation?->maintenance_description,
             'copyright_template' => $translation?->copyright_template,
@@ -104,7 +102,6 @@ final class PublicSiteSettingsReader
                 'id',
                 'locale',
                 'copyright_template',
-                'maintenance_eyebrow',
                 'maintenance_title',
                 'maintenance_description',
             ])

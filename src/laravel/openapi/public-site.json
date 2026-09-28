@@ -308,12 +308,6 @@
                                                 "maintenance_enabled": {
                                                     "type": "boolean"
                                                 },
-                                                "maintenance_eyebrow": {
-                                                    "type": [
-                                                        "string",
-                                                        "null"
-                                                    ]
-                                                },
                                                 "maintenance_title": {
                                                     "type": [
                                                         "string",
@@ -431,7 +425,6 @@
                                                 "contact_profiles",
                                                 "protected_email",
                                                 "maintenance_enabled",
-                                                "maintenance_eyebrow",
                                                 "maintenance_title",
                                                 "maintenance_description",
                                                 "feature_flags",

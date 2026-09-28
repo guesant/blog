@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import { Box } from '../box';
+import { Divider } from '../divider';
 import { Typography } from '../typography';
 import { ConditionalContent } from '../../primitives/conditional-content';
 import type { PageHeaderLayout } from './styles';
@@ -23,6 +24,7 @@ export function PageHeaderFrame(props: PageHeaderFrameProps) {
   return (
     <Box component="header" sx={pageHeaderLayoutStyles[props.layout]}>
       {props.breadcrumbs}
+      {props.breadcrumbs ? <Divider /> : null}
       <Typography variant="h1" sx={slotStyles.title}>
         {props.title}
       </Typography>

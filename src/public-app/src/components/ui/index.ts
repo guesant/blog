@@ -2,6 +2,8 @@ export { Box } from './box';
 
 export { CatalogCardFrame, CatalogEntryContent } from './catalog-card';
 
+export { ListingCardFrame, type ListingCardFrameProps } from './listing-card';
+
 export * from './finding-card';
 
 export { FollowEntryCardFrame, FollowEntryDescription } from './follow-card';
@@ -71,6 +73,8 @@ export { EditorialSection, type EditorialSectionPresentation } from './editorial
 export { ListingListFrame, ListingViewFrame } from './listing-view';
 
 export { PageHeaderFrame } from './page-header';
+
+export { PageHeaderSectionFrame } from './semantic/PageHeaderSectionFrame';
 
 export * from './resume';
 

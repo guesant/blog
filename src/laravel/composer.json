@@ -6,8 +6,9 @@
     "keywords": ["laravel", "framework"],
     "license": "MIT",
     "require": {
-        "dedoc/scramble": "^0.13.45",
         "php": "^8.3",
+        "craft-forge/filament-language-switcher": "^1.0",
+        "dedoc/scramble": "^0.13.45",
         "filament/filament": "^4.0",
         "laravel/framework": "^13.17",
         "laravel/socialite": "^5.31",

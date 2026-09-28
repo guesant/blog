@@ -26,7 +26,6 @@ class SiteSettingsRevisionTranslationFactory extends RevisionTranslationFactory
             'site_settings_id' => SiteSettings::factory(),
             'locale' => $this->faker->randomElement(['en', 'pt-BR']),
             'copyright_template' => $this->faker->optional()->sentence(),
-            'maintenance_eyebrow' => $this->faker->optional()->word(),
             'maintenance_title' => $this->faker->optional()->word(),
             'maintenance_description' => $this->faker->optional()->paragraph(),
         ];

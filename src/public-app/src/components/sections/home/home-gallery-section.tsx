@@ -12,7 +12,7 @@ type HomeGallerySectionProps = {
   href: string;
   entries: HomeGalleryEntry[];
   total?: number;
-  mode?: 'grid' | 'carousel' | 'list';
+  mode?: 'carousel' | 'list';
   t: HomeTranslator;
 };
 

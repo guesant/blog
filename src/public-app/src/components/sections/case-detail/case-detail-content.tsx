@@ -1,7 +1,7 @@
 'use client';
 
-import { Box } from '../../ui';
 import { useTranslations } from '@/i18n/compat';
+import { DetailArticle } from '../../content/detail-layout';
 import { ContentActions } from '../../content/content-actions';
 import { DetailHeader } from '../../content/page-header';
 import type { CaseDetailContentProps } from './types';
@@ -15,7 +15,7 @@ export function CaseDetailContent(props: CaseDetailContentProps) {
   const tNav = useTranslations('Nav');
 
   return (
-    <Box>
+    <DetailArticle>
       <DetailHeader
         breadcrumbs={[{ label: tNav('work'), href: '/cases' }, { label: item.title }]}
         title={item.title}
@@ -31,6 +31,6 @@ export function CaseDetailContent(props: CaseDetailContentProps) {
         }
       />
       <CaseDetailBody item={item} t={t} />
-    </Box>
+    </DetailArticle>
   );
 }

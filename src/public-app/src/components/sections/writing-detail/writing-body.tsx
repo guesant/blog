@@ -6,7 +6,7 @@ type WritingBodyProps = { item: Writing };
 
 export function WritingBody(props: WritingBodyProps) {
   return (
-    <WritingBodyFrame>
+    <WritingBodyFrame component="main">
       <ContentRichText content={props.item.body} />
     </WritingBodyFrame>
   );

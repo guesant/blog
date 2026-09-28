@@ -23,7 +23,7 @@ type HomeGalleryFeedSection = {
   href: string;
   entries: HomeGalleryFeedCategories[keyof HomeGalleryFeedCategories];
   total: number;
-  mode: 'grid' | 'list';
+  mode: 'list';
 };
 
 export function HomeGalleryFeedSections(props: HomeGalleryFeedSectionsProps) {

@@ -83,7 +83,7 @@ class PageForm
 
             if ($key === 'story' || str_ends_with($key, '_body') || str_ends_with($key, '_description') || in_array($key, ['context', 'intro', 'introduction', 'lead'], true)) {
                 $component = MarkdownEditor::make($field);
-            } elseif (str_ends_with($key, '_title') || str_ends_with($key, '_label') || in_array($key, ['hero_identity', 'hero_experience', 'hero_current_focus', 'title', 'eyebrow'], true)) {
+            } elseif (str_ends_with($key, '_title') || str_ends_with($key, '_label') || in_array($key, ['hero_identity', 'hero_experience', 'hero_current_focus', 'title'], true)) {
                 $component = TextInput::make($field);
             } else {
                 $component = Textarea::make($field)->rows(3);

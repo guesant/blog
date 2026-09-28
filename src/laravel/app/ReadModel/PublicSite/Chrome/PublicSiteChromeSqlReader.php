@@ -34,7 +34,6 @@ final class PublicSiteChromeSqlReader implements PublicSiteChromeReader
                 'contact_profiles' => $settings['contact_profiles'],
                 'protected_email' => null,
                 'maintenance_enabled' => $settings['maintenance_enabled'],
-                'maintenance_eyebrow' => $settings['maintenance_eyebrow'],
                 'maintenance_title' => $settings['maintenance_title'],
                 'maintenance_description' => $settings['maintenance_description'],
                 'feature_flags' => $settings['feature_flags'],

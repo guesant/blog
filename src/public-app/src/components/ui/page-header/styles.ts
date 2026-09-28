@@ -4,7 +4,7 @@ export type PageHeaderLayout = 'standard' | 'detail' | 'contentFeed' | 'about' |
 
 const pageIntroLayout: SxProps<Theme> = {
   display: 'grid',
-  rowGap: 'var(--site-space-4)',
+  rowGap: 'var(--site-page-content-offset)',
   marginBlockStart: 0,
 };
 
@@ -12,7 +12,7 @@ export const pageHeaderLayoutStyles: Record<PageHeaderLayout, SxProps<Theme>> = 
   standard: { ...pageIntroLayout, maxWidth: 'var(--site-page-header-max)' },
   detail: {
     display: 'grid',
-    rowGap: 'var(--site-space-2)',
+    rowGap: 'var(--site-page-content-offset)',
     maxWidth: 'var(--site-lede-max)',
   },
   contentFeed: {
@@ -23,7 +23,7 @@ export const pageHeaderLayoutStyles: Record<PageHeaderLayout, SxProps<Theme>> = 
   about: { ...pageIntroLayout, maxWidth: 'var(--site-page-header-max)' },
   findingDetail: {
     display: 'grid',
-    rowGap: 'var(--site-space-3)',
+    rowGap: 'var(--site-page-content-offset)',
   },
 };
 

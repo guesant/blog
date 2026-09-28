@@ -5,6 +5,8 @@ namespace App\Providers\Filament;
 use App\Filament\Pages\Auth\Login;
 use App\Http\Middleware\EnsureAdminOidcSession;
 use App\Http\Middleware\RequestAuditMiddleware;
+use App\Http\Middleware\SetFilamentLocale;
+use CraftForge\FilamentLanguageSwitcher\FilamentLanguageSwitcherPlugin;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -56,11 +58,22 @@ class AdminPanelProvider extends PanelProvider
                 AccountWidget::class,
                 FilamentInfoWidget::class,
             ])
+            ->plugins([
+                FilamentLanguageSwitcherPlugin::make()
+                    ->locales([
+                        ['code' => 'en', 'name' => 'EN'],
+                        ['code' => 'pt_BR', 'name' => 'PT'],
+                    ])
+                    ->showFlags(false)
+                    ->showOnAuthPages()
+                    ->rememberLocale(),
+            ])
             ->middleware([
                 RequestAuditMiddleware::class,
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
                 StartSession::class,
+                SetFilamentLocale::class,
                 EnsureAdminOidcSession::class,
                 AuthenticateSession::class,
                 ShareErrorsFromSession::class,

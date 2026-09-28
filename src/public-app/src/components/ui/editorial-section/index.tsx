@@ -21,6 +21,11 @@ const sectionStyles = {
   rowGap: 'var(--site-space-6)',
   paddingBlock: 'var(--site-space-6)',
   textAlign: 'center',
+  '&[id="recent-writing"], &[id="recent-findings"], &[id="popular-writing"], &[id="portfolio-credits"], &[id="contact"]':
+    {
+      paddingBlockStart: 0,
+      gap: 'var(--site-page-content-offset)',
+    },
 };
 
 const headerStyles = {

@@ -4,7 +4,7 @@ import { FeedCardBody } from './feed-card-body';
 
 export function FeedCard(props: FeedCardProps) {
   return (
-    <FindingFeedCardFrame>
+    <FindingFeedCardFrame component="article">
       <FeedCardBody {...props} />
     </FindingFeedCardFrame>
   );

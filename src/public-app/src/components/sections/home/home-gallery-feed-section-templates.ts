@@ -1,5 +1,5 @@
 const feedSectionDefinitions = [
-  ['recent-writing', 'recentWriting', 'viewWriting', '/writing', 'recent', 'writing', 'grid'],
+  ['recent-writing', 'recentWriting', 'viewWriting', '/writing', 'recent', 'writing', 'list'],
   ['recent-findings', 'recentFindings', 'viewFindings', '/findings', 'recent', 'finding', 'list'],
   [
     'recent-collections',
@@ -8,9 +8,9 @@ const feedSectionDefinitions = [
     '/collections',
     'recent',
     'collection',
-    'grid',
+    'list',
   ],
-  ['popular-writing', 'popularWriting', 'viewWriting', '/writing', 'popular', 'writing', 'grid'],
+  ['popular-writing', 'popularWriting', 'viewWriting', '/writing', 'popular', 'writing', 'list'],
   [
     'popular-findings',
     'popularFindings',
@@ -27,7 +27,7 @@ const feedSectionDefinitions = [
     '/collections',
     'popular',
     'collection',
-    'grid',
+    'list',
   ],
 ] as const;
 

@@ -6,8 +6,6 @@ type CatalogEntrySummaryProps = {
   title: ReactNode;
   description?: ReactNode;
   titleComponent?: 'h2' | 'h3';
-  titleVariant?: 'h3' | 'h5';
-  descriptionLayout?: 'default' | 'reference';
 };
 
 export function CatalogEntrySummary(props: CatalogEntrySummaryProps) {
@@ -17,8 +15,6 @@ export function CatalogEntrySummary(props: CatalogEntrySummaryProps) {
       title={props.title}
       description={props.description}
       titleComponent={props.titleComponent}
-      titleVariant={props.titleVariant}
-      descriptionLayout={props.descriptionLayout}
     />
   );
 }

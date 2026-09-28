@@ -17,9 +17,5 @@ export function CatalogCard(props: CatalogCardProps) {
     ...(isExternal ? { target: '_blank', rel: 'noopener noreferrer' } : {}),
   };
 
-  return (
-    <CatalogCardFrame {...linkProps} variant="outlined">
-      {props.children}
-    </CatalogCardFrame>
-  );
+  return <CatalogCardFrame {...linkProps}>{props.children}</CatalogCardFrame>;
 }

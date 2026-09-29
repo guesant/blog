@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\AssignsNextOrder;
 use App\Models\Concerns\Auditable;
 use App\Models\Concerns\UsesCurrentRevision;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -13,7 +14,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 class Language extends Model
 {
-    use Auditable, HasFactory, UsesCurrentRevision;
+    use AssignsNextOrder, Auditable, HasFactory, UsesCurrentRevision;
 
     protected $fillable = ['slug', 'order', 'code'];
 

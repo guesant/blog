@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\AssignsNextOrder;
 use App\Models\Concerns\UsesCurrentRevision;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -10,7 +11,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class NavItem extends Model
 {
-    use HasFactory, UsesCurrentRevision;
+    use AssignsNextOrder, HasFactory, UsesCurrentRevision;
 
     protected $fillable = ['route_name', 'parent_id', 'placement', 'sidebar_group', 'order'];
 

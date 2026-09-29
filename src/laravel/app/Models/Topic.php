@@ -6,6 +6,7 @@ use App\Content\Graph\GraphNode;
 use App\Content\Graph\InteractsWithGraph;
 use App\Content\Locale;
 use App\Content\PublicIdentifier;
+use App\Models\Concerns\AssignsNextOrder;
 use App\Models\Concerns\Auditable;
 use App\Models\Concerns\HasPublicId;
 use App\Models\Concerns\UsesCurrentRevision;
@@ -21,7 +22,7 @@ use Illuminate\Database\Eloquent\Relations\MorphToMany;
  */
 class Topic extends Model implements GraphNode
 {
-    use Auditable, HasFactory, HasPublicId, InteractsWithGraph, UsesCurrentRevision;
+    use AssignsNextOrder, Auditable, HasFactory, HasPublicId, InteractsWithGraph, UsesCurrentRevision;
 
     protected $fillable = ['slug', 'public_id', 'order', 'kind', 'parent_id', 'hidden'];
 

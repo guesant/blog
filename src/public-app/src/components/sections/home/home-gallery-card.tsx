@@ -1,6 +1,6 @@
 import type { HomeGalleryEntry } from '@portfolio/data/domain/types';
 import type { HomeTranslator } from '@/i18n/compat-support';
-import { HomeGalleryCatalogCard } from './home-gallery-catalog-card';
+import { CatalogFeedCard } from '../../content/catalog-feed-card';
 import { HomeGalleryFindingCard } from './home-gallery-finding-card';
 
 type HomeGalleryCardProps = {
@@ -13,5 +13,5 @@ export function HomeGalleryCard(props: HomeGalleryCardProps) {
     return <HomeGalleryFindingCard entry={props.entry} />;
   }
 
-  return <HomeGalleryCatalogCard entry={props.entry} t={props.t} />;
+  return <CatalogFeedCard entry={props.entry} t={props.t} />;
 }

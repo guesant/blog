@@ -13,5 +13,7 @@ export function homeGalleryEntry(
     title: stringValue(source.gallery_title),
     description: stringValue(source.gallery_description),
     href: stringValue(source.href),
+    category: stringValue(source.category),
+    date: stringValue(source.date),
   };
 }

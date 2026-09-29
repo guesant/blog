@@ -16,6 +16,8 @@ export type HomeGalleryEntry = Record<string, unknown> & {
   title: string;
   description: string;
   href: string;
+  category?: string;
+  date?: string;
 };
 
 export type HomeCollectionShowcase = {

@@ -1,29 +1,20 @@
 import type { HomeGalleryEntry } from '@portfolio/data/domain/types';
 import type { HomeTranslator } from '@/i18n/compat-support';
-import { FindingCardPresentation } from '../../content/finding-card-presentation';
-import { FindingCardSummary } from '../../content/finding-card-summary';
-import {
-  FindingCardFooterFrame,
-  FindingCardKindChip,
-  FindingCardMetadataRow,
-  FindingCardReadAction,
-  FindingFeedCardFrame,
-} from '../../ui';
+import { FindingCardPresentation } from './finding-card-presentation';
+import { FindingCardSummary } from './finding-card-summary';
+import { CatalogFeedCardMetadata } from './catalog-feed-card-metadata';
+import { FindingCardFooterFrame, FindingCardReadAction, FindingFeedCardFrame } from '../ui';
 
-type HomeGalleryCatalogCardProps = {
+type CatalogFeedCardProps = {
   entry: HomeGalleryEntry;
   t: HomeTranslator;
 };
 
-export function HomeGalleryCatalogCard(props: HomeGalleryCatalogCardProps) {
+export function CatalogFeedCard(props: CatalogFeedCardProps) {
   return (
     <FindingFeedCardFrame component="article">
       <FindingCardPresentation
-        metadata={
-          <FindingCardMetadataRow>
-            <FindingCardKindChip>{props.t(`kind.${props.entry.kind}`)}</FindingCardKindChip>
-          </FindingCardMetadataRow>
-        }
+        metadata={<CatalogFeedCardMetadata entry={props.entry} t={props.t} />}
         summary={
           <FindingCardSummary
             title={props.entry.title}

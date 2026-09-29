@@ -29,6 +29,7 @@ export function HomeGallerySection(props: HomeGallerySectionProps) {
       id={props.id}
       title={props.title}
       description={summary}
+      divider
       footer={<HomeGallerySectionAction action={props.action} href={props.href} />}
     >
       <HomeGalleryRow mode={props.mode}>

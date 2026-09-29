@@ -13,7 +13,7 @@ class CreditEntryFactory extends Factory
     {
         return [
             'url' => $this->faker->optional()->url(),
-            'category' => $this->faker->randomElement(['reference', 'infrastructure']),
+            'category' => $this->faker->randomElement(['reference', 'infrastructure', 'tooling']),
             'order' => $this->faker->numberBetween(1, 100),
         ];
     }

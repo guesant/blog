@@ -16,6 +16,7 @@ use App\Models\Topic;
 use App\Models\Writing;
 use App\OpenGraph\OgImageUrlGenerator;
 use App\Support\PublicMediaUrl;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 
@@ -74,22 +75,22 @@ final class PublicContentResponseFactory
 
     private function projectSummary(Project $project, string $locale): array
     {
-        return $this->withoutDetailFields($this->project($project, $locale));
+        return $this->withoutDetailFields($this->project($project, $locale, false));
     }
 
     private function caseStudySummary(CaseStudy $case, string $locale): array
     {
-        return $this->withoutDetailFields($this->caseStudy($case, $locale));
+        return $this->withoutDetailFields($this->caseStudy($case, $locale, false));
     }
 
     private function writingSummary(Writing $writing, string $locale): array
     {
-        return $this->withoutDetailFields($this->writing($writing, $locale));
+        return $this->withoutDetailFields($this->writing($writing, $locale, false));
     }
 
     private function experimentSummary(Experiment $experiment, string $locale): array
     {
-        return $this->withoutDetailFields($this->experiment($experiment, $locale));
+        return $this->withoutDetailFields($this->experiment($experiment, $locale, false));
     }
 
     private function snippetSummary(Snippet $snippet, string $locale): array
@@ -269,16 +270,18 @@ final class PublicContentResponseFactory
         return $data;
     }
 
-    private function project(Project $project, string $locale): array
+    private function project(Project $project, string $locale, bool $includeSeo = true): array
     {
         $translation = $project->translation($locale);
+        $seo = $includeSeo ? $this->translationSeo($translation) : null;
 
-        return [
+        $data = [
             'slug' => $project->slug,
             'url' => Locale::url('/projects/'.PublicIdentifier::key($project), $locale),
             'name' => $translation?->name ?? $project->slug,
             'purpose' => $translation?->purpose,
-            'og_image_url' => $this->ogImages->generate(
+            'og_image_url' => $this->ogImageUrl(
+                $seo,
                 'project',
                 $translation?->name ?? $project->slug,
                 $translation?->purpose,
@@ -300,19 +303,27 @@ final class PublicContentResponseFactory
             'related' => null,
             'updated_at' => $project->updated_at?->format('Y-m-d H:i:s'),
         ];
+
+        if ($seo !== null) {
+            $data['seo'] = $seo;
+        }
+
+        return $data;
     }
 
-    private function caseStudy(CaseStudy $case, string $locale): array
+    private function caseStudy(CaseStudy $case, string $locale, bool $includeSeo = true): array
     {
         $translation = $case->translation($locale);
+        $seo = $includeSeo ? $this->translationSeo($translation) : null;
 
-        return [
+        $data = [
             'slug' => $case->slug,
             'url' => Locale::url('/cases/'.PublicIdentifier::key($case), $locale),
             'title' => $translation?->title ?? $case->slug,
             'status' => $translation?->status,
             'summary' => $translation?->summary,
-            'og_image_url' => $this->ogImages->generate(
+            'og_image_url' => $this->ogImageUrl(
+                $seo,
                 'project',
                 $translation?->title ?? $case->slug,
                 $translation?->summary,
@@ -335,18 +346,26 @@ final class PublicContentResponseFactory
             'related' => null,
             'updated_at' => $case->updated_at?->format('Y-m-d H:i:s'),
         ];
+
+        if ($seo !== null) {
+            $data['seo'] = $seo;
+        }
+
+        return $data;
     }
 
-    private function writing(Writing $writing, string $locale): array
+    private function writing(Writing $writing, string $locale, bool $includeSeo = true): array
     {
         $translation = $writing->translation($locale);
+        $seo = $includeSeo ? $this->translationSeo($translation) : null;
 
-        return [
+        $data = [
             'slug' => $writing->slug,
             'url' => Locale::url('/writing/'.PublicIdentifier::key($writing), $locale),
             'title' => $translation?->title ?? $writing->slug,
             'excerpt' => $translation?->excerpt,
-            'og_image_url' => $this->ogImages->generate(
+            'og_image_url' => $this->ogImageUrl(
+                $seo,
                 'article',
                 $translation?->title ?? $writing->slug,
                 $translation?->excerpt,
@@ -365,6 +384,12 @@ final class PublicContentResponseFactory
             'related' => null,
             'updated_at' => $writing->updated_at?->format('Y-m-d H:i:s'),
         ];
+
+        if ($seo !== null) {
+            $data['seo'] = $seo;
+        }
+
+        return $data;
     }
 
     private function collectionDetail(
@@ -373,12 +398,20 @@ final class PublicContentResponseFactory
         ?LengthAwarePaginator $resources,
     ): array {
         $translation = $collection->translation($locale);
+        $seo = $this->translationSeo($translation);
 
-        return [
+        $data = [
             'slug' => $collection->slug,
             'url' => Locale::url('/collections/'.PublicIdentifier::key($collection), $locale),
             'title' => $translation?->title ?? $collection->slug,
             'description' => $translation?->description,
+            'og_image_url' => $this->ogImageUrl(
+                $seo,
+                'article',
+                $this->translationString($translation, 'title') ?? $collection->slug,
+                $this->translationString($translation, 'description'),
+            ),
+            'seo' => $seo,
             'intro' => $this->media->rewrite($translation?->intro),
             'published_at' => $collection->published_at?->toDateString(),
             'resources' => $resources?->getCollection()->map(function ($resource) use ($locale): array {
@@ -415,18 +448,22 @@ final class PublicContentResponseFactory
             'updated_at' => $collection->updated_at?->format('Y-m-d H:i:s'),
             'created_at' => $collection->created_at?->format('Y-m-d H:i:s'),
         ];
+
+        return $data;
     }
 
-    private function experiment(Experiment $experiment, string $locale): array
+    private function experiment(Experiment $experiment, string $locale, bool $includeSeo = true): array
     {
         $translation = $experiment->translation($locale);
+        $seo = $includeSeo ? $this->translationSeo($translation) : null;
 
-        return [
+        $data = [
             'slug' => $experiment->slug,
             'url' => Locale::url('/projects/experiments/'.PublicIdentifier::key($experiment), $locale),
             'name' => $translation?->name ?? $experiment->slug,
             'purpose' => $translation?->purpose,
-            'og_image_url' => $this->ogImages->generate(
+            'og_image_url' => $this->ogImageUrl(
+                $seo,
                 'project',
                 $translation?->name ?? $experiment->slug,
                 $translation?->purpose,
@@ -444,11 +481,18 @@ final class PublicContentResponseFactory
             'history' => null,
             'related' => null,
         ];
+
+        if ($seo !== null) {
+            $data['seo'] = $seo;
+        }
+
+        return $data;
     }
 
     private function snippet(Snippet $snippet, string $locale): array
     {
         $translation = $snippet->translation($locale);
+        $seo = $this->translationSeo($translation);
 
         return [
             'slug' => $snippet->slug,
@@ -456,11 +500,13 @@ final class PublicContentResponseFactory
             'download_url' => '/api/v1/snippets/'.PublicIdentifier::key($snippet).'/download',
             'title' => $translation?->title ?? $snippet->slug,
             'description' => $translation?->description,
-            'og_image_url' => $this->ogImages->generate(
+            'og_image_url' => $this->ogImageUrl(
+                $seo,
                 'article',
                 $translation?->title ?? $snippet->slug,
                 $translation?->description,
             ),
+            'seo' => $seo,
             'published_at' => $snippet->published_at?->toDateString(),
             'files' => $snippet->files->map(fn ($file) => [
                 'path' => $file->path,
@@ -474,5 +520,37 @@ final class PublicContentResponseFactory
             'related' => null,
             'updated_at' => $snippet->updated_at?->format('Y-m-d H:i:s'),
         ];
+    }
+
+    private function translationSeo(?object $translation): ?array
+    {
+        $seo = $translation?->seo;
+        $rewritten = $this->media->rewrite($seo);
+
+        return is_array($rewritten) ? $rewritten : null;
+    }
+
+    private function ogImageUrl(
+        ?array $seo,
+        string $template,
+        string $title,
+        ?string $description = null,
+    ): ?string {
+        $image = $seo['image'] ?? null;
+
+        return is_string($image) && trim($image) !== ''
+            ? $image
+            : $this->ogImages->generate($template, $title, $description);
+    }
+
+    private function translationString(?object $translation, string $attribute): ?string
+    {
+        if (! $translation instanceof Model) {
+            return null;
+        }
+
+        $value = $translation->getAttribute($attribute);
+
+        return is_string($value) ? $value : null;
     }
 }

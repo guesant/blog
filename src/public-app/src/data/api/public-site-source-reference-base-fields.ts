@@ -3,6 +3,7 @@ import type { RecordValue } from './public-site-source-support';
 import { optionalStringValue } from './public-site-source-optional-string-value';
 import { stringValue } from './public-site-source-string-value';
 import { firstValue } from './public-site-source-first-value';
+import { seoMetadata } from './public-site-source-seo';
 
 type ReferenceBaseFields = Pick<
   Reference,
@@ -22,6 +23,7 @@ type ReferenceBaseFields = Pick<
   | 'personalNote'
   | 'reasonFound'
   | 'ogImageUrl'
+  | 'seo'
 >;
 
 export function referenceBaseFields(item: RecordValue): ReferenceBaseFields {
@@ -42,5 +44,6 @@ export function referenceBaseFields(item: RecordValue): ReferenceBaseFields {
     personalNote: stringValue(item.personal_note),
     reasonFound: stringValue(item.reason_found),
     ogImageUrl: optionalStringValue(item.og_image_url),
+    seo: seoMetadata(item.seo),
   };
 }

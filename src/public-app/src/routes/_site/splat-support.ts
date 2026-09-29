@@ -10,6 +10,11 @@ export type RouteMetadata = {
   description: string;
   type?: string;
   image?: string;
+  imageAlt?: string;
+  canonical?: string;
+  robots?: string;
+  keywords?: string[];
+  noIndex?: boolean;
 };
 
 export const Route = createFileRoute('/_site/splat-support')({

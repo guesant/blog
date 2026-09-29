@@ -61,7 +61,10 @@ trait SyncsTranslations
         }
 
         if ($translation instanceof PageRevisionTranslation) {
-            return $translation->fields;
+            $fields = $translation->fields;
+            $fields['seo'] = $translation->seo;
+
+            return $fields;
         }
 
         if ($translation instanceof ProfileRevisionTranslation) {

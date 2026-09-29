@@ -66,6 +66,7 @@ const metadataResolvers: Partial<Record<RouteData['kind'], MetadataResolver>> = 
   'snippet-detail': (data) =>
     data.kind === 'snippet-detail'
       ? contentMetadata({
+          source: data.snippet,
           title: data.snippet.title,
           description: data.snippet.description,
           type: 'article',

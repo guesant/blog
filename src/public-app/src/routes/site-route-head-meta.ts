@@ -1,8 +1,10 @@
 import type { RouteMetadata } from './_site/splat-support';
 import type { SiteRouteHeadValues } from './site-route-head-values';
+import type { SiteRouteHeadMetaItem } from './site-route-head-meta-extras';
+import { siteRouteHeadMetaExtras } from './site-route-head-meta-extras';
 
 export function siteRouteHeadMeta(metadata: RouteMetadata, values: SiteRouteHeadValues) {
-  return [
+  const meta: SiteRouteHeadMetaItem[] = [
     { title: `${metadata.title} - guesant.net` },
     { name: 'description', content: metadata.description },
     { property: 'og:title', content: metadata.title },
@@ -15,4 +17,6 @@ export function siteRouteHeadMeta(metadata: RouteMetadata, values: SiteRouteHead
     { name: 'twitter:description', content: metadata.description },
     { name: 'twitter:image', content: values.imageUrl },
   ];
+
+  return [...meta, ...siteRouteHeadMetaExtras(metadata)];
 }

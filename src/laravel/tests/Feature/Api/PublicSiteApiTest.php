@@ -171,6 +171,10 @@ class PublicSiteApiTest extends TestCase
                     'title' => 'Home SEO',
                     'description' => 'The SEO description.',
                     'canonical' => 'https://example.com/home',
+                    'image' => 'https://example.com/home.png',
+                    'imageAlt' => 'Home social image',
+                    'robots' => 'follow',
+                    'noIndex' => true,
                     'keywords' => ['home'],
                 ],
             ],
@@ -182,6 +186,13 @@ class PublicSiteApiTest extends TestCase
             ->assertJsonPath('description', 'The home page.')
             ->assertJsonPath('seo.title', 'Home SEO')
             ->assertJsonPath('seo.description', 'The SEO description.')
+            ->assertJsonPath('seo.canonical', 'https://example.com/home')
+            ->assertJsonPath('seo.image', 'https://example.com/home.png')
+            ->assertJsonPath('seo.imageAlt', 'Home social image')
+            ->assertJsonPath('seo.robots', 'follow')
+            ->assertJsonPath('seo.noIndex', true)
+            ->assertJsonPath('seo.keywords.0', 'home')
+            ->assertJsonPath('og_image_url', 'https://example.com/home.png')
             ->assertJsonPath('recurringTechnologies', []);
     }
 

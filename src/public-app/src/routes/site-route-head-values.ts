@@ -1,6 +1,7 @@
 import type { Locale } from '../i18n/compat-support';
 import type { RouteMetadata } from './_site/splat-support';
 import { routeContext } from './site-route-context';
+import { siteRouteCanonicalUrl } from './site-route-canonical-url';
 import { siteRouteOrigin } from './site-route-origin';
 
 export type SiteRouteHeadValues = {
@@ -26,7 +27,7 @@ export function siteRouteHeadValues(
   const canonicalPath = locale === 'pt-BR' ? portuguesePath : englishPath;
 
   return {
-    canonicalUrl: new URL(canonicalPath, siteOrigin).toString(),
+    canonicalUrl: siteRouteCanonicalUrl(siteOrigin, canonicalPath, metadata.canonical),
     englishUrl: new URL(englishPath, siteOrigin).toString(),
     imageUrl: metadata.image ?? new URL('/favicon.svg', siteOrigin).toString(),
     portugueseUrl: new URL(portuguesePath, siteOrigin).toString(),

@@ -3,11 +3,13 @@ import type { Reference } from './refs-details';
 
 export type RichTextContent = string | Record<string, unknown>;
 
-type SeoMetadata = {
+export type SeoMetadata = {
   title?: string;
   description?: string;
+  canonical?: string;
   image?: string;
   imageAlt?: string;
+  robots?: string;
   keywords?: string[];
   noIndex?: boolean;
 };
@@ -41,7 +43,7 @@ type SnippetFile = {
   content: string;
 };
 
-export type Snippet = {
+export type Snippet = WithSeo & {
   slug: string;
   title: string;
   description: string;

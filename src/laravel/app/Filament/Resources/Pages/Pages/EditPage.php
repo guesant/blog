@@ -29,23 +29,25 @@ class EditPage extends EditRecord
     {
         $data = $this->fillTranslationsIntoData($data);
 
-        $data['featured_cases'] = $this->getRecord()->featuredCases()
-            ->orderByPivot('order')
-            ->get()
-            ->map(fn ($case) => ['case_study_id' => $case->id])
-            ->all();
+        if ($this->getRecord()->slug === 'portfolio') {
+            $data['featured_cases'] = $this->getRecord()->featuredCases()
+                ->orderByPivot('order')
+                ->get()
+                ->map(fn ($case) => ['case_study_id' => $case->id])
+                ->all();
 
-        $data['featured_projects'] = $this->getRecord()->featuredProjects()
-            ->orderByPivot('order')
-            ->get()
-            ->map(fn ($project) => ['project_id' => $project->id])
-            ->all();
+            $data['featured_projects'] = $this->getRecord()->featuredProjects()
+                ->orderByPivot('order')
+                ->get()
+                ->map(fn ($project) => ['project_id' => $project->id])
+                ->all();
 
-        $data['featured_writings'] = $this->getRecord()->featuredWritings()
-            ->orderByPivot('order')
-            ->get()
-            ->map(fn ($writing) => ['writing_id' => $writing->id])
-            ->all();
+            $data['featured_writings'] = $this->getRecord()->featuredWritings()
+                ->orderByPivot('order')
+                ->get()
+                ->map(fn ($writing) => ['writing_id' => $writing->id])
+                ->all();
+        }
 
         if ($this->getRecord()->slug === 'home') {
             $sections = $this->getRecord()->currentRevision?->homeSections()->get();
@@ -59,9 +61,10 @@ class EditPage extends EditRecord
 
     protected function mutateFormDataBeforeSave(array $data): array
     {
-        $this->pendingFeaturedCases = $data['featured_cases'] ?? [];
-        $this->pendingFeaturedProjects = $data['featured_projects'] ?? [];
-        $this->pendingFeaturedWritings = $data['featured_writings'] ?? [];
+        $isPortfolio = $this->getRecord()->slug === 'portfolio';
+        $this->pendingFeaturedCases = $isPortfolio ? ($data['featured_cases'] ?? []) : [];
+        $this->pendingFeaturedProjects = $isPortfolio ? ($data['featured_projects'] ?? []) : [];
+        $this->pendingFeaturedWritings = $isPortfolio ? ($data['featured_writings'] ?? []) : [];
         $this->pendingHomeSections = $data['home_sections'] ?? [];
         unset($data['featured_cases'], $data['featured_projects'], $data['featured_writings'], $data['home_sections']);
 
@@ -72,23 +75,25 @@ class EditPage extends EditRecord
     {
         $this->persistTranslations();
 
-        $this->getRecord()->featuredCases()->sync(
-            collect($this->pendingFeaturedCases)->values()->mapWithKeys(fn (array $item, int $order) => [
-                $item['case_study_id'] => ['order' => $order],
-            ])
-        );
+        if ($this->getRecord()->slug === 'portfolio') {
+            $this->getRecord()->featuredCases()->sync(
+                collect($this->pendingFeaturedCases)->values()->mapWithKeys(fn (array $item, int $order) => [
+                    $item['case_study_id'] => ['order' => $order],
+                ])
+            );
 
-        $this->getRecord()->featuredProjects()->sync(
-            collect($this->pendingFeaturedProjects)->values()->mapWithKeys(fn (array $item, int $order) => [
-                $item['project_id'] => ['order' => $order],
-            ])
-        );
+            $this->getRecord()->featuredProjects()->sync(
+                collect($this->pendingFeaturedProjects)->values()->mapWithKeys(fn (array $item, int $order) => [
+                    $item['project_id'] => ['order' => $order],
+                ])
+            );
 
-        $this->getRecord()->featuredWritings()->sync(
-            collect($this->pendingFeaturedWritings)->values()->mapWithKeys(fn (array $item, int $order) => [
-                $item['writing_id'] => ['order' => $order],
-            ])
-        );
+            $this->getRecord()->featuredWritings()->sync(
+                collect($this->pendingFeaturedWritings)->values()->mapWithKeys(fn (array $item, int $order) => [
+                    $item['writing_id'] => ['order' => $order],
+                ])
+            );
+        }
 
         app(EditorialRevisionPublisher::class)->syncPageRelations(
             $this->getRecord(),

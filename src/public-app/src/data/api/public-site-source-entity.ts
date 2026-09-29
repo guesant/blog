@@ -4,11 +4,13 @@ import { snippet } from './public-site-source-snippet';
 import { stringValue } from './public-site-source-string-value';
 import { technologyFields } from './public-site-source-technology-fields';
 import { optionalStringValue } from './public-site-source-optional-string-value';
+import { seoMetadata } from './public-site-source-seo';
 import type { ContentCollection, RecordValue } from './public-site-source-support';
 
 const entityBuilders: Record<ContentCollection, (item: RecordValue) => RecordValue> = {
   cases: (item) => ({
     ...item,
+    seo: seoMetadata(item.seo),
     number: '',
     ...technologyFields(item),
     metrics: recordList<RecordValue>(item.metrics),
@@ -16,21 +18,24 @@ const entityBuilders: Record<ContentCollection, (item: RecordValue) => RecordVal
   }),
   projects: (item) => ({
     ...item,
+    seo: seoMetadata(item.seo),
     currentFocus: item.current_focus,
     ...technologyFields(item),
     metrics: recordList<RecordValue>(item.metrics),
   }),
   experiments: (item) => ({
     ...item,
+    seo: seoMetadata(item.seo),
     ...technologyFields(item),
   }),
   technologies: (item) => ({
     ...item,
     skills: recordList<unknown>(item.skills).map(stringValue),
   }),
-  snippets: (item) => snippet(item),
+  snippets: (item) => ({ ...snippet(item), seo: seoMetadata(item.seo) }),
   writing: (item) => ({
     ...item,
+    seo: seoMetadata(item.seo),
     dateISO: item.date,
     readingTime: item.reading_time,
     subject: '',
@@ -43,6 +48,7 @@ const entityBuilders: Record<ContentCollection, (item: RecordValue) => RecordVal
   references: (item) => Object.fromEntries(Object.entries(reference(item))),
   collections: (item) => ({
     ...item,
+    seo: seoMetadata(item.seo),
     intro: item.intro,
   }),
   credits: (item) => ({ ...item }),

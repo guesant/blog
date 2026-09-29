@@ -10,7 +10,7 @@ use Tests\TestCase;
 
 class PageFormTest extends TestCase
 {
-    public function test_page_fields_can_be_grouped_by_prefix(): void
+    public function test_page_fields_are_grouped_by_page_specific_sections(): void
     {
         $method = new ReflectionMethod(PageForm::class, 'pageFieldInputs');
 

@@ -63,10 +63,6 @@ class WritingForm
                     Textarea::make("{$prefix}excerpt")
                         ->label('Excerpt')
                         ->nullable(),
-                    TextInput::make("{$prefix}reading_time")
-                        ->label('Reading Time')
-                        ->nullable()
-                        ->maxLength(255),
                     static::markdownEditor("{$prefix}body")
                         ->label('Body')
                         ->nullable(),

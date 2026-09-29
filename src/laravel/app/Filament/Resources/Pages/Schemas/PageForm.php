@@ -4,6 +4,7 @@ namespace App\Filament\Resources\Pages\Schemas;
 
 use App\Content\HomeGallerySection;
 use App\Filament\Concerns\BuildsMarkdownEditors;
+use App\Filament\Concerns\BuildsStructuredFields;
 use App\Filament\Concerns\BuildsTranslationTabs;
 use App\Models\CaseStudy;
 use App\Models\PageRevisionTranslation;
@@ -14,15 +15,15 @@ use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
+use Filament\Schemas\Components\Component;
 use Filament\Schemas\Components\Fieldset;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Schema;
-use Illuminate\Support\Collection;
 
 class PageForm
 {
-    use BuildsMarkdownEditors, BuildsTranslationTabs;
+    use BuildsMarkdownEditors, BuildsStructuredFields, BuildsTranslationTabs;
 
     private const FIELD_LABELS = [
         'activitypub_description' => 'ActivityPub description',
@@ -49,34 +50,53 @@ class PageForm
         'websub_title' => 'WebSub title',
     ];
 
-    private const FIELDSET_LABELS = [
-        'activitypub' => 'ActivityPub',
-        'ai' => 'AI',
-        'api' => 'API',
-        'atom' => 'Atom',
-        'code' => 'Code license',
-        'contact' => 'Contact',
-        'content' => 'Content license',
-        'experiments' => 'Experiments',
-        'experience' => 'Experience',
-        'hero' => 'Hero',
-        'jsonfeed' => 'JSON Feed',
-        'projects' => 'Projects',
-        'robots' => 'robots.txt',
-        'rss' => 'RSS',
-        'section' => 'Section',
-        'sitemap' => 'Sitemap',
-        'story' => 'Story',
-        'timeline' => 'Timeline',
-        'webfinger' => 'WebFinger',
-        'webmention' => 'Webmention',
-        'websub' => 'WebSub',
-        'work' => 'Work',
-        'writing' => 'Writing',
+    private const PAGE_FIELD_GROUPS = [
+        'home' => [
+            'Hero' => ['hero_identity', 'hero_experience', 'hero_current_focus', 'available_label', 'unavailable_label'],
+            'Experience' => ['experience_title', 'experience_description', 'currently_exploring_label', 'recurring_technologies_label'],
+            'Work' => ['work_title', 'work_description'],
+            'Projects' => ['projects_title', 'projects_description', 'experiments_summary'],
+            'Writing' => ['writing_title', 'writing_description'],
+            'Contact' => ['contact_title', 'contact_description'],
+        ],
+        'about' => [
+            'Introduction' => ['lead', 'context', 'introduction'],
+            'Timeline' => ['timeline_title', 'timeline_description'],
+            'Story' => ['story_title', 'story'],
+        ],
+        'follow' => [
+            'Current' => ['intro', 'section_label', 'section_title'],
+            'Future' => ['future_label', 'future_title', 'planned_label', 'planned_title'],
+            'Feeds' => [
+                'activitypub_description', 'activitypub_title', 'api_description', 'api_title',
+                'atom_description', 'atom_title', 'jsonfeed_description', 'jsonfeed_title',
+                'robots_description', 'robots_title', 'rss_description', 'rss_title',
+                'sitemap_description', 'sitemap_title', 'webfinger_description', 'webfinger_title',
+                'webmention_description', 'webmention_title', 'websub_description', 'websub_title',
+            ],
+        ],
+        'license' => [
+            'License content' => [
+                'section_label', 'section_title', 'code_heading', 'code_body', 'content_heading',
+                'content_body', 'ai_heading', 'ai_body', 'contact',
+            ],
+        ],
+        'now' => [
+            'Current status' => ['trabalhando', 'construindo', 'estudando', 'lendo', 'ouvindo', 'assistindo'],
+        ],
+        'portfolio' => [
+            'Hero' => ['hero_identity', 'hero_experience', 'hero_current_focus', 'available_label'],
+            'Work' => ['work_title', 'work_description'],
+            'Projects' => ['projects_title', 'projects_description', 'experiments_summary'],
+        ],
+        'projects' => [
+            'Projects' => ['selected_label', 'archive_label', 'experiments_title'],
+        ],
     ];
 
     protected static function pageFieldInputs(string $prefix): array
     {
+        /** @var array<string, Component> $fields */
         $fields = collect(PageRevisionTranslation::FIELDS)->mapWithKeys(function (string $key) use ($prefix) {
             $field = "{$prefix}fields.{$key}";
             $label = self::FIELD_LABELS[$key] ?? str($key)->headline()->toString();
@@ -90,31 +110,35 @@ class PageForm
             }
 
             return [$key => $component->label($label)->nullable()];
-        });
+        })->all();
 
-        return collect(PageRevisionTranslation::FIELDS)
-            ->groupBy(fn (string $key): string => str_contains($key, '_')
-                ? str($key)->before('_')->toString()
-                : '')
-            ->flatMap(function (Collection $keys, string $group) use ($fields): array {
-                $components = collect($keys)
-                    ->map(fn (string $key) => $fields->get($key))
+        $components = [
+            $fields['title'],
+            $fields['description']->visible(
+                fn (Get $get): bool => ! in_array($get('slug', true), ['follow', 'now'], true),
+            ),
+        ];
+
+        foreach (self::PAGE_FIELD_GROUPS as $slug => $groups) {
+            foreach ($groups as $group => $keys) {
+                $groupFields = collect($keys)
+                    ->map(fn (string $key) => $fields[$key] ?? null)
                     ->filter()
                     ->values()
                     ->all();
 
-                if ($group === '' || count($keys) < 2) {
-                    return $components;
+                if ($groupFields === []) {
+                    continue;
                 }
 
-                return [
-                    Fieldset::make(self::FIELDSET_LABELS[$group] ?? str($group)->headline()->toString())
-                        ->columns(2)
-                        ->schema($components),
-                ];
-            })
-            ->values()
-            ->all();
+                $components[] = Fieldset::make($group)
+                    ->columns(2)
+                    ->schema($groupFields)
+                    ->visible(fn (Get $get): bool => $get('slug', true) === $slug);
+            }
+        }
+
+        return $components;
     }
 
     public static function configure(Schema $schema): Schema
@@ -125,6 +149,7 @@ class PageForm
                     ->schema([
                         TextInput::make('slug')
                             ->required()
+                            ->live()
                             ->unique(ignoreRecord: true)
                             ->maxLength(255),
                     ]),
@@ -138,6 +163,7 @@ class PageForm
                             ->columns(2),
                     ]),
                 Section::make('Featured Cases')
+                    ->visible(fn (Get $get): bool => $get('slug') === 'portfolio')
                     ->schema([
                         Repeater::make('featured_cases')
                             ->reorderableWithButtons()
@@ -156,6 +182,7 @@ class PageForm
                             ->defaultItems(0),
                     ]),
                 Section::make('Featured Projects')
+                    ->visible(fn (Get $get): bool => $get('slug') === 'portfolio')
                     ->schema([
                         Repeater::make('featured_projects')
                             ->reorderableWithButtons()
@@ -174,6 +201,7 @@ class PageForm
                             ->defaultItems(0),
                     ]),
                 Section::make('Featured Writings')
+                    ->visible(fn (Get $get): bool => $get('slug') === 'portfolio')
                     ->schema([
                         Repeater::make('featured_writings')
                             ->reorderableWithButtons()
@@ -191,7 +219,10 @@ class PageForm
                             ->addActionLabel('Add writing')
                             ->defaultItems(0),
                     ]),
-                static::translationTabs(fn (string $prefix) => static::pageFieldInputs($prefix)),
+                static::translationTabs(fn (string $prefix) => [
+                    ...static::pageFieldInputs($prefix),
+                    static::seoFieldset($prefix),
+                ]),
             ]);
     }
 }

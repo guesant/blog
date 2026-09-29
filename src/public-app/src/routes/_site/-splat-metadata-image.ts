@@ -6,5 +6,5 @@ export type MetadataImageSource = {
 };
 
 export function metadataImage(source?: MetadataImageSource): string | undefined {
-  return source?.ogImageUrl || source?.seo?.image;
+  return source?.seo?.image || source?.ogImageUrl;
 }

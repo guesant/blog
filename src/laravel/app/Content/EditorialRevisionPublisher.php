@@ -3,6 +3,7 @@
 namespace App\Content;
 
 use App\Events\PublicSiteContentChanged;
+use App\Models\Writing;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -105,20 +106,22 @@ class EditorialRevisionPublisher
 
         $revisionId = $record->current_revision_id;
         DB::transaction(function () use ($record, $revisionId, $homeSections): void {
-            $relations = [
-                ['relation' => 'featuredCases', 'table' => 'page_revision_featured_cases', 'column' => 'case_study_id'],
-                ['relation' => 'featuredProjects', 'table' => 'page_revision_featured_projects', 'column' => 'project_id'],
-                ['relation' => 'featuredWritings', 'table' => 'page_revision_featured_writings', 'column' => 'writing_id'],
-            ];
+            if ($record->getAttribute('slug') === 'portfolio') {
+                $relations = [
+                    ['relation' => 'featuredCases', 'table' => 'page_revision_featured_cases', 'column' => 'case_study_id'],
+                    ['relation' => 'featuredProjects', 'table' => 'page_revision_featured_projects', 'column' => 'project_id'],
+                    ['relation' => 'featuredWritings', 'table' => 'page_revision_featured_writings', 'column' => 'writing_id'],
+                ];
 
-            foreach ($relations as $relation) {
-                DB::table($relation['table'])->where('page_revision_id', $revisionId)->delete();
-                foreach ($record->{$relation['relation']}()->get() as $item) {
-                    DB::table($relation['table'])->insert([
-                        'page_revision_id' => $revisionId,
-                        $relation['column'] => $item->id,
-                        'sort_order' => $item->pivot->order ?? 0,
-                    ]);
+                foreach ($relations as $relation) {
+                    DB::table($relation['table'])->where('page_revision_id', $revisionId)->delete();
+                    foreach ($record->{$relation['relation']}()->get() as $item) {
+                        DB::table($relation['table'])->insert([
+                            'page_revision_id' => $revisionId,
+                            $relation['column'] => $item->id,
+                            'sort_order' => $item->pivot->order ?? 0,
+                        ]);
+                    }
                 }
             }
 
@@ -207,7 +210,7 @@ class EditorialRevisionPublisher
                 $this->resumeTranslation($translation, $fields);
             } else {
                 foreach ($definition['translation_columns'] as $column) {
-                    $translation[$column] = $fields[$column] ?? null;
+                    $translation[$column] = $this->translationColumnValue($record, $locale, $column, $fields);
                 }
             }
 
@@ -220,6 +223,19 @@ class EditorialRevisionPublisher
             }
             $this->structuredTranslation($record->getTable(), $translationId, $fields);
         }
+    }
+
+    private function translationColumnValue(Model $record, string $locale, string $column, array $fields): mixed
+    {
+        if (array_key_exists($column, $fields)) {
+            return $fields[$column];
+        }
+
+        if ($record instanceof Writing && $column === 'reading_time') {
+            return $record->translation($locale)?->getAttribute('reading_time');
+        }
+
+        return null;
     }
 
     private function profileTranslation(array &$translation, array $fields): void

@@ -24,7 +24,10 @@ final readonly class PublicPageResponseDto
         $title = is_string($fields['title'] ?? null) ? $fields['title'] : $result->slug;
         $description = is_string($fields['description'] ?? null) ? $fields['description'] : null;
         $template = in_array($result->slug, ['home', 'about'], true) ? 'profile' : 'article';
-        $fields['og_image_url'] = $ogImages->generate($template, $title, $description);
+        $seoImage = is_array($fields['seo'] ?? null) ? $fields['seo']['image'] ?? null : null;
+        $fields['og_image_url'] = is_string($seoImage) && trim($seoImage) !== ''
+            ? $seoImage
+            : $ogImages->generate($template, $title, $description);
 
         return new self($fields);
     }

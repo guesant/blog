@@ -22,6 +22,9 @@ trait BuildsStructuredFields
                 TextInput::make("{$prefix}seo.image")
                     ->label('SEO image URL')
                     ->nullable(),
+                TextInput::make("{$prefix}seo.canonical")
+                    ->label('Canonical URL')
+                    ->nullable(),
                 Textarea::make("{$prefix}seo.description")
                     ->label('SEO description')
                     ->rows(2)
@@ -31,6 +34,10 @@ trait BuildsStructuredFields
                     ->nullable(),
                 TagsInput::make("{$prefix}seo.keywords")
                     ->label('SEO keywords')
+                    ->nullable(),
+                TextInput::make("{$prefix}seo.robots")
+                    ->label('Robots directives')
+                    ->placeholder('index, follow')
                     ->nullable(),
                 Toggle::make("{$prefix}seo.noIndex")
                     ->label('Exclude from search engines (noindex)')

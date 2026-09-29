@@ -2,12 +2,14 @@ import { ArrowForward } from '../arrow-forward';
 import { VisuallyHidden } from '../visually-hidden';
 import { NavLink } from '../../primitives/nav-link';
 import { ActionButton } from '../semantic/ActionButton';
+import { Link } from '../link';
 
 type FindingCardReadActionProps = {
   href: string;
   label: string;
   title: string;
   children: string;
+  external?: boolean;
 };
 
 const actionStyles = {
@@ -25,10 +27,13 @@ const actionStyles = {
 };
 
 export function FindingCardReadAction(props: FindingCardReadActionProps) {
+  const component = props.external ? Link : NavLink;
+
   return (
     <ActionButton
-      component={NavLink}
+      component={component}
       href={props.href}
+      {...(props.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
       data-action="read-more"
 
       size="small"

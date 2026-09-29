@@ -2,6 +2,7 @@ import { getSitePage } from './public-site-generated-client';
 import { apiClient } from './public-site-source-api-client';
 import { objectValue } from './public-site-source-object-value';
 import { optionalStringValue } from './public-site-source-optional-string-value';
+import { seoMetadata } from './public-site-source-seo';
 import type { RecordValue } from './public-site-source-support';
 
 export async function getLocalizedPage<T>(slug: string, locale?: string): Promise<T> {
@@ -20,6 +21,7 @@ export async function getLocalizedPage<T>(slug: string, locale?: string): Promis
 
   const page = {
     ...pageValue,
+    seo: seoMetadata(pageValue.seo),
     ogImageUrl: optionalStringValue(pageValue.og_image_url),
   } as RecordValue;
 

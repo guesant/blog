@@ -9,7 +9,6 @@ type EditorialSectionLayoutProps = {
   footer?: ReactNode;
   divider?: boolean;
   sectionGap?: string;
-  sectionPadding?: string;
 };
 
 export function EditorialSectionLayout(props: EditorialSectionLayoutProps) {

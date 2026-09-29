@@ -7,8 +7,6 @@ export const DetailArticleFrame = createSemanticSxComponent<ComponentProps<typeo
   {
     display: 'grid',
     rowGap: 'var(--site-page-content-offset)',
-    paddingBlockStart: 0,
-    paddingBlockEnd: { xs: 8, md: 10 },
     width: '100%',
     maxWidth: '100%',
     mx: 0,

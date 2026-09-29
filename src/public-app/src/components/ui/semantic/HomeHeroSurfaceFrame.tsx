@@ -14,8 +14,6 @@ export function HomeHeroSurfaceFrame(props: HomeHeroSurfaceFrameProps) {
           position: 'relative',
           isolation: 'isolate',
           overflow: 'hidden',
-          pt: 0,
-          pb: 'var(--site-space-8)',
         },
         props.sx ?? {},
       ]}

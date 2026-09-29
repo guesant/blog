@@ -30,6 +30,7 @@ export function HomeGallerySection(props: HomeGallerySectionProps) {
       title={props.title}
       description={summary}
       divider
+      sectionGap="var(--site-page-content-offset)"
       footer={<HomeGallerySectionAction action={props.action} href={props.href} />}
     >
       <HomeGalleryRow mode={props.mode}>

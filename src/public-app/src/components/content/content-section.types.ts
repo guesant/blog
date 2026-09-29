@@ -7,4 +7,5 @@ export type ContentSectionProps = {
   children: ReactNode;
   footer?: ReactNode;
   divider?: boolean;
+  sectionGap?: string;
 };

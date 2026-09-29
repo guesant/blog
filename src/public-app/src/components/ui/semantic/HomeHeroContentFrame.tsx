@@ -10,6 +10,6 @@ export const HomeHeroContentFrame = createSemanticSxComponent<ComponentProps<typ
     display: 'grid',
     rowGap: 'var(--site-space-6)',
     width: '100%',
-    textAlign: 'center',
+    textAlign: 'left',
   },
 );

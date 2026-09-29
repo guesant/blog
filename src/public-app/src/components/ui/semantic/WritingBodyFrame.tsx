@@ -1,24 +1,22 @@
 import type { ComponentProps } from 'react';
 import { createSemanticSxComponent } from '@/components/ui/create-semantic-sx-component';
 import { Box as BaseComponent } from '@/components/ui/box';
+import {
+  editorialBodyStyles,
+  editorialSectionTitleStyles,
+  editorialSubsectionTitleStyles,
+} from '../editorial-typography';
 
 export const WritingBodyFrame = createSemanticSxComponent<ComponentProps<typeof BaseComponent>>(
   BaseComponent,
   {
     '& > *': { display: 'grid', rowGap: 'var(--site-space-5)' },
     '& p, & li': {
+      ...editorialBodyStyles,
       margin: 0,
-      fontSize: 'var(--site-text-lg)',
-      lineHeight: 'var(--site-leading-relaxed)',
     },
-    '& h2': {
-      margin: 0,
-      fontSize: 'var(--site-text-2xl)',
-    },
-    '& h3': {
-      margin: 0,
-      fontSize: 'var(--site-text-xl)',
-    },
+    '& h2': { ...editorialSectionTitleStyles },
+    '& h3': { ...editorialSubsectionTitleStyles },
     '& ul, & ol': { margin: 0, paddingInlineStart: 'var(--site-space-6)' },
     '& pre': {
       margin: 0,

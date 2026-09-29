@@ -14,8 +14,6 @@ export function HomeHeroSurfaceWithContactFrame(props: HomeHeroSurfaceWithContac
           position: 'relative',
           isolation: 'isolate',
           overflow: 'hidden',
-          pt: 0,
-          pb: 0,
         },
         props.sx ?? {},
       ]}

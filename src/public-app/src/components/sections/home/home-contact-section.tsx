@@ -18,6 +18,7 @@ export function HomeContactSection(props: HomeContactSectionProps) {
       id="contact"
       title={page.contactTitle}
       divider
+      sectionGap="var(--site-page-content-offset)"
       description={<Typography component="span">{page.contactDescription}</Typography>}
     >
       <ContactActionEmail site={site} hasEmail={hasEmail} label={t('contactEmailButton')} />

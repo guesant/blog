@@ -9,7 +9,6 @@ export function ExplorationSection(props: ExplorationSectionProps) {
       description={props.description}
       divider={props.divider}
       sectionGap="var(--site-exploration-gap)"
-      sectionPadding="0"
     >
       {props.children}
     </EditorialSectionLayout>

@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import { Typography } from '../../../ui';
+import { editorialSubtitleStyles } from '../../../ui/editorial-typography';
 
 type PortfolioSectionDescriptionProps = {
   children: ReactNode;
@@ -7,16 +8,7 @@ type PortfolioSectionDescriptionProps = {
 
 export function PortfolioSectionDescription(props: PortfolioSectionDescriptionProps) {
   return (
-    <Typography
-      color="text.secondary"
-      sx={{
-        mb: 'var(--site-space-3)',
-        width: '100%',
-        maxWidth: '100%',
-        marginInline: 'auto',
-        textAlign: 'center',
-      }}
-    >
+    <Typography sx={{ ...editorialSubtitleStyles, mb: 'var(--site-space-3)' }}>
       {props.children}
     </Typography>
   );

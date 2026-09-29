@@ -6,4 +6,5 @@ export type ActionSectionProps = {
   description?: ReactNode;
   children: ReactNode;
   divider?: boolean;
+  sectionGap?: string;
 };

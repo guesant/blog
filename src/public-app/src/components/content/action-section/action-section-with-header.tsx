@@ -13,6 +13,7 @@ export function ActionSectionWithHeader(props: ActionSectionWithHeaderProps) {
       title={props.title}
       description={props.description}
       divider={props.divider}
+      sectionGap={props.sectionGap}
     >
       <ExplorationTileGrid>{props.children}</ExplorationTileGrid>
     </ContentSection>

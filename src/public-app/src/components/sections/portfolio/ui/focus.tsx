@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import { Typography } from '../../../ui';
+import { editorialSubtitleStyles } from '../../../ui/editorial-typography';
 
 type PortfolioFocusProps = {
   children: ReactNode;
@@ -7,7 +8,7 @@ type PortfolioFocusProps = {
 
 export function PortfolioFocus(props: PortfolioFocusProps) {
   return (
-    <Typography color="text.secondary" sx={{ mt: 'var(--site-space-1)', maxWidth: '68ch' }}>
+    <Typography sx={{ ...editorialSubtitleStyles, mt: 'var(--site-space-1)', maxWidth: '68ch' }}>
       {props.children}
     </Typography>
   );

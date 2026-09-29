@@ -1,4 +1,5 @@
 import type { SxProps, Theme } from '@mui/material/styles';
+import { editorialPageTitleStyles, editorialSubtitleStyles } from '../editorial-typography';
 
 export type PageHeaderVariant = 'showcase' | 'reading';
 
@@ -12,24 +13,9 @@ export const pageHeaderVariantStyles: Record<PageHeaderVariant, SxProps<Theme>> 
   showcase: {
     ...pageIntroLayout,
     maxWidth: 'var(--site-content-max)',
-    textAlign: 'center',
+    textAlign: 'left',
   },
   reading: { ...pageIntroLayout, maxWidth: 'var(--site-page-header-max)', textAlign: 'left' },
-};
-
-const pageTitle: SxProps<Theme> = {
-  margin: 0,
-  fontSize: 'var(--site-text-3xl)',
-};
-
-const readingDescription: SxProps<Theme> = {
-  margin: 0,
-  width: '100%',
-  maxWidth: '100%',
-  boxSizing: 'border-box',
-  fontSize: 'var(--site-text-lg)',
-  textAlign: 'justify',
-  hyphens: 'auto',
 };
 
 export const pageHeaderSlotStyles: Record<
@@ -37,17 +23,13 @@ export const pageHeaderSlotStyles: Record<
   { title: SxProps<Theme>; description: SxProps<Theme>; meta: SxProps<Theme> }
 > = {
   showcase: {
-    title: pageTitle,
-    description: {
-      ...readingDescription,
-      marginInline: 'auto',
-      textAlign: 'center',
-    },
+    title: editorialPageTitleStyles,
+    description: editorialSubtitleStyles,
     meta: { margin: 0 },
   },
   reading: {
-    title: pageTitle,
-    description: readingDescription,
+    title: editorialPageTitleStyles,
+    description: editorialSubtitleStyles,
     meta: { margin: 0 },
   },
 };

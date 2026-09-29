@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import { Box } from '../box';
+import { editorialPageTitleStyles, editorialSubtitleStyles } from '../editorial-typography';
 import { Typography } from '../typography';
 
 type ResumeHeaderFrameProps = {
@@ -10,17 +11,13 @@ type ResumeHeaderFrameProps = {
   contactActions: ReactNode;
 };
 
-const headerStyles = { display: 'grid', gap: 'var(--site-gap-stack)', textAlign: 'center' };
+const headerStyles = { display: 'grid', gap: 'var(--site-gap-stack)', textAlign: 'left' };
 
 const identityStyles = { display: 'grid', gap: 'var(--site-space-1)' };
 
-const nameStyles = {
-  fontWeight: 'var(--site-weight-bold)',
-};
+const nameStyles = editorialPageTitleStyles;
 
-const titleStyles = {
-  color: 'var(--site-text-secondary)',
-};
+const titleStyles = editorialSubtitleStyles;
 
 const locationStyles = {
   color: 'var(--site-text-secondary)',

@@ -3,6 +3,7 @@ import { Box } from '../box';
 import { Divider } from '../divider';
 import { Typography } from '../typography';
 import { ConditionalContent } from '../../primitives/conditional-content';
+import { editorialSectionTitleStyles, editorialSubtitleStyles } from '../editorial-typography';
 
 export type EditorialSectionProps = {
   id?: string;
@@ -12,37 +13,26 @@ export type EditorialSectionProps = {
   footer?: ReactNode;
   divider?: boolean;
   sectionGap?: string;
-  sectionPadding?: string;
 };
 
 const sectionStyles = {
   display: 'grid',
   rowGap: 'var(--site-space-6)',
-  paddingBlock: 'var(--site-space-6)',
-  textAlign: 'center',
-  '&[id="recent-writing"], &[id="recent-findings"], &[id="popular-writing"], &[id="portfolio-credits"], &[id="contact"]':
-    {
-      paddingBlockStart: 0,
-      gap: 'var(--site-page-content-offset)',
-    },
+  textAlign: 'left',
 };
 
 const headerStyles = {
   display: 'flex',
   flexDirection: 'column',
-  alignItems: 'center',
-  justifyContent: 'center',
+  alignItems: 'flex-start',
+  justifyContent: 'flex-start',
   gap: 'var(--site-space-2)',
-  textAlign: 'center',
+  textAlign: 'left',
 };
 
 const descriptionStyles = {
+  ...editorialSubtitleStyles,
   display: 'block',
-  width: '100%',
-  maxWidth: '100%',
-  marginInline: 'auto',
-  boxSizing: 'border-box',
-  textAlign: 'center',
 };
 
 export function EditorialSection(props: EditorialSectionProps) {
@@ -54,7 +44,6 @@ export function EditorialSection(props: EditorialSectionProps) {
         sectionStyles,
         {
           ...(props.sectionGap ? { rowGap: props.sectionGap } : {}),
-          ...(props.sectionPadding ? { paddingBlock: props.sectionPadding } : {}),
         },
       ]}
     >
@@ -63,7 +52,7 @@ export function EditorialSection(props: EditorialSectionProps) {
         content={<Divider sx={{ width: '100%', borderColor: 'var(--site-border)' }} />}
       />
       <Box component="header" sx={headerStyles}>
-        <Typography component="h2" variant="h2">
+        <Typography component="h2" variant="h2" sx={editorialSectionTitleStyles}>
           {props.title}
         </Typography>
         <ConditionalContent

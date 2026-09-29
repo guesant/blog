@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\ResourceFindings\Schemas;
 
+use App\Filament\Concerns\BuildsMarkdownEditors;
 use App\Filament\Concerns\BuildsStructuredFields;
 use App\Filament\Concerns\BuildsTranslationTabs;
 use App\Filament\Support\AutocompleteField;
@@ -13,7 +14,6 @@ use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\KeyValue;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Section;
@@ -21,7 +21,7 @@ use Filament\Schemas\Schema;
 
 class ResourceFindingForm
 {
-    use BuildsStructuredFields, BuildsTranslationTabs;
+    use BuildsMarkdownEditors, BuildsStructuredFields, BuildsTranslationTabs;
 
     protected const TYPES = [
         'book', 'article', 'paper', 'repo', 'site', 'docs', 'tool',
@@ -172,13 +172,13 @@ class ResourceFindingForm
                         ->label('Alternative Title')
                         ->nullable()
                         ->maxLength(255),
-                    Textarea::make("{$prefix}description")
+                    static::markdownEditor("{$prefix}description")
                         ->label('Description')
                         ->nullable(),
-                    Textarea::make("{$prefix}personal_note")
+                    static::markdownEditor("{$prefix}personal_note")
                         ->label('Personal Note')
                         ->nullable(),
-                    Textarea::make("{$prefix}reason_found")
+                    static::markdownEditor("{$prefix}reason_found")
                         ->label('Reason Found')
                         ->nullable(),
                     static::seoFieldset($prefix),

@@ -3,6 +3,7 @@
 namespace App\Filament\Pages;
 
 use App\Content\EditorialRevisionPublisher;
+use App\Filament\Concerns\BuildsMarkdownEditors;
 use App\Filament\Concerns\BuildsStructuredFields;
 use App\Filament\Concerns\BuildsTranslationTabs;
 use App\Filament\Concerns\HasSingleSaveAction;
@@ -20,7 +21,6 @@ use BackedEnum;
 use Filament\Actions\Action;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Notifications\Notification;
@@ -36,7 +36,7 @@ use Throwable;
  */
 class ManageResume extends Page
 {
-    use BuildsStructuredFields, BuildsTranslationTabs, HasSingleSaveAction, SyncsTranslations;
+    use BuildsMarkdownEditors, BuildsStructuredFields, BuildsTranslationTabs, HasSingleSaveAction, SyncsTranslations;
 
     protected static function entryRepeater(string $name, string $label, array $fields, string $labelKey): Repeater
     {
@@ -215,7 +215,7 @@ class ManageResume extends Page
                             ->defaultItems(0),
                     ]),
                 static::translationTabs(fn (string $prefix) => [
-                    Textarea::make("{$prefix}summary")
+                    static::markdownEditor("{$prefix}summary")
                         ->label('Summary')
                         ->nullable(),
                     static::entryRepeater("{$prefix}leadership", 'Leadership', [
@@ -259,7 +259,7 @@ class ManageResume extends Page
                         TextInput::make('author')->required(),
                         TextInput::make('period')->nullable(),
                         TextInput::make('role')->nullable()->columnSpanFull(),
-                        Textarea::make('quote')->rows(3)->required()->columnSpanFull(),
+                        static::markdownEditor('quote')->required(),
                         TextInput::make('url')->url()->nullable(),
                         Toggle::make('hidden')->inline(false),
                     ], 'author'),
@@ -268,7 +268,7 @@ class ManageResume extends Page
                         TextInput::make('period')->required(),
                         AutocompleteField::make('kind', 'Kind', $technicalProductionKinds),
                         TextInput::make('url')->url()->nullable(),
-                        Textarea::make('description')->rows(2)->nullable()->columnSpanFull(),
+                        static::markdownEditor('description')->nullable(),
                         Toggle::make('includeInPdf')->label('Include in PDF')->inline(false),
                         Toggle::make('hidden')->inline(false),
                     ], 'name'),
@@ -287,7 +287,7 @@ class ManageResume extends Page
                         TextInput::make('period')->required(),
                         TextInput::make('issuer')->nullable(),
                         TextInput::make('url')->url()->nullable(),
-                        Textarea::make('description')->rows(2)->nullable()->columnSpanFull(),
+                        static::markdownEditor('description')->nullable(),
                         Toggle::make('hidden')->inline(false),
                     ], 'name'),
                 ]),

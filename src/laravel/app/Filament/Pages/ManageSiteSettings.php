@@ -3,6 +3,7 @@
 namespace App\Filament\Pages;
 
 use App\Content\PublicSiteChromeCache;
+use App\Filament\Concerns\BuildsMarkdownEditors;
 use App\Filament\Concerns\BuildsStructuredFields;
 use App\Filament\Concerns\BuildsTranslationTabs;
 use App\Filament\Concerns\HasSingleSaveAction;
@@ -12,7 +13,6 @@ use App\Models\SiteSettings;
 use BackedEnum;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Notifications\Notification;
@@ -27,7 +27,7 @@ use Filament\Support\Icons\Heroicon;
  */
 class ManageSiteSettings extends Page
 {
-    use BuildsStructuredFields, BuildsTranslationTabs, HasSingleSaveAction, SyncsTranslations;
+    use BuildsMarkdownEditors, BuildsStructuredFields, BuildsTranslationTabs, HasSingleSaveAction, SyncsTranslations;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedCog6Tooth;
 
@@ -131,14 +131,13 @@ class ManageSiteSettings extends Page
                                 ->label('Maintenance Title')
                                 ->nullable()
                                 ->maxLength(255),
-                            Textarea::make("{$prefix}maintenance_description")
+                            static::markdownEditor("{$prefix}maintenance_description")
                                 ->label('Maintenance Description')
-                                ->nullable()
-                                ->columnSpanFull(),
+                                ->nullable(),
                         ]),
                     Fieldset::make(__('Copyright'))
                         ->schema([
-                            Textarea::make("{$prefix}copyright_template")
+                            static::markdownEditor("{$prefix}copyright_template")
                                 ->label('Copyright Template')
                                 ->nullable()
                                 ->helperText(__('Use {year} and {name} as placeholders.')),

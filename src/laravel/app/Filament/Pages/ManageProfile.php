@@ -2,6 +2,7 @@
 
 namespace App\Filament\Pages;
 
+use App\Filament\Concerns\BuildsMarkdownEditors;
 use App\Filament\Concerns\BuildsStructuredFields;
 use App\Filament\Concerns\BuildsTranslationTabs;
 use App\Filament\Concerns\HasSingleSaveAction;
@@ -10,7 +11,6 @@ use App\Models\Profile;
 use BackedEnum;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Repeater;
-use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Notifications\Notification;
@@ -25,7 +25,7 @@ use Filament\Support\Icons\Heroicon;
  */
 class ManageProfile extends Page
 {
-    use BuildsStructuredFields, BuildsTranslationTabs, HasSingleSaveAction, SyncsTranslations;
+    use BuildsMarkdownEditors, BuildsStructuredFields, BuildsTranslationTabs, HasSingleSaveAction, SyncsTranslations;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedUser;
 
@@ -83,13 +83,13 @@ class ManageProfile extends Page
                     Fieldset::make(__('Profile narrative'))
                         ->columns(2)
                         ->schema([
-                            Textarea::make("{$prefix}description")
+                            static::markdownEditor("{$prefix}description")
                                 ->label('Description')
                                 ->nullable(),
-                            Textarea::make("{$prefix}interests")
+                            static::markdownEditor("{$prefix}interests")
                                 ->label('Interests')
                                 ->nullable(),
-                            Textarea::make("{$prefix}learning")
+                            static::markdownEditor("{$prefix}learning")
                                 ->label('Learning')
                                 ->nullable(),
                         ]),
@@ -134,7 +134,7 @@ class ManageProfile extends Page
                         ->schema([
                             TextInput::make('year')->required(),
                             TextInput::make('title')->required(),
-                            Textarea::make('description')->rows(2)->columnSpanFull()->nullable(),
+                            static::markdownEditor('description')->nullable(),
                             Toggle::make('hidden')->inline(false),
                         ])
                         ->itemLabel(fn (mixed $state): ?string => is_array($state)

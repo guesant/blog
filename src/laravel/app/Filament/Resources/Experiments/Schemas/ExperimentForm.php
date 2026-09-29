@@ -7,7 +7,6 @@ use App\Filament\Concerns\BuildsStructuredFields;
 use App\Filament\Concerns\BuildsTranslationTabs;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Section;
@@ -55,7 +54,7 @@ class ExperimentForm
                         ->label('Name')
                         ->required()
                         ->maxLength(255),
-                    Textarea::make("{$prefix}purpose")
+                    static::markdownEditor("{$prefix}purpose")
                         ->label('Purpose')
                         ->required(),
                     static::markdownEditor("{$prefix}body")

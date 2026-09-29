@@ -7,7 +7,6 @@ use App\Filament\Concerns\BuildsStructuredFields;
 use App\Filament\Concerns\BuildsTranslationTabs;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Section;
@@ -57,13 +56,13 @@ class ProjectForm
                         ->label('Name')
                         ->required()
                         ->maxLength(255),
-                    Textarea::make("{$prefix}purpose")
+                    static::markdownEditor("{$prefix}purpose")
                         ->label('Purpose')
                         ->required(),
-                    Textarea::make("{$prefix}problem")
+                    static::markdownEditor("{$prefix}problem")
                         ->label('Problem')
                         ->nullable(),
-                    Textarea::make("{$prefix}current_focus")
+                    static::markdownEditor("{$prefix}current_focus")
                         ->label('Current Focus')
                         ->nullable(),
                     TextInput::make("{$prefix}status")

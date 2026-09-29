@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Snippets\Schemas;
 
+use App\Filament\Concerns\BuildsMarkdownEditors;
 use App\Filament\Concerns\BuildsTranslationTabs;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Repeater;
@@ -13,7 +14,7 @@ use Filament\Schemas\Schema;
 
 class SnippetForm
 {
-    use BuildsTranslationTabs;
+    use BuildsMarkdownEditors, BuildsTranslationTabs;
 
     public static function configure(Schema $schema): Schema
     {
@@ -69,7 +70,7 @@ class SnippetForm
                         ->label('Title')
                         ->required()
                         ->maxLength(255),
-                    Textarea::make("{$prefix}description")
+                    static::markdownEditor("{$prefix}description")
                         ->label('Description')
                         ->nullable(),
                 ]),

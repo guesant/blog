@@ -11,6 +11,7 @@ trait BuildsMarkdownEditors
         $disk = (string) config('filesystems.default');
 
         return MarkdownEditor::make($name)
+            ->columnSpanFull()
             ->fileAttachmentsDisk($disk === 'local' ? 'public' : $disk)
             ->fileAttachmentsDirectory('content-attachments')
             ->getFileAttachmentUrlUsing(function (mixed $file): ?string {

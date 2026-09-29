@@ -4,7 +4,6 @@ namespace App\Filament\Concerns;
 
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\TagsInput;
-use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Fieldset;
@@ -25,9 +24,8 @@ trait BuildsStructuredFields
                 TextInput::make("{$prefix}seo.canonical")
                     ->label('Canonical URL')
                     ->nullable(),
-                Textarea::make("{$prefix}seo.description")
+                static::markdownEditor("{$prefix}seo.description")
                     ->label('SEO description')
-                    ->rows(2)
                     ->nullable(),
                 TextInput::make("{$prefix}seo.imageAlt")
                     ->label('SEO image alt text')
@@ -71,7 +69,7 @@ trait BuildsStructuredFields
     {
         return Repeater::make($name)
             ->label($label)
-            ->simple(Textarea::make('value')->rows(2)->required())
+            ->simple(static::markdownEditor('value')->required())
             ->default([])
             ->addActionLabel($addLabel)
             ->defaultItems(0);

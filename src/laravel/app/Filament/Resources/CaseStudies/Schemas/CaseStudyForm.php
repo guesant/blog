@@ -7,7 +7,6 @@ use App\Filament\Concerns\BuildsStructuredFields;
 use App\Filament\Concerns\BuildsTranslationTabs;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Section;
@@ -68,16 +67,16 @@ class CaseStudyForm
                         ->label('Meta')
                         ->nullable()
                         ->maxLength(255),
-                    Textarea::make("{$prefix}summary")
+                    static::markdownEditor("{$prefix}summary")
                         ->label('Summary')
                         ->nullable(),
-                    Textarea::make("{$prefix}context")
+                    static::markdownEditor("{$prefix}context")
                         ->label('Context')
                         ->nullable(),
-                    Textarea::make("{$prefix}role")
+                    static::markdownEditor("{$prefix}role")
                         ->label('Role')
                         ->nullable(),
-                    Textarea::make("{$prefix}result")
+                    static::markdownEditor("{$prefix}result")
                         ->label('Result')
                         ->nullable(),
                     static::metricsRepeater($prefix),

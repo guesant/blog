@@ -9,7 +9,6 @@ use App\Models\Resource as ResourceModel;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Section;
@@ -52,9 +51,7 @@ class ReferenceCollectionForm
                                     ->searchable()
                                     ->required()
                                     ->columnSpanFull(),
-                                Textarea::make('note')
-                                    ->columnSpanFull()
-                                    ->nullable(),
+                                static::markdownEditor('note')->nullable(),
                             ])
                             ->itemLabel(fn (mixed $state): ?string => is_array($state) && isset($state['resource_id'])
                                 ? ResourceModel::find($state['resource_id'])?->slug
@@ -67,7 +64,7 @@ class ReferenceCollectionForm
                         ->label('Title')
                         ->required()
                         ->maxLength(255),
-                    Textarea::make("{$prefix}description")
+                    static::markdownEditor("{$prefix}description")
                         ->label('Description')
                         ->nullable(),
                     static::markdownEditor("{$prefix}intro")

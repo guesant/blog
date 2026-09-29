@@ -13,7 +13,6 @@ use App\Models\Writing;
 use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Component;
 use Filament\Schemas\Components\Fieldset;
@@ -106,7 +105,7 @@ class PageForm
             } elseif (str_ends_with($key, '_title') || str_ends_with($key, '_label') || in_array($key, ['hero_identity', 'hero_experience', 'hero_current_focus', 'title'], true)) {
                 $component = TextInput::make($field);
             } else {
-                $component = Textarea::make($field)->rows(3);
+                $component = static::markdownEditor($field);
             }
 
             return [$key => $component->label($label)->nullable()];

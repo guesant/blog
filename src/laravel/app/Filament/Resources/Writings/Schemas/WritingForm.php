@@ -7,7 +7,6 @@ use App\Filament\Concerns\BuildsStructuredFields;
 use App\Filament\Concerns\BuildsTranslationTabs;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Section;
@@ -60,7 +59,7 @@ class WritingForm
                         ->label('Title')
                         ->required()
                         ->maxLength(255),
-                    Textarea::make("{$prefix}excerpt")
+                    static::markdownEditor("{$prefix}excerpt")
                         ->label('Excerpt')
                         ->nullable(),
                     static::markdownEditor("{$prefix}body")

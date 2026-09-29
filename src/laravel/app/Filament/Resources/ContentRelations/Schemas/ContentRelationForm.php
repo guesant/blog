@@ -3,17 +3,19 @@
 namespace App\Filament\Resources\ContentRelations\Schemas;
 
 use App\Content\Graph\NodeRegistry;
+use App\Filament\Concerns\BuildsMarkdownEditors;
 use App\Models\RelationType;
 use Filament\Forms\Components\MorphToSelect;
 use Filament\Forms\Components\MorphToSelect\Type;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Textarea;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Illuminate\Support\Str;
 
 class ContentRelationForm
 {
+    use BuildsMarkdownEditors;
+
     public static function configure(Schema $schema): Schema
     {
         return $schema
@@ -55,12 +57,8 @@ class ContentRelationForm
                 Section::make(__('Notes'))
                     ->columns(2)
                     ->schema([
-                        Textarea::make('note')
-                            ->rows(2)
-                            ->columnSpanFull(),
-                        Textarea::make('context')
-                            ->rows(2)
-                            ->columnSpanFull(),
+                        static::markdownEditor('note'),
+                        static::markdownEditor('context'),
                     ]),
             ]);
     }

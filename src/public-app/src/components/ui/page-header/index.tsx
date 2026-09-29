@@ -25,27 +25,29 @@ export function PageHeaderFrame(props: PageHeaderFrameProps) {
     <Box component="header" sx={pageHeaderLayoutStyles[props.layout]}>
       {props.breadcrumbs}
       {props.breadcrumbs ? <Divider /> : null}
-      <Typography variant="h1" sx={slotStyles.title}>
-        {props.title}
-      </Typography>
-      {props.actions}
-      <ConditionalContent
-        condition={Boolean(props.description)}
-        content={
-          <Typography color="text.secondary" sx={slotStyles.description}>
-            {props.description}
-          </Typography>
-        }
-      />
-      <ConditionalContent
-        condition={Boolean(props.meta)}
-        content={
-          <Typography color="text.secondary" sx={slotStyles.meta}>
-            {props.meta}
-          </Typography>
-        }
-      />
-      {props.metadata}
+      <Box sx={{ display: 'grid', rowGap: 'var(--site-space-5)' }}>
+        <Typography variant="h1" sx={slotStyles.title}>
+          {props.title}
+        </Typography>
+        {props.actions}
+        <ConditionalContent
+          condition={Boolean(props.description)}
+          content={
+            <Typography color="text.secondary" sx={slotStyles.description}>
+              {props.description}
+            </Typography>
+          }
+        />
+        <ConditionalContent
+          condition={Boolean(props.meta)}
+          content={
+            <Typography color="text.secondary" sx={slotStyles.meta}>
+              {props.meta}
+            </Typography>
+          }
+        />
+        {props.metadata}
+      </Box>
     </Box>
   );
 }

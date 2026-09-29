@@ -14,7 +14,6 @@ final class PublicSiteProfileReader
             ->select([
                 'profiles.id',
                 'profiles.name',
-                'profiles.birth_date',
                 'profiles.current_revision_id',
                 'profile_revisions.hidden as revision_hidden',
             ])
@@ -31,8 +30,6 @@ final class PublicSiteProfileReader
                 'location' => null,
                 'description' => null,
                 'milestones' => [],
-                'birth_date' => $profile->birth_date ?? '',
-                'birth_city' => null,
                 'interests' => null,
                 'learning' => null,
                 'personal_interests' => [],
@@ -52,8 +49,6 @@ final class PublicSiteProfileReader
                 $translation?->id,
                 ['year', 'title', 'description'],
             ),
-            'birth_date' => $profile->birth_date ?? '',
-            'birth_city' => $translation?->birth_city,
             'interests' => $translation?->interests,
             'learning' => $translation?->learning,
             'personal_interests' => $this->values($translation?->id),
@@ -72,7 +67,6 @@ final class PublicSiteProfileReader
                 'locale',
                 'title',
                 'location',
-                'birth_city',
                 'description',
                 'interests',
                 'learning',

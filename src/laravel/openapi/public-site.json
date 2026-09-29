@@ -566,15 +566,6 @@
                                                         ]
                                                     }
                                                 },
-                                                "birth_date": {
-                                                    "type": "string"
-                                                },
-                                                "birth_city": {
-                                                    "type": [
-                                                        "string",
-                                                        "null"
-                                                    ]
-                                                },
                                                 "interests": {
                                                     "type": [
                                                         "string",
@@ -608,8 +599,6 @@
                                                 "location",
                                                 "description",
                                                 "milestones",
-                                                "birth_date",
-                                                "birth_city",
                                                 "interests",
                                                 "learning",
                                                 "personal_interests"
@@ -1178,6 +1167,12 @@
                             }
                         }
                     },
+                    "403": {
+                        "$ref": "#/components/responses/AuthorizationException"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/AuthenticationException"
+                    },
                     "503": {
                         "description": "The service is temporarily unavailable.",
                         "content": {
@@ -1215,12 +1210,6 @@
                                 }
                             }
                         }
-                    },
-                    "403": {
-                        "$ref": "#/components/responses/AuthorizationException"
-                    },
-                    "401": {
-                        "$ref": "#/components/responses/AuthenticationException"
                     }
                 }
             }

@@ -16,14 +16,15 @@ class EnsureAdminOidcSession
             return $next($request);
         }
 
-        $email = (string) (Auth::user()?->email ?? '');
-        $isAllowedEmail = in_array($email, config('admin.allowed_emails', []), true);
+        $user = Auth::user();
         $expiresAt = session('admin_oidc_expires_at');
         $hasValidOidcSession = session('admin_oidc_authorized') === true
             && is_numeric($expiresAt)
-            && (int) $expiresAt > now()->timestamp;
+            && (int) $expiresAt > now()->timestamp
+            && session('admin_oidc_issuer') === rtrim((string) config('services.keycloak.base_url'), '/')
+            && session('admin_oidc_subject') === $user?->oidc_subject;
 
-        if ($isAllowedEmail || $hasValidOidcSession) {
+        if ($hasValidOidcSession) {
             return $next($request);
         }
 

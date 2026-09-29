@@ -116,10 +116,8 @@ export type ResumeContent = {
 
 export type Profile = {
   name: string;
-  birthDate?: string;
   title: string;
   location: string;
-  birthCity?: string;
   description: string;
   interests: string;
   learning: string;

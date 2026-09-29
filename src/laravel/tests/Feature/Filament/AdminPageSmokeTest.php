@@ -50,9 +50,18 @@ class AdminPageSmokeTest extends TestCase
 
     private function actingAsAdmin(): User
     {
-        Config::set('admin.allowed_emails', ['admin@example.com']);
+        Config::set('services.keycloak.base_url', 'https://auth.test/realms/management');
         $user = User::factory()->create(['email' => 'admin@example.com']);
-        $this->actingAs($user);
+        $this->actingAs($user)->withSession([
+            'admin_oidc_authorized' => true,
+            'admin_oidc_expires_at' => now()->addHour()->timestamp,
+            'admin_oidc_issuer' => 'https://auth.test/realms/management',
+            'admin_oidc_subject' => 'admin-subject',
+        ]);
+        $user->update([
+            'oidc_issuer' => 'https://auth.test/realms/management',
+            'oidc_subject' => 'admin-subject',
+        ]);
 
         return $user;
     }

@@ -8,6 +8,20 @@ use Symfony\Component\HttpFoundation\Response;
 
 final class PublicMediaController extends Controller
 {
+    private const INLINE_CONTENT_TYPES = [
+        'application/pdf',
+        'audio/mpeg',
+        'audio/ogg',
+        'audio/wav',
+        'image/avif',
+        'image/gif',
+        'image/jpeg',
+        'image/png',
+        'image/webp',
+        'video/mp4',
+        'video/webm',
+    ];
+
     public function __invoke(string $path): Response
     {
         $path = ltrim($path, '/');
@@ -25,10 +39,12 @@ final class PublicMediaController extends Controller
 
         $contentType = $disk->mimeType($path) ?: 'application/octet-stream';
         $size = rescue(fn (): int => $disk->size($path), 0, false);
+        $disposition = in_array($contentType, self::INLINE_CONTENT_TYPES, true) ? 'inline' : 'attachment';
         $headers = [
             'Cache-Control' => 'public, max-age=31536000, immutable',
-            'Content-Disposition' => 'inline',
+            'Content-Disposition' => $disposition,
             'Content-Type' => $contentType,
+            'X-Content-Type-Options' => 'nosniff',
         ];
 
         if ($size > 0) {

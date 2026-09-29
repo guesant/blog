@@ -93,5 +93,11 @@ class AppServiceProvider extends ServiceProvider
         RateLimiter::for('og-images', function (Request $request) {
             return Limit::perMinute((int) config('og.rate_limit_per_minute', 60))->by($request->ip());
         });
+
+        RateLimiter::for('public-feed', fn (Request $request) => Limit::perMinute(30)->by($request->ip()));
+        RateLimiter::for('public-metadata', fn (Request $request) => Limit::perMinute(30)->by($request->ip()));
+        RateLimiter::for('public-media', fn (Request $request) => Limit::perMinute(120)->by($request->ip()));
+        RateLimiter::for('public-pdf', fn (Request $request) => Limit::perMinute(10)->by($request->ip()));
+        RateLimiter::for('public-docs', fn (Request $request) => Limit::perMinute(10)->by($request->ip()));
     }
 }

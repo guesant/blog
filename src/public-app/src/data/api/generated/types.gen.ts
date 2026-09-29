@@ -272,8 +272,6 @@ export type PublicSiteApiChromeResponses = {
                 description: string | null;
                 hidden: boolean;
             }>;
-            birth_date: string;
-            birth_city: string | null;
             interests: string | null;
             learning: string | null;
             personal_interests: Array<{

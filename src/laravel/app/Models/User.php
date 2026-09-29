@@ -12,8 +12,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-#[Fillable(['name', 'email', 'password'])]
-#[Hidden(['password', 'remember_token'])]
+#[Fillable(['name', 'email', 'password', 'oidc_issuer', 'oidc_subject'])]
+#[Hidden(['password', 'remember_token', 'oidc_issuer', 'oidc_subject'])]
 class User extends Authenticatable implements FilamentUser
 {
     /** @use HasFactory<UserFactory> */
@@ -26,15 +26,13 @@ class User extends Authenticatable implements FilamentUser
 
     public function canAccessAdminArea(): bool
     {
-        if (in_array($this->email, config('admin.allowed_emails', []), true)) {
-            return true;
-        }
-
         $expiresAt = session()->get('admin_oidc_expires_at');
 
         return session()->get('admin_oidc_authorized') === true
             && is_numeric($expiresAt)
-            && (int) $expiresAt > now()->timestamp;
+            && (int) $expiresAt > now()->timestamp
+            && session()->get('admin_oidc_issuer') === rtrim((string) config('services.keycloak.base_url'), '/')
+            && session()->get('admin_oidc_subject') === $this->oidc_subject;
     }
 
     /**

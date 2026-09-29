@@ -14,8 +14,8 @@ use Illuminate\Session\Middleware\StartSession;
 use Illuminate\Support\Facades\Route;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 
-Route::view('/docs/swagger', 'docs.swagger')->name('docs.swagger');
-Route::view('/docs/swagger/index.html', 'docs.swagger')->name('docs.swagger.index');
+Route::view('/docs/swagger', 'docs.swagger')->name('docs.swagger')->middleware('throttle:public-docs');
+Route::view('/docs/swagger/index.html', 'docs.swagger')->name('docs.swagger.index')->middleware('throttle:public-docs');
 
 Route::get('/auth/keycloak/redirect', [KeycloakAuthController::class, 'redirect'])->name('auth.keycloak.redirect');
 Route::get('/auth/keycloak/callback', [KeycloakAuthController::class, 'callback'])->name('auth.keycloak.callback');
@@ -35,15 +35,15 @@ Route::get('/og/{payload}/{signature}.png', OgImageController::class)
         ValidateCsrfToken::class,
     ]);
 
-Route::get('/robots.txt', [PublicMetadataController::class, 'robots']);
-Route::get('/sitemap.xml', [PublicMetadataController::class, 'sitemap']);
-Route::get('/.well-known/webfinger', [PublicMetadataController::class, 'webfinger']);
-Route::get('/feed.xml', fn (PublicMetadataController $controller) => $controller->feed('en', 'rss'));
-Route::get('/pt-BR/feed.xml', fn (PublicMetadataController $controller) => $controller->feed('pt-BR', 'rss'));
-Route::get('/atom.xml', fn (PublicMetadataController $controller) => $controller->feed('en', 'atom'));
-Route::get('/pt-BR/atom.xml', fn (PublicMetadataController $controller) => $controller->feed('pt-BR', 'atom'));
-Route::get('/feed.json', fn (PublicMetadataController $controller) => $controller->feed('en', 'json'));
-Route::get('/pt-BR/feed.json', fn (PublicMetadataController $controller) => $controller->feed('pt-BR', 'json'));
-Route::get('/resume-{locale}.pdf', [PublicSiteApiController::class, 'resumePdf']);
+Route::get('/robots.txt', [PublicMetadataController::class, 'robots'])->middleware('throttle:public-metadata');
+Route::get('/sitemap.xml', [PublicMetadataController::class, 'sitemap'])->middleware('throttle:public-metadata');
+Route::get('/.well-known/webfinger', [PublicMetadataController::class, 'webfinger'])->middleware('throttle:public-metadata');
+Route::get('/feed.xml', fn (PublicMetadataController $controller) => $controller->feed('en', 'rss'))->middleware('throttle:public-feed');
+Route::get('/pt-BR/feed.xml', fn (PublicMetadataController $controller) => $controller->feed('pt-BR', 'rss'))->middleware('throttle:public-feed');
+Route::get('/atom.xml', fn (PublicMetadataController $controller) => $controller->feed('en', 'atom'))->middleware('throttle:public-feed');
+Route::get('/pt-BR/atom.xml', fn (PublicMetadataController $controller) => $controller->feed('pt-BR', 'atom'))->middleware('throttle:public-feed');
+Route::get('/feed.json', fn (PublicMetadataController $controller) => $controller->feed('en', 'json'))->middleware('throttle:public-feed');
+Route::get('/pt-BR/feed.json', fn (PublicMetadataController $controller) => $controller->feed('pt-BR', 'json'))->middleware('throttle:public-feed');
+Route::get('/resume-{locale}.pdf', [PublicSiteApiController::class, 'resumePdf'])->middleware('throttle:public-pdf');
 Route::get('/snippets/{slug}/download', SnippetDownloadController::class)->middleware('throttle:snippet-zip');
 Route::get('/pt-BR/snippets/{slug}/download', SnippetDownloadController::class)->middleware('throttle:snippet-zip');

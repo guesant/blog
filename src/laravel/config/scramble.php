@@ -39,6 +39,7 @@ return [
     ],
     'middleware' => [
         'web',
+        'throttle:public-docs',
         CacheOpenApiDocumentation::class,
     ],
     'extensions' => [],

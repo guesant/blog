@@ -8,6 +8,18 @@ use Illuminate\Support\Facades\DB;
 
 final class PublicNavigationReader
 {
+    private const PRIVATE_ROUTE_PREFIXES = [
+        'admin',
+        'api',
+        'auth',
+        'docs',
+        'filament',
+        'livewire',
+        'password',
+        'sanctum',
+        'verification',
+    ];
+
     public function read(string $locale): array
     {
         $roots = DB::table('nav_items')
@@ -24,7 +36,9 @@ final class PublicNavigationReader
             ->orderBy('sidebar_group')
             ->orderBy('order')
             ->orderBy('id')
-            ->get();
+            ->get()
+            ->filter(fn (object $item): bool => $this->isPublicRoute($item->route_name))
+            ->values();
 
         $children = DB::table('nav_items')
             ->select([
@@ -38,7 +52,9 @@ final class PublicNavigationReader
             ->whereIn('parent_id', $roots->pluck('id'))
             ->orderBy('order')
             ->orderBy('id')
-            ->get();
+            ->get()
+            ->filter(fn (object $item): bool => $this->isPublicRoute($item->route_name))
+            ->values();
 
         $presented = $roots->map(fn (object $item): array => $this->present(
             $item,
@@ -105,5 +121,16 @@ final class PublicNavigationReader
         };
 
         return Locale::path($path, $locale);
+    }
+
+    private function isPublicRoute(string $name): bool
+    {
+        foreach (self::PRIVATE_ROUTE_PREFIXES as $prefix) {
+            if ($name === $prefix || str_starts_with($name, $prefix.'.')) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

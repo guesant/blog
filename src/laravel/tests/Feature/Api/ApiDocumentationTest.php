@@ -2,6 +2,8 @@
 
 namespace Tests\Feature\Api;
 
+use Illuminate\Routing\Middleware\ThrottleRequests;
+use Illuminate\Support\Facades\Route;
 use Tests\TestCase;
 
 class ApiDocumentationTest extends TestCase
@@ -35,5 +37,19 @@ class ApiDocumentationTest extends TestCase
                 'paths',
             ])
             ->assertJsonPath('paths./site/chrome.get', fn ($value): bool => is_array($value));
+    }
+
+    public function test_generated_documentation_routes_are_rate_limited(): void
+    {
+        foreach (['docs', 'docs/openapi.json'] as $uri) {
+            $route = collect(Route::getRoutes())
+                ->first(fn ($candidate): bool => $candidate->uri() === $uri);
+
+            $this->assertNotNull($route);
+            $this->assertContains(
+                ThrottleRequests::class.':public-docs',
+                app('router')->gatherRouteMiddleware($route),
+            );
+        }
     }
 }

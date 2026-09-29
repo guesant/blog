@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\FindingApiController;
 use App\Http\Controllers\Api\PublicMediaController;
 use App\Http\Controllers\Api\PublicSiteApiController;
 use App\Http\Controllers\SnippetDownloadController;
+use App\Http\Middleware\CheckPublicApiMaintenanceMode;
 use App\Http\Responses\ApiErrorCode;
 use App\Http\Responses\ApiErrorResponse;
 use Illuminate\Support\Facades\Route;
@@ -15,18 +16,23 @@ Route::prefix('v1')
             ->withoutMiddleware(['auth:web', 'can:access-private-api'])
             ->group(function (): void {
                 Route::get('/site/chrome', [PublicSiteApiController::class, 'chrome']);
-                Route::get('/site/home-gallery', [PublicSiteApiController::class, 'homeGallery']);
-                Route::get('/site/pages/{slug}', [PublicSiteApiController::class, 'page']);
-                Route::get('/site/resume', [PublicSiteApiController::class, 'resumeData']);
-                Route::get('/media/{path}', PublicMediaController::class)->where('path', '.*');
-                Route::get('/content/{collection}', [PublicSiteApiController::class, 'collection']);
-                Route::get('/content/{collection}/{slug}', [PublicSiteApiController::class, 'document']);
-                Route::get('/resume/{locale}.pdf', [PublicSiteApiController::class, 'resumePdf']);
-                Route::post('/protected-email/challenge', [PublicSiteApiController::class, 'protectedEmailChallenge']);
-                Route::get('/findings', [FindingApiController::class, 'index']);
-                Route::get('/findings/{slug}', [FindingApiController::class, 'show']);
-                Route::get('/snippets/{slug}/download', SnippetDownloadController::class)
-                    ->middleware('throttle:snippet-zip');
+                Route::middleware(CheckPublicApiMaintenanceMode::class)->group(function (): void {
+                    Route::get('/site/home-gallery', [PublicSiteApiController::class, 'homeGallery']);
+                    Route::get('/site/pages/{slug}', [PublicSiteApiController::class, 'page']);
+                    Route::get('/site/resume', [PublicSiteApiController::class, 'resumeData']);
+                    Route::get('/media/{path}', PublicMediaController::class)
+                        ->where('path', '.*')
+                        ->middleware('throttle:public-media');
+                    Route::get('/content/{collection}', [PublicSiteApiController::class, 'collection']);
+                    Route::get('/content/{collection}/{slug}', [PublicSiteApiController::class, 'document']);
+                    Route::get('/resume/{locale}.pdf', [PublicSiteApiController::class, 'resumePdf'])
+                        ->middleware('throttle:public-pdf');
+                    Route::post('/protected-email/challenge', [PublicSiteApiController::class, 'protectedEmailChallenge']);
+                    Route::get('/findings', [FindingApiController::class, 'index']);
+                    Route::get('/findings/{slug}', [FindingApiController::class, 'show']);
+                    Route::get('/snippets/{slug}/download', SnippetDownloadController::class)
+                        ->middleware('throttle:snippet-zip');
+                });
             });
     });
 

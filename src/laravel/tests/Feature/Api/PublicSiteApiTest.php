@@ -2,11 +2,13 @@
 
 namespace Tests\Feature\Api;
 
+use App\Application\PublicSite\GetPublicPageQueryResult;
 use App\Application\PublicSite\GetPublicSiteChromeQueryHandler;
 use App\Content\EditorialRevisionPublisher;
 use App\Content\HomeGallerySection;
 use App\Content\PublicSiteChromeCache;
 use App\Events\PublicSiteContentChanged;
+use App\Http\Responses\PublicPageResponseDto;
 use App\Jobs\WarmPublicSiteChrome;
 use App\Listeners\InvalidatePublicSiteChrome;
 use App\Models\CaseStudy;
@@ -21,6 +23,8 @@ use App\Models\ResourceRevisionTranslation;
 use App\Models\Resume;
 use App\Models\ResumeRevisionTranslation;
 use App\Models\SiteSettings;
+use App\OpenGraph\OgImageUrlGenerator;
+use App\Support\PublicMediaUrl;
 use Illuminate\Database\Events\QueryExecuted;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
@@ -41,8 +45,81 @@ class PublicSiteApiTest extends TestCase
             ->assertHeader('Cache-Control', 'immutable, max-age=31536000, public');
 
         $this->assertSame('public attachment', $response->streamedContent());
+        $response->assertHeader('Content-Disposition', 'attachment');
+        $response->assertHeader('X-Content-Type-Options', 'nosniff');
 
         $this->get('/api/v1/media/private.txt')->assertNotFound();
+    }
+
+    public function test_public_api_data_routes_are_blocked_during_maintenance(): void
+    {
+        SiteSettings::factory()->create(['maintenance_enabled' => true]);
+
+        $this->getJson('/api/v1/site/pages/home')
+            ->assertStatus(503)
+            ->assertJsonPath('error.code', 'maintenance');
+
+        $this->getJson('/api/v1/media/content-attachments/missing.png')
+            ->assertStatus(503)
+            ->assertJsonPath('error.code', 'maintenance');
+
+        $this->postJson('/api/v1/protected-email/challenge')
+            ->assertStatus(503)
+            ->assertJsonPath('error.code', 'maintenance');
+    }
+
+    public function test_public_page_response_does_not_return_unlisted_fields(): void
+    {
+        $response = PublicPageResponseDto::fromResult(
+            new GetPublicPageQueryResult('home', 'en', [
+                'title' => 'Home',
+                'description' => 'Public description',
+                'privateSecret' => 'must not be returned',
+                'seo' => ['image' => 'https://example.com/home.png'],
+            ]),
+            app(OgImageUrlGenerator::class),
+            app(PublicMediaUrl::class),
+        );
+
+        $this->assertSame([
+            'title' => 'Home',
+            'description' => 'Public description',
+            'seo' => ['image' => 'https://example.com/home.png'],
+            'og_image_url' => 'https://example.com/home.png',
+        ], $response->toArray());
+    }
+
+    public function test_disabled_contact_does_not_issue_a_protected_email_challenge(): void
+    {
+        SiteSettings::factory()->create([
+            'maintenance_enabled' => false,
+            'contact_enabled' => false,
+            'contact_email' => 'contact@example.com',
+        ]);
+
+        $this->postJson('/api/v1/protected-email/challenge')
+            ->assertOk()
+            ->assertJson([]);
+    }
+
+    public function test_private_navigation_routes_are_not_published(): void
+    {
+        DB::table('nav_items')->insert([
+            'route_name' => 'filament.admin.pages.dashboard',
+            'parent_id' => null,
+            'placement' => 'sidebar',
+            'sidebar_group' => 99,
+            'order' => 0,
+        ]);
+
+        $navigation = $this->getJson('/api/v1/site/chrome?locale=en')
+            ->assertOk()
+            ->json('navigation');
+
+        $this->assertStringNotContainsString(
+            'filament',
+            json_encode($navigation, JSON_THROW_ON_ERROR),
+        );
     }
 
     public function test_static_interface_catalog_is_not_an_api_resource(): void
@@ -66,6 +143,8 @@ class PublicSiteApiTest extends TestCase
                 'build',
                 'visibility',
             ]);
+        $this->assertArrayNotHasKey('birth_date', $response->json('profile') ?? []);
+        $this->assertArrayNotHasKey('birth_city', $response->json('profile') ?? []);
         $this->assertStringNotContainsString(
             '"label"',
             json_encode($response->json('navigation'), JSON_THROW_ON_ERROR),

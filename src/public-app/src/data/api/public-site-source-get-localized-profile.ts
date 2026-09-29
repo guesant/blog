@@ -12,10 +12,8 @@ export async function getLocalizedProfile(locale?: string, chrome?: RecordValue)
 
   return {
     name: textValue(profile.name),
-    birthDate: textValue(profile.birth_date),
     title: textValue(profile.title),
     location: textValue(profile.location),
-    birthCity: textValue(profile.birth_city),
     description: textValue(profile.description),
     interests: textValue(profile.interests),
     learning: textValue(profile.learning),

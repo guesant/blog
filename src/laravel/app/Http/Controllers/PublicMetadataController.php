@@ -16,6 +16,7 @@ use App\Http\Responses\ApiErrorResponse;
 use App\Http\Responses\PublicContentResponseFactory;
 use App\Http\Responses\PublicFindingResponseFactory;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Symfony\Component\HttpFoundation\Response;
 
 class PublicMetadataController extends Controller
@@ -68,7 +69,9 @@ class PublicMetadataController extends Controller
         ];
         $rules = collect($bots)->map(fn (string $bot) => "User-agent: {$bot}\nDisallow: /")->implode("\n\n");
 
-        return response("User-agent: *\nAllow: /\n\n{$rules}\n\nSitemap: {$this->absolute('/sitemap.xml')}\n", 200, [
+        $body = Cache::remember('public-metadata:robots', 3600, fn (): string => "User-agent: *\nAllow: /\n\n{$rules}\n\nSitemap: {$this->absolute('/sitemap.xml')}\n");
+
+        return response($body, 200, [
             'Content-Type' => 'text/plain; charset=UTF-8',
             'Cache-Control' => 'public, max-age=3600',
         ]);
@@ -80,25 +83,28 @@ class PublicMetadataController extends Controller
             return response('', 200, ['Content-Type' => 'application/xml; charset=UTF-8']);
         }
 
-        $urls = [];
-        foreach (Locale::all() as $locale) {
-            foreach (self::STATIC_PATHS as $path) {
-                $urls[] = $this->absolute(Locale::path($path, $locale));
-            }
-            foreach (['projects', 'cases', 'writing', 'collections', 'topics', 'technologies', 'experiments', 'snippets'] as $collection) {
-                foreach ($this->collectionItems($collection, $locale) as $item) {
+        $xml = Cache::remember('public-metadata:sitemap', 3600, function (): string {
+            $urls = [];
+            foreach (Locale::all() as $locale) {
+                foreach (self::STATIC_PATHS as $path) {
+                    $urls[] = $this->absolute(Locale::path($path, $locale));
+                }
+                foreach (['projects', 'cases', 'writing', 'collections', 'topics', 'technologies', 'experiments', 'snippets'] as $collection) {
+                    foreach ($this->collectionItems($collection, $locale) as $item) {
+                        $this->appendUrl($urls, $item['url'] ?? null);
+                    }
+                }
+                foreach ($this->findingItems($locale) as $item) {
                     $this->appendUrl($urls, $item['url'] ?? null);
                 }
             }
-            foreach ($this->findingItems($locale) as $item) {
-                $this->appendUrl($urls, $item['url'] ?? null);
-            }
-        }
 
-        $body = collect(array_values(array_unique($urls)))
-            ->map(fn (string $url) => '<url><loc>'.$this->xml($url).'</loc></url>')
-            ->implode('');
-        $xml = '<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'.$body.'</urlset>';
+            $body = collect(array_values(array_unique($urls)))
+                ->map(fn (string $url) => '<url><loc>'.$this->xml($url).'</loc></url>')
+                ->implode('');
+
+            return '<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'.$body.'</urlset>';
+        });
 
         return response($xml, 200, [
             'Content-Type' => 'application/xml; charset=UTF-8',
@@ -109,7 +115,7 @@ class PublicMetadataController extends Controller
     public function feed(string $locale, string $format): Response
     {
         $locale = Locale::normalize($locale);
-        $items = $this->feedItems($locale);
+        $items = Cache::remember("public-metadata:feed:{$locale}:{$format}", 300, fn (): array => $this->feedItems($locale));
 
         if ($format === 'json') {
             return response()->json([

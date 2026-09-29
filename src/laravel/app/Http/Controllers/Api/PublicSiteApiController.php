@@ -14,15 +14,11 @@ use App\Application\PublicSite\GetPublicResumeQuery;
 use App\Application\PublicSite\GetPublicResumeQueryHandler;
 use App\Application\PublicSite\GetPublicSiteChromeQuery;
 use App\Application\PublicSite\GetPublicSiteChromeQueryHandler;
-use App\Application\PublicSite\IsPublicSiteInMaintenanceQuery;
-use App\Application\PublicSite\IsPublicSiteInMaintenanceQueryHandler;
 use App\Application\PublicSite\ListPublicContentQuery;
 use App\Application\PublicSite\ListPublicContentQueryHandler;
 use App\Content\Locale;
 use App\Content\PublicSiteChromeCache;
 use App\Http\Controllers\Controller;
-use App\Http\Responses\ApiErrorCode;
-use App\Http\Responses\ApiErrorResponse;
 use App\Http\Responses\PublicContentDetailResponseDto;
 use App\Http\Responses\PublicContentListResponseDto;
 use App\Http\Responses\PublicContentResponseFactory;
@@ -70,17 +66,8 @@ class PublicSiteApiController extends Controller
         Request $request,
         string $collection,
         ListPublicContentQueryHandler $handler,
-        IsPublicSiteInMaintenanceQueryHandler $maintenance,
         PublicContentResponseFactory $presenter,
     ): JsonResponse {
-        if ($maintenance->handle(new IsPublicSiteInMaintenanceQuery)) {
-            return ApiErrorResponse::make(
-                ApiErrorCode::Maintenance,
-                503,
-                'The service is temporarily unavailable.',
-            )->header('Retry-After', (string) 3600);
-        }
-
         abort_unless(in_array($collection, self::COLLECTIONS, true), 404);
 
         $locale = Locale::normalize($request->query('locale'));
@@ -124,17 +111,8 @@ class PublicSiteApiController extends Controller
         string $collection,
         string $slug,
         GetPublicContentQueryHandler $handler,
-        IsPublicSiteInMaintenanceQueryHandler $maintenance,
         PublicContentResponseFactory $presenter,
     ): JsonResponse {
-        if ($maintenance->handle(new IsPublicSiteInMaintenanceQuery)) {
-            return ApiErrorResponse::make(
-                ApiErrorCode::Maintenance,
-                503,
-                'The service is temporarily unavailable.',
-            )->header('Retry-After', (string) 3600);
-        }
-
         abort_unless(in_array($collection, self::COLLECTIONS, true), 404);
 
         $locale = Locale::normalize($request->query('locale'));
@@ -196,16 +174,7 @@ class PublicSiteApiController extends Controller
     #[ScrambleResponse(503, 'The service is temporarily unavailable.', type: 'array{error: array{code: string, message: string, status: int, details: string}}')]
     public function protectedEmailChallenge(
         GetPublicEmailChallengeQueryHandler $handler,
-        IsPublicSiteInMaintenanceQueryHandler $maintenance,
     ): JsonResponse|Response {
-        if ($maintenance->handle(new IsPublicSiteInMaintenanceQuery)) {
-            return ApiErrorResponse::make(
-                ApiErrorCode::Maintenance,
-                503,
-                'The service is temporarily unavailable.',
-            )->header('Retry-After', (string) 3600);
-        }
-
         $challenge = $handler->handle(new GetPublicEmailChallengeQuery);
 
         return response()->json(PublicEmailChallengeResponseDto::fromResult($challenge)->toArray());
@@ -250,8 +219,6 @@ class PublicSiteApiController extends Controller
      *     location: string|null,
      *     description: string|null,
      *     milestones: array<int, array{year: string|null, title: string|null, description: string|null, hidden: bool}>,
-     *     birth_date: string,
-     *     birth_city: string|null,
      *     interests: string|null,
      *     learning: string|null,
      *     personal_interests: array<int, array{value: string}>
@@ -345,17 +312,8 @@ class PublicSiteApiController extends Controller
     public function homeGallery(
         Request $request,
         GetPublicHomeGalleryQueryHandler $handler,
-        IsPublicSiteInMaintenanceQueryHandler $maintenance,
         PublicContentResponseFactory $presenter,
     ): JsonResponse {
-        if ($maintenance->handle(new IsPublicSiteInMaintenanceQuery)) {
-            return ApiErrorResponse::make(
-                ApiErrorCode::Maintenance,
-                503,
-                'The service is temporarily unavailable.',
-            )->header('Retry-After', (string) 3600);
-        }
-
         $locale = Locale::normalize($request->query('locale'));
         $result = $handler->handle(new GetPublicHomeGalleryQuery($locale));
 

@@ -9,7 +9,8 @@ export const DetailArticleFrame = createSemanticSxComponent<ComponentProps<typeo
     rowGap: 'var(--site-page-content-offset)',
     paddingBlockStart: 0,
     paddingBlockEnd: { xs: 8, md: 10 },
-    maxWidth: '52rem',
-    mx: 'auto',
+    width: '100%',
+    maxWidth: '100%',
+    mx: 0,
   },
 );

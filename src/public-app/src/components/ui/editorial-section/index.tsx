@@ -11,6 +11,8 @@ export type EditorialSectionProps = {
   children: ReactNode;
   footer?: ReactNode;
   divider?: boolean;
+  sectionGap?: string;
+  sectionPadding?: string;
 };
 
 const sectionStyles = {
@@ -45,7 +47,17 @@ const descriptionStyles = {
 
 export function EditorialSection(props: EditorialSectionProps) {
   return (
-    <Box component="section" id={props.id} sx={sectionStyles}>
+    <Box
+      component="section"
+      id={props.id}
+      sx={[
+        sectionStyles,
+        {
+          ...(props.sectionGap ? { rowGap: props.sectionGap } : {}),
+          ...(props.sectionPadding ? { paddingBlock: props.sectionPadding } : {}),
+        },
+      ]}
+    >
       <ConditionalContent
         condition={Boolean(props.divider)}
         content={<Divider sx={{ width: '100%', borderColor: 'var(--site-border)' }} />}

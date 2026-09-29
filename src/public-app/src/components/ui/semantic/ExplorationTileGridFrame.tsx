@@ -1,6 +1,8 @@
 import type { ComponentProps } from 'react';
 import { Box } from '../box';
 
+export const explorationTileGridGapProperty = '--site-exploration-tile-grid-gap' as const;
+
 type ExplorationTileGridFrameProps = ComponentProps<typeof Box>;
 
 export function ExplorationTileGridFrame(props: ExplorationTileGridFrameProps) {
@@ -14,13 +16,14 @@ export function ExplorationTileGridFrame(props: ExplorationTileGridFrameProps) {
           display: 'flex',
           flexWrap: 'wrap',
           justifyContent: 'center',
-          rowGap: 'var(--site-gap-stack)',
-          columnGap: 'var(--site-gap-cluster)',
-          mt: 'var(--site-space-4)',
+          [explorationTileGridGapProperty]: 'var(--site-exploration-gap)',
+          rowGap: `var(${explorationTileGridGapProperty})`,
+          columnGap: `var(${explorationTileGridGapProperty})`,
+          mt: 0,
           '& > *, & [data-exploration-item]': {
             flex: {
-              xs: '0 0 calc((100% - var(--site-space-3)) / 2)',
-              sm: '0 0 calc((100% - (var(--site-space-3) * 3)) / 4)',
+              xs: `0 0 calc((100% - var(${explorationTileGridGapProperty})) / 2)`,
+              sm: `0 0 calc((100% - (var(${explorationTileGridGapProperty}) * 3)) / 4)`,
             },
             minWidth: 0,
           },

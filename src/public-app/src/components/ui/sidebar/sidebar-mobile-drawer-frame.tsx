@@ -7,7 +7,9 @@ type SidebarMobileDrawerFrameProps = {
   onClose: () => void;
 };
 
-const paperStyles = { width: 'min(var(--site-offcanvas-w), var(--site-offcanvas-max))' };
+const paperStyles = {
+  width: 'min(var(--site-offcanvas-mobile-w), var(--site-offcanvas-max))',
+};
 
 export function SidebarMobileDrawerFrame(props: SidebarMobileDrawerFrameProps) {
   return (

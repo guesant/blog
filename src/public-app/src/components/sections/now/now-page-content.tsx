@@ -22,6 +22,7 @@ export function NowPageContent(props: NowPageContentProps) {
         title={tNav('now')}
         description={page.description}
         breadcrumbs={[{ label: tNav('now') }]}
+        variant="showcase"
       />
       <CollectionListing
         items={entries}

@@ -31,6 +31,7 @@ export function FollowPageContent(props: FollowPageContentProps) {
         title={page.title}
         description={page.intro}
         breadcrumbs={[{ label: tNav('follow') }]}
+        variant="showcase"
       />
       {hasCurrentSection ? (
         <FollowCurrentSection label={page.sectionLabel} title={page.sectionTitle} />

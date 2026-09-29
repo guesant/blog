@@ -16,6 +16,7 @@ export function PortfolioPageHeader(props: PortfolioPageHeaderProps) {
         title={props.profile.name}
         description={props.page.heroExperience}
         breadcrumbs={[{ label: props.tNav('portfolio') }]}
+        variant="showcase"
       />
       <PortfolioAvailabilityCard>
         <Typography variant="overline" color="text.secondary">

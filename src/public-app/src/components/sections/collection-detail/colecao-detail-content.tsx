@@ -30,6 +30,7 @@ export function ColecaoDetailContent(props: ColecaoDetailContentProps) {
           { label: tNav('collections'), href: '/collections' },
           { label: collection.title },
         ]}
+        variant="showcase"
       />
       <CollectionDetailSections collection={collection} tCommon={tCommon} />
     </>

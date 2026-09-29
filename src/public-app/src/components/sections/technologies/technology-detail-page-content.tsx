@@ -19,6 +19,7 @@ export function TechnologyDetailPageContent(props: TechnologyDetailPageContentPr
       <PageHeader
         title={technology.name}
         breadcrumbs={[{ label: tNav('technologies'), href: '/technologies' }]}
+        variant="reading"
       />
       <ConditionalContent
         condition={Boolean(technology.code)}

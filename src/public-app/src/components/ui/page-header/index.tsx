@@ -3,13 +3,13 @@ import { Box } from '../box';
 import { Divider } from '../divider';
 import { Typography } from '../typography';
 import { ConditionalContent } from '../../primitives/conditional-content';
-import type { PageHeaderLayout } from './styles';
-import { pageHeaderLayoutStyles, pageHeaderSlotStyles } from './styles';
+import type { PageHeaderVariant } from './styles';
+import { pageHeaderSlotStyles, pageHeaderVariantStyles } from './styles';
 
-export type { PageHeaderLayout } from './styles';
+export type { PageHeaderVariant } from './styles';
 
 export type PageHeaderFrameProps = {
-  layout: PageHeaderLayout;
+  variant: PageHeaderVariant;
   breadcrumbs?: ReactNode;
   title: string;
   description?: ReactNode;
@@ -19,10 +19,10 @@ export type PageHeaderFrameProps = {
 };
 
 export function PageHeaderFrame(props: PageHeaderFrameProps) {
-  const slotStyles = pageHeaderSlotStyles[props.layout];
+  const slotStyles = pageHeaderSlotStyles[props.variant];
 
   return (
-    <Box component="header" sx={pageHeaderLayoutStyles[props.layout]}>
+    <Box component="header" sx={pageHeaderVariantStyles[props.variant]}>
       {props.breadcrumbs}
       {props.breadcrumbs ? <Divider /> : null}
       <Box sx={{ display: 'grid', rowGap: 'var(--site-space-5)' }}>

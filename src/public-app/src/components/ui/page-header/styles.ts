@@ -1,6 +1,6 @@
 import type { SxProps, Theme } from '@mui/material/styles';
 
-export type PageHeaderLayout = 'standard' | 'detail' | 'contentFeed' | 'about' | 'findingDetail';
+export type PageHeaderVariant = 'showcase' | 'reading';
 
 const pageIntroLayout: SxProps<Theme> = {
   display: 'grid',
@@ -8,79 +8,46 @@ const pageIntroLayout: SxProps<Theme> = {
   marginBlockStart: 0,
 };
 
-export const pageHeaderLayoutStyles: Record<PageHeaderLayout, SxProps<Theme>> = {
-  standard: { ...pageIntroLayout, maxWidth: 'var(--site-page-header-max)' },
-  detail: {
-    display: 'grid',
-    rowGap: 'var(--site-page-content-offset)',
-    maxWidth: 'var(--site-lede-max)',
-  },
-  contentFeed: {
+export const pageHeaderVariantStyles: Record<PageHeaderVariant, SxProps<Theme>> = {
+  showcase: {
     ...pageIntroLayout,
     maxWidth: 'var(--site-content-max)',
     textAlign: 'center',
   },
-  about: { ...pageIntroLayout, maxWidth: 'var(--site-page-header-max)' },
-  findingDetail: {
-    display: 'grid',
-    rowGap: 'var(--site-page-content-offset)',
-  },
+  reading: { ...pageIntroLayout, maxWidth: 'var(--site-page-header-max)', textAlign: 'left' },
 };
 
-const standardTitle: SxProps<Theme> = {
+const pageTitle: SxProps<Theme> = {
   margin: 0,
   fontSize: 'var(--site-text-3xl)',
 };
 
-const standardDescription: SxProps<Theme> = {
+const readingDescription: SxProps<Theme> = {
   margin: 0,
-  maxWidth: 'var(--site-page-header-description-max)',
+  width: '100%',
+  maxWidth: '100%',
+  boxSizing: 'border-box',
   fontSize: 'var(--site-text-lg)',
   textAlign: 'justify',
   hyphens: 'auto',
 };
 
-const detailDescription: SxProps<Theme> = {
-  margin: 0,
-  maxWidth: 'var(--site-detail-header-description-max)',
-  fontSize: 'var(--site-text-lg)',
-  lineHeight: 'var(--site-leading-relaxed)',
-};
-
 export const pageHeaderSlotStyles: Record<
-  PageHeaderLayout,
+  PageHeaderVariant,
   { title: SxProps<Theme>; description: SxProps<Theme>; meta: SxProps<Theme> }
 > = {
-  standard: { title: standardTitle, description: standardDescription, meta: { margin: 0 } },
-  detail: {
-    title: standardTitle,
-    description: detailDescription,
-    meta: { margin: 0, fontSize: 'var(--site-text-sm)' },
-  },
-  contentFeed: {
-    title: standardTitle,
+  showcase: {
+    title: pageTitle,
     description: {
-      ...standardDescription,
-      maxWidth: 'var(--site-lede-max)',
+      ...readingDescription,
       marginInline: 'auto',
       textAlign: 'center',
     },
     meta: { margin: 0 },
   },
-  about: { title: standardTitle, description: standardDescription, meta: { margin: 0 } },
-  findingDetail: {
-    title: {
-      ...standardTitle,
-      color: 'var(--site-text-primary)',
-      fontWeight: 'var(--site-weight-bold)',
-      letterSpacing: 'var(--site-letter-heading)',
-      lineHeight: 'var(--site-leading-tight)',
-    },
-    description: {
-      ...detailDescription,
-      color: 'var(--site-text-primary)',
-      fontSize: 'var(--site-text-lg)',
-    },
+  reading: {
+    title: pageTitle,
+    description: readingDescription,
     meta: { margin: 0 },
   },
 };

@@ -66,7 +66,7 @@ export { RichTextElement } from './rich-text-element';
 
 export { VisibilitySentinel } from './visibility-sentinel';
 
-export { EditorialSection, type EditorialSectionPresentation } from './editorial-section';
+export { EditorialSection } from './editorial-section';
 
 export { ListingListFrame, ListingViewFrame } from './listing-view';
 

@@ -22,6 +22,7 @@ export function CatalogPageContent<T>(props: CatalogPageContentProps<T>) {
         title={props.title}
         description={props.description}
         breadcrumbs={props.breadcrumbs}
+        variant="showcase"
       />
       <CollectionListing
         items={props.items}

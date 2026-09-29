@@ -44,7 +44,7 @@ export function AchadoDetailHeader(props: AchadoDetailHeaderProps) {
           />
         </>
       }
-      layout="findingDetail"
+      variant="reading"
     />
   );
 }

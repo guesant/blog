@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { EditorialSection, type EditorialSectionPresentation } from '../ui';
+import { EditorialSection } from '../ui';
 
 type EditorialSectionLayoutProps = {
   id?: string;
@@ -8,7 +8,6 @@ type EditorialSectionLayoutProps = {
   children: ReactNode;
   footer?: ReactNode;
   divider?: boolean;
-  presentation?: EditorialSectionPresentation;
 };
 
 export function EditorialSectionLayout(props: EditorialSectionLayoutProps) {

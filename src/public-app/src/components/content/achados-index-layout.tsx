@@ -25,6 +25,7 @@ export function AchadosIndexLayout(props: AchadosIndexLayoutProps) {
         title={title}
         description={description}
         breadcrumbs={[{ label: tNav('achados'), href: '/findings' }, { label: title }]}
+        variant="showcase"
       />
       <ConditionalContent condition={isEmpty}>
         <EmptyState icon="problem">{emptyMessage}</EmptyState>

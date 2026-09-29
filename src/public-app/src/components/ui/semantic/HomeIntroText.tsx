@@ -12,7 +12,7 @@ export const HomeIntroText = createSemanticSxComponent<ComponentProps<typeof Bas
       marginLeft: 'auto',
       marginRight: 'auto',
       boxSizing: 'border-box',
-      ...{ textAlign: 'justify', hyphens: 'auto' },
+      textAlign: 'center',
     },
     margin: 0,
     fontFamily: 'var(--site-font-action)',

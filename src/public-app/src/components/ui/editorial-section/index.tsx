@@ -4,8 +4,6 @@ import { Divider } from '../divider';
 import { Typography } from '../typography';
 import { ConditionalContent } from '../../primitives/conditional-content';
 
-export type EditorialSectionPresentation = 'default' | 'exploration';
-
 export type EditorialSectionProps = {
   id?: string;
   title: string;
@@ -13,7 +11,6 @@ export type EditorialSectionProps = {
   children: ReactNode;
   footer?: ReactNode;
   divider?: boolean;
-  presentation?: EditorialSectionPresentation;
 };
 
 const sectionStyles = {
@@ -37,19 +34,16 @@ const headerStyles = {
   textAlign: 'center',
 };
 
-const explorationDescriptionStyles = {
+const descriptionStyles = {
   display: 'block',
   width: '100%',
   maxWidth: '100%',
   marginInline: 'auto',
   boxSizing: 'border-box',
-  textAlign: 'justify',
-  hyphens: 'auto',
+  textAlign: 'center',
 };
 
 export function EditorialSection(props: EditorialSectionProps) {
-  const isExploration = props.presentation === 'exploration';
-
   return (
     <Box component="section" id={props.id} sx={sectionStyles}>
       <ConditionalContent
@@ -63,10 +57,7 @@ export function EditorialSection(props: EditorialSectionProps) {
         <ConditionalContent
           condition={Boolean(props.description)}
           content={
-            <Typography
-              color="text.secondary"
-              sx={isExploration ? explorationDescriptionStyles : undefined}
-            >
+            <Typography color="text.secondary" sx={descriptionStyles}>
               {props.description}
             </Typography>
           }

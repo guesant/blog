@@ -8,7 +8,6 @@ export function ExplorationSection(props: ExplorationSectionProps) {
       title={props.title}
       description={props.description}
       divider={props.divider}
-      presentation="exploration"
     >
       {props.children}
     </EditorialSectionLayout>

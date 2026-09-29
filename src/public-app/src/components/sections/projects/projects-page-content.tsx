@@ -20,6 +20,7 @@ export function ProjectsPageContent(props: ProjectsPageContentProps) {
         title={page.title}
         breadcrumbs={[{ label: tNav('projects') }]}
         description={page.description}
+        variant="showcase"
       />
       <ProjectsPageBody
         page={page}

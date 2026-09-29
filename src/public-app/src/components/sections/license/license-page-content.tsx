@@ -23,6 +23,7 @@ export function LicensePageContent(props: LicensePageContentProps) {
         title={page.title}
         description={page.description}
         breadcrumbs={[{ label: tFooter('license') }]}
+        variant="reading"
       />
       {sections.map((section) => (
         <LicenseSection

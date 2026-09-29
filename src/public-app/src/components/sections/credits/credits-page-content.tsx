@@ -14,6 +14,7 @@ export function CreditsPageContent(props: CreditsPageContentProps) {
         title={content.page.title}
         description={content.page.description}
         breadcrumbs={[{ label: tFooter('credits') }]}
+        variant="showcase"
       />
       <CreditsPageSections content={content} />
     </>

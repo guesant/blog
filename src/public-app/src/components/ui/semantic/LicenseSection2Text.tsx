@@ -4,5 +4,5 @@ import { Typography as BaseComponent } from '@/components/ui/typography';
 
 export const LicenseSection2Text = createSemanticSxComponent<ComponentProps<typeof BaseComponent>>(
   BaseComponent,
-  { lineHeight: 1.7 },
+  { lineHeight: 1.7, textAlign: 'justify', hyphens: 'auto' },
 );

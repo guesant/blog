@@ -8,7 +8,7 @@ export function PageHeader(props: PageHeaderProps) {
   return (
     <PageHeaderSectionFrame>
       <PageHeaderFrame
-        layout={props.layout ?? 'standard'}
+        variant={props.variant ?? 'reading'}
         breadcrumbs={props.breadcrumbs ? <Breadcrumbs trail={props.breadcrumbs} /> : undefined}
         title={props.title}
         description={props.description}

@@ -20,7 +20,7 @@ export function StatusContent(props: StatusContentProps) {
   return (
     <StatusContentFrame>
       <StatusIcon name="problem" size={22} />
-      <PageHeader title={t('title')} description={t('description')} />
+      <PageHeader title={t('title')} description={t('description')} variant="showcase" />
       <StatusActions {...props} />
     </StatusContentFrame>
   );

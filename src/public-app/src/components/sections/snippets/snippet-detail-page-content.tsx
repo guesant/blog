@@ -23,6 +23,7 @@ export function SnippetDetailPageContent(props: SnippetDetailPageContentProps) {
         title={snippet.title}
         description={snippet.description}
         breadcrumbs={[{ label: tNav('snippets'), href: '/snippets' }]}
+        variant="reading"
       />
       <Button
         component="a"

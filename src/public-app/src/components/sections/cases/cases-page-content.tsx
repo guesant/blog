@@ -18,7 +18,7 @@ export function CasesPageContent(props: CasesPageContentProps) {
 
   return (
     <>
-      <EditablePageHeader page={page} breadcrumbs={[{ label: tNav('work') }]} />
+      <EditablePageHeader page={page} breadcrumbs={[{ label: tNav('work') }]} variant="showcase" />
       <CollectionListing
         items={items}
         getKey={(item) => item.slug}

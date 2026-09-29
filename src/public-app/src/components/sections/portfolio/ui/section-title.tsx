@@ -10,7 +10,7 @@ export function PortfolioSectionTitle(props: PortfolioSectionTitleProps) {
     <Typography
       component="h2"
       variant="h2"
-      sx={{ mt: 'var(--site-space-1)', mb: 'var(--site-space-1)' }}
+      sx={{ mt: 'var(--site-space-1)', mb: 'var(--site-space-1)', textAlign: 'center' }}
     >
       {props.children}
     </Typography>

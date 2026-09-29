@@ -47,7 +47,7 @@ class ManageResume extends Page
             ->schema($fields)
             ->itemLabel(fn (mixed $state): ?string => is_array($state) ? ($state[$labelKey] ?? null) : null)
             ->formatStateUsing(fn (mixed $state): array => is_array($state) ? $state : [])
-            ->addActionLabel('Add entry')
+            ->addActionLabel(__('Add entry'))
             ->defaultItems(0);
     }
 
@@ -122,19 +122,19 @@ class ManageResume extends Page
     {
         return [
             Action::make('regeneratePdfs')
-                ->label('Regenerate PDFs')
+                ->label(__('Regenerate PDFs'))
                 ->action(function () {
                     try {
                         foreach (['en', 'pt-BR'] as $locale) {
                             GenerateResumePdfJob::dispatchSync($locale);
                         }
 
-                        Notification::make()->success()->title('Résumé PDFs regenerated')->send();
+                        Notification::make()->success()->title(__('Résumé PDFs regenerated'))->send();
                     } catch (Throwable) {
                         Notification::make()
                             ->warning()
-                            ->title('Résumé PDFs were not regenerated')
-                            ->body('Complete the profile, résumé and site settings before generating PDFs.')
+                            ->title(__('Résumé PDFs were not regenerated'))
+                            ->body(__('Complete the profile, résumé and site settings before generating PDFs.'))
                             ->send();
                     }
                 }),
@@ -148,7 +148,7 @@ class ManageResume extends Page
 
         return $schema
             ->components([
-                Section::make('Selected Cases')
+                Section::make(__('Selected Cases'))
                     ->schema([
                         Repeater::make('selected_cases')
                             ->reorderableWithButtons()
@@ -163,10 +163,10 @@ class ManageResume extends Page
                             ->itemLabel(fn (mixed $state): ?string => is_array($state) && isset($state['case_study_id'])
                                 ? CaseStudy::find($state['case_study_id'])?->slug
                                 : null)
-                            ->addActionLabel('Add case')
+                            ->addActionLabel(__('Add case'))
                             ->defaultItems(0),
                     ]),
-                Section::make('Skills')
+                Section::make(__('Skills'))
                     ->schema([
                         Repeater::make('skills')
                             ->reorderableWithButtons()
@@ -189,10 +189,10 @@ class ManageResume extends Page
                             ->itemLabel(fn (mixed $state): ?string => is_array($state) && isset($state['topic_id'])
                                 ? Topic::find($state['topic_id'])?->slug
                                 : null)
-                            ->addActionLabel('Add skill category')
+                            ->addActionLabel(__('Add skill category'))
                             ->defaultItems(0),
                     ]),
-                Section::make('Languages')
+                Section::make(__('Languages'))
                     ->schema([
                         Repeater::make('languages')
                             ->relationship('languages')
@@ -211,7 +211,7 @@ class ManageResume extends Page
                                 ),
                             ])
                             ->itemLabel(fn (mixed $state): ?string => is_array($state) ? ($state['proficiency'] ?? null) : null)
-                            ->addActionLabel('Add language')
+                            ->addActionLabel(__('Add language'))
                             ->defaultItems(0),
                     ]),
                 static::translationTabs(fn (string $prefix) => [
@@ -326,6 +326,6 @@ class ManageResume extends Page
 
         app(EditorialRevisionPublisher::class)->syncResumeRelations($this->getRecord());
 
-        Notification::make()->success()->title('Saved')->send();
+        Notification::make()->success()->title(__('Saved'))->send();
     }
 }

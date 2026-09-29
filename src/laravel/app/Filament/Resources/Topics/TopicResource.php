@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Topics;
 
+use App\Filament\Concerns\TranslatesResourceLabels;
 use App\Filament\Resources\Topics\Pages\CreateTopic;
 use App\Filament\Resources\Topics\Pages\EditTopic;
 use App\Filament\Resources\Topics\Pages\ListTopics;
@@ -16,6 +17,8 @@ use Filament\Tables\Table;
 
 class TopicResource extends Resource
 {
+    use TranslatesResourceLabels;
+
     protected static ?string $model = Topic::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;

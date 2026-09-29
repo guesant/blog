@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\CreditEntries;
 
+use App\Filament\Concerns\TranslatesResourceLabels;
 use App\Filament\Resources\CreditEntries\Pages\CreateCreditEntry;
 use App\Filament\Resources\CreditEntries\Pages\EditCreditEntry;
 use App\Filament\Resources\CreditEntries\Pages\ListCreditEntries;
@@ -16,6 +17,8 @@ use Filament\Tables\Table;
 
 class CreditEntryResource extends Resource
 {
+    use TranslatesResourceLabels;
+
     protected static ?string $model = CreditEntry::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedHeart;

@@ -18,7 +18,7 @@ class RelationTypeForm
     {
         return $schema
             ->components([
-                Section::make('Definition')
+                Section::make(__('Definition'))
                     ->columns(2)
                     ->schema([
                         TextInput::make('key')
@@ -38,7 +38,7 @@ class RelationTypeForm
                         Toggle::make('symmetric'),
                     ]),
                 static::translationTabs(fn (string $prefix) => [
-                    Fieldset::make('Localized labels')
+                    Fieldset::make(__('Localized labels'))
                         ->columns(2)
                         ->schema([
                             TextInput::make("{$prefix}outbound_label")

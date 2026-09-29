@@ -19,7 +19,7 @@ class CreditEntryForm
     {
         return $schema
             ->components([
-                Section::make('Credit metadata')
+                Section::make(__('Credit metadata'))
                     ->columns(2)
                     ->schema([
                         TextInput::make('url')

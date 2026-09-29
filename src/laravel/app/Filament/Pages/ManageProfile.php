@@ -54,7 +54,7 @@ class ManageProfile extends Page
     {
         return $schema
             ->components([
-                Section::make('Profile settings')
+                Section::make(__('Profile settings'))
                     ->columns(2)
                     ->schema([
                         TextInput::make('name')
@@ -64,7 +64,7 @@ class ManageProfile extends Page
                             ->nullable(),
                     ]),
                 static::translationTabs(fn (string $prefix) => [
-                    Fieldset::make('Profile identity')
+                    Fieldset::make(__('Profile identity'))
                         ->columns(2)
                         ->schema([
                             TextInput::make("{$prefix}title")
@@ -80,7 +80,7 @@ class ManageProfile extends Page
                                 ->nullable()
                                 ->maxLength(255),
                         ]),
-                    Fieldset::make('Profile narrative')
+                    Fieldset::make(__('Profile narrative'))
                         ->columns(2)
                         ->schema([
                             Textarea::make("{$prefix}description")
@@ -107,7 +107,7 @@ class ManageProfile extends Page
                             ? trim(($state['label'] ?? '').' — '.($state['since'] ?? ''), ' —') ?: null
                             : null)
                         ->formatStateUsing(fn (mixed $state): array => is_array($state) ? $state : [])
-                        ->addActionLabel('Add thing')
+                        ->addActionLabel(__('Add thing'))
                         ->defaultItems(0),
                     Repeater::make("{$prefix}trajectory")
                         ->label('Trajectory')
@@ -125,7 +125,7 @@ class ManageProfile extends Page
                             ? trim(($state['role'] ?? '').' — '.($state['organization'] ?? ''), ' —') ?: null
                             : null)
                         ->formatStateUsing(fn (mixed $state): array => is_array($state) ? $state : [])
-                        ->addActionLabel('Add trajectory entry')
+                        ->addActionLabel(__('Add trajectory entry'))
                         ->defaultItems(0),
                     Repeater::make("{$prefix}milestones")
                         ->label('Milestones')
@@ -141,7 +141,7 @@ class ManageProfile extends Page
                             ? trim(($state['year'] ?? '').' — '.($state['title'] ?? ''), ' —') ?: null
                             : null)
                         ->formatStateUsing(fn (mixed $state): array => is_array($state) ? $state : [])
-                        ->addActionLabel('Add milestone')
+                        ->addActionLabel(__('Add milestone'))
                         ->defaultItems(0),
                 ]),
             ])
@@ -157,6 +157,6 @@ class ManageProfile extends Page
         $this->getRecord()->update($data);
         $this->persistTranslations();
 
-        Notification::make()->success()->title('Saved')->send();
+        Notification::make()->success()->title(__('Saved'))->send();
     }
 }

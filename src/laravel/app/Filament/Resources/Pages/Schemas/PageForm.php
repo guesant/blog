@@ -99,7 +99,7 @@ class PageForm
         /** @var array<string, Component> $fields */
         $fields = collect(PageRevisionTranslation::FIELDS)->mapWithKeys(function (string $key) use ($prefix) {
             $field = "{$prefix}fields.{$key}";
-            $label = self::FIELD_LABELS[$key] ?? str($key)->headline()->toString();
+            $label = __(self::FIELD_LABELS[$key] ?? str($key)->headline()->toString());
 
             if ($key === 'story' || str_ends_with($key, '_body') || str_ends_with($key, '_description') || in_array($key, ['context', 'intro', 'introduction', 'lead'], true)) {
                 $component = static::markdownEditor($field);
@@ -131,7 +131,7 @@ class PageForm
                     continue;
                 }
 
-                $components[] = Fieldset::make($group)
+                $components[] = Fieldset::make(__($group))
                     ->columns(2)
                     ->schema($groupFields)
                     ->visible(fn (Get $get): bool => $get('slug', true) === $slug);
@@ -145,7 +145,7 @@ class PageForm
     {
         return $schema
             ->components([
-                Section::make('Page settings')
+                Section::make(__('Page settings'))
                     ->schema([
                         TextInput::make('slug')
                             ->required()
@@ -153,16 +153,18 @@ class PageForm
                             ->unique(ignoreRecord: true)
                             ->maxLength(255),
                     ]),
-                Section::make('Home gallery')
+                Section::make(__('Home gallery'))
                     ->visible(fn (Get $get): bool => $get('slug') === 'home')
                     ->schema([
                         CheckboxList::make('home_sections')
                             ->label('Visible sections')
-                            ->options(HomeGallerySection::LABELS)
+                            ->options(collect(HomeGallerySection::LABELS)
+                                ->map(fn (string $label): string => __($label))
+                                ->all())
                             ->default(array_keys(array_filter(HomeGallerySection::DEFAULTS)))
                             ->columns(2),
                     ]),
-                Section::make('Featured Cases')
+                Section::make(__('Featured Cases'))
                     ->visible(fn (Get $get): bool => $get('slug') === 'portfolio')
                     ->schema([
                         Repeater::make('featured_cases')
@@ -178,10 +180,10 @@ class PageForm
                             ->itemLabel(fn (mixed $state): ?string => is_array($state) && isset($state['case_study_id'])
                                 ? CaseStudy::find($state['case_study_id'])?->slug
                                 : null)
-                            ->addActionLabel('Add case')
+                            ->addActionLabel(__('Add case'))
                             ->defaultItems(0),
                     ]),
-                Section::make('Featured Projects')
+                Section::make(__('Featured Projects'))
                     ->visible(fn (Get $get): bool => $get('slug') === 'portfolio')
                     ->schema([
                         Repeater::make('featured_projects')
@@ -197,10 +199,10 @@ class PageForm
                             ->itemLabel(fn (mixed $state): ?string => is_array($state) && isset($state['project_id'])
                                 ? Project::find($state['project_id'])?->slug
                                 : null)
-                            ->addActionLabel('Add project')
+                            ->addActionLabel(__('Add project'))
                             ->defaultItems(0),
                     ]),
-                Section::make('Featured Writings')
+                Section::make(__('Featured Writings'))
                     ->visible(fn (Get $get): bool => $get('slug') === 'portfolio')
                     ->schema([
                         Repeater::make('featured_writings')
@@ -216,7 +218,7 @@ class PageForm
                             ->itemLabel(fn (mixed $state): ?string => is_array($state) && isset($state['writing_id'])
                                 ? Writing::find($state['writing_id'])?->slug
                                 : null)
-                            ->addActionLabel('Add writing')
+                            ->addActionLabel(__('Add writing'))
                             ->defaultItems(0),
                     ]),
                 static::translationTabs(fn (string $prefix) => [

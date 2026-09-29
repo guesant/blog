@@ -22,15 +22,15 @@ class ListNavItems extends ListRecords
         return [
             CreateAction::make(),
             Action::make('reorderSidebarGroups')
-                ->label('Edit sidebar groups')
+                ->label(__('Edit sidebar groups'))
                 ->icon('heroicon-o-bars-3-bottom-left')
-                ->modalHeading('Edit sidebar groups')
-                ->modalDescription('Reorder groups with drag and drop or the arrow buttons.')
+                ->modalHeading(__('Edit sidebar groups'))
+                ->modalDescription(__('Reorder groups with drag and drop or the arrow buttons.'))
                 ->modalWidth('2xl')
                 ->fillForm(fn (): array => ['groups' => $this->sidebarGroupFormData()])
                 ->form([
                     Repeater::make('groups')
-                        ->label('Sidebar groups')
+                        ->label(__('Sidebar groups'))
                         ->schema([
                             Hidden::make('key'),
                             Hidden::make('label'),
@@ -49,7 +49,7 @@ class ListNavItems extends ListRecords
                     );
 
                     Notification::make()
-                        ->title('Sidebar groups reordered')
+                        ->title(__('Sidebar groups reordered'))
                         ->success()
                         ->send();
                 }),

@@ -21,7 +21,7 @@ class ExperimentForm
     {
         return $schema
             ->components([
-                Section::make('Publishing')
+                Section::make(__('Publishing'))
                     ->columnSpanFull()
                     ->columns(2)
                     ->schema([
@@ -41,7 +41,7 @@ class ExperimentForm
                         Toggle::make('show_history')
                             ->default(false),
                     ]),
-                Section::make('Technologies')
+                Section::make(__('Technologies'))
                     ->columnSpanFull()
                     ->schema([
                         Select::make('technologies')

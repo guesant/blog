@@ -22,7 +22,7 @@ trait ConfiguresRecordOrdering
             ->reorderable('order')
             ->reorderRecordsTriggerAction(
                 fn (Action $action): Action => $action
-                    ->label('Edit order')
+                    ->label(__('Edit order'))
                     ->button(),
             )
             ->afterReordering(

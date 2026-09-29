@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\CreditCategories;
 
+use App\Filament\Concerns\TranslatesResourceLabels;
 use App\Filament\Resources\CreditCategories\Pages\CreateCreditCategory;
 use App\Filament\Resources\CreditCategories\Pages\EditCreditCategory;
 use App\Filament\Resources\CreditCategories\Pages\ListCreditCategories;
@@ -16,6 +17,8 @@ use Filament\Tables\Table;
 
 class CreditCategoryResource extends Resource
 {
+    use TranslatesResourceLabels;
+
     protected static ?string $model = CreditCategory::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedTag;

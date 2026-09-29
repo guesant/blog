@@ -15,7 +15,7 @@ class TechnologyForm
     {
         return $schema
             ->components([
-                Section::make('Technology settings')
+                Section::make(__('Technology settings'))
                     ->columns(2)
                     ->schema([
                         TextInput::make('slug')
@@ -24,10 +24,10 @@ class TechnologyForm
                             ->maxLength(255),
                         TextInput::make('code')
                             ->maxLength(255)
-                            ->helperText('Optional short code, e.g. a version label.'),
+                            ->helperText(__('Optional short code, e.g. a version label.')),
                         TextInput::make('logo')
                             ->maxLength(255)
-                            ->helperText('Simple Icons slug, e.g. "react" or "githubactions".'),
+                            ->helperText(__('Simple Icons slug, e.g. "react" or "githubactions".')),
                     ]),
                 static::translationTabs(fn (string $prefix) => [
                     TextInput::make("{$prefix}name")

@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Platforms;
 
+use App\Filament\Concerns\TranslatesResourceLabels;
 use App\Filament\Resources\Platforms\Pages\CreatePlatform;
 use App\Filament\Resources\Platforms\Pages\EditPlatform;
 use App\Filament\Resources\Platforms\Pages\ListPlatforms;
@@ -20,6 +21,8 @@ use Filament\Tables\Table;
  */
 class PlatformResource extends Resource
 {
+    use TranslatesResourceLabels;
+
     protected static ?string $model = Platform::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;

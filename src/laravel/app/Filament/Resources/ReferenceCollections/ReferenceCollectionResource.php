@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\ReferenceCollections;
 
+use App\Filament\Concerns\TranslatesResourceLabels;
 use App\Filament\Resources\ReferenceCollections\Pages\CreateReferenceCollection;
 use App\Filament\Resources\ReferenceCollections\Pages\EditReferenceCollection;
 use App\Filament\Resources\ReferenceCollections\Pages\ListReferenceCollections;
@@ -16,6 +17,8 @@ use Filament\Tables\Table;
 
 class ReferenceCollectionResource extends Resource
 {
+    use TranslatesResourceLabels;
+
     protected static ?string $model = ReferenceCollection::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedFolder;

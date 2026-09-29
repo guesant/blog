@@ -13,7 +13,7 @@ trait BuildsStructuredFields
 {
     protected static function seoFieldset(string $prefix): Fieldset
     {
-        return Fieldset::make('SEO')
+        return Fieldset::make(__('SEO'))
             ->columns(2)
             ->schema([
                 TextInput::make("{$prefix}seo.title")
@@ -54,16 +54,16 @@ trait BuildsStructuredFields
             ->schema([
                 TextInput::make('value')
                     ->required()
-                    ->helperText('The headline number, e.g. "40%" or "1200".'),
+                    ->helperText(__('The headline number, e.g. "40%" or "1200".')),
                 TextInput::make('label')
                     ->required()
-                    ->helperText('What the number means, e.g. "waitlist reduction".'),
+                    ->helperText(__('What the number means, e.g. "waitlist reduction".')),
             ])
             ->itemLabel(fn (mixed $state): ?string => is_array($state)
                 ? trim(($state['value'] ?? '').' '.($state['label'] ?? '')) ?: null
                 : null)
             ->formatStateUsing(fn (mixed $state): array => is_array($state) ? $state : [])
-            ->addActionLabel('Add metric')
+            ->addActionLabel(__('Add metric'))
             ->defaultItems(0);
     }
 

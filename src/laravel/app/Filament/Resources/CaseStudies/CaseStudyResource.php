@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\CaseStudies;
 
+use App\Filament\Concerns\TranslatesResourceLabels;
 use App\Filament\Resources\CaseStudies\Pages\CreateCaseStudy;
 use App\Filament\Resources\CaseStudies\Pages\EditCaseStudy;
 use App\Filament\Resources\CaseStudies\Pages\ListCaseStudies;
@@ -16,6 +17,8 @@ use Filament\Tables\Table;
 
 class CaseStudyResource extends Resource
 {
+    use TranslatesResourceLabels;
+
     protected static ?string $model = CaseStudy::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;

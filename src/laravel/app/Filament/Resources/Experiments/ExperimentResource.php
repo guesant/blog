@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Experiments;
 
+use App\Filament\Concerns\TranslatesResourceLabels;
 use App\Filament\Resources\Experiments\Pages\CreateExperiment;
 use App\Filament\Resources\Experiments\Pages\EditExperiment;
 use App\Filament\Resources\Experiments\Pages\ListExperiments;
@@ -16,6 +17,8 @@ use Filament\Tables\Table;
 
 class ExperimentResource extends Resource
 {
+    use TranslatesResourceLabels;
+
     protected static ?string $model = Experiment::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;

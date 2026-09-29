@@ -19,7 +19,7 @@ class SnippetForm
     {
         return $schema
             ->components([
-                Section::make('Snippet settings')
+                Section::make(__('Snippet settings'))
                     ->columns(2)
                     ->schema([
                         TextInput::make('slug')
@@ -29,12 +29,12 @@ class SnippetForm
                         Toggle::make('hidden')
                             ->default(false),
                         Toggle::make('show_history')
-                            ->helperText('Show a public version-history/diff section on this snippet\'s page.')
+                            ->helperText(__('Show a public version-history/diff section on this snippet\'s page.'))
                             ->default(false),
                         DatePicker::make('published_at')
                             ->label('Published'),
                     ]),
-                Section::make('Files')
+                Section::make(__('Files'))
                     ->columnSpanFull()
                     ->schema([
                         Repeater::make('files')
@@ -61,7 +61,7 @@ class SnippetForm
                                     ->columnSpanFull(),
                             ])
                             ->itemLabel(fn (mixed $state): ?string => is_array($state) ? ($state['path'] ?? null) : null)
-                            ->addActionLabel('Add file')
+                            ->addActionLabel(__('Add file'))
                             ->defaultItems(1),
                     ]),
                 static::translationTabs(fn (string $prefix) => [

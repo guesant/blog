@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\RelationTypes;
 
+use App\Filament\Concerns\TranslatesResourceLabels;
 use App\Filament\Resources\RelationTypes\Pages\CreateRelationType;
 use App\Filament\Resources\RelationTypes\Pages\EditRelationType;
 use App\Filament\Resources\RelationTypes\Pages\ListRelationTypes;
@@ -16,6 +17,8 @@ use Filament\Tables\Table;
 
 class RelationTypeResource extends Resource
 {
+    use TranslatesResourceLabels;
+
     protected static ?string $model = RelationType::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedTag;

@@ -29,9 +29,9 @@ trait BuildsTranslationTabs
     {
         return Tabs::make('translations')
             ->tabs([
-                Tab::make('English')
+                Tab::make(__('English'))
                     ->schema(static::translationTabSchema($fieldsFactory('translations.en.'))),
-                Tab::make('Português')
+                Tab::make(__('Português'))
                     ->schema(static::translationTabSchema($fieldsFactory('translations.pt-BR.'))),
             ])
             ->columnSpanFull();
@@ -50,7 +50,7 @@ trait BuildsTranslationTabs
 
         return [
             ...($content === [] ? [] : [
-                Section::make('Content')
+                Section::make(__('Content'))
                     ->schema($content)
                     ->columnSpanFull(),
             ]),

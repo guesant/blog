@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Snippets;
 
+use App\Filament\Concerns\TranslatesResourceLabels;
 use App\Filament\Resources\Snippets\Pages\CreateSnippet;
 use App\Filament\Resources\Snippets\Pages\EditSnippet;
 use App\Filament\Resources\Snippets\Pages\ListSnippets;
@@ -16,6 +17,8 @@ use Filament\Tables\Table;
 
 class SnippetResource extends Resource
 {
+    use TranslatesResourceLabels;
+
     protected static ?string $model = Snippet::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedCodeBracket;

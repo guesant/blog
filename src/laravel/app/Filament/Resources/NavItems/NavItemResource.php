@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\NavItems;
 
+use App\Filament\Concerns\TranslatesResourceLabels;
 use App\Filament\Resources\NavItems\Pages\CreateNavItem;
 use App\Filament\Resources\NavItems\Pages\EditNavItem;
 use App\Filament\Resources\NavItems\Pages\ListNavItems;
@@ -16,6 +17,8 @@ use Filament\Tables\Table;
 
 class NavItemResource extends Resource
 {
+    use TranslatesResourceLabels;
+
     protected static ?string $model = NavItem::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedBars3;

@@ -23,7 +23,7 @@ class ReferenceCollectionForm
     {
         return $schema
             ->components([
-                Section::make('Publishing')
+                Section::make(__('Publishing'))
                     ->columnSpanFull()
                     ->columns(2)
                     ->schema([
@@ -39,7 +39,7 @@ class ReferenceCollectionForm
                         DatePicker::make('published_at')
                             ->label('Published'),
                     ]),
-                Section::make('Curated items')
+                Section::make(__('Curated items'))
                     ->columnSpanFull()
                     ->schema([
                         Repeater::make('items')
@@ -59,7 +59,7 @@ class ReferenceCollectionForm
                             ->itemLabel(fn (mixed $state): ?string => is_array($state) && isset($state['resource_id'])
                                 ? ResourceModel::find($state['resource_id'])?->slug
                                 : null)
-                            ->addActionLabel('Add item')
+                            ->addActionLabel(__('Add item'))
                             ->defaultItems(0),
                     ]),
                 static::translationTabs(fn (string $prefix) => [

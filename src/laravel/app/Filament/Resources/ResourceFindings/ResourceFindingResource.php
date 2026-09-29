@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\ResourceFindings;
 
+use App\Filament\Concerns\TranslatesResourceLabels;
 use App\Filament\Resources\ResourceFindings\Pages\CreateResourceFinding;
 use App\Filament\Resources\ResourceFindings\Pages\EditResourceFinding;
 use App\Filament\Resources\ResourceFindings\Pages\ListResourceFindings;
@@ -16,6 +17,8 @@ use Filament\Tables\Table;
 
 class ResourceFindingResource extends Resource
 {
+    use TranslatesResourceLabels;
+
     protected static ?string $model = ResourceModel::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedMagnifyingGlass;

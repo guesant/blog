@@ -21,7 +21,7 @@ class WritingForm
     {
         return $schema
             ->components([
-                Section::make('Publishing')
+                Section::make(__('Publishing'))
                     ->columnSpanFull()
                     ->columns(2)
                     ->schema([
@@ -40,13 +40,13 @@ class WritingForm
                         Select::make('type')
                             ->label('Type')
                             ->options([
-                                'article' => 'article',
-                                'note' => 'note',
-                                'project-diary' => 'project-diary',
+                                'article' => __('article'),
+                                'note' => __('note'),
+                                'project-diary' => __('project-diary'),
                             ])
                             ->required(),
                     ]),
-                Section::make('Topics')
+                Section::make(__('Topics'))
                     ->columnSpanFull()
                     ->schema([
                         Select::make('topics')

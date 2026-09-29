@@ -78,17 +78,17 @@ class ResourceFindingForm
         return $schema
             ->components([
                 static::publishingSection($types),
-                Section::make('Type details')
+                Section::make(__('Type details'))
                     ->columnSpanFull()
                     ->schema([
                         KeyValue::make('type_details')
                             ->label('Type details')
                             ->keyLabel('Field')
                             ->valueLabel('Value')
-                            ->addActionLabel('Add detail')
-                            ->helperText('Free-form details for this type — e.g. a book uses isbn, publisher, edition, pages; a repo uses org, name, language, license.'),
+                            ->addActionLabel(__('Add detail'))
+                            ->helperText(__('Free-form details for this type — e.g. a book uses isbn, publisher, edition, pages; a repo uses org, name, language, license.')),
                     ]),
-                Section::make('Topics')
+                Section::make(__('Topics'))
                     ->columnSpanFull()
                     ->schema([
                         Select::make('topics')
@@ -96,7 +96,7 @@ class ResourceFindingForm
                             ->multiple()
                             ->searchable()
                             ->preload()
-                            ->helperText('Per-topic role is not editable here yet — none of the current data uses it.'),
+                            ->helperText(__('Per-topic role is not editable here yet — none of the current data uses it.')),
                         Select::make('authorTopics')
                             ->label('Authors')
                             ->relationship('authorTopics', 'slug')
@@ -110,7 +110,7 @@ class ResourceFindingForm
                             ->searchable()
                             ->preload(),
                     ]),
-                Section::make('Links')
+                Section::make(__('Links'))
                     ->columnSpanFull()
                     ->schema([
                         Repeater::make('links')
@@ -139,10 +139,10 @@ class ResourceFindingForm
                             ->itemLabel(fn (mixed $state): ?string => is_array($state)
                                 ? ($state['label'] ?? $state['url'] ?? null)
                                 : null)
-                            ->addActionLabel('Add link')
+                            ->addActionLabel(__('Add link'))
                             ->defaultItems(0),
                     ]),
-                Section::make('Identifiers')
+                Section::make(__('Identifiers'))
                     ->columnSpanFull()
                     ->schema([
                         Repeater::make('identifiers')
@@ -160,7 +160,7 @@ class ResourceFindingForm
                             ->itemLabel(fn (mixed $state): ?string => is_array($state) && isset($state['kind'])
                                 ? "{$state['kind']}: ".($state['value'] ?? '')
                                 : null)
-                            ->addActionLabel('Add identifier')
+                            ->addActionLabel(__('Add identifier'))
                             ->defaultItems(0),
                     ]),
                 static::translationTabs(fn (string $prefix) => [
@@ -188,7 +188,7 @@ class ResourceFindingForm
 
     protected static function publishingSection(array $types): Section
     {
-        return Section::make('Publishing')
+        return Section::make(__('Publishing'))
             ->columnSpanFull()
             ->columns(2)
             ->schema([
@@ -213,16 +213,28 @@ class ResourceFindingForm
                 DatePicker::make('found_date_iso')
                     ->label('Found date'),
                 Select::make('consumption_state')
-                    ->options(array_combine(self::CONSUMPTION_STATES, self::CONSUMPTION_STATES))
+                    ->options(array_combine(
+                        self::CONSUMPTION_STATES,
+                        array_map(fn (string $value): string => __($value), self::CONSUMPTION_STATES),
+                    ))
                     ->nullable(),
                 Select::make('rating')
-                    ->options(array_combine(self::RATINGS, self::RATINGS))
+                    ->options(array_combine(
+                        self::RATINGS,
+                        array_map(fn (string $value): string => __($value), self::RATINGS),
+                    ))
                     ->nullable(),
                 Select::make('editorial_state')
-                    ->options(array_combine(self::EDITORIAL_STATES, self::EDITORIAL_STATES))
+                    ->options(array_combine(
+                        self::EDITORIAL_STATES,
+                        array_map(fn (string $value): string => __($value), self::EDITORIAL_STATES),
+                    ))
                     ->nullable(),
                 Select::make('visibility')
-                    ->options(array_combine(self::VISIBILITIES, self::VISIBILITIES))
+                    ->options(array_combine(
+                        self::VISIBILITIES,
+                        array_map(fn (string $value): string => __($value), self::VISIBILITIES),
+                    ))
                     ->nullable(),
             ]);
     }

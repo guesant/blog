@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Technologies;
 
+use App\Filament\Concerns\TranslatesResourceLabels;
 use App\Filament\Resources\Technologies\Pages\CreateTechnology;
 use App\Filament\Resources\Technologies\Pages\EditTechnology;
 use App\Filament\Resources\Technologies\Pages\ListTechnologies;
@@ -16,6 +17,8 @@ use Filament\Tables\Table;
 
 class TechnologyResource extends Resource
 {
+    use TranslatesResourceLabels;
+
     protected static ?string $model = Technology::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;

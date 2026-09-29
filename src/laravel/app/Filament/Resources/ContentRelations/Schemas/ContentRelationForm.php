@@ -18,7 +18,7 @@ class ContentRelationForm
     {
         return $schema
             ->components([
-                Section::make('Relation')
+                Section::make(__('Relation'))
                     ->columns(2)
                     ->schema([
                         MorphToSelect::make('subject')
@@ -35,24 +35,24 @@ class ContentRelationForm
                             ->searchable()
                             ->required(),
                     ]),
-                Section::make('Visibility')
+                Section::make(__('Visibility'))
                     ->columns(2)
                     ->schema([
                         Select::make('status')
                             ->options([
-                                'verified' => 'verified',
-                                'unverified' => 'unverified',
+                                'verified' => __('verified'),
+                                'unverified' => __('unverified'),
                             ])
                             ->default('verified'),
                         Select::make('visibility')
                             ->options([
-                                'public' => 'public',
-                                'private' => 'private',
+                                'public' => __('public'),
+                                'private' => __('private'),
                             ])
                             ->default('public')
                             ->nullable(),
                     ]),
-                Section::make('Notes')
+                Section::make(__('Notes'))
                     ->columns(2)
                     ->schema([
                         Textarea::make('note')
@@ -70,7 +70,7 @@ class ContentRelationForm
         return collect(NodeRegistry::kinds())
             ->map(fn (string $class, string $kind) => Type::make($class)
                 ->titleAttribute('slug')
-                ->label(Str::headline($kind)))
+                ->label(__(Str::headline($kind))))
             ->values()
             ->all();
     }

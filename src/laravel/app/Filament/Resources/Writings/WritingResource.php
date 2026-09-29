@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Writings;
 
+use App\Filament\Concerns\TranslatesResourceLabels;
 use App\Filament\Resources\Writings\Pages\CreateWriting;
 use App\Filament\Resources\Writings\Pages\EditWriting;
 use App\Filament\Resources\Writings\Pages\ListWritings;
@@ -16,6 +17,8 @@ use Filament\Tables\Table;
 
 class WritingResource extends Resource
 {
+    use TranslatesResourceLabels;
+
     protected static ?string $model = Writing::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedPencilSquare;

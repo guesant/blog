@@ -16,7 +16,7 @@ class TopicForm
     {
         return $schema
             ->components([
-                Section::make('Taxonomy')
+                Section::make(__('Taxonomy'))
                     ->columns(2)
                     ->schema([
                         TextInput::make('slug')
@@ -27,9 +27,9 @@ class TopicForm
                             ->required()
                             ->default('topic')
                             ->options([
-                                'topic' => 'topic',
-                                'category' => 'category',
-                                'skill' => 'skill',
+                                'topic' => __('topic'),
+                                'category' => __('category'),
+                                'skill' => __('skill'),
                             ]),
                         Select::make('parent_id')
                             ->label('Parent Topic')

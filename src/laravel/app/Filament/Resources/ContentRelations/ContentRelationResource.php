@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\ContentRelations;
 
+use App\Filament\Concerns\TranslatesResourceLabels;
 use App\Filament\Resources\ContentRelations\Pages\CreateContentRelation;
 use App\Filament\Resources\ContentRelations\Pages\EditContentRelation;
 use App\Filament\Resources\ContentRelations\Pages\ListContentRelations;
@@ -16,6 +17,8 @@ use Filament\Tables\Table;
 
 class ContentRelationResource extends Resource
 {
+    use TranslatesResourceLabels;
+
     protected static ?string $model = ContentRelation::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedArrowsRightLeft;

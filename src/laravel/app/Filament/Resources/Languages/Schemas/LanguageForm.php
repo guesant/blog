@@ -15,7 +15,7 @@ class LanguageForm
     {
         return $schema
             ->components([
-                Section::make('Language settings')
+                Section::make(__('Language settings'))
                     ->columns(2)
                     ->schema([
                         TextInput::make('slug')

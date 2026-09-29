@@ -56,7 +56,7 @@ class ManageSiteSettings extends Page
     {
         return $schema
             ->components([
-                Section::make('Site settings')
+                Section::make(__('Site settings'))
                     ->columns(2)
                     ->schema([
                         TextInput::make('short_name')
@@ -74,20 +74,20 @@ class ManageSiteSettings extends Page
                             ->maxLength(255),
                         Toggle::make('contact_enabled')
                             ->label('Show Contact')
-                            ->helperText('Controls whether the public contact section and links are shown.')
+                            ->helperText(__('Controls whether the public contact section and links are shown.'))
                             ->default(true),
                         Toggle::make('contact_available')
                             ->label('Available for Opportunities')
-                            ->helperText('Controls only the public availability indicator.')
+                            ->helperText(__('Controls only the public availability indicator.'))
                             ->default(false),
                         TextInput::make('source_repository_url')
-                            ->label('URL do repositório')
-                            ->helperText('Deixe em branco para ocultar os links de fork/issue e a URL do repositório no rodapé do site.')
+                            ->label('Repository URL')
+                            ->helperText(__('Leave blank to hide the fork/issue links and the repository URL in the site footer.'))
                             ->url()
                             ->nullable()
                             ->maxLength(255),
                     ]),
-                Section::make('Public feature flags')
+                Section::make(__('Public feature flags'))
                     ->columns(2)
                     ->schema([
                         Toggle::make('content_actions_copy_text')
@@ -103,7 +103,7 @@ class ManageSiteSettings extends Page
                             ->label('Enable Contextual Cursor')
                             ->default(false),
                     ]),
-                Section::make('Contact Profiles')
+                Section::make(__('Contact Profiles'))
                     ->schema([
                         Repeater::make('contactProfiles')
                             ->relationship('contactProfiles')
@@ -120,11 +120,11 @@ class ManageSiteSettings extends Page
                                 TextInput::make('url')->required()->url()->columnSpanFull(),
                             ])
                             ->itemLabel(fn (array $state): ?string => Platform::query()->find($state['platform_id'] ?? null)?->label)
-                            ->addActionLabel('Add contact profile')
+                            ->addActionLabel(__('Add contact profile'))
                             ->defaultItems(0),
                     ]),
                 static::translationTabs(fn (string $prefix) => [
-                    Fieldset::make('Maintenance messages')
+                    Fieldset::make(__('Maintenance messages'))
                         ->columns(2)
                         ->schema([
                             TextInput::make("{$prefix}maintenance_title")
@@ -136,12 +136,12 @@ class ManageSiteSettings extends Page
                                 ->nullable()
                                 ->columnSpanFull(),
                         ]),
-                    Fieldset::make('Copyright')
+                    Fieldset::make(__('Copyright'))
                         ->schema([
                             Textarea::make("{$prefix}copyright_template")
                                 ->label('Copyright Template')
                                 ->nullable()
-                                ->helperText('Use {year} and {name} as placeholders.'),
+                                ->helperText(__('Use {year} and {name} as placeholders.')),
                         ]),
                     static::seoFieldset($prefix),
                 ]),
@@ -161,6 +161,6 @@ class ManageSiteSettings extends Page
         $this->persistTranslations();
         app(PublicSiteChromeCache::class)->forgetAll();
 
-        Notification::make()->success()->title('Saved')->send();
+        Notification::make()->success()->title(__('Saved'))->send();
     }
 }

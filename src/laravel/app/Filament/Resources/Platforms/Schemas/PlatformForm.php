@@ -12,7 +12,7 @@ class PlatformForm
     {
         return $schema
             ->components([
-                Section::make('Platform settings')
+                Section::make(__('Platform settings'))
                     ->columns(2)
                     ->schema([
                         TextInput::make('slug')

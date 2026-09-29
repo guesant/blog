@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Languages;
 
+use App\Filament\Concerns\TranslatesResourceLabels;
 use App\Filament\Resources\Languages\Pages\CreateLanguage;
 use App\Filament\Resources\Languages\Pages\EditLanguage;
 use App\Filament\Resources\Languages\Pages\ListLanguages;
@@ -16,6 +17,8 @@ use Filament\Tables\Table;
 
 class LanguageResource extends Resource
 {
+    use TranslatesResourceLabels;
+
     protected static ?string $model = Language::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;

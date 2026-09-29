@@ -13,7 +13,7 @@ class NavItemForm
     {
         return $schema
             ->components([
-                Section::make('Navigation item')
+                Section::make(__('Navigation item'))
                     ->columns(2)
                     ->schema([
                         Select::make('route_name')
@@ -26,8 +26,8 @@ class NavItemForm
                             ->nullable(),
                         Select::make('placement')
                             ->options([
-                                'sidebar' => 'sidebar',
-                                'footer_links' => 'footer_links',
+                                'sidebar' => __('sidebar'),
+                                'footer_links' => __('footer_links'),
                             ])
                             ->nullable(),
                     ]),

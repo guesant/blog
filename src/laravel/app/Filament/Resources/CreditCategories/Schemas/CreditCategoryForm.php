@@ -16,7 +16,7 @@ class CreditCategoryForm
     {
         return $schema
             ->components([
-                Section::make('Category settings')
+                Section::make(__('Category settings'))
                     ->columns(3)
                     ->schema([
                         TextInput::make('slug')

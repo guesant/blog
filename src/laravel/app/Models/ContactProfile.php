@@ -10,7 +10,7 @@ class ContactProfile extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['site_settings_id', 'platform', 'label', 'url', 'order'];
+    protected $fillable = ['site_settings_id', 'platform_id', 'url', 'order'];
 
     /**
      * @return BelongsTo<SiteSettings, $this>
@@ -18,5 +18,13 @@ class ContactProfile extends Model
     public function siteSettings(): BelongsTo
     {
         return $this->belongsTo(SiteSettings::class);
+    }
+
+    /**
+     * @return BelongsTo<Platform, $this>
+     */
+    public function platform(): BelongsTo
+    {
+        return $this->belongsTo(Platform::class);
     }
 }

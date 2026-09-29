@@ -2,10 +2,10 @@
 
 namespace App\Filament\Resources\CaseStudies\Schemas;
 
+use App\Filament\Concerns\BuildsMarkdownEditors;
 use App\Filament\Concerns\BuildsStructuredFields;
 use App\Filament\Concerns\BuildsTranslationTabs;
 use Filament\Forms\Components\DatePicker;
-use Filament\Forms\Components\MarkdownEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -15,7 +15,7 @@ use Filament\Schemas\Schema;
 
 class CaseStudyForm
 {
-    use BuildsStructuredFields, BuildsTranslationTabs;
+    use BuildsMarkdownEditors, BuildsStructuredFields, BuildsTranslationTabs;
 
     public static function configure(Schema $schema): Schema
     {
@@ -81,7 +81,7 @@ class CaseStudyForm
                         ->label('Result')
                         ->nullable(),
                     static::metricsRepeater($prefix),
-                    MarkdownEditor::make("{$prefix}body")
+                    static::markdownEditor("{$prefix}body")
                         ->label('Body')
                         ->nullable(),
                     static::seoFieldset($prefix),

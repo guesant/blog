@@ -3,6 +3,7 @@
 namespace App\Support\ResumePdf;
 
 use App\Models\CaseStudy;
+use App\Models\ContactProfile;
 use App\ReadModel\PublicSite\Content\PageReader;
 use App\ReadModel\PublicSite\Content\ProfileReader;
 use App\ReadModel\PublicSite\Content\ResumeReader;
@@ -42,17 +43,6 @@ class ResumePdfBuilder
             'languagesHeading' => 'Idiomas',
             'nativeProficiency' => 'Nativo',
         ],
-    ];
-
-    private const PLATFORM_LABELS = [
-        'linkedin' => 'LinkedIn',
-        'github' => 'GitHub',
-        'lattes' => 'Lattes',
-        'orcid' => 'ORCID',
-        'scholar' => 'Google Scholar',
-        'researchgate' => 'ResearchGate',
-        'mastodon' => 'Mastodon',
-        'bluesky' => 'Bluesky',
     ];
 
     private const TECHNICAL_PRODUCTION_KIND_LABELS = [
@@ -134,13 +124,15 @@ class ResumePdfBuilder
         return preg_replace('#^https?://#', '', $url);
     }
 
-    private function profilePlatformLabel(array $profile): string
+    private function profilePlatformLabel(ContactProfile $profile): string
     {
-        if (! empty(trim($profile['label'] ?? ''))) {
-            return trim($profile['label']);
+        $platform = $profile->platform;
+
+        if ($platform === null) {
+            return $this->stripProtocol($profile->url);
         }
 
-        return self::PLATFORM_LABELS[$profile['platform']] ?? $this->stripProtocol($profile['url']);
+        return trim($platform->label) !== '' ? trim($platform->label) : $platform->slug;
     }
 
     private function buildContactLinks($siteSettings, $siteSettingsTranslation): string
@@ -156,7 +148,7 @@ class ResumePdfBuilder
                 continue;
             }
             $url = trim($profile->url);
-            $label = $this->profilePlatformLabel(['label' => $profile->label, 'platform' => $profile->platform, 'url' => $url]);
+            $label = $this->profilePlatformLabel($profile);
             $links[] = '\\href{'.$url.'}{'.$this->escapeLatex($label).'}';
         }
 

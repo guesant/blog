@@ -15,6 +15,7 @@ use App\Models\Technology;
 use App\Models\Topic;
 use App\Models\Writing;
 use App\OpenGraph\OgImageUrlGenerator;
+use App\Support\PublicMediaUrl;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 
@@ -26,6 +27,7 @@ final class PublicContentResponseFactory
     public function __construct(
         private readonly PublicFindingResponseFactory $findings,
         private readonly OgImageUrlGenerator $ogImages,
+        private readonly PublicMediaUrl $media,
     ) {}
 
     public function feedItem(PublicFeedItem $item, string $locale): array
@@ -287,7 +289,7 @@ final class PublicContentResponseFactory
             'problem' => $translation?->problem,
             'current_focus' => $translation?->current_focus,
             'metrics' => $translation?->metrics,
-            'body' => $translation?->body,
+            'body' => $this->media->rewrite($translation?->body),
             'technologies' => $project->technologies->map(fn ($technology) => [
                 'slug' => $technology->slug,
                 'name' => $technology->translation($locale)?->name ?? $technology->slug,
@@ -322,7 +324,7 @@ final class PublicContentResponseFactory
             'role' => $translation?->role,
             'result' => $translation?->result,
             'metrics' => $translation?->metrics,
-            'body' => $translation?->body,
+            'body' => $this->media->rewrite($translation?->body),
             'technologies' => $case->technologies->map(fn ($technology) => [
                 'slug' => $technology->slug,
                 'name' => $technology->translation($locale)?->name ?? $technology->slug,
@@ -350,7 +352,7 @@ final class PublicContentResponseFactory
                 $translation?->excerpt,
             ),
             'reading_time' => $translation?->reading_time,
-            'body' => $translation?->body,
+            'body' => $this->media->rewrite($translation?->body),
             'type' => $writing->type,
             'date' => $writing->date_iso?->toDateString(),
             'topics' => $writing->topics->map(fn ($topic) => [
@@ -377,7 +379,7 @@ final class PublicContentResponseFactory
             'url' => Locale::url('/collections/'.PublicIdentifier::key($collection), $locale),
             'title' => $translation?->title ?? $collection->slug,
             'description' => $translation?->description,
-            'intro' => $translation?->intro,
+            'intro' => $this->media->rewrite($translation?->intro),
             'published_at' => $collection->published_at?->toDateString(),
             'resources' => $resources?->getCollection()->map(function ($resource) use ($locale): array {
                 $resourceTranslation = $resource->translation($locale);
@@ -429,7 +431,7 @@ final class PublicContentResponseFactory
                 $translation?->name ?? $experiment->slug,
                 $translation?->purpose,
             ),
-            'body' => $translation?->body,
+            'body' => $this->media->rewrite($translation?->body),
             'published_at' => $experiment->published_at?->toDateString(),
             'external' => $experiment->external,
             'technologies' => $experiment->technologies->map(fn ($technology) => [

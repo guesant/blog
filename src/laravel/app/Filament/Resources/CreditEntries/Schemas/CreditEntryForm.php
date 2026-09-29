@@ -7,6 +7,7 @@ use App\Models\CreditCategory;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 
@@ -32,6 +33,8 @@ class CreditEntryForm
                                 ->orderBy('slug')
                                 ->pluck('slug', 'slug')
                                 ->all()),
+                        Toggle::make('active')
+                            ->default(true),
                     ]),
                 static::translationTabs(fn (string $prefix) => [
                     TextInput::make("{$prefix}name")

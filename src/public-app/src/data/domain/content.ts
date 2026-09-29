@@ -111,7 +111,7 @@ export type Writing = WithSeo & {
   subject: string;
   tags: string[];
   title: string;
-  excerpt: string;
+  excerpt?: string;
   readingTime: string;
   dateISO: string;
   topicSlugs?: string[];

@@ -1,7 +1,7 @@
 import type { ElementType, ReactNode } from 'react';
 import { Card } from '../card';
 
-export type ListingCardFrameProps = {
+type ListingCardFrameProps = {
   children: ReactNode;
   component?: ElementType;
   href?: string;
@@ -36,6 +36,6 @@ const frameStyles = {
   '&:hover .content-feed-title': { color: 'secondary.main' },
 };
 
-export function ListingCardFrame(props: ListingCardFrameProps) {
+export default function ListingCardFrame(props: ListingCardFrameProps) {
   return <Card {...props} component={props.component} sx={frameStyles} />;
 }

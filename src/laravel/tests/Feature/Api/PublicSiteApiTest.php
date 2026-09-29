@@ -25,10 +25,26 @@ use Illuminate\Database\Events\QueryExecuted;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Queue;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class PublicSiteApiTest extends TestCase
 {
+    public function test_public_media_serves_only_content_attachments(): void
+    {
+        config(['filesystems.default' => 's3']);
+        Storage::fake('s3');
+        Storage::disk('s3')->put('content-attachments/example.txt', 'public attachment');
+
+        $response = $this->get('/api/v1/media/content-attachments/example.txt')
+            ->assertOk()
+            ->assertHeader('Cache-Control', 'immutable, max-age=31536000, public');
+
+        $this->assertSame('public attachment', $response->streamedContent());
+
+        $this->get('/api/v1/media/private.txt')->assertNotFound();
+    }
+
     public function test_static_interface_catalog_is_not_an_api_resource(): void
     {
         $this->getJson('/api/v1/site/interface?locale=en')->assertNotFound();

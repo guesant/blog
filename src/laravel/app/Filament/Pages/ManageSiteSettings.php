@@ -7,13 +7,11 @@ use App\Filament\Concerns\BuildsStructuredFields;
 use App\Filament\Concerns\BuildsTranslationTabs;
 use App\Filament\Concerns\HasSingleSaveAction;
 use App\Filament\Concerns\SyncsTranslations;
-use App\Filament\Support\AutocompleteField;
-use App\Filament\Support\FilamentOptionCatalog;
-use App\Models\ContactProfile;
-use App\Models\ResourceLink;
+use App\Models\Platform;
 use App\Models\SiteSettings;
 use BackedEnum;
 use Filament\Forms\Components\Repeater;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
@@ -56,12 +54,6 @@ class ManageSiteSettings extends Page
 
     public function form(Schema $schema): Schema
     {
-        $platforms = [
-            ...array_keys(FilamentOptionCatalog::PLATFORMS),
-            ...ContactProfile::query()->distinct()->pluck('platform')->all(),
-            ...ResourceLink::query()->distinct()->pluck('platform')->all(),
-        ];
-
         return $schema
             ->components([
                 Section::make('Site settings')
@@ -119,16 +111,15 @@ class ManageSiteSettings extends Page
                             ->reorderableWithButtons()
                             ->columns(2)
                             ->schema([
-                                AutocompleteField::make(
-                                    'platform',
-                                    'Platform',
-                                    $platforms,
-                                    true,
-                                ),
-                                TextInput::make('label')->nullable(),
+                                Select::make('platform_id')
+                                    ->label('Platform')
+                                    ->relationship('platform', 'label')
+                                    ->searchable()
+                                    ->preload()
+                                    ->required(),
                                 TextInput::make('url')->required()->url()->columnSpanFull(),
                             ])
-                            ->itemLabel(fn (array $state): ?string => $state['platform'] ?? null)
+                            ->itemLabel(fn (array $state): ?string => Platform::query()->find($state['platform_id'] ?? null)?->label)
                             ->addActionLabel('Add contact profile')
                             ->defaultItems(0),
                     ]),

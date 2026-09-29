@@ -125,6 +125,62 @@ export type FindingApiShowResponses = {
 
 export type FindingApiShowResponse = FindingApiShowResponses[keyof FindingApiShowResponses];
 
+export type PublicMediaData = {
+    body?: never;
+    path: {
+        path: string;
+    };
+    query?: never;
+    url: '/media/{path}';
+};
+
+export type PublicMediaErrors = {
+    /**
+     * Unauthenticated
+     */
+    401: {
+        /**
+         * Error overview.
+         */
+        message: string;
+    };
+    /**
+     * Authorization error
+     */
+    403: {
+        /**
+         * Error overview.
+         */
+        message: string;
+    };
+    /**
+     * Not found
+     */
+    404: {
+        /**
+         * Error overview.
+         */
+        message: string;
+    };
+    /**
+     * An error
+     */
+    503: {
+        /**
+         * Error overview.
+         */
+        message: string;
+    };
+};
+
+export type PublicMediaError = PublicMediaErrors[keyof PublicMediaErrors];
+
+export type PublicMediaResponses = {
+    200: Blob | File;
+};
+
+export type PublicMediaResponse = PublicMediaResponses[keyof PublicMediaResponses];
+
 export type PublicSiteApiChromeData = {
     body?: never;
     path?: never;

@@ -1,7 +1,5 @@
 export { FindingFeedCardFrame } from './finding-feed-card-frame';
 
-export { ListingCardFrame, type ListingCardFrameProps } from '../listing-card';
-
 export { FindingCardFooterFrame } from './finding-card-footer-frame';
 
 export { FindingCardKindChip } from './finding-card-kind-chip';

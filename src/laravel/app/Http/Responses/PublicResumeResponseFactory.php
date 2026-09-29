@@ -5,11 +5,14 @@ namespace App\Http\Responses;
 use App\Application\PublicSite\GetPublicResumeQueryResult;
 use App\Content\Locale;
 use App\Content\PublicIdentifier;
+use App\Support\PublicMediaUrl;
 
 final class PublicResumeResponseFactory
 {
-    public function fromResult(GetPublicResumeQueryResult $result): PublicResumeResponseDto
-    {
+    public function fromResult(
+        GetPublicResumeQueryResult $result,
+        PublicMediaUrl $media,
+    ): PublicResumeResponseDto {
         $translation = $result->resume?->translation($result->locale);
         $profileTranslation = $result->profile?->translation($result->locale);
 
@@ -30,7 +33,7 @@ final class PublicResumeResponseFactory
                 ->all(),
             selectedCases: $result->resume?->selectedCases
                 ->sortBy('pivot.order')
-                ->map(fn (object $case) => $this->caseStudy($case, $result->locale))
+                ->map(fn (object $case) => $this->caseStudy($case, $result->locale, $media))
                 ->values()
                 ->all() ?? [],
             skills: $result->resume?->skills
@@ -57,7 +60,7 @@ final class PublicResumeResponseFactory
         );
     }
 
-    private function caseStudy(object $case, string $locale): array
+    private function caseStudy(object $case, string $locale, PublicMediaUrl $media): array
     {
         $translation = $case->translation($locale);
 
@@ -74,7 +77,7 @@ final class PublicResumeResponseFactory
             'role' => $translation?->role,
             'result' => $translation?->result,
             'metrics' => $translation?->metrics,
-            'body' => $translation?->body,
+            'body' => $media->rewrite($translation?->body),
             'technologies' => $case->technologies->map(fn ($technology) => [
                 'slug' => $technology->slug,
                 'name' => $technology->translation($locale)?->name ?? $technology->slug,

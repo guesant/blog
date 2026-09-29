@@ -3,13 +3,13 @@
 namespace App\Filament\Resources\Pages\Schemas;
 
 use App\Content\HomeGallerySection;
+use App\Filament\Concerns\BuildsMarkdownEditors;
 use App\Filament\Concerns\BuildsTranslationTabs;
 use App\Models\CaseStudy;
 use App\Models\PageRevisionTranslation;
 use App\Models\Project;
 use App\Models\Writing;
 use Filament\Forms\Components\CheckboxList;
-use Filament\Forms\Components\MarkdownEditor;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
@@ -22,7 +22,7 @@ use Illuminate\Support\Collection;
 
 class PageForm
 {
-    use BuildsTranslationTabs;
+    use BuildsMarkdownEditors, BuildsTranslationTabs;
 
     private const FIELD_LABELS = [
         'activitypub_description' => 'ActivityPub description',
@@ -82,7 +82,7 @@ class PageForm
             $label = self::FIELD_LABELS[$key] ?? str($key)->headline()->toString();
 
             if ($key === 'story' || str_ends_with($key, '_body') || str_ends_with($key, '_description') || in_array($key, ['context', 'intro', 'introduction', 'lead'], true)) {
-                $component = MarkdownEditor::make($field);
+                $component = static::markdownEditor($field);
             } elseif (str_ends_with($key, '_title') || str_ends_with($key, '_label') || in_array($key, ['hero_identity', 'hero_experience', 'hero_current_focus', 'title'], true)) {
                 $component = TextInput::make($field);
             } else {

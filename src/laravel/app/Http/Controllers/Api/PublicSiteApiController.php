@@ -33,6 +33,7 @@ use App\Http\Responses\PublicPageResponseDto;
 use App\Http\Responses\PublicResumeResponseFactory;
 use App\Http\Responses\PublicSiteChromeResponseDto;
 use App\OpenGraph\OgImageUrlGenerator;
+use App\Support\PublicMediaUrl;
 use Dedoc\Scramble\Attributes\Response as ScrambleResponse;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -327,6 +328,7 @@ class PublicSiteApiController extends Controller
         string $slug,
         GetPublicPageQueryHandler $handler,
         OgImageUrlGenerator $ogImages,
+        PublicMediaUrl $media,
     ): JsonResponse {
         $result = $handler->handle(new GetPublicPageQuery(
             slug: $slug,
@@ -334,7 +336,7 @@ class PublicSiteApiController extends Controller
         ));
         abort_unless($result !== null, 404);
 
-        return response()->json(PublicPageResponseDto::fromResult($result, $ogImages)->toArray())
+        return response()->json(PublicPageResponseDto::fromResult($result, $ogImages, $media)->toArray())
             ->header('Cache-Control', 'public, max-age=60, stale-while-revalidate=300');
     }
 
@@ -385,11 +387,13 @@ class PublicSiteApiController extends Controller
         Request $request,
         GetPublicResumeQueryHandler $handler,
         PublicResumeResponseFactory $presenter,
+        PublicMediaUrl $media,
     ): JsonResponse {
         $locale = Locale::normalize($request->query('locale'));
 
         return response()->json($presenter->fromResult(
             $handler->handle(new GetPublicResumeQuery($locale)),
+            $media,
         )->toArray())
             ->header('Cache-Control', 'public, max-age=60, stale-while-revalidate=300');
     }

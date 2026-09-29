@@ -13,7 +13,7 @@ export function buildEntries(
       kind: 'post' as const,
       slug: item.slug,
       title: item.title,
-      preview: item.excerpt,
+      preview: item.excerpt ?? '',
       date: dateValue(item.dateISO),
       readingTime: item.readingTime,
       topics: item.tags.map((name, index) => ({

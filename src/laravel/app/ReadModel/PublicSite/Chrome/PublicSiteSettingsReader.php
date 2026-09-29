@@ -54,14 +54,15 @@ final class PublicSiteSettingsReader
 
         $translation = $this->translation($settings->current_revision_id, $locale);
         $contactProfiles = DB::table('contact_profiles')
-            ->select(['platform', 'label', 'url'])
-            ->where('site_settings_id', $settings->id)
-            ->orderBy('order')
-            ->orderBy('id')
+            ->join('platforms', 'platforms.id', '=', 'contact_profiles.platform_id')
+            ->select(['platforms.slug as platform', 'platforms.label', 'contact_profiles.url'])
+            ->where('contact_profiles.site_settings_id', $settings->id)
+            ->orderBy('contact_profiles.order')
+            ->orderBy('contact_profiles.id')
             ->get()
             ->map(static fn (object $profile): array => [
                 'platform' => $profile->platform,
-                'label' => $profile->label ?: $profile->platform,
+                'label' => $profile->label,
                 'url' => $profile->url,
             ])
             ->all();

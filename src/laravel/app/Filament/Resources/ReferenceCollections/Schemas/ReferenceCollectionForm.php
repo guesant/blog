@@ -2,11 +2,11 @@
 
 namespace App\Filament\Resources\ReferenceCollections\Schemas;
 
+use App\Filament\Concerns\BuildsMarkdownEditors;
 use App\Filament\Concerns\BuildsStructuredFields;
 use App\Filament\Concerns\BuildsTranslationTabs;
 use App\Models\Resource as ResourceModel;
 use Filament\Forms\Components\DatePicker;
-use Filament\Forms\Components\MarkdownEditor;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
@@ -17,7 +17,7 @@ use Filament\Schemas\Schema;
 
 class ReferenceCollectionForm
 {
-    use BuildsStructuredFields, BuildsTranslationTabs;
+    use BuildsMarkdownEditors, BuildsStructuredFields, BuildsTranslationTabs;
 
     public static function configure(Schema $schema): Schema
     {
@@ -70,7 +70,7 @@ class ReferenceCollectionForm
                     Textarea::make("{$prefix}description")
                         ->label('Description')
                         ->nullable(),
-                    MarkdownEditor::make("{$prefix}intro")
+                    static::markdownEditor("{$prefix}intro")
                         ->label('Intro')
                         ->nullable(),
                     static::seoFieldset($prefix),

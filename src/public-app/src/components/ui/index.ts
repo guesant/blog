@@ -2,8 +2,6 @@ export { Box } from './box';
 
 export { CatalogCardFrame, CatalogEntryContent } from './catalog-card';
 
-export { ListingCardFrame, type ListingCardFrameProps } from './listing-card';
-
 export * from './finding-card';
 
 export { FollowEntryCardFrame, FollowEntryDescription } from './follow-card';

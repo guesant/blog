@@ -7,6 +7,7 @@ use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Table;
 
 class CreditEntriesTable
@@ -23,6 +24,7 @@ class CreditEntriesTable
                     ->label('Name (EN)')
                     ->getStateUsing(fn ($record) => $record->translation('en')?->name),
                 TextColumn::make('url')->limit(40),
+                ToggleColumn::make('active')->sortable(),
             ])
             ->filters([
                 //

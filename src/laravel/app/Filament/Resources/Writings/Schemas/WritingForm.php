@@ -2,10 +2,10 @@
 
 namespace App\Filament\Resources\Writings\Schemas;
 
+use App\Filament\Concerns\BuildsMarkdownEditors;
 use App\Filament\Concerns\BuildsStructuredFields;
 use App\Filament\Concerns\BuildsTranslationTabs;
 use Filament\Forms\Components\DatePicker;
-use Filament\Forms\Components\MarkdownEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -15,7 +15,7 @@ use Filament\Schemas\Schema;
 
 class WritingForm
 {
-    use BuildsStructuredFields, BuildsTranslationTabs;
+    use BuildsMarkdownEditors, BuildsStructuredFields, BuildsTranslationTabs;
 
     public static function configure(Schema $schema): Schema
     {
@@ -62,12 +62,12 @@ class WritingForm
                         ->maxLength(255),
                     Textarea::make("{$prefix}excerpt")
                         ->label('Excerpt')
-                        ->required(),
+                        ->nullable(),
                     TextInput::make("{$prefix}reading_time")
                         ->label('Reading Time')
                         ->nullable()
                         ->maxLength(255),
-                    MarkdownEditor::make("{$prefix}body")
+                    static::markdownEditor("{$prefix}body")
                         ->label('Body')
                         ->nullable(),
                     static::seoFieldset($prefix),

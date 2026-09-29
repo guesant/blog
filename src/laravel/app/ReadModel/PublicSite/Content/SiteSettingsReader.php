@@ -8,6 +8,6 @@ class SiteSettingsReader
 {
     public function find(): ?SiteSettings
     {
-        return SiteSettings::with(['translations', 'contactProfiles'])->first();
+        return SiteSettings::with(['translations', 'contactProfiles.platform'])->first();
     }
 }

@@ -49,8 +49,8 @@ trait BuildsMarkdownEditors
                     return null;
                 }
 
-                return app(AdminMediaUrl::class)->forPath($file, (string) config('filesystems.default'))
-                    ?? app(AdminMediaUrl::class)->forPath($file);
+                return app(AdminMediaUrl::class)->forPath($file, (string) config('filesystems.default'), true)
+                    ?? app(AdminMediaUrl::class)->forPath($file, null, true);
             });
     }
 }

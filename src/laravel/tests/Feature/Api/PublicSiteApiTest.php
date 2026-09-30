@@ -27,6 +27,7 @@ use App\Models\ResumeRevisionTranslation;
 use App\Models\SidebarGroup;
 use App\Models\SiteSettings;
 use App\OpenGraph\OgImageUrlGenerator;
+use App\Support\AdminMediaUrl;
 use App\Support\PublicMediaSignature;
 use App\Support\PublicMediaUrl;
 use Illuminate\Database\Events\QueryExecuted;
@@ -106,6 +107,15 @@ class PublicSiteApiTest extends TestCase
         $this->get($inline['path'].'?'.$inline['query'])
             ->assertOk()
             ->assertHeader('Content-Disposition', 'inline');
+    }
+
+    public function test_admin_markdown_media_urls_request_inline_images(): void
+    {
+        $asset = MediaAsset::factory()->create();
+
+        $url = app(AdminMediaUrl::class)->forAsset($asset, true);
+
+        $this->assertStringContainsString('/media/'.$asset->id.'/download?inline=1', $url);
     }
 
     public function test_public_media_rejects_expired_and_tampered_signatures(): void

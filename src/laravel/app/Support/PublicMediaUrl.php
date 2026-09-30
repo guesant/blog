@@ -97,15 +97,13 @@ final class PublicMediaUrl
         if (preg_match('~/'.$adminPath.'/media/([0-9]+)/download$~', $path, $matches) === 1) {
             $asset = $this->assets->findPublicById((int) $matches[1]);
 
-            return $asset === null ? null : $this->urlForAsset($asset, null, $inline);
+            return $asset === null ? null : $this->url($asset->path, null, $inline);
         }
 
         if (preg_match('~/(?:portfolio/)?(content-attachments/[^?#]+)$~', $path, $matches) !== 1) {
             return null;
         }
 
-        $asset = $this->assets->findPublicByPath(rawurldecode($matches[1]));
-
-        return $asset === null ? null : $this->urlForAsset($asset, null, $inline);
+        return $this->url(rawurldecode($matches[1]), null, $inline);
     }
 }

@@ -60,7 +60,7 @@ class PublicSiteApiTest extends TestCase
         $this->assertSame('public attachment', $response->streamedContent());
         $response->assertHeader('X-Content-Type-Options', 'nosniff');
         $this->assertMatchesRegularExpression(
-            '/^public, max-age=\d+$/',
+            '/^max-age=\d+, public$/',
             (string) $response->headers->get('Cache-Control'),
         );
 

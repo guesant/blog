@@ -13,8 +13,15 @@ class TechnologyReader
 
     public function listPaginated(int $perPage = 20, ?string $sort = 'order'): LengthAwarePaginator
     {
-        $query = Technology::where('technologies.hidden', false)
-            ->with(['translations', 'resumeSkills.topic.translations', 'resumeSkills.topic.parent']);
+        $query = Technology::query()
+            ->published()
+            ->with([
+                'publishedTranslations',
+                'resumeSkills.topic' => static fn ($query) => $query->published(),
+                'resumeSkills.topic.publishedTranslations',
+                'resumeSkills.topic.parent' => static fn ($query) => $query->published(),
+                'resumeSkills.topic.parent.publishedTranslations',
+            ]);
 
         $this->applySort($query, $sort, alphaTable: 'technology_revision_translations', alphaForeignKey: 'technology_revision_id', alphaColumn: 'name');
 
@@ -23,9 +30,14 @@ class TechnologyReader
 
     public function findByIdentifier(string $identifier): ?Technology
     {
-        return PublicIdentifier::constrain(Technology::query(), $identifier)
-            ->where('hidden', false)
-            ->with(['translations', 'resumeSkills.topic.translations', 'resumeSkills.topic.parent'])
+        return PublicIdentifier::constrain(Technology::query()->published(), $identifier)
+            ->with([
+                'publishedTranslations',
+                'resumeSkills.topic' => static fn ($query) => $query->published(),
+                'resumeSkills.topic.publishedTranslations',
+                'resumeSkills.topic.parent' => static fn ($query) => $query->published(),
+                'resumeSkills.topic.parent.publishedTranslations',
+            ])
             ->first();
     }
 

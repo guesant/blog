@@ -15,7 +15,7 @@ trait RelatesByTechnology
     /**
      * @param  Builder<*>  $baseQuery  Already scoped to "visible, excluding self".
      * @param  Collection<int, int>  $technologyIds
-     * @param  list<string>  $with
+     * @param  array<int|string, mixed>  $with
      * @return Collection<int, mixed>
      */
     private function relatedByTechnology(Builder $baseQuery, Collection $technologyIds, int $limit, array $with): Collection

@@ -27,12 +27,6 @@ trait SyncsTranslations
 
     protected function persistTranslations(): void
     {
-        if ($this->pendingTranslations === []) {
-            PublicSiteContentChanged::dispatch();
-
-            return;
-        }
-
         app(EditorialRevisionPublisher::class)->publish($this->getRecord(), $this->pendingTranslations, $this->pendingRecordData);
     }
 

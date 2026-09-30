@@ -93,7 +93,7 @@ class ManageResume extends Page
     {
         $this->record = Resume::query()->first() ?? Resume::create();
 
-        $data = [];
+        $data = $this->record->attributesToArray();
         $data = $this->fillTranslationsIntoData($data);
 
         $data['selected_cases'] = $this->record->selectedCases()
@@ -148,6 +148,12 @@ class ManageResume extends Page
 
         return $schema
             ->components([
+                Section::make(__('Resume settings'))
+                    ->schema([
+                        Toggle::make('hidden')
+                            ->label(__('Hide from public site'))
+                            ->default(false),
+                    ]),
                 Section::make(__('Selected Cases'))
                     ->schema([
                         Repeater::make('selected_cases')

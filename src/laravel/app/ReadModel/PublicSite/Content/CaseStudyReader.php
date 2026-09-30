@@ -15,9 +15,14 @@ class CaseStudyReader
 
     public function listPaginated(int $perPage = 20, ?string $sort = null): LengthAwarePaginator
     {
-        $query = CaseStudy::where('case_studies.hidden', false)
-            ->where('case_studies.nda', false)
-            ->with(['translations', 'technologies.translations']);
+        $query = CaseStudy::query()
+            ->published()
+            ->whereHas('publishedRevision', static fn ($query) => $query->where('nda', false))
+            ->with([
+                'publishedTranslations',
+                'technologies' => static fn ($query) => $query->published(),
+                'technologies.publishedTranslations',
+            ]);
 
         $this->applySort($query, $sort, alphaTable: 'case_study_revision_translations', alphaForeignKey: 'case_study_revision_id', alphaColumn: 'title');
 
@@ -26,10 +31,13 @@ class CaseStudyReader
 
     public function findByIdentifier(string $identifier): ?CaseStudy
     {
-        return PublicIdentifier::constrain(CaseStudy::query(), $identifier)
-            ->where('hidden', false)
-            ->where('nda', false)
-            ->with(['translations', 'technologies.translations'])
+        return PublicIdentifier::constrain(CaseStudy::query()->published(), $identifier)
+            ->whereHas('publishedRevision', static fn ($query) => $query->where('nda', false))
+            ->with([
+                'publishedTranslations',
+                'technologies' => static fn ($query) => $query->published(),
+                'technologies.publishedTranslations',
+            ])
             ->first();
     }
 
@@ -40,10 +48,15 @@ class CaseStudyReader
 
     public function related(CaseStudy $case, int $limit = 3): Collection
     {
-        $baseQuery = CaseStudy::where('id', '!=', $case->id)
-            ->where('hidden', false)
-            ->where('nda', false);
+        $baseQuery = CaseStudy::query()
+            ->published()
+            ->where('id', '!=', $case->id)
+            ->whereHas('publishedRevision', static fn ($query) => $query->where('nda', false));
 
-        return $this->relatedByTechnology($baseQuery, $case->technologies->pluck('id'), $limit, ['translations', 'technologies.translations']);
+        return $this->relatedByTechnology($baseQuery, $case->technologies->pluck('id'), $limit, [
+            'publishedTranslations',
+            'technologies' => static fn ($query) => $query->published(),
+            'technologies.publishedTranslations',
+        ]);
     }
 }

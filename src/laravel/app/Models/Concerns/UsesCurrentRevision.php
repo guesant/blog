@@ -34,6 +34,7 @@ use App\Models\TopicRevision;
 use App\Models\TopicRevisionTranslation;
 use App\Models\WritingRevision;
 use App\Models\WritingRevisionTranslation;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -58,28 +59,101 @@ trait UsesCurrentRevision
         'writings' => [WritingRevisionTranslation::class, 'writing_revision_id'],
     ];
 
+    private const REVISION_DEFINITIONS = [
+        'case_studies' => CaseStudyRevision::class,
+        'experiments' => ExperimentRevision::class,
+        'pages' => PageRevision::class,
+        'profiles' => ProfileRevision::class,
+        'projects' => ProjectRevision::class,
+        'reference_collections' => ReferenceCollectionRevision::class,
+        'resources' => ResourceRevision::class,
+        'resumes' => ResumeRevision::class,
+        'writings' => WritingRevision::class,
+        'site_settings' => SiteSettingsRevision::class,
+        'nav_items' => NavItemRevision::class,
+        'credit_entries' => CreditEntryRevision::class,
+        'snippets' => SnippetRevision::class,
+        'technologies' => TechnologyRevision::class,
+        'topics' => TopicRevision::class,
+        'languages' => LanguageRevision::class,
+    ];
+
+    private const HIDDEN_REVISION_TABLES = [
+        'case_study_revisions',
+        'experiment_revisions',
+        'nav_item_revisions',
+        'page_revisions',
+        'profile_revisions',
+        'project_revisions',
+        'reference_collection_revisions',
+        'resource_revisions',
+        'resume_revisions',
+        'snippet_revisions',
+        'technology_revisions',
+        'topic_revisions',
+        'writing_revisions',
+    ];
+
+    private const HIDDEN_BASE_TABLES = [
+        'case_studies',
+        'experiments',
+        'pages',
+        'profiles',
+        'projects',
+        'reference_collections',
+        'resources',
+        'resumes',
+        'snippets',
+        'technologies',
+        'topics',
+        'writings',
+    ];
+
     public function currentRevision(): BelongsTo
     {
-        $model = [
-            'case_studies' => CaseStudyRevision::class,
-            'experiments' => ExperimentRevision::class,
-            'pages' => PageRevision::class,
-            'profiles' => ProfileRevision::class,
-            'projects' => ProjectRevision::class,
-            'reference_collections' => ReferenceCollectionRevision::class,
-            'resources' => ResourceRevision::class,
-            'resumes' => ResumeRevision::class,
-            'writings' => WritingRevision::class,
-            'site_settings' => SiteSettingsRevision::class,
-            'nav_items' => NavItemRevision::class,
-            'credit_entries' => CreditEntryRevision::class,
-            'snippets' => SnippetRevision::class,
-            'technologies' => TechnologyRevision::class,
-            'topics' => TopicRevision::class,
-            'languages' => LanguageRevision::class,
-        ][$this->getTable()] ?? Model::class;
+        $model = self::REVISION_DEFINITIONS[$this->getTable()] ?? Model::class;
 
         return $this->belongsTo($model, 'current_revision_id');
+    }
+
+    public function publishedRevision(): BelongsTo
+    {
+        $model = self::REVISION_DEFINITIONS[$this->getTable()] ?? Model::class;
+
+        return $this->belongsTo($model, 'published_revision_id');
+    }
+
+    public function publishedTranslations(): HasMany
+    {
+        [$model, $foreignKey] = self::TRANSLATION_DEFINITIONS[$this->getTable()] ?? [Model::class, 'published_revision_id'];
+
+        return $this->hasMany($model, $foreignKey, 'published_revision_id');
+    }
+
+    public function scopePublished(Builder $query): Builder
+    {
+        if (! array_key_exists($this->getTable(), self::REVISION_DEFINITIONS)) {
+            return $query;
+        }
+
+        $revisionModel = self::REVISION_DEFINITIONS[$this->getTable()];
+        $revisionTable = (new $revisionModel)->getTable();
+
+        return $query
+            ->whereNotNull($query->getModel()->qualifyColumn('published_revision_id'))
+            ->when(
+                in_array($this->getTable(), self::HIDDEN_BASE_TABLES, true),
+                static fn (Builder $visible): Builder => $visible->where(fn (Builder $visibility): Builder => $visibility
+                    ->where($visible->getModel()->qualifyColumn('hidden'), false)
+                    ->orWhereNull($visible->getModel()->qualifyColumn('hidden'))),
+            )
+            ->whereHas('publishedRevision', function (Builder $revisionQuery) use ($revisionTable): void {
+                if (in_array($revisionTable, self::HIDDEN_REVISION_TABLES, true)) {
+                    $revisionQuery->where(fn (Builder $visibility): Builder => $visibility
+                        ->where('hidden', false)
+                        ->orWhereNull('hidden'));
+                }
+            });
     }
 
     public function translations(): HasMany
@@ -92,8 +166,11 @@ trait UsesCurrentRevision
     public function translation(?string $locale = null): ?Model
     {
         $normalized = Locale::normalize($locale);
+        $translations = $this->relationLoaded('publishedTranslations')
+            ? $this->publishedTranslations
+            : $this->translations;
 
-        return $this->translations->firstWhere('locale', $normalized)
-            ?? $this->translations->firstWhere('locale', 'en');
+        return $translations->firstWhere('locale', $normalized)
+            ?? $translations->firstWhere('locale', 'en');
     }
 }

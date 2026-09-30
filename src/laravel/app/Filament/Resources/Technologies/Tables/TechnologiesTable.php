@@ -6,6 +6,7 @@ use App\Filament\Concerns\ConfiguresRecordOrdering;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
@@ -23,6 +24,7 @@ class TechnologiesTable
                     ->label('Name (EN)')
                     ->getStateUsing(fn ($record) => $record->translation('en')?->name),
                 TextColumn::make('logo')->label('Icon slug'),
+                IconColumn::make('hidden')->boolean()->sortable(),
             ])
             ->filters([
                 //

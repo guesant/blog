@@ -12,8 +12,17 @@ class CreditsReader
 
     public function listPaginated(int $perPage = 20, ?string $sort = null): LengthAwarePaginator
     {
-        $query = CreditEntry::where('active', true)
-            ->with('translations');
+        $query = CreditEntry::query()
+            ->published()
+            ->whereHas('publishedRevision', static fn ($revision) => $revision->where('active', true))
+            ->whereExists(function ($category): void {
+                $category
+                    ->selectRaw('1')
+                    ->from('credit_categories')
+                    ->whereColumn('credit_categories.slug', 'credit_entries.category')
+                    ->where('credit_categories.active', true);
+            })
+            ->with('publishedTranslations');
 
         $this->applySort($query, $sort, sortColumn: 'created_at', defaultColumn: 'order');
 

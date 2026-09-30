@@ -13,8 +13,15 @@ class TopicReader
 
     public function listPaginated(int $perPage = 20, ?string $sort = null): LengthAwarePaginator
     {
-        $query = Topic::where('topics.hidden', false)
-            ->with(['translations', 'parent.translations', 'children.translations']);
+        $query = Topic::query()
+            ->published()
+            ->with([
+                'publishedTranslations',
+                'parent' => static fn ($query) => $query->published(),
+                'parent.publishedTranslations',
+                'children' => static fn ($query) => $query->published(),
+                'children.publishedTranslations',
+            ]);
 
         $this->applySort($query, $sort, alphaTable: 'topic_revision_translations', alphaForeignKey: 'topic_revision_id', alphaColumn: 'name');
 
@@ -23,9 +30,14 @@ class TopicReader
 
     public function findByIdentifier(string $identifier): ?Topic
     {
-        return PublicIdentifier::constrain(Topic::query(), $identifier)
-            ->where('hidden', false)
-            ->with(['translations', 'parent.translations', 'children.translations'])
+        return PublicIdentifier::constrain(Topic::query()->published(), $identifier)
+            ->with([
+                'publishedTranslations',
+                'parent' => static fn ($query) => $query->published(),
+                'parent.publishedTranslations',
+                'children' => static fn ($query) => $query->published(),
+                'children.publishedTranslations',
+            ])
             ->first();
     }
 

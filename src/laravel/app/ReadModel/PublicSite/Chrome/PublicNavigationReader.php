@@ -3,6 +3,7 @@
 namespace App\ReadModel\PublicSite\Chrome;
 
 use App\Content\Locale;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
@@ -22,36 +23,20 @@ final class PublicNavigationReader
 
     public function read(string $locale): array
     {
-        $roots = DB::table('nav_items')
-            ->select([
-                'id',
-                'route_name',
-                'parent_id',
-                'placement',
-                'sidebar_group_id',
-                'order',
-            ])
-            ->whereNull('parent_id')
-            ->orderByRaw('sidebar_group_id is not null')
-            ->orderBy('sidebar_group_id')
-            ->orderBy('order')
-            ->orderBy('id')
+        $roots = $this->publishedItems()
+            ->whereNull('revisions.parent_id')
+            ->orderByRaw('revisions.sidebar_group_id is not null')
+            ->orderBy('revisions.sidebar_group_id')
+            ->orderBy('revisions.order')
+            ->orderBy('items.id')
             ->get()
             ->filter(fn (object $item): bool => $this->isPublicRoute($item->route_name))
             ->values();
 
-        $children = DB::table('nav_items')
-            ->select([
-                'id',
-                'route_name',
-                'parent_id',
-                'placement',
-                'sidebar_group_id',
-                'order',
-            ])
-            ->whereIn('parent_id', $roots->pluck('id'))
-            ->orderBy('order')
-            ->orderBy('id')
+        $children = $this->publishedItems()
+            ->whereIn('revisions.parent_id', $roots->pluck('id'))
+            ->orderBy('revisions.order')
+            ->orderBy('items.id')
             ->get()
             ->filter(fn (object $item): bool => $this->isPublicRoute($item->route_name))
             ->values();
@@ -129,6 +114,23 @@ final class PublicNavigationReader
                 'children' => null,
             ])->values()->all(),
         ];
+    }
+
+    private function publishedItems(): Builder
+    {
+        return DB::table('nav_items as items')
+            ->join('nav_item_revisions as revisions', 'revisions.id', '=', 'items.published_revision_id')
+            ->where(fn ($visibility) => $visibility
+                ->where('revisions.hidden', false)
+                ->orWhereNull('revisions.hidden'))
+            ->select([
+                'items.id',
+                'revisions.route_name',
+                'revisions.parent_id',
+                'revisions.placement',
+                'revisions.sidebar_group_id',
+                'revisions.order',
+            ]);
     }
 
     private function withoutGroup(array $item): array

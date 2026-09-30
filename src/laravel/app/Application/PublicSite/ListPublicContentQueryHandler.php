@@ -76,32 +76,47 @@ final class ListPublicContentQueryHandler
                 'relation' => 'featuredCases',
                 'pivot' => 'page_revision_featured_cases',
                 'table' => 'case_studies',
-                'with' => ['translations', 'technologies.translations'],
+                'with' => [
+                    'publishedTranslations',
+                    'technologies' => static fn ($query) => $query->published(),
+                    'technologies.publishedTranslations',
+                ],
             ],
             'projects' => [
                 'relation' => 'featuredProjects',
                 'pivot' => 'page_revision_featured_projects',
                 'table' => 'projects',
-                'with' => ['translations', 'technologies.translations'],
+                'with' => [
+                    'publishedTranslations',
+                    'technologies' => static fn ($query) => $query->published(),
+                    'technologies.publishedTranslations',
+                ],
             ],
             'writing' => [
                 'relation' => 'featuredWritings',
                 'pivot' => 'page_revision_featured_writings',
                 'table' => 'writings',
-                'with' => ['translations', 'topics.translations'],
+                'with' => [
+                    'publishedTranslations',
+                    'topics' => static fn ($query) => $query->published(),
+                    'topics.publishedTranslations',
+                ],
             ],
             default => throw new InvalidArgumentException('Featured content is unavailable for this collection.'),
         };
-        $portfolio = $this->pages->findBySlug('portfolio')?->currentRevision;
+        $portfolio = $this->pages->findBySlug('portfolio')?->publishedRevision;
 
         if ($portfolio === null) {
             return new LengthAwarePaginator([], 0, $query->perPage, max(1, $query->page));
         }
 
         $builder = $portfolio->{$configuration['relation']}()
-            ->where('hidden', false)
+            ->published()
             ->with($configuration['with'])
-            ->when($query->collection === 'cases', fn ($builder) => $builder->where('nda', false));
+            ->when(
+                in_array($query->collection, ['cases', 'projects'], true),
+                fn ($builder) => $builder->whereHas('publishedRevision', static fn ($revision) => $revision->where('nda', false)),
+            );
         $pivot = $configuration['pivot'];
 
         return $builder

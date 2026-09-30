@@ -16,7 +16,7 @@ final class PublicSiteAvailabilityReader
             ->selectSub($this->publicContent('case_studies', ['hidden' => false, 'nda' => false]), 'has_cases')
             ->selectSub($this->publicContent('experiments', ['hidden' => false]), 'has_experiments')
             ->selectSub($this->pageWithFields('license', $locale, ['code_body', 'content_body', 'ai_body']), 'has_license')
-            ->selectSub($this->publicContent('credit_entries', ['active' => true]), 'has_credits')
+            ->selectSub($this->publicCredits(), 'has_credits')
             ->selectSub($this->pageWithFields('follow', $locale, [
                 'rss_title',
                 'atom_title',
@@ -66,11 +66,11 @@ final class PublicSiteAvailabilityReader
     {
         return DB::table('resumes as r')
             ->selectRaw('1')
-            ->whereNotNull('r.current_revision_id')
+            ->whereNotNull('r.published_revision_id')
             ->whereExists(function (Builder $query): void {
                 $query->selectRaw('1')
                     ->from('resume_revisions as rr')
-                    ->whereColumn('rr.id', 'r.current_revision_id')
+                    ->whereColumn('rr.id', 'r.published_revision_id')
                     ->where(fn ($visibility) => $visibility
                         ->where('rr.hidden', false)
                         ->orWhereNull('rr.hidden'));
@@ -78,19 +78,22 @@ final class PublicSiteAvailabilityReader
             ->whereExists(function (Builder $query) use ($locale): void {
                 $query->selectRaw('1')
                     ->from('resume_revision_translations as rt')
-                    ->whereColumn('rt.resume_revision_id', 'r.current_revision_id')
+                    ->whereColumn('rt.resume_revision_id', 'r.published_revision_id')
                     ->where(function (Builder $query) use ($locale): void {
                         $query->where(function (Builder $query) use ($locale): void {
                             $query->where('rt.locale', $locale)
-                                ->whereNotNull('rt.summary');
+                                ->where(function (Builder $content): void {
+                                    $this->resumeTranslationHasContent($content);
+                                });
                         })->orWhere(function (Builder $query) use ($locale): void {
                             $query->where('rt.locale', 'en')
-                                ->whereNotNull('rt.summary')
                                 ->whereNotExists(function (Builder $query) use ($locale): void {
                                     $query->selectRaw('1')
                                         ->from('resume_revision_translations as rt_locale')
-                                        ->whereColumn('rt_locale.resume_revision_id', 'r.current_revision_id')
+                                        ->whereColumn('rt_locale.resume_revision_id', 'r.published_revision_id')
                                         ->where('rt_locale.locale', $locale);
+                                })->where(function (Builder $content): void {
+                                    $this->resumeTranslationHasContent($content);
                                 });
                         });
                     });
@@ -98,15 +101,63 @@ final class PublicSiteAvailabilityReader
             ->limit(1);
     }
 
+    private function resumeTranslationHasContent(Builder $query): void
+    {
+        $query
+            ->where(function (Builder $content): void {
+                $content
+                    ->where(function (Builder $summary): void {
+                        $summary
+                            ->whereNotNull('rt.summary')
+                            ->where('rt.summary', '<>', '');
+                    });
+
+                foreach ([
+                    'leadership',
+                    'education',
+                    'certificates',
+                    'certifications',
+                    'publications',
+                    'recommendations',
+                    'technical_productions',
+                    'events',
+                    'awards',
+                ] as $section) {
+                    $content->orWhereExists(function (Builder $rows) use ($section): void {
+                        $rows
+                            ->selectRaw('1')
+                            ->from('resume_revision_'.$section)
+                            ->whereColumn('resume_revision_'.$section.'.resume_revision_translation_id', 'rt.id');
+                    });
+                }
+
+                foreach (['selected_cases', 'skills', 'skill_technologies', 'languages'] as $relation) {
+                    $content->orWhereExists(function (Builder $rows) use ($relation): void {
+                        $rows
+                            ->selectRaw('1')
+                            ->from($relation === 'skill_technologies'
+                                ? 'resume_revision_skill_technologies'
+                                : 'resume_revision_'.$relation)
+                            ->whereColumn(
+                                $relation === 'skill_technologies'
+                                    ? 'resume_revision_skill_technologies.resume_revision_id'
+                                    : 'resume_revision_'.$relation.'.resume_revision_id',
+                                'r.published_revision_id',
+                            );
+                    });
+                }
+            });
+    }
+
     private function profileWithTrajectory(string $locale): Builder
     {
         return DB::table('profiles as p')
             ->selectRaw('1')
-            ->whereNotNull('p.current_revision_id')
+            ->whereNotNull('p.published_revision_id')
             ->whereExists(function (Builder $query): void {
                 $query->selectRaw('1')
                     ->from('profile_revisions as pr')
-                    ->whereColumn('pr.id', 'p.current_revision_id')
+                    ->whereColumn('pr.id', 'p.published_revision_id')
                     ->where(fn ($visibility) => $visibility
                         ->where('pr.hidden', false)
                         ->orWhereNull('pr.hidden'));
@@ -114,7 +165,7 @@ final class PublicSiteAvailabilityReader
             ->whereExists(function (Builder $query) use ($locale): void {
                 $query->selectRaw('1')
                     ->from('profile_revision_translations as pt')
-                    ->whereColumn('pt.profile_revision_id', 'p.current_revision_id')
+                    ->whereColumn('pt.profile_revision_id', 'p.published_revision_id')
                     ->where(function (Builder $query) use ($locale): void {
                         $query->where('pt.locale', $locale)
                             ->orWhere(function (Builder $query) use ($locale): void {
@@ -122,7 +173,7 @@ final class PublicSiteAvailabilityReader
                                     ->whereNotExists(function (Builder $query) use ($locale): void {
                                         $query->selectRaw('1')
                                             ->from('profile_revision_translations as pt_locale')
-                                            ->whereColumn('pt_locale.profile_revision_id', 'p.current_revision_id')
+                                            ->whereColumn('pt_locale.profile_revision_id', 'p.published_revision_id')
                                             ->where('pt_locale.locale', $locale);
                                     });
                             });
@@ -141,9 +192,69 @@ final class PublicSiteAvailabilityReader
 
     private function publicContent(string $table, array $filters): Builder
     {
-        return DB::table($table)
+        $revisionTable = [
+            'case_studies' => 'case_study_revisions',
+            'experiments' => 'experiment_revisions',
+            'projects' => 'project_revisions',
+            'reference_collections' => 'reference_collection_revisions',
+            'resources' => 'resource_revisions',
+            'snippets' => 'snippet_revisions',
+            'technologies' => 'technology_revisions',
+            'topics' => 'topic_revisions',
+            'writings' => 'writing_revisions',
+        ][$table] ?? null;
+
+        if ($revisionTable === null) {
+            return DB::table($table)
+                ->selectRaw('1')
+                ->where($filters)
+                ->limit(1);
+        }
+
+        return DB::table($table.' as content')
             ->selectRaw('1')
-            ->where($filters)
+            ->whereNotNull('content.published_revision_id')
+            ->whereExists(function (Builder $revision) use ($revisionTable, $filters): void {
+                $revision
+                    ->selectRaw('1')
+                    ->from($revisionTable.' as public_revision')
+                    ->whereColumn('public_revision.id', 'content.published_revision_id')
+                    ->where(function (Builder $visibility): void {
+                        $visibility
+                            ->where('public_revision.hidden', false)
+                            ->orWhereNull('public_revision.hidden');
+                    });
+
+                foreach ($filters as $field => $value) {
+                    if ($field === 'hidden') {
+                        continue;
+                    }
+
+                    $revision->where('public_revision.'.$field, $value);
+                }
+            })
+            ->limit(1);
+    }
+
+    private function publicCredits(): Builder
+    {
+        return DB::table('credit_entries as entries')
+            ->selectRaw('1')
+            ->whereNotNull('entries.published_revision_id')
+            ->whereExists(function (Builder $revision): void {
+                $revision
+                    ->selectRaw('1')
+                    ->from('credit_entry_revisions as public_revision')
+                    ->whereColumn('public_revision.id', 'entries.published_revision_id')
+                    ->where('public_revision.active', true);
+            })
+            ->whereExists(function (Builder $category): void {
+                $category
+                    ->selectRaw('1')
+                    ->from('credit_categories')
+                    ->whereColumn('credit_categories.slug', 'entries.category')
+                    ->where('credit_categories.active', true);
+            })
             ->limit(1);
     }
 
@@ -152,14 +263,11 @@ final class PublicSiteAvailabilityReader
         return DB::table('pages as p')
             ->selectRaw('1')
             ->where('p.slug', $slug)
-            ->where(fn ($visibility) => $visibility
-                ->where('p.hidden', false)
-                ->orWhereNull('p.hidden'))
-            ->whereNotNull('p.current_revision_id')
+            ->whereNotNull('p.published_revision_id')
             ->whereExists(function (Builder $query): void {
                 $query->selectRaw('1')
                     ->from('page_revisions as pr')
-                    ->whereColumn('pr.id', 'p.current_revision_id')
+                    ->whereColumn('pr.id', 'p.published_revision_id')
                     ->where(fn ($visibility) => $visibility
                         ->where('pr.hidden', false)
                         ->orWhereNull('pr.hidden'));
@@ -170,7 +278,7 @@ final class PublicSiteAvailabilityReader
                         $query->whereNotExists(function (Builder $query) use ($locale): void {
                             $query->selectRaw('1')
                                 ->from('page_revision_translations as locale_translation')
-                                ->whereColumn('locale_translation.page_revision_id', 'p.current_revision_id')
+                                ->whereColumn('locale_translation.page_revision_id', 'p.published_revision_id')
                                 ->where('locale_translation.locale', $locale);
                         })->whereExists($this->pageTranslationWithFields('en', $fields));
                     });
@@ -183,7 +291,7 @@ final class PublicSiteAvailabilityReader
         return function (Builder $query) use ($locale, $fields): void {
             $query->selectRaw('1')
                 ->from('page_revision_translations as page_translation')
-                ->whereColumn('page_translation.page_revision_id', 'p.current_revision_id')
+                ->whereColumn('page_translation.page_revision_id', 'p.published_revision_id')
                 ->where('page_translation.locale', $locale)
                 ->where(function (Builder $query) use ($fields): void {
                     foreach ($fields as $index => $field) {

@@ -56,7 +56,9 @@ class ResourceReader
 
     public function listByTopicPaginated(int $topicId, int $perPage = 20, ?string $sort = null): LengthAwarePaginator
     {
-        $query = Resource::public()->whereHas('topics', fn ($t) => $t->where('topics.id', $topicId));
+        $query = Resource::public()->whereHas('topics', fn (Builder $topic) => $topic
+            ->whereIn('topics.id', Topic::query()->published()->select('id'))
+            ->where('topics.id', $topicId));
         $query->select($this->listingColumns());
 
         $this->applySort($query, $sort, 'published_date_iso', alphaTable: 'resource_revision_translations', alphaForeignKey: 'resource_revision_id', alphaColumn: 'title');
@@ -106,8 +108,10 @@ class ResourceReader
                 ->map(fn (string|int|float $year) => (string) (int) $year)
                 ->values()
                 ->all(),
-            'topics' => Topic::whereHas('findings', $onlyPublicFindings)
-                ->with('translations')
+            'topics' => Topic::query()
+                ->published()
+                ->whereHas('findings', $onlyPublicFindings)
+                ->with('publishedTranslations')
                 ->get()
                 ->map(fn (Topic $topic) => [
                     'slug' => $topic->slug,
@@ -123,8 +127,8 @@ class ResourceReader
         if (filled($filters['q'] ?? null)) {
             $term = '%'.$filters['q'].'%';
             $query->where(function ($outer) use ($term, $locale) {
-                $outer->whereHas('currentRevision.attributions', fn ($attribution) => $attribution->where('name', 'ilike', $term))
-                    ->orWhereHas('translations', function ($t) use ($term, $locale) {
+                $outer->whereHas('publishedRevision.attributions', fn ($attribution) => $attribution->where('name', 'ilike', $term))
+                    ->orWhereHas('publishedTranslations', function ($t) use ($term, $locale) {
                         $t->where('locale', $locale)
                             ->where(function ($tt) use ($term) {
                                 $tt->where('title', 'like', $term)
@@ -135,8 +139,12 @@ class ResourceReader
                     })
                     ->orWhereHas('identifiers', fn ($i) => $i->where('value', 'ilike', $term))
                     ->orWhereHas('links', fn ($l) => $l->where('platform', 'ilike', $term))
-                    ->orWhereHas('topics.translations', function ($tt) use ($term, $locale) {
-                        $tt->where('locale', $locale)->where('name', 'ilike', $term);
+                    ->orWhereHas('topics', function (Builder $topic) use ($term, $locale): void {
+                        $topic
+                            ->whereIn('topics.id', Topic::query()->published()->select('id'))
+                            ->whereHas('publishedTranslations', function (Builder $translation) use ($term, $locale): void {
+                                $translation->where('locale', $locale)->where('name', 'ilike', $term);
+                            });
                     });
             });
         }
@@ -146,7 +154,9 @@ class ResourceReader
         }
 
         if (filled($filters['topic'] ?? null)) {
-            $query->whereHas('topics', fn ($t) => $t->where('slug', $filters['topic']));
+            $query->whereHas('topics', fn (Builder $topic) => $topic
+                ->whereIn('topics.id', Topic::query()->published()->select('id'))
+                ->where('slug', $filters['topic']));
         }
 
         if (filled($filters['rating'] ?? null)) {
@@ -174,8 +184,10 @@ class ResourceReader
         if ($topic) {
             return Resource::public()
                 ->where('id', '!=', $resource->id)
-                ->whereHas('topics', fn ($t) => $t->where('topics.id', $topic->id))
-                ->with('translations')
+                ->whereHas('topics', fn (Builder $t) => $t
+                    ->whereIn('topics.id', Topic::query()->published()->select('id'))
+                    ->where('topics.id', $topic->id))
+                ->with('publishedTranslations')
                 ->orderByDesc('published_date_iso')
                 ->limit($limit)
                 ->get();
@@ -184,7 +196,7 @@ class ResourceReader
         return Resource::public()
             ->where('id', '!=', $resource->id)
             ->where('type', $resource->type)
-            ->with('translations')
+            ->with('publishedTranslations')
             ->orderByDesc('published_date_iso')
             ->limit($limit)
             ->get();
@@ -194,7 +206,17 @@ class ResourceReader
     {
         $resource = Resource::where('slug', $slug)
             ->public()
-            ->with(['translations', 'topics.translations', 'authorTopics.translations', 'publisherTopics.translations', 'links', 'identifiers'])
+            ->with([
+                'publishedTranslations',
+                'topics' => static fn ($query) => $query->published(),
+                'topics.publishedTranslations',
+                'authorTopics' => static fn ($query) => $query->published(),
+                'authorTopics.publishedTranslations',
+                'publisherTopics' => static fn ($query) => $query->published(),
+                'publisherTopics.publishedTranslations',
+                'links',
+                'identifiers',
+            ])
             ->first();
 
         if (! $resource) {
@@ -210,9 +232,10 @@ class ResourceReader
     private function listingRelations(): array
     {
         return [
-            'translations:id,resource_id,locale,title,alternative_title,description,personal_note,reason_found',
-            'topics:id,slug,public_id',
-            'topics.translations:id,topic_id,locale,name',
+            'publishedTranslations',
+            'topics' => static fn (Builder $topic) => $topic
+                ->whereIn('topics.id', Topic::query()->published()->select('id')),
+            'topics.publishedTranslations',
             'links:id,resource_id,url,label,platform,purpose,is_free,is_primary',
             'identifiers:id,resource_id,kind,value',
         ];

@@ -44,9 +44,9 @@ class PublicResourceReader
                 ->values()
                 ->all(),
             'topics' => Topic::query()
-                ->where('hidden', false)
+                ->published()
                 ->whereIn('id', DB::table('resource_revision_topics')->whereIn('resource_revision_id', $publicIds)->select('topic_id'))
-                ->with('translations')
+                ->with('publishedTranslations')
                 ->orderBy('slug')
                 ->get()
                 ->map(fn (Topic $topic): array => [
@@ -78,7 +78,8 @@ class PublicResourceReader
         )
             ->with([
                 'translations',
-                'topics.translations',
+                'topics' => static fn ($query) => $query->published(),
+                'topics.publishedTranslations',
                 'links',
                 'identifiers',
                 'typeDetailRows',
@@ -99,7 +100,8 @@ class PublicResourceReader
             ->select('resource_revisions.*')
             ->with([
                 'translations',
-                'topics.translations',
+                'topics' => static fn ($query) => $query->published(),
+                'topics.publishedTranslations',
                 'links',
                 'identifiers',
                 'typeDetailRows',
@@ -126,7 +128,11 @@ class PublicResourceReader
                     })
                     ->orWhereHas('identifiers', fn (Builder $identifier) => $identifier->where('value', 'ilike', $term))
                     ->orWhereHas('links', fn (Builder $link) => $link->where('platform', 'ilike', $term))
-                    ->orWhereHas('topics.translations', fn (Builder $translation) => $translation->where('locale', $locale)->where('name', 'ilike', $term));
+                    ->orWhereHas('topics', fn (Builder $topic) => $topic
+                        ->whereIn('topics.id', Topic::query()->published()->select('id'))
+                        ->whereHas('publishedTranslations', fn (Builder $translation) => $translation
+                            ->where('locale', $locale)
+                            ->where('name', 'ilike', $term)));
             });
         }
 
@@ -137,7 +143,9 @@ class PublicResourceReader
         }
 
         if (filled($filters['topic'] ?? null)) {
-            $query->whereHas('topics', fn (Builder $topic) => $topic->where('topics.slug', $filters['topic']));
+            $query->whereHas('topics', fn (Builder $topic) => $topic
+                ->whereIn('topics.id', Topic::query()->published()->select('id'))
+                ->where('topics.slug', $filters['topic']));
         }
 
         if (filled($filters['year'] ?? null)) {

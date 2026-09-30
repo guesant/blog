@@ -120,47 +120,36 @@ final class HomeGalleryReader
     private function homeRevision(): ?PageRevision
     {
         return Page::query()
+            ->published()
             ->where('slug', 'home')
-            ->where(fn ($visibility) => $visibility
-                ->where('pages.hidden', false)
-                ->orWhereNull('pages.hidden'))
-            ->whereHas('currentRevision', static function ($query): void {
-                $query->where(fn ($visibility) => $visibility
-                    ->where('hidden', false)
-                    ->orWhereNull('hidden'));
-            })
-            ->with([
-                'currentRevision.homeSections',
-            ])
-            ->first()?->currentRevision;
+            ->with('publishedRevision.homeSections')
+            ->first()?->publishedRevision;
     }
 
     private function portfolioRevision(): ?PageRevision
     {
         return Page::query()
+            ->published()
             ->where('slug', 'portfolio')
-            ->where(fn ($visibility) => $visibility
-                ->where('pages.hidden', false)
-                ->orWhereNull('pages.hidden'))
-            ->whereHas('currentRevision', static function ($query): void {
-                $query->where(fn ($visibility) => $visibility
-                    ->where('hidden', false)
-                    ->orWhereNull('hidden'));
-            })
             ->with([
-                'currentRevision.featuredCases' => static fn ($query) => $query
-                    ->where('hidden', false)
-                    ->where('nda', false)
-                    ->with(['translations', 'technologies.translations']),
-                'currentRevision.featuredProjects' => static fn ($query) => $query
-                    ->where('hidden', false)
-                    ->where('nda', false)
-                    ->with(['translations', 'technologies.translations']),
-                'currentRevision.featuredWritings' => static fn ($query) => $query
-                    ->where('hidden', false)
-                    ->with(['translations', 'topics.translations']),
+                'publishedRevision.featuredCases' => static fn ($query) => $query
+                    ->published()
+                    ->whereHas('publishedRevision', static fn ($revision) => $revision->where('nda', false)),
+                'publishedRevision.featuredCases.publishedTranslations',
+                'publishedRevision.featuredCases.technologies' => static fn ($query) => $query->published(),
+                'publishedRevision.featuredCases.technologies.publishedTranslations',
+                'publishedRevision.featuredProjects' => static fn ($query) => $query
+                    ->published()
+                    ->whereHas('publishedRevision', static fn ($revision) => $revision->where('nda', false)),
+                'publishedRevision.featuredProjects.publishedTranslations',
+                'publishedRevision.featuredProjects.technologies' => static fn ($query) => $query->published(),
+                'publishedRevision.featuredProjects.technologies.publishedTranslations',
+                'publishedRevision.featuredWritings' => static fn ($query) => $query->published(),
+                'publishedRevision.featuredWritings.publishedTranslations',
+                'publishedRevision.featuredWritings.topics' => static fn ($query) => $query->published(),
+                'publishedRevision.featuredWritings.topics.publishedTranslations',
             ])
-            ->first()?->currentRevision;
+            ->first()?->publishedRevision;
     }
 
     private function pageResults(array $pages): array

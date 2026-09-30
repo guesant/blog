@@ -14,6 +14,7 @@ use App\Listeners\InvalidatePublicSiteChrome;
 use App\Models\CaseStudy;
 use App\Models\CaseStudyRevisionTranslation;
 use App\Models\MediaAsset;
+use App\Models\NavItem;
 use App\Models\Page;
 use App\Models\Profile;
 use App\Models\ProfileRevisionTranslation;
@@ -280,7 +281,7 @@ class PublicSiteApiTest extends TestCase
             ['order' => 99, 'active' => true],
         );
 
-        DB::table('nav_items')->insert([
+        $this->createPublishedNavItem([
             'route_name' => 'filament.admin.pages.dashboard',
             'parent_id' => null,
             'placement' => 'sidebar',
@@ -351,7 +352,7 @@ class PublicSiteApiTest extends TestCase
             ['locale' => 'en', 'label' => 'Editorial'],
             ['locale' => 'pt-BR', 'label' => 'Editorial em português'],
         ]);
-        DB::table('nav_items')->insert([
+        $this->createPublishedNavItem([
             'route_name' => 'writing.show',
             'parent_id' => null,
             'placement' => 'sidebar',
@@ -435,7 +436,7 @@ class PublicSiteApiTest extends TestCase
             ->assertJsonPath('visibility.right_sidebar', false);
     }
 
-    public function test_site_chrome_keeps_profile_identity_when_revision_is_hidden(): void
+    public function test_site_chrome_hides_profile_when_published_revision_is_hidden(): void
     {
         Cache::flush();
         $profile = Profile::factory()->create(['name' => 'Gabriel R. Antunes']);
@@ -443,12 +444,20 @@ class PublicSiteApiTest extends TestCase
             'profile_id' => $profile->id,
             'locale' => 'en',
         ]);
-        $profile->refresh()->currentRevision()->update(['hidden' => true]);
+        $profile->refresh()->publishedRevision()->update(['hidden' => true]);
 
         $response = $this->getJson('/api/v1/site/chrome?locale=en')
             ->assertOk()
-            ->assertJsonPath('profile.name', 'Gabriel R. Antunes')
+            ->assertJsonPath('profile', null)
             ->assertJsonPath('visibility.about', false);
+    }
+
+    private function createPublishedNavItem(array $attributes): NavItem
+    {
+        $item = NavItem::query()->create($attributes);
+        app(EditorialRevisionPublisher::class)->publish($item, []);
+
+        return $item->refresh();
     }
 
     public function test_home_page_returns_server_computed_recurring_technologies(): void

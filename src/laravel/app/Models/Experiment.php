@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 /**
  * @property bool $show_history
  *
+ * @method static \Illuminate\Database\Eloquent\Builder published()
  * @method ExperimentRevisionTranslation|null translation(?string $locale = null)
  */
 class Experiment extends Model implements GraphNode
@@ -43,7 +44,7 @@ class Experiment extends Model implements GraphNode
 
     public static function graphNodesQuery(): Builder
     {
-        return static::query()->where('hidden', false)->with('translations');
+        return static::query()->published()->with('publishedTranslations');
     }
 
     public function graphLabel(string $locale): string

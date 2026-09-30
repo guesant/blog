@@ -4,6 +4,7 @@ namespace App\Filament\Resources\NavItems\Schemas;
 
 use App\Models\SidebarGroup;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Schema;
@@ -49,6 +50,9 @@ class NavItemForm
                             ->nullable()
                             ->required(fn (Get $get): bool => $get('placement') === 'sidebar')
                             ->visible(fn (Get $get): bool => $get('placement') === 'sidebar'),
+                        Toggle::make('hidden')
+                            ->label(__('Hide from navigation'))
+                            ->default(false),
                     ]),
             ]);
     }

@@ -8,21 +8,22 @@ final class PublicSiteSettingsReader
 {
     public function read(string $locale): array
     {
-        $settings = DB::table('site_settings')
+        $settings = DB::table('site_settings as settings')
+            ->leftJoin('site_settings_revisions as revision', 'revision.id', '=', 'settings.published_revision_id')
             ->select([
-                'id',
-                'short_name',
-                'portfolio_url',
-                'source_repository_url',
-                'contact_email',
-                'contact_enabled',
-                'contact_available',
-                'maintenance_enabled',
-                'content_actions_copy_text',
-                'content_actions_copy_url',
-                'content_actions_download_text',
-                'contextual_cursor_enabled',
-                'current_revision_id',
+                'settings.id',
+                'settings.published_revision_id',
+                'revision.short_name',
+                'revision.portfolio_url',
+                'revision.source_repository_url',
+                'revision.contact_email',
+                'revision.contact_enabled',
+                'revision.contact_available',
+                'revision.maintenance_enabled',
+                'revision.content_actions_copy_text',
+                'revision.content_actions_copy_url',
+                'revision.content_actions_download_text',
+                'revision.contextual_cursor_enabled',
             ])
             ->first();
 
@@ -52,7 +53,7 @@ final class PublicSiteSettingsReader
             ];
         }
 
-        $translation = $this->translation($settings->current_revision_id, $locale);
+        $translation = $this->translation($settings->published_revision_id, $locale);
         $contactProfiles = DB::table('contact_profiles')
             ->join('platforms', 'platforms.id', '=', 'contact_profiles.platform_id')
             ->select(['platforms.slug as platform', 'platforms.label', 'contact_profiles.url'])

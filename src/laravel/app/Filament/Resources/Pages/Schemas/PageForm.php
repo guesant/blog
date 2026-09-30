@@ -14,6 +14,7 @@ use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Component;
 use Filament\Schemas\Components\Fieldset;
 use Filament\Schemas\Components\Section;
@@ -151,6 +152,9 @@ class PageForm
                             ->live()
                             ->unique(ignoreRecord: true)
                             ->maxLength(255),
+                        Toggle::make('hidden')
+                            ->label(__('Hide from public site'))
+                            ->default(false),
                     ]),
                 Section::make(__('Home gallery'))
                     ->visible(fn (Get $get): bool => $get('slug') === 'home')

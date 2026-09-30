@@ -16,34 +16,23 @@ class ResumeReader
     public function find(): ?Resume
     {
         $resume = Resume::query()
-            ->whereHas('currentRevision', static function ($query): void {
-                $query->where(fn ($visibility) => $visibility
-                    ->where('hidden', false)
-                    ->orWhereNull('hidden'));
-            })
-            ->with([
-                'currentRevision' => static function ($query): void {
-                    $query
-                        ->where(fn ($visibility) => $visibility
-                            ->where('hidden', false)
-                            ->orWhereNull('hidden'))
-                        ->with('translations');
-                },
-                'selectedCases.translations',
-                'skills.topic',
-                'skills.technologies',
-                'languages.language',
-            ])
+            ->published()
+            ->with('publishedTranslations')
             ->first();
 
-        if ($resume?->currentRevision === null) {
+        if ($resume?->publishedRevision === null) {
             return $resume;
         }
 
-        $revision = $resume->currentRevision;
+        $revision = $resume->publishedRevision;
         $resume->setRelation('selectedCases', $revision->selectedCases()
-            ->where('hidden', false)
-            ->where('nda', false)
+            ->published()
+            ->whereHas('publishedRevision', static fn ($query) => $query->where('nda', false))
+            ->with([
+                'publishedTranslations',
+                'technologies' => static fn ($query) => $query->published(),
+                'technologies.publishedTranslations',
+            ])
             ->get());
         $resume->setRelation('skills', $this->skills($revision->id));
         $resume->setRelation('languages', $this->languages($revision->id));
@@ -58,20 +47,20 @@ class ResumeReader
             ->orderBy('sort_order')
             ->get();
         $topicIds = $rows->pluck('topic_id')->unique()->values();
-        $topics = Topic::whereIn('id', $topicIds)
-            ->where(fn ($visibility) => $visibility
-                ->where('hidden', false)
-                ->orWhereNull('hidden'))
+        $topics = Topic::query()
+            ->published()
+            ->whereIn('id', $topicIds)
+            ->with('publishedTranslations')
             ->get()
             ->keyBy('id');
         $technologyRows = DB::table('resume_revision_skill_technologies')
             ->where('resume_revision_id', $revisionId)
             ->orderBy('sort_order')
             ->get();
-        $technologies = Technology::whereIn('id', $technologyRows->pluck('technology_id')->unique())
-            ->where(fn ($visibility) => $visibility
-                ->where('hidden', false)
-                ->orWhereNull('hidden'))
+        $technologies = Technology::query()
+            ->published()
+            ->whereIn('id', $technologyRows->pluck('technology_id')->unique())
+            ->with('publishedTranslations')
             ->get()
             ->keyBy('id');
 
@@ -94,7 +83,10 @@ class ResumeReader
             ->where('resume_revision_id', $revisionId)
             ->orderBy('sort_order')
             ->get();
-        $languages = Language::whereIn('id', $rows->pluck('language_id')->unique())
+        $languages = Language::query()
+            ->published()
+            ->whereIn('id', $rows->pluck('language_id')->unique())
+            ->with('publishedTranslations')
             ->get()
             ->keyBy('id');
 

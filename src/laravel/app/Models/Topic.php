@@ -19,6 +19,7 @@ use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 /**
  * @method TopicRevisionTranslation|null translation(?string $locale = null)
+ * @method static \Illuminate\Database\Eloquent\Builder published()
  */
 class Topic extends Model implements GraphNode
 {
@@ -67,7 +68,7 @@ class Topic extends Model implements GraphNode
 
     public static function graphNodesQuery(): Builder
     {
-        return static::query()->with('translations');
+        return static::query()->published()->with('publishedTranslations');
     }
 
     public function graphLabel(string $locale): string

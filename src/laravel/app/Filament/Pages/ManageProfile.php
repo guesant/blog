@@ -62,6 +62,9 @@ class ManageProfile extends Page
                             ->maxLength(255),
                         DatePicker::make('birth_date')
                             ->nullable(),
+                        Toggle::make('hidden')
+                            ->label(__('Hide from public site'))
+                            ->default(false),
                     ]),
                 static::translationTabs(fn (string $prefix) => [
                     Fieldset::make(__('Profile identity'))

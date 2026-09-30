@@ -43,7 +43,7 @@ class ReferenceCollection extends Model implements GraphNode
 
     public static function graphNodesQuery(): Builder
     {
-        return static::query()->where('hidden', false)->with('translations');
+        return static::query()->published()->with('publishedTranslations');
     }
 
     public function graphLabel(string $locale): string

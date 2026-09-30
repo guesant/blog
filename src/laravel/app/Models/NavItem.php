@@ -13,7 +13,9 @@ class NavItem extends Model
 {
     use AssignsNextOrder, HasFactory, UsesCurrentRevision;
 
-    protected $fillable = ['route_name', 'parent_id', 'placement', 'sidebar_group_id', 'order'];
+    protected $fillable = ['route_name', 'parent_id', 'placement', 'sidebar_group_id', 'order', 'hidden'];
+
+    protected $casts = ['hidden' => 'boolean'];
 
     public function sidebarGroup(): BelongsTo
     {

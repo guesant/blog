@@ -30,22 +30,6 @@ class PublicMetadataController extends Controller
         private readonly PublicFindingResponseFactory $findingPresenter,
     ) {}
 
-    private const STATIC_PATHS = [
-        '/',
-        '/about',
-        '/portfolio',
-        '/projects',
-        '/cases',
-        '/topics',
-        '/technologies',
-        '/resume',
-        '/contact',
-        '/credits',
-        '/license',
-        '/follow',
-        '/snippets',
-    ];
-
     public function robots(): Response
     {
         if ($this->maintenanceEnabled()) {
@@ -86,8 +70,12 @@ class PublicMetadataController extends Controller
         $xml = Cache::remember('public-metadata:sitemap', 3600, function (): string {
             $urls = [];
             foreach (Locale::all() as $locale) {
-                foreach (self::STATIC_PATHS as $path) {
-                    $urls[] = $this->absolute(Locale::path($path, $locale));
+                $navigation = $this->chrome
+                    ->handle(new GetPublicSiteChromeQuery($locale))
+                    ->navigation['sitemap'] ?? [];
+
+                foreach ($this->navigationUrls($navigation) as $url) {
+                    $urls[] = $url;
                 }
                 foreach (['projects', 'cases', 'writing', 'collections', 'topics', 'technologies', 'experiments', 'snippets'] as $collection) {
                     foreach ($this->collectionItems($collection, $locale) as $item) {
@@ -110,6 +98,18 @@ class PublicMetadataController extends Controller
             'Content-Type' => 'application/xml; charset=UTF-8',
             'Cache-Control' => 'public, max-age=3600',
         ]);
+    }
+
+    private function navigationUrls(array $items): array
+    {
+        return collect($items)
+            ->flatMap(fn (array $item): array => [
+                $this->absolute($item['route']),
+                ...$this->navigationUrls($item['children'] ?? []),
+            ])
+            ->filter()
+            ->values()
+            ->all();
     }
 
     public function feed(string $locale, string $format): Response

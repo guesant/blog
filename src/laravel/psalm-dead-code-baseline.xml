@@ -34,9 +34,6 @@
     </PossiblyUnusedMethod>
   </file>
   <file src="app/Application/PublicSite/GetPublicPageQueryHandler.php">
-    <InvalidMethodCall>
-      <code><![CDATA[format]]></code>
-    </InvalidMethodCall>
     <PossiblyUnusedMethod>
       <code><![CDATA[__construct]]></code>
     </PossiblyUnusedMethod>
@@ -662,18 +659,6 @@
     </PossiblyUnusedMethod>
   </file>
   <file src="app/Http/Responses/PublicContentResponseFactory.php">
-    <InvalidMethodCall>
-      <code><![CDATA[format]]></code>
-      <code><![CDATA[format]]></code>
-      <code><![CDATA[format]]></code>
-      <code><![CDATA[format]]></code>
-      <code><![CDATA[format]]></code>
-      <code><![CDATA[format]]></code>
-      <code><![CDATA[format]]></code>
-      <code><![CDATA[format]]></code>
-      <code><![CDATA[format]]></code>
-      <code><![CDATA[format]]></code>
-    </InvalidMethodCall>
     <InvalidTemplateParam>
       <code><![CDATA[$technology->resumeSkills
                 ->map(fn ($skill) => $skill->topic?->translation($locale)?->name ?? $skill->topic?->slug)
@@ -787,6 +772,11 @@
     <PossiblyUnusedMethod>
       <code><![CDATA[translation]]></code>
     </PossiblyUnusedMethod>
+  </file>
+  <file src="app/Models/NavItemRevision.php">
+    <UnusedClass>
+      <code><![CDATA[NavItemRevision]]></code>
+    </UnusedClass>
   </file>
   <file src="app/Models/Page.php">
     <MissingTemplateParam>
@@ -1267,11 +1257,6 @@
   <file src="database/factories/ResumeSkillFactory.php">
     <UnusedClass>
       <code><![CDATA[ResumeSkillFactory]]></code>
-    </UnusedClass>
-  </file>
-  <file src="database/factories/SiteSettingsFactory.php">
-    <UnusedClass>
-      <code><![CDATA[SiteSettingsFactory]]></code>
     </UnusedClass>
   </file>
   <file src="database/factories/SiteSettingsRevisionTranslationFactory.php">

@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Topics\Schemas;
 use App\Filament\Concerns\BuildsTranslationTabs;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 
@@ -35,6 +36,9 @@ class TopicForm
                             ->label('Parent Topic')
                             ->relationship('parent', 'slug')
                             ->nullable(),
+                        Toggle::make('hidden')
+                            ->label(__('Hide from public site'))
+                            ->default(false),
                     ]),
                 static::translationTabs(fn (string $prefix) => [
                     TextInput::make("{$prefix}name")

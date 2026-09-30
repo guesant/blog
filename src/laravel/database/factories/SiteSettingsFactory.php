@@ -2,12 +2,20 @@
 
 namespace Database\Factories;
 
+use App\Content\EditorialRevisionPublisher;
 use App\Models\SiteSettings;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class SiteSettingsFactory extends Factory
 {
     protected $model = SiteSettings::class;
+
+    public function configure(): static
+    {
+        return $this->afterCreating(function (SiteSettings $settings): void {
+            app(EditorialRevisionPublisher::class)->publish($settings, []);
+        });
+    }
 
     public function definition(): array
     {

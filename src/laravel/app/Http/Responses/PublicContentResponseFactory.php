@@ -4,7 +4,6 @@ namespace App\Http\Responses;
 
 use App\Application\PublicSite\PublicFeedItem;
 use App\Content\Locale;
-use App\Content\PublicIdentifier;
 use App\Models\CaseStudy;
 use App\Models\CreditCategory;
 use App\Models\Experiment;
@@ -16,6 +15,7 @@ use App\Models\Topic;
 use App\Models\Writing;
 use App\OpenGraph\OgImageUrlGenerator;
 use App\Support\PublicMediaUrl;
+use Carbon\CarbonInterface;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
@@ -96,57 +96,62 @@ final class PublicContentResponseFactory
     private function snippetSummary(Snippet $snippet, string $locale): array
     {
         $translation = $snippet->translation($locale);
+        $slug = (string) $this->publishedValue($snippet, 'slug');
 
         return [
-            'slug' => $snippet->slug,
-            'title' => $translation?->title ?? $snippet->slug,
+            'slug' => $slug,
+            'title' => $translation?->title ?? $slug,
             'description' => $translation?->description,
             'og_image_url' => $this->ogImages->generate(
                 'article',
-                $translation?->title ?? $snippet->slug,
+                $translation?->title ?? $slug,
                 $translation?->description,
             ),
-            'url' => Locale::url('/snippets/'.PublicIdentifier::key($snippet), $locale),
-            'download_url' => Locale::url('/snippets/'.PublicIdentifier::key($snippet).'/download', $locale),
+            'url' => Locale::url('/snippets/'.$this->publicKey($snippet), $locale),
+            'download_url' => Locale::url('/snippets/'.$this->publicKey($snippet).'/download', $locale),
             'files' => [],
             'file_count' => $snippet->files_count ?? 0,
-            'updated_at' => $snippet->updated_at?->format('Y-m-d H:i:s'),
+            'updated_at' => $this->publishedDate($snippet, 'updated_at', true),
         ];
     }
 
     private function collectionSummary(ReferenceCollection $collection, string $locale): array
     {
         $translation = $collection->translation($locale);
+        $slug = (string) $this->publishedValue($collection, 'slug');
 
         return [
-            'slug' => $collection->slug,
-            'url' => Locale::url('/collections/'.PublicIdentifier::key($collection), $locale),
-            'title' => $translation?->title ?? $collection->slug,
+            'slug' => $slug,
+            'url' => Locale::url('/collections/'.$this->publicKey($collection), $locale),
+            'title' => $translation?->title ?? $slug,
             'description' => $translation?->description,
             'og_image_url' => $this->ogImages->generate(
                 'article',
-                $translation?->title ?? $collection->slug,
+                $translation?->title ?? $slug,
                 $translation?->description,
             ),
             'intro' => $translation?->intro,
-            'published_at' => $collection->published_at?->toDateString(),
+            'published_at' => $this->publishedDate($collection, 'published_at'),
             'resources_count' => $collection->resources_count ?? 0,
             'related' => null,
-            'updated_at' => $collection->updated_at?->format('Y-m-d H:i:s'),
-            'created_at' => $collection->created_at?->format('Y-m-d H:i:s'),
+            'updated_at' => $this->publishedDate($collection, 'updated_at', true),
+            'created_at' => $this->publishedDate($collection, 'created_at', true),
         ];
     }
 
     private function technology(Technology $technology, string $locale): array
     {
+        $slug = (string) $this->publishedValue($technology, 'slug');
+        $name = $technology->translation($locale)?->name ?? $slug;
+
         return [
-            'slug' => $technology->slug,
-            'name' => $technology->translation($locale)?->name ?? $technology->slug,
-            'code' => $technology->code ?? '',
-            'url' => Locale::url('/technologies/'.PublicIdentifier::key($technology), $locale),
+            'slug' => $slug,
+            'name' => $name,
+            'code' => $this->publishedValue($technology, 'code') ?? '',
+            'url' => Locale::url('/technologies/'.$this->publicKey($technology), $locale),
             'og_image_url' => $this->ogImages->generate(
                 'article',
-                $technology->translation($locale)?->name ?? $technology->slug,
+                $name,
             ),
             'skills' => $technology->resumeSkills
                 ->map(fn ($skill) => $skill->topic?->translation($locale)?->name ?? $skill->topic?->slug)
@@ -155,7 +160,7 @@ final class PublicContentResponseFactory
             'resume_skills' => $technology->resumeSkills->map(fn ($skill) => $skill->topic ? [
                 'slug' => $skill->topic->slug,
                 'name' => $skill->topic->translation($locale)?->name ?? $skill->topic->slug,
-                'url' => Locale::url('/topics/'.PublicIdentifier::key($skill->topic), $locale),
+                'url' => Locale::url('/topics/'.$this->publicKey($skill->topic), $locale),
                 'parent' => $skill->topic->parent?->slug,
                 'kind' => null,
                 'children' => null,
@@ -165,17 +170,20 @@ final class PublicContentResponseFactory
 
     private function topic(Topic $topic, string $locale): array
     {
+        $slug = (string) $this->publishedValue($topic, 'slug');
+        $name = $topic->translation($locale)?->name ?? $slug;
+
         return [
-            'slug' => $topic->slug,
-            'url' => Locale::url('/topics/'.PublicIdentifier::key($topic), $locale),
-            'name' => $topic->translation($locale)?->name ?? $topic->slug,
+            'slug' => $slug,
+            'url' => Locale::url('/topics/'.$this->publicKey($topic), $locale),
+            'name' => $name,
             'og_image_url' => $this->ogImages->generate(
                 'article',
-                $topic->translation($locale)?->name ?? $topic->slug,
+                $name,
             ),
-            'kind' => $topic->kind === 'skill' ? 'topic' : $topic->kind,
+            'kind' => $this->publishedValue($topic, 'kind') === 'skill' ? 'topic' : $this->publishedValue($topic, 'kind'),
             'parent' => $topic->parent?->slug,
-            'children' => $topic->children->where('hidden', false)->map(fn ($child) => [
+            'children' => $topic->children->map(fn ($child) => [
                 'slug' => $child->slug,
                 'name' => $child->translation($locale)?->name ?? $child->slug,
             ])->values(),
@@ -184,23 +192,24 @@ final class PublicContentResponseFactory
 
     private function credit(object $credit, string $locale): array
     {
-        $categoryKey = (string) $credit->category;
+        $categoryKey = (string) $this->publishedValue($credit, 'category');
         $categoryName = $this->creditCategoryName($categoryKey, $locale);
+        $name = $credit->translation($locale)?->name ?? $categoryName;
 
         return [
-            'slug' => $credit->package_name ?: $categoryKey.'-'.$credit->id,
+            'slug' => $this->publishedValue($credit, 'package_name') ?: $categoryKey.'-'.$credit->id,
             'category' => $categoryName,
-            'name' => $credit->translation($locale)?->name ?? $categoryName,
+            'name' => $name,
             'description' => $credit->translation($locale)?->description,
             'og_image_url' => $this->ogImages->generate(
                 'article',
-                $credit->translation($locale)?->name ?? $categoryName,
+                $name,
                 $credit->translation($locale)?->description,
             ),
-            'url' => $credit->url,
-            'package_manager' => $credit->package_manager,
-            'package_name' => $credit->package_name,
-            'created_at' => $credit->created_at?->format('Y-m-d H:i:s'),
+            'url' => $this->publishedValue($credit, 'url'),
+            'package_manager' => $this->publishedValue($credit, 'package_manager'),
+            'package_name' => $this->publishedValue($credit, 'package_name'),
+            'created_at' => $this->publishedDate($credit, 'created_at', true),
         ];
     }
 
@@ -274,21 +283,22 @@ final class PublicContentResponseFactory
     {
         $translation = $project->translation($locale);
         $seo = $includeSeo ? $this->translationSeo($translation) : null;
+        $slug = (string) $this->publishedValue($project, 'slug');
 
         $data = [
-            'slug' => $project->slug,
-            'url' => Locale::url('/projects/'.PublicIdentifier::key($project), $locale),
-            'name' => $translation?->name ?? $project->slug,
+            'slug' => $slug,
+            'url' => Locale::url('/projects/'.$this->publicKey($project), $locale),
+            'name' => $translation?->name ?? $slug,
             'purpose' => $translation?->purpose,
             'og_image_url' => $this->ogImageUrl(
                 $seo,
                 'project',
-                $translation?->name ?? $project->slug,
+                $translation?->name ?? $slug,
                 $translation?->purpose,
             ),
             'status' => $translation?->status,
-            'published_at' => $project->published_at?->toDateString(),
-            'external' => $project->external,
+            'published_at' => $this->publishedDate($project, 'published_at'),
+            'external' => $this->publishedValue($project, 'external'),
             'problem' => $translation?->problem,
             'current_focus' => $translation?->current_focus,
             'metrics' => $translation?->metrics,
@@ -297,11 +307,11 @@ final class PublicContentResponseFactory
                 'slug' => $technology->slug,
                 'name' => $technology->translation($locale)?->name ?? $technology->slug,
             ])->values(),
-            'show_history' => $project->show_history,
+            'show_history' => $this->publishedValue($project, 'show_history'),
             'history' => null,
-            'href' => $project->href,
+            'href' => $this->publishedValue($project, 'href'),
             'related' => null,
-            'updated_at' => $project->updated_at?->format('Y-m-d H:i:s'),
+            'updated_at' => $this->publishedDate($project, 'updated_at', true),
         ];
 
         if ($seo !== null) {
@@ -315,21 +325,22 @@ final class PublicContentResponseFactory
     {
         $translation = $case->translation($locale);
         $seo = $includeSeo ? $this->translationSeo($translation) : null;
+        $slug = (string) $this->publishedValue($case, 'slug');
 
         $data = [
-            'slug' => $case->slug,
-            'url' => Locale::url('/cases/'.PublicIdentifier::key($case), $locale),
-            'title' => $translation?->title ?? $case->slug,
+            'slug' => $slug,
+            'url' => Locale::url('/cases/'.$this->publicKey($case), $locale),
+            'title' => $translation?->title ?? $slug,
             'status' => $translation?->status,
             'summary' => $translation?->summary,
             'og_image_url' => $this->ogImageUrl(
                 $seo,
                 'project',
-                $translation?->title ?? $case->slug,
+                $translation?->title ?? $slug,
                 $translation?->summary,
             ),
-            'published_at' => $case->published_at?->toDateString(),
-            'external' => $case->external,
+            'published_at' => $this->publishedDate($case, 'published_at'),
+            'external' => $this->publishedValue($case, 'external'),
             'meta' => $translation?->meta,
             'context' => $translation?->context,
             'role' => $translation?->role,
@@ -340,11 +351,11 @@ final class PublicContentResponseFactory
                 'slug' => $technology->slug,
                 'name' => $technology->translation($locale)?->name ?? $technology->slug,
             ])->values(),
-            'show_history' => $case->show_history,
+            'show_history' => $this->publishedValue($case, 'show_history'),
             'history' => null,
-            'href' => $case->href,
+            'href' => $this->publishedValue($case, 'href'),
             'related' => null,
-            'updated_at' => $case->updated_at?->format('Y-m-d H:i:s'),
+            'updated_at' => $this->publishedDate($case, 'updated_at', true),
         ];
 
         if ($seo !== null) {
@@ -358,31 +369,32 @@ final class PublicContentResponseFactory
     {
         $translation = $writing->translation($locale);
         $seo = $includeSeo ? $this->translationSeo($translation) : null;
+        $slug = (string) $this->publishedValue($writing, 'slug');
 
         $data = [
-            'slug' => $writing->slug,
-            'url' => Locale::url('/writing/'.PublicIdentifier::key($writing), $locale),
-            'title' => $translation?->title ?? $writing->slug,
+            'slug' => $slug,
+            'url' => Locale::url('/writing/'.$this->publicKey($writing), $locale),
+            'title' => $translation?->title ?? $slug,
             'excerpt' => $translation?->excerpt,
             'og_image_url' => $this->ogImageUrl(
                 $seo,
                 'article',
-                $translation?->title ?? $writing->slug,
+                $translation?->title ?? $slug,
                 $translation?->excerpt,
             ),
             'reading_time' => $translation?->reading_time,
             'body' => $this->media->rewrite($translation?->body),
-            'type' => $writing->type,
-            'date' => $writing->date_iso?->toDateString(),
+            'type' => $this->publishedValue($writing, 'type'),
+            'date' => $this->publishedDate($writing, 'date_iso'),
             'topics' => $writing->topics->map(fn ($topic) => [
                 'slug' => $topic->slug,
                 'name' => $topic->translation($locale)?->name ?? $topic->slug,
-                'url' => Locale::url('/topics/'.PublicIdentifier::key($topic), $locale),
+                'url' => Locale::url('/topics/'.$this->publicKey($topic), $locale),
             ])->values(),
-            'show_history' => $writing->show_history,
+            'show_history' => $this->publishedValue($writing, 'show_history'),
             'history' => null,
             'related' => null,
-            'updated_at' => $writing->updated_at?->format('Y-m-d H:i:s'),
+            'updated_at' => $this->publishedDate($writing, 'updated_at', true),
         ];
 
         if ($seo !== null) {
@@ -399,36 +411,38 @@ final class PublicContentResponseFactory
     ): array {
         $translation = $collection->translation($locale);
         $seo = $this->translationSeo($translation);
+        $slug = (string) $this->publishedValue($collection, 'slug');
 
         $data = [
-            'slug' => $collection->slug,
-            'url' => Locale::url('/collections/'.PublicIdentifier::key($collection), $locale),
-            'title' => $translation?->title ?? $collection->slug,
+            'slug' => $slug,
+            'url' => Locale::url('/collections/'.$this->publicKey($collection), $locale),
+            'title' => $translation?->title ?? $slug,
             'description' => $translation?->description,
             'og_image_url' => $this->ogImageUrl(
                 $seo,
                 'article',
-                $this->translationString($translation, 'title') ?? $collection->slug,
+                $this->translationString($translation, 'title') ?? $slug,
                 $this->translationString($translation, 'description'),
             ),
             'seo' => $seo,
             'intro' => $this->media->rewrite($translation?->intro),
-            'published_at' => $collection->published_at?->toDateString(),
+            'published_at' => $this->publishedDate($collection, 'published_at'),
             'resources' => $resources?->getCollection()->map(function ($resource) use ($locale): array {
                 $resourceTranslation = $resource->translation($locale);
+                $resourceSlug = (string) $this->publishedValue($resource, 'slug');
 
                 return [
-                    'slug' => $resource->slug,
-                    'url' => Locale::url('/findings/'.PublicIdentifier::key($resource), $locale),
-                    'title' => $resourceTranslation?->title ?? $resource->slug,
+                    'slug' => $resourceSlug,
+                    'url' => Locale::url('/findings/'.$this->publicKey($resource), $locale),
+                    'title' => $resourceTranslation?->title ?? $resourceSlug,
                     'description' => $resourceTranslation?->description,
                     'og_image_url' => $this->ogImages->generate(
                         'article',
-                        $resourceTranslation?->title ?? $resource->slug,
+                        $resourceTranslation?->title ?? $resourceSlug,
                         $resourceTranslation?->description,
                     ),
-                    'type' => $resource->type,
-                    'rating' => $resource->rating,
+                    'type' => $this->publishedValue($resource, 'type'),
+                    'rating' => $this->publishedValue($resource, 'rating'),
                     'note' => $resource->pivot->note,
                     'topics' => $resource->topics->map(fn ($topic) => [
                         'slug' => $topic->slug,
@@ -445,8 +459,8 @@ final class PublicContentResponseFactory
                 'to' => $resources->lastItem(),
             ],
             'related' => null,
-            'updated_at' => $collection->updated_at?->format('Y-m-d H:i:s'),
-            'created_at' => $collection->created_at?->format('Y-m-d H:i:s'),
+            'updated_at' => $this->publishedDate($collection, 'updated_at', true),
+            'created_at' => $this->publishedDate($collection, 'created_at', true),
         ];
 
         return $data;
@@ -456,28 +470,29 @@ final class PublicContentResponseFactory
     {
         $translation = $experiment->translation($locale);
         $seo = $includeSeo ? $this->translationSeo($translation) : null;
+        $slug = (string) $this->publishedValue($experiment, 'slug');
 
         $data = [
-            'slug' => $experiment->slug,
-            'url' => Locale::url('/projects/experiments/'.PublicIdentifier::key($experiment), $locale),
-            'name' => $translation?->name ?? $experiment->slug,
+            'slug' => $slug,
+            'url' => Locale::url('/projects/experiments/'.$this->publicKey($experiment), $locale),
+            'name' => $translation?->name ?? $slug,
             'purpose' => $translation?->purpose,
             'og_image_url' => $this->ogImageUrl(
                 $seo,
                 'project',
-                $translation?->name ?? $experiment->slug,
+                $translation?->name ?? $slug,
                 $translation?->purpose,
             ),
             'body' => $this->media->rewrite($translation?->body),
-            'published_at' => $experiment->published_at?->toDateString(),
-            'external' => $experiment->external,
+            'published_at' => $this->publishedDate($experiment, 'published_at'),
+            'external' => $this->publishedValue($experiment, 'external'),
             'technologies' => $experiment->technologies->map(fn ($technology) => [
                 'slug' => $technology->slug,
                 'name' => $technology->translation($locale)?->name ?? $technology->slug,
             ])->values(),
-            'href' => $experiment->href,
-            'updated_at' => $experiment->updated_at?->format('Y-m-d H:i:s'),
-            'show_history' => $experiment->show_history,
+            'href' => $this->publishedValue($experiment, 'href'),
+            'updated_at' => $this->publishedDate($experiment, 'updated_at', true),
+            'show_history' => $this->publishedValue($experiment, 'show_history'),
             'history' => null,
             'related' => null,
         ];
@@ -493,21 +508,22 @@ final class PublicContentResponseFactory
     {
         $translation = $snippet->translation($locale);
         $seo = $this->translationSeo($translation);
+        $slug = (string) $this->publishedValue($snippet, 'slug');
 
         return [
-            'slug' => $snippet->slug,
-            'url' => Locale::url('/snippets/'.PublicIdentifier::key($snippet), $locale),
-            'download_url' => '/api/v1/snippets/'.PublicIdentifier::key($snippet).'/download',
-            'title' => $translation?->title ?? $snippet->slug,
+            'slug' => $slug,
+            'url' => Locale::url('/snippets/'.$this->publicKey($snippet), $locale),
+            'download_url' => '/api/v1/snippets/'.$this->publicKey($snippet).'/download',
+            'title' => $translation?->title ?? $slug,
             'description' => $translation?->description,
             'og_image_url' => $this->ogImageUrl(
                 $seo,
                 'article',
-                $translation?->title ?? $snippet->slug,
+                $translation?->title ?? $slug,
                 $translation?->description,
             ),
             'seo' => $seo,
-            'published_at' => $snippet->published_at?->toDateString(),
+            'published_at' => $this->publishedDate($snippet, 'published_at'),
             'files' => $snippet->files->map(fn ($file) => [
                 'path' => $file->path,
                 'language' => $file->language,
@@ -515,10 +531,10 @@ final class PublicContentResponseFactory
                 'id' => (string) $file->id,
                 'history' => null,
             ])->values(),
-            'show_history' => $snippet->show_history,
+            'show_history' => $this->publishedValue($snippet, 'show_history'),
             'history' => null,
             'related' => null,
-            'updated_at' => $snippet->updated_at?->format('Y-m-d H:i:s'),
+            'updated_at' => $this->publishedDate($snippet, 'updated_at', true),
         ];
     }
 
@@ -528,6 +544,42 @@ final class PublicContentResponseFactory
         $rewritten = $this->media->rewrite($seo);
 
         return is_array($rewritten) ? $rewritten : null;
+    }
+
+    private function publishedValue(Model $model, string $attribute): mixed
+    {
+        $revision = $model->relationLoaded('publishedRevision')
+            ? $model->getRelation('publishedRevision')
+            : $model->getRelationValue('publishedRevision');
+
+        return $revision instanceof Model ? $revision->getAttribute($attribute) : null;
+    }
+
+    private function publishedDate(Model $model, string $attribute, bool $withTime = false): ?string
+    {
+        $value = $this->publishedValue($model, $attribute);
+        if ($value === null) {
+            return null;
+        }
+
+        if ($value instanceof CarbonInterface) {
+            return $withTime ? $value->format('Y-m-d H:i:s') : $value->toDateString();
+        }
+
+        $date = date_create((string) $value);
+        if ($date === false) {
+            return null;
+        }
+
+        return $withTime ? $date->format('Y-m-d H:i:s') : $date->format('Y-m-d');
+    }
+
+    private function publicKey(Model $model): string
+    {
+        $slug = (string) $this->publishedValue($model, 'slug');
+        $publicId = $this->publishedValue($model, 'public_id');
+
+        return is_string($publicId) && $publicId !== '' ? $publicId.'-'.$slug : $slug;
     }
 
     private function ogImageUrl(

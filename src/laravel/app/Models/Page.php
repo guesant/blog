@@ -15,7 +15,9 @@ class Page extends Model
 {
     use Auditable, HasFactory, UsesCurrentRevision;
 
-    protected $fillable = ['slug'];
+    protected $fillable = ['slug', 'hidden'];
+
+    protected $casts = ['hidden' => 'boolean'];
 
     /**
      * @return BelongsToMany<CaseStudy, $this>

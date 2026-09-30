@@ -10,8 +10,9 @@ final class PublicEmailChallengeSqlReader implements PublicEmailChallengeReader
 {
     public function read(): ?array
     {
-        $settings = DB::table('site_settings')
-            ->select(['contact_enabled', 'contact_email'])
+        $settings = DB::table('site_settings as settings')
+            ->join('site_settings_revisions as revision', 'revision.id', '=', 'settings.published_revision_id')
+            ->select(['revision.contact_enabled', 'revision.contact_email'])
             ->first();
 
         if ($settings === null || ! (bool) $settings->contact_enabled) {

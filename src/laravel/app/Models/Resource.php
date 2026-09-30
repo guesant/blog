@@ -20,6 +20,7 @@ use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 /**
  * @method ResourceRevisionTranslation|null translation(?string $locale = null)
+ * @method static \Illuminate\Database\Eloquent\Builder published()
  */
 class Resource extends Model implements GraphNode
 {
@@ -109,7 +110,8 @@ class Resource extends Model implements GraphNode
 
     public function scopePublic(Builder $query): Builder
     {
-        return $query->where('hidden', false)->where('visibility', 'public');
+        return $this->scopePublished($query)
+            ->whereHas('publishedRevision', static fn ($revision) => $revision->where('visibility', 'public'));
     }
 
     public static function graphKind(): string
@@ -119,7 +121,7 @@ class Resource extends Model implements GraphNode
 
     public static function graphNodesQuery(): Builder
     {
-        return static::query()->public()->with('translations');
+        return static::query()->public()->with('publishedTranslations');
     }
 
     public function graphLabel(string $locale): string

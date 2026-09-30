@@ -13,7 +13,7 @@ class Profile extends Model
 {
     use HasFactory, UsesCurrentRevision;
 
-    protected $fillable = ['name', 'birth_date'];
+    protected $fillable = ['name', 'birth_date', 'hidden'];
 
-    protected $casts = ['birth_date' => 'date'];
+    protected $casts = ['birth_date' => 'date', 'hidden' => 'boolean'];
 }

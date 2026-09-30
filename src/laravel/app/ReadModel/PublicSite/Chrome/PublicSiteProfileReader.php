@@ -10,11 +10,11 @@ final class PublicSiteProfileReader
     public function read(string $locale): PublicSiteProfileReadResult
     {
         $profile = DB::table('profiles')
-            ->leftJoin('profile_revisions', 'profile_revisions.id', '=', 'profiles.current_revision_id')
+            ->leftJoin('profile_revisions', 'profile_revisions.id', '=', 'profiles.published_revision_id')
             ->select([
                 'profiles.id',
-                'profiles.name',
-                'profiles.current_revision_id',
+                'profile_revisions.name',
+                'profiles.published_revision_id',
                 'profile_revisions.hidden as revision_hidden',
             ])
             ->first();
@@ -23,20 +23,11 @@ final class PublicSiteProfileReader
             return new PublicSiteProfileReadResult(null, false);
         }
 
-        if ($profile->current_revision_id === null || (bool) $profile->revision_hidden) {
-            return new PublicSiteProfileReadResult([
-                'name' => $profile->name,
-                'title' => null,
-                'location' => null,
-                'description' => null,
-                'milestones' => [],
-                'interests' => null,
-                'learning' => null,
-                'personal_interests' => [],
-            ], false);
+        if ($profile->published_revision_id === null || (bool) $profile->revision_hidden) {
+            return new PublicSiteProfileReadResult(null, false);
         }
 
-        $translation = $this->translation($profile->current_revision_id, $locale);
+        $translation = $this->translation($profile->published_revision_id, $locale);
 
         return new PublicSiteProfileReadResult([
             'name' => $profile->name,

@@ -15,9 +15,10 @@ class SnippetReader implements PublicSnippetReader
 
     public function listPaginated(int $perPage = 20, ?string $sort = null): LengthAwarePaginator
     {
-        $query = Snippet::where('snippets.hidden', false)
+        $query = Snippet::query()
+            ->published()
             ->withCount('files')
-            ->with('translations');
+            ->with('publishedTranslations');
 
         $this->applySort($query, $sort, alphaTable: 'snippet_revision_translations', alphaForeignKey: 'snippet_revision_id', alphaColumn: 'title');
 
@@ -26,9 +27,8 @@ class SnippetReader implements PublicSnippetReader
 
     public function findByIdentifier(string $identifier): ?Snippet
     {
-        return PublicIdentifier::constrain(Snippet::query(), $identifier)
-            ->where('hidden', false)
-            ->with(['translations', 'files'])
+        return PublicIdentifier::constrain(Snippet::query()->published(), $identifier)
+            ->with(['publishedTranslations', 'files'])
             ->first();
     }
 
@@ -39,8 +39,7 @@ class SnippetReader implements PublicSnippetReader
 
     public function findForDownload(string $identifier): mixed
     {
-        return PublicIdentifier::constrain(Snippet::query(), $identifier)
-            ->where('hidden', false)
+        return PublicIdentifier::constrain(Snippet::query()->published(), $identifier)
             ->with('files')
             ->first();
     }
@@ -51,11 +50,12 @@ class SnippetReader implements PublicSnippetReader
      */
     public function related(Snippet $snippet, int $limit = 3): Collection
     {
-        return Snippet::where('id', '!=', $snippet->id)
-            ->where('hidden', false)
+        return Snippet::query()
+            ->published()
+            ->where('id', '!=', $snippet->id)
             ->orderBy('published_at', 'desc')
             ->limit($limit)
-            ->with('translations')
+            ->with('publishedTranslations')
             ->get();
     }
 }

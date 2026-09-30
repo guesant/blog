@@ -16,9 +16,14 @@ class ProjectReader
 
     public function listPaginated(int $perPage = 20, ?string $sort = null): LengthAwarePaginator
     {
-        $query = Project::where('projects.hidden', false)
-            ->where('projects.nda', false)
-            ->with(['translations', 'technologies.translations']);
+        $query = Project::query()
+            ->published()
+            ->whereHas('publishedRevision', static fn ($query) => $query->where('nda', false))
+            ->with([
+                'publishedTranslations',
+                'technologies' => static fn ($query) => $query->published(),
+                'technologies.publishedTranslations',
+            ]);
 
         $this->applySort($query, $sort, alphaTable: 'project_revision_translations', alphaForeignKey: 'project_revision_id', alphaColumn: 'name');
 
@@ -27,10 +32,13 @@ class ProjectReader
 
     public function findByIdentifier(string $identifier): ?Project
     {
-        return PublicIdentifier::constrain(Project::query(), $identifier)
-            ->where('hidden', false)
-            ->where('nda', false)
-            ->with(['translations', 'technologies.translations'])
+        return PublicIdentifier::constrain(Project::query()->published(), $identifier)
+            ->whereHas('publishedRevision', static fn ($query) => $query->where('nda', false))
+            ->with([
+                'publishedTranslations',
+                'technologies' => static fn ($query) => $query->published(),
+                'technologies.publishedTranslations',
+            ])
             ->first();
     }
 
@@ -41,8 +49,13 @@ class ProjectReader
 
     public function listExperimentsPaginated(int $perPage = 20, ?string $sort = null): LengthAwarePaginator
     {
-        $query = Experiment::where('experiments.hidden', false)
-            ->with(['translations', 'technologies.translations']);
+        $query = Experiment::query()
+            ->published()
+            ->with([
+                'publishedTranslations',
+                'technologies' => static fn ($query) => $query->published(),
+                'technologies.publishedTranslations',
+            ]);
 
         $this->applySort($query, $sort, alphaTable: 'experiment_revision_translations', alphaForeignKey: 'experiment_revision_id', alphaColumn: 'name');
 
@@ -51,9 +64,12 @@ class ProjectReader
 
     public function findExperimentByIdentifier(string $identifier): ?Experiment
     {
-        return PublicIdentifier::constrain(Experiment::query(), $identifier)
-            ->where('hidden', false)
-            ->with(['translations', 'technologies.translations'])
+        return PublicIdentifier::constrain(Experiment::query()->published(), $identifier)
+            ->with([
+                'publishedTranslations',
+                'technologies' => static fn ($query) => $query->published(),
+                'technologies.publishedTranslations',
+            ])
             ->first();
     }
 
@@ -64,18 +80,28 @@ class ProjectReader
 
     public function related(Project $project, int $limit = 3): Collection
     {
-        $baseQuery = Project::where('id', '!=', $project->id)
-            ->where('hidden', false)
-            ->where('nda', false);
+        $baseQuery = Project::query()
+            ->published()
+            ->where('id', '!=', $project->id)
+            ->whereHas('publishedRevision', static fn ($query) => $query->where('nda', false));
 
-        return $this->relatedByTechnology($baseQuery, $project->technologies->pluck('id'), $limit, ['translations', 'technologies.translations']);
+        return $this->relatedByTechnology($baseQuery, $project->technologies->pluck('id'), $limit, [
+            'publishedTranslations',
+            'technologies' => static fn ($query) => $query->published(),
+            'technologies.publishedTranslations',
+        ]);
     }
 
     public function relatedExperiments(Experiment $experiment, int $limit = 3): Collection
     {
-        $baseQuery = Experiment::where('id', '!=', $experiment->id)
-            ->where('hidden', false);
+        $baseQuery = Experiment::query()
+            ->published()
+            ->where('id', '!=', $experiment->id);
 
-        return $this->relatedByTechnology($baseQuery, $experiment->technologies->pluck('id'), $limit, ['translations', 'technologies.translations']);
+        return $this->relatedByTechnology($baseQuery, $experiment->technologies->pluck('id'), $limit, [
+            'publishedTranslations',
+            'technologies' => static fn ($query) => $query->published(),
+            'technologies.publishedTranslations',
+        ]);
     }
 }

@@ -15,7 +15,9 @@ class Resume extends Model
 {
     use HasFactory, UsesCurrentRevision;
 
-    protected $fillable = [];
+    protected $fillable = ['hidden'];
+
+    protected $casts = ['hidden' => 'boolean'];
 
     /**
      * @return BelongsToMany<CaseStudy, $this>

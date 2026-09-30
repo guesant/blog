@@ -4,6 +4,7 @@ namespace App\Application\PublicSite;
 
 use App\Content\Locale;
 use App\ReadModel\PublicSite\Content\PageReader;
+use Illuminate\Database\Eloquent\Model;
 
 final class GetPublicPageQueryHandler
 {
@@ -18,14 +19,24 @@ final class GetPublicPageQueryHandler
             return null;
         }
 
+        $revision = $page->getRelationValue('publishedRevision');
+        $slug = (string) (($revision instanceof Model
+            ? $revision->getAttribute('slug')
+            : null) ?? $page->getAttribute('slug'));
         $translation = $page->translation($query->locale);
         $fields = $translation?->fields ?? [];
         $fields['seo'] = $translation?->seo;
-        if ($page->updated_at) {
-            $fields['updated_at'] = $page->updated_at->format('Y-m-d H:i:s');
+        $updatedAtValue = $revision instanceof Model
+            ? $revision->getAttribute('updated_at')
+            : null;
+        if ($updatedAtValue) {
+            $updatedAt = date_create((string) $updatedAtValue);
+            if ($updatedAt !== false) {
+                $fields['updated_at'] = $updatedAt->format('Y-m-d H:i:s');
+            }
         }
 
-        if ($page->slug === 'now') {
+        if ($slug === 'now') {
             $keys = [
                 'trabalhando' => 'working',
                 'construindo' => 'building',
@@ -42,9 +53,9 @@ final class GetPublicPageQueryHandler
             )->filter(fn (array $entry): bool => filled($entry['value']))->values()->all();
         }
 
-        if ($page->slug === 'home') {
-            $featuredItems = collect($page->currentRevision?->featuredCases ?? [])
-                ->concat($page->currentRevision?->featuredProjects ?? []);
+        if ($slug === 'home') {
+            $featuredItems = collect($page->publishedRevision?->featuredCases ?? [])
+                ->concat($page->publishedRevision?->featuredProjects ?? []);
 
             $fields['recurringTechnologies'] = $featuredItems
                 ->flatMap(fn ($item) => $item->technologies)
@@ -58,7 +69,7 @@ final class GetPublicPageQueryHandler
                 ->all();
         }
 
-        if ($page->slug === 'follow') {
+        if ($slug === 'follow') {
             $available = [
                 ['key' => 'rss', 'url' => Locale::path('/feed.xml', $query->locale)],
                 ['key' => 'atom', 'url' => Locale::path('/atom.xml', $query->locale)],
@@ -83,7 +94,7 @@ final class GetPublicPageQueryHandler
         }
 
         return new GetPublicPageQueryResult(
-            slug: $page->slug,
+            slug: $slug,
             locale: $query->locale,
             fields: $fields,
         );

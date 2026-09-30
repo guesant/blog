@@ -8,23 +8,25 @@ class PageReader
 {
     public function findBySlug(string $slug): ?Page
     {
-        return Page::where('slug', $slug)
-            ->where(fn ($visibility) => $visibility
-                ->where('pages.hidden', false)
-                ->orWhereNull('pages.hidden'))
-            ->whereHas('currentRevision', static function ($query): void {
-                $query->where(fn ($visibility) => $visibility
-                    ->where('hidden', false)
-                    ->orWhereNull('hidden'));
-            })
+        return Page::query()
+            ->published()
+            ->where('slug', $slug)
             ->with([
-                'currentRevision.translations',
-                'currentRevision.featuredCases.technologies.translations',
-                'currentRevision.featuredProjects.technologies.translations',
-                'currentRevision.featuredWritings',
-                'featuredCases.translations',
-                'featuredProjects.translations',
-                'featuredWritings.translations',
+                'publishedTranslations',
+                'publishedRevision',
+                'publishedRevision.featuredCases' => static fn ($query) => $query
+                    ->published()
+                    ->whereHas('publishedRevision', static fn ($revision) => $revision->where('nda', false)),
+                'publishedRevision.featuredCases.technologies' => static fn ($query) => $query->published(),
+                'publishedRevision.featuredCases.technologies.publishedTranslations',
+                'publishedRevision.featuredProjects' => static fn ($query) => $query
+                    ->published()
+                    ->whereHas('publishedRevision', static fn ($revision) => $revision->where('nda', false)),
+                'publishedRevision.featuredProjects.technologies' => static fn ($query) => $query->published(),
+                'publishedRevision.featuredProjects.technologies.publishedTranslations',
+                'publishedRevision.featuredWritings' => static fn ($query) => $query->published(),
+                'publishedRevision.featuredWritings.topics' => static fn ($query) => $query->published(),
+                'publishedRevision.featuredWritings.topics.publishedTranslations',
             ])
             ->first();
     }

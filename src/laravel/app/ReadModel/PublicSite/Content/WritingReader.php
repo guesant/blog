@@ -4,8 +4,10 @@ namespace App\ReadModel\PublicSite\Content;
 
 use App\Content\Locale;
 use App\Content\PublicIdentifier;
+use App\Models\Topic;
 use App\Models\Writing;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 
 class WritingReader
@@ -17,12 +19,17 @@ class WritingReader
         ?string $search = null,
         ?string $topic = null,
     ): LengthAwarePaginator {
-        $query = Writing::where('hidden', false)
-            ->with(['translations', 'topics.translations']);
+        $query = Writing::query()
+            ->published()
+            ->with([
+                'publishedTranslations',
+                'topics' => static fn ($query) => $query->published(),
+                'topics.publishedTranslations',
+            ]);
 
         if (filled($search)) {
             $term = '%'.$search.'%';
-            $query->whereHas('translations', function ($translation) use ($locale, $term): void {
+            $query->whereHas('publishedTranslations', function ($translation) use ($locale, $term): void {
                 $translation->where('locale', Locale::normalize($locale))
                     ->where(function ($fields) use ($term): void {
                         $fields->where('title', 'ilike', $term)
@@ -32,7 +39,9 @@ class WritingReader
         }
 
         if (filled($topic)) {
-            $query->whereHas('topics', fn ($topicQuery) => $topicQuery->where('topics.slug', $topic));
+            $query->whereHas('topics', fn (Builder $topicQuery) => $topicQuery
+                ->whereIn('topics.id', Topic::query()->published()->select('id'))
+                ->where('topics.slug', $topic));
         }
 
         if ($sort === 'asc') {
@@ -48,9 +57,12 @@ class WritingReader
 
     public function findByIdentifier(string $identifier): ?Writing
     {
-        return PublicIdentifier::constrain(Writing::query(), $identifier)
-            ->where('hidden', false)
-            ->with(['translations', 'topics.translations'])
+        return PublicIdentifier::constrain(Writing::query()->published(), $identifier)
+            ->with([
+                'publishedTranslations',
+                'topics' => static fn ($query) => $query->published(),
+                'topics.publishedTranslations',
+            ])
             ->first();
     }
 
@@ -67,12 +79,15 @@ class WritingReader
             return collect();
         }
 
-        return Writing::where('id', '!=', $writing->id)
-            ->where('hidden', false)
-            ->whereHas('topics', fn ($t) => $t->where('topics.id', $topic->id))
+        return Writing::query()
+            ->published()
+            ->where('id', '!=', $writing->id)
+            ->whereHas('topics', fn (Builder $t) => $t
+                ->whereIn('topics.id', Topic::query()->published()->select('id'))
+                ->where('topics.id', $topic->id))
             ->orderBy('date_iso', 'desc')
             ->limit($limit)
-            ->with(['translations'])
+            ->with(['publishedTranslations', 'topics.publishedTranslations'])
             ->get();
     }
 }

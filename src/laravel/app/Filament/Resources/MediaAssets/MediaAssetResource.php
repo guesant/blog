@@ -17,7 +17,7 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 
 /**
- * @extends resource<MediaAsset, ResourceConfiguration>
+ * @extends \Filament\Resources\Resource<MediaAsset, ResourceConfiguration>
  */
 class MediaAssetResource extends Resource
 {

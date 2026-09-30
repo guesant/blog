@@ -3,6 +3,7 @@
 namespace Tests\Feature\Filament;
 
 use App\Filament\Pages\ManageResume;
+use App\Jobs\GenerateResumePdf;
 use App\Models\Resume;
 use App\Models\ResumeRevision;
 use App\Models\ResumeRevisionTranslation;
@@ -12,6 +13,7 @@ use App\Models\Topic;
 use App\Models\User;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Queue;
 use Livewire\Livewire;
 use Tests\TestCase;
 
@@ -123,5 +125,19 @@ class ManageResumeTest extends TestCase
         $this->assertFalse($resume->hidden);
         $this->assertNotNull($resume->published_revision_id);
         $this->assertFalse((bool) ResumeRevision::query()->findOrFail($resume->published_revision_id)->hidden);
+    }
+
+    public function test_regenerate_pdfs_queues_each_locale_without_rendering_in_the_request(): void
+    {
+        $this->actingAsAdmin();
+        Queue::fake();
+
+        Livewire::test(ManageResume::class)
+            ->callAction('regeneratePdfs')
+            ->assertHasNoErrors();
+
+        Queue::assertPushed(GenerateResumePdf::class, 2);
+        Queue::assertPushed(GenerateResumePdf::class, fn (GenerateResumePdf $job): bool => $job->locale === 'en');
+        Queue::assertPushed(GenerateResumePdf::class, fn (GenerateResumePdf $job): bool => $job->locale === 'pt-BR');
     }
 }

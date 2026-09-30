@@ -138,15 +138,15 @@ class ManageResume extends Page
                 ->action(function () {
                     try {
                         foreach (['en', 'pt-BR'] as $locale) {
-                            GenerateResumePdfJob::dispatchSync($locale);
+                            GenerateResumePdfJob::dispatch($locale);
                         }
 
-                        Notification::make()->success()->title(__('Résumé PDFs regenerated'))->send();
+                        Notification::make()->success()->title(__('Résumé PDF generation queued'))->send();
                     } catch (Throwable) {
                         Notification::make()
                             ->warning()
-                            ->title(__('Résumé PDFs were not regenerated'))
-                            ->body(__('Complete the profile, résumé and site settings before generating PDFs.'))
+                            ->title(__('Résumé PDF generation was not queued'))
+                            ->body(__('The résumé PDF jobs could not be sent to the queue.'))
                             ->send();
                     }
                 }),

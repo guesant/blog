@@ -16,9 +16,8 @@ class GenerateResumePdf extends Command
         $locales = $this->option('locale') ? [$this->option('locale')] : ['en', 'pt-BR'];
 
         foreach ($locales as $locale) {
-            $this->info("Generating résumé PDF for locale: {$locale}");
-            GenerateResumePdfJob::dispatchSync($locale);
-            $this->info("Done: storage/app/public/resume-{$locale}.pdf");
+            GenerateResumePdfJob::dispatch($locale);
+            $this->info("Queued résumé PDF generation for locale: {$locale}");
         }
 
         return self::SUCCESS;

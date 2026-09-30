@@ -29,18 +29,6 @@
       <code><![CDATA[header]]></code>
     </TooManyArguments>
   </file>
-  <file src="app/Filament/Concerns/SyncsTranslations.php">
-    <UndefinedMagicPropertyFetch>
-      <code><![CDATA[$translation->birth_city]]></code>
-      <code><![CDATA[$translation->description]]></code>
-      <code><![CDATA[$translation->fortunes]]></code>
-      <code><![CDATA[$translation->interests]]></code>
-      <code><![CDATA[$translation->learning]]></code>
-      <code><![CDATA[$translation->location]]></code>
-      <code><![CDATA[$translation->summary]]></code>
-      <code><![CDATA[$translation->title]]></code>
-    </UndefinedMagicPropertyFetch>
-  </file>
   <file src="app/Filament/Pages/ManageProfile.php">
     <MissingTemplateParam>
       <code><![CDATA[ManageProfile]]></code>

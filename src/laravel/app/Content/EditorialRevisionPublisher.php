@@ -260,6 +260,10 @@ class EditorialRevisionPublisher
             foreach ($fields[$kind] ?? [] as $order => $item) {
                 $data = ['resume_revision_translation_id' => $translationId, 'sort_order' => $order];
                 foreach ((array) $item as $key => $value) {
+                    if ((string) $key === 'id') {
+                        continue;
+                    }
+
                     $column = match ([$kind, (string) $key]) {
                         ['certificates', 'credentialId'], ['certifications', 'credentialId'] => 'credential_id',
                         ['publications', 'name'], ['publications', 'issuer'] => (string) $key,

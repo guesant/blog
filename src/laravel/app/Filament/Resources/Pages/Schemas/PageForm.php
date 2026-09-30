@@ -2,17 +2,11 @@
 
 namespace App\Filament\Resources\Pages\Schemas;
 
-use App\Content\HomeGallerySection;
 use App\Filament\Concerns\BuildsMarkdownEditors;
 use App\Filament\Concerns\BuildsStructuredFields;
 use App\Filament\Concerns\BuildsTranslationTabs;
-use App\Models\CaseStudy;
+use App\Filament\Resources\Pages\PageResource;
 use App\Models\PageRevisionTranslation;
-use App\Models\Project;
-use App\Models\Writing;
-use Filament\Forms\Components\CheckboxList;
-use Filament\Forms\Components\Repeater;
-use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Component;
@@ -51,30 +45,6 @@ class PageForm
     ];
 
     private const PAGE_FIELD_GROUPS = [
-        'home' => [
-            'Hero' => ['hero_identity', 'hero_experience', 'hero_current_focus', 'available_label', 'unavailable_label'],
-            'Experience' => ['experience_title', 'experience_description', 'currently_exploring_label', 'recurring_technologies_label'],
-            'Work' => ['work_title', 'work_description'],
-            'Projects' => ['projects_title', 'projects_description', 'experiments_summary'],
-            'Writing' => ['writing_title', 'writing_description'],
-            'Contact' => ['contact_title', 'contact_description'],
-        ],
-        'about' => [
-            'Introduction' => ['lead', 'context', 'introduction'],
-            'Timeline' => ['timeline_title', 'timeline_description'],
-            'Story' => ['story_title', 'story'],
-        ],
-        'follow' => [
-            'Current' => ['intro', 'section_label', 'section_title'],
-            'Future' => ['future_label', 'future_title', 'planned_label', 'planned_title'],
-            'Feeds' => [
-                'activitypub_description', 'activitypub_title', 'api_description', 'api_title',
-                'atom_description', 'atom_title', 'jsonfeed_description', 'jsonfeed_title',
-                'robots_description', 'robots_title', 'rss_description', 'rss_title',
-                'sitemap_description', 'sitemap_title', 'webfinger_description', 'webfinger_title',
-                'webmention_description', 'webmention_title', 'websub_description', 'websub_title',
-            ],
-        ],
         'license' => [
             'License content' => [
                 'section_label', 'section_title', 'code_heading', 'code_body', 'content_heading',
@@ -83,11 +53,6 @@ class PageForm
         ],
         'now' => [
             'Current status' => ['trabalhando', 'construindo', 'estudando', 'lendo', 'ouvindo', 'assistindo'],
-        ],
-        'portfolio' => [
-            'Hero' => ['hero_identity', 'hero_experience', 'hero_current_focus', 'available_label'],
-            'Work' => ['work_title', 'work_description'],
-            'Projects' => ['projects_title', 'projects_description', 'experiments_summary'],
         ],
         'projects' => [
             'Projects' => ['selected_label', 'archive_label', 'experiments_title'],
@@ -151,78 +116,11 @@ class PageForm
                             ->required()
                             ->live()
                             ->unique(ignoreRecord: true)
+                            ->notIn(PageResource::MANAGED_SLUGS)
                             ->maxLength(255),
                         Toggle::make('hidden')
                             ->label(__('Hide from public site'))
                             ->default(false),
-                    ]),
-                Section::make(__('Home gallery'))
-                    ->visible(fn (Get $get): bool => $get('slug') === 'home')
-                    ->schema([
-                        CheckboxList::make('home_sections')
-                            ->label('Visible sections')
-                            ->options(collect(HomeGallerySection::LABELS)
-                                ->map(fn (string $label): string => __($label))
-                                ->all())
-                            ->default(array_keys(array_filter(HomeGallerySection::DEFAULTS)))
-                            ->columns(2),
-                    ]),
-                Section::make(__('Featured Cases'))
-                    ->visible(fn (Get $get): bool => $get('slug') === 'portfolio')
-                    ->schema([
-                        Repeater::make('featured_cases')
-                            ->reorderableWithButtons()
-                            ->columns(2)
-                            ->schema([
-                                Select::make('case_study_id')
-                                    ->label('Case Study')
-                                    ->options(fn () => CaseStudy::query()->pluck('slug', 'id'))
-                                    ->searchable()
-                                    ->required(),
-                            ])
-                            ->itemLabel(fn (mixed $state): ?string => is_array($state) && isset($state['case_study_id'])
-                                ? CaseStudy::find($state['case_study_id'])?->slug
-                                : null)
-                            ->addActionLabel(__('Add case'))
-                            ->defaultItems(0),
-                    ]),
-                Section::make(__('Featured Projects'))
-                    ->visible(fn (Get $get): bool => $get('slug') === 'portfolio')
-                    ->schema([
-                        Repeater::make('featured_projects')
-                            ->reorderableWithButtons()
-                            ->columns(2)
-                            ->schema([
-                                Select::make('project_id')
-                                    ->label('Project')
-                                    ->options(fn () => Project::query()->pluck('slug', 'id'))
-                                    ->searchable()
-                                    ->required(),
-                            ])
-                            ->itemLabel(fn (mixed $state): ?string => is_array($state) && isset($state['project_id'])
-                                ? Project::find($state['project_id'])?->slug
-                                : null)
-                            ->addActionLabel(__('Add project'))
-                            ->defaultItems(0),
-                    ]),
-                Section::make(__('Featured Writings'))
-                    ->visible(fn (Get $get): bool => $get('slug') === 'portfolio')
-                    ->schema([
-                        Repeater::make('featured_writings')
-                            ->reorderableWithButtons()
-                            ->columns(2)
-                            ->schema([
-                                Select::make('writing_id')
-                                    ->label('Writing')
-                                    ->options(fn () => Writing::query()->pluck('slug', 'id'))
-                                    ->searchable()
-                                    ->required(),
-                            ])
-                            ->itemLabel(fn (mixed $state): ?string => is_array($state) && isset($state['writing_id'])
-                                ? Writing::find($state['writing_id'])?->slug
-                                : null)
-                            ->addActionLabel(__('Add writing'))
-                            ->defaultItems(0),
                     ]),
                 static::translationTabs(fn (string $prefix) => [
                     ...static::pageFieldInputs($prefix),

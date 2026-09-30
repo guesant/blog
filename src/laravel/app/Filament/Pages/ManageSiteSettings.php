@@ -8,11 +8,8 @@ use App\Filament\Concerns\BuildsStructuredFields;
 use App\Filament\Concerns\BuildsTranslationTabs;
 use App\Filament\Concerns\HasSingleSaveAction;
 use App\Filament\Concerns\SyncsTranslations;
-use App\Models\Platform;
 use App\Models\SiteSettings;
 use BackedEnum;
-use Filament\Forms\Components\Repeater;
-use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Notifications\Notification;
@@ -68,18 +65,6 @@ class ManageSiteSettings extends Page
                             ->maxLength(255),
                         Toggle::make('maintenance_enabled')
                             ->default(false),
-                        TextInput::make('contact_email')
-                            ->email()
-                            ->nullable()
-                            ->maxLength(255),
-                        Toggle::make('contact_enabled')
-                            ->label('Show Contact')
-                            ->helperText(__('Controls whether the public contact section and links are shown.'))
-                            ->default(true),
-                        Toggle::make('contact_available')
-                            ->label('Available for Opportunities')
-                            ->helperText(__('Controls only the public availability indicator.'))
-                            ->default(false),
                         TextInput::make('source_repository_url')
                             ->label('Repository URL')
                             ->helperText(__('Leave blank to hide the fork/issue links and the repository URL in the site footer.'))
@@ -102,26 +87,6 @@ class ManageSiteSettings extends Page
                         Toggle::make('contextual_cursor_enabled')
                             ->label('Enable Contextual Cursor')
                             ->default(false),
-                    ]),
-                Section::make(__('Contact Profiles'))
-                    ->schema([
-                        Repeater::make('contactProfiles')
-                            ->relationship('contactProfiles')
-                            ->orderColumn('order')
-                            ->reorderableWithButtons()
-                            ->columns(2)
-                            ->schema([
-                                Select::make('platform_id')
-                                    ->label('Platform')
-                                    ->relationship('platform', 'label')
-                                    ->searchable()
-                                    ->preload()
-                                    ->required(),
-                                TextInput::make('url')->required()->url()->columnSpanFull(),
-                            ])
-                            ->itemLabel(fn (array $state): ?string => Platform::query()->find($state['platform_id'] ?? null)?->label)
-                            ->addActionLabel(__('Add contact profile'))
-                            ->defaultItems(0),
                     ]),
                 static::translationTabs(fn (string $prefix) => [
                     Fieldset::make(__('Maintenance messages'))
@@ -152,8 +117,6 @@ class ManageSiteSettings extends Page
     public function save(): void
     {
         $data = $this->form->getState();
-        unset($data['contactProfiles']);
-
         $data = $this->extractTranslationsBeforeSave($data);
 
         $this->getRecord()->update($data);

@@ -4,6 +4,7 @@ namespace Tests\Feature\Filament;
 
 use App\Filament\Pages\ManageResume;
 use App\Models\Resume;
+use App\Models\ResumeRevision;
 use App\Models\ResumeRevisionTranslation;
 use App\Models\ResumeSkill;
 use App\Models\Technology;
@@ -91,6 +92,36 @@ class ManageResumeTest extends TestCase
             'sort_order' => 0,
         ]);
 
-        Livewire::test(ManageResume::class)->assertHasNoErrors();
+        Livewire::test(ManageResume::class)
+            ->call('save')
+            ->assertHasNoErrors();
+    }
+
+    public function test_resume_visibility_uses_the_revision_and_publishes_when_unhidden(): void
+    {
+        $this->actingAsAdmin();
+
+        $resume = Resume::factory()->create(['hidden' => false]);
+        $revision = ResumeRevision::create([
+            'resume_id' => $resume->id,
+            'revision_number' => 1,
+            'hidden' => true,
+        ]);
+        DB::table('resumes')->where('id', $resume->id)->update([
+            'current_revision_id' => $revision->id,
+            'published_revision_id' => null,
+        ]);
+
+        Livewire::test(ManageResume::class)
+            ->assertSet('data.hidden', true)
+            ->set('data.hidden', false)
+            ->call('save')
+            ->assertHasNoErrors();
+
+        $resume->refresh();
+
+        $this->assertFalse($resume->hidden);
+        $this->assertNotNull($resume->published_revision_id);
+        $this->assertFalse((bool) ResumeRevision::query()->findOrFail($resume->published_revision_id)->hidden);
     }
 }

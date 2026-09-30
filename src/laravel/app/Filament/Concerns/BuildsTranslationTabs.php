@@ -27,12 +27,17 @@ trait BuildsTranslationTabs
      */
     protected static function translationTabs(Closure $fieldsFactory): Tabs
     {
-        return Tabs::make('translations')
+        return static::localizedTabs('translations', $fieldsFactory);
+    }
+
+    protected static function localizedTabs(string $statePath, Closure $fieldsFactory): Tabs
+    {
+        return Tabs::make($statePath)
             ->tabs([
                 Tab::make(__('English'))
-                    ->schema(static::translationTabSchema($fieldsFactory('translations.en.'))),
+                    ->schema(self::translationTabSchema($fieldsFactory("{$statePath}.en."))),
                 Tab::make(__('Português'))
-                    ->schema(static::translationTabSchema($fieldsFactory('translations.pt-BR.'))),
+                    ->schema(self::translationTabSchema($fieldsFactory("{$statePath}.pt-BR."))),
             ])
             ->columnSpanFull();
     }

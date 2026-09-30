@@ -14,10 +14,21 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 class PageResource extends Resource
 {
     use TranslatesResourceLabels;
+
+    public const MANAGED_SLUGS = [
+        'about',
+        'contact',
+        'credits',
+        'follow',
+        'home',
+        'portfolio',
+        'resume',
+    ];
 
     protected static ?string $model = PageModel::class;
 
@@ -26,6 +37,11 @@ class PageResource extends Resource
     public static function form(Schema $schema): Schema
     {
         return PageForm::configure($schema);
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()->whereNotIn('slug', self::MANAGED_SLUGS);
     }
 
     public static function table(Table $table): Table

@@ -163,17 +163,62 @@
       <code><![CDATA[afterDelete]]></code>
       <code><![CDATA[afterDelete]]></code>
       <code><![CDATA[afterDelete]]></code>
+      <code><![CDATA[afterDelete]]></code>
+      <code><![CDATA[afterDelete]]></code>
+      <code><![CDATA[afterDelete]]></code>
+      <code><![CDATA[afterDelete]]></code>
+      <code><![CDATA[afterDelete]]></code>
     </PossiblyUnusedMethod>
-    <UndefinedMagicPropertyFetch>
-      <code><![CDATA[$translation->birth_city]]></code>
-      <code><![CDATA[$translation->description]]></code>
-      <code><![CDATA[$translation->fortunes]]></code>
-      <code><![CDATA[$translation->interests]]></code>
-      <code><![CDATA[$translation->learning]]></code>
-      <code><![CDATA[$translation->location]]></code>
-      <code><![CDATA[$translation->summary]]></code>
-      <code><![CDATA[$translation->title]]></code>
-    </UndefinedMagicPropertyFetch>
+  </file>
+  <file src="app/Filament/Pages/ManageContact.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[form]]></code>
+      <code><![CDATA[mount]]></code>
+      <code><![CDATA[save]]></code>
+    </PossiblyUnusedMethod>
+    <PossiblyUnusedProperty>
+      <code><![CDATA[$data]]></code>
+    </PossiblyUnusedProperty>
+  </file>
+  <file src="app/Filament/Pages/ManageCredits.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[form]]></code>
+      <code><![CDATA[mount]]></code>
+      <code><![CDATA[save]]></code>
+    </PossiblyUnusedMethod>
+    <PossiblyUnusedProperty>
+      <code><![CDATA[$data]]></code>
+    </PossiblyUnusedProperty>
+  </file>
+  <file src="app/Filament/Pages/ManageFollow.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[form]]></code>
+      <code><![CDATA[mount]]></code>
+      <code><![CDATA[save]]></code>
+    </PossiblyUnusedMethod>
+    <PossiblyUnusedProperty>
+      <code><![CDATA[$data]]></code>
+    </PossiblyUnusedProperty>
+  </file>
+  <file src="app/Filament/Pages/ManageHome.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[form]]></code>
+      <code><![CDATA[mount]]></code>
+      <code><![CDATA[save]]></code>
+    </PossiblyUnusedMethod>
+    <PossiblyUnusedProperty>
+      <code><![CDATA[$data]]></code>
+    </PossiblyUnusedProperty>
+  </file>
+  <file src="app/Filament/Pages/ManagePortfolio.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[form]]></code>
+      <code><![CDATA[mount]]></code>
+      <code><![CDATA[save]]></code>
+    </PossiblyUnusedMethod>
+    <PossiblyUnusedProperty>
+      <code><![CDATA[$data]]></code>
+    </PossiblyUnusedProperty>
   </file>
   <file src="app/Filament/Pages/ManageProfile.php">
     <MissingTemplateParam>

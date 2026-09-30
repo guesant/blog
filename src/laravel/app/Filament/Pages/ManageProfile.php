@@ -7,6 +7,7 @@ use App\Filament\Concerns\BuildsStructuredFields;
 use App\Filament\Concerns\BuildsTranslationTabs;
 use App\Filament\Concerns\HasSingleSaveAction;
 use App\Filament\Concerns\SyncsTranslations;
+use App\Models\Page as ContentPage;
 use App\Models\Profile;
 use BackedEnum;
 use Filament\Forms\Components\DatePicker;
@@ -35,12 +36,17 @@ class ManageProfile extends Page
 
     protected ?Profile $record = null;
 
+    protected ?ContentPage $aboutPageRecord = null;
+
     public function mount(): void
     {
         $this->record = Profile::query()->first() ?? Profile::create(['name' => '']);
 
         $data = $this->record->attributesToArray();
         $data = $this->fillTranslationsIntoData($data);
+        $aboutPage = $this->getAboutPageRecord();
+        $data['about_page_hidden'] = (bool) $aboutPage->getAttribute('hidden');
+        $data['about_translations'] = $this->fillTranslationsForRecord($aboutPage, [])['translations'] ?? [];
 
         $this->form->fill($data);
     }
@@ -48,6 +54,11 @@ class ManageProfile extends Page
     protected function getRecord(): Profile
     {
         return $this->record ??= Profile::query()->first() ?? Profile::create(['name' => '']);
+    }
+
+    protected function getAboutPageRecord(): ContentPage
+    {
+        return $this->aboutPageRecord ??= ContentPage::query()->firstOrCreate(['slug' => 'about']);
     }
 
     public function form(Schema $schema): Schema
@@ -147,6 +158,40 @@ class ManageProfile extends Page
                         ->addActionLabel(__('Add milestone'))
                         ->defaultItems(0),
                 ]),
+                Section::make(__('About page'))
+                    ->schema([
+                        Toggle::make('about_page_hidden')
+                            ->label(__('Hide from public site'))
+                            ->default(false),
+                        static::localizedTabs('about_translations', fn (string $prefix): array => [
+                            TextInput::make("{$prefix}fields.title")
+                                ->label(__('Title'))
+                                ->nullable(),
+                            static::markdownEditor("{$prefix}fields.description")
+                                ->label(__('Description'))
+                                ->nullable(),
+                            Fieldset::make(__('Introduction'))
+                                ->columns(2)
+                                ->schema([
+                                    static::markdownEditor("{$prefix}fields.lead")->label(__('Lead'))->nullable(),
+                                    static::markdownEditor("{$prefix}fields.context")->label(__('Context'))->nullable(),
+                                    static::markdownEditor("{$prefix}fields.introduction")->label(__('Introduction'))->nullable(),
+                                ]),
+                            Fieldset::make(__('Timeline'))
+                                ->columns(2)
+                                ->schema([
+                                    TextInput::make("{$prefix}fields.timeline_title")->label(__('Timeline title'))->nullable(),
+                                    static::markdownEditor("{$prefix}fields.timeline_description")->label(__('Timeline description'))->nullable(),
+                                ]),
+                            Fieldset::make(__('Story'))
+                                ->columns(2)
+                                ->schema([
+                                    TextInput::make("{$prefix}fields.story_title")->label(__('Story title'))->nullable(),
+                                    static::markdownEditor("{$prefix}fields.story")->label(__('Story'))->nullable(),
+                                ]),
+                            static::seoFieldset($prefix),
+                        ]),
+                    ]),
             ])
             ->model($this->getRecord())
             ->statePath('data');
@@ -155,10 +200,17 @@ class ManageProfile extends Page
     public function save(): void
     {
         $data = $this->form->getState();
+        $aboutHidden = (bool) ($data['about_page_hidden'] ?? false);
+        $aboutTranslations = $data['about_translations'] ?? [];
+        unset($data['about_page_hidden'], $data['about_translations']);
         $data = $this->extractTranslationsBeforeSave($data);
 
         $this->getRecord()->update($data);
         $this->persistTranslations();
+
+        $aboutPage = $this->getAboutPageRecord();
+        $aboutPage->update(['hidden' => $aboutHidden]);
+        $this->publishTranslationsFor($aboutPage, $aboutTranslations, $aboutPage->attributesToArray());
 
         Notification::make()->success()->title(__('Saved'))->send();
     }

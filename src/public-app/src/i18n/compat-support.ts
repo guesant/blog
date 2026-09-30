@@ -58,8 +58,6 @@ export type AchadosTranslator = NamespaceTranslator<'Pages.achados', AchadosTran
 
 export type NavTranslationKey = TranslationKey<'Nav'>;
 
-export type SidebarTranslationKey = TranslationKey<'Sidebar'>;
-
 export type NavTranslator = NamespaceTranslator<'Nav'>;
 
 export type SidebarTranslator = NamespaceTranslator<'Sidebar'>;

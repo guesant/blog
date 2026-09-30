@@ -33,9 +33,4 @@ class MediaAsset extends Model
     {
         return $query->where('visibility', 'public');
     }
-
-    public function isPublic(): bool
-    {
-        return $this->visibility === 'public';
-    }
 }

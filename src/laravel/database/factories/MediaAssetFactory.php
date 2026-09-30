@@ -6,6 +6,7 @@ use App\Models\MediaAsset;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
+/** @psalm-suppress UnusedClass */
 class MediaAssetFactory extends Factory
 {
     protected $model = MediaAsset::class;

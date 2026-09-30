@@ -4,6 +4,7 @@ namespace App\Support;
 
 final class PublicMediaUrl
 {
+    /** @psalm-suppress PossiblyUnusedMethod */
     public function __construct(
         private readonly PublicMediaSignature $signature,
         private readonly MediaAssetResolver $assets,

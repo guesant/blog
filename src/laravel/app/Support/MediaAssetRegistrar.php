@@ -15,12 +15,12 @@ final class MediaAssetRegistrar
         ?int $size = null,
         ?string $checksum = null,
         string $visibility = 'private',
-    ): MediaAsset {
+    ): void {
         $storage = Storage::disk($disk);
         $size ??= rescue(fn () => $storage->size($path), null, false);
         $mimeType ??= rescue(fn () => $storage->mimeType($path), null, false);
 
-        return MediaAsset::query()->updateOrCreate(
+        MediaAsset::query()->updateOrCreate(
             ['disk' => $disk, 'path' => $path],
             [
                 'original_name' => $originalName,

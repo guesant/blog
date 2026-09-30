@@ -43,6 +43,7 @@ class SnippetDownloadController extends Controller
             'Content-Type' => 'application/zip',
             'Content-Disposition' => 'attachment; filename="'.addslashes($response->filename()).'"',
             'Cache-Control' => 'no-store',
+            'X-Content-Type-Options' => 'nosniff',
         ]);
     }
 }

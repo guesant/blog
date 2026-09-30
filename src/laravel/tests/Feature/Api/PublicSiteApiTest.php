@@ -13,6 +13,7 @@ use App\Jobs\WarmPublicSiteChrome;
 use App\Listeners\InvalidatePublicSiteChrome;
 use App\Models\CaseStudy;
 use App\Models\CaseStudyRevisionTranslation;
+use App\Models\MediaAsset;
 use App\Models\Page;
 use App\Models\Profile;
 use App\Models\ProfileRevisionTranslation;
@@ -37,18 +38,138 @@ class PublicSiteApiTest extends TestCase
     public function test_public_media_serves_only_content_attachments(): void
     {
         config(['filesystems.default' => 's3']);
+        config([
+            'portfolio.media_url_signing_key' => 'test-media-signing-key',
+            'portfolio.media_url_ttl_seconds' => 300,
+        ]);
         Storage::fake('s3');
         Storage::disk('s3')->put('content-attachments/example.txt', 'public attachment');
+        MediaAsset::factory()->create([
+            'disk' => 's3',
+            'path' => 'content-attachments/example.txt',
+        ]);
 
-        $response = $this->get('/api/v1/media/content-attachments/example.txt')
+        $signedUrl = app(PublicMediaUrl::class)->url('content-attachments/example.txt');
+        $this->assertNotNull($signedUrl);
+        $parts = parse_url($signedUrl);
+        $response = $this->get($parts['path'].'?'.$parts['query'])
             ->assertOk()
-            ->assertHeader('Cache-Control', 'immutable, max-age=31536000, public');
+            ->assertHeader('Content-Disposition', 'attachment');
 
         $this->assertSame('public attachment', $response->streamedContent());
-        $response->assertHeader('Content-Disposition', 'attachment');
         $response->assertHeader('X-Content-Type-Options', 'nosniff');
+        $this->assertMatchesRegularExpression(
+            '/^public, max-age=\d+$/',
+            (string) $response->headers->get('Cache-Control'),
+        );
 
+        $this->get('/api/v1/media/content-attachments/example.txt')->assertNotFound();
         $this->get('/api/v1/media/private.txt')->assertNotFound();
+    }
+
+    public function test_public_media_rejects_expired_and_tampered_signatures(): void
+    {
+        config(['portfolio.media_url_signing_key' => 'test-media-signing-key']);
+        Storage::fake('s3');
+        config(['filesystems.default' => 's3']);
+        Storage::disk('s3')->put('content-attachments/example.txt', 'public attachment');
+        MediaAsset::factory()->create([
+            'disk' => 's3',
+            'path' => 'content-attachments/example.txt',
+        ]);
+
+        $expiredUrl = app(PublicMediaUrl::class)->url('content-attachments/example.txt', time() - 1);
+        $this->assertNotNull($expiredUrl);
+        $expired = parse_url($expiredUrl);
+        $this->get($expired['path'].'?'.$expired['query'])->assertNotFound();
+
+        $signedUrl = app(PublicMediaUrl::class)->url('content-attachments/example.txt');
+        $this->assertNotNull($signedUrl);
+        $parts = parse_url($signedUrl);
+        parse_str($parts['query'], $query);
+        $query['signature'] = str_repeat('0', 64);
+
+        $this->get($parts['path'].'?'.http_build_query($query))->assertNotFound();
+    }
+
+    public function test_private_media_is_not_signed_or_served_publicly(): void
+    {
+        config([
+            'filesystems.default' => 's3',
+            'portfolio.media_url_signing_key' => 'test-media-signing-key',
+        ]);
+        Storage::fake('s3');
+        Storage::disk('s3')->put('content-attachments/private.txt', 'private attachment');
+        MediaAsset::factory()->create([
+            'disk' => 's3',
+            'path' => 'content-attachments/private.txt',
+            'visibility' => 'private',
+        ]);
+
+        $this->assertNull(app(PublicMediaUrl::class)->url('content-attachments/private.txt'));
+
+        $expiresAt = time() + 300;
+        $signature = app(\App\Support\PublicMediaSignature::class)->sign(
+            's3',
+            'content-attachments/private.txt',
+            $expiresAt,
+        );
+
+        $this->get('/api/v1/media/content-attachments/private.txt?'.http_build_query([
+            'disk' => 's3',
+            'expires' => $expiresAt,
+            'signature' => $signature,
+        ]))->assertNotFound();
+    }
+
+    public function test_public_media_accepts_the_previous_signing_key_during_rotation(): void
+    {
+        config([
+            'filesystems.default' => 's3',
+            'portfolio.media_url_signing_key' => 'new-media-signing-key',
+            'portfolio.media_url_previous_signing_key' => 'old-media-signing-key',
+        ]);
+        Storage::fake('s3');
+        Storage::disk('s3')->put('content-attachments/example.txt', 'public attachment');
+        MediaAsset::factory()->create([
+            'disk' => 's3',
+            'path' => 'content-attachments/example.txt',
+        ]);
+
+        $expiresAt = time() + 300;
+        $signature = hash_hmac(
+            'sha256',
+            "GET\n{$expiresAt}\ns3\ncontent-attachments/example.txt",
+            'old-media-signing-key',
+        );
+
+        $this->get('/api/v1/media/content-attachments/example.txt?'.http_build_query([
+            'disk' => 's3',
+            'expires' => $expiresAt,
+            'signature' => $signature,
+        ]))->assertOk();
+    }
+
+    public function test_public_media_rewrite_does_not_expose_storage_urls(): void
+    {
+        config([
+            'filesystems.default' => 's3',
+            'portfolio.media_url_signing_key' => 'test-media-signing-key',
+        ]);
+        Storage::fake('s3');
+        Storage::disk('s3')->put('content-attachments/example.png', 'public attachment');
+        MediaAsset::factory()->create([
+            'disk' => 's3',
+            'path' => 'content-attachments/example.png',
+        ]);
+
+        $rewritten = app(PublicMediaUrl::class)->rewrite(
+            '![Example](https://silo.guesant.internal/portfolio/content-attachments/example.png)',
+        );
+
+        $this->assertIsString($rewritten);
+        $this->assertStringContainsString('/api/v1/media/content-attachments/example.png?', $rewritten);
+        $this->assertStringNotContainsString('silo.guesant.internal', $rewritten);
     }
 
     public function test_public_api_data_routes_are_blocked_during_maintenance(): void

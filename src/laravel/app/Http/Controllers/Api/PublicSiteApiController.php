@@ -165,7 +165,8 @@ class PublicSiteApiController extends Controller
         }, 200, [
             'Cache-Control' => 'public, max-age=3600',
             'Content-Type' => 'application/pdf',
-            'Content-Disposition' => "inline; filename=resume-{$locale}.pdf",
+            'Content-Disposition' => "attachment; filename=resume-{$locale}.pdf",
+            'X-Content-Type-Options' => 'nosniff',
         ]);
     }
 

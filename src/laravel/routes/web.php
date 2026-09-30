@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\PublicSiteApiController;
+use App\Http\Controllers\AdminMediaDownloadController;
 use App\Http\Controllers\KeycloakAuthController;
 use App\Http\Controllers\OgImageController;
 use App\Http\Controllers\PublicMetadataController;
@@ -20,6 +21,10 @@ Route::view('/docs/swagger/index.html', 'docs.swagger')->name('docs.swagger.inde
 Route::get('/auth/keycloak/redirect', [KeycloakAuthController::class, 'redirect'])->name('auth.keycloak.redirect');
 Route::get('/auth/keycloak/callback', [KeycloakAuthController::class, 'callback'])->name('auth.keycloak.callback');
 Route::post('/auth/keycloak/logout', [KeycloakAuthController::class, 'logout'])->name('auth.keycloak.logout');
+
+Route::get('/'.trim((string) config('admin.path'), '/').'/media/{mediaAsset}/download', AdminMediaDownloadController::class)
+    ->middleware(['auth:web', 'can:access-private-api'])
+    ->name('admin.media.download');
 
 Route::get('/og/{payload}/{signature}.png', OgImageController::class)
     ->where('payload', '[A-Za-z0-9_-]+')

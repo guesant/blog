@@ -1,7 +1,7 @@
 <?php
 
-use App\Http\Controllers\Api\PublicSiteApiController;
 use App\Http\Controllers\AdminMediaDownloadController;
+use App\Http\Controllers\Api\PublicSiteApiController;
 use App\Http\Controllers\KeycloakAuthController;
 use App\Http\Controllers\OgImageController;
 use App\Http\Controllers\PublicMetadataController;

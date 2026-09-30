@@ -25,6 +25,7 @@ use App\Models\Resume;
 use App\Models\ResumeRevisionTranslation;
 use App\Models\SiteSettings;
 use App\OpenGraph\OgImageUrlGenerator;
+use App\Support\PublicMediaSignature;
 use App\Support\PublicMediaUrl;
 use Illuminate\Database\Events\QueryExecuted;
 use Illuminate\Support\Facades\Cache;
@@ -109,7 +110,7 @@ class PublicSiteApiTest extends TestCase
         $this->assertNull(app(PublicMediaUrl::class)->url('content-attachments/private.txt'));
 
         $expiresAt = time() + 300;
-        $signature = app(\App\Support\PublicMediaSignature::class)->sign(
+        $signature = app(PublicMediaSignature::class)->sign(
             's3',
             'content-attachments/private.txt',
             $expiresAt,

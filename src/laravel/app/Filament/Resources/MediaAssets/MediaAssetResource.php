@@ -11,12 +11,13 @@ use App\Filament\Resources\MediaAssets\Tables\MediaAssetsTable;
 use App\Models\MediaAsset;
 use BackedEnum;
 use Filament\Resources\Resource;
+use Filament\Resources\ResourceConfiguration;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 
 /**
- * @extends Resource<MediaAsset, \Filament\Resources\ResourceConfiguration>
+ * @extends resource<MediaAsset, ResourceConfiguration>
  */
 class MediaAssetResource extends Resource
 {

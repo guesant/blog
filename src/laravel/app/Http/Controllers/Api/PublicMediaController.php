@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Support\MediaAssetResponse;
 use App\Support\MediaAssetResolver;
+use App\Support\MediaAssetResponse;
 use App\Support\PublicMediaSignature;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,8 +14,7 @@ final class PublicMediaController extends Controller
     public function __invoke(
         Request $request,
         string $path,
-    ): Response
-    {
+    ): Response {
         $signature = app(PublicMediaSignature::class);
         $assets = app(MediaAssetResolver::class);
         $response = app(MediaAssetResponse::class);

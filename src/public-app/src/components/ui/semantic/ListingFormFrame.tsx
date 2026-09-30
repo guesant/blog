@@ -4,5 +4,5 @@ import { Box as BaseComponent } from '@/components/ui/box';
 
 export const ListingFormFrame = createSemanticSxComponent<ComponentProps<typeof BaseComponent>>(
   BaseComponent,
-  { mb: 'var(--site-space-4)' },
+  {},
 );

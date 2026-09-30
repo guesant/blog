@@ -10,7 +10,6 @@ export function ListingViewFrame(props: ListingViewFrameProps) {
     <Stack
       sx={{
         gap: 'var(--site-space-4)',
-        mb: { xs: 'var(--site-space-10)', md: 'var(--site-space-12)' },
       }}
     >
       {props.children}

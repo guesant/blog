@@ -9,5 +9,4 @@ export const ContentFeedDisplayControlsStack = createSemanticSxComponent<
   flexWrap: 'wrap',
   rowGap: 'var(--site-gap-stack)',
   columnGap: 'var(--site-gap-cluster)',
-  mb: 'var(--site-space-4)',
 });

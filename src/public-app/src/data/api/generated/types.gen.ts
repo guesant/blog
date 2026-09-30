@@ -134,6 +134,7 @@ export type PublicMediaData = {
         disk?: string;
         expires?: string;
         signature?: string;
+        inline?: boolean;
     };
     url: '/media/{path}';
 };

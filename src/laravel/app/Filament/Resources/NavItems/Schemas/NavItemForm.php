@@ -2,8 +2,10 @@
 
 namespace App\Filament\Resources\NavItems\Schemas;
 
+use App\Models\SidebarGroup;
 use Filament\Forms\Components\Select;
 use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Schema;
 use Illuminate\Support\Facades\Route;
 
@@ -25,11 +27,28 @@ class NavItemForm
                             ->relationship('parent', 'route_name')
                             ->nullable(),
                         Select::make('placement')
+                            ->live()
                             ->options([
                                 'sidebar' => __('sidebar'),
                                 'footer_links' => __('footer_links'),
                             ])
                             ->nullable(),
+                        Select::make('sidebar_group_id')
+                            ->label('Sidebar group')
+                            ->options(fn (): array => SidebarGroup::query()
+                                ->with('translations')
+                                ->orderBy('order')
+                                ->get()
+                                ->mapWithKeys(function (SidebarGroup $group): array {
+                                    $translation = $group->translation('en');
+
+                                    return [$group->id => $translation === null ? $group->key : $translation->label];
+                                })
+                                ->all())
+                            ->searchable()
+                            ->nullable()
+                            ->required(fn (Get $get): bool => $get('placement') === 'sidebar')
+                            ->visible(fn (Get $get): bool => $get('placement') === 'sidebar'),
                     ]),
             ]);
     }

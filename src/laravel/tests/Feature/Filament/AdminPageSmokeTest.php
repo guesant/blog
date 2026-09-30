@@ -4,6 +4,7 @@ namespace Tests\Feature\Filament;
 
 use App\Models\CreditCategory;
 use App\Models\NavItem;
+use App\Models\SidebarGroup;
 use App\Models\User;
 use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\Config;
@@ -106,11 +107,24 @@ class AdminPageSmokeTest extends TestCase
         }
 
         if ($modelClass === NavItem::class) {
+            $group = SidebarGroup::query()->firstOrCreate(
+                ['key' => 'smoke-test'],
+                ['order' => 0, 'active' => true],
+            );
+
             return NavItem::query()->create([
                 'route_name' => 'home',
                 'placement' => 'sidebar',
-                'sidebar_group' => 0,
+                'sidebar_group_id' => $group->id,
                 'order' => 0,
+            ]);
+        }
+
+        if ($modelClass === SidebarGroup::class) {
+            return SidebarGroup::query()->create([
+                'key' => 'smoke-test-group',
+                'order' => 0,
+                'active' => true,
             ]);
         }
 

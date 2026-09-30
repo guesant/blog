@@ -276,8 +276,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "type": "object",
-                                    "additionalProperties": {}
+                                    "type": "object"
                                 }
                             }
                         }
@@ -601,37 +600,56 @@
                                                 "sidebar": {
                                                     "type": "array",
                                                     "items": {
-                                                        "type": "array",
-                                                        "items": {
-                                                            "type": "object",
-                                                            "properties": {
-                                                                "route": {
-                                                                    "type": "string"
-                                                                },
-                                                                "children": {
-                                                                    "type": "array",
-                                                                    "items": {
-                                                                        "type": "object",
-                                                                        "properties": {
-                                                                            "route": {
-                                                                                "type": "string"
-                                                                            },
-                                                                            "children": {
-                                                                                "type": "null"
-                                                                            }
-                                                                        },
-                                                                        "required": [
-                                                                            "route",
-                                                                            "children"
-                                                                        ]
-                                                                    }
-                                                                }
+                                                        "type": "object",
+                                                        "properties": {
+                                                            "key": {
+                                                                "type": "string"
                                                             },
-                                                            "required": [
-                                                                "route",
-                                                                "children"
-                                                            ]
-                                                        }
+                                                            "label": {
+                                                                "type": [
+                                                                    "string",
+                                                                    "null"
+                                                                ]
+                                                            },
+                                                            "items": {
+                                                                "type": "array",
+                                                                "items": {
+                                                                    "type": "object",
+                                                                    "properties": {
+                                                                        "route": {
+                                                                            "type": "string"
+                                                                        },
+                                                                        "children": {
+                                                                            "type": "array",
+                                                                            "items": {
+                                                                                "type": "object",
+                                                                                "properties": {
+                                                                                    "route": {
+                                                                                        "type": "string"
+                                                                                    },
+                                                                                    "children": {
+                                                                                        "type": "null"
+                                                                                    }
+                                                                                },
+                                                                                "required": [
+                                                                                    "route",
+                                                                                    "children"
+                                                                                ]
+                                                                            }
+                                                                        }
+                                                                    },
+                                                                    "required": [
+                                                                        "route",
+                                                                        "children"
+                                                                    ]
+                                                                }
+                                                            }
+                                                        },
+                                                        "required": [
+                                                            "key",
+                                                            "label",
+                                                            "items"
+                                                        ]
                                                     }
                                                 },
                                                 "footer_links": {

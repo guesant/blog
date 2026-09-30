@@ -28,12 +28,12 @@ final class PublicNavigationReader
                 'route_name',
                 'parent_id',
                 'placement',
-                'sidebar_group',
+                'sidebar_group_id',
                 'order',
             ])
             ->whereNull('parent_id')
-            ->orderByRaw('sidebar_group is not null')
-            ->orderBy('sidebar_group')
+            ->orderByRaw('sidebar_group_id is not null')
+            ->orderBy('sidebar_group_id')
             ->orderBy('order')
             ->orderBy('id')
             ->get()
@@ -46,7 +46,7 @@ final class PublicNavigationReader
                 'route_name',
                 'parent_id',
                 'placement',
-                'sidebar_group',
+                'sidebar_group_id',
                 'order',
             ])
             ->whereIn('parent_id', $roots->pluck('id'))
@@ -62,16 +62,50 @@ final class PublicNavigationReader
             $locale,
         ));
 
-        return [
-            'sidebar' => $presented
-                ->filter(static fn (array $item): bool => $item['placement'] === 'sidebar')
-                ->groupBy(static fn (array $item): mixed => $item['sidebar_group'])
-                ->map(fn (Collection $group): array => $group
+        $sidebarItems = $presented
+            ->filter(static fn (array $item): bool => $item['placement'] === 'sidebar')
+            ->values();
+
+        $groups = DB::table('sidebar_groups as groups')
+            ->leftJoin('sidebar_group_translations as translations', function ($join) use ($locale): void {
+                $join->on('translations.sidebar_group_id', '=', 'groups.id')
+                    ->where('translations.locale', '=', $locale);
+            })
+            ->where('groups.active', true)
+            ->orderBy('groups.order')
+            ->orderBy('groups.id')
+            ->get(['groups.id', 'groups.key', 'translations.label']);
+
+        $sidebar = $groups
+            ->map(function (object $group) use ($sidebarItems): ?array {
+                $items = $sidebarItems
+                    ->where('sidebar_group_id', $group->id)
                     ->map(fn (array $item): array => $this->withoutGroup($item))
                     ->values()
-                    ->all())
-                ->values()
-                ->all(),
+                    ->all();
+
+                return $items === [] ? null : [
+                    'key' => $group->key,
+                    'label' => $group->label ?? $group->key,
+                    'items' => $items,
+                ];
+            })
+            ->filter()
+            ->values()
+            ->all();
+
+        $unassigned = $sidebarItems
+            ->whereNull('sidebar_group_id')
+            ->map(fn (array $item): array => $this->withoutGroup($item))
+            ->values()
+            ->all();
+
+        if ($unassigned !== []) {
+            $sidebar[] = ['key' => 'unassigned', 'label' => null, 'items' => $unassigned];
+        }
+
+        return [
+            'sidebar' => $sidebar,
             'footer_links' => $presented
                 ->filter(static fn (array $item): bool => $item['placement'] === 'footer_links')
                 ->map(fn (array $item): array => $this->withoutGroup($item))
@@ -89,7 +123,7 @@ final class PublicNavigationReader
         return [
             'route' => $this->route($item->route_name, $locale),
             'placement' => $item->placement,
-            'sidebar_group' => $item->sidebar_group,
+            'sidebar_group_id' => $item->sidebar_group_id,
             'children' => $children->map(fn (object $child): array => [
                 'route' => $this->route($child->route_name, $locale),
                 'children' => null,
@@ -99,7 +133,7 @@ final class PublicNavigationReader
 
     private function withoutGroup(array $item): array
     {
-        unset($item['sidebar_group'], $item['placement']);
+        unset($item['sidebar_group_id'], $item['placement']);
 
         return $item;
     }

@@ -23,6 +23,7 @@ use App\Models\Resource;
 use App\Models\ResourceRevisionTranslation;
 use App\Models\Resume;
 use App\Models\ResumeRevisionTranslation;
+use App\Models\SidebarGroup;
 use App\Models\SiteSettings;
 use App\OpenGraph\OgImageUrlGenerator;
 use App\Support\PublicMediaSignature;
@@ -226,11 +227,16 @@ class PublicSiteApiTest extends TestCase
 
     public function test_private_navigation_routes_are_not_published(): void
     {
+        $group = SidebarGroup::query()->firstOrCreate(
+            ['key' => 'private-test'],
+            ['order' => 99, 'active' => true],
+        );
+
         DB::table('nav_items')->insert([
             'route_name' => 'filament.admin.pages.dashboard',
             'parent_id' => null,
             'placement' => 'sidebar',
-            'sidebar_group' => 99,
+            'sidebar_group_id' => $group->id,
             'order' => 0,
         ]);
 
@@ -261,22 +267,58 @@ class PublicSiteApiTest extends TestCase
                 'site',
                 'profile',
                 'copyright',
-                'navigation',
+                'navigation' => [
+                    'sidebar',
+                    'footer_links',
+                    'sitemap',
+                ],
                 'build',
                 'visibility',
             ]);
+        $this->assertIsArray($response->json('navigation.sidebar'));
+        foreach ($response->json('navigation.sidebar') as $group) {
+            $this->assertArrayHasKey('key', $group);
+            $this->assertArrayHasKey('label', $group);
+            $this->assertArrayHasKey('items', $group);
+        }
         $this->assertArrayNotHasKey('birth_date', $response->json('profile') ?? []);
         $this->assertArrayNotHasKey('birth_city', $response->json('profile') ?? []);
-        $this->assertStringNotContainsString(
-            '"label"',
-            json_encode($response->json('navigation'), JSON_THROW_ON_ERROR),
-        );
         $response->assertHeader('X-Public-Site-Cache', 'miss');
         $this->assertTrue(Cache::has(app(PublicSiteChromeCache::class)->key('en')));
 
         $this->getJson('/api/v1/site/chrome?locale=en')
             ->assertOk()
             ->assertHeader('X-Public-Site-Cache', 'hit');
+    }
+
+    public function test_sidebar_group_labels_are_published_from_the_selected_locale(): void
+    {
+        Cache::flush();
+        $group = SidebarGroup::query()->create([
+            'key' => 'editorial-test',
+            'order' => 99,
+            'active' => true,
+        ]);
+        $group->translations()->createMany([
+            ['locale' => 'en', 'label' => 'Editorial'],
+            ['locale' => 'pt-BR', 'label' => 'Editorial em português'],
+        ]);
+        DB::table('nav_items')->insert([
+            'route_name' => 'writing.show',
+            'parent_id' => null,
+            'placement' => 'sidebar',
+            'sidebar_group_id' => $group->id,
+            'order' => 0,
+        ]);
+
+        $englishGroups = collect($this->getJson('/api/v1/site/chrome?locale=en')->json('navigation.sidebar'));
+        $portugueseGroups = collect($this->getJson('/api/v1/site/chrome?locale=pt-BR')->json('navigation.sidebar'));
+
+        $this->assertSame('Editorial', $englishGroups->firstWhere('key', 'editorial-test')['label']);
+        $this->assertSame(
+            'Editorial em português',
+            $portugueseGroups->firstWhere('key', 'editorial-test')['label'],
+        );
     }
 
     public function test_site_chrome_returns_maintenance_state_without_blocking_the_shell(): void

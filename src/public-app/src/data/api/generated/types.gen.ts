@@ -277,13 +277,17 @@ export type PublicSiteApiChromeResponses = {
         } | null;
         copyright: string;
         navigation: {
-            sidebar: Array<Array<{
-                route: string;
-                children: Array<{
+            sidebar: Array<{
+                key: string;
+                label: string | null;
+                items: Array<{
                     route: string;
-                    children: null;
+                    children: Array<{
+                        route: string;
+                        children: null;
+                    }>;
                 }>;
-            }>>;
+            }>;
             footer_links: Array<{
                 route: string;
                 children: Array<{

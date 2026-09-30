@@ -1034,15 +1034,6 @@
     <InvalidArgument>
       <code><![CDATA[$children->where('parent_id', $item->id)]]></code>
     </InvalidArgument>
-    <InvalidTemplateParam>
-      <code><![CDATA[$presented
-                ->filter(static fn (array $item): bool => $item['placement'] === 'sidebar')
-                ->groupBy(static fn (array $item): mixed => $item['sidebar_group'])
-                ->map(fn (Collection $group): array => $group
-                    ->map(fn (array $item): array => $this->withoutGroup($item))
-                    ->values()
-                    ->all())]]></code>
-    </InvalidTemplateParam>
   </file>
   <file src="app/ReadModel/PublicSite/Chrome/PublicSiteChromeSqlReader.php">
     <PossiblyUnusedMethod>
@@ -1363,5 +1354,15 @@
     <UnusedClass>
       <code><![CDATA[PortfolioPageSeeder]]></code>
     </UnusedClass>
+  </file>
+  <file src="app/Filament/Resources/SidebarGroups/Pages/CreateSidebarGroup.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[afterCreate]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="app/Filament/Resources/SidebarGroups/Pages/EditSidebarGroup.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[afterSave]]></code>
+    </PossiblyUnusedMethod>
   </file>
 </files>

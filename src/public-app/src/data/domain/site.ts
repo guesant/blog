@@ -39,8 +39,14 @@ export type NavigationItem = {
   children: NavigationItem[];
 };
 
+export type SidebarGroup = {
+  key: string;
+  label?: string;
+  items: NavigationItem[];
+};
+
 type SiteNavigation = {
-  sidebar: NavigationItem[][];
+  sidebar: SidebarGroup[];
   footerLinks: NavigationItem[];
   sitemap: NavigationItem[];
 };

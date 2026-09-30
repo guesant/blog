@@ -25,7 +25,6 @@ export function LeftSidebarShellView(props: LeftSidebarShellViewProps) {
         site={props.site}
         locale={props.locale}
         onNavigate={props.onNavigate}
-        t={props.t}
         data={props.data}
         back={props.back}
         compact={!props.showPreferences}

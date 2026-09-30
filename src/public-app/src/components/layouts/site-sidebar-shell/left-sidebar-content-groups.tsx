@@ -1,11 +1,8 @@
 import { SidebarGroup } from './sidebar-group';
-import type { NavigationItem, SiteText } from '@portfolio/data/domain/types';
-import type { SidebarTranslationKey, SidebarTranslator } from '@/i18n/compat-support';
+import type { SidebarGroup as SidebarGroupData, SiteText } from '@portfolio/data/domain/types';
 
 type LeftSidebarContentGroupsProps = {
-  groups: NavigationItem[][];
-  groupLabel: (items: NavigationItem[]) => SidebarTranslationKey;
-  t: SidebarTranslator;
+  groups: SidebarGroupData[];
   pathname: string;
   locale: string;
   site: SiteText;
@@ -15,11 +12,11 @@ type LeftSidebarContentGroupsProps = {
 export function LeftSidebarContentGroups(props: LeftSidebarContentGroupsProps) {
   return (
     <>
-      {props.groups.map((items, index) => (
+      {props.groups.map((group) => (
         <SidebarGroup
-          key={index}
-          label={props.t(props.groupLabel(items))}
-          items={items}
+          key={group.key}
+          label={group.label}
+          items={group.items}
           pathname={props.pathname}
           locale={props.locale}
           site={props.site}

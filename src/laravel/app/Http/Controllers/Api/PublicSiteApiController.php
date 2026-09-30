@@ -226,7 +226,7 @@ class PublicSiteApiController extends Controller
      *   }|null,
      *   copyright: string,
      *   navigation: array{
-     *     sidebar: array<int, array<int, array{route: string, children: array<int, array{route: string, children: null}>}>>,
+     *     sidebar: array<int, array{key: string, label: string|null, items: array<int, array{route: string, children: array<int, array{route: string, children: null}>}>}>,
      *     footer_links: array<int, array{route: string, children: array<int, array{route: string, children: null}>}>,
      *     sitemap: array<int, array{route: string, children: array<int, array{route: string, children: null}>}>
      *   },

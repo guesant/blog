@@ -13,7 +13,12 @@ class NavItem extends Model
 {
     use AssignsNextOrder, HasFactory, UsesCurrentRevision;
 
-    protected $fillable = ['route_name', 'parent_id', 'placement', 'sidebar_group', 'order'];
+    protected $fillable = ['route_name', 'parent_id', 'placement', 'sidebar_group_id', 'order'];
+
+    public function sidebarGroup(): BelongsTo
+    {
+        return $this->belongsTo(SidebarGroup::class);
+    }
 
     /**
      * @return BelongsTo<NavItem, $this>

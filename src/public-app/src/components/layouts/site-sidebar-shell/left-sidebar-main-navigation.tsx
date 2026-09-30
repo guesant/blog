@@ -3,18 +3,15 @@ import { SidebarBrandRow } from './sidebar-brand-row';
 import { SidebarLinkList } from './sidebar-link-list';
 import { LeftSidebarAboutGroup } from './left-sidebar-about-group';
 import { LeftSidebarContentGroups } from './left-sidebar-content-groups';
-import type { NavigationItem, SiteText } from '@portfolio/data/domain/types';
-import type { SidebarTranslationKey, SidebarTranslator } from '@/i18n/compat-support';
+import type { NavigationItem, SidebarGroup, SiteText } from '@portfolio/data/domain/types';
 
 type LeftSidebarMainNavigationProps = {
   backHref?: string;
   backLabel: string;
   homeItem: NavigationItem;
-  contentGroups: NavigationItem[][];
+  contentGroups: SidebarGroup[];
   aboutVisible: boolean;
   aboutItem: NavigationItem;
-  groupLabel: (items: NavigationItem[]) => SidebarTranslationKey;
-  t: SidebarTranslator;
   pathname: string;
   locale: string;
   site: SiteText;
@@ -38,8 +35,6 @@ export function LeftSidebarMainNavigation(props: LeftSidebarMainNavigationProps)
       />
       <LeftSidebarContentGroups
         groups={props.contentGroups}
-        groupLabel={props.groupLabel}
-        t={props.t}
         pathname={props.pathname}
         locale={props.locale}
         site={props.site}

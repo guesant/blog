@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\NavItem;
+use App\Models\SidebarGroup;
 use Illuminate\Database\Seeder;
 
 /**
@@ -21,28 +22,25 @@ class NavItemSeeder extends Seeder
     {
         $this->upsert($this->home(), [
             'placement' => null,
-            'sidebar_group' => null,
+            'sidebar_group_id' => null,
             'order' => 0,
             'parent_id' => null,
         ]);
 
-        $sidebarGroupIndex = 0;
-
-        foreach ($this->sidebarGroups() as $group) {
+        foreach ($this->sidebarGroups() as $sidebarGroupIndex => $groupDefinition) {
+            $group = $this->sidebarGroup($groupDefinition, $sidebarGroupIndex);
             $order = 0;
 
-            foreach ($group as $entry) {
+            foreach ($groupDefinition['items'] as $entry) {
                 $this->upsert($entry, [
                     'placement' => 'sidebar',
-                    'sidebar_group' => $sidebarGroupIndex,
+                    'sidebar_group_id' => $group->id,
                     'order' => $order,
                     'parent_id' => null,
                 ]);
 
                 $order++;
             }
-
-            $sidebarGroupIndex++;
         }
 
         $order = 0;
@@ -50,7 +48,7 @@ class NavItemSeeder extends Seeder
         foreach ($this->footerItems() as $entry) {
             $this->upsert($entry, [
                 'placement' => 'footer_links',
-                'sidebar_group' => null,
+                'sidebar_group_id' => null,
                 'order' => $order,
                 'parent_id' => null,
             ]);
@@ -71,7 +69,7 @@ class NavItemSeeder extends Seeder
         foreach ($entry['children'] ?? [] as $child) {
             $this->upsert($child, [
                 'placement' => null,
-                'sidebar_group' => null,
+                'sidebar_group_id' => null,
                 'order' => $childOrder,
                 'parent_id' => $navItem->id,
             ]);
@@ -87,11 +85,28 @@ class NavItemSeeder extends Seeder
     private function sidebarGroups(): array
     {
         return [
-            [$this->writing(), $this->findings()],
-            [$this->topics(), $this->collections()],
-            [$this->snippets()],
-            [$this->about(), $this->agora(), $this->resume(), $this->portfolio()],
+            ['key' => 'content', 'en' => 'Content', 'pt-BR' => 'Conteúdo', 'items' => [$this->writing(), $this->findings()]],
+            ['key' => 'explore', 'en' => 'Explore', 'pt-BR' => 'Explorar', 'items' => [$this->topics(), $this->collections()]],
+            ['key' => 'resources', 'en' => 'Resources', 'pt-BR' => 'Referências', 'items' => [$this->snippets()]],
+            ['key' => 'about', 'en' => 'About', 'pt-BR' => 'Sobre', 'items' => [$this->about(), $this->agora(), $this->resume(), $this->portfolio()]],
         ];
+    }
+
+    private function sidebarGroup(array $definition, int $order): SidebarGroup
+    {
+        $group = SidebarGroup::firstOrCreate(
+            ['key' => $definition['key']],
+            ['order' => $order, 'active' => true],
+        );
+
+        foreach (['en', 'pt-BR'] as $locale) {
+            $group->translations()->updateOrCreate(
+                ['locale' => $locale],
+                ['label' => $definition[$locale]],
+            );
+        }
+
+        return $group;
     }
 
     /**

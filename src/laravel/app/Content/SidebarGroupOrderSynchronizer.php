@@ -10,17 +10,9 @@ final class SidebarGroupOrderSynchronizer
 {
     public function synchronize(array $orderedGroupKeys): void
     {
-        $items = DB::table('nav_items')
-            ->select(['id', 'current_revision_id', 'published_revision_id', 'sidebar_group'])
-            ->where('placement', 'sidebar')
-            ->whereNull('parent_id')
-            ->whereNotNull('sidebar_group')
-            ->get();
-
-        $existingGroupKeys = $items
-            ->pluck('sidebar_group')
+        $existingGroupKeys = DB::table('sidebar_groups')
+            ->pluck('id')
             ->map(static fn (mixed $key): int => (int) $key)
-            ->unique()
             ->sort()
             ->values();
 
@@ -37,38 +29,14 @@ final class SidebarGroupOrderSynchronizer
         }
 
         $positions = $groupKeys->mapWithKeys(
-            static fn (int $key, int $position): array => [(string) $key => $position],
+            static fn (int $key, int $position): array => [(string) $key => $position + 1],
         );
-        $offset = ($existingGroupKeys->max() ?? 0) + $existingGroupKeys->count() + 1;
 
-        DB::transaction(function () use ($items, $positions, $offset): void {
-            $itemIds = $items->pluck('id')->all();
-
-            DB::table('nav_items')
-                ->whereIn('id', $itemIds)
-                ->update(['sidebar_group' => DB::raw('sidebar_group + '.$offset)]);
-
-            foreach ($items as $item) {
-                $position = $positions->get((string) $item->sidebar_group);
-
-                if ($position === null) {
-                    continue;
-                }
-
-                DB::table('nav_items')
-                    ->where('id', $item->id)
-                    ->update(['sidebar_group' => $position]);
-
-                $revisionIds = collect([$item->current_revision_id, $item->published_revision_id])
-                    ->filter()
-                    ->unique()
-                    ->values();
-
-                if ($revisionIds->isNotEmpty()) {
-                    DB::table('nav_item_revisions')
-                        ->whereIn('id', $revisionIds)
-                        ->update(['sidebar_group' => $position]);
-                }
+        DB::transaction(function () use ($positions): void {
+            foreach ($positions as $groupId => $position) {
+                DB::table('sidebar_groups')
+                    ->where('id', (int) $groupId)
+                    ->update(['order' => $position]);
             }
         });
 

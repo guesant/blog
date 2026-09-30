@@ -21,7 +21,7 @@ final class MediaAssetReferenceScanner
                 }
 
                 $query = DB::table($table);
-                $wrappedColumn = $query->getQuery()->getGrammar()->wrap($column['name']);
+                $wrappedColumn = DB::connection()->getQueryGrammar()->wrap($column['name']);
 
                 if ($query->whereRaw(
                     "CAST({$wrappedColumn} AS TEXT) LIKE ?",

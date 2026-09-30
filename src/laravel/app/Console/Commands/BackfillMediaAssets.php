@@ -42,6 +42,7 @@ class BackfillMediaAssets extends Command
                     ->where('disk', $diskName)
                     ->where('path', $path)
                     ->first();
+                $assetVisibility = $existing === null ? $visibility : $existing->visibility;
 
                 $registrar->register(
                     disk: $diskName,
@@ -50,7 +51,7 @@ class BackfillMediaAssets extends Command
                     mimeType: rescue(fn () => $disk->mimeType($path), null, false),
                     size: rescue(fn () => $disk->size($path), null, false),
                     checksum: $this->checksum($disk, $path),
-                    visibility: $existing?->visibility ?? $visibility,
+                    visibility: $assetVisibility,
                 );
             }
         }

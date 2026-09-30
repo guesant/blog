@@ -25,7 +25,7 @@ trait BuildsMarkdownEditors
                     report: false,
                 );
                 $realPath = $file->getRealPath();
-                $checksum = is_string($realPath) ? hash_file('sha256', $realPath) : false;
+                $checksum = hash_file('sha256', $realPath);
 
                 app(MediaAssetRegistrar::class)->register(
                     disk: $disk,
@@ -33,7 +33,7 @@ trait BuildsMarkdownEditors
                     originalName: $file->getClientOriginalName(),
                     mimeType: $file->getMimeType(),
                     size: $file->getSize(),
-                    checksum: is_string($checksum) ? $checksum : null,
+                    checksum: $checksum === false ? null : $checksum,
                 );
 
                 return $path;

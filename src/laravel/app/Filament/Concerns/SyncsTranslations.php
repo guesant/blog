@@ -7,6 +7,7 @@ use App\Events\PublicSiteContentChanged;
 use App\Models\PageRevisionTranslation;
 use App\Models\ProfileRevisionTranslation;
 use App\Models\ResumeRevisionTranslation;
+use Illuminate\Support\Str;
 
 trait SyncsTranslations
 {
@@ -47,7 +48,21 @@ trait SyncsTranslations
         }
 
         $data['translations'] = collect(['en', 'pt-BR'])
-            ->mapWithKeys(fn (string $locale): array => [$locale => $this->translationFields($locale)])
+            ->mapWithKeys(function (string $locale): array {
+                $fields = $this->translationFields($locale);
+
+                if ($this->getRecord()->getTable() === 'pages') {
+                    return [$locale => [
+                        'fields' => collect($fields)
+                            ->except('seo')
+                            ->mapWithKeys(fn (mixed $value, string $key): array => [Str::snake($key) => $value])
+                            ->all(),
+                        'seo' => $fields['seo'] ?? null,
+                    ]];
+                }
+
+                return [$locale => $fields];
+            })
             ->all();
 
         return $data;

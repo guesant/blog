@@ -1,7 +1,6 @@
 'use client';
 
-import { Box } from '../../ui';
-import type { ReactNode } from 'react';
+import { Fragment, type ReactNode } from 'react';
 
 type ListingListItemProps<T> = {
   item: T;
@@ -12,5 +11,5 @@ type ListingListItemProps<T> = {
 export function ListingListItem<T>(props: ListingListItemProps<T>) {
   const { item, getKey, renderListItem } = props;
 
-  return <Box key={getKey(item)}>{renderListItem(item)}</Box>;
+  return <Fragment key={getKey(item)}>{renderListItem(item)}</Fragment>;
 }

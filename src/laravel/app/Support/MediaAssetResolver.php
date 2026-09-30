@@ -19,6 +19,11 @@ final class MediaAssetResolver
         return MediaAsset::query()->where('path', $path)->first();
     }
 
+    public function findPublicById(int $id): ?MediaAsset
+    {
+        return MediaAsset::query()->public()->find($id);
+    }
+
     public function findPublic(string $disk, string $path): ?MediaAsset
     {
         return MediaAsset::query()

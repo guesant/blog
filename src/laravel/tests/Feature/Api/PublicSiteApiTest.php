@@ -49,12 +49,19 @@ class PublicSiteApiTest extends TestCase
         MediaAsset::factory()->create([
             'disk' => 's3',
             'path' => 'content-attachments/example.txt',
+            'mime_type' => 'text/plain',
         ]);
 
         $signedUrl = app(PublicMediaUrl::class)->url('content-attachments/example.txt');
         $this->assertNotNull($signedUrl);
         $parts = parse_url($signedUrl);
         $response = $this->get($parts['path'].'?'.$parts['query'])
+            ->assertOk()
+            ->assertHeader('Content-Disposition', 'attachment');
+
+        parse_str((string) $parts['query'], $query);
+        $query['inline'] = '1';
+        $this->get($parts['path'].'?'.http_build_query($query))
             ->assertOk()
             ->assertHeader('Content-Disposition', 'attachment');
 
@@ -67,6 +74,37 @@ class PublicSiteApiTest extends TestCase
 
         $this->get('/api/v1/media/content-attachments/example.txt')->assertNotFound();
         $this->get('/api/v1/media/private.txt')->assertNotFound();
+    }
+
+    public function test_markdown_media_urls_can_render_images_without_changing_direct_downloads(): void
+    {
+        config([
+            'filesystems.default' => 's3',
+            'portfolio.media_url_signing_key' => 'test-media-signing-key',
+        ]);
+        Storage::fake('s3');
+        Storage::disk('s3')->put('content-attachments/example.png', 'public image');
+        MediaAsset::factory()->create([
+            'disk' => 's3',
+            'path' => 'content-attachments/example.png',
+        ]);
+
+        $directUrl = app(PublicMediaUrl::class)->url('content-attachments/example.png');
+        $inlineUrl = app(PublicMediaUrl::class)->url('content-attachments/example.png', null, true);
+        $this->assertNotNull($directUrl);
+        $this->assertNotNull($inlineUrl);
+        $this->assertStringNotContainsString('inline=1', (string) $directUrl);
+        $this->assertStringContainsString('inline=1', (string) $inlineUrl);
+
+        $direct = parse_url($directUrl);
+        $this->get($direct['path'].'?'.$direct['query'])
+            ->assertOk()
+            ->assertHeader('Content-Disposition', 'attachment');
+
+        $inline = parse_url($inlineUrl);
+        $this->get($inline['path'].'?'.$inline['query'])
+            ->assertOk()
+            ->assertHeader('Content-Disposition', 'inline');
     }
 
     public function test_public_media_rejects_expired_and_tampered_signatures(): void
@@ -171,7 +209,17 @@ class PublicSiteApiTest extends TestCase
 
         $this->assertIsString($rewritten);
         $this->assertStringContainsString('/api/v1/media/content-attachments/example.png?', $rewritten);
+        $this->assertStringContainsString('inline=1', $rewritten);
         $this->assertStringNotContainsString('silo.guesant.internal', $rewritten);
+
+        $adminRewritten = app(PublicMediaUrl::class)->rewrite(
+            '![Example](https://admin.guesant.net/admin/media/'.MediaAsset::query()->firstOrFail()->id.'/download)',
+        );
+
+        $this->assertIsString($adminRewritten);
+        $this->assertStringContainsString('/api/v1/media/content-attachments/example.png?', $adminRewritten);
+        $this->assertStringContainsString('inline=1', $adminRewritten);
+        $this->assertStringNotContainsString('admin.guesant.net', $adminRewritten);
     }
 
     public function test_public_api_data_routes_are_blocked_during_maintenance(): void

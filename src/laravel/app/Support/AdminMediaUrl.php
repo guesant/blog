@@ -8,7 +8,13 @@ final class AdminMediaUrl
 {
     public function forAsset(MediaAsset $asset): string
     {
-        return route('admin.media.download', ['mediaAsset' => $asset]);
+        $url = route('admin.media.download', ['mediaAsset' => $asset]);
+
+        if (app()->environment('production') && str_starts_with($url, 'http://')) {
+            return 'https://'.substr($url, 7);
+        }
+
+        return $url;
     }
 
     public function forPath(string $path, ?string $disk = null): ?string

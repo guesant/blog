@@ -26,7 +26,7 @@ trait BuildsMarkdownEditors
                 }
 
                 rescue(
-                    fn () => Storage::disk($disk)->setVisibility($path, 'private'),
+                    fn () => Storage::disk($disk)->setVisibility($path, 'public'),
                     report: false,
                 );
                 $realPath = $file->getRealPath();
@@ -39,6 +39,7 @@ trait BuildsMarkdownEditors
                     mimeType: $file->getMimeType(),
                     size: $file->getSize(),
                     checksum: $checksum === false ? null : $checksum,
+                    visibility: 'public',
                 );
 
                 return $path;

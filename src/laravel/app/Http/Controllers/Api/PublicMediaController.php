@@ -47,6 +47,10 @@ final class PublicMediaController extends Controller
 
         $maxAge = $expiresAt === null ? 0 : max(0, $expiresAt - time());
 
-        return $response->download($asset, "public, max-age={$maxAge}");
+        return $response->download(
+            $asset,
+            "public, max-age={$maxAge}",
+            $request->boolean('inline'),
+        );
     }
 }

@@ -8,8 +8,11 @@ use Symfony\Component\HttpFoundation\Response;
 
 final class MediaAssetResponse
 {
-    public function download(MediaAsset $asset, string $cacheControl): Response
-    {
+    public function download(
+        MediaAsset $asset,
+        string $cacheControl,
+        bool $inline = false,
+    ): Response {
         abort_unless(array_key_exists($asset->disk, (array) config('filesystems.disks', [])), 404);
 
         $storage = Storage::disk($asset->disk);
@@ -20,10 +23,20 @@ final class MediaAssetResponse
         abort_unless(is_resource($stream), 503);
 
         $contentType = $asset->mime_type ?: $storage->mimeType($asset->path) ?: 'application/octet-stream';
+        $mediaType = strtolower(trim(explode(';', $contentType, 2)[0]));
+        $disposition = $inline && in_array($mediaType, [
+            'image/avif',
+            'image/gif',
+            'image/jpeg',
+            'image/png',
+            'image/webp',
+        ], true)
+            ? 'inline'
+            : 'attachment';
         $size = rescue(fn (): int => $storage->size($asset->path), 0, false);
         $headers = [
             'Cache-Control' => $cacheControl,
-            'Content-Disposition' => 'attachment',
+            'Content-Disposition' => $disposition,
             'Content-Type' => $contentType,
             'X-Content-Type-Options' => 'nosniff',
         ];

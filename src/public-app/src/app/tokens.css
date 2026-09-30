@@ -24,7 +24,7 @@
   --site-gap-cluster: var(--site-space-3);
   --site-gap-stack: var(--site-space-4);
   --site-gap-section: var(--site-space-6);
-  --site-exploration-gap: 1.5rem;
+  --site-exploration-gap: var(--site-space-5);
   --site-sidebar-gap: var(--site-space-4);
   --site-inset-control: var(--site-space-2) var(--site-space-3);
   --site-inset-card: var(--site-space-4);

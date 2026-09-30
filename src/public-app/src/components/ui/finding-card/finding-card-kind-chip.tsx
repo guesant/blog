@@ -2,9 +2,12 @@ import type { ReactNode } from 'react';
 import { Chip } from '../chip';
 
 type FindingCardKindChipProps = {
-  children: ReactNode;
+  'aria-label'?: string;
+  children?: ReactNode;
   clickable?: boolean;
+  icon?: ReactNode;
   onClick?: () => void;
+  title?: string;
 };
 
 const chipStyles = {
@@ -24,11 +27,13 @@ const chipStyles = {
 export function FindingCardKindChip(props: FindingCardKindChipProps) {
   return (
     <Chip
+      aria-label={props['aria-label']}
       clickable={props.clickable}
-      label={props.children}
+      label={props.icon ?? props.children}
       onClick={props.onClick}
       size="small"
       sx={chipStyles}
+      title={props.title}
     />
   );
 }

@@ -3,7 +3,7 @@ import { Box } from '../box';
 import { Divider } from '../divider';
 import { Typography } from '../typography';
 import { ConditionalContent } from '../../primitives/conditional-content';
-import { editorialSectionTitleStyles, editorialSubtitleStyles } from '../editorial-typography';
+import { editorialDescriptionStyles, editorialSectionTitleStyles } from '../editorial-typography';
 
 export type EditorialSectionProps = {
   id?: string;
@@ -31,7 +31,7 @@ const headerStyles = {
 };
 
 const descriptionStyles = {
-  ...editorialSubtitleStyles,
+  ...editorialDescriptionStyles,
   display: 'block',
 };
 

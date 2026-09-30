@@ -39,6 +39,12 @@ export const editorialSubtitleStyles = {
   textAlign: 'left',
 };
 
+export const editorialDescriptionStyles = {
+  ...editorialSubtitleStyles,
+  textAlign: 'justify',
+  hyphens: 'auto',
+};
+
 export const editorialBodyStyles = {
   ...editorialTextBase,
   color: 'var(--site-text-primary)',

@@ -1,5 +1,5 @@
 import type { SxProps, Theme } from '@mui/material/styles';
-import { editorialPageTitleStyles, editorialSubtitleStyles } from '../editorial-typography';
+import { editorialDescriptionStyles, editorialPageTitleStyles } from '../editorial-typography';
 
 export type PageHeaderVariant = 'showcase' | 'reading';
 
@@ -24,12 +24,12 @@ export const pageHeaderSlotStyles: Record<
 > = {
   showcase: {
     title: editorialPageTitleStyles,
-    description: editorialSubtitleStyles,
+    description: editorialDescriptionStyles,
     meta: { margin: 0 },
   },
   reading: {
     title: editorialPageTitleStyles,
-    description: editorialSubtitleStyles,
+    description: editorialDescriptionStyles,
     meta: { margin: 0 },
   },
 };

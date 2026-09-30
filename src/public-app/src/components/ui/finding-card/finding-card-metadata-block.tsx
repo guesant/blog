@@ -5,9 +5,9 @@ type FindingCardMetadataBlockProps = { children: ReactNode };
 
 const blockStyles = {
   display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'flex-start',
-  gap: 'var(--site-space-2)',
+  flexWrap: 'wrap',
+  alignItems: 'center',
+  gap: 'var(--site-gap-cluster)',
   width: '100%',
 };
 

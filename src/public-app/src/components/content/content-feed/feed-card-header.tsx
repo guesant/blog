@@ -14,7 +14,7 @@ const kindMessageKeys = {
 } as const satisfies Record<FeedCardProps['entry']['kind'], AchadosTranslationKey>;
 
 const kindIcons = {
-  achado: 'problem',
+  achado: 'search',
   post: 'pen-line',
   colecao: 'archive',
 } as const;

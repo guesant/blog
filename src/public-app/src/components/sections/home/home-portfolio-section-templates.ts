@@ -6,7 +6,6 @@ const portfolioSectionDefinitions = [
   ['snippets', 'portfolioSnippets', 'viewSnippets', '/snippets'],
   ['technologies', 'portfolioTechnologies', 'viewTechnologies', '/technologies'],
   ['topics', 'portfolioTopics', 'viewTopics', '/topics'],
-  ['credits', 'portfolioCredits', 'viewCredits', '/credits'],
 ] as const;
 
 export const homePortfolioSectionTemplates = portfolioSectionDefinitions.map(

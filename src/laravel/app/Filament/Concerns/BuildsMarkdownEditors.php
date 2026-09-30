@@ -20,6 +20,11 @@ trait BuildsMarkdownEditors
             ->fileAttachmentsDirectory('content-attachments')
             ->saveUploadedFileAttachmentUsing(function (TemporaryUploadedFile $file) use ($disk): string {
                 $path = $file->store('content-attachments', $disk);
+
+                if ($path === false) {
+                    throw new \RuntimeException('Unable to store the uploaded attachment.');
+                }
+
                 rescue(
                     fn () => Storage::disk($disk)->setVisibility($path, 'private'),
                     report: false,

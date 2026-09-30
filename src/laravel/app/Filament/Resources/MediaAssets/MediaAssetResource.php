@@ -15,6 +15,9 @@ use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 
+/**
+ * @extends Resource<MediaAsset, \Filament\Resources\ResourceConfiguration>
+ */
 class MediaAssetResource extends Resource
 {
     use TranslatesResourceLabels;

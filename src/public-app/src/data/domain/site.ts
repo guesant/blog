@@ -76,6 +76,9 @@ export type SiteFeatureFlags = {
     downloadText: boolean;
   };
   contextualCursor: boolean;
+  feed: {
+    flatCards: boolean;
+  };
 };
 
 type SiteBuild = {

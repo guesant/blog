@@ -24,6 +24,7 @@ final class PublicSiteSettingsReader
                 'revision.content_actions_copy_url',
                 'revision.content_actions_download_text',
                 'revision.contextual_cursor_enabled',
+                'revision.feed_flat_cards_enabled',
             ])
             ->first();
 
@@ -49,6 +50,9 @@ final class PublicSiteSettingsReader
                         'download_text' => false,
                     ],
                     'contextual_cursor' => false,
+                    'feed' => [
+                        'flat_cards' => true,
+                    ],
                 ],
             ];
         }
@@ -84,6 +88,9 @@ final class PublicSiteSettingsReader
                     'download_text' => (bool) $settings->content_actions_download_text,
                 ],
                 'contextual_cursor' => (bool) $settings->contextual_cursor_enabled,
+                'feed' => [
+                    'flat_cards' => $settings->feed_flat_cards_enabled !== false,
+                ],
             ],
             'maintenance_title' => $translation?->maintenance_title,
             'maintenance_description' => $translation?->maintenance_description,

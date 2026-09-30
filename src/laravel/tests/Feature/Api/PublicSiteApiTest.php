@@ -5,7 +5,6 @@ namespace Tests\Feature\Api;
 use App\Application\PublicSite\GetPublicPageQueryResult;
 use App\Application\PublicSite\GetPublicSiteChromeQueryHandler;
 use App\Content\EditorialRevisionPublisher;
-use App\Content\HomeGallerySection;
 use App\Content\PublicSiteChromeCache;
 use App\Events\PublicSiteContentChanged;
 use App\Http\Responses\PublicPageResponseDto;
@@ -26,6 +25,8 @@ use App\Models\Resume;
 use App\Models\ResumeRevisionTranslation;
 use App\Models\SidebarGroup;
 use App\Models\SiteSettings;
+use App\Models\Writing;
+use App\Models\WritingRevisionTranslation;
 use App\OpenGraph\OgImageUrlGenerator;
 use App\Support\AdminMediaUrl;
 use App\Support\PublicMediaSignature;
@@ -401,6 +402,7 @@ class PublicSiteApiTest extends TestCase
             'content_actions_copy_url' => true,
             'content_actions_download_text' => false,
             'contextual_cursor_enabled' => true,
+            'feed_flat_cards_enabled' => false,
         ]);
 
         $this->getJson('/api/v1/site/chrome?locale=en')
@@ -408,7 +410,8 @@ class PublicSiteApiTest extends TestCase
             ->assertJsonPath('site.feature_flags.content_actions.copy_text', true)
             ->assertJsonPath('site.feature_flags.content_actions.copy_url', true)
             ->assertJsonPath('site.feature_flags.content_actions.download_text', false)
-            ->assertJsonPath('site.feature_flags.contextual_cursor', true);
+            ->assertJsonPath('site.feature_flags.contextual_cursor', true)
+            ->assertJsonPath('site.feature_flags.feed.flat_cards', false);
     }
 
     public function test_contact_visibility_is_independent_from_opportunity_availability(): void
@@ -738,8 +741,7 @@ class PublicSiteApiTest extends TestCase
             ->assertOk()
             ->assertJsonStructure([
                 'highlights',
-                'recent' => ['writing', 'finding', 'collection'],
-                'popular' => ['writing', 'finding', 'collection'],
+                'feed',
                 'portfolio' => [
                     'cases',
                     'projects',
@@ -753,8 +755,7 @@ class PublicSiteApiTest extends TestCase
                 'collection_showcases',
                 'totals' => [
                     'highlights',
-                    'recent' => ['writing', 'finding', 'collection'],
-                    'popular' => ['writing', 'finding', 'collection'],
+                    'feed',
                     'portfolio' => [
                         'cases',
                         'projects',
@@ -769,12 +770,9 @@ class PublicSiteApiTest extends TestCase
                 ],
             ]);
 
-        foreach (['recent', 'popular'] as $group) {
-            foreach (['writing', 'finding', 'collection'] as $kind) {
-                $limit = $kind === 'finding' ? 3 : 6;
-                $this->assertLessThanOrEqual($limit, count($response->json("{$group}.{$kind}")));
-            }
-        }
+        $this->assertArrayNotHasKey('recent', $response->json());
+        $this->assertArrayNotHasKey('popular', $response->json());
+        $this->assertLessThanOrEqual(10, count($response->json('feed')));
         foreach (
             ['cases', 'projects', 'experiments', 'collections', 'snippets', 'technologies', 'topics', 'credits'] as $kind
         ) {
@@ -787,39 +785,47 @@ class PublicSiteApiTest extends TestCase
 
     public function test_home_gallery_returns_totals_for_limited_sections(): void
     {
-        foreach (range(1, 7) as $index) {
+        foreach (range(1, 11) as $index) {
             $this->createResource("home-gallery-finding-{$index}");
         }
 
         $this->getJson('/api/v1/site/home-gallery?locale=en')
             ->assertOk()
-            ->assertJsonCount(3, 'recent.finding')
-            ->assertJsonPath('totals.recent.finding', 7)
-            ->assertJsonCount(0, 'popular.finding')
-            ->assertJsonPath('totals.popular.finding', 0);
+            ->assertJsonCount(10, 'feed')
+            ->assertJsonPath('totals.feed', 11);
     }
 
-    public function test_home_gallery_popular_findings_can_be_enabled_in_cms(): void
+    public function test_home_gallery_feed_mixes_published_content_in_date_order(): void
     {
-        $page = Page::factory()->create(['slug' => 'home']);
-        app(EditorialRevisionPublisher::class)->publish($page, [
-            'en' => [
-                'title' => 'Home',
-            ],
+        $writing = Writing::factory()->create([
+            'hidden' => false,
+            'date_iso' => '2026-09-03',
+        ]);
+        WritingRevisionTranslation::factory()->create([
+            'writing_id' => $writing->id,
+            'locale' => 'en',
+        ]);
+        $writing->publishedRevision()->update(['date_iso' => '2026-09-03']);
+
+        $this->createResource('mixed-feed-finding', [
+            'found_date_iso' => '2026-09-02',
+            'published_date_iso' => '2026-09-02',
         ]);
 
-        $sections = array_keys(HomeGallerySection::DEFAULTS);
-        $sections[] = 'popular-findings';
-        app(EditorialRevisionPublisher::class)->syncPageRelations($page->refresh(), $sections);
+        $collection = ReferenceCollection::factory()->create([
+            'hidden' => false,
+            'published_at' => '2026-09-01',
+        ]);
+        ReferenceCollectionRevisionTranslation::factory()->create([
+            'reference_collection_id' => $collection->id,
+            'locale' => 'en',
+        ]);
+        $collection->publishedRevision()->update(['published_at' => '2026-09-01']);
 
-        foreach (range(1, 7) as $index) {
-            $this->createResource("popular-home-gallery-finding-{$index}");
-        }
+        $response = $this->getJson('/api/v1/site/home-gallery?locale=en')->assertOk();
+        $feed = $response->json('feed');
 
-        $this->getJson('/api/v1/site/home-gallery?locale=en')
-            ->assertOk()
-            ->assertJsonCount(3, 'popular.finding')
-            ->assertJsonPath('totals.popular.finding', 7);
+        $this->assertSame(['post', 'achado', 'colecao'], array_column($feed, 'kind'));
     }
 
     public function test_home_gallery_returns_items_for_each_visible_collection(): void
@@ -884,10 +890,11 @@ class PublicSiteApiTest extends TestCase
         return $case;
     }
 
-    private function createResource(string $slug): Resource
+    private function createResource(string $slug, array $attributes = []): Resource
     {
         $resource = Resource::factory()->create([
             'slug' => $slug,
+            ...$attributes,
             'hidden' => false,
             'visibility' => 'public',
         ]);

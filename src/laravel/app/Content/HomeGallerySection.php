@@ -6,12 +6,7 @@ final class HomeGallerySection
 {
     public const DEFAULTS = [
         'highlights' => true,
-        'recent-writing' => true,
-        'recent-findings' => true,
-        'recent-collections' => true,
-        'popular-writing' => true,
-        'popular-findings' => false,
-        'popular-collections' => true,
+        'feed' => true,
         'portfolio-cases' => true,
         'portfolio-projects' => true,
         'portfolio-experiments' => true,
@@ -25,12 +20,7 @@ final class HomeGallerySection
 
     public const LABELS = [
         'highlights' => 'Highlights',
-        'recent-writing' => 'Recent writing',
-        'recent-findings' => 'Recent findings',
-        'recent-collections' => 'Recent collections',
-        'popular-writing' => 'Popular writing',
-        'popular-findings' => 'Popular findings',
-        'popular-collections' => 'Popular collections',
+        'feed' => 'Feed',
         'portfolio-cases' => 'Portfolio cases',
         'portfolio-projects' => 'Portfolio projects',
         'portfolio-experiments' => 'Portfolio experiments',

@@ -26,8 +26,7 @@ final readonly class PublicHomeGalleryResponseDto
                 ],
                 $result->highlights,
             )),
-            'recent' => self::feedCategories($result->recent, $presenter, $locale),
-            'popular' => self::feedCategories($result->popular, $presenter, $locale),
+            'feed' => self::feedItems($result->feed, $presenter, $locale),
             'portfolio' => self::portfolio($result->portfolio, $presenter, $locale),
             'collection_showcases' => array_values(array_map(
                 fn (array $showcase): array => self::collectionShowcase($showcase, $presenter, $locale),
@@ -42,25 +41,13 @@ final readonly class PublicHomeGalleryResponseDto
         return $this->value;
     }
 
-    private static function feedCategories(
-        array $categories,
-        PublicContentResponseFactory $presenter,
-        string $locale,
-    ): array {
-        return [
-            'writing' => self::feedItems($categories['writing'] ?? [], $presenter, $locale),
-            'finding' => self::feedItems($categories['finding'] ?? [], $presenter, $locale),
-            'collection' => self::feedItems($categories['collection'] ?? [], $presenter, $locale),
-        ];
-    }
-
     private static function feedItems(
         array $items,
         PublicContentResponseFactory $presenter,
         string $locale,
     ): array {
         return array_values(array_map(
-            fn (PublicFeedItem $item): array => self::galleryItem($presenter->feedItem($item, $locale)),
+            fn (PublicFeedItem $item): array => $presenter->feedItem($item, $locale),
             $items,
         ));
     }

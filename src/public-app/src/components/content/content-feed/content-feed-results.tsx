@@ -4,6 +4,7 @@ import { CollectionListing } from '../collection-listing';
 import type { FeedEntry, FeedQuickFilter } from './types';
 import type { AchadosTranslator } from '@/i18n/compat-support';
 import { FeedCard } from './feed-card';
+import { useSiteFeatureFlags } from '../use-site-feature-flags';
 
 type ContentFeedResultsProps = {
   entries: FeedEntry[];
@@ -13,6 +14,8 @@ type ContentFeedResultsProps = {
 };
 
 export function ContentFeedResults(props: ContentFeedResultsProps) {
+  const { feed } = useSiteFeatureFlags();
+
   return (
     <CollectionListing
       items={props.entries}
@@ -23,6 +26,7 @@ export function ContentFeedResults(props: ContentFeedResultsProps) {
           locale={props.locale}
           t={props.t}
           onQuickFilter={props.onQuickFilter}
+          flatCards={feed.flatCards}
         />
       )}
     />

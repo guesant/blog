@@ -1,7 +1,6 @@
 import type { HomeGalleryTotals } from '../domain/pages-content';
 import { numberOrZero } from './public-site-source-number-or-zero';
 import { objectValue } from './public-site-source-object-value';
-import { parseHomeGalleryTotalsGroup } from './public-site-source-parse-home-gallery-totals-group';
 
 export function parseHomeGalleryTotals(value: unknown): HomeGalleryTotals {
   const payload = objectValue(value) ?? {};
@@ -10,8 +9,7 @@ export function parseHomeGalleryTotals(value: unknown): HomeGalleryTotals {
 
   return {
     highlights: numberOrZero(payload.highlights),
-    recent: parseHomeGalleryTotalsGroup(payload.recent),
-    popular: parseHomeGalleryTotalsGroup(payload.popular),
+    feed: numberOrZero(payload.feed),
     portfolio: {
       cases: numberOrZero(portfolio.cases),
       projects: numberOrZero(portfolio.projects),

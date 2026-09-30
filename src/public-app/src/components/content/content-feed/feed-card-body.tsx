@@ -1,7 +1,6 @@
 import type { FeedCardProps } from './feed-card-types';
 import { FeedCardFooter } from './feed-card-footer';
 import { FeedCardHeader } from './feed-card-header';
-import { FeedCardSourcePreviews } from './feed-card-source-previews';
 import { FindingCardPresentation } from '../finding-card-presentation';
 import { FindingCardSummary } from '../finding-card-summary';
 
@@ -20,7 +19,6 @@ export function FeedCardBody(props: FeedCardBodyProps) {
           presentation="feed"
         />
       }
-      previews={<FeedCardSourcePreviews {...props} />}
       footer={<FeedCardFooter {...props} />}
     />
   );

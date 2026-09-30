@@ -6,5 +6,5 @@ export type FeedCardProps = {
   locale: string;
   t: AchadosTranslator;
   onQuickFilter?: (filter: FeedQuickFilter) => void;
-  showSourcePreviews?: boolean;
+  flatCards?: boolean;
 };

@@ -1093,9 +1093,6 @@
     <PossiblyUnusedMethod>
       <code><![CDATA[__construct]]></code>
     </PossiblyUnusedMethod>
-    <UndefinedInterfaceMethod>
-      <code><![CDATA[getCollection]]></code>
-    </UndefinedInterfaceMethod>
   </file>
   <file src="app/ReadModel/PublicSite/Content/ProjectReader.php">
     <PossiblyUnusedMethod>

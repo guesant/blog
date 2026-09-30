@@ -247,6 +247,9 @@ export type PublicSiteApiChromeResponses = {
                     download_text: boolean;
                 };
                 contextual_cursor: boolean;
+                feed: {
+                    flat_cards: boolean;
+                };
             };
             seo: {
                 title: string | null;
@@ -381,28 +384,9 @@ export type PublicSiteApiHomeGalleryResponses = {
                 [key: string]: unknown;
             };
         }>;
-        recent: {
-            writing: Array<{
-                [key: string]: unknown;
-            }>;
-            finding: Array<{
-                [key: string]: unknown;
-            }>;
-            collection: Array<{
-                [key: string]: unknown;
-            }>;
-        };
-        popular: {
-            writing: Array<{
-                [key: string]: unknown;
-            }>;
-            finding: Array<{
-                [key: string]: unknown;
-            }>;
-            collection: Array<{
-                [key: string]: unknown;
-            }>;
-        };
+        feed: Array<{
+            [key: string]: unknown;
+        }>;
         portfolio: {
             cases: Array<{
                 [key: string]: unknown;
@@ -439,16 +423,7 @@ export type PublicSiteApiHomeGalleryResponses = {
         }>;
         totals: {
             highlights: number;
-            recent: {
-                writing: number;
-                finding: number;
-                collection: number;
-            };
-            popular: {
-                writing: number;
-                finding: number;
-                collection: number;
-            };
+            feed: number;
             portfolio: {
                 cases: number;
                 projects: number;

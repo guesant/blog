@@ -11,10 +11,8 @@ export type {
   HomeGallery,
   HomeGalleryEntry,
   HomeGalleryEntryKind,
-  HomeGalleryFeedCategories,
   HomeGalleryPortfolio,
   HomeGalleryPortfolioTotals,
-  HomeGallerySectionTotals,
   HomeGalleryTotals,
 } from './pages-gallery';
 

@@ -615,11 +615,6 @@
       <code><![CDATA[$pageResult->getCollection()]]></code>
     </InvalidArgument>
   </file>
-  <file src="app/ReadModel/PublicSite/Content/HomeGalleryReader.php">
-    <UndefinedInterfaceMethod>
-      <code><![CDATA[getCollection]]></code>
-    </UndefinedInterfaceMethod>
-  </file>
   <file src="app/ReadModel/PublicSite/Content/SnippetReader.php">
     <ParamNameMismatch>
       <code><![CDATA[$identifier]]></code>

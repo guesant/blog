@@ -87,6 +87,9 @@ class ManageSiteSettings extends Page
                         Toggle::make('contextual_cursor_enabled')
                             ->label('Enable Contextual Cursor')
                             ->default(false),
+                        Toggle::make('feed_flat_cards_enabled')
+                            ->label('Use Editorial Feed Presentation')
+                            ->default(true),
                     ]),
                 static::translationTabs(fn (string $prefix) => [
                     Fieldset::make(__('Maintenance messages'))

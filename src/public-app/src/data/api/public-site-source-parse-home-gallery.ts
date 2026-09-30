@@ -1,9 +1,9 @@
 import type { HomeGallery, HomeGalleryEntryKind } from '../domain/pages-content';
 import { homeGalleryEntry } from './public-site-source-home-gallery-entry';
 import { parseHomeCollectionShowcase } from './public-site-source-parse-home-collection-showcase';
-import { parseHomeGalleryFeedCategories } from './public-site-source-parse-home-gallery-feed-categories';
 import { parseHomeGalleryPortfolio } from './public-site-source-parse-home-gallery-portfolio';
 import { parseHomeGalleryTotals } from './public-site-source-parse-home-gallery-totals';
+import { feedItem } from './public-site-source-feed-item';
 import { objectValue } from './public-site-source-object-value';
 import { recordList } from './public-site-source-list';
 import { stringValue } from './public-site-source-string-value';
@@ -24,8 +24,7 @@ export function parseHomeGallery(value: unknown): HomeGallery {
 
       return homeGalleryEntry(item, kind);
     }),
-    recent: parseHomeGalleryFeedCategories(payload.recent),
-    popular: parseHomeGalleryFeedCategories(payload.popular),
+    feed: recordList<RecordValue>(payload.feed).map(feedItem),
     portfolio: parseHomeGalleryPortfolio(payload.portfolio),
     collectionShowcases,
     totals: parseHomeGalleryTotals(payload.totals),

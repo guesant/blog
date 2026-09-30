@@ -7,7 +7,6 @@ import type {
 import type { ReactNode } from 'react';
 import type { FindingFacets, FindingListMeta } from '@portfolio/data/services';
 import type { ContentCollectionMeta } from '@portfolio/data/api/public-site-source-support';
-import type { SourcePreviewData } from '../source-preview/types';
 import type { BreadcrumbItem } from '../../navigation/breadcrumbs';
 
 type FeedKind = 'post' | 'achado' | 'colecao';
@@ -33,7 +32,6 @@ export type FeedEntry = {
   popularityRank?: number;
   popularityLabel?: string;
   featured?: boolean;
-  sourcePreviews?: SourcePreviewData[];
   href: string;
 };
 

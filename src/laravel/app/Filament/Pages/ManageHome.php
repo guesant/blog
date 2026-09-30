@@ -49,9 +49,11 @@ class ManageHome extends Page
         $data = $this->fillManagedPageData();
         $revision = $this->getPageRecord()->currentRevision()->first();
         $sections = $revision instanceof PageRevision ? $revision->homeSections()->get() : null;
-        $data['home_sections'] = $sections?->isNotEmpty()
-            ? $sections->where('enabled', true)->pluck('section_key')->all()
-            : array_keys(array_filter(HomeGallerySection::DEFAULTS));
+        $sectionKeys = array_keys(HomeGallerySection::DEFAULTS);
+        $knownSections = $sections?->whereIn('section_key', $sectionKeys);
+        $data['home_sections'] = $knownSections?->isNotEmpty()
+            ? $knownSections->where('enabled', true)->pluck('section_key')->all()
+            : array_keys(HomeGallerySection::DEFAULTS);
 
         $this->form->fill($data);
     }

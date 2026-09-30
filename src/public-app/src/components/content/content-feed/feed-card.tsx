@@ -1,11 +1,7 @@
-import { FindingFeedCardFrame } from '../../ui';
 import type { FeedCardProps } from './feed-card-types';
-import { FeedCardBody } from './feed-card-body';
+import { EditorialFeedCard } from './editorial-feed-card';
+import { TraditionalFeedCard } from './traditional-feed-card';
 
 export function FeedCard(props: FeedCardProps) {
-  return (
-    <FindingFeedCardFrame component="article">
-      <FeedCardBody {...props} />
-    </FindingFeedCardFrame>
-  );
+  return props.flatCards ? <EditorialFeedCard {...props} /> : <TraditionalFeedCard {...props} />;
 }

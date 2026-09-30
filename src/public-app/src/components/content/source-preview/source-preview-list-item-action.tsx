@@ -19,7 +19,7 @@ export function SourcePreviewListItemAction(props: SourcePreviewListItemActionPr
 
       size="small"
       variant="outlined"
-      startIcon={<Icon name="external" size={14} />}
+      endIcon={<Icon name="external" size={14} />}
     >
       {props.t('sourcePreview.open', { provider: providerLabels[props.data.provider] })}
     </SourcePreviewOpenActionButton>

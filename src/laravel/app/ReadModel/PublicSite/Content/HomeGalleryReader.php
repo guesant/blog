@@ -12,7 +12,7 @@ final class HomeGalleryReader
 {
     private const LIMIT = 6;
 
-    private const FINDING_LIMIT = 3;
+    private const FEED_LIMIT = 10;
 
     public function __construct(
         private readonly CaseStudyReader $cases,
@@ -33,29 +33,9 @@ final class HomeGalleryReader
             ->mapWithKeys(fn ($section): array => [$section->section_key => $section->enabled])
             ->all() ?? [];
 
-        $recent = $this->pageResults([
-            'writing' => $this->sectionEnabled($sectionStates, 'recent-writing')
-                ? $this->feedPage($locale, 'desc', 'post')
-                : null,
-            'finding' => $this->sectionEnabled($sectionStates, 'recent-findings')
-                ? $this->feedPage($locale, 'desc', 'achado', self::FINDING_LIMIT)
-                : null,
-            'collection' => $this->sectionEnabled($sectionStates, 'recent-collections')
-                ? $this->feedPage($locale, 'desc', 'colecao')
-                : null,
-        ]);
-
-        $popular = $this->pageResults([
-            'writing' => $this->sectionEnabled($sectionStates, 'popular-writing')
-                ? $this->feedPage($locale, 'popular', 'post')
-                : null,
-            'finding' => $this->sectionEnabled($sectionStates, 'popular-findings')
-                ? $this->feedPage($locale, 'popular', 'achado', self::FINDING_LIMIT)
-                : null,
-            'collection' => $this->sectionEnabled($sectionStates, 'popular-collections')
-                ? $this->feedPage($locale, 'popular', 'colecao')
-                : null,
-        ]);
+        $feedPage = $this->sectionEnabled($sectionStates, 'feed')
+            ? $this->feedPage($locale, 'desc', null, self::FEED_LIMIT)
+            : null;
 
         $collectionsPage = $this->sectionEnabled($sectionStates, 'portfolio-collections')
             || $this->sectionEnabled($sectionStates, 'collection-showcases')
@@ -90,7 +70,7 @@ final class HomeGalleryReader
         $highlights = $this->sectionEnabled($sectionStates, 'highlights')
             ? $this->highlights($portfolioRevision)
             : ['items' => [], 'total' => 0];
-        $collectionItems = $collectionsPage?->getCollection()->all() ?? [];
+        $collectionItems = $collectionsPage?->items() ?? [];
         $collectionShowcases = $this->sectionEnabled($sectionStates, 'collection-showcases')
             ? array_map(
                 fn ($collection): array => [
@@ -103,14 +83,12 @@ final class HomeGalleryReader
 
         return new GetPublicHomeGalleryQueryResult(
             highlights: $highlights['items'],
-            recent: $recent['items'],
-            popular: $popular['items'],
+            feed: $feedPage?->items() ?? [],
             portfolio: $portfolio['items'],
             collectionShowcases: $collectionShowcases,
             totals: [
                 'highlights' => $highlights['total'],
-                'recent' => $recent['totals'],
-                'popular' => $popular['totals'],
+                'feed' => $feedPage?->total() ?? 0,
                 'portfolio' => $portfolio['totals'],
                 'collection_showcases' => $collectionsPage?->total() ?? 0,
             ],
@@ -158,7 +136,7 @@ final class HomeGalleryReader
         $totals = [];
 
         foreach ($pages as $key => $page) {
-            $items[$key] = $page?->getCollection()->all() ?? [];
+            $items[$key] = $page?->items() ?? [];
             $totals[$key] = $page?->total() ?? 0;
         }
 
@@ -173,7 +151,7 @@ final class HomeGalleryReader
     private function feedPage(
         string $locale,
         string $sort,
-        string $kind,
+        ?string $kind,
         int $limit = self::LIMIT,
     ): LengthAwarePaginator {
         return $this->feed->listPaginated(

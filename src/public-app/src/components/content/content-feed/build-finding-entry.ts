@@ -1,5 +1,4 @@
 import type { Reference } from '@portfolio/data/domain/types';
-import { sourcePreviewEntriesForLink } from '../source-preview/source-preview-entries-for-link';
 import { findingDate } from './finding-date';
 import { findingPopularityLabel } from './finding-popularity-label';
 import { findingPreview } from './finding-preview';
@@ -18,7 +17,6 @@ export function buildFindingEntry(item: Reference): FeedEntry {
     popularityRank: item.popularity?.rank,
     popularityLabel: findingPopularityLabel(item.popularity),
     featured: item.featured,
-    sourcePreviews: item.links.flatMap(sourcePreviewEntriesForLink.bind(null, item)),
     href: item.url ?? `/findings/${item.slug}`,
   };
 }

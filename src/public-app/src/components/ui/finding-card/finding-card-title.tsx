@@ -24,12 +24,14 @@ const titleStyles = {
     overflow: 'hidden',
     textOverflow: 'ellipsis',
     transition: 'color .2s',
+    '& a': { color: 'var(--site-primary)' },
   },
   reference: {
     width: '100%',
     fontSize: 'var(--site-text-xl)',
     textAlign: 'left',
     transition: 'color .2s',
+    '& a': { color: 'var(--site-primary)' },
   },
 };
 

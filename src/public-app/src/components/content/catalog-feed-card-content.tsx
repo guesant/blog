@@ -4,7 +4,7 @@ import { FindingCardSummary } from './finding-card-summary';
 import { CatalogFeedCardMetadata } from './catalog-feed-card-metadata';
 import type { CatalogFeedCardProps } from './catalog-feed-card';
 
-type CatalogFeedCardContentProps = CatalogFeedCardProps & { footer: ReactNode };
+type CatalogFeedCardContentProps = CatalogFeedCardProps & { footer?: ReactNode };
 
 export function CatalogFeedCardContent(props: CatalogFeedCardContentProps) {
   return (

@@ -13,7 +13,7 @@ const titleStyles = {
     margin: 0,
     width: '100%',
     color: 'var(--site-text-primary)',
-    fontSize: 'var(--site-text-xl)',
+    fontSize: 'var(--site-text-lg)',
     fontWeight: 'var(--site-weight-bold)',
     letterSpacing: 'var(--site-letter-heading)',
     lineHeight: 'var(--site-leading-tight)',
@@ -28,7 +28,7 @@ const titleStyles = {
   },
   reference: {
     width: '100%',
-    fontSize: 'var(--site-text-xl)',
+    fontSize: 'var(--site-text-lg)',
     textAlign: 'left',
     transition: 'color .2s',
     '& a': { color: 'var(--site-primary)' },

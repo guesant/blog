@@ -274,21 +274,10 @@
                     "200": {
                         "description": "",
                         "content": {
-                            "application/octet-stream": {
+                            "application/json": {
                                 "schema": {
-                                    "type": "string",
-                                    "format": "binary"
-                                }
-                            }
-                        },
-                        "headers": {
-                            "Transfer-Encoding": {
-                                "required": true,
-                                "schema": {
-                                    "type": "string",
-                                    "enum": [
-                                        "chunked"
-                                    ]
+                                    "type": "object",
+                                    "additionalProperties": {}
                                 }
                             }
                         }

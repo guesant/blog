@@ -171,7 +171,9 @@ export type PublicMediaErrors = {
 export type PublicMediaError = PublicMediaErrors[keyof PublicMediaErrors];
 
 export type PublicMediaResponses = {
-    200: Blob | File;
+    200: {
+        [key: string]: unknown;
+    };
 };
 
 export type PublicMediaResponse = PublicMediaResponses[keyof PublicMediaResponses];

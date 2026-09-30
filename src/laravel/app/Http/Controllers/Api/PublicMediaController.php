@@ -6,13 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Support\MediaAssetResponse;
 use App\Support\MediaAssetResolver;
 use App\Support\PublicMediaSignature;
-use Dedoc\Scramble\Attributes\Response as ScrambleResponse;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 final class PublicMediaController extends Controller
 {
-    #[ScrambleResponse(200, mediaType: 'application/octet-stream', type: 'string', format: 'binary')]
     public function __invoke(
         Request $request,
         string $path,

@@ -130,7 +130,11 @@ export type PublicMediaData = {
     path: {
         path: string;
     };
-    query?: never;
+    query?: {
+        disk?: string;
+        expires?: string;
+        signature?: string;
+    };
     url: '/media/{path}';
 };
 
@@ -157,15 +161,6 @@ export type PublicMediaErrors = {
      * Not found
      */
     404: {
-        /**
-         * Error overview.
-         */
-        message: string;
-    };
-    /**
-     * An error
-     */
-    503: {
         /**
          * Error overview.
          */

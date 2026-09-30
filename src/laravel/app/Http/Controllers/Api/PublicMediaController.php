@@ -13,12 +13,12 @@ final class PublicMediaController extends Controller
 {
     public function __invoke(
         Request $request,
-        PublicMediaSignature $signature,
-        MediaAssetResolver $assets,
-        MediaAssetResponse $response,
         string $path,
     ): Response
     {
+        $signature = app(PublicMediaSignature::class);
+        $assets = app(MediaAssetResolver::class);
+        $response = app(MediaAssetResponse::class);
         $path = ltrim($path, '/');
 
         abort_unless(

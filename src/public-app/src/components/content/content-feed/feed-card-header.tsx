@@ -2,8 +2,14 @@ import { Box, FindingCardKindChip, FindingCardMetadataRow } from '../../ui';
 import type { FeedCardProps } from './feed-card-types';
 import { formatDate } from '../format-date';
 import type { AchadosTranslationKey } from '@/i18n/compat-support';
+import { FeedCardTags } from './feed-card-tags';
+import { EditorialFeedCardMetadata } from './editorial-feed-card-metadata';
+import { TraditionalFeedCardMetadata } from './traditional-feed-card-metadata';
 
-type FeedCardHeaderProps = Pick<FeedCardProps, 'entry' | 'locale' | 't' | 'onQuickFilter'>;
+type FeedCardHeaderProps = Pick<
+  FeedCardProps,
+  'entry' | 'locale' | 't' | 'onQuickFilter' | 'flatCards'
+>;
 
 export function FeedCardHeader(props: FeedCardHeaderProps) {
   const kindMessageKey: AchadosTranslationKey = (
@@ -18,7 +24,7 @@ export function FeedCardHeader(props: FeedCardHeaderProps) {
     .filter(Boolean)
     .join(' · ');
 
-  return (
+  const metadataRow = (
     <FindingCardMetadataRow>
       <FindingCardKindChip
         clickable={Boolean(props.onQuickFilter)}
@@ -28,5 +34,14 @@ export function FeedCardHeader(props: FeedCardHeaderProps) {
       </FindingCardKindChip>
       <Box component="span">{metadata}</Box>
     </FindingCardMetadataRow>
+  );
+
+  return props.flatCards ? (
+    <EditorialFeedCardMetadata
+      metadata={metadataRow}
+      tags={<FeedCardTags entry={props.entry} t={props.t} />}
+    />
+  ) : (
+    <TraditionalFeedCardMetadata metadata={metadataRow} />
   );
 }

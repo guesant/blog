@@ -6,6 +6,8 @@ export { FindingCardKindChip } from './finding-card-kind-chip';
 
 export { FindingCardMetadataRow } from './finding-card-metadata-row';
 
+export { FindingCardMetadataBlock } from './finding-card-metadata-block';
+
 export { FindingCardReadAction } from './finding-card-read-action';
 
 export { FindingCardTagListFrame } from './finding-card-tag-list-frame';

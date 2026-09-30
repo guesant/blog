@@ -5,19 +5,12 @@ import type { AchadosTranslationKey } from '@/i18n/compat-support';
 import { FeedCardTags } from './feed-card-tags';
 import { EditorialFeedCardMetadata } from './editorial-feed-card-metadata';
 import { TraditionalFeedCardMetadata } from './traditional-feed-card-metadata';
-import { Icon } from '../../primitives/icon';
 
 const kindMessageKeys = {
   achado: 'finding',
   post: 'writing',
   colecao: 'collection',
 } as const satisfies Record<FeedCardProps['entry']['kind'], AchadosTranslationKey>;
-
-const kindIcons = {
-  achado: 'search',
-  post: 'pen-line',
-  colecao: 'archive',
-} as const;
 
 type FeedCardHeaderProps = Pick<
   FeedCardProps,
@@ -36,10 +29,11 @@ export function FeedCardHeader(props: FeedCardHeaderProps) {
       <FindingCardKindChip
         aria-label={kindLabel}
         clickable={Boolean(props.onQuickFilter)}
-        icon={<Icon name={kindIcons[props.entry.kind]} size={14} />}
         onClick={() => props.onQuickFilter?.({ kind: props.entry.kind })}
         title={kindLabel}
-      />
+      >
+        {kindLabel}
+      </FindingCardKindChip>
       <Box component="span">{metadata}</Box>
     </FindingCardMetadataRow>
   );

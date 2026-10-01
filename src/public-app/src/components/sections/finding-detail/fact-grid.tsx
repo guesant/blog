@@ -8,7 +8,7 @@ type FactGridProps = { entries: DetailEntry[] };
 
 export function FactGrid(props: FactGridProps) {
   return (
-    <FactGridFrame component="dl">
+    <FactGridFrame component="dl" singleColumn={props.entries.length === 1}>
       {props.entries.map((entry) => (
         <FactEntry key={`${entry.label}-${entry.value}`} entry={entry} />
       ))}

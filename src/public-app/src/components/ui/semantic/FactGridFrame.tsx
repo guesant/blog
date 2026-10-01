@@ -1,8 +1,9 @@
 import type { ComponentProps } from 'react';
 import { createSemanticSxComponent } from '@/components/ui/create-semantic-sx-component';
 import { Box as BaseComponent } from '@/components/ui/box';
+import { mergeSx } from '../sx';
 
-export const FactGridFrame = createSemanticSxComponent<ComponentProps<typeof BaseComponent>>(
+const FactGridBase = createSemanticSxComponent<ComponentProps<typeof BaseComponent>>(
   BaseComponent,
   {
     display: 'grid',
@@ -11,3 +12,16 @@ export const FactGridFrame = createSemanticSxComponent<ComponentProps<typeof Bas
     margin: 0,
   },
 );
+
+type FactGridFrameProps = ComponentProps<typeof BaseComponent> & { singleColumn?: boolean };
+
+export function FactGridFrame(props: FactGridFrameProps) {
+  const { singleColumn, sx, ...rest } = props;
+
+  return (
+    <FactGridBase
+      {...rest}
+      sx={mergeSx(singleColumn ? { gridTemplateColumns: '1fr' } : {}, sx)}
+    />
+  );
+}

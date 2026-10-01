@@ -18,6 +18,8 @@ export { FindingCardDescription } from './finding-card-description';
 
 export { FindingCardTitle } from './finding-card-title';
 
+export { FindingCardTitleFrame } from './finding-card-title-frame';
+
 export type { FindingCardPresentation } from './finding-card-types';
 
 export { FindingReferenceMetaFrame } from './finding-reference-meta-frame';

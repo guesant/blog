@@ -13,7 +13,7 @@ use Illuminate\Support\Collection;
 class WritingReader
 {
     public function listPaginated(
-        int $perPage = 20,
+        int $perPage = 50,
         ?string $sort = null,
         ?string $locale = null,
         ?string $search = null,

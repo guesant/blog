@@ -16,7 +16,7 @@ class ResourceReader
 {
     use SortsListings;
 
-    public function paginate(array $filters = [], ?string $locale = null, int $perPage = 20, ?string $sort = null): LengthAwarePaginator
+    public function paginate(array $filters = [], ?string $locale = null, int $perPage = 50, ?string $sort = null): LengthAwarePaginator
     {
         $locale = Locale::normalize($locale);
 
@@ -43,7 +43,7 @@ class ResourceReader
             ->paginate($perPage);
     }
 
-    public function listByTypePaginated(string $type, int $perPage = 20, ?string $sort = null): LengthAwarePaginator
+    public function listByTypePaginated(string $type, int $perPage = 50, ?string $sort = null): LengthAwarePaginator
     {
         $query = Resource::public()->where('type', $type);
         $query->select($this->listingColumns());
@@ -54,7 +54,7 @@ class ResourceReader
             ->paginate($perPage);
     }
 
-    public function listByTopicPaginated(int $topicId, int $perPage = 20, ?string $sort = null): LengthAwarePaginator
+    public function listByTopicPaginated(int $topicId, int $perPage = 50, ?string $sort = null): LengthAwarePaginator
     {
         $query = Resource::public()->whereHas('topics', fn (Builder $topic) => $topic
             ->whereIn('topics.id', Topic::query()->published()->select('id'))

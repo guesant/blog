@@ -11,7 +11,7 @@ class TopicReader
 {
     use SortsListings;
 
-    public function listPaginated(int $perPage = 20, ?string $sort = null): LengthAwarePaginator
+    public function listPaginated(int $perPage = 50, ?string $sort = null): LengthAwarePaginator
     {
         $query = Topic::query()
             ->published()

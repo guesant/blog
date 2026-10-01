@@ -22,7 +22,7 @@ export function publicCollectionMetaNumbers(
   );
 
   const perPage = Number(
-    fallbackValue(numberValue(props.meta?.per_page), fallbackValue(props.query.perPage, 20)),
+    fallbackValue(numberValue(props.meta?.per_page), fallbackValue(props.query.perPage, 50)),
   );
 
   const total = Number(fallbackValue(numberValue(props.meta?.total), 0));

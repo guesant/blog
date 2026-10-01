@@ -14,7 +14,7 @@ class ReferenceCollectionReader
     use SortsListings;
 
     public function listPaginated(
-        int $perPage = 20,
+        int $perPage = 50,
         ?string $sort = null,
         ?string $locale = null,
         ?string $search = null,
@@ -61,7 +61,7 @@ class ReferenceCollectionReader
         return $this->findByIdentifier($slug);
     }
 
-    public function resourcesPaginated(ReferenceCollection $collection, int $perPage = 20, int $page = 1): LengthAwarePaginator
+    public function resourcesPaginated(ReferenceCollection $collection, int $perPage = 50, int $page = 1): LengthAwarePaginator
     {
         return $collection->resources()
             ->whereNotNull('resources.published_revision_id')

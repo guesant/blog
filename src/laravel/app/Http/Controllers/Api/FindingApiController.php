@@ -39,7 +39,7 @@ class FindingApiController extends Controller
         $locale = Locale::normalize($request->query('locale'));
         $filters = $request->only(['q', 'type', 'topic', 'rating', 'consumption_state', 'year', 'free_only']);
 
-        $perPage = min(max((int) $request->query('per_page', 20), 1), 100);
+        $perPage = min(max((int) $request->query('per_page', 50), 1), 100);
         $sort = in_array($request->query('sort'), ['asc', 'desc', 'alpha', 'popular'], true)
             ? $request->query('sort')
             : null;

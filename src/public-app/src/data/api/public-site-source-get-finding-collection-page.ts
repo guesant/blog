@@ -8,7 +8,7 @@ export async function getFindingCollectionPage<T>(
   const result = await fetchFindingList(
     {
       page: query.page ?? 1,
-      perPage: query.perPage ?? 20,
+      perPage: query.perPage ?? 50,
       sort: query.sort,
       q: query.q,
       type: query.type,

@@ -11,7 +11,7 @@ class TechnologyReader
 {
     use SortsListings;
 
-    public function listPaginated(int $perPage = 20, ?string $sort = 'order'): LengthAwarePaginator
+    public function listPaginated(int $perPage = 50, ?string $sort = 'order'): LengthAwarePaginator
     {
         $query = Technology::query()
             ->published()

@@ -71,7 +71,7 @@ class PublicSiteApiController extends Controller
         abort_unless(in_array($collection, self::COLLECTIONS, true), 404);
 
         $locale = Locale::normalize($request->query('locale'));
-        $perPage = min(max((int) $request->query('per_page', 20), 1), 100);
+        $perPage = min(max((int) $request->query('per_page', 50), 1), 100);
         $sort = $this->sort($request->query('sort'));
         $search = $this->queryString($request->query('q'));
         $type = $this->queryString($request->query('type'));

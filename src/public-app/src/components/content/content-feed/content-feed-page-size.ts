@@ -1,3 +1,3 @@
 export function contentFeedPageSize(perPage: number | undefined): number {
-  return perPage ?? 20;
+  return perPage ?? 50;
 }

@@ -58,7 +58,7 @@ class PublicResourceReader
         ];
     }
 
-    public function paginate(array $filters = [], ?string $locale = null, int $perPage = 20, ?string $sort = null): LengthAwarePaginator
+    public function paginate(array $filters = [], ?string $locale = null, int $perPage = 50, ?string $sort = null): LengthAwarePaginator
     {
         $query = $this->baseQuery($locale);
 

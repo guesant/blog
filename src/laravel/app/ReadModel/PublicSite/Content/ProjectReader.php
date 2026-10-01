@@ -14,7 +14,7 @@ class ProjectReader
 {
     use RelatesByTechnology, SortsListings;
 
-    public function listPaginated(int $perPage = 20, ?string $sort = null): LengthAwarePaginator
+    public function listPaginated(int $perPage = 50, ?string $sort = null): LengthAwarePaginator
     {
         $query = Project::query()
             ->published()
@@ -47,7 +47,7 @@ class ProjectReader
         return $this->findByIdentifier($slug);
     }
 
-    public function listExperimentsPaginated(int $perPage = 20, ?string $sort = null): LengthAwarePaginator
+    public function listExperimentsPaginated(int $perPage = 50, ?string $sort = null): LengthAwarePaginator
     {
         $query = Experiment::query()
             ->published()

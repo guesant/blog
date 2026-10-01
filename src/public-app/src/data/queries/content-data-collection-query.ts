@@ -7,7 +7,7 @@ import { positiveQueryNumber } from './positive-query-number';
 export function collectionQuery(
   search: string | undefined,
   parameter = 'page',
-  perPage = 20,
+  perPage = 50,
 ): ContentCollectionQuery {
   const params = new URLSearchParams(search);
 

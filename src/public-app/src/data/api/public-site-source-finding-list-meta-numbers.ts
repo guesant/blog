@@ -14,7 +14,7 @@ export function findingListMetaNumbers(
   filters: FindingListQuery,
 ): FindingListMetaNumbers {
   const perPage = Number(
-    fallbackValue(numberValue(value?.per_page), fallbackValue(filters.perPage, 20)),
+    fallbackValue(numberValue(value?.per_page), fallbackValue(filters.perPage, 50)),
   );
 
   const total = Number(fallbackValue(numberValue(value?.total), 0));

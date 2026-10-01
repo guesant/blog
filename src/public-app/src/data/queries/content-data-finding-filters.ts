@@ -19,6 +19,6 @@ export function findingFilters(search: string | undefined): FindingListQuery {
     year,
     sort: parseFindingSort(params.get('sort')),
     page: page ?? 1,
-    perPage: 20,
+    perPage: 50,
   };
 }

@@ -19,9 +19,6 @@ export function FactGridFrame(props: FactGridFrameProps) {
   const { singleColumn, sx, ...rest } = props;
 
   return (
-    <FactGridBase
-      {...rest}
-      sx={mergeSx(singleColumn ? { gridTemplateColumns: '1fr' } : {}, sx)}
-    />
+    <FactGridBase {...rest} sx={mergeSx(singleColumn ? { gridTemplateColumns: '1fr' } : {}, sx)} />
   );
 }

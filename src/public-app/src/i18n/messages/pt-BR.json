@@ -23,6 +23,7 @@
     "cases": "Cases",
     "contact": "Contato",
     "experiments": "Experimentos",
+    "feed": "Feed",
     "findings": "Achados",
     "resume": "Currículo",
     "talk": "Vamos Conversar",
@@ -127,22 +128,17 @@
     "feed": "Feed",
     "showing": "Mostrando {visible} de {total}",
     "recent": "Recentes",
-    "popular": "Populares",
     "collections": "Coleções",
     "projects": "Projetos e Trabalhos",
     "viewHighlights": "Ver Todos os Destaques",
     "viewFeed": "Ver Todo o Feed",
     "viewRecent": "Ver Todos os Recentes",
-    "viewPopular": "Ver Todos os Achados Populares",
     "viewCollections": "Ver Todas as Coleções",
     "viewCollection": "Ver Todos os Itens da Coleção",
     "viewProjects": "Ver Todos os Projetos",
     "recentWriting": "Escritos Recentes",
     "recentFindings": "Achados Recentes",
     "recentCollections": "Coleções Recentes",
-    "popularWriting": "Escritos Populares",
-    "popularFindings": "Achados Populares",
-    "popularCollections": "Coleções Populares",
     "viewWriting": "Ver Todos os Escritos",
     "viewFindings": "Ver Todos os Achados",
     "portfolioCases": "Cases Profissionais",
@@ -193,7 +189,8 @@
     },
     "feed": {
       "title": "Feed",
-      "description": "Escritos, achados, coleções e trabalhos selecionados"
+      "description": "Escritos, achados, coleções e trabalhos selecionados",
+      "searchPlaceholder": "Buscar no feed…"
     },
     "now": {
       "working": "Trabalhando em",
@@ -221,7 +218,8 @@
       "metrics": "Destaques de impacto"
     },
     "writings": {
-      "back": "Todos os Escritos"
+      "back": "Todos os Escritos",
+      "searchPlaceholder": "Buscar nos escritos…"
     },
     "achados": {
       "back": "Todos os achados",
@@ -238,14 +236,6 @@
           "link": "Link"
         },
         "fields": {
-          "owner": "Proprietário",
-          "language": "Linguagem",
-          "license": "Licença",
-          "channel": "Canal",
-          "duration": "Duração",
-          "identifier": "Identificador",
-          "siteName": "Site",
-          "contentType": "Tipo",
           "host": "Host"
         }
       },
@@ -272,7 +262,6 @@
       "newest": "Mais recentes",
       "oldest": "Mais antigos",
       "alphabetical": "Alfabética",
-      "mostPopular": "Mais Populares",
       "apply": "Aplicar",
       "pagination": "Paginação dos achados",
       "displayMode": "Modo de exibição do feed",

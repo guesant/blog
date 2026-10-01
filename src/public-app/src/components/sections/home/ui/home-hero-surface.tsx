@@ -8,7 +8,9 @@ type HomeHeroSurfaceProps = {
 };
 
 export function HomeHeroSurface(props: HomeHeroSurfaceProps) {
-  const Frame = props.showContact ? HomeHeroSurfaceWithContactFrame : HomeHeroSurfaceFrame;
+  if (props.showContact) {
+    return <HomeHeroSurfaceWithContactFrame children={props.children} />;
+  }
 
-  return <Frame>{props.children}</Frame>;
+  return <HomeHeroSurfaceFrame children={props.children} />;
 }

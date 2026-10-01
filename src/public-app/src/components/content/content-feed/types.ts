@@ -11,7 +11,7 @@ import type { BreadcrumbItem } from '../../navigation/breadcrumbs';
 
 type FeedKind = 'post' | 'achado' | 'colecao';
 
-export type SortMode = 'desc' | 'asc' | 'alpha' | 'popular';
+export type SortMode = 'desc' | 'asc' | 'alpha';
 
 export type ContentFeedDisplayMode = 'pagination' | 'infinite';
 
@@ -29,8 +29,6 @@ export type FeedEntry = {
   readingTime?: string;
   topics: { name: string; slug?: string; url?: string }[];
   findingType?: string;
-  popularityRank?: number;
-  popularityLabel?: string;
   featured?: boolean;
   href: string;
 };
@@ -43,6 +41,7 @@ export type ContentFeedProps = {
   findings: Reference[];
   collections: ReferenceCollection[];
   copy: FeedPageCopy;
+  searchPlaceholder?: string;
   breadcrumbs?: BreadcrumbItem[];
   showHeader?: boolean;
   showPagination?: boolean;

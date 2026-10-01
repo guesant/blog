@@ -15,6 +15,7 @@ use App\Models\CaseStudyRevisionTranslation;
 use App\Models\MediaAsset;
 use App\Models\NavItem;
 use App\Models\Page;
+use App\Models\PageRevisionTranslation;
 use App\Models\Profile;
 use App\Models\ProfileRevisionTranslation;
 use App\Models\ReferenceCollection;
@@ -251,6 +252,25 @@ class PublicSiteApiTest extends TestCase
             ->assertJsonPath('error.code', 'maintenance');
     }
 
+    public function test_follow_page_publishes_available_feed_entries(): void
+    {
+        PageRevisionTranslation::factory()->create([
+            'page_id' => Page::factory()->create(['slug' => 'follow'])->id,
+            'locale' => 'en',
+            'rss_title' => 'RSS',
+            'rss_description' => 'RSS feed',
+            'jsonfeed_title' => 'JSON Feed',
+        ]);
+
+        $this->getJson('/api/v1/site/pages/follow?locale=en')
+            ->assertOk()
+            ->assertJsonPath('entries.0.key', 'rss')
+            ->assertJsonPath('entries.0.title', 'RSS')
+            ->assertJsonPath('entries.0.description', 'RSS feed')
+            ->assertJsonPath('entries.1.key', 'jsonfeed')
+            ->assertJsonPath('entries.1.title', 'JSON Feed');
+    }
+
     public function test_public_page_response_does_not_return_unlisted_fields(): void
     {
         $response = PublicPageResponseDto::fromResult(
@@ -306,6 +326,17 @@ class PublicSiteApiTest extends TestCase
             'filament',
             json_encode($navigation, JSON_THROW_ON_ERROR),
         );
+    }
+
+    public function test_feed_is_published_in_the_content_sidebar_group(): void
+    {
+        Cache::flush();
+        $groups = collect($this->getJson('/api/v1/site/chrome?locale=en')
+            ->assertOk()
+            ->json('navigation.sidebar'));
+        $content = $groups->firstWhere('key', 'content');
+
+        $this->assertContains('/feed', array_column($content['items'], 'route'));
     }
 
     public function test_static_interface_catalog_is_not_an_api_resource(): void
@@ -816,6 +847,33 @@ class PublicSiteApiTest extends TestCase
         $feed = $response->json('feed');
 
         $this->assertSame(['post', 'achado', 'colecao'], array_column($feed, 'kind'));
+    }
+
+    public function test_writing_body_is_the_only_editorial_text_field(): void
+    {
+        $body = '**Intro** [link](https://example.com) '.str_repeat('word ', 60);
+        $writing = Writing::factory()->create([
+            'slug' => 'description-source',
+            'hidden' => false,
+        ]);
+        WritingRevisionTranslation::factory()->create([
+            'writing_id' => $writing->id,
+            'locale' => 'en',
+            'title' => 'Description source',
+            'body' => $body,
+        ]);
+
+        $listItem = $this->getJson('/api/v1/content/writing?locale=en&per_page=1')
+            ->assertOk()
+            ->json('data.0');
+        $this->assertArrayNotHasKey('body', $listItem);
+        $this->assertLessThanOrEqual(350, mb_strlen((string) $listItem['excerpt']));
+        $this->assertStringNotContainsString('https://example.com', $listItem['excerpt']);
+
+        $this->getJson('/api/v1/content/writing/description-source?locale=en')
+            ->assertOk()
+            ->assertJsonPath('body', $body)
+            ->assertJsonMissingPath('excerpt');
     }
 
     public function test_home_gallery_returns_items_for_each_visible_collection(): void

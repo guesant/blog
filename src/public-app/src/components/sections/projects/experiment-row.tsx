@@ -3,7 +3,7 @@
 import { Box, Typography } from '../../ui';
 import { useTranslations } from '@/i18n/compat';
 import type { ExperimentRowProps } from './types';
-import { ExperimentRow2Text } from '../../ui/semantic/ExperimentRow2Text';
+import { ExperimentPurposeText } from '../../ui/semantic/ExperimentPurposeText';
 import { ExperimentRowLink } from '../../ui/semantic/ExperimentRowLink';
 import { ExperimentRowText } from '../../ui/semantic/ExperimentRowText';
 
@@ -24,9 +24,9 @@ export function ExperimentRow(props: ExperimentRowProps) {
         <ExperimentRowText className="experiment-title" variant="subtitle2" component="h3">
           {item.name}
         </ExperimentRowText>
-        <ExperimentRow2Text variant="body2" color="text.secondary">
+        <ExperimentPurposeText variant="body2" color="text.secondary">
           {item.purpose}
-        </ExperimentRow2Text>
+        </ExperimentPurposeText>
       </Box>
       <Typography color="text.secondary">{t('arrow')}</Typography>
     </ExperimentRowLink>

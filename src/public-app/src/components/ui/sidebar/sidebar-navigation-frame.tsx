@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
-import { Box } from '../box';
+import { SidebarNavigationCompactFrame } from './sidebar-navigation-compact-frame';
+import { SidebarNavigationExpandedFrame } from './sidebar-navigation-expanded-frame';
 
 type SidebarNavigationFrameProps = {
   children: ReactNode;
@@ -8,22 +9,11 @@ type SidebarNavigationFrameProps = {
 };
 
 export function SidebarNavigationFrame(props: SidebarNavigationFrameProps) {
-  return (
-    <Box
-      component="nav"
-      aria-label={props['aria-label']}
-      sx={{
-        width: '100%',
-        padding: props.compact ? 0 : 'var(--site-space-3)',
-        minWidth: 0,
-        minHeight: props.compact ? 0 : '100dvh',
-        flex: props.compact ? '0 0 auto' : undefined,
-        display: 'flex',
-        flexDirection: 'column',
-        gap: 'var(--site-sidebar-gap)',
-      }}
-    >
-      {props.children}
-    </Box>
-  );
+  const contentProps = { children: props.children, 'aria-label': props['aria-label'] };
+
+  if (props.compact) {
+    return <SidebarNavigationCompactFrame {...contentProps} />;
+  }
+
+  return <SidebarNavigationExpandedFrame {...contentProps} />;
 }

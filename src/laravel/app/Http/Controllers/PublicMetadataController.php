@@ -128,7 +128,7 @@ class PublicMetadataController extends Controller
                     'id' => $item['url'],
                     'url' => $item['url'],
                     'title' => $item['title'],
-                    'summary' => $item['excerpt'],
+                    'summary' => $item['summary'],
                     'date_published' => $item['date']?->format(DATE_ATOM),
                 ], fn ($value) => $value !== null))->values(),
             ], 200, [
@@ -195,17 +195,17 @@ class PublicMetadataController extends Controller
     {
         $items = collect($this->collectionItems('writing', $locale, 30))->map(fn (array $item) => [
             'title' => $item['title'] ?? '',
-            'excerpt' => $item['excerpt'] ?? null,
+            'summary' => $item['excerpt'] ?? null,
             'raw_date' => $item['date'] ?? null,
             'url' => $this->absolute($item['url'] ?? '/'),
         ])->concat(collect($this->findingItems($locale, 30))->filter(fn (array $item) => filled($item['title'] ?? null))->map(fn (array $item) => [
             'title' => $item['title'],
-            'excerpt' => $item['personal_note'] ?? $item['reason_found'] ?? $item['description'] ?? null,
+            'summary' => $item['personal_note'] ?? $item['reason_found'] ?? $item['description'] ?? null,
             'raw_date' => $item['found_date'] ?? $item['published_date'] ?? null,
             'url' => $this->absolute($item['url'] ?? '/'),
         ]))->concat(collect($this->collectionItems('collections', $locale, 30))->map(fn (array $item) => [
             'title' => $item['title'] ?? '',
-            'excerpt' => $item['description'] ?? null,
+            'summary' => $item['description'] ?? null,
             'raw_date' => $item['created_at'] ?? null,
             'url' => $this->absolute($item['url'] ?? '/'),
         ]))->map(function (array $item): array {
@@ -292,7 +292,7 @@ class PublicMetadataController extends Controller
     {
         $home = $this->absolute(Locale::path('/', $locale));
         $feed = $this->absolute(Locale::path('/feed.xml', $locale));
-        $entries = collect($items)->map(fn (array $item) => '<item><title>'.$this->xml($item['title']).'</title><link>'.$this->xml($item['url']).'</link><guid isPermaLink="true">'.$this->xml($item['url']).'</guid>'.($item['date'] ? '<pubDate>'.$item['date']->setTimezone(new \DateTimeZone('UTC'))->format(DATE_RSS).'</pubDate>' : '').(filled($item['excerpt']) ? '<description>'.$this->xml($item['excerpt']).'</description>' : '').'</item>')->implode('');
+        $entries = collect($items)->map(fn (array $item) => '<item><title>'.$this->xml($item['title']).'</title><link>'.$this->xml($item['url']).'</link><guid isPermaLink="true">'.$this->xml($item['url']).'</guid>'.($item['date'] ? '<pubDate>'.$item['date']->setTimezone(new \DateTimeZone('UTC'))->format(DATE_RSS).'</pubDate>' : '').(filled($item['summary']) ? '<description>'.$this->xml($item['summary']).'</description>' : '').'</item>')->implode('');
 
         return '<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"><channel><title>Portfolio</title><link>'.$this->xml($home).'</link><description>Portfolio</description><language>'.$this->xml($locale).'</language><link xmlns:atom="http://www.w3.org/2005/Atom" href="'.$this->xml($feed).'" rel="self" type="application/rss+xml"/>'.$entries.'</channel></rss>';
     }
@@ -301,7 +301,7 @@ class PublicMetadataController extends Controller
     {
         $feed = $this->absolute(Locale::path('/atom.xml', $locale));
         $updated = $items[0]['date'] ?? now()->toImmutable();
-        $entries = collect($items)->map(fn (array $item) => '<entry><id>'.$this->xml($item['url']).'</id><title>'.$this->xml($item['title']).'</title><link href="'.$this->xml($item['url']).'"/><updated>'.$item['date']?->setTimezone(new \DateTimeZone('UTC'))->format(DATE_ATOM).'</updated>'.(filled($item['excerpt']) ? '<summary>'.$this->xml($item['excerpt']).'</summary>' : '').'</entry>')->implode('');
+        $entries = collect($items)->map(fn (array $item) => '<entry><id>'.$this->xml($item['url']).'</id><title>'.$this->xml($item['title']).'</title><link href="'.$this->xml($item['url']).'"/><updated>'.$item['date']?->setTimezone(new \DateTimeZone('UTC'))->format(DATE_ATOM).'</updated>'.(filled($item['summary']) ? '<summary>'.$this->xml($item['summary']).'</summary>' : '').'</entry>')->implode('');
 
         return '<?xml version="1.0" encoding="UTF-8"?><feed xmlns="http://www.w3.org/2005/Atom"><id>'.$this->xml($feed).'</id><title>Portfolio</title><updated>'.$updated->setTimezone(new \DateTimeZone('UTC'))->format(DATE_ATOM).'</updated><link rel="self" href="'.$this->xml($feed).'"/>'.$entries.'</feed>';
     }

@@ -1,30 +1,17 @@
-import { Icon } from '../../primitives/icon';
-import { ContactActionButton } from '../semantic/ContactActionButton';
-import { ProtectedEmailSidebarButton } from '../semantic/ProtectedEmailSidebarButton';
+import { ProtectedEmailContactRevealedButton } from './protected-email-contact-revealed-button';
+import { ProtectedEmailSidebarRevealedButton } from './protected-email-sidebar-revealed-button';
+import type { ProtectedEmailRevealedButtonProps as ProtectedEmailRevealedButtonContentProps } from './protected-email-button-types';
 
-type ProtectedEmailRevealedButtonProps = {
+type ProtectedEmailRevealedButtonProps = ProtectedEmailRevealedButtonContentProps & {
   presentation: 'contact' | 'sidebar';
-  email: string;
-  label: string;
-  showAddress: boolean;
-  onReveal: () => void;
-  ref?: (element: HTMLButtonElement | null) => void;
 };
 
 export function ProtectedEmailRevealedButton(props: ProtectedEmailRevealedButtonProps) {
-  const contact = props.presentation === 'contact';
+  const { presentation, ...contentProps } = props;
 
-  const Frame = contact ? ContactActionButton : ProtectedEmailSidebarButton;
+  if (presentation === 'contact') {
+    return <ProtectedEmailContactRevealedButton {...contentProps} />;
+  }
 
-  return (
-    <Frame
-      ref={props.ref}
-      variant="outlined"
-      size={contact ? 'medium' : 'small'}
-      startIcon={<Icon name="mail" size={contact ? 18 : 14} />}
-      onClick={props.onReveal}
-    >
-      {props.showAddress ? props.email : props.label}
-    </Frame>
-  );
+  return <ProtectedEmailSidebarRevealedButton {...contentProps} />;
 }

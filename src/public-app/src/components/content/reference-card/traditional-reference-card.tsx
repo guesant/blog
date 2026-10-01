@@ -1,4 +1,4 @@
-import { FindingReferenceCardFrame } from '../../ui';
+import { FindingFeedCardFrame } from '../../ui';
 import { ReferenceCardContent } from './reference-card-content';
 import type { ReferenceCardProps } from './types';
 
@@ -6,8 +6,8 @@ type TraditionalReferenceCardProps = ReferenceCardProps;
 
 export function TraditionalReferenceCard(props: TraditionalReferenceCardProps) {
   return (
-    <FindingReferenceCardFrame>
+    <FindingFeedCardFrame component="article">
       <ReferenceCardContent {...props} />
-    </FindingReferenceCardFrame>
+    </FindingFeedCardFrame>
   );
 }

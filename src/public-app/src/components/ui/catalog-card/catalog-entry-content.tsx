@@ -13,14 +13,10 @@ export function CatalogEntryContent(props: CatalogEntryContentProps) {
   return (
     <>
       {props.meta}
-      <FindingCardTitle component={props.titleComponent ?? 'h2'} presentation="feed">
-        {props.title}
-      </FindingCardTitle>
+      <FindingCardTitle component={props.titleComponent ?? 'h2'}>{props.title}</FindingCardTitle>
       <ConditionalContent
         condition={Boolean(props.description)}
-        content={
-          <FindingCardDescription presentation="feed">{props.description}</FindingCardDescription>
-        }
+        content={<FindingCardDescription>{props.description}</FindingCardDescription>}
       />
     </>
   );

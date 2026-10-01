@@ -21,7 +21,6 @@ const pageLabelKeys = {
   newestLabel: 'newest',
   oldestLabel: 'oldest',
   alphabeticalLabel: 'alphabetical',
-  popularLabel: 'mostPopular',
   searchLabel: 'searchPlaceholder',
   applyLabel: 'apply',
   clearLabel: 'clearFilters',

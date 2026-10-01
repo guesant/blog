@@ -1,1 +1,1 @@
-export { AchadoDetailContent } from './achado-detail-content';
+export { FindingDetailPage } from './finding-detail-page';

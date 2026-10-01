@@ -1,7 +1,7 @@
 import Markdown from 'react-markdown';
 import rehypeSanitize from 'rehype-sanitize';
 import remarkGfm from 'remark-gfm';
-import { RichTextContentFrame } from '../../ui/semantic/RichTextContentFrame';
+import { RichTextFlowFrame } from '../../ui/semantic/RichTextFlowFrame';
 import { markdownComponents } from './markdown-components';
 
 type MarkdownRichTextProps = {
@@ -10,7 +10,7 @@ type MarkdownRichTextProps = {
 
 export function MarkdownRichText(props: MarkdownRichTextProps) {
   return (
-    <RichTextContentFrame>
+    <RichTextFlowFrame>
       <Markdown
         components={markdownComponents}
         rehypePlugins={[rehypeSanitize]}
@@ -18,6 +18,6 @@ export function MarkdownRichText(props: MarkdownRichTextProps) {
       >
         {props.content}
       </Markdown>
-    </RichTextContentFrame>
+    </RichTextFlowFrame>
   );
 }

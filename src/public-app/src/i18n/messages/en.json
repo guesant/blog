@@ -23,6 +23,7 @@
     "cases": "Cases",
     "contact": "Contact",
     "experiments": "Experiments",
+    "feed": "Feed",
     "findings": "Findings",
     "resume": "Résumé",
     "talk": "Let's Talk",
@@ -127,22 +128,17 @@
     "feed": "Feed",
     "showing": "Showing {visible} of {total}",
     "recent": "Recent",
-    "popular": "Popular",
     "collections": "Collections",
     "projects": "Projects and Work",
     "viewHighlights": "View All Highlights",
     "viewFeed": "View All Feed",
     "viewRecent": "View All Recent",
-    "viewPopular": "View All Popular Findings",
     "viewCollections": "View All Collections",
     "viewCollection": "View All Collection Items",
     "viewProjects": "View All Projects",
     "recentWriting": "Recent Writing",
     "recentFindings": "Recent Findings",
     "recentCollections": "Recent Collections",
-    "popularWriting": "Popular Writing",
-    "popularFindings": "Popular Findings",
-    "popularCollections": "Popular Collections",
     "viewWriting": "View All Writing",
     "viewFindings": "View All Findings",
     "portfolioCases": "Case Studies",
@@ -193,7 +189,8 @@
     },
     "feed": {
       "title": "Feed",
-      "description": "Writing, findings, collections, and selected work"
+      "description": "Writing, findings, collections, and selected work",
+      "searchPlaceholder": "Search Feed…"
     },
     "now": {
       "working": "Working on",
@@ -221,7 +218,8 @@
       "metrics": "Impact highlights"
     },
     "writings": {
-      "back": "All Writing"
+      "back": "All Writing",
+      "searchPlaceholder": "Search Writing…"
     },
     "achados": {
       "back": "All Findings",
@@ -238,14 +236,6 @@
           "link": "Link"
         },
         "fields": {
-          "owner": "Owner",
-          "language": "Language",
-          "license": "License",
-          "channel": "Channel",
-          "duration": "Duration",
-          "identifier": "Identifier",
-          "siteName": "Site",
-          "contentType": "Type",
           "host": "Host"
         }
       },
@@ -272,7 +262,6 @@
       "newest": "Newest",
       "oldest": "Oldest",
       "alphabetical": "Alphabetical",
-      "mostPopular": "Most Popular",
       "apply": "Apply",
       "pagination": "Findings pagination",
       "displayMode": "Feed display mode",

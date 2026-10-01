@@ -1,24 +1,30 @@
 import { type IconName } from '../primitives/icon';
 import { ConditionalContent } from '../primitives/conditional-content';
-import { EmptyState2Frame } from '../ui/semantic/EmptyState2Frame';
+import { EmptyStateCatIllustrationFrame } from '../ui/semantic/EmptyStateCatIllustrationFrame';
 import { EmptyStateFrame } from '../ui/semantic/EmptyStateFrame';
 import { EmptyStateIcon } from '../ui/semantic/EmptyStateIcon';
 import { EmptyStateText } from '../ui/semantic/EmptyStateText';
 
-type EmptyStateProps = { children: string; icon?: IconName; cat?: boolean; eyes?: string };
+type EmptyStateProps = {
+  children: string;
+  icon?: IconName;
+  cat?: boolean;
+  eyes?: string;
+  topDivider?: boolean;
+};
 
 export function EmptyState(props: EmptyStateProps) {
-  const { children, icon, cat = true, eyes = '^.^' } = props;
+  const { children, icon, cat = true, eyes = '^.^', topDivider } = props;
 
   return (
-    <EmptyStateFrame role="status">
+    <EmptyStateFrame role="status" topDivider={topDivider}>
       <ConditionalContent condition={cat}>
-        <EmptyState2Frame component="pre" aria-hidden="true">
+        <EmptyStateCatIllustrationFrame component="pre" aria-hidden="true">
           {`/\\_/\\
 ( ${eyes} )
 
  > ^ <`}
-        </EmptyState2Frame>
+        </EmptyStateCatIllustrationFrame>
       </ConditionalContent>
       <ConditionalContent condition={Boolean(icon)}>
         <EmptyStateIcon name={icon ?? 'problem'} size={20} />

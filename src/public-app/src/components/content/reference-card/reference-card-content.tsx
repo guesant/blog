@@ -18,7 +18,6 @@ export function ReferenceCardContent(props: ReferenceCardContentProps) {
           href={reference.url ?? `/findings/${reference.slug}`}
           description={reference.description}
           headingLevel={headingLevel}
-          presentation="reference"
         />
       }
       topics={

@@ -31,8 +31,8 @@ export function PortfolioProjectResults(props: PortfolioProjectResultsProps) {
       content={
         <Box>
           <PortfolioProjectGrid>
-            {progressive.items.map((project, index) => (
-              <ProjectCard key={project.slug} project={project} highlighted={index === 0} />
+            {progressive.items.map((project) => (
+              <ProjectCard key={project.slug} project={project} />
             ))}
           </PortfolioProjectGrid>
           <ProgressiveCollectionFooter progressive={progressive} />

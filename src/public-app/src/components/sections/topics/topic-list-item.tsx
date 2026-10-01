@@ -1,7 +1,7 @@
 import type { Topic } from '@portfolio/data/domain/types';
 import type { CommonTranslator } from '@/i18n/compat-support';
 import { NavLink } from '../../primitives/nav-link';
-import { TopicArrowArrow } from '../../ui/semantic/TopicArrowArrow';
+import { TopicExploreArrowIcon } from '../../ui/semantic/TopicExploreArrowIcon';
 import { TopicExploreButton } from '../../ui/semantic/TopicExploreButton';
 import { TopicItemFrame } from '../../ui/semantic/TopicItemFrame';
 import { TopicTitleText } from '../../ui/semantic/TopicTitleText';
@@ -28,7 +28,7 @@ export function TopicListItem(props: TopicListItemProps) {
         href={props.topic.url ?? `/topics/${props.topic.slug}`}
         size="small"
         variant="outlined"
-        endIcon={<TopicArrowArrow />}
+        endIcon={<TopicExploreArrowIcon />}
       >
         {props.t('explore')}
       </TopicExploreButton>

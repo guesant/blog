@@ -33,7 +33,7 @@ class WritingReader
                 $translation->where('locale', Locale::normalize($locale))
                     ->where(function ($fields) use ($term): void {
                         $fields->where('title', 'ilike', $term)
-                            ->orWhere('excerpt', 'ilike', $term);
+                            ->orWhere('body', 'ilike', $term);
                     });
             });
         }

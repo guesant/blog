@@ -85,7 +85,10 @@ final class PublicContentResponseFactory
 
     private function writingSummary(Writing $writing, string $locale): array
     {
-        return $this->withoutDetailFields($this->writing($writing, $locale));
+        $data = $this->writing($writing, $locale);
+        $data['excerpt'] = $this->writingPreview($data['body'] ?? null);
+
+        return $this->withoutDetailFields($data);
     }
 
     private function experimentSummary(Experiment $experiment, string $locale): array
@@ -251,7 +254,6 @@ final class PublicContentResponseFactory
             'preview' => $item['personal_note'] ?: ($item['reason_found'] ?: ($item['description'] ?? '')),
             'date' => $item['found_date'] ?: ($item['published_date'] ?? ''),
             'finding_type' => $item['type'],
-            'popularity' => $item['popularity'],
             'featured' => $item['featured'],
             'topics' => $item['topics'],
             'links' => $item['links'],
@@ -362,14 +364,13 @@ final class PublicContentResponseFactory
             'slug' => $slug,
             'url' => Locale::url('/writing/'.$this->publicKey($writing), $locale),
             'title' => $translation?->title ?? $slug,
-            'excerpt' => $translation?->excerpt,
+            'body' => $this->media->rewrite($translation?->body),
             'og_image_url' => $this->ogImages->generate(
                 'article',
                 $translation?->title ?? $slug,
-                $translation?->excerpt,
+                $this->writingPreview($translation?->body),
             ),
             'reading_time' => $translation?->reading_time,
-            'body' => $this->media->rewrite($translation?->body),
             'type' => $this->publishedValue($writing, 'type'),
             'date' => $this->publishedDate($writing, 'date_iso'),
             'topics' => $writing->topics->map(fn ($topic) => [
@@ -384,6 +385,33 @@ final class PublicContentResponseFactory
         ];
 
         return $data;
+    }
+
+    private function writingPreview(mixed $value): string
+    {
+        $text = $this->plainText($value);
+
+        return mb_strlen($text) > 350 ? mb_substr($text, 0, 347).'...' : $text;
+    }
+
+    private function plainText(mixed $value): string
+    {
+        if (is_array($value)) {
+            return $this->plainText(collect($value)->map(fn (mixed $item): string => $this->plainText($item))->implode(' '));
+        }
+
+        if (! is_string($value)) {
+            return '';
+        }
+
+        $text = preg_replace('/!\[([^]]*)\]\([^)]*\)/u', '$1', $value) ?? $value;
+        $text = preg_replace('/\[([^]]+)\]\([^)]*\)/u', '$1', $text) ?? $text;
+        $text = strip_tags($text);
+        $text = preg_replace('/(^|\s)[#>*+~-]+\s*/u', '$1', $text) ?? $text;
+        $text = preg_replace('/[`*_~]/u', '', $text) ?? $text;
+        $text = preg_replace('/\s+/u', ' ', $text) ?? $text;
+
+        return trim($text);
     }
 
     private function collectionDetail(

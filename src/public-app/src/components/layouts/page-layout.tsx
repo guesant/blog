@@ -1,6 +1,6 @@
-import { AboutPageLayoutFrame } from '../ui/semantic/AboutPageLayoutFrame';
-import { PageLayoutFrame } from '../ui/semantic/PageLayoutFrame';
 import type { ReactNode } from 'react';
+import { AboutPageLayout } from './about-page-layout';
+import { StandardPageLayout } from './standard-page-layout';
 
 type PageLayoutProps = {
   children: ReactNode;
@@ -8,7 +8,9 @@ type PageLayoutProps = {
 };
 
 export function PageLayout(props: PageLayoutProps) {
-  const Frame = props.about ? AboutPageLayoutFrame : PageLayoutFrame;
+  if (props.about) {
+    return <AboutPageLayout children={props.children} />;
+  }
 
-  return <Frame>{props.children}</Frame>;
+  return <StandardPageLayout children={props.children} />;
 }

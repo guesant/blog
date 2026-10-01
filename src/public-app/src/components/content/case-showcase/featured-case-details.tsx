@@ -20,10 +20,8 @@ export function FeaturedCaseDetails(props: FeaturedCaseDetailsProps) {
         item={props.item}
         meta={`${t('selectedCase')} ${props.item.number} · ${props.item.meta}`}
       />
-      <CaseCardTitle component="h3" presentation="featured">
-        {props.item.title}
-      </CaseCardTitle>
-      <CaseCardSummary presentation="featured">{props.item.summary}</CaseCardSummary>
+      <CaseCardTitle component="h3">{props.item.title}</CaseCardTitle>
+      <CaseCardSummary>{props.item.summary}</CaseCardSummary>
       <FeaturedCaseFacts item={props.item} />
       <FeaturedCaseFooter item={props.item} />
     </CaseFeaturedDetailsFrame>

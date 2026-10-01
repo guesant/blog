@@ -1,13 +1,13 @@
 'use client';
 
-import { ProjectRowContent, ProjectRowFrame } from '../../ui';
+import { ProjectRowFrame, ProjectSummaryContent } from '../../ui';
 import { NavLink } from '../../primitives/nav-link';
 import type { ProjectRowProps } from './types';
 
 export function ProjectRow(props: ProjectRowProps) {
   return (
     <ProjectRowFrame>
-      <ProjectRowContent
+      <ProjectSummaryContent
         status={props.item.status}
         title={
           <NavLink
@@ -18,6 +18,7 @@ export function ProjectRow(props: ProjectRowProps) {
             {props.item.name}
           </NavLink>
         }
+        headingLevel="h3"
         purpose={props.item.purpose}
         problem={props.item.problem}
         technologies={props.item.technologies.join(' · ')}

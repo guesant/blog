@@ -26,7 +26,6 @@ class WritingRevisionTranslationFactory extends RevisionTranslationFactory
             'writing_id' => Writing::factory(),
             'locale' => $this->faker->randomElement(['en', 'pt-BR']),
             'title' => $this->faker->sentence(),
-            'excerpt' => $this->faker->optional()->paragraph(),
             'reading_time' => $this->faker->optional()->word(),
             'body' => $this->faker->optional()->paragraph(),
         ];

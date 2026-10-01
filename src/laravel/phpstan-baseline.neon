@@ -181,24 +181,6 @@ parameters:
 			path: app/Content/Graph/RelationResolver.php
 
 		-
-			message: '#^Call to an undefined method Illuminate\\Contracts\\Cache\\Repository\:\:lock\(\)\.$#'
-			identifier: method.notFound
-			count: 1
-			path: app/Content/OpenGraphMetadata.php
-
-		-
-			message: '#^Method Illuminate\\Http\\Client\\Response\:\:header\(\) invoked with 2 parameters, 1 required\.$#'
-			identifier: arguments.count
-			count: 1
-			path: app/Content/OpenGraphMetadata.php
-
-		-
-			message: '#^Offset ''og\:title'' on array\{''og\:title''\: string, ''og\:description''\?\: non\-empty\-string, ''og\:image''\?\: non\-empty\-string, ''og\:site_name''\?\: non\-empty\-string, ''og\:type''\?\: non\-empty\-string, ''og\:url''\?\: non\-empty\-string\} on left side of \?\? always exists and is not nullable\.$#'
-			identifier: nullCoalesce.offset
-			count: 1
-			path: app/Content/OpenGraphMetadata.php
-
-		-
 			message: '#^Access to an undefined property App\\Models\\Resource\:\:\$pivot\.$#'
 			identifier: property.notFound
 			count: 1
@@ -392,12 +374,6 @@ parameters:
 
 		-
 			message: '#^Access to an undefined property App\\Models\\WritingRevisionTranslation\:\:\$body\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Responses/PublicContentResponseFactory.php
-
-		-
-			message: '#^Access to an undefined property App\\Models\\WritingRevisionTranslation\:\:\$excerpt\.$#'
 			identifier: property.notFound
 			count: 2
 			path: app/Http/Responses/PublicContentResponseFactory.php

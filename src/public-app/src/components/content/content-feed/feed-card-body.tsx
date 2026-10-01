@@ -28,7 +28,6 @@ export function FeedCardBody(props: FeedCardBodyProps) {
           description={props.entry.preview}
           metadata={<FeedCardHeader {...props} />}
           headingLevel="h2"
-          presentation="feed"
         />
       }
       footer={<FeedCardFooter {...props} />}

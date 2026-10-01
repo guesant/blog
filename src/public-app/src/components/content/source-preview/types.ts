@@ -4,16 +4,7 @@ import type { SourcePreviewTranslationKey } from '@/i18n/compat-support';
 type SourcePreviewKind =
   'repository' | 'organization' | 'user' | 'video' | 'playlist' | 'channel' | 'link';
 
-export type SourcePreviewMetadataKey =
-  | 'owner'
-  | 'language'
-  | 'license'
-  | 'channel'
-  | 'duration'
-  | 'identifier'
-  | 'siteName'
-  | 'contentType'
-  | 'host';
+export type SourcePreviewMetadataKey = 'host';
 
 export type SourcePreviewMetadata = {
   key: SourcePreviewMetadataKey;
@@ -26,7 +17,6 @@ export type SourcePreviewData = {
   url: string;
   title: string;
   description: string;
-  imageUrl?: string;
   icon: IconName;
   metadata: SourcePreviewMetadata[];
   filterType?: string;

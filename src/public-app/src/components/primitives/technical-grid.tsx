@@ -1,19 +1,12 @@
-'use client';
+import { PanelTechnicalGrid } from './panel-technical-grid';
+import { HeroTechnicalGrid } from './hero-technical-grid';
 
-import { TechnicalGridSurface } from '../ui';
-import { useRef } from 'react';
-import { useGridPointer } from './use-grid-pointer';
-
-type TechnicalGridProps = { variant?: 'hero' | 'panel' };
+export type TechnicalGridProps = { variant?: 'hero' | 'panel' };
 
 export function TechnicalGrid(props: TechnicalGridProps) {
-  const { variant = 'hero' } = props;
+  if (props.variant === 'panel') {
+    return <PanelTechnicalGrid />;
+  }
 
-  const isPanel = variant === 'panel';
-
-  const gridRef = useRef<HTMLDivElement>(null);
-
-  useGridPointer(gridRef, isPanel);
-
-  return <TechnicalGridSurface ref={gridRef} panel={isPanel} />;
+  return <HeroTechnicalGrid />;
 }

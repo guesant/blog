@@ -160,9 +160,7 @@ class PublicResourceReader
 
     private function applySort(Builder $query, ?string $sort): void
     {
-        if ($sort === 'popular') {
-            $query->orderByDesc('resource_revisions.popularity_rank');
-        } elseif ($sort === 'alpha') {
+        if ($sort === 'alpha') {
             $query->orderBy('resource_revisions.slug');
         } elseif ($sort === 'asc') {
             $query->orderBy('resource_revisions.found_date_iso');

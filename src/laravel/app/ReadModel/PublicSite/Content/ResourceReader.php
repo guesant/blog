@@ -25,19 +25,15 @@ class ResourceReader
         $this->applyFilters($query, $filters, $locale);
         $query->select($this->listingColumns());
 
-        if ($sort === 'popular') {
-            $query->orderByDesc('popularity_rank')->orderBy('order')->orderBy('id');
-        } else {
-            $this->applySort(
-                $query,
-                $sort,
-                'found_date_iso',
-                alphaTable: 'resource_revision_translations',
-                alphaForeignKey: 'resource_revision_id',
-                alphaColumn: 'title',
-                locale: $locale,
-            );
-        }
+        $this->applySort(
+            $query,
+            $sort,
+            'found_date_iso',
+            alphaTable: 'resource_revision_translations',
+            alphaForeignKey: 'resource_revision_id',
+            alphaColumn: 'title',
+            locale: $locale,
+        );
 
         return $query->with($this->listingRelations())
             ->paginate($perPage);
@@ -258,9 +254,6 @@ class ResourceReader
             'updated_at',
             'featured',
             'featured_order',
-            'popularity_kind',
-            'popularity_rank',
-            'popularity_value',
         ];
     }
 

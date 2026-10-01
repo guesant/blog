@@ -1,6 +1,6 @@
 import type { ExternalProfile } from '@portfolio/data/domain/types';
 import type { ExternalProfilesTranslator } from '@/i18n/compat-support';
-import { ContactProfileButton } from './contact-profile-grid/contact-profile-button';
+import { ContactExternalProfileLink } from './contact-profile-grid/contact-external-profile-link';
 
 type ContactActionProfilesProps = {
   profiles: ExternalProfile[];
@@ -9,11 +9,10 @@ type ContactActionProfilesProps = {
 
 export function ContactActionProfiles(props: ContactActionProfilesProps) {
   return props.profiles.map((profile) => (
-    <ContactProfileButton
+    <ContactExternalProfileLink
       key={profile.url}
       profile={profile}
       tExternalProfiles={props.tExternalProfiles}
-      presentation="exploration"
     />
   ));
 }

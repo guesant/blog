@@ -8,6 +8,7 @@ import { metadataFromPage } from './splat-metadata-from-page';
 import { contentMetadata } from './splat-metadata-content';
 import { localizedMetadata } from './splat-metadata-localized';
 import { pageMetadata } from './splat-metadata-page';
+import { articleEntityMetadata } from './splat-metadata-article-entity';
 import { toMessageKey } from '../../data/config/achados';
 
 type MetadataResolver = (data: RouteData, locale: Locale) => RouteMetadata;
@@ -45,24 +46,8 @@ const metadataResolvers: Partial<Record<RouteData['kind'], MetadataResolver>> = 
           description: data.collection.description,
         })
       : defaultMetadata(),
-  'project-detail': (data) =>
-    data.kind === 'project-detail'
-      ? contentMetadata({
-          source: data.project,
-          title: data.project.name,
-          description: data.project.purpose,
-          type: 'article',
-        })
-      : defaultMetadata(),
-  'experiment-detail': (data) =>
-    data.kind === 'experiment-detail'
-      ? contentMetadata({
-          source: data.experiment,
-          title: data.experiment.name,
-          description: data.experiment.purpose,
-          type: 'article',
-        })
-      : defaultMetadata(),
+  'project-detail': articleEntityMetadata,
+  'experiment-detail': articleEntityMetadata,
   'snippet-detail': (data) =>
     data.kind === 'snippet-detail'
       ? contentMetadata({

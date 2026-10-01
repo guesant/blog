@@ -5,7 +5,7 @@ import { LinkList } from './link-list';
 import { SourcePreview } from './source-preview/source-preview';
 import { sourcePreviewDataForLink } from '../../content/source-preview/source-preview-data-for-link';
 import type { AchadosTranslator } from '@/i18n/compat-support';
-import { LinkSectionContentFrame } from '../../ui/semantic/LinkSectionContentFrame';
+import { FindingReferencePreviewListFrame } from '../../ui/semantic/FindingReferencePreviewListFrame';
 
 type LinkSectionContentProps = { item: Reference; t: AchadosTranslator };
 
@@ -29,13 +29,13 @@ export function LinkSectionContent(props: LinkSectionContentProps) {
   }
 
   return (
-    <LinkSectionContentFrame>
+    <FindingReferencePreviewListFrame>
       {previews.map((entry) => (
         <SourcePreview key={entry.link.url} data={entry.data} t={props.t} />
       ))}
       {fallbackLinks.length > 0 && (
         <LinkList item={{ ...props.item, links: fallbackLinks }} t={props.t} />
       )}
-    </LinkSectionContentFrame>
+    </FindingReferencePreviewListFrame>
   );
 }

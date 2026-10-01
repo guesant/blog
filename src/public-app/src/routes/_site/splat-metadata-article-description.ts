@@ -1,4 +1,5 @@
 import type { RouteData } from '../../data/queries';
+import { plainText } from '../../components/content/plain-text';
 
 type ArticleRouteData = Extract<
   RouteData,
@@ -10,9 +11,13 @@ export function articleDescription(data: ArticleRouteData): string {
     return data.item.summary;
   }
 
-  if ('description' in data.item) {
-    return data.item.description;
+  if ('body' in data.item) {
+    return plainText(data.item.body);
   }
 
-  return data.item.excerpt ?? '';
+  if ('excerpt' in data.item) {
+    return typeof data.item.excerpt === 'string' ? data.item.excerpt : '';
+  }
+
+  return '';
 }

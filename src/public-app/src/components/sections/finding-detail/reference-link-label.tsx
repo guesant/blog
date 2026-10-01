@@ -1,4 +1,4 @@
-import { ReferenceLinkLabel2Text } from '../../ui/semantic/ReferenceLinkLabel2Text';
+import { ReferenceLinkHostText } from '../../ui/semantic/ReferenceLinkHostText';
 import { ReferenceLinkLabelFrame } from '../../ui/semantic/ReferenceLinkLabelFrame';
 import { ReferenceLinkLabelText } from '../../ui/semantic/ReferenceLinkLabelText';
 
@@ -8,7 +8,7 @@ export function ReferenceLinkLabel(props: ReferenceLinkLabelProps) {
   return (
     <ReferenceLinkLabelFrame>
       <ReferenceLinkLabelText>{props.label}</ReferenceLinkLabelText>
-      <ReferenceLinkLabel2Text>{props.host}</ReferenceLinkLabel2Text>
+      <ReferenceLinkHostText>{props.host}</ReferenceLinkHostText>
     </ReferenceLinkLabelFrame>
   );
 }

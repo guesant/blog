@@ -2,7 +2,6 @@ import type { Reference } from '../domain/types.ts';
 import type { RecordValue } from './public-site-source-support';
 import { listValue } from './public-site-source-list-value';
 import { referenceLink } from './public-site-source-reference-link';
-import { referencePopularity } from './public-site-source-reference-popularity';
 import { referenceRelation } from './public-site-source-reference-relation';
 import { referenceRelations } from './public-site-source-reference-relations';
 import { referenceIdentifiers } from './public-site-source-reference-identifiers';
@@ -20,7 +19,6 @@ export function referenceContentFields(
   | 'topicSlugs'
   | 'topicUrls'
   | 'links'
-  | 'popularity'
   | 'featured'
   | 'featuredOrder'
   | 'identifiers'
@@ -31,7 +29,6 @@ export function referenceContentFields(
     topicSlugs: listValue<RecordValue>(item.topics).map(topicSlug),
     topicUrls: listValue<RecordValue>(item.topics).map((topic) => stringValue(topic.url)),
     links: listValue<RecordValue>(item.links).map(referenceLink),
-    popularity: referencePopularity(item.popularity),
     featured: item.featured === true,
     featuredOrder: numberValue(item.featured_order),
     identifiers: referenceIdentifiers(item.identifiers),

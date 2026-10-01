@@ -84,11 +84,6 @@ export type Reference = WithOgImage & {
   topicUrls?: string[];
   topicMemberships?: TopicMembership[];
   links: ExternalLink[];
-  popularity?: {
-    value: number;
-    kind: string;
-    rank: number;
-  };
   featured?: boolean;
   featuredOrder?: number;
   identifiers: ReferenceIdentifier[];

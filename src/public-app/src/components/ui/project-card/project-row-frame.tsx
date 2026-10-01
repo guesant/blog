@@ -13,7 +13,7 @@ const frameStyles = {
   borderRight: 'var(--site-border-width) solid var(--site-border)',
   borderBottom: 'var(--site-border-width) solid var(--site-border)',
   backgroundColor: 'var(--site-surface)',
-  '&:hover .project-row-title': { color: 'var(--site-primary)' },
+  '&:hover .project-summary-title': { color: 'var(--site-primary)' },
 };
 
 export function ProjectRowFrame(props: ProjectRowFrameProps) {

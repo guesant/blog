@@ -19,7 +19,7 @@ export type ContentCollection =
 export type ContentCollectionQuery = {
   page?: number;
   perPage?: number;
-  sort?: 'asc' | 'desc' | 'alpha' | 'popular';
+  sort?: 'asc' | 'desc' | 'alpha';
   featured?: boolean;
   q?: string;
   type?: string;
@@ -48,7 +48,7 @@ export type FindingListQuery = {
   consumptionState?: string;
   year?: number;
   freeOnly?: boolean;
-  sort?: 'asc' | 'desc' | 'alpha' | 'popular';
+  sort?: 'asc' | 'desc' | 'alpha';
   page?: number;
   perPage?: number;
 };

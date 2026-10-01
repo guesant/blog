@@ -18,8 +18,6 @@ export function CaseLink(props: CaseLinkProps) {
         item={props.item}
         meta={`${t('selectedCase')} ${props.item.number} · ${visuals.status}`}
         headingLevel="h3"
-        presentation="showcase"
-        compact={props.compact}
         actionLabel={t('readFullCase')}
       />
     </CaseShowcaseCardFrame>

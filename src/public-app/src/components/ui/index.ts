@@ -38,8 +38,6 @@ export { Paper } from './paper';
 
 export { ToggleButton } from './toggle-button';
 
-export { ToggleButtonGroup } from './toggle-button-group';
-
 export { Typography } from './typography';
 
 export { ArrowForward } from './arrow-forward';
@@ -58,7 +56,9 @@ export { DocumentShell } from './document-shell';
 
 export { MotionDiv } from './motion-div';
 
-export { TechnicalGridSurface } from './technical-grid';
+export { HeroTechnicalGridSurface } from './technical-grid/hero-technical-grid-surface';
+
+export { PanelTechnicalGridSurface } from './technical-grid/panel-technical-grid-surface';
 
 export { NoScript } from './no-script';
 
@@ -73,8 +73,6 @@ export { EditorialFeedItemDivider, EditorialFeedItemFrame } from './semantic';
 export { ListingListFrame, ListingViewFrame } from './listing-view';
 
 export { PageHeaderFrame } from './page-header';
-
-export { PageHeaderSectionFrame } from './semantic/PageHeaderSectionFrame';
 
 export * from './resume';
 

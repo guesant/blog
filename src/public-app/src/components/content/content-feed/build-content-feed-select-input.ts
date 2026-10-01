@@ -37,6 +37,5 @@ export function buildContentFeedSelectInput(
     newestLabel: translations.newestLabel,
     oldestLabel: translations.oldestLabel,
     alphabeticalLabel: translations.alphabeticalLabel,
-    popularLabel: translations.popularLabel,
   };
 }

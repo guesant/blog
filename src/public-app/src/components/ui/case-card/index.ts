@@ -31,5 +31,3 @@ export { CaseCardSummary } from './case-card-summary';
 export { CaseCardTechnologies } from './case-card-technologies';
 
 export { CaseCardTitle } from './case-card-title';
-
-export type { CaseCardPresentation } from './case-card-types';

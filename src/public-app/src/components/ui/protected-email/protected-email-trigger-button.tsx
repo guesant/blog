@@ -1,29 +1,17 @@
-import { Icon } from '../../primitives/icon';
-import { ContactActionButton } from '../semantic/ContactActionButton';
-import { ProtectedEmailSidebarButton } from '../semantic/ProtectedEmailSidebarButton';
+import { ProtectedEmailContactTriggerButton } from './protected-email-contact-trigger-button';
+import { ProtectedEmailSidebarTriggerButton } from './protected-email-sidebar-trigger-button';
+import type { ProtectedEmailTriggerButtonProps as ProtectedEmailTriggerButtonContentProps } from './protected-email-button-types';
 
-type ProtectedEmailTriggerButtonProps = {
+type ProtectedEmailTriggerButtonProps = ProtectedEmailTriggerButtonContentProps & {
   presentation: 'contact' | 'sidebar';
-  busy: boolean;
-  label: string;
-  onReveal: () => void;
 };
 
 export function ProtectedEmailTriggerButton(props: ProtectedEmailTriggerButtonProps) {
-  const contact = props.presentation === 'contact';
+  const { presentation, ...contentProps } = props;
 
-  const Frame = contact ? ContactActionButton : ProtectedEmailSidebarButton;
+  if (presentation === 'contact') {
+    return <ProtectedEmailContactTriggerButton {...contentProps} />;
+  }
 
-  return (
-    <Frame
-      type="button"
-      onClick={props.onReveal}
-      disabled={props.busy}
-      variant="outlined"
-      size={contact ? 'medium' : 'small'}
-      startIcon={<Icon name="mail" size={contact ? 18 : 14} />}
-    >
-      {props.label}
-    </Frame>
-  );
+  return <ProtectedEmailSidebarTriggerButton {...contentProps} />;
 }

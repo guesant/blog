@@ -59,9 +59,6 @@ class WritingForm
                         ->label('Title')
                         ->required()
                         ->maxLength(255),
-                    static::markdownEditor("{$prefix}excerpt")
-                        ->label('Excerpt')
-                        ->nullable(),
                     static::markdownEditor("{$prefix}body")
                         ->label('Body')
                         ->nullable(),

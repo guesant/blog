@@ -7,11 +7,3 @@ export type CaseCardFrameProps = {
   underline?: 'none' | 'hover' | 'always';
   color?: string;
 };
-
-export type CaseCardTextProps = {
-  children: ReactNode;
-  presentation: CaseCardPresentation;
-  compact?: boolean;
-};
-
-export type CaseCardPresentation = 'listing' | 'showcase' | 'featured';

@@ -40,7 +40,7 @@ class FindingApiController extends Controller
         $filters = $request->only(['q', 'type', 'topic', 'rating', 'consumption_state', 'year', 'free_only']);
 
         $perPage = min(max((int) $request->query('per_page', 50), 1), 100);
-        $sort = in_array($request->query('sort'), ['asc', 'desc', 'alpha', 'popular'], true)
+        $sort = in_array($request->query('sort'), ['asc', 'desc', 'alpha'], true)
             ? $request->query('sort')
             : null;
         $result = $handler->handle(new ListPublicFindingsQuery(

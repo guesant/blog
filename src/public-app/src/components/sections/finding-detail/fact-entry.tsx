@@ -1,7 +1,7 @@
 'use client';
 
 import type { DetailEntry } from './types';
-import { FactEntry2Text } from '../../ui/semantic/FactEntry2Text';
+import { FindingFactValueText } from '../../ui/semantic/FindingFactValueText';
 import { FactEntryFrame } from '../../ui/semantic/FactEntryFrame';
 import { FactEntryText } from '../../ui/semantic/FactEntryText';
 
@@ -13,7 +13,7 @@ export function FactEntry(props: FactEntryProps) {
   return (
     <FactEntryFrame component="div">
       <FactEntryText component="dt">{entry.label}</FactEntryText>
-      <FactEntry2Text component="dd">{entry.value}</FactEntry2Text>
+      <FindingFactValueText component="dd">{entry.value}</FindingFactValueText>
     </FactEntryFrame>
   );
 }

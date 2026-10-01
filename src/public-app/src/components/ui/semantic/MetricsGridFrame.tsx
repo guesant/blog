@@ -6,6 +6,7 @@ export const MetricsGridFrame = createSemanticSxComponent<ComponentProps<typeof 
   display: 'grid',
   gridTemplateColumns: { xs: '1fr', sm: 'repeat(auto-fit, minmax(9rem, 1fr))' },
   gap: 3,
+  marginBlockStart: 'var(--site-space-6)',
   pt: 4,
   borderTop: 1,
   borderColor: 'divider',

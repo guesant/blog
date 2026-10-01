@@ -7,6 +7,7 @@ export const ContentFeedDisplayControlsStack = createSemanticSxComponent<
 >(BaseComponent, {
   alignItems: 'center',
   flexWrap: 'wrap',
+  width: '100%',
   rowGap: 'var(--site-gap-stack)',
   columnGap: 'var(--site-gap-cluster)',
 });

@@ -1,15 +1,13 @@
 'use client';
 
-import { ContentActionsHeroStack } from '../ui/semantic/ContentActionsHeroStack';
-import { ContentActionsSectionStack } from '../ui/semantic/ContentActionsSectionStack';
 import type { RichTextContent } from '@portfolio/data/domain/types';
 import { useTranslations } from '@/i18n/compat';
 import { useState } from 'react';
 import { copyContentAction } from './copy-content-action';
 import { plainText } from './plain-text';
-import { ContentActionsPrimary } from './content-actions-primary';
-import { ContentActionsSecondary } from './content-actions-secondary';
 import { useSiteFeatureFlags } from './use-site-feature-flags';
+import { ContentActionsHero } from './content-actions-hero';
+import { ContentActionsSection } from './content-actions-section';
 
 type ContentActionsProps = {
   title: string;
@@ -39,20 +37,21 @@ export function ContentActions(props: ContentActionsProps) {
       .replace(/[^a-z0-9]+/g, '-')
       .replace(/^-|-$/g, '') || 'content';
 
-  const ActionsFrame = placement === 'hero' ? ContentActionsHeroStack : ContentActionsSectionStack;
+  const contentProps = {
+    text,
+    copy,
+    url,
+    filename,
+    t,
+    copied,
+    featureFlags: featureFlags.contentActions,
+    externalUrl,
+    downloadUrl,
+  };
 
-  return (
-    <ActionsFrame direction="row">
-      <ContentActionsPrimary
-        text={text}
-        copy={copy}
-        url={url}
-        filename={filename}
-        t={t}
-        copied={copied}
-        featureFlags={featureFlags.contentActions}
-      />
-      <ContentActionsSecondary externalUrl={externalUrl} downloadUrl={downloadUrl} t={t} />
-    </ActionsFrame>
-  );
+  if (placement === 'hero') {
+    return <ContentActionsHero {...contentProps} />;
+  }
+
+  return <ContentActionsSection {...contentProps} />;
 }

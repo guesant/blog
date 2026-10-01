@@ -14,6 +14,10 @@ type ContentFeedRouteSectionProps = {
 export function ContentFeedRouteSection(props: ContentFeedRouteSectionProps) {
   const tNav = useTranslations('Nav');
 
+  const tFeed = useTranslations('Pages.feed');
+
+  const tWritings = useTranslations('Pages.writings');
+
   const breadcrumbLabels = {
     post: tNav('writing'),
     colecao: tNav('collections'),
@@ -24,6 +28,8 @@ export function ContentFeedRouteSection(props: ContentFeedRouteSectionProps) {
     findings: props.data.findings,
     collections: props.data.collections,
     copy: props.data.page,
+    searchPlaceholder:
+      props.fixedKind === 'post' ? tWritings('searchPlaceholder') : tFeed('searchPlaceholder'),
     breadcrumbs: [{ label: breadcrumbLabels[props.fixedKind] }],
     contentMeta: props.data.pagination,
     fixedKind: props.fixedKind,

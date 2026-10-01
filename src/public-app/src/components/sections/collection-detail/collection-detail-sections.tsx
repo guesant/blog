@@ -4,8 +4,8 @@ import type { ReferenceCollectionDetail } from '@portfolio/data/domain/types';
 import type { CommonTranslator } from '@/i18n/compat-support';
 import { CollectionReferenceItem } from './collection-reference-item';
 import { ConditionalContent } from '../../primitives/conditional-content';
-import { ColecaoDetailContent2Frame } from '../../ui/semantic/ColecaoDetailContent2Frame';
-import { ColecaoDetailContentFrame } from '../../ui/semantic/ColecaoDetailContentFrame';
+import { CollectionReferenceListFrame } from '../../ui/semantic/CollectionReferenceListFrame';
+import { CollectionIntroductionFrame } from '../../ui/semantic/CollectionIntroductionFrame';
 
 type CollectionDetailSectionsProps = {
   collection: ReferenceCollectionDetail;
@@ -18,9 +18,9 @@ export function CollectionDetailSections(props: CollectionDetailSectionsProps) {
       <ConditionalContent
         condition={Boolean(props.collection.intro)}
         content={
-          <ColecaoDetailContentFrame>
+          <CollectionIntroductionFrame>
             <ContentRichText content={props.collection.intro ?? {}} />
-          </ColecaoDetailContentFrame>
+          </CollectionIntroductionFrame>
         }
       />
       <ConditionalContent
@@ -30,11 +30,11 @@ export function CollectionDetailSections(props: CollectionDetailSectionsProps) {
       <ConditionalContent
         condition={props.collection.items.length > 0}
         content={
-          <ColecaoDetailContent2Frame>
+          <CollectionReferenceListFrame>
             {props.collection.items.map((item) => (
               <CollectionReferenceItem key={item.reference.slug} item={item} />
             ))}
-          </ColecaoDetailContent2Frame>
+          </CollectionReferenceListFrame>
         }
       />
     </>

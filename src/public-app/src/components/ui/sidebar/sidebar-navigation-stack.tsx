@@ -1,20 +1,13 @@
 import type { ReactNode } from 'react';
-import { Stack } from '../stack';
+import { SidebarNavigationCompactStack } from './sidebar-navigation-compact-stack';
+import { SidebarNavigationExpandedStack } from './sidebar-navigation-expanded-stack';
 
 type SidebarNavigationStackProps = { children: ReactNode; compact: boolean };
 
 export function SidebarNavigationStack(props: SidebarNavigationStackProps) {
-  return (
-    <Stack
-      sx={{
-        width: '100%',
-        flexShrink: 0,
-        gap: 'var(--site-sidebar-gap)',
-        flex: props.compact ? undefined : 1,
-        minHeight: props.compact ? undefined : 0,
-      }}
-    >
-      {props.children}
-    </Stack>
-  );
+  if (props.compact) {
+    return <SidebarNavigationCompactStack children={props.children} />;
+  }
+
+  return <SidebarNavigationExpandedStack children={props.children} />;
 }

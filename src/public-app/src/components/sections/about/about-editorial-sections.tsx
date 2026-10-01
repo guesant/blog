@@ -1,7 +1,7 @@
 import { AboutEditorialSection } from './about-editorial-section';
 import type { AboutEditorialSectionsProps } from './types';
 import { AboutEditorialSectionsFrame } from '../../ui/semantic/AboutEditorialSectionsFrame';
-import { AboutSectionDividerDivider } from '../../ui/semantic/AboutSectionDividerDivider';
+import { AboutSectionDivider } from '../../ui/semantic/AboutSectionDivider';
 
 export function AboutEditorialSections(props: AboutEditorialSectionsProps) {
   if (props.sections.length === 0) {
@@ -13,7 +13,7 @@ export function AboutEditorialSections(props: AboutEditorialSectionsProps) {
       {props.sections.map((section) => (
         <AboutEditorialSection key={section.id} section={section} />
       ))}
-      <AboutSectionDividerDivider />
+      <AboutSectionDivider />
     </AboutEditorialSectionsFrame>
   );
 }

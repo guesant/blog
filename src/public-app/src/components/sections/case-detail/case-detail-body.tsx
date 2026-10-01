@@ -4,9 +4,9 @@ import type { CaseStudy } from '@portfolio/data/domain/types';
 import type { CasesTranslator } from '@/i18n/compat-support';
 import { CaseDetailMetric } from './case-detail-metric';
 import { ConditionalContent } from '../../primitives/conditional-content';
-import { CaseDetailContent2Frame } from '../../ui/semantic/CaseDetailContent2Frame';
-import { CaseDetailContentFrame } from '../../ui/semantic/CaseDetailContentFrame';
-import { CaseDetailContentText } from '../../ui/semantic/CaseDetailContentText';
+import { CaseBodyRichTextFrame } from '../../ui/semantic/CaseBodyRichTextFrame';
+import { CaseDetailFactsGridFrame } from '../../ui/semantic/CaseDetailFactsGridFrame';
+import { CaseDetailTechnologyListText } from '../../ui/semantic/CaseDetailTechnologyListText';
 
 type CaseDetailBodyProps = {
   item: CaseStudy;
@@ -22,19 +22,21 @@ export function CaseDetailBody(props: CaseDetailBodyProps) {
 
   return (
     <>
-      <CaseDetailContentFrame>
+      <CaseDetailFactsGridFrame>
         {details.map((detail) => (
           <CaseDetailMetric key={detail.field} {...detail} />
         ))}
-      </CaseDetailContentFrame>
-      <MetricsGrid metrics={props.item.metrics} marginTop={4} />
-      <CaseDetailContentText>{props.item.technologies.join(' · ')}</CaseDetailContentText>
+      </CaseDetailFactsGridFrame>
+      <MetricsGrid metrics={props.item.metrics} />
+      <CaseDetailTechnologyListText>
+        {props.item.technologies.join(' · ')}
+      </CaseDetailTechnologyListText>
       <ConditionalContent
         condition={Boolean(props.item.body)}
         content={
-          <CaseDetailContent2Frame>
+          <CaseBodyRichTextFrame>
             <ContentRichText content={props.item.body ?? {}} />
-          </CaseDetailContent2Frame>
+          </CaseBodyRichTextFrame>
         }
       />
     </>

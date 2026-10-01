@@ -44,7 +44,6 @@ class WritingTest extends TestCase
         app(EditorialRevisionPublisher::class)->publish($writing, [
             'en' => [
                 'title' => 'Updated title',
-                'excerpt' => 'Updated excerpt',
                 'body' => 'Updated body',
             ],
         ]);

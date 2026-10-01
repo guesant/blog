@@ -18,7 +18,7 @@ class ResourceRevisionTranslationFactory extends RevisionTranslationFactory
 
     protected string $revisionKey = 'resource_revision_id';
 
-    protected array $revisionColumns = ['slug', 'public_id', 'hidden', 'order', 'type', 'language_id', 'published_date_iso', 'found_date_iso', 'consumption_state', 'rating', 'editorial_state', 'visibility', 'featured', 'featured_order', 'popularity_kind', 'popularity_rank', 'popularity_value'];
+    protected array $revisionColumns = ['slug', 'public_id', 'hidden', 'order', 'type', 'language_id', 'published_date_iso', 'found_date_iso', 'consumption_state', 'rating', 'editorial_state', 'visibility', 'featured', 'featured_order'];
 
     public function definition(): array
     {

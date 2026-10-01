@@ -6,5 +6,4 @@ type Metric = { label: string; value: string };
 
 export type MetricsGridProps = {
   metrics: Metric[];
-  marginTop: number;
 };

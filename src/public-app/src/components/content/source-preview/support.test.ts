@@ -38,6 +38,7 @@ test('creates one preview for every recognized finding link', () => {
   });
 
   assert.equal(previews.length, 3);
+  assert.equal('imageUrl' in (previews[0] ?? {}), false);
   assert.deepEqual(
     previews.map((preview) => [preview.provider, preview.kind]),
     [
@@ -72,21 +73,4 @@ test('creates a generic widget for valid provider links without a specialized pa
     assert.equal(preview?.provider, 'generic');
     assert.equal(preview?.kind, 'link');
   }
-});
-
-test('exposes generic Open Graph metadata alongside the host', () => {
-  const preview = sourcePreviewDataForLink(finding, {
-    url: 'https://example.com/article',
-    openGraph: {
-      siteName: 'Example',
-      type: 'article',
-      title: 'Article',
-    },
-  });
-
-  assert.deepEqual(preview?.metadata, [
-    { key: 'host', value: 'example.com' },
-    { key: 'siteName', value: 'Example' },
-    { key: 'contentType', value: 'article' },
-  ]);
 });

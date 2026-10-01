@@ -1,6 +1,6 @@
 import type { Project } from '@portfolio/data/domain/types';
 import { Icon } from '../primitives/icon';
-import { ProjectCardContent } from '../ui';
+import { ProjectSummaryContent } from '../ui';
 import type { CommonTranslator } from '@/i18n/compat-support';
 
 type ProjectCardDetailsProps = {
@@ -11,9 +11,9 @@ type ProjectCardDetailsProps = {
 
 export function ProjectCardDetails(props: ProjectCardDetailsProps) {
   return (
-    <ProjectCardContent
+    <ProjectSummaryContent
       status={props.project.status}
-      name={props.project.name}
+      title={props.project.name}
       headingLevel={props.headingLevel}
       purpose={props.project.purpose}
       problem={props.project.problem}

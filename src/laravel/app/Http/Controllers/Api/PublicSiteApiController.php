@@ -352,7 +352,7 @@ class PublicSiteApiController extends Controller
 
     private function sort(mixed $value): ?string
     {
-        return in_array($value, ['asc', 'desc', 'alpha', 'popular'], true) ? $value : null;
+        return in_array($value, ['asc', 'desc', 'alpha'], true) ? $value : null;
     }
 
     private function queryString(mixed $value): ?string

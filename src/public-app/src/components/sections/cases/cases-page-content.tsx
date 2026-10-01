@@ -23,7 +23,11 @@ export function CasesPageContent(props: CasesPageContentProps) {
         items={items}
         getKey={(item) => item.slug}
         renderListItem={(item) => <CaseCard item={item} />}
-        empty={<EmptyState icon="problem">{t('emptyCases')}</EmptyState>}
+        empty={
+          <EmptyState icon="problem" topDivider={false}>
+            {t('emptyCases')}
+          </EmptyState>
+        }
         pagination={{ meta: props.pagination, action: '/cases' }}
       />
     </>

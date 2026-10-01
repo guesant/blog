@@ -8,7 +8,6 @@ type BuildSortSelectProps = {
   newestLabel: string;
   oldestLabel: string;
   alphabeticalLabel: string;
-  popularLabel: string;
 };
 
 export function buildSortSelect(props: BuildSortSelectProps): FeedSelectDefinition {
@@ -23,7 +22,6 @@ export function buildSortSelect(props: BuildSortSelectProps): FeedSelectDefiniti
       { value: 'desc', label: props.newestLabel, icon: 'calendar' },
       { value: 'asc', label: props.oldestLabel, icon: 'clock' },
       { value: 'alpha', label: props.alphabeticalLabel, icon: 'arrow' },
-      { value: 'popular', label: props.popularLabel, icon: 'star' },
     ],
   };
 }

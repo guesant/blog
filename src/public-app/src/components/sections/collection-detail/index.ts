@@ -1,1 +1,1 @@
-export { ColecaoDetailContent } from './colecao-detail-content';
+export { CollectionDetailPage } from './collection-detail-page';

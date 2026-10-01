@@ -16,7 +16,6 @@ export function CatalogFeedCardContent(props: CatalogFeedCardContentProps) {
           href={props.entry.href}
           description={props.entry.description}
           headingLevel="h3"
-          presentation="feed"
         />
       }
       footer={props.footer}

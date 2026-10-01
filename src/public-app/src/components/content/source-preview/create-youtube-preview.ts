@@ -1,10 +1,6 @@
 import type { ExternalLink, Reference } from '@portfolio/data/domain/types';
-import { youtubePreviewIcon } from './youtube-preview-icon';
-import { youtubePreviewImage } from './youtube-preview-image';
-import { youtubePreviewMetadata } from './youtube-preview-metadata';
-import { nonEmpty } from './source-preview-non-empty';
-import { sourcePreviewFirstValue } from './source-preview-first-value';
 import { sourcePreviewFirstText } from './source-preview-first-text';
+import { youtubePreviewIcon } from './youtube-preview-icon';
 import type { YoutubePreviewIdentity } from './resolve-youtube-preview-kind';
 import type { SourcePreviewData } from './types';
 
@@ -15,26 +11,14 @@ type CreateYoutubePreviewProps = {
 };
 
 export function createYoutubePreview(props: CreateYoutubePreviewProps): SourcePreviewData {
-  const metadataEntries = youtubePreviewMetadata(props);
-
-  const fallbackImage = youtubePreviewImage(props.identity);
-
   return {
     provider: 'youtube',
     kind: props.identity.kind,
     url: props.link.url,
-    title: sourcePreviewFirstText([nonEmpty(props.link.openGraph?.title), props.item.title]),
-    description: sourcePreviewFirstText([
-      nonEmpty(props.link.openGraph?.description),
-      props.item.description,
-    ]),
-    imageUrl: sourcePreviewFirstValue([
-      nonEmpty(props.item.image),
-      nonEmpty(props.link.openGraph?.image),
-      fallbackImage,
-    ]),
+    title: props.item.title,
+    description: sourcePreviewFirstText([props.item.description]),
     icon: youtubePreviewIcon(props.identity.kind),
-    metadata: metadataEntries,
+    metadata: [],
     filterType: props.item.type,
   };
 }

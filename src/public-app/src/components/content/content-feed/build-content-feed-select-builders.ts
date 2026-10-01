@@ -33,7 +33,6 @@ export type ContentFeedSelectBuilderProps = {
   newestLabel: string;
   oldestLabel: string;
   alphabeticalLabel: string;
-  popularLabel: string;
 };
 
 type ContentFeedSelectBuilder = (
@@ -79,6 +78,5 @@ export const contentFeedSelectBuilders: ContentFeedSelectBuilder[] = [
       newestLabel: props.newestLabel,
       oldestLabel: props.oldestLabel,
       alphabeticalLabel: props.alphabeticalLabel,
-      popularLabel: props.popularLabel,
     }),
 ];

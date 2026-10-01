@@ -8,6 +8,7 @@ const navigationTranslationKeys: Record<string, NavTranslationKey> = {
   cases: 'cases',
   collections: 'collections',
   experiments: 'experiments',
+  feed: 'feed',
   findings: 'findings',
   follow: 'follow',
   home: 'home',

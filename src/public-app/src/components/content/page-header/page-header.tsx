@@ -1,12 +1,12 @@
 import { Divider } from '../../ui';
 import { PageHeaderFrame } from '../../ui';
-import { PageHeaderSectionFrame } from '../../ui';
+import { PageHeaderContentFrame } from '../../ui/semantic/PageHeaderContentFrame';
 import { Breadcrumbs } from '../../navigation/breadcrumbs';
 import type { PageHeaderProps } from './types';
 
 export function PageHeader(props: PageHeaderProps) {
   return (
-    <PageHeaderSectionFrame>
+    <PageHeaderContentFrame>
       <PageHeaderFrame
         variant={props.variant ?? 'reading'}
         breadcrumbs={props.breadcrumbs ? <Breadcrumbs trail={props.breadcrumbs} /> : undefined}
@@ -17,6 +17,6 @@ export function PageHeader(props: PageHeaderProps) {
         actions={props.actions}
       />
       <Divider />
-    </PageHeaderSectionFrame>
+    </PageHeaderContentFrame>
   );
 }

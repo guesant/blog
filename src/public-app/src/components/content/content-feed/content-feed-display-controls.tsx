@@ -2,12 +2,13 @@
 
 import { Icon } from '../../primitives/icon';
 import { ConditionalContent } from '../../primitives/conditional-content';
-import { ToggleButton, ToggleButtonGroup } from '../../ui';
+import { ToggleButton } from '../../ui';
 import { FeedSelectControl } from './feed-select-control';
 import { buildContentFeedPerPageSelect } from './build-content-feed-per-page-select';
 import { handleFeedDisplayModeChange } from './handle-feed-display-mode-change';
 import type { ContentFeedDisplayMode } from './types';
 import { ContentFeedDisplayControlsStack } from '../../ui/semantic/ContentFeedDisplayControlsStack';
+import { ContentFeedDisplayModeToggleGroup } from '../../ui/semantic/ContentFeedDisplayModeToggleGroup';
 
 type ContentFeedDisplayControlsProps = {
   displayMode: ContentFeedDisplayMode;
@@ -29,7 +30,7 @@ export function ContentFeedDisplayControls(props: ContentFeedDisplayControlsProp
 
   return (
     <ContentFeedDisplayControlsStack direction="row">
-      <ToggleButtonGroup
+      <ContentFeedDisplayModeToggleGroup
         exclusive
         value={props.displayMode}
         aria-label={props.modeLabel}
@@ -43,7 +44,7 @@ export function ContentFeedDisplayControls(props: ContentFeedDisplayControlsProp
           <Icon name="infinity" size={16} />
           {props.infiniteLabel}
         </ToggleButton>
-      </ToggleButtonGroup>
+      </ContentFeedDisplayModeToggleGroup>
       <ConditionalContent
         condition={props.displayMode === 'pagination'}
         content={<FeedSelectControl {...perPageSelect} clearLabel={props.perPageLabel} />}

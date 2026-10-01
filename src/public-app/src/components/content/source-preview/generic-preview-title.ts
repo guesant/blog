@@ -7,9 +7,5 @@ type GenericPreviewTitleProps = {
 };
 
 export function genericPreviewTitle(props: GenericPreviewTitleProps): string {
-  return (
-    [props.link.openGraph?.title, props.link.label, props.link.platform]
-      .map(nonEmpty)
-      .find(Boolean) ?? props.host
-  );
+  return [props.link.label, props.link.platform].map(nonEmpty).find(Boolean) ?? props.host;
 }

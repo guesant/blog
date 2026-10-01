@@ -1,6 +1,5 @@
 import { buildFindingEntry } from './build-finding-entry';
 import { dateValue } from './date-value';
-import { findingPopularityLabel } from './finding-popularity-label';
 import type { FeedEntry } from './types';
 import type { PublicFeedItem } from '@portfolio/data/domain/types';
 
@@ -18,8 +17,6 @@ export function buildFeedItemEntry(item: PublicFeedItem): FeedEntry {
     readingTime: item.readingTime,
     topics: item.topics,
     findingType: item.findingType,
-    popularityRank: item.popularity?.rank,
-    popularityLabel: item.popularity ? findingPopularityLabel(item.popularity) : undefined,
     featured: item.featured,
     href: item.href,
   };

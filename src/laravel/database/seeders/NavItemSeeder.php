@@ -85,7 +85,12 @@ class NavItemSeeder extends Seeder
     private function sidebarGroups(): array
     {
         return [
-            ['key' => 'content', 'en' => 'Content', 'pt-BR' => 'Conteúdo', 'items' => [$this->writing(), $this->findings()]],
+            [
+                'key' => 'content',
+                'en' => 'Content',
+                'pt-BR' => 'Conteúdo',
+                'items' => [$this->writing(), $this->findings(), $this->feed()],
+            ],
             ['key' => 'explore', 'en' => 'Explore', 'pt-BR' => 'Explorar', 'items' => [$this->topics(), $this->collections()]],
             ['key' => 'resources', 'en' => 'Resources', 'pt-BR' => 'Referências', 'items' => [$this->snippets()]],
             ['key' => 'about', 'en' => 'About', 'pt-BR' => 'Sobre', 'items' => [$this->about(), $this->agora(), $this->resume(), $this->portfolio()]],
@@ -135,6 +140,11 @@ class NavItemSeeder extends Seeder
     private function findings(): array
     {
         return ['route' => 'findings'];
+    }
+
+    private function feed(): array
+    {
+        return ['route' => 'feed'];
     }
 
     private function collections(): array

@@ -10,13 +10,9 @@ export { FindingCardReadAction } from './finding-card-read-action';
 
 export { FindingCardTagListFrame } from './finding-card-tag-list-frame';
 
-export { FindingReferenceCardFrame } from './finding-reference-card-frame';
-
 export { FindingCardDescription } from './finding-card-description';
 
 export { FindingCardTitle } from './finding-card-title';
-
-export type { FindingCardPresentation } from './finding-card-types';
 
 export { FindingReferenceMetaFrame } from './finding-reference-meta-frame';
 

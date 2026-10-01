@@ -10,9 +10,7 @@ type GenericPreviewMetadataProps = {
 export function genericPreviewMetadata(
   props: GenericPreviewMetadataProps,
 ): SourcePreviewMetadata[] {
-  return [
-    metadata('host', props.host),
-    metadata('siteName', props.link.openGraph?.siteName),
-    metadata('contentType', props.link.openGraph?.type),
-  ].filter((entry): entry is SourcePreviewMetadata => entry !== undefined);
+  return [metadata('host', props.host)].filter(
+    (entry): entry is SourcePreviewMetadata => entry !== undefined,
+  );
 }

@@ -5,7 +5,7 @@ import { PageHeader } from '../../content/page-header';
 import { StatusActions } from './status-actions';
 import type { StatusTranslator } from '@/i18n/compat-support';
 import type { StatusPageKind } from './status-page-kind';
-import { StatusContentFrame } from '../../ui/semantic/StatusContentFrame';
+import { StatusMessageBodyFrame } from '../../ui/semantic/StatusMessageBodyFrame';
 import { StatusIcon } from '../../ui/semantic/StatusIcon';
 
 type StatusContentProps = {
@@ -18,10 +18,10 @@ export function StatusContent(props: StatusContentProps) {
   const t: StatusTranslator = useTranslations(`Pages.${props.kind}`);
 
   return (
-    <StatusContentFrame>
+    <StatusMessageBodyFrame>
       <StatusIcon name="problem" size={22} />
       <PageHeader title={t('title')} description={t('description')} variant="showcase" />
       <StatusActions {...props} />
-    </StatusContentFrame>
+    </StatusMessageBodyFrame>
   );
 }

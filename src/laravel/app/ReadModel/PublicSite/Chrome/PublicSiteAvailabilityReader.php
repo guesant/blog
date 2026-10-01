@@ -41,6 +41,8 @@ final class PublicSiteAvailabilityReader
             || $this->boolean($result?->has_projects)
             || $this->boolean($result?->has_experiments);
         $hasWriting = $this->boolean($result?->has_writing);
+        $hasFindings = $this->boolean($result?->has_findings);
+        $hasCollections = $this->boolean($result?->has_collections);
 
         return [
             'about' => $hasProfile,
@@ -52,11 +54,11 @@ final class PublicSiteAvailabilityReader
             'license' => $this->boolean($result?->has_license),
             'credits' => $this->boolean($result?->has_credits),
             'follow' => $this->boolean($result?->has_follow),
-            'feed' => $hasWriting,
+            'feed' => $hasWriting || $hasFindings || $hasCollections,
             'writing' => $hasWriting,
-            'findings' => $this->boolean($result?->has_findings),
+            'findings' => $hasFindings,
             'topics' => $this->boolean($result?->has_topics),
-            'collections' => $this->boolean($result?->has_collections),
+            'collections' => $hasCollections,
             'snippets' => $this->boolean($result?->has_snippets),
             'right_sidebar' => $contactEnabled,
         ];

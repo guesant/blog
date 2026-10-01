@@ -24,11 +24,6 @@
       <code><![CDATA[$relationType->key]]></code>
     </UndefinedMagicPropertyFetch>
   </file>
-  <file src="app/Content/OpenGraphMetadata.php">
-    <TooManyArguments>
-      <code><![CDATA[header]]></code>
-    </TooManyArguments>
-  </file>
   <file src="app/Filament/Pages/ManageProfile.php">
     <MissingTemplateParam>
       <code><![CDATA[ManageProfile]]></code>
@@ -346,6 +341,7 @@
       <code><![CDATA[$translation?->body]]></code>
       <code><![CDATA[$translation?->body]]></code>
       <code><![CDATA[$translation?->body]]></code>
+      <code><![CDATA[$translation?->body]]></code>
       <code><![CDATA[$translation?->context]]></code>
       <code><![CDATA[$translation?->current_focus]]></code>
       <code><![CDATA[$translation?->description]]></code>
@@ -355,8 +351,6 @@
       <code><![CDATA[$translation?->description]]></code>
       <code><![CDATA[$translation?->description]]></code>
       <code><![CDATA[$translation?->description]]></code>
-      <code><![CDATA[$translation?->excerpt]]></code>
-      <code><![CDATA[$translation?->excerpt]]></code>
       <code><![CDATA[$translation?->intro]]></code>
       <code><![CDATA[$translation?->intro]]></code>
       <code><![CDATA[$translation?->meta]]></code>

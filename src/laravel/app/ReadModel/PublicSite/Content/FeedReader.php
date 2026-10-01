@@ -92,14 +92,13 @@ final class FeedReader
                 'writings.id as content_id',
                 'public_writing_revision.date_iso as date_value',
                 'writing_revision_translations.title as title_value',
-                DB::raw('0 as popularity_value'),
             ]);
 
         if (filled($search)) {
             $term = '%'.$search.'%';
             $query->where(function (Builder $fields) use ($term): void {
                 $fields->where('writing_revision_translations.title', 'ilike', $term)
-                    ->orWhere('writing_revision_translations.excerpt', 'ilike', $term);
+                    ->orWhere('writing_revision_translations.body', 'ilike', $term);
             });
         }
 
@@ -130,7 +129,6 @@ final class FeedReader
                 'resources.id as content_id',
                 DB::raw('COALESCE(public_resource_revision.found_date_iso, public_resource_revision.published_date_iso) as date_value'),
                 'resource_revision_translations.title as title_value',
-                DB::raw('COALESCE(public_resource_revision.popularity_rank, 0) as popularity_value'),
             ]);
 
         if (filled($search)) {
@@ -178,7 +176,6 @@ final class FeedReader
                 'reference_collections.id as content_id',
                 'public_collection_revision.published_at as date_value',
                 'reference_collection_revision_translations.title as title_value',
-                DB::raw('0 as popularity_value'),
             ]);
 
         if (filled($search)) {
@@ -223,14 +220,6 @@ final class FeedReader
         if ($sort === 'alpha') {
             return $query
                 ->orderByRaw("lower(coalesce(title_value, ''))")
-                ->orderBy('kind')
-                ->orderBy('content_id');
-        }
-
-        if ($sort === 'popular') {
-            return $query
-                ->orderByDesc('popularity_value')
-                ->orderByDesc('date_value')
                 ->orderBy('kind')
                 ->orderBy('content_id');
         }

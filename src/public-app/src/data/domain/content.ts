@@ -102,12 +102,12 @@ export type Writing = WithOgImage & {
   tags: string[];
   title: string;
   excerpt?: string;
+  body: RichTextContent;
   readingTime: string;
   dateISO: string;
   topicSlugs?: string[];
   topicUrls?: string[];
   language?: 'en' | 'pt-BR';
-  body: RichTextContent;
 };
 
 export type PublicFeedItem = {
@@ -119,7 +119,6 @@ export type PublicFeedItem = {
   readingTime?: string;
   topics: { name: string; slug?: string; url?: string }[];
   findingType?: string;
-  popularity?: { value: number; kind: string; rank: number };
   featured?: boolean;
   links?: ExternalLink[];
   reference?: Reference;

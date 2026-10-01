@@ -16,6 +16,7 @@ export function FeedRouteSection(props: FeedRouteSectionProps) {
       findings={[]}
       collections={[]}
       copy={{ title: t('title'), description: t('description') }}
+      searchPlaceholder={t('searchPlaceholder')}
       breadcrumbs={[{ label: t('title') }]}
       contentMeta={props.data.feedPagination}
       action="/feed"

@@ -4,7 +4,6 @@ namespace App\Http\Responses;
 
 use App\Application\PublicSite\GetPublicFindingQueryResult;
 use App\Content\Locale;
-use App\Content\OpenGraphMetadata;
 use App\Content\PublicIdentifier;
 use App\OpenGraph\OgImageUrlGenerator;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -12,7 +11,6 @@ use Illuminate\Pagination\LengthAwarePaginator;
 final class PublicFindingResponseFactory
 {
     public function __construct(
-        private readonly OpenGraphMetadata $openGraph,
         private readonly OgImageUrlGenerator $ogImages,
     ) {}
 
@@ -22,7 +20,7 @@ final class PublicFindingResponseFactory
         array $facets,
     ): PublicFindingListResponseDto {
         $data = $page->getCollection()
-            ->map(fn (object $resource): array => $this->item($resource, $locale, null, true))
+            ->map(fn (object $resource): array => $this->item($resource, $locale, null))
             ->all();
 
         return PublicFindingListResponseDto::fromPage(
@@ -33,19 +31,18 @@ final class PublicFindingResponseFactory
 
     public function detail(GetPublicFindingQueryResult $result, string $locale): PublicFindingResponseDto
     {
-        return PublicFindingResponseDto::fromArray($this->item($result->resource, $locale, [], true));
+        return PublicFindingResponseDto::fromArray($this->item($result->resource, $locale, []));
     }
 
     public function summary(object $resource, string $locale): array
     {
-        return $this->item($resource, $locale, null, true);
+        return $this->item($resource, $locale, null);
     }
 
     private function item(
         object $resource,
         string $locale,
         ?array $relations,
-        bool $includeOpenGraph,
     ): array {
         $translation = $resource->translation($locale);
 
@@ -76,8 +73,8 @@ final class PublicFindingResponseFactory
                 'name' => $topic->translation($locale)?->name,
                 'url' => Locale::url('/topics/'.PublicIdentifier::key($topic), $locale),
             ])->values()->all(),
-            'links' => $resource->links->map(function ($link) use ($includeOpenGraph): array {
-                $result = [
+            'links' => $resource->links->map(function ($link): array {
+                return [
                     'url' => $link->url,
                     'label' => $link->label,
                     'platform' => $link->platform,
@@ -85,12 +82,6 @@ final class PublicFindingResponseFactory
                     'is_free' => $link->is_free,
                     'is_primary' => $link->is_primary,
                 ];
-
-                if ($includeOpenGraph) {
-                    $result['open_graph'] = $this->openGraph->forUrl($link->url);
-                }
-
-                return $result;
             })->values()->all(),
             'identifiers' => $resource->identifiers->map(fn ($identifier) => [
                 'kind' => $identifier->kind,
@@ -98,15 +89,6 @@ final class PublicFindingResponseFactory
             ])->values()->all(),
             'related' => null,
             'relations' => $relations ?? [],
-            'popularity' => $resource->popularity_value !== null
-                && $resource->popularity_kind !== null
-                && $resource->popularity_rank !== null
-                ? [
-                    'value' => (int) $resource->popularity_value,
-                    'kind' => $resource->popularity_kind,
-                    'rank' => (float) $resource->popularity_rank,
-                ]
-                : null,
             'featured' => (bool) $resource->featured,
             'featured_order' => $resource->featured_order,
         ];

@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
-import { Box } from '../box';
+import { ProtectedEmailDialogInlineStateFrame } from './protected-email-dialog-inline-state-frame';
+import { ProtectedEmailDialogStackedStateFrame } from './protected-email-dialog-stacked-state-frame';
 
 type ProtectedEmailDialogStateLayout = 'stacked' | 'inline';
 
@@ -8,19 +9,10 @@ type ProtectedEmailDialogStateFrameProps = {
   children: ReactNode;
 };
 
-const stackedStyles = {
-  display: 'flex',
-  flexDirection: 'column',
-  gap: 'var(--site-space-3)',
-  alignItems: 'center',
-};
-
-const inlineStyles = {
-  display: 'flex',
-  alignItems: 'center',
-  gap: 'var(--site-space-3)',
-};
-
 export function ProtectedEmailDialogStateFrame(props: ProtectedEmailDialogStateFrameProps) {
-  return <Box sx={props.layout === 'inline' ? inlineStyles : stackedStyles}>{props.children}</Box>;
+  if (props.layout === 'inline') {
+    return <ProtectedEmailDialogInlineStateFrame children={props.children} />;
+  }
+
+  return <ProtectedEmailDialogStackedStateFrame children={props.children} />;
 }

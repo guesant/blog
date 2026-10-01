@@ -31,7 +31,6 @@ export function WritingDetailContent(props: WritingDetailContentProps) {
       <DetailHeader
         breadcrumbs={[{ label: tNav('writing'), href: '/writing' }, { label: item.title }]}
         title={item.title}
-        description={item.excerpt}
         meta={joinDefined([item.readingTime, formattedDate])}
         actions={
           <ContentActions

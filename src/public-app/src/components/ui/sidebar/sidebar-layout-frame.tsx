@@ -1,26 +1,13 @@
 import type { ReactNode } from 'react';
-import { Box } from '../box';
+import { SidebarLayoutWithRightSidebarFrame } from './sidebar-layout-with-right-sidebar-frame';
+import { SidebarLayoutWithoutRightSidebarFrame } from './sidebar-layout-without-right-sidebar-frame';
 
 type SidebarLayoutFrameProps = { children: ReactNode; withRightSidebar: boolean };
 
-const baseStyles = {
-  minHeight: '100dvh',
-  display: 'grid',
-  bgcolor: 'var(--site-surface)',
-};
-
 export function SidebarLayoutFrame(props: SidebarLayoutFrameProps) {
-  return (
-    <Box
-      sx={{
-        ...baseStyles,
-        gridTemplateColumns: {
-          xs: '1fr',
-          md: props.withRightSidebar ? '16rem minmax(0, 1fr) 16rem' : '16rem minmax(0, 1fr)',
-        },
-      }}
-    >
-      {props.children}
-    </Box>
-  );
+  if (props.withRightSidebar) {
+    return <SidebarLayoutWithRightSidebarFrame children={props.children} />;
+  }
+
+  return <SidebarLayoutWithoutRightSidebarFrame children={props.children} />;
 }

@@ -124,14 +124,6 @@
       <code><![CDATA[routeName]]></code>
     </PossiblyUnusedMethod>
   </file>
-  <file src="app/Content/OpenGraphMetadata.php">
-    <PossiblyUnusedMethod>
-      <code><![CDATA[refresh]]></code>
-    </PossiblyUnusedMethod>
-    <TooManyArguments>
-      <code><![CDATA[header]]></code>
-    </TooManyArguments>
-  </file>
   <file src="app/Filament/Concerns/SyncsTranslations.php">
     <PossiblyUnusedMethod>
       <code><![CDATA[afterDelete]]></code>
@@ -722,6 +714,7 @@
       <code><![CDATA[$translation?->body]]></code>
       <code><![CDATA[$translation?->body]]></code>
       <code><![CDATA[$translation?->body]]></code>
+      <code><![CDATA[$translation?->body]]></code>
       <code><![CDATA[$translation?->context]]></code>
       <code><![CDATA[$translation?->current_focus]]></code>
       <code><![CDATA[$translation?->description]]></code>
@@ -731,8 +724,6 @@
       <code><![CDATA[$translation?->description]]></code>
       <code><![CDATA[$translation?->description]]></code>
       <code><![CDATA[$translation?->description]]></code>
-      <code><![CDATA[$translation?->excerpt]]></code>
-      <code><![CDATA[$translation?->excerpt]]></code>
       <code><![CDATA[$translation?->intro]]></code>
       <code><![CDATA[$translation?->intro]]></code>
       <code><![CDATA[$translation?->meta]]></code>

@@ -90,7 +90,6 @@ final readonly class PublicHomeGalleryResponseDto
                 ?? $item['summary']
                 ?? $item['purpose']
                 ?? $item['preview']
-                ?? $item['excerpt']
                 ?? '',
             'href' => $item['href'] ?? $item['url'] ?? '',
         ];

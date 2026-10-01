@@ -26,9 +26,9 @@ class Resource extends Model implements GraphNode
 {
     use AssignsNextOrder, Auditable, HasFactory, HasPublicId, InteractsWithGraph, UsesCurrentRevision;
 
-    protected $fillable = ['slug', 'public_id', 'hidden', 'order', 'type', 'language_id', 'published_date_iso', 'found_date_iso', 'consumption_state', 'rating', 'editorial_state', 'visibility', 'featured', 'featured_order', 'popularity_kind', 'popularity_rank', 'popularity_value'];
+    protected $fillable = ['slug', 'public_id', 'hidden', 'order', 'type', 'language_id', 'published_date_iso', 'found_date_iso', 'consumption_state', 'rating', 'editorial_state', 'visibility', 'featured', 'featured_order'];
 
-    protected $casts = ['hidden' => 'boolean', 'published_date_iso' => 'date', 'found_date_iso' => 'date', 'featured' => 'boolean', 'popularity_rank' => 'float'];
+    protected $casts = ['hidden' => 'boolean', 'published_date_iso' => 'date', 'found_date_iso' => 'date', 'featured' => 'boolean'];
 
     /**
      * @return BelongsTo<Language, $this>

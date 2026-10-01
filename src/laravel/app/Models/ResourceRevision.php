@@ -20,8 +20,6 @@ class ResourceRevision extends Model
         'published_date_iso' => 'date',
         'found_date_iso' => 'date',
         'featured' => 'boolean',
-        'popularity_rank' => 'float',
-        'popularity_value' => 'integer',
     ];
 
     public function resource(): BelongsTo

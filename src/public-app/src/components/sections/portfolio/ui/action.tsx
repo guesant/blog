@@ -1,10 +1,10 @@
 import type { ReactNode } from 'react';
-import { PageSectionStartFrame } from '../../../ui/semantic/PageSectionStartFrame';
+import { PageSectionLeadingSpacingFrame } from '../../../ui/semantic/PageSectionLeadingSpacingFrame';
 
 type PortfolioActionProps = {
   children: ReactNode;
 };
 
 export function PortfolioAction(props: PortfolioActionProps) {
-  return <PageSectionStartFrame>{props.children}</PageSectionStartFrame>;
+  return <PageSectionLeadingSpacingFrame>{props.children}</PageSectionLeadingSpacingFrame>;
 }

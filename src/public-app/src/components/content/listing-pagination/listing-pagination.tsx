@@ -4,7 +4,7 @@ import { listingPaginationAriaLabel } from './listing-pagination-aria-label';
 import type { ListingPaginationProps } from './types';
 import type { ChangeEvent } from 'react';
 import { goToListingPage } from './go-to-listing-page';
-import { ListingPaginationPagination } from '../../ui/semantic/ListingPaginationPagination';
+import { ListingPaginationControl } from '../../ui/semantic/ListingPaginationControl';
 
 export function ListingPagination(props: ListingPaginationProps) {
   if (props.pageCount <= 1) {
@@ -12,7 +12,7 @@ export function ListingPagination(props: ListingPaginationProps) {
   }
 
   return (
-    <ListingPaginationPagination
+    <ListingPaginationControl
       count={props.pageCount}
       page={props.page}
       aria-label={props.ariaLabel}

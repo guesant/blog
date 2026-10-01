@@ -2,8 +2,8 @@ import type { NavigationAvailability, Profile, SiteText } from '@portfolio/data/
 import { useTranslations } from '@/i18n/compat';
 import { SiteShellFrame } from './site-shell-frame';
 import { SiteFeatureFlagsProvider } from '../content/site-feature-flags-provider';
-import { SiteShell2Frame } from '../ui/semantic/SiteShell2Frame';
-import { SiteShellFrame2 } from '../ui/semantic/SiteShellFrame2';
+import { SkipToContentLinkFrame } from '../ui/semantic/SkipToContentLinkFrame';
+import { SiteApplicationRootFrame } from '../ui/semantic/SiteApplicationRootFrame';
 
 type SiteShellProps = {
   children: React.ReactNode;
@@ -18,15 +18,15 @@ export function SiteShell(props: SiteShellProps) {
   const t = useTranslations('Nav');
 
   return (
-    <SiteShellFrame2>
-      <SiteShell2Frame component="a" href="#main-content">
+    <SiteApplicationRootFrame>
+      <SkipToContentLinkFrame component="a" href="#main-content">
         {t('skipToContent')}
-      </SiteShell2Frame>
+      </SkipToContentLinkFrame>
       <SiteFeatureFlagsProvider value={site.featureFlags}>
         <SiteShellFrame profile={profile} site={site} availability={availability}>
           {children}
         </SiteShellFrame>
       </SiteFeatureFlagsProvider>
-    </SiteShellFrame2>
+    </SiteApplicationRootFrame>
   );
 }

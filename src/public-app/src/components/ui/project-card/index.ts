@@ -1,6 +1,4 @@
-export { ProjectCardContent } from './project-card-content';
-
-export { ProjectRowContent } from './project-row-content';
+export { ProjectSummaryContent } from './project-summary-content';
 
 export { ProjectCardFrame } from './project-card-frame';
 

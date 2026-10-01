@@ -5,6 +5,7 @@ namespace App\Application\PublicSite;
 use App\Content\Locale;
 use App\ReadModel\PublicSite\Content\PageReader;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 final class GetPublicPageQueryHandler
 {
@@ -81,8 +82,8 @@ final class GetPublicPageQueryHandler
             $future = [['key' => 'activitypub'], ['key' => 'websub'], ['key' => 'webmention']];
             $buildEntry = fn (array $entry): array => [
                 ...$entry,
-                'title' => $fields["{$entry['key']}_title"] ?? null,
-                'description' => $fields["{$entry['key']}_description"] ?? null,
+                'title' => $fields[Str::camel("{$entry['key']}_title")] ?? null,
+                'description' => $fields[Str::camel("{$entry['key']}_description")] ?? null,
             ];
             $fields['entries'] = collect($available)->map($buildEntry)->filter(
                 fn (array $entry): bool => filled($entry['title']),

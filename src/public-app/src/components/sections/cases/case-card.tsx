@@ -20,7 +20,6 @@ export function CaseCard(props: CaseCardProps) {
         item={props.item}
         meta={`${props.item.number} · ${props.item.meta}`}
         headingLevel="h2"
-        presentation="listing"
         actionLabel={t('viewCase')}
       />
     </CaseListingCardFrame>

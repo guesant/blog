@@ -38,7 +38,7 @@ export function ProjectDetailContent(props: ProjectDetailContentProps) {
 
       <ProjectOverview project={project} t={t} />
 
-      <MetricsGrid metrics={project.metrics} marginTop={6} />
+      <MetricsGrid metrics={project.metrics} />
 
       <ProjectDetailMetadata project={project} t={t} />
       <ProjectDetailBody body={project.body} />

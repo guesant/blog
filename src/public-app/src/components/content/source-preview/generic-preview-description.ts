@@ -7,7 +7,5 @@ type GenericPreviewDescriptionProps = {
 };
 
 export function genericPreviewDescription(props: GenericPreviewDescriptionProps): string {
-  return (
-    [props.link.openGraph?.description, props.link.note].map(nonEmpty).find(Boolean) ?? props.host
-  );
+  return [props.link.note].map(nonEmpty).find(Boolean) ?? props.host;
 }

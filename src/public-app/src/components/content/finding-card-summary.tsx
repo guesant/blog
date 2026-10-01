@@ -1,11 +1,5 @@
-import type { ReactNode } from 'react';
 import { NavLink } from '../primitives/nav-link';
-import {
-  FindingCardDescription,
-  FindingCardTitle,
-  FindingCardTitleBlock,
-  type FindingCardPresentation,
-} from '../ui';
+import { FindingCardDescription, FindingCardTitle, type FindingCardPresentation } from '../ui';
 
 type FindingCardSummaryProps = {
   title: string;
@@ -13,7 +7,6 @@ type FindingCardSummaryProps = {
   description: string;
   headingLevel: 'h2' | 'h3';
   presentation: FindingCardPresentation;
-  titleSupporting?: ReactNode;
 };
 
 export function FindingCardSummary(props: FindingCardSummaryProps) {
@@ -27,7 +20,7 @@ export function FindingCardSummary(props: FindingCardSummaryProps) {
 
   return (
     <>
-      <FindingCardTitleBlock supporting={props.titleSupporting}>{title}</FindingCardTitleBlock>
+      {title}
       <FindingCardDescription presentation={props.presentation}>
         {props.description}
       </FindingCardDescription>

@@ -1,10 +1,9 @@
 import type { ReactNode } from 'react';
-import { ConditionalContent } from '../primitives/conditional-content';
 import { NavLink } from '../primitives/nav-link';
 import {
   FindingCardDescription,
   FindingCardTitle,
-  FindingCardTitleFrame,
+  FindingCardTitleBlock,
   type FindingCardPresentation,
 } from '../ui';
 
@@ -14,7 +13,7 @@ type FindingCardSummaryProps = {
   description: string;
   headingLevel: 'h2' | 'h3';
   presentation: FindingCardPresentation;
-  titleLeading?: ReactNode;
+  titleSupporting?: ReactNode;
 };
 
 export function FindingCardSummary(props: FindingCardSummaryProps) {
@@ -28,13 +27,7 @@ export function FindingCardSummary(props: FindingCardSummaryProps) {
 
   return (
     <>
-      <ConditionalContent
-        condition={Boolean(props.titleLeading)}
-        content={
-          <FindingCardTitleFrame leading={props.titleLeading}>{title}</FindingCardTitleFrame>
-        }
-        fallback={title}
-      />
+      <FindingCardTitleBlock supporting={props.titleSupporting}>{title}</FindingCardTitleBlock>
       <FindingCardDescription presentation={props.presentation}>
         {props.description}
       </FindingCardDescription>

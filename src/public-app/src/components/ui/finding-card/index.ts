@@ -18,7 +18,7 @@ export { FindingCardDescription } from './finding-card-description';
 
 export { FindingCardTitle } from './finding-card-title';
 
-export { FindingCardTitleFrame } from './finding-card-title-frame';
+export { FindingCardTitleBlock } from './finding-card-title-block';
 
 export type { FindingCardPresentation } from './finding-card-types';
 

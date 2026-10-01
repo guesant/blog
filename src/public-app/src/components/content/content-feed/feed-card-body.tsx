@@ -22,7 +22,7 @@ export function FeedCardBody(props: FeedCardBodyProps) {
           description={props.entry.preview}
           headingLevel="h2"
           presentation="feed"
-          titleLeading={category}
+          titleSupporting={category}
         />
       }
       footer={<FeedCardFooter {...props} />}

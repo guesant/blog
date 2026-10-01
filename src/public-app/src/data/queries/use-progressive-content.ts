@@ -1,32 +1,15 @@
 'use client';
 
-import { useInfiniteQuery } from '@tanstack/react-query';
-import { useMemo } from 'react';
-import { contentQueryStaleTimeMs } from './content-query-cache-policy';
-import { contentQueryRetryCount } from './content-query-retry-policy';
+import { useCallback, useMemo, useRef } from 'react';
 import { appendProgressiveContentItems } from './append-progressive-content-items';
-import type { ProgressiveContentPage, ProgressiveContentQuery } from './progressive-content-types';
+import { prefetchProgressiveContentPages } from './prefetch-progressive-content-pages';
+import type { ProgressiveContentQuery } from './progressive-content-types';
+import { useProgressiveContentQuery } from './use-progressive-content-query';
 
 export function useProgressiveContent<T>(props: ProgressiveContentQuery<T>) {
-  const query = useInfiniteQuery<ProgressiveContentPage<T>>({
-    queryKey: props.queryKey,
-    enabled: props.enabled,
-    initialPageParam: props.initialPage.meta.page,
-    initialData: {
-      pages: [props.initialPage],
-      pageParams: [props.initialPage.meta.page],
-    },
-    queryFn: ({ pageParam }) => props.loadPage(Number(pageParam)),
-    getNextPageParam: (lastPage) => {
-      if (lastPage.meta.page >= lastPage.meta.lastPage) {
-        return undefined;
-      }
+  const prefetchingRef = useRef(false);
 
-      return lastPage.meta.page + 1;
-    },
-    staleTime: contentQueryStaleTimeMs,
-    retry: contentQueryRetryCount,
-  });
+  const query = useProgressiveContentQuery(props);
 
   const items = useMemo(
     () =>
@@ -37,9 +20,24 @@ export function useProgressiveContent<T>(props: ProgressiveContentQuery<T>) {
     [props.getKey, props.initialPage.items, query.data?.pages],
   );
 
+  const fetchNextPages = useCallback(async () => {
+    if (prefetchingRef.current) {
+      return;
+    }
+
+    prefetchingRef.current = true;
+
+    try {
+      await prefetchProgressiveContentPages(query.fetchNextPage);
+    } finally {
+      prefetchingRef.current = false;
+    }
+  }, [query.fetchNextPage]);
+
   return {
     ...query,
     items,
     meta: query.data?.pages.at(-1)?.meta ?? props.initialPage.meta,
+    fetchNextPage: fetchNextPages,
   };
 }

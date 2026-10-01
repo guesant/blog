@@ -3,6 +3,7 @@
 import { CollectionListing } from '../collection-listing';
 import type { FeedEntry, FeedQuickFilter } from './types';
 import type { AchadosTranslator } from '@/i18n/compat-support';
+import { EditorialFeedItemDivider } from '../../ui';
 import { FeedCard } from './feed-card';
 import { useSiteFeatureFlags } from '../use-site-feature-flags';
 
@@ -20,6 +21,7 @@ export function ContentFeedResults(props: ContentFeedResultsProps) {
     <CollectionListing
       items={props.entries}
       getKey={(entry) => `${entry.kind}-${entry.slug}`}
+      separator={feed.flatCards ? <EditorialFeedItemDivider /> : undefined}
       renderListItem={(entry) => (
         <FeedCard
           entry={entry}

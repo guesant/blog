@@ -68,7 +68,7 @@ export { VisibilitySentinel } from './visibility-sentinel';
 
 export { EditorialSection } from './editorial-section';
 
-export { EditorialFeedItemFrame, EditorialFeedItemFooterFrame } from './semantic';
+export { EditorialFeedItemDivider, EditorialFeedItemFrame } from './semantic';
 
 export { ListingListFrame, ListingViewFrame } from './listing-view';
 

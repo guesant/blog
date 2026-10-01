@@ -7,6 +7,7 @@ export type CollectionListingProps<T> = {
   items: T[];
   getKey: (item: T) => string;
   renderListItem: (item: T) => ReactNode;
+  separator?: ReactNode;
   empty?: ReactNode;
   pagination?: CollectionPaginationProps;
 };
@@ -24,6 +25,7 @@ export function CollectionListing<T>(props: CollectionListingProps<T>) {
             items={props.items}
             getKey={props.getKey}
             renderListItem={props.renderListItem}
+            separator={props.separator}
           />
         }
       />

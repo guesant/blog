@@ -7,6 +7,7 @@ import { buildFeedItemEntry } from '../../content/content-feed/build-feed-item-e
 import { FeedCard } from '../../content/content-feed/feed-card';
 import { useSiteFeatureFlags } from '../../content/use-site-feature-flags';
 import { ContentSection } from '../../content/content-section';
+import { EditorialFeedItemDivider } from '../../ui';
 import type { HomeTranslator } from '@/i18n/compat-support';
 import { HomeGallerySectionAction } from './ui/home-gallery-section-action';
 
@@ -42,6 +43,7 @@ export function HomeFeedSection(props: HomeFeedSectionProps) {
       <CollectionListing
         items={entries}
         getKey={(entry) => `${entry.kind}-${entry.slug}`}
+        separator={feed.flatCards ? <EditorialFeedItemDivider /> : undefined}
         renderListItem={(entry) => (
           <FeedCard entry={entry} locale={locale} t={tFeed} flatCards={feed.flatCards} />
         )}

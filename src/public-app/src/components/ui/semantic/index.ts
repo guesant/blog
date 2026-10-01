@@ -1,3 +1,3 @@
 export { EditorialFeedItemFrame } from './EditorialFeedItemFrame';
 
-export { EditorialFeedItemFooterFrame } from './EditorialFeedItemFooterFrame';
+export { EditorialFeedItemDivider } from './EditorialFeedItemDivider';

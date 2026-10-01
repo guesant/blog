@@ -41,7 +41,6 @@ final class PublicSiteSettingsReader
                 'maintenance_title' => null,
                 'maintenance_description' => null,
                 'copyright_template' => null,
-                'seo' => null,
                 'contact_profiles' => [],
                 'feature_flags' => [
                     'content_actions' => [
@@ -95,7 +94,6 @@ final class PublicSiteSettingsReader
             'maintenance_title' => $translation?->maintenance_title,
             'maintenance_description' => $translation?->maintenance_description,
             'copyright_template' => $translation?->copyright_template,
-            'seo' => $this->seo($translation?->id),
             'contact_profiles' => $contactProfiles,
         ];
     }
@@ -118,46 +116,5 @@ final class PublicSiteSettingsReader
             ->whereIn('locale', array_values(array_unique([$locale, 'en'])))
             ->orderByRaw('case when locale = ? then 0 else 1 end', [$locale])
             ->first();
-    }
-
-    private function seo(?int $translationId): ?array
-    {
-        if ($translationId === null) {
-            return null;
-        }
-
-        $seo = DB::table('content_revision_seo')
-            ->select([
-                'title',
-                'description',
-                'canonical_url',
-                'image_url',
-                'image_alt',
-                'robots',
-                'no_index',
-            ])
-            ->where('content_type', 'site_settings')
-            ->where('translation_id', $translationId)
-            ->first();
-
-        if ($seo === null) {
-            return null;
-        }
-
-        return [
-            'title' => $seo->title,
-            'description' => $seo->description,
-            'canonical' => $seo->canonical_url,
-            'image' => $seo->image_url,
-            'imageAlt' => $seo->image_alt,
-            'robots' => $seo->robots,
-            'noIndex' => (bool) $seo->no_index,
-            'keywords' => DB::table('content_revision_seo_keywords')
-                ->where('content_type', 'site_settings')
-                ->where('translation_id', $translationId)
-                ->orderBy('sort_order')
-                ->pluck('keyword')
-                ->all(),
-        ];
     }
 }

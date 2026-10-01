@@ -37,7 +37,6 @@ final class PublicSiteChromeSqlReader implements PublicSiteChromeReader
                 'maintenance_title' => $settings['maintenance_title'],
                 'maintenance_description' => $settings['maintenance_description'],
                 'feature_flags' => $settings['feature_flags'],
-                'seo' => $settings['seo'],
             ],
             profile: $profile,
             copyright: $copyright,

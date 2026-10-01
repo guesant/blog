@@ -34,7 +34,10 @@ export type ContentFeedListingProps = Pick<
 export function ContentFeedListing(props: ContentFeedListingProps) {
   return (
     <>
-      <ContentFeedStatus count={props.count} label={props.t('results')} />
+      <ContentFeedStatus
+        count={props.count}
+        label={props.t(props.count === 1 ? 'result' : 'results')}
+      />
       <ContentFeedListingResults {...props} />
       <>
         {props.beforeExplore}

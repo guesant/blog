@@ -1,5 +1,5 @@
 import type { CaseStudy, TechnologyBadge } from './content';
-import type { WithSeo } from './content';
+import type { WithOgImage } from './content';
 import type { Profile, ResumeContent } from './resume';
 import type { SiteText } from './site';
 import type { HomePageCopy, PageIntroduction, ResumePageCopy } from './pages-copy';
@@ -45,7 +45,7 @@ export type CreditsContent = {
   meta: ContentCollectionMeta;
 };
 
-export type CreditsPageCopy = WithSeo & {
+export type CreditsPageCopy = WithOgImage & {
   title: string;
   description: string;
 };
@@ -55,7 +55,7 @@ export type CreditsPageContent = {
   credits: CreditsContent;
 };
 
-export type PortfolioPageCopy = WithSeo & {
+export type PortfolioPageCopy = WithOgImage & {
   title: string;
   description: string;
   heroExperience: string;

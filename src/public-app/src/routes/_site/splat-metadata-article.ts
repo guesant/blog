@@ -3,6 +3,7 @@ import type { RouteMetadata } from './splat-support';
 import { defaultMetadata } from './splat-metadata-default';
 import { contentMetadata } from './splat-metadata-content';
 import { articleDescription } from './splat-metadata-article-description';
+import { articleMetadataKeywords } from './splat-metadata-article-keywords';
 
 export function articleMetadata(data: RouteData): RouteMetadata {
   const articleKinds = ['case-detail', 'finding-detail', 'writing-detail'] as const;
@@ -21,5 +22,6 @@ export function articleMetadata(data: RouteData): RouteMetadata {
     title: articleData.item.title,
     description: articleDescription(articleData),
     type: 'article',
+    keywords: articleMetadataKeywords(articleData.item),
   });
 }

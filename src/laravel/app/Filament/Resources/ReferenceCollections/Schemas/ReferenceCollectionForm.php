@@ -70,7 +70,6 @@ class ReferenceCollectionForm
                     static::markdownEditor("{$prefix}intro")
                         ->label('Intro')
                         ->nullable(),
-                    static::seoFieldset($prefix),
                 ]),
             ]);
     }

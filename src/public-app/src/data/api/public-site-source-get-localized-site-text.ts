@@ -10,7 +10,6 @@ import { siteBuild } from './public-site-source-site-build';
 import { getLocalizedSiteChrome } from './public-site-source-get-localized-site-chrome';
 import type { RecordValue } from './public-site-source-support';
 import { siteFeatureFlags } from './public-site-source-site-feature-flags';
-import { seoMetadata } from './public-site-source-seo';
 
 export async function getLocalizedSiteText(
   locale?: string,
@@ -34,6 +33,5 @@ export async function getLocalizedSiteText(
     navigation: siteNavigation(resolvedChrome.navigation),
     visibility: siteVisibility(recordOrEmpty(resolvedChrome.visibility)),
     build: siteBuild(objectValue(resolvedChrome.build)),
-    seo: seoMetadata(site.seo),
   };
 }

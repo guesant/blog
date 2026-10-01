@@ -258,7 +258,6 @@ class PublicSiteApiTest extends TestCase
                 'title' => 'Home',
                 'description' => 'Public description',
                 'privateSecret' => 'must not be returned',
-                'seo' => ['image' => 'https://example.com/home.png'],
             ]),
             app(OgImageUrlGenerator::class),
             app(PublicMediaUrl::class),
@@ -267,8 +266,7 @@ class PublicSiteApiTest extends TestCase
         $this->assertSame([
             'title' => 'Home',
             'description' => 'Public description',
-            'seo' => ['image' => 'https://example.com/home.png'],
-            'og_image_url' => 'https://example.com/home.png',
+            'og_image_url' => app(OgImageUrlGenerator::class)->generate('profile', 'Home', 'Public description'),
         ], $response->toArray());
     }
 
@@ -344,6 +342,7 @@ class PublicSiteApiTest extends TestCase
         $this->assertArrayNotHasKey('birth_date', $response->json('profile') ?? []);
         $this->assertArrayNotHasKey('birth_city', $response->json('profile') ?? []);
         $response->assertHeader('X-Public-Site-Cache', 'miss');
+        $response->assertHeader('Cache-Control', 'must-revalidate, no-cache, public');
         $this->assertTrue(Cache::has(app(PublicSiteChromeCache::class)->key('en')));
 
         $this->getJson('/api/v1/site/chrome?locale=en')
@@ -475,38 +474,28 @@ class PublicSiteApiTest extends TestCase
 
     public function test_home_page_returns_server_computed_recurring_technologies(): void
     {
+        config()->set([
+            'og.enabled' => true,
+            'og.secret' => 'test-og-secret',
+            'og.base_url' => 'https://api.example.test',
+        ]);
+
         $page = Page::factory()->create(['slug' => 'home']);
         app(EditorialRevisionPublisher::class)->publish($page, [
             'en' => [
                 'title' => 'Home',
                 'description' => 'The home page.',
-                'seo' => [
-                    'title' => 'Home SEO',
-                    'description' => 'The SEO description.',
-                    'canonical' => 'https://example.com/home',
-                    'image' => 'https://example.com/home.png',
-                    'imageAlt' => 'Home social image',
-                    'robots' => 'follow',
-                    'noIndex' => true,
-                    'keywords' => ['home'],
-                ],
             ],
         ]);
 
-        $this->getJson('/api/v1/site/pages/home?locale=en')
+        $response = $this->getJson('/api/v1/site/pages/home?locale=en')
             ->assertOk()
             ->assertJsonPath('title', 'Home')
             ->assertJsonPath('description', 'The home page.')
-            ->assertJsonPath('seo.title', 'Home SEO')
-            ->assertJsonPath('seo.description', 'The SEO description.')
-            ->assertJsonPath('seo.canonical', 'https://example.com/home')
-            ->assertJsonPath('seo.image', 'https://example.com/home.png')
-            ->assertJsonPath('seo.imageAlt', 'Home social image')
-            ->assertJsonPath('seo.robots', 'follow')
-            ->assertJsonPath('seo.noIndex', true)
-            ->assertJsonPath('seo.keywords.0', 'home')
-            ->assertJsonPath('og_image_url', 'https://example.com/home.png')
+            ->assertJsonPath('og_image_url', fn (mixed $value): bool => is_string($value) && $value !== '')
             ->assertJsonPath('recurringTechnologies', []);
+
+        $this->assertArrayNotHasKey('seo', $response->json());
     }
 
     public function test_site_chrome_uses_cache_without_building_the_query(): void
@@ -620,7 +609,8 @@ class PublicSiteApiTest extends TestCase
         $cache->put('en', ['site' => []]);
         $cache->put('pt-BR', ['site' => []]);
 
-        (new InvalidatePublicSiteChrome)->handle(new PublicSiteContentChanged);
+        PublicSiteContentChanged::dispatch();
+        (new InvalidatePublicSiteChrome)->handle(new PublicSiteContentChanged, $cache);
 
         $this->assertFalse(Cache::has($cache->key('en')));
         $this->assertFalse(Cache::has($cache->key('pt-BR')));

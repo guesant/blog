@@ -430,69 +430,6 @@
                                                         "contextual_cursor",
                                                         "feed"
                                                     ]
-                                                },
-                                                "seo": {
-                                                    "type": [
-                                                        "object",
-                                                        "null"
-                                                    ],
-                                                    "properties": {
-                                                        "title": {
-                                                            "type": [
-                                                                "string",
-                                                                "null"
-                                                            ]
-                                                        },
-                                                        "description": {
-                                                            "type": [
-                                                                "string",
-                                                                "null"
-                                                            ]
-                                                        },
-                                                        "canonical": {
-                                                            "type": [
-                                                                "string",
-                                                                "null"
-                                                            ]
-                                                        },
-                                                        "image": {
-                                                            "type": [
-                                                                "string",
-                                                                "null"
-                                                            ]
-                                                        },
-                                                        "imageAlt": {
-                                                            "type": [
-                                                                "string",
-                                                                "null"
-                                                            ]
-                                                        },
-                                                        "robots": {
-                                                            "type": [
-                                                                "string",
-                                                                "null"
-                                                            ]
-                                                        },
-                                                        "noIndex": {
-                                                            "type": "boolean"
-                                                        },
-                                                        "keywords": {
-                                                            "type": "array",
-                                                            "items": {
-                                                                "type": "string"
-                                                            }
-                                                        }
-                                                    },
-                                                    "required": [
-                                                        "title",
-                                                        "description",
-                                                        "canonical",
-                                                        "image",
-                                                        "imageAlt",
-                                                        "robots",
-                                                        "noIndex",
-                                                        "keywords"
-                                                    ]
                                                 }
                                             },
                                             "required": [
@@ -507,8 +444,7 @@
                                                 "maintenance_enabled",
                                                 "maintenance_title",
                                                 "maintenance_description",
-                                                "feature_flags",
-                                                "seo"
+                                                "feature_flags"
                                             ]
                                         },
                                         "profile": {

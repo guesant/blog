@@ -340,28 +340,6 @@ class EditorialRevisionPublisher
             'site_settings' => 'site_settings',
             default => Str::singular($table),
         };
-        if (isset($fields['seo']) && is_array($fields['seo'])) {
-            DB::table('content_revision_seo')->insert([
-                'content_type' => $contentType,
-                'translation_id' => $translationId,
-                'title' => $fields['seo']['title'] ?? null,
-                'description' => $fields['seo']['description'] ?? null,
-                'canonical_url' => $fields['seo']['canonical'] ?? ($fields['seo']['canonical_url'] ?? null),
-                'image_url' => $fields['seo']['image'] ?? ($fields['seo']['image_url'] ?? null),
-                'image_alt' => $fields['seo']['imageAlt'] ?? ($fields['seo']['image_alt'] ?? null),
-                'robots' => $fields['seo']['robots'] ?? null,
-                'no_index' => $fields['seo']['noIndex'] ?? ($fields['seo']['no_index'] ?? false),
-            ]);
-
-            foreach ($fields['seo']['keywords'] ?? [] as $order => $keyword) {
-                DB::table('content_revision_seo_keywords')->insert([
-                    'content_type' => $contentType,
-                    'translation_id' => $translationId,
-                    'keyword' => (string) $keyword,
-                    'sort_order' => $order,
-                ]);
-            }
-        }
         if (isset($fields['metrics']) && is_array($fields['metrics'])) {
             foreach ($fields['metrics'] as $order => $metric) {
                 if (! is_array($metric)) {

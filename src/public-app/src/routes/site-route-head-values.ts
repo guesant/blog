@@ -27,7 +27,7 @@ export function siteRouteHeadValues(
   const canonicalPath = locale === 'pt-BR' ? portuguesePath : englishPath;
 
   return {
-    canonicalUrl: siteRouteCanonicalUrl(siteOrigin, canonicalPath, metadata.canonical),
+    canonicalUrl: siteRouteCanonicalUrl(siteOrigin, canonicalPath),
     englishUrl: new URL(englishPath, siteOrigin).toString(),
     imageUrl: metadata.image ?? new URL('/favicon.svg', siteOrigin).toString(),
     portugueseUrl: new URL(portuguesePath, siteOrigin).toString(),

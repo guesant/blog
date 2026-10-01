@@ -57,7 +57,6 @@ trait ManagesPageContent
             static::markdownEditor("{$prefix}fields.description")
                 ->label(__('Description'))
                 ->nullable(),
-            static::seoFieldset($prefix),
         ];
     }
 

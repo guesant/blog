@@ -17,5 +17,5 @@ export function metadataRobots(
     );
   }
 
-  return directives.length > 0 ? [...new Set(directives)].join(', ') : undefined;
+  return directives.length > 0 ? [...new Set(directives)].join(', ') : 'index, follow';
 }

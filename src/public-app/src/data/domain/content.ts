@@ -3,19 +3,7 @@ import type { Reference } from './refs-details';
 
 export type RichTextContent = string | Record<string, unknown>;
 
-export type SeoMetadata = {
-  title?: string;
-  description?: string;
-  canonical?: string;
-  image?: string;
-  imageAlt?: string;
-  robots?: string;
-  keywords?: string[];
-  noIndex?: boolean;
-};
-
-export type WithSeo = {
-  seo?: SeoMetadata;
+export type WithOgImage = {
   ogImageUrl?: string;
 };
 
@@ -43,7 +31,7 @@ type SnippetFile = {
   content: string;
 };
 
-export type Snippet = WithSeo & {
+export type Snippet = WithOgImage & {
   slug: string;
   title: string;
   description: string;
@@ -53,7 +41,7 @@ export type Snippet = WithSeo & {
   files: SnippetFile[];
 };
 
-export type CaseStudy = WithSeo & {
+export type CaseStudy = WithOgImage & {
   hidden?: boolean;
   order: number;
   slug: string;
@@ -73,7 +61,7 @@ export type CaseStudy = WithSeo & {
   body?: RichTextContent;
 };
 
-export type Project = WithSeo & {
+export type Project = WithOgImage & {
   hidden?: boolean;
   order: number;
   slug: string;
@@ -91,7 +79,7 @@ export type Project = WithSeo & {
   body?: RichTextContent;
 };
 
-export type Experiment = WithSeo & {
+export type Experiment = WithOgImage & {
   hidden?: boolean;
   order: number;
   slug: string;
@@ -105,7 +93,7 @@ export type Experiment = WithSeo & {
   body?: RichTextContent;
 };
 
-export type Writing = WithSeo & {
+export type Writing = WithOgImage & {
   hidden?: boolean;
   slug: string;
   url?: string;

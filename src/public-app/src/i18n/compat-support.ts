@@ -41,7 +41,7 @@ type TranslationKey<Namespace extends TranslationNamespace> = MessageKeyPaths<
   Extract<MessageAtPath<typeof en, Namespace>, object>
 >;
 
-export type AchadosTranslationKey =
+type AchadosTranslationKey =
   | TranslationKey<'Pages.achados'>
   | `types.${string}`
   | `ratings.${string}`

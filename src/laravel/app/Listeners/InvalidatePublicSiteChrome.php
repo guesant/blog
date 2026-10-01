@@ -10,9 +10,9 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 
 final class InvalidatePublicSiteChrome implements ShouldQueue
 {
-    public function handle(PublicSiteContentChanged $event): void
+    public function handle(PublicSiteContentChanged $event, PublicSiteChromeCache $cache): void
     {
-        app(PublicSiteChromeCache::class)->forgetAll();
+        $cache->forgetAll();
 
         foreach (Locale::all() as $locale) {
             WarmPublicSiteChrome::dispatch($locale);

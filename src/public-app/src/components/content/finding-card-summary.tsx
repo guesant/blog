@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import { NavLink } from '../primitives/nav-link';
 import { FindingCardDescription, FindingCardTitle, type FindingCardPresentation } from '../ui';
 
@@ -5,6 +6,7 @@ type FindingCardSummaryProps = {
   title: string;
   href: string;
   description: string;
+  metadata?: ReactNode;
   headingLevel: 'h2' | 'h3';
   presentation: FindingCardPresentation;
 };
@@ -21,6 +23,7 @@ export function FindingCardSummary(props: FindingCardSummaryProps) {
   return (
     <>
       {title}
+      {props.metadata}
       <FindingCardDescription presentation={props.presentation}>
         {props.description}
       </FindingCardDescription>

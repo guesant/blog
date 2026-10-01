@@ -1,12 +1,12 @@
-import type { RichTextContent, TechnologyBadge, WithSeo } from './content';
+import type { RichTextContent, TechnologyBadge, WithOgImage } from './content';
 import type { ContentReference } from './resume';
 
-export type PageIntroduction = WithSeo & {
+export type PageIntroduction = WithOgImage & {
   title: string;
   description: string;
 };
 
-export type HomePageCopy = WithSeo & {
+export type HomePageCopy = WithOgImage & {
   title: string;
   description: string;
   recurringTechnologies?: TechnologyBadge[];
@@ -55,7 +55,7 @@ export type ProjectsPageCopy = PageIntroduction & {
   experimentsTitle: string;
 };
 
-export type ResumePageCopy = WithSeo & {
+export type ResumePageCopy = WithOgImage & {
   title: string;
   description: string;
 };

@@ -181,7 +181,6 @@ class ResourceFindingForm
                     static::markdownEditor("{$prefix}reason_found")
                         ->label('Reason Found')
                         ->nullable(),
-                    static::seoFieldset($prefix),
                 ]),
             ]);
     }

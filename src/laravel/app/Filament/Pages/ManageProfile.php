@@ -189,7 +189,6 @@ class ManageProfile extends Page
                                     TextInput::make("{$prefix}fields.story_title")->label(__('Story title'))->nullable(),
                                     static::markdownEditor("{$prefix}fields.story")->label(__('Story'))->nullable(),
                                 ]),
-                            static::seoFieldset($prefix),
                         ]),
                     ]),
             ])

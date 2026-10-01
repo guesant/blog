@@ -12,16 +12,21 @@ export function FeedCardBody(props: FeedCardBodyProps) {
     ? getFeedCardCategoryLabel({ entry: props.entry, t: props.t })
     : undefined;
 
-  const title = category ? `${props.entry.title} [${category}]` : props.entry.title;
+  const categorySuffix = category ? ` [${category}]` : '';
+
+  const title =
+    props.entry.kind === 'achado'
+      ? `${props.t('finding')}: ${props.entry.title}${categorySuffix}`
+      : props.entry.title;
 
   return (
     <FindingCardPresentation
-      metadata={<FeedCardHeader {...props} />}
       summary={
         <FindingCardSummary
           title={title}
           href={props.entry.href}
           description={props.entry.preview}
+          metadata={<FeedCardHeader {...props} />}
           headingLevel="h2"
           presentation="feed"
         />

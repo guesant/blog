@@ -3,47 +3,10 @@
 namespace App\Filament\Concerns;
 
 use Filament\Forms\Components\Repeater;
-use Filament\Forms\Components\TagsInput;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Toggle;
-use Filament\Schemas\Components\Fieldset;
 
 trait BuildsStructuredFields
 {
-    protected static function seoFieldset(string $prefix): Fieldset
-    {
-        return Fieldset::make(__('SEO'))
-            ->columns(2)
-            ->schema([
-                TextInput::make("{$prefix}seo.title")
-                    ->label('SEO title')
-                    ->nullable(),
-                TextInput::make("{$prefix}seo.image")
-                    ->label('SEO image URL')
-                    ->nullable(),
-                TextInput::make("{$prefix}seo.canonical")
-                    ->label('Canonical URL')
-                    ->nullable(),
-                static::markdownEditor("{$prefix}seo.description")
-                    ->label('SEO description')
-                    ->nullable(),
-                TextInput::make("{$prefix}seo.imageAlt")
-                    ->label('SEO image alt text')
-                    ->nullable(),
-                TagsInput::make("{$prefix}seo.keywords")
-                    ->label('SEO keywords')
-                    ->nullable(),
-                TextInput::make("{$prefix}seo.robots")
-                    ->label('Robots directives')
-                    ->placeholder('index, follow')
-                    ->nullable(),
-                Toggle::make("{$prefix}seo.noIndex")
-                    ->label('Exclude from search engines (noindex)')
-                    ->default(false)
-                    ->inline(false),
-            ]);
-    }
-
     protected static function metricsRepeater(string $prefix): Repeater
     {
         return Repeater::make("{$prefix}metrics")

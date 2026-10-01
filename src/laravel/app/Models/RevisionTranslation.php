@@ -12,34 +12,6 @@ abstract class RevisionTranslation extends Model
 
     protected $guarded = [];
 
-    public function getSeoAttribute(): ?array
-    {
-        $seo = DB::table('content_revision_seo')
-            ->where('content_type', $this->contentType())
-            ->where('translation_id', $this->id)
-            ->first();
-
-        if ($seo === null) {
-            return null;
-        }
-
-        return [
-            'title' => $seo->title,
-            'description' => $seo->description,
-            'canonical' => $seo->canonical_url,
-            'image' => $seo->image_url,
-            'imageAlt' => $seo->image_alt,
-            'robots' => $seo->robots,
-            'noIndex' => $seo->no_index,
-            'keywords' => DB::table('content_revision_seo_keywords')
-                ->where('content_type', $this->contentType())
-                ->where('translation_id', $this->id)
-                ->orderBy('sort_order')
-                ->pluck('keyword')
-                ->all(),
-        ];
-    }
-
     public function getMetricsAttribute(): array
     {
         return DB::table('content_revision_metrics')

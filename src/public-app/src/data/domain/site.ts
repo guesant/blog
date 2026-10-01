@@ -1,5 +1,4 @@
 import type { ProtectedEmailChallenge } from './protected-email/types.ts';
-import type { WithSeo } from './content';
 
 type ExternalProfilePlatform =
   | 'linkedin'
@@ -85,7 +84,7 @@ type SiteBuild = {
   commitSha?: string;
 };
 
-export type SiteText = WithSeo & {
+export type SiteText = {
   shortName: string;
   portfolioUrl?: string;
   copyrightTemplate: string;

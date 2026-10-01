@@ -206,16 +206,6 @@ class PublicSiteApiController extends Controller
      *         flat_cards: bool
      *       }
      *     },
-     *     seo: array{
-     *       title: string|null,
-     *       description: string|null,
-     *       canonical: string|null,
-     *       image: string|null,
-     *       imageAlt: string|null,
-     *       robots: string|null,
-     *       noIndex: bool,
-     *       keywords: array<int, string>
-     *     }|null
      *   },
      *   profile: array{
      *     name: string,
@@ -288,7 +278,7 @@ class PublicSiteApiController extends Controller
         }
 
         return response()->json($data)
-            ->header('Cache-Control', 'public, max-age=60, stale-while-revalidate=300')
+            ->header('Cache-Control', 'public, no-cache, must-revalidate')
             ->header('X-Public-Site-Cache', $cacheState)
             ->header('Server-Timing', 'public-site-chrome;dur='.$duration);
     }

@@ -1,5 +1,5 @@
 import type { ExternalLink } from './refs-links';
-import type { RichTextContent, WithSeo } from './content';
+import type { RichTextContent, WithOgImage } from './content';
 
 type ReferenceIdentifier = {
   kind: 'isbn' | 'doi' | 'issn' | 'imdb' | 'tmdb' | 'youtube' | 'other';
@@ -58,7 +58,7 @@ type ReferenceFilmDetails = {
   tmdbId?: string;
 };
 
-export type Reference = WithSeo & {
+export type Reference = WithOgImage & {
   hidden?: boolean;
   order: number;
   slug: string;
@@ -125,7 +125,7 @@ type ReferenceCollectionItem = {
   note?: string;
 };
 
-export type ReferenceCollection = WithSeo & {
+export type ReferenceCollection = WithOgImage & {
   hidden?: boolean;
   order: number;
   slug: string;

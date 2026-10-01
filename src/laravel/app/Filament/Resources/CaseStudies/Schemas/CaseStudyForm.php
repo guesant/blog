@@ -83,7 +83,6 @@ class CaseStudyForm
                     static::markdownEditor("{$prefix}body")
                         ->label('Body')
                         ->nullable(),
-                    static::seoFieldset($prefix),
                 ]),
             ]);
     }

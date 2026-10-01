@@ -58,19 +58,14 @@ Laravel content API returns the new value.
 
 ### SEO and social sharing
 
-The localized **SEO and social sharing** group is available in Settings, pages, cases, projects,
-experiments and writing. It supports an optional meta title, meta description, keywords, social
-image, image alternative text and `noindex`. Images are stored in the repository; use a 1200 × 630 px
-image when possible.
+SEO metadata is derived automatically from the published content. The public title and description
+are used for document metadata, the canonical URL comes from the localized route, and the Open Graph
+image is generated from the resolved title and description. Published taxonomies and technologies
+provide keywords where the route exposes them.
 
-An uploaded image takes priority. When neither the document nor Settings provides one, `/og`
-generates a cacheable 1200 × 630 px fallback from the resolved page or post title and description.
-The generator receives those resolved values in the image URL and does not query an editor at runtime.
-
-Settings provides the global fallback. A document only needs SEO overrides when its search or social
-presentation should differ from its visible title and description. Canonical URLs, locale alternates,
-Open Graph type, publication dates and authorship remain application-generated so they cannot drift
-from the actual route or document.
+Hidden content is absent from public responses, feeds, sitemaps and metadata. The Filament panel does
+not expose manual SEO overrides, so social and search metadata cannot diverge from the published
+content.
 
 The production command is intentionally just `corepack pnpm build` from this directory.
 

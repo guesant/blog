@@ -25,7 +25,6 @@ final class GetPublicPageQueryHandler
             : null) ?? $page->getAttribute('slug'));
         $translation = $page->translation($query->locale);
         $fields = $translation?->fields ?? [];
-        $fields['seo'] = $translation?->seo;
         $updatedAtValue = $revision instanceof Model
             ? $revision->getAttribute('updated_at')
             : null;

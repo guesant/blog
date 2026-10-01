@@ -11,7 +11,6 @@ export type RouteMetadata = {
   type?: string;
   image?: string;
   imageAlt?: string;
-  canonical?: string;
   robots?: string;
   keywords?: string[];
   noIndex?: boolean;

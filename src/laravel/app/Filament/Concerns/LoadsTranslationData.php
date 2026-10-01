@@ -26,10 +26,8 @@ trait LoadsTranslationData
                 if ($this->getRecord()->getTable() === 'pages') {
                     return [$locale => [
                         'fields' => collect($fields)
-                            ->except('seo')
                             ->mapWithKeys(fn (mixed $value, string $key): array => [Str::snake($key) => $value])
                             ->all(),
-                        'seo' => $fields['seo'] ?? null,
                     ]];
                 }
 
@@ -49,10 +47,8 @@ trait LoadsTranslationData
                 if ($record instanceof Page) {
                     return [$locale => [
                         'fields' => collect($fields)
-                            ->except('seo')
                             ->mapWithKeys(fn (mixed $value, string $key): array => [Str::snake($key) => $value])
                             ->all(),
-                        'seo' => $fields['seo'] ?? null,
                     ]];
                 }
 
@@ -71,16 +67,12 @@ trait LoadsTranslationData
         }
 
         if ($translation instanceof PageRevisionTranslation) {
-            $fields = $translation->fields;
-            $fields['seo'] = $translation->seo;
-
-            return $fields;
+            return $translation->fields;
         }
 
         $fields = collect($translation->getAttributes())
             ->except(['id', 'locale', 'created_at', 'updated_at'])
             ->all();
-        $fields['seo'] = $translation->seo;
         $fields['metrics'] = $translation->metrics;
 
         return array_filter($fields, static fn (mixed $value): bool => $value !== null);
@@ -95,10 +87,7 @@ trait LoadsTranslationData
         }
 
         if ($translation instanceof PageRevisionTranslation) {
-            $fields = $translation->fields;
-            $fields['seo'] = $translation->seo;
-
-            return $fields;
+            return $translation->fields;
         }
 
         if ($translation instanceof ProfileRevisionTranslation) {
@@ -116,7 +105,6 @@ trait LoadsTranslationData
         $fields = collect($translation->getAttributes())
             ->except(['id', 'locale', 'created_at', 'updated_at'])
             ->all();
-        $fields['seo'] = $translation->seo;
         $fields['metrics'] = $translation->metrics;
 
         return array_filter($fields, static fn (mixed $value): bool => $value !== null);

@@ -251,16 +251,6 @@ export type PublicSiteApiChromeResponses = {
                     flat_cards: boolean;
                 };
             };
-            seo: {
-                title: string | null;
-                description: string | null;
-                canonical: string | null;
-                image: string | null;
-                imageAlt: string | null;
-                robots: string | null;
-                noIndex: boolean;
-                keywords: Array<string>;
-            } | null;
         };
         profile: {
             name: string;

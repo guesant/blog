@@ -973,10 +973,8 @@
   <file src="app/Models/RevisionTranslation.php">
     <PublicModelAccessor>
       <code><![CDATA[getMetricsAttribute]]></code>
-      <code><![CDATA[getSeoAttribute]]></code>
     </PublicModelAccessor>
     <UndefinedThisPropertyFetch>
-      <code><![CDATA[$this->id]]></code>
       <code><![CDATA[$this->id]]></code>
     </UndefinedThisPropertyFetch>
   </file>

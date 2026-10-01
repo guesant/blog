@@ -174,7 +174,6 @@ class ManageResume extends Page
                     static::markdownEditor("{$prefix}fields.description")
                         ->label(__('Excerpt'))
                         ->nullable(),
-                    static::seoFieldset($prefix),
                 ]),
             ]);
     }

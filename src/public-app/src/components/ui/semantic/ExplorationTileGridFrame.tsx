@@ -16,7 +16,7 @@ export function ExplorationTileGridFrame(props: ExplorationTileGridFrameProps) {
           display: 'flex',
           flexWrap: 'wrap',
           justifyContent: 'center',
-          [explorationTileGridGapProperty]: 'var(--site-exploration-gap)',
+          [explorationTileGridGapProperty]: 'var(--site-exploration-grid-gap)',
           rowGap: `var(${explorationTileGridGapProperty})`,
           columnGap: `var(${explorationTileGridGapProperty})`,
           mt: 0,

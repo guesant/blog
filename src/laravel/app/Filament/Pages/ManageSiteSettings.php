@@ -2,7 +2,6 @@
 
 namespace App\Filament\Pages;
 
-use App\Content\PublicSiteChromeCache;
 use App\Filament\Concerns\BuildsMarkdownEditors;
 use App\Filament\Concerns\BuildsStructuredFields;
 use App\Filament\Concerns\BuildsTranslationTabs;
@@ -110,7 +109,6 @@ class ManageSiteSettings extends Page
                                 ->nullable()
                                 ->helperText(__('Use {year} and {name} as placeholders.')),
                         ]),
-                    static::seoFieldset($prefix),
                 ]),
             ])
             ->model($this->getRecord())
@@ -124,7 +122,6 @@ class ManageSiteSettings extends Page
 
         $this->getRecord()->update($data);
         $this->persistTranslations();
-        app(PublicSiteChromeCache::class)->forgetAll();
 
         Notification::make()->success()->title(__('Saved'))->send();
     }

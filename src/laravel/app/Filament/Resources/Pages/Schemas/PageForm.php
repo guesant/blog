@@ -124,7 +124,6 @@ class PageForm
                     ]),
                 static::translationTabs(fn (string $prefix) => [
                     ...static::pageFieldInputs($prefix),
-                    static::seoFieldset($prefix),
                 ]),
             ]);
     }

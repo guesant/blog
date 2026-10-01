@@ -18,6 +18,7 @@ export function HomeHero(props: HomeHeroProps) {
       <TechnicalGrid />
       <HomeHeroContent>
         <PageHeader
+          breadcrumbs={[]}
           title={profile.name}
           description={
             <HomeHeroDescriptionFrame>

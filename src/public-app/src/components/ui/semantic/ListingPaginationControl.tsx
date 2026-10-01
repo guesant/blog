@@ -12,15 +12,16 @@ export const ListingPaginationControl = createSemanticSxComponent<
   maxWidth: '100%',
   '& .MuiPagination-ul': {
     display: 'flex',
-    flexDirection: { xs: 'column', sm: 'row' },
-    alignItems: { xs: 'stretch', sm: 'center' },
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    alignItems: 'center',
     justifyContent: 'center',
     gap: 0,
-    width: { xs: '100%', sm: 'auto' },
+    width: '100%',
   },
   '& .MuiPaginationItem-root': {
     margin: 0,
-    width: { xs: '100%', sm: 'auto' },
+    width: 'auto',
     minWidth: 'var(--site-control-h-sm)',
     height: 'var(--site-control-h-sm)',
     borderRadius: 0,
@@ -30,8 +31,11 @@ export const ListingPaginationControl = createSemanticSxComponent<
     zIndex: 1,
   },
   '& .MuiPaginationItem-root + .MuiPaginationItem-root': {
-    marginLeft: { xs: 0, sm: 'calc(var(--site-border-width) * -1)' },
-    marginTop: { xs: 'calc(var(--site-border-width) * -1)', sm: 0 },
+    marginLeft: 'calc(var(--site-border-width) * -1)',
+    marginTop: 0,
+  },
+  '& .MuiPaginationItem-firstLast': {
+    display: { xs: 'none', sm: 'inline-flex' },
   },
   '& .MuiPaginationItem-firstLast, & .MuiPaginationItem-previousNext': {
     backgroundColor: 'var(--site-accent-bg)',

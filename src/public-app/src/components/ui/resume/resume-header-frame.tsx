@@ -37,9 +37,9 @@ const contactActionsStyles = {
 
 export function ResumeHeaderFrame(props: ResumeHeaderFrameProps) {
   return (
-    <Box component="header" sx={headerStyles}>
+    <Box component="section" sx={headerStyles}>
       <Box sx={identityStyles}>
-        <Typography component="h1" variant="h2" sx={nameStyles}>
+        <Typography component="h2" variant="h2" sx={nameStyles}>
           {props.name}
         </Typography>
         <Typography sx={titleStyles}>{props.title}</Typography>

@@ -328,15 +328,15 @@ class PublicSiteApiTest extends TestCase
         );
     }
 
-    public function test_feed_is_published_in_the_content_sidebar_group(): void
+    public function test_feed_page_is_not_published_in_the_content_sidebar_group(): void
     {
         Cache::flush();
         $groups = collect($this->getJson('/api/v1/site/chrome?locale=en')
             ->assertOk()
             ->json('navigation.sidebar'));
-        $content = $groups->firstWhere('key', 'content');
+        $items = $groups->flatMap(static fn (array $group): array => $group['items'] ?? []);
 
-        $this->assertContains('/feed', array_column($content['items'], 'route'));
+        $this->assertNotContains('/feed', array_column($items->all(), 'route'));
     }
 
     public function test_static_interface_catalog_is_not_an_api_resource(): void

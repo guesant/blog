@@ -3,7 +3,9 @@ import { Box } from '../box';
 import { Divider } from '../divider';
 import { Typography } from '../typography';
 import { ConditionalContent } from '../../primitives/conditional-content';
-import { editorialDescriptionStyles, editorialPageTitleStyles } from '../editorial-typography';
+import { editorialPageTitleStyles } from '../editorial-typography';
+import { PageHeaderDescriptionFrame } from './page-header-description-frame';
+import { PageHeaderSupportingContentFrame } from './page-header-supporting-content-frame';
 
 export type PageHeaderFrameContentProps = {
   maxWidth: string;
@@ -16,6 +18,10 @@ export type PageHeaderFrameContentProps = {
 };
 
 export function PageHeaderFrameContent(props: PageHeaderFrameContentProps) {
+  const hasDescription = Boolean(props.description);
+
+  const hasSupportingContent = Boolean(props.actions || props.meta || props.metadata);
+
   return (
     <Box
       component="header"
@@ -23,29 +29,26 @@ export function PageHeaderFrameContent(props: PageHeaderFrameContentProps) {
     >
       {props.breadcrumbs}
       {props.breadcrumbs ? <Divider /> : null}
-      <Box sx={{ display: 'grid', rowGap: 'var(--site-space-5)' }}>
-        <Typography variant="h1" sx={editorialPageTitleStyles}>
-          {props.title}
-        </Typography>
-        {props.actions}
-        <ConditionalContent
-          condition={Boolean(props.description)}
-          content={
-            <Typography color="text.secondary" sx={editorialDescriptionStyles}>
-              {props.description}
-            </Typography>
-          }
-        />
-        <ConditionalContent
-          condition={Boolean(props.meta)}
-          content={
-            <Typography color="text.secondary" sx={{ margin: 0 }}>
-              {props.meta}
-            </Typography>
-          }
-        />
-        {props.metadata}
-      </Box>
+      <Typography variant="h1" sx={editorialPageTitleStyles}>
+        {props.title}
+      </Typography>
+      <Divider />
+      <ConditionalContent
+        condition={hasDescription}
+        content={<PageHeaderDescriptionFrame>{props.description}</PageHeaderDescriptionFrame>}
+      />
+      <ConditionalContent condition={hasDescription} content={<Divider />} />
+      <ConditionalContent
+        condition={hasSupportingContent}
+        content={
+          <PageHeaderSupportingContentFrame
+            actions={props.actions}
+            meta={props.meta}
+            metadata={props.metadata}
+          />
+        }
+      />
+      <ConditionalContent condition={hasSupportingContent} content={<Divider />} />
     </Box>
   );
 }

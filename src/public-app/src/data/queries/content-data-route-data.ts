@@ -34,9 +34,6 @@ export type RouteData =
   | {
       kind: 'home';
       content: HomePageContent;
-    }
-  | {
-      kind: 'feed';
       feedItems: PublicFeedItem[];
       feedPagination: ContentCollectionMeta;
     }

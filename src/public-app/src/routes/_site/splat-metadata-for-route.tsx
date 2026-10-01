@@ -15,12 +15,6 @@ type MetadataResolver = (data: RouteData, locale: Locale) => RouteMetadata;
 
 const metadataResolvers: Partial<Record<RouteData['kind'], MetadataResolver>> = {
   home: (data) => (data.kind === 'home' ? metadataFromPage(data.content.page) : defaultMetadata()),
-  feed: (_data, locale) =>
-    localizedMetadata({
-      locale,
-      titlePath: 'Pages.feed.title',
-      descriptionPath: 'Pages.feed.description',
-    }),
   about: pageMetadata,
   cases: pageMetadata,
   collections: pageMetadata,

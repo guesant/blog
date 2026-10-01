@@ -1,12 +1,14 @@
 'use client';
 
+import { PageHeader } from '../../content/page-header';
+import { HomeIntroText } from '../../ui/semantic/HomeIntroText';
+import { HomeHeroDescriptionFrame } from '../../ui/semantic/HomeHeroDescriptionFrame';
 import { TechnicalGrid } from '../../primitives/technical-grid';
 import type { HomeHeroProps } from './types';
 import { HomeAvailability } from './ui/home-availability';
 import { HomeHeroActions } from './ui/home-hero-actions';
 import { HomeHeroContent } from './ui/home-hero-content';
 import { HomeHeroSurface } from './ui/home-hero-surface';
-import { HomeHeroText } from './ui/home-hero-text';
 
 export function HomeHero(props: HomeHeroProps) {
   const { page, profile, showContact, showAvailability, workTarget, t } = props;
@@ -15,14 +17,23 @@ export function HomeHero(props: HomeHeroProps) {
     <HomeHeroSurface showContact={showContact}>
       <TechnicalGrid />
       <HomeHeroContent>
-        <HomeHeroText kind="title">{profile.name}</HomeHeroText>
-        <HomeHeroText kind="experience">{page.heroExperience}</HomeHeroText>
-        <HomeHeroText kind="focus">{page.heroCurrentFocus}</HomeHeroText>
-        <HomeHeroActions
-          site={props.site}
-          showContact={showContact}
-          workTarget={workTarget}
-          t={t}
+        <PageHeader
+          title={profile.name}
+          description={
+            <HomeHeroDescriptionFrame>
+              <HomeIntroText component="p">{page.heroExperience}</HomeIntroText>
+              <HomeIntroText component="p">{page.heroCurrentFocus}</HomeIntroText>
+            </HomeHeroDescriptionFrame>
+          }
+          actions={
+            <HomeHeroActions
+              site={props.site}
+              showContact={showContact}
+              workTarget={workTarget}
+              t={t}
+            />
+          }
+          variant="showcase"
         />
       </HomeHeroContent>
       <HomeAvailability page={page} showAvailability={showAvailability} />

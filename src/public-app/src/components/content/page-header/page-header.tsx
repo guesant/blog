@@ -1,4 +1,3 @@
-import { Divider } from '../../ui';
 import { PageHeaderFrame } from '../../ui';
 import { PageHeaderContentFrame } from '../../ui/semantic/PageHeaderContentFrame';
 import { Breadcrumbs } from '../../navigation/breadcrumbs';
@@ -16,7 +15,6 @@ export function PageHeader(props: PageHeaderProps) {
         metadata={props.metadata}
         actions={props.actions}
       />
-      <Divider />
     </PageHeaderContentFrame>
   );
 }

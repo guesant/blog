@@ -2,8 +2,6 @@ export { ResumeAwardIssuer } from './resume-award-issuer';
 
 export { ResumeArticleFrame } from './resume-article-frame';
 
-export { ResumeBreadcrumbsFrame } from './resume-breadcrumbs-frame';
-
 export { ResumeCaseAction } from './resume-case-action';
 
 export { ResumeCaseFrame } from './resume-case-frame';

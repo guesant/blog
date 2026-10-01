@@ -1,8 +1,7 @@
 'use client';
 
 import { useLocale, useTranslations } from '@/i18n/compat';
-import { Breadcrumbs } from '../../navigation/breadcrumbs';
-import { ResumeBreadcrumbsFrame } from '../../ui';
+import { PageHeader } from '../../content/page-header';
 import type { ResumePageContentProps } from './types';
 import { ResumeHeader } from './resume-header';
 import { ResumePageSections } from './resume-page-sections';
@@ -29,18 +28,22 @@ export function ResumePageContent(props: ResumePageContentProps) {
 
   return (
     <ResumeArticle>
-      <ResumeBreadcrumbsFrame>
-        <Breadcrumbs trail={[{ label: tNav('resume') }]} />
-      </ResumeBreadcrumbsFrame>
-      <ResumeHeader
-        page={page}
-        profile={profile}
-        site={site}
-        hasEmail={hasEmail}
-        locale={locale}
-        pdfUrls={pdfUrls}
-        t={t}
-        tExternalProfiles={tExternalProfiles}
+      <PageHeader
+        title={page.title}
+        description={page.description}
+        breadcrumbs={[{ label: tNav('resume') }]}
+        metadata={
+          <ResumeHeader
+            profile={profile}
+            site={site}
+            hasEmail={hasEmail}
+            locale={locale}
+            pdfUrls={pdfUrls}
+            t={t}
+            tExternalProfiles={tExternalProfiles}
+          />
+        }
+        variant="showcase"
       />
 
       <ResumePageSections content={staticContent} t={t} />

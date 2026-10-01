@@ -94,7 +94,6 @@ export type ResumeCredentialsProps = {
 };
 
 export type ResumeHeaderProps = {
-  page: ResumeContent['page'];
   profile: ResumeContent['profile'];
   site: ResumeContent['site'];
   hasEmail: boolean;

@@ -25,17 +25,15 @@ import type { RouteLoadContext, RouteLoader } from './content-data-route-loader'
 
 export const primaryRouteLoaders: Record<string, RouteLoader> = {
   ...collectionRouteLoaders,
-  '/': async ({ locale }, context?: RouteLoadContext) => {
-    return {
-      kind: 'home',
-      content: await getHomePageContent(locale, context?.shell),
-    };
-  },
-  '/feed': async ({ locale, search }) => {
-    const feed = await getHomeFeedPage(locale, feedQuery(search));
+  '/': async ({ locale, search }, context?: RouteLoadContext) => {
+    const [content, feed] = await Promise.all([
+      getHomePageContent(locale, context?.shell),
+      getHomeFeedPage(locale, feedQuery(search)),
+    ]);
 
     return {
-      kind: 'feed',
+      kind: 'home',
+      content,
       feedItems: feed.items,
       feedPagination: feed.meta,
     };

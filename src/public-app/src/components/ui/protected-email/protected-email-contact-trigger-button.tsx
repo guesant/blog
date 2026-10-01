@@ -12,7 +12,7 @@ export function ProtectedEmailContactTriggerButton(props: ProtectedEmailContactT
       disabled={props.busy}
       variant="outlined"
       size="medium"
-      startIcon={<Icon name="mail" size={18} />}
+      startIcon={<Icon name="mail" size={16} />}
     >
       {props.label}
     </ContactActionButton>

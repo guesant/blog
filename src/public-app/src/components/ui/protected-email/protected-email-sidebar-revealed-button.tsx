@@ -1,10 +1,19 @@
 import type { ProtectedEmailRevealedButtonProps as ProtectedEmailRevealedButtonContentProps } from './protected-email-button-types';
-import { ProtectedEmailRevealedActionButton } from './protected-email-revealed-action-button';
+import { Icon } from '../../primitives/icon';
+import { SidebarButton } from '../semantic/SidebarButton';
 
 type ProtectedEmailSidebarRevealedButtonProps = ProtectedEmailRevealedButtonContentProps;
 
 export function ProtectedEmailSidebarRevealedButton(
   props: ProtectedEmailSidebarRevealedButtonProps,
 ) {
-  return <ProtectedEmailRevealedActionButton {...props} size="small" iconSize={14} />;
+  return (
+    <SidebarButton
+      ref={props.ref}
+      startIcon={<Icon name="mail" size={14} />}
+      onClick={props.onReveal}
+    >
+      {props.showAddress ? props.email : props.label}
+    </SidebarButton>
+  );
 }

@@ -6,8 +6,8 @@ import { useState } from 'react';
 import { copyContentAction } from './copy-content-action';
 import { plainText } from './plain-text';
 import { useSiteFeatureFlags } from './use-site-feature-flags';
-import { ContentActionsHero } from './content-actions-hero';
-import { ContentActionsSection } from './content-actions-section';
+import { ContentActionsPlacement } from './content-actions-placement';
+import { ConditionalContent } from '../primitives/conditional-content';
 
 type ContentActionsProps = {
   title: string;
@@ -49,9 +49,12 @@ export function ContentActions(props: ContentActionsProps) {
     downloadUrl,
   };
 
-  if (placement === 'hero') {
-    return <ContentActionsHero {...contentProps} />;
-  }
+  const hasPrimaryActions = Object.values(featureFlags.contentActions).some(Boolean);
 
-  return <ContentActionsSection {...contentProps} />;
+  return (
+    <ConditionalContent
+      condition={hasPrimaryActions || Boolean(externalUrl) || Boolean(downloadUrl)}
+      content={<ContentActionsPlacement {...contentProps} placement={placement} />}
+    />
+  );
 }

@@ -1,8 +1,8 @@
 import { createServerFn } from '@tanstack/react-start';
-import { errorRouteData } from './content-data-fallback-route';
 import { serializable } from './content-data-serializable';
 import { requestSchema } from './content-data-request-schema';
 import { getServerStaleWhileRevalidate } from './content-data-server-cache';
+import type { RouteData } from './content-data-support';
 
 export const loadShell = createServerFn({ method: 'GET' })
   .validator((locale: string) => locale)
@@ -35,11 +35,15 @@ export const loadRoute = createServerFn({ method: 'GET' })
       fallback: undefined,
     });
 
-    return serializable(
-      await getServerStaleWhileRevalidate({
-        key: `route:${JSON.stringify(data)}`,
-        loader: async () => loadRouteDataForRequest(data, { shell }),
-        fallback: errorRouteData,
-      }),
-    );
+    const route = await getServerStaleWhileRevalidate<RouteData | undefined>({
+      key: `route:${JSON.stringify(data)}`,
+      loader: async () => loadRouteDataForRequest(data, { shell }),
+      fallback: undefined,
+    });
+
+    if (route === undefined) {
+      throw new Error('Public site route is unavailable');
+    }
+
+    return serializable(route);
   });

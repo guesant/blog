@@ -6,8 +6,6 @@ import { LeftSidebarContentGroups } from './left-sidebar-content-groups';
 import type { NavigationItem, SidebarGroup, SiteText } from '@portfolio/data/domain/types';
 
 type LeftSidebarMainNavigationProps = {
-  backHref?: string;
-  backLabel: string;
   homeItem: NavigationItem;
   contentGroups: SidebarGroup[];
   aboutVisible: boolean;
@@ -23,9 +21,7 @@ type LeftSidebarMainNavigationProps = {
 export function LeftSidebarMainNavigation(props: LeftSidebarMainNavigationProps) {
   return (
     <SidebarNavigationStack compact={Boolean(props.compact)}>
-      {props.showBrand !== false && (
-        <SidebarBrandRow backHref={props.backHref} backLabel={props.backLabel} />
-      )}
+      {props.showBrand !== false && <SidebarBrandRow />}
       <Divider />
       <SidebarLinkList
         items={[props.homeItem]}

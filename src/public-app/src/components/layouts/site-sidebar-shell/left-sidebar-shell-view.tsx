@@ -3,7 +3,6 @@ import { ConditionalContent } from '../../primitives/conditional-content';
 import { LeftSidebarShellNavigation } from './left-sidebar-shell-navigation';
 import { LeftSidebarPreferencesArea } from './left-sidebar-preferences-area';
 import type { SiteText } from '@portfolio/data/domain/types';
-import type { buildLeftSidebarBackNavigation } from './build-left-sidebar-back-navigation';
 import type { buildLeftSidebarData } from './build-left-sidebar-data';
 import type { SidebarTranslator } from '@/i18n/compat-support';
 
@@ -14,7 +13,6 @@ type LeftSidebarShellViewProps = {
   showPreferences: boolean;
   t: SidebarTranslator;
   data: ReturnType<typeof buildLeftSidebarData>;
-  back: ReturnType<typeof buildLeftSidebarBackNavigation>;
   showBrand?: boolean;
 };
 
@@ -26,7 +24,6 @@ export function LeftSidebarShellView(props: LeftSidebarShellViewProps) {
         locale={props.locale}
         onNavigate={props.onNavigate}
         data={props.data}
-        back={props.back}
         compact={!props.showPreferences}
         showBrand={props.showBrand}
       />

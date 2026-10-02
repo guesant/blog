@@ -2,7 +2,6 @@
 
 import { useTranslations } from '@/i18n/compat';
 import type { SiteText } from '@portfolio/data/domain/types';
-import { buildLeftSidebarBackNavigation } from './build-left-sidebar-back-navigation';
 import { buildLeftSidebarData } from './build-left-sidebar-data';
 import { internalRoute } from './internal-route';
 import { LeftSidebarShellView } from './left-sidebar-shell-view';
@@ -25,8 +24,6 @@ export function LeftSidebar(props: LeftSidebarProps) {
 
   const data = buildLeftSidebarData({ site: props.site, currentPathname, tNav });
 
-  const back = buildLeftSidebarBackNavigation({ pathname: currentPathname, tNav });
-
   return (
     <LeftSidebarShellView
       site={props.site}
@@ -35,7 +32,6 @@ export function LeftSidebar(props: LeftSidebarProps) {
       showPreferences={props.showPreferences ?? true}
       t={t}
       data={data}
-      back={back}
       showBrand={props.showBrand}
     />
   );

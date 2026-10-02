@@ -1,7 +1,5 @@
 export { SidebarActionButton } from './sidebar-action-button';
 
-export { SidebarBackButtonFrame } from './sidebar-back-button-frame';
-
 export { SidebarBrandLinkFrame } from './sidebar-brand-link-frame';
 
 export { SidebarBrandRowFrame } from './sidebar-brand-row-frame';
@@ -21,8 +19,6 @@ export { SidebarLayoutFrame } from './sidebar-layout-frame';
 export { SidebarMainColumnFrame } from './sidebar-main-column-frame';
 
 export { SidebarMainContentFrame } from './sidebar-main-content-frame';
-
-export { SidebarMobileBackButtonFrame } from './sidebar-mobile-back-button-frame';
 
 export { SidebarMobileBrandHeaderFrame } from './sidebar-mobile-brand-header-frame';
 

@@ -1,7 +1,6 @@
 'use client';
 
 import { ExploreSection } from './explore-section';
-import { ContentFeedStatus } from './content-feed-status';
 import type { ContentFeedViewProps } from './content-feed-view';
 import { ContentFeedListingResults } from './content-feed-listing-results';
 
@@ -32,10 +31,6 @@ export type ContentFeedListingProps = Pick<
 export function ContentFeedListing(props: ContentFeedListingProps) {
   return (
     <>
-      <ContentFeedStatus
-        count={props.count}
-        label={props.t(props.count === 1 ? 'result' : 'results')}
-      />
       <ContentFeedListingResults {...props} />
       <>
         {props.beforeExplore}

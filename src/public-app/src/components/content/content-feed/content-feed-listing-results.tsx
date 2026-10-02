@@ -1,9 +1,11 @@
 import { ContentFeedResultsState } from './content-feed-results-state';
 import { ContentFeedListingPagination } from './content-feed-listing-pagination';
+import { ContentFeedStatus } from './content-feed-status';
 import type { ContentFeedListingProps } from './content-feed-listing';
 
 type ContentFeedListingResultsProps = Pick<
   ContentFeedListingProps,
+  | 'count'
   | 'visibleEntries'
   | 'hasActiveFilters'
   | 'noResultsLabel'
@@ -37,6 +39,10 @@ export function ContentFeedListingResults(props: ContentFeedListingResultsProps)
         locale={props.locale}
         t={props.t}
         onQuickFilter={props.onQuickFilter}
+      />
+      <ContentFeedStatus
+        count={props.count}
+        label={props.t(props.count === 1 ? 'result' : 'results')}
       />
       <ContentFeedListingPagination {...props} />
     </>

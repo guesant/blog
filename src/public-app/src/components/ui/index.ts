@@ -64,8 +64,6 @@ export { NoScript } from './no-script';
 
 export { RichTextElement } from './rich-text-element';
 
-export { VisibilitySentinel } from './visibility-sentinel';
-
 export { EditorialSection } from './editorial-section';
 
 export { EditorialFeedItemDivider, EditorialFeedItemFrame } from './semantic';

@@ -9,5 +9,5 @@ export function feedPerPage(value: string | null) {
     return requested;
   }
 
-  return 50;
+  return 10;
 }

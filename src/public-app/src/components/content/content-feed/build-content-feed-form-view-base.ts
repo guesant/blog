@@ -1,4 +1,4 @@
-import { buildContentFeedShowPagination } from './build-content-feed-show-pagination';
+import { contentFeedShowPagination } from './content-feed-show-pagination';
 import { contentFeedShowSelects } from './content-feed-show-selects';
 import type {
   ContentFeedFormViewProps,
@@ -16,7 +16,6 @@ export type ContentFeedFormViewBase = Pick<
   | 'pendingSearch'
   | 'searchLabel'
   | 'displayControls'
-  | 'displayMode'
   | 'perPage'
 >;
 
@@ -38,16 +37,12 @@ export function buildContentFeedFormViewBase(
     copy: props.copy,
     breadcrumbs: props.breadcrumbs,
     showHeader,
-    showPagination: buildContentFeedShowPagination({
-      showPagination,
-      displayMode: state.displayMode,
-    }),
+    showPagination: contentFeedShowPagination(showPagination),
     selects,
     showSelects: contentFeedShowSelects(props.showSelects),
     pendingSearch: state.pendingSearch,
     searchLabel,
     displayControls,
-    displayMode: state.displayMode,
     perPage: state.perPage,
   };
 }

@@ -33,12 +33,7 @@ export function useContentFeedActions(props: ContentFeedActionProps) {
     clearFilters,
     applyQuickFilter,
     pageHref: navigation.pageHref,
-    displayModeHref: navigation.displayModeHref,
     perPageHref: navigation.perPageHref,
-    setDisplayMode: (value: ContentFeedActionProps['displayMode']) => {
-      props.setDisplayMode(value);
-      navigation.navigate(navigation.displayModeHref(value, props.perPage));
-    },
     setPerPage: (value: number) => {
       props.setPerPage(value);
       navigation.navigate(navigation.perPageHref(value));

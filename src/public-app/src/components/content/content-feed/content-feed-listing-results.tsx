@@ -1,6 +1,5 @@
 import { ContentFeedResultsState } from './content-feed-results-state';
 import { ContentFeedListingPagination } from './content-feed-listing-pagination';
-import { ContentFeedListingProgressive } from './content-feed-listing-progressive';
 import type { ContentFeedListingProps } from './content-feed-listing';
 
 type ContentFeedListingResultsProps = Pick<
@@ -23,8 +22,6 @@ type ContentFeedListingResultsProps = Pick<
   | 'lastLabel'
   | 'onPageChange'
   | 'showPagination'
-  | 'displayMode'
-  | 'progressive'
 >;
 
 export function ContentFeedListingResults(props: ContentFeedListingResultsProps) {
@@ -42,7 +39,6 @@ export function ContentFeedListingResults(props: ContentFeedListingResultsProps)
         onQuickFilter={props.onQuickFilter}
       />
       <ContentFeedListingPagination {...props} />
-      <ContentFeedListingProgressive {...props} />
     </>
   );
 }

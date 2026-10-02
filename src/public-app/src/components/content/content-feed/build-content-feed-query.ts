@@ -1,4 +1,4 @@
-import type { ContentFeedDisplayMode, FeedQuickFilter, SortMode } from './types';
+import type { FeedQuickFilter, SortMode } from './types';
 import { contentFeedQueryKind } from './content-feed-query-kind';
 import { contentFeedQuerySort } from './content-feed-query-sort';
 import { resolveContentFeedKind } from './resolve-content-feed-kind';
@@ -12,7 +12,6 @@ export type BuildContentFeedQueryProps = {
   type: string;
   search: string;
   sort: SortMode;
-  displayMode?: ContentFeedDisplayMode;
   perPage?: number;
   page?: number;
   filter?: FeedQuickFilter;

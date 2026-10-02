@@ -15,19 +15,12 @@ type PortfolioPageBodyProps = PortfolioPageContentProps & {
 export function PortfolioPageBody(props: PortfolioPageBodyProps) {
   return (
     <>
-      <PortfolioCaseSection
-        page={props.page}
-        cases={props.cases}
-        casesPagination={props.casesPagination}
-        search={props.search}
-      />
+      <PortfolioCaseSection page={props.page} cases={props.cases} />
       <PortfolioProjectsSection
         page={props.page}
         projects={props.projects}
-        projectsPagination={props.projectsPagination}
         experiments={props.experiments}
         experimentsPagination={props.experimentsPagination}
-        search={props.search}
       />
       <CollectionPagination
         meta={portfolioPaginationMeta({

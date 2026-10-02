@@ -8,7 +8,7 @@ import { PortfolioProjectResults } from './portfolio-project-results';
 
 type PortfolioProjectsContentProps = Pick<
   PortfolioPageContentProps,
-  'page' | 'projects' | 'projectsPagination' | 'experiments' | 'experimentsPagination' | 'search'
+  'page' | 'projects' | 'experiments' | 'experimentsPagination'
 >;
 
 export function PortfolioProjectsContent(props: PortfolioProjectsContentProps) {
@@ -16,11 +16,7 @@ export function PortfolioProjectsContent(props: PortfolioProjectsContentProps) {
     <Box component="section">
       <PortfolioSectionTitle>{props.page.projectsTitle}</PortfolioSectionTitle>
       <PortfolioSectionDescription>{props.page.projectsDescription}</PortfolioSectionDescription>
-      <PortfolioProjectResults
-        projects={props.projects}
-        pagination={props.projectsPagination}
-        search={props.search}
-      />
+      <PortfolioProjectResults projects={props.projects} />
       <ConditionalContent
         condition={props.experiments.length > 0}
         content={

@@ -8,7 +8,7 @@ import { ContentFeedDisplayControls } from './content-feed-display-controls';
 import { ContentFeedHeader } from './content-feed-header';
 import { ContentFeedListing } from './content-feed-listing';
 import type { FeedSelectDefinition } from './feed-select.types';
-import type { ContentFeedDisplayMode, FeedEntry, FeedPageCopy, FeedQuickFilter } from './types';
+import type { FeedEntry, FeedPageCopy, FeedQuickFilter } from './types';
 import type { BreadcrumbItem } from '../../navigation/breadcrumbs';
 import type { AchadosTranslator } from '@/i18n/compat-support';
 
@@ -44,20 +44,9 @@ export type ContentFeedViewProps = {
   onPageChange: (page: number) => void;
   beforeExplore?: ReactNode;
   displayControls: boolean;
-  displayMode: ContentFeedDisplayMode;
   perPage: number;
-  modeLabel: string;
-  paginationModeLabel: string;
-  infiniteModeLabel: string;
   perPageLabel: string;
-  onDisplayModeChange: (value: ContentFeedDisplayMode) => void;
   onPerPageChange: (value: number) => void;
-  progressive: {
-    hasNextPage: boolean | undefined;
-    isFetchingNextPage: boolean;
-    isFetchNextPageError: boolean;
-    fetchNextPage: () => Promise<unknown>;
-  };
 };
 
 export function ContentFeedView(props: ContentFeedViewProps) {
@@ -78,13 +67,8 @@ export function ContentFeedView(props: ContentFeedViewProps) {
         condition={props.displayControls}
         content={
           <ContentFeedDisplayControls
-            displayMode={props.displayMode}
             perPage={props.perPage}
-            modeLabel={props.modeLabel}
-            paginationLabel={props.paginationModeLabel}
-            infiniteLabel={props.infiniteModeLabel}
             perPageLabel={props.perPageLabel}
-            onDisplayModeChange={props.onDisplayModeChange}
             onPerPageChange={props.onPerPageChange}
           />
         }

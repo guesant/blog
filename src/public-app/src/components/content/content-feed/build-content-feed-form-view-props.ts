@@ -19,11 +19,7 @@ export function buildContentFeedFormViewProps(
     clearLabel: translations.clearLabel,
     onPendingSearchChange: runtime.state.setPendingSearch,
     onSubmit: actions.applyFilters,
-    modeLabel: translations.modeLabel,
-    paginationModeLabel: translations.paginationModeLabel,
-    infiniteModeLabel: translations.infiniteModeLabel,
     perPageLabel: translations.perPageLabel,
-    onDisplayModeChange: actions.setDisplayMode,
     onPerPageChange: actions.setPerPage,
   };
 }

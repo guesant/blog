@@ -31,9 +31,6 @@ const pageLabelKeys = {
   previousLabel: 'previous',
   nextLabel: 'next',
   lastLabel: 'last',
-  modeLabel: 'displayMode',
-  paginationModeLabel: 'paginationMode',
-  infiniteModeLabel: 'infiniteMode',
   perPageLabel: 'perPage',
 } as const;
 

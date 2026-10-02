@@ -1,5 +1,5 @@
 import type { useRouter } from '../../../i18n/compat';
-import type { ContentFeedDisplayMode, SortMode } from './types';
+import type { SortMode } from './types';
 
 export type ContentFeedRouter = ReturnType<typeof useRouter>;
 
@@ -19,8 +19,6 @@ export type ContentFeedActionProps = {
   setSearch: (value: string) => void;
   setPendingSearch: (value: string) => void;
   setSort: (value: SortMode) => void;
-  displayMode: ContentFeedDisplayMode;
   perPage: number;
-  setDisplayMode: (value: ContentFeedDisplayMode) => void;
   setPerPage: (value: number) => void;
 };

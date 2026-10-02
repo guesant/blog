@@ -26,8 +26,6 @@ export type ContentFeedListingProps = Pick<
   | 'lastLabel'
   | 'onPageChange'
   | 'showPagination'
-  | 'displayMode'
-  | 'progressive'
   | 'beforeExplore'
 >;
 

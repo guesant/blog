@@ -11,7 +11,9 @@ export default {
     {
       name: '@tanstack/react-query',
       queryKeys: { enabled: true },
+      infiniteQueryKeys: false,
       queryOptions: { enabled: true, exported: true },
+      infiniteQueryOptions: false,
       mutationOptions: { enabled: true, exported: true },
       includeInEntry: true,
     },

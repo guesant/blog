@@ -12,7 +12,6 @@ type UseContentFeedStateProps = Pick<
   | 'initialSearch'
   | 'initialSort'
   | 'initialType'
-  | 'displayControls'
   | 'initialPerPage'
 > & {
   query: URLSearchParams;
@@ -30,7 +29,6 @@ export function useContentFeedState(props: UseContentFeedStateProps) {
     props.initialSearch,
     props.initialSort,
     props.initialType,
-    props.displayControls,
     props.initialPerPage,
     props.query,
   ]);
@@ -45,8 +43,6 @@ export function useContentFeedState(props: UseContentFeedStateProps) {
     setSort: (value: ContentFeedState['sort']) =>
       setState((current) => ({ ...current, sort: value })),
     setType: (value: string) => setState((current) => ({ ...current, type: value })),
-    setDisplayMode: (value: ContentFeedState['displayMode']) =>
-      setState((current) => ({ ...current, displayMode: value })),
     setPerPage: (value: number) => setState((current) => ({ ...current, perPage: value })),
   };
 }

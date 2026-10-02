@@ -1,7 +1,5 @@
 import { useCallback } from 'react';
 import type { ContentFeedRouter } from './use-content-feed-actions.types';
-import type { ContentFeedDisplayMode } from './types';
-import { buildFeedDisplayModeHref } from './build-feed-display-mode-href';
 import { buildFeedPageHref } from './build-feed-page-href';
 import { buildFeedPerPageHref } from './build-feed-per-page-href';
 
@@ -31,12 +29,6 @@ export function useFeedNavigation(props: UseFeedNavigationProps) {
     [props.action, props.query],
   );
 
-  const displayModeHref = useCallback(
-    (mode: ContentFeedDisplayMode, perPage: number) =>
-      buildFeedDisplayModeHref({ action: props.action, query: props.query, mode, perPage }),
-    [props.action, props.query],
-  );
-
   const perPageHref = useCallback(
     (perPage: number) => buildFeedPerPageHref(props.action, props.query, perPage),
     [props.action, props.query],
@@ -49,5 +41,5 @@ export function useFeedNavigation(props: UseFeedNavigationProps) {
     [props.router, scrollToFeedAfter],
   );
 
-  return { pageHref, scrollToFeedAfter, displayModeHref, perPageHref, navigate };
+  return { pageHref, scrollToFeedAfter, perPageHref, navigate };
 }

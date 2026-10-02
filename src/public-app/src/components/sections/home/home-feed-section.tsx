@@ -24,7 +24,7 @@ export function HomeFeedSection(props: HomeFeedSectionProps) {
       contentMeta={props.pagination}
       action="/"
       showSelects={false}
-      initialPerPage={10}
+      initialPerPage={50}
     />
   );
 }

@@ -1,4 +1,5 @@
 import { buildContentFeedShowPagination } from './build-content-feed-show-pagination';
+import { contentFeedShowSelects } from './content-feed-show-selects';
 import type {
   ContentFeedFormViewProps,
   UseContentFeedViewPropsInput,
@@ -11,6 +12,7 @@ export type ContentFeedFormViewBase = Pick<
   | 'showHeader'
   | 'showPagination'
   | 'selects'
+  | 'showSelects'
   | 'pendingSearch'
   | 'searchLabel'
   | 'displayControls'
@@ -41,6 +43,7 @@ export function buildContentFeedFormViewBase(
       displayMode: state.displayMode,
     }),
     selects,
+    showSelects: contentFeedShowSelects(props.showSelects),
     pendingSearch: state.pendingSearch,
     searchLabel,
     displayControls,

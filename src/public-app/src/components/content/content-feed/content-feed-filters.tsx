@@ -7,9 +7,11 @@ import type { FeedSelectDefinition } from './feed-select.types';
 import { FeedSelectControl } from './feed-select-control';
 import { FeedSearchField } from './feed-search-field';
 import { ContentFeedFiltersFrame } from '../../ui/semantic/ContentFeedFiltersFrame';
+import { ConditionalContent } from '../../primitives/conditional-content';
 
 type ContentFeedFiltersProps = {
   selects: FeedSelectDefinition[];
+  showSelects: boolean;
   pendingSearch: string;
   searchLabel: string;
   applyLabel: string;
@@ -27,9 +29,12 @@ export function ContentFeedFilters(props: ContentFeedFiltersProps) {
       applyLabel={props.applyLabel}
       clearLabel={props.clearLabel}
     >
-      {props.selects.map((select) => (
-        <FeedSelectControl key={select.id} {...select} clearLabel={props.clearLabel} />
-      ))}
+      <ConditionalContent
+        condition={props.showSelects}
+        content={props.selects.map((select) => (
+          <FeedSelectControl key={select.id} {...select} clearLabel={props.clearLabel} />
+        ))}
+      />
       <ContentFeedFiltersFrame>
         <FeedSearchField
           value={props.pendingSearch}

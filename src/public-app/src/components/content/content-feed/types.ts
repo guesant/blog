@@ -52,6 +52,7 @@ export type ContentFeedProps = {
   initialSearch?: string;
   initialSort?: SortMode;
   initialType?: string;
+  showSelects?: boolean;
   displayControls?: boolean;
   initialPerPage?: number;
   initialPage?: number;

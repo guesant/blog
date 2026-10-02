@@ -18,6 +18,7 @@ export type ContentFeedViewProps = {
   showHeader: boolean;
   showPagination: boolean;
   selects: FeedSelectDefinition[];
+  showSelects: boolean;
   pendingSearch: string;
   searchLabel: string;
   applyLabel: string;
@@ -65,6 +66,7 @@ export function ContentFeedView(props: ContentFeedViewProps) {
       <ContentFeedHeader {...props} visible={props.showHeader} />
       <ContentFeedFilters
         selects={props.selects}
+        showSelects={props.showSelects}
         pendingSearch={props.pendingSearch}
         searchLabel={props.searchLabel}
         onPendingSearchChange={props.onPendingSearchChange}

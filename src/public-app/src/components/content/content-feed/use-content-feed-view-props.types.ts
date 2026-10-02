@@ -16,6 +16,7 @@ export type ContentFeedFormViewProps = Pick<
   | 'showHeader'
   | 'showPagination'
   | 'selects'
+  | 'showSelects'
   | 'pendingSearch'
   | 'searchLabel'
   | 'applyLabel'

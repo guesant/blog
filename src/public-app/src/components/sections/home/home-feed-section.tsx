@@ -23,7 +23,7 @@ export function HomeFeedSection(props: HomeFeedSectionProps) {
       searchPlaceholder={t('searchPlaceholder')}
       contentMeta={props.pagination}
       action="/"
-      displayControls
+      showSelects={false}
       initialPerPage={10}
     />
   );

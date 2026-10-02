@@ -22,8 +22,8 @@ export function ListingPagination(props: ListingPaginationProps) {
       size="small"
       showFirstButton
       showLastButton
-      boundaryCount={2}
-      siblingCount={1}
+      boundaryCount={1}
+      siblingCount={0}
       onChange={(_event: ChangeEvent<unknown>, nextPage: number) =>
         goToListingPage({ ...props, nextPage: nextPage ?? props.page })
       }

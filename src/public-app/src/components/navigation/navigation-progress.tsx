@@ -1,6 +1,6 @@
 'use client';
 
-import { usePathname } from '../../i18n/compat';
+import { useRouterState } from '@tanstack/react-router';
 import NProgress from 'nprogress';
 import { useEffect } from 'react';
 import { finishProgress } from './finish-progress';
@@ -8,7 +8,7 @@ import { handleNavigationClick } from './handle-navigation-click';
 import { startProgress } from './start-progress';
 
 export function NavigationProgress() {
-  const pathname = usePathname();
+  const routerStatus = useRouterState({ select: (state) => state.status });
 
   useEffect(() => {
     NProgress.configure({
@@ -30,10 +30,11 @@ export function NavigationProgress() {
     };
   }, []);
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: pathname intentionally only triggers completion after navigation.
   useEffect(() => {
-    finishProgress();
-  }, [pathname]);
+    if (routerStatus === 'idle') {
+      finishProgress();
+    }
+  }, [routerStatus]);
 
   return null;
 }

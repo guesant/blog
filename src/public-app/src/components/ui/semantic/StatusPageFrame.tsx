@@ -8,7 +8,6 @@ export const StatusPageFrame = createSemanticSxComponent<ComponentProps<typeof B
     width: '100%',
     maxWidth: 'var(--site-page-max)',
     mx: 'auto',
-    px: 'var(--site-inset-page)',
     boxSizing: 'border-box',
     minHeight: { xs: '55vh', md: '60vh' },
     display: 'flex',

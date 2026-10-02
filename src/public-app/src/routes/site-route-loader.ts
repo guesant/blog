@@ -1,7 +1,6 @@
 import type { QueryClient } from '@tanstack/react-query';
 import type { RouteRequest } from '../data/queries';
 import {
-  errorRouteData,
   fallbackRouteData,
   getSsrQueryData,
   routeQueryOptions,
@@ -18,7 +17,7 @@ export function siteRouteLoader(props: SiteRouteLoaderProps) {
     queryClient: props.queryClient,
     options: routeQueryOptions(props.request),
     fallback: fallbackRouteData,
-    errorFallback: errorRouteData,
+    errorFallback: fallbackRouteData,
     timeoutMs: SSR_CONTENT_BUDGET_MS,
   });
 }

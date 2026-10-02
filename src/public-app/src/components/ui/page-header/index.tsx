@@ -8,6 +8,7 @@ export type { PageHeaderVariant } from './styles';
 export type PageHeaderFrameProps = {
   variant: PageHeaderVariant;
   breadcrumbs?: ReactNode;
+  titleAdornment?: ReactNode;
   title: string;
   description?: ReactNode;
   meta?: string;

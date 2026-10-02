@@ -5,6 +5,7 @@ import type { PageHeaderVariant } from '../../ui/page-header';
 
 export type PageHeaderProps = {
   title: string;
+  titleAdornment?: ReactNode;
   description?: ReactNode;
   meta?: string;
   metadata?: ReactNode;

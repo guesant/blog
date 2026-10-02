@@ -6,10 +6,12 @@ import { ConditionalContent } from '../../primitives/conditional-content';
 import { editorialPageTitleStyles } from '../editorial-typography';
 import { PageHeaderDescriptionFrame } from './page-header-description-frame';
 import { PageHeaderSupportingContentFrame } from './page-header-supporting-content-frame';
+import { PageHeaderTitleFrame } from './page-header-title-frame';
 
 export type PageHeaderFrameContentProps = {
   maxWidth: string;
   breadcrumbs?: ReactNode;
+  titleAdornment?: ReactNode;
   title: string;
   description?: ReactNode;
   meta?: string;
@@ -29,9 +31,11 @@ export function PageHeaderFrameContent(props: PageHeaderFrameContentProps) {
     >
       {props.breadcrumbs}
       {props.breadcrumbs ? <Divider /> : null}
-      <Typography variant="h1" sx={editorialPageTitleStyles}>
-        {props.title}
-      </Typography>
+      <PageHeaderTitleFrame adornment={props.titleAdornment}>
+        <Typography variant="h1" sx={editorialPageTitleStyles}>
+          {props.title}
+        </Typography>
+      </PageHeaderTitleFrame>
       <Divider />
       <ConditionalContent
         condition={hasDescription}

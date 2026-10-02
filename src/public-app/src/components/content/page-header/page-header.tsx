@@ -9,6 +9,7 @@ export function PageHeader(props: PageHeaderProps) {
       <PageHeaderFrame
         variant={props.variant ?? 'reading'}
         breadcrumbs={props.breadcrumbs ? <Breadcrumbs trail={props.breadcrumbs} /> : undefined}
+        titleAdornment={props.titleAdornment}
         title={props.title}
         description={props.description}
         meta={props.meta}

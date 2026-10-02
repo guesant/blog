@@ -5,5 +5,4 @@ export const StatusIcon = styled(BaseComponent, { name: 'StatusIcon' })({
   display: 'block',
   flex: '0 0 auto',
   opacity: 0.45,
-  marginBottom: '0.75rem',
 });

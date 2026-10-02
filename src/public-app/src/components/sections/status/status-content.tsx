@@ -19,8 +19,12 @@ export function StatusContent(props: StatusContentProps) {
 
   return (
     <StatusMessageBodyFrame>
-      <StatusIcon name="problem" size={22} />
-      <PageHeader title={t('title')} description={t('description')} variant="showcase" />
+      <PageHeader
+        title={t('title')}
+        titleAdornment={<StatusIcon name="problem" size={22} />}
+        description={t('description')}
+        variant="showcase"
+      />
       <StatusActions {...props} />
     </StatusMessageBodyFrame>
   );

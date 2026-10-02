@@ -4,4 +4,10 @@ import { Box as BaseComponent } from '@/components/ui/box';
 
 export const StatusMessageBodyFrame = createSemanticSxComponent<
   ComponentProps<typeof BaseComponent>
->(BaseComponent, { width: '100%', maxWidth: 'var(--site-lede-max)', mx: 'auto' });
+>(BaseComponent, {
+  width: '100%',
+  maxWidth: 'var(--site-lede-max)',
+  mx: 'auto',
+  display: 'grid',
+  rowGap: 'var(--site-page-content-offset)',
+});

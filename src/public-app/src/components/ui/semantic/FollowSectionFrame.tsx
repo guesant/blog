@@ -2,12 +2,11 @@ import type { ComponentProps } from 'react';
 import { createSemanticSxComponent } from '@/components/ui/create-semantic-sx-component';
 import { Box as BaseComponent } from '@/components/ui/box';
 
-export const FindingSectionFrame = createSemanticSxComponent<ComponentProps<typeof BaseComponent>>(
+export const FollowSectionFrame = createSemanticSxComponent<ComponentProps<typeof BaseComponent>>(
   BaseComponent,
   {
     display: 'grid',
-    gap: 'var(--site-page-section-gap)',
-    borderRadius: 0,
-    backgroundColor: 'var(--site-surface)',
+    rowGap: 'var(--site-page-section-gap)',
+    width: '100%',
   },
 );

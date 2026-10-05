@@ -6,7 +6,7 @@ export const ConnectionsSectionFrame = createSemanticSxComponent<
   ComponentProps<typeof BaseComponent>
 >(BaseComponent, {
   display: 'grid',
-  gap: 'var(--site-space-4)',
+  gap: 'var(--site-page-section-gap)',
   padding: 'var(--site-space-6)',
   borderRadius: 0,
   backgroundColor: 'var(--site-surface)',

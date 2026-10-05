@@ -5,4 +5,4 @@ import { editorialSectionTitleStyles } from '../editorial-typography';
 
 export const FollowSectionTitleText = createSemanticSxComponent<
   ComponentProps<typeof BaseComponent>
->(BaseComponent, { ...editorialSectionTitleStyles, mt: 1, mb: 3 });
+>(BaseComponent, editorialSectionTitleStyles);

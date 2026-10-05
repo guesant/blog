@@ -3,7 +3,7 @@ import { CollectionListing } from '../../content/collection-listing';
 import { renderFollowEntryCard } from './render-follow-entry-card';
 import type { FollowEntry } from './types';
 import { FollowFutureTitleText } from '../../ui/semantic/FollowFutureTitleText';
-import { PageSectionLeadingSpacingFrame } from '../../ui/semantic/PageSectionLeadingSpacingFrame';
+import { FollowSectionFrame } from '../../ui/semantic/FollowSectionFrame';
 
 type FollowFutureSectionProps = {
   entries: FollowEntry[];
@@ -13,7 +13,7 @@ type FollowFutureSectionProps = {
 
 export function FollowFutureSection(props: FollowFutureSectionProps) {
   return (
-    <PageSectionLeadingSpacingFrame>
+    <FollowSectionFrame component="section">
       <Typography variant="overline" color="text.secondary">
         {props.label}
       </Typography>
@@ -25,6 +25,6 @@ export function FollowFutureSection(props: FollowFutureSectionProps) {
         getKey={(entry) => entry.key}
         renderListItem={renderFollowEntryCard}
       />
-    </PageSectionLeadingSpacingFrame>
+    </FollowSectionFrame>
   );
 }

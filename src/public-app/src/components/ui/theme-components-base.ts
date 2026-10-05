@@ -93,12 +93,17 @@ export const themeComponentsBase = {
         zIndex: 'var(--site-z-navigation-overlay)',
         inset: 0,
         backgroundColor: 'var(--site-navigation-overlay)',
+        opacity: 0,
         pointerEvents: 'none',
         visibility: 'hidden',
+        transition:
+          'opacity var(--site-duration-short-4) var(--site-ease-standard), visibility 0s linear var(--site-duration-short-4)',
       },
       'html[data-navigation-state="loading"] #navigation-busy-overlay': {
+        opacity: 1,
         pointerEvents: 'auto',
         visibility: 'visible',
+        transition: 'opacity var(--site-duration-short-4) var(--site-ease-standard)',
       },
       '#nprogress': { pointerEvents: 'none' },
       '#nprogress .bar': {

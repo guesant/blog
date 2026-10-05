@@ -35,6 +35,11 @@ export function NavigationProgress() {
   }, []);
 
   useEffect(() => {
+    if (routerStatus === 'pending') {
+      startProgress();
+      return;
+    }
+
     if (routerStatus === 'idle' && fetchingCount === 0) {
       finishProgress();
     }

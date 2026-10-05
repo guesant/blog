@@ -29,8 +29,9 @@
   --site-sidebar-gap: var(--site-space-4);
   --site-inset-control: var(--site-space-2) var(--site-space-3);
   --site-inset-card: var(--site-space-4);
-  --site-inset-page: var(--site-space-6);
+  --site-inset-page: 1.5rem;
   --site-page-content-offset: 3rem;
+  --site-page-section-gap: 1.5rem;
   --site-action-py: var(--site-space-2);
   --site-action-px: var(--site-space-3);
 
@@ -115,6 +116,7 @@
   --site-breadcrumb-item-max: 22ch;
   --site-stat-min: 8rem;
   --site-pagination-edge-max: 8rem;
+  --site-pagination-button-width: 6rem;
   --site-list-indent: 1.4rem;
   --site-dot: 0.5rem;
   --site-swatch: 0.625rem;
@@ -135,7 +137,7 @@
   --site-feed-accent-w: 0.25rem;
   --site-tile-min-h: 5rem;
   --site-source-preview-mobile-min-h: 8rem;
-  --site-navigation-overlay: rgb(255 255 255 / 42%);
+  --site-navigation-overlay: rgb(255 255 255 / 12%);
   --site-viewport-height: 100svh;
   --site-viewport-min-height: 100svh;
 

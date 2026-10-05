@@ -4,6 +4,7 @@ import { Typography } from '../typography';
 type FindingCardTitleProps = {
   children: ReactNode;
   component: 'h2' | 'h3';
+  fontSize?: string;
 };
 
 export function FindingCardTitle(props: FindingCardTitleProps) {
@@ -14,7 +15,7 @@ export function FindingCardTitle(props: FindingCardTitleProps) {
         margin: 0,
         width: '100%',
         color: 'var(--site-text-primary)',
-        fontSize: 'var(--site-text-lg)',
+        fontSize: props.fontSize ?? 'var(--site-text-lg)',
         fontWeight: 'var(--site-weight-bold)',
         letterSpacing: 'var(--site-letter-heading)',
         lineHeight: 'var(--site-leading-tight)',

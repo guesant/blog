@@ -19,6 +19,8 @@ export function FeedCardBody(props: FeedCardBodyProps) {
       ? `${props.t('finding')}: ${props.entry.title}${categorySuffix}`
       : props.entry.title;
 
+  const titleFontSize = props.entry.kind === 'post' ? 'var(--site-text-xl)' : undefined;
+
   return (
     <FindingCardPresentation
       summary={
@@ -28,6 +30,7 @@ export function FeedCardBody(props: FeedCardBodyProps) {
           description={props.entry.preview}
           metadata={<FeedCardHeader {...props} />}
           headingLevel="h2"
+          titleFontSize={titleFontSize}
         />
       }
       footer={<FeedCardFooter {...props} />}

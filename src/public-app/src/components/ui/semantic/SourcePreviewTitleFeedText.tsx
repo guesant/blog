@@ -11,7 +11,6 @@ export const SourcePreviewTitleFeedText = createSemanticSxComponent<
   fontSize: 'var(--site-text-sm)',
   fontWeight: 'var(--site-weight-bold)',
   lineHeight: 'var(--site-leading-tight)',
-  overflow: 'hidden',
-  textOverflow: 'ellipsis',
-  whiteSpace: 'nowrap',
+  overflowWrap: 'anywhere',
+  wordBreak: 'break-word',
 });

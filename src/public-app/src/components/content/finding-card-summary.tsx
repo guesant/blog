@@ -8,11 +8,12 @@ type FindingCardSummaryProps = {
   description: string;
   metadata?: ReactNode;
   headingLevel: 'h2' | 'h3';
+  titleFontSize?: string;
 };
 
 export function FindingCardSummary(props: FindingCardSummaryProps) {
   const title = (
-    <FindingCardTitle component={props.headingLevel}>
+    <FindingCardTitle component={props.headingLevel} fontSize={props.titleFontSize}>
       <NavLink href={props.href} underline="none" color="inherit">
         {props.title}
       </NavLink>

@@ -1,14 +1,4 @@
 [[IgnoredVulns]]
-id = "GHSA-7pqw-9j4j-h8q3"
+id = "GHSA-vfj7-8cjw-p6xm"
 ignoreUntil = 2026-12-31
-reason = "Transitive development-only extract-zip dependency of Lighthouse; not included in the published application."
-
-[[IgnoredVulns]]
-id = "GHSA-jmr9-qjv8-65gv"
-ignoreUntil = 2026-12-31
-reason = "Transitive development-only extract-zip dependency of Lighthouse; not included in the published application."
-
-[[IgnoredVulns]]
-id = "GHSA-w5hq-g745-h8pq"
-ignoreUntil = 2026-12-31
-reason = "Transitive development-only uuid dependency of Lighthouse; the current Lighthouse release requires the CommonJS-compatible major."
+reason = "Transitive development-only braces dependency of linting tools; it is not included in the published application and has no fixed release."

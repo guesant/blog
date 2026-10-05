@@ -297,16 +297,19 @@ return new class extends Migration
             if (isset($specialCases[$lowerWord]) && $letters === $part) {
                 $parts[$index] = $specialCases[$lowerWord];
                 $wordPosition++;
+
                 continue;
             }
 
             if ($letters !== '' && mb_strtoupper($letters, 'UTF-8') === $letters && mb_strlen($letters, 'UTF-8') > 1) {
                 $wordPosition++;
+
                 continue;
             }
 
             if (preg_match('/\p{Lu}/u', $letters) && preg_match('/\p{Ll}/u', $letters)) {
                 $wordPosition++;
+
                 continue;
             }
 

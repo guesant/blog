@@ -2,6 +2,7 @@ import { ListingPaginationButton } from '../../ui/semantic/ListingPaginationButt
 
 type ListingPaginationNextButtonProps = {
   label: string;
+  disabled: boolean;
   onClick: () => void;
 };
 
@@ -11,6 +12,7 @@ export function ListingPaginationNextButton(props: ListingPaginationNextButtonPr
       type="button"
       variant="outlined"
       aria-label={props.label}
+      disabled={props.disabled}
       onClick={props.onClick}
     >
       {props.label}

@@ -1,33 +1,40 @@
-import type { ComponentProps } from 'react';
 import { Typography } from '../../ui/typography';
-import { ListingPaginationPageInput } from '../../ui/semantic/ListingPaginationPageInput';
+import {
+  ListingPaginationPageAutocomplete,
+  type ListingPaginationPageAutocompleteProps,
+} from '../../ui/semantic/ListingPaginationPageAutocomplete';
 
 type ListingPaginationPageFieldProps = {
-  value: string;
+  value: number;
   label: string;
   pageCount: number;
   pageOfLabel: string;
-  onChange: ComponentProps<typeof ListingPaginationPageInput>['onChange'];
-  onBlur: ComponentProps<typeof ListingPaginationPageInput>['onBlur'];
+  onChange: (page: number) => void;
 };
 
 export function ListingPaginationPageField(props: ListingPaginationPageFieldProps) {
+  const options = Array.from({ length: props.pageCount }, (_, index) => index + 1);
+
+  const handleChange: NonNullable<ListingPaginationPageAutocompleteProps['onChange']> = (
+    _event,
+    value,
+  ) => {
+    if (value !== null) {
+      props.onChange(value);
+    }
+  };
+
   return (
     <>
-      <ListingPaginationPageInput
-        size="small"
-        type="number"
+      <ListingPaginationPageAutocomplete
+        disableClearable
+        disablePortal
+        getOptionLabel={(option) => String(option)}
+        inputLabel={props.label}
+        isOptionEqualToValue={(option, value) => option === value}
+        options={options}
         value={props.value}
-        aria-label={props.label}
-        onChange={props.onChange}
-        onBlur={props.onBlur}
-        slotProps={{
-          htmlInput: {
-            min: 1,
-            max: props.pageCount,
-            inputMode: 'numeric',
-          },
-        }}
+        onChange={handleChange}
       />
       <Typography component="span" variant="body2" color="text.secondary" whiteSpace="nowrap">
         {props.pageOfLabel} {props.pageCount}

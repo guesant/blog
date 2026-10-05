@@ -6,7 +6,7 @@ export const ListingPaginationButton = createSemanticSxComponent<
   ComponentProps<typeof BaseComponent>
 >(BaseComponent, {
   justifyContent: 'center',
-  minWidth: 'var(--site-control-h-sm)',
+  width: 'var(--site-pagination-button-width)',
   minHeight: 'var(--site-control-h-sm)',
   borderRadius: 0,
   borderColor: 'var(--site-primary)',

@@ -24,21 +24,19 @@ export function ListingPagination(props: ListingPaginationProps) {
   return (
     <ListingPaginationFrame component="nav" aria-label={props.ariaLabel}>
       <ListingPaginationStartSlot>
-        {props.page > 1 ? (
-          <ListingPaginationPreviousButton
-            label={props.previousLabel}
-            onClick={() => onNavigate(props.page - 1)}
-          />
-        ) : null}
+        <ListingPaginationPreviousButton
+          label={props.previousLabel}
+          disabled={props.page <= 1}
+          onClick={() => onNavigate(props.page - 1)}
+        />
       </ListingPaginationStartSlot>
       <ListingPaginationCenter {...props} onNavigate={onNavigate} />
       <ListingPaginationEndSlot>
-        {props.page < props.pageCount ? (
-          <ListingPaginationNextButton
-            label={props.nextLabel}
-            onClick={() => onNavigate(props.page + 1)}
-          />
-        ) : null}
+        <ListingPaginationNextButton
+          label={props.nextLabel}
+          disabled={props.page >= props.pageCount}
+          onClick={() => onNavigate(props.page + 1)}
+        />
       </ListingPaginationEndSlot>
     </ListingPaginationFrame>
   );

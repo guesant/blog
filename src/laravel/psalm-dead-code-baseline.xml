@@ -741,11 +741,6 @@
       <code><![CDATA[$translation?->summary]]></code>
     </UndefinedMagicPropertyFetch>
   </file>
-  <file src="app/Http/Responses/PublicFindingResponseFactory.php">
-    <PossiblyUnusedMethod>
-      <code><![CDATA[__construct]]></code>
-    </PossiblyUnusedMethod>
-  </file>
   <file src="app/Jobs/GenerateResumePdf.php">
     <PossiblyUnusedMethod>
       <code><![CDATA[__construct]]></code>

@@ -744,7 +744,8 @@ class PublicSiteApiTest extends TestCase
         $this->getJson("/api/v1/findings/{$identifier}?locale=en")
             ->assertOk()
             ->assertJsonPath('slug', 'new-finding-slug')
-            ->assertJsonPath('url', "/findings/{$revision->public_id}-new-finding-slug");
+            ->assertJsonPath('url', "/findings/{$revision->public_id}-new-finding-slug")
+            ->assertJsonMissingPath('og_image_url');
     }
 
     public function test_home_feed_is_paginated_and_server_ordered(): void

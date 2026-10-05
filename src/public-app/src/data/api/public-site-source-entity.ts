@@ -59,6 +59,10 @@ const entityBuilders: Record<ContentCollection, (item: RecordValue) => RecordVal
 export function entity(collection: ContentCollection, item: RecordValue): RecordValue {
   const result = entityBuilders[collection](item);
 
+  if (collection === 'references') {
+    return result;
+  }
+
   return {
     ...result,
     ogImageUrl: optionalStringValue(result.og_image_url ?? result.ogImageUrl),

@@ -5,29 +5,23 @@ namespace App\Http\Responses;
 use App\Application\PublicSite\GetPublicFindingQueryResult;
 use App\Content\Locale;
 use App\Content\PublicIdentifier;
-use App\OpenGraph\OgImageUrlGenerator;
 
 final class PublicFindingResponseFactory
 {
-    public function __construct(
-        private readonly OgImageUrlGenerator $ogImages,
-    ) {}
-
     public function detail(GetPublicFindingQueryResult $result, string $locale): PublicFindingResponseDto
     {
-        return PublicFindingResponseDto::fromArray($this->item($result->resource, $locale, [], true));
+        return PublicFindingResponseDto::fromArray($this->item($result->resource, $locale, []));
     }
 
     public function summary(object $resource, string $locale): array
     {
-        return $this->item($resource, $locale, null, false);
+        return $this->item($resource, $locale, null);
     }
 
     private function item(
         object $resource,
         string $locale,
         ?array $relations,
-        bool $includeOgImage,
     ): array {
         $translation = $resource->translation($locale);
 
@@ -72,14 +66,6 @@ final class PublicFindingResponseFactory
             'featured' => (bool) $resource->featured,
             'featured_order' => $resource->featured_order,
         ];
-
-        if ($includeOgImage) {
-            $data['og_image_url'] = $this->ogImages->generate(
-                'article',
-                $translation?->title ?? $resource->slug,
-                $translation?->description,
-            );
-        }
 
         return $data;
     }

@@ -17,8 +17,10 @@ export function articleMetadata(data: RouteData): RouteMetadata {
     { kind: 'case-detail' | 'finding-detail' | 'writing-detail' }
   >;
 
+  const source = 'ogImageUrl' in articleData.item ? articleData.item : undefined;
+
   return contentMetadata({
-    source: articleData.item,
+    source,
     title: articleData.item.title,
     description: articleDescription(articleData),
     type: 'article',

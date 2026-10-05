@@ -58,7 +58,7 @@ type ReferenceFilmDetails = {
   tmdbId?: string;
 };
 
-export type Reference = WithOgImage & {
+export type Reference = {
   hidden?: boolean;
   order: number;
   slug: string;

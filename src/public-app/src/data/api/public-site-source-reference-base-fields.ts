@@ -21,7 +21,6 @@ type ReferenceBaseFields = Pick<
   | 'description'
   | 'personalNote'
   | 'reasonFound'
-  | 'ogImageUrl'
 >;
 
 export function referenceBaseFields(item: RecordValue): ReferenceBaseFields {
@@ -41,6 +40,5 @@ export function referenceBaseFields(item: RecordValue): ReferenceBaseFields {
     description: stringValue(item.description),
     personalNote: stringValue(item.personal_note),
     reasonFound: stringValue(item.reason_found),
-    ogImageUrl: optionalStringValue(item.og_image_url),
   };
 }

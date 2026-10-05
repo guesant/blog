@@ -2,7 +2,7 @@
 
 import type { Client, ClientMeta, Options as Options2, RequestResult, TDataShape } from './client';
 import { client } from './client.gen';
-import type { FindingApiIndexData, FindingApiIndexErrors, FindingApiIndexResponses, FindingApiShowData, FindingApiShowErrors, FindingApiShowResponses, PublicMediaData, PublicMediaErrors, PublicMediaResponses, PublicSiteApiChromeData, PublicSiteApiChromeErrors, PublicSiteApiChromeResponses, PublicSiteApiCollectionData, PublicSiteApiCollectionErrors, PublicSiteApiCollectionResponses, PublicSiteApiDocumentData, PublicSiteApiDocumentErrors, PublicSiteApiDocumentResponses, PublicSiteApiHomeGalleryData, PublicSiteApiHomeGalleryErrors, PublicSiteApiHomeGalleryResponses, PublicSiteApiPageData, PublicSiteApiPageErrors, PublicSiteApiPageResponses, PublicSiteApiProtectedEmailChallengeData, PublicSiteApiProtectedEmailChallengeErrors, PublicSiteApiProtectedEmailChallengeResponses, PublicSiteApiResumeDataData, PublicSiteApiResumeDataErrors, PublicSiteApiResumeDataResponses, PublicSiteApiResumePdfData, PublicSiteApiResumePdfErrors, PublicSiteApiResumePdfResponses, SnippetDownloadData, SnippetDownloadErrors, SnippetDownloadResponses } from './types.gen';
+import type { FindingApiShowData, FindingApiShowErrors, FindingApiShowResponses, PublicMediaData, PublicMediaErrors, PublicMediaResponses, PublicSiteApiChromeData, PublicSiteApiChromeErrors, PublicSiteApiChromeResponses, PublicSiteApiCollectionData, PublicSiteApiCollectionErrors, PublicSiteApiCollectionResponses, PublicSiteApiDocumentData, PublicSiteApiDocumentErrors, PublicSiteApiDocumentResponses, PublicSiteApiFeedData, PublicSiteApiFeedErrors, PublicSiteApiFeedResponses, PublicSiteApiHomeGalleryData, PublicSiteApiHomeGalleryErrors, PublicSiteApiHomeGalleryResponses, PublicSiteApiPageData, PublicSiteApiPageErrors, PublicSiteApiPageResponses, PublicSiteApiProtectedEmailChallengeData, PublicSiteApiProtectedEmailChallengeErrors, PublicSiteApiProtectedEmailChallengeResponses, PublicSiteApiResumeDataData, PublicSiteApiResumeDataErrors, PublicSiteApiResumeDataResponses, PublicSiteApiResumePdfData, PublicSiteApiResumePdfErrors, PublicSiteApiResumePdfResponses, SnippetDownloadData, SnippetDownloadErrors, SnippetDownloadResponses } from './types.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean, TResponse = unknown> = Options2<TData, ThrowOnError, TResponse> & {
     /**
@@ -18,8 +18,6 @@ export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends 
     meta?: keyof ClientMeta extends never ? Record<string, unknown> : ClientMeta;
 };
 
-export const findingApiIndex = <ThrowOnError extends boolean = false>(options?: Options<FindingApiIndexData, ThrowOnError>): RequestResult<FindingApiIndexResponses, FindingApiIndexErrors, ThrowOnError> => (options?.client ?? client).get<FindingApiIndexResponses, FindingApiIndexErrors, ThrowOnError>({ url: '/findings', ...options });
-
 export const findingApiShow = <ThrowOnError extends boolean = false>(options: Options<FindingApiShowData, ThrowOnError>): RequestResult<FindingApiShowResponses, FindingApiShowErrors, ThrowOnError> => (options.client ?? client).get<FindingApiShowResponses, FindingApiShowErrors, ThrowOnError>({ url: '/findings/{slug}', ...options });
 
 export const publicMedia = <ThrowOnError extends boolean = false>(options: Options<PublicMediaData, ThrowOnError>): RequestResult<PublicMediaResponses, PublicMediaErrors, ThrowOnError> => (options.client ?? client).get<PublicMediaResponses, PublicMediaErrors, ThrowOnError>({ url: '/media/{path}', ...options });
@@ -31,6 +29,8 @@ export const publicSiteApiHomeGallery = <ThrowOnError extends boolean = false>(o
 export const publicSiteApiPage = <ThrowOnError extends boolean = false>(options: Options<PublicSiteApiPageData, ThrowOnError>): RequestResult<PublicSiteApiPageResponses, PublicSiteApiPageErrors, ThrowOnError> => (options.client ?? client).get<PublicSiteApiPageResponses, PublicSiteApiPageErrors, ThrowOnError>({ url: '/site/pages/{slug}', ...options });
 
 export const publicSiteApiResumeData = <ThrowOnError extends boolean = false>(options?: Options<PublicSiteApiResumeDataData, ThrowOnError>): RequestResult<PublicSiteApiResumeDataResponses, PublicSiteApiResumeDataErrors, ThrowOnError> => (options?.client ?? client).get<PublicSiteApiResumeDataResponses, PublicSiteApiResumeDataErrors, ThrowOnError>({ url: '/site/resume', ...options });
+
+export const publicSiteApiFeed = <ThrowOnError extends boolean = false>(options?: Options<PublicSiteApiFeedData, ThrowOnError>): RequestResult<PublicSiteApiFeedResponses, PublicSiteApiFeedErrors, ThrowOnError> => (options?.client ?? client).get<PublicSiteApiFeedResponses, PublicSiteApiFeedErrors, ThrowOnError>({ url: '/content/feed', ...options });
 
 export const publicSiteApiCollection = <ThrowOnError extends boolean = false>(options: Options<PublicSiteApiCollectionData, ThrowOnError>): RequestResult<PublicSiteApiCollectionResponses, PublicSiteApiCollectionErrors, ThrowOnError> => (options.client ?? client).get<PublicSiteApiCollectionResponses, PublicSiteApiCollectionErrors, ThrowOnError>({ url: '/content/{collection}', ...options });
 

@@ -3,11 +3,13 @@ import { useTranslations } from '@/i18n/compat';
 import { ContentFeed } from './content-feed';
 import type { ContentFeedProps } from './content-feed/types';
 
-type ContentFeedRouteData = Extract<RouteData, { kind: 'collections' | 'writing' }>;
+type ContentFeedRouteKind = 'collections' | 'findings' | 'writing';
+
+type ContentFeedRouteData = Extract<RouteData, { kind: ContentFeedRouteKind }>;
 
 type ContentFeedRouteSectionProps = {
   data: ContentFeedRouteData;
-  fixedKind: 'post' | 'colecao';
+  fixedKind: 'post' | 'achado' | 'colecao';
   action: string;
 };
 
@@ -18,20 +20,20 @@ export function ContentFeedRouteSection(props: ContentFeedRouteSectionProps) {
 
   const tWritings = useTranslations('Pages.writings');
 
-  const breadcrumbLabels = {
+  const breadcrumbLabels: Record<ContentFeedRouteSectionProps['fixedKind'], string> = {
     post: tNav('writing'),
+    achado: tNav('findings'),
     colecao: tNav('collections'),
   };
 
   const feedProps: ContentFeedProps = {
-    writings: props.data.writings,
-    findings: props.data.findings,
-    collections: props.data.collections,
+    feedItems: props.data.feedItems,
     copy: props.data.page,
     searchPlaceholder:
       props.fixedKind === 'post' ? tWritings('searchPlaceholder') : tFeed('searchPlaceholder'),
     breadcrumbs: [{ label: breadcrumbLabels[props.fixedKind] }],
-    contentMeta: props.data.pagination,
+    contentMeta: props.data.feedPagination,
+    findingFacets: props.data.feedPagination.facets,
     fixedKind: props.fixedKind,
     action: props.action,
   };

@@ -7,7 +7,6 @@ import { contentFeedRequestedPage } from './content-feed-requested-page';
 
 type ContentFeedPageDataProps = {
   entries: FeedEntry[];
-  findingsMeta?: { total: number; perPage: number; page: number };
   contentMeta?: { total: number; perPage: number; page: number };
   initialPage: number;
   pageFromQuery: number;
@@ -15,7 +14,6 @@ type ContentFeedPageDataProps = {
 
 export function contentFeedPageData(props: ContentFeedPageDataProps) {
   const meta = contentFeedPageMeta({
-    findingsMeta: props.findingsMeta,
     contentMeta: props.contentMeta,
     entryCount: props.entries.length,
   });

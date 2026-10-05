@@ -21,7 +21,6 @@ final class ListPublicFindingsQueryHandler
 
         return new ListPublicFindingsQueryResult(
             page: $page,
-            facets: $this->resources->facetOptions($query->locale),
         );
     }
 }

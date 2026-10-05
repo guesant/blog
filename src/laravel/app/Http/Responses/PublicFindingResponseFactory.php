@@ -6,28 +6,12 @@ use App\Application\PublicSite\GetPublicFindingQueryResult;
 use App\Content\Locale;
 use App\Content\PublicIdentifier;
 use App\OpenGraph\OgImageUrlGenerator;
-use Illuminate\Pagination\LengthAwarePaginator;
 
 final class PublicFindingResponseFactory
 {
     public function __construct(
         private readonly OgImageUrlGenerator $ogImages,
     ) {}
-
-    public function list(
-        LengthAwarePaginator $page,
-        string $locale,
-        array $facets,
-    ): PublicFindingListResponseDto {
-        $data = $page->getCollection()
-            ->map(fn (object $resource): array => $this->item($resource, $locale, null))
-            ->all();
-
-        return PublicFindingListResponseDto::fromPage(
-            $data,
-            PublicListMetaDto::fromPage($page, $locale, $facets),
-        );
-    }
 
     public function detail(GetPublicFindingQueryResult $result, string $locale): PublicFindingResponseDto
     {

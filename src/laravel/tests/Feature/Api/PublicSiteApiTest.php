@@ -669,7 +669,7 @@ class PublicSiteApiTest extends TestCase
         $this->createResource('first-finding');
         $this->createResource('second-finding');
 
-        $response = $this->getJson('/api/v1/findings?locale=en&per_page=1');
+        $response = $this->getJson('/api/v1/content/feed?locale=en&per_page=1&kind=achado');
 
         $response
             ->assertOk()
@@ -677,7 +677,15 @@ class PublicSiteApiTest extends TestCase
             ->assertJsonPath('meta.per_page', 1)
             ->assertJsonPath('meta.total', 2)
             ->assertJsonPath('meta.last_page', 2)
+            ->assertJsonPath('data.0.kind', 'achado')
             ->assertJsonCount(1, 'data');
+    }
+
+    public function test_writing_collection_and_findings_list_endpoints_are_not_public(): void
+    {
+        $this->getJson('/api/v1/content/writing?locale=en')->assertNotFound();
+        $this->getJson('/api/v1/content/collections?locale=en')->assertNotFound();
+        $this->getJson('/api/v1/findings?locale=en')->assertNotFound();
     }
 
     public function test_hidden_resume_revision_is_not_returned_by_the_public_api(): void
@@ -863,12 +871,12 @@ class PublicSiteApiTest extends TestCase
             'body' => $body,
         ]);
 
-        $listItem = $this->getJson('/api/v1/content/writing?locale=en&per_page=1')
+        $listItem = $this->getJson('/api/v1/content/feed?locale=en&per_page=1&kind=post')
             ->assertOk()
             ->json('data.0');
         $this->assertArrayNotHasKey('body', $listItem);
-        $this->assertLessThanOrEqual(350, mb_strlen((string) $listItem['excerpt']));
-        $this->assertStringNotContainsString('https://example.com', $listItem['excerpt']);
+        $this->assertLessThanOrEqual(350, mb_strlen((string) $listItem['preview']));
+        $this->assertStringNotContainsString('https://example.com', $listItem['preview']);
 
         $this->getJson('/api/v1/content/writing/description-source?locale=en')
             ->assertOk()

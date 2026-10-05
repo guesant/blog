@@ -1,11 +1,6 @@
-import type {
-  PublicFeedItem,
-  Reference,
-  ReferenceCollection,
-  Writing,
-} from '@portfolio/data/domain/types';
+import type { PublicFeedItem } from '@portfolio/data/domain/types';
 import type { ReactNode } from 'react';
-import type { FindingFacets, FindingListMeta } from '@portfolio/data/services';
+import type { FindingFacets } from '@portfolio/data/services';
 import type { ContentCollectionMeta } from '@portfolio/data/api/public-site-source-support';
 import type { BreadcrumbItem } from '../../navigation/breadcrumbs';
 
@@ -34,18 +29,12 @@ export type FeedEntry = {
 export type FeedPageCopy = { title: string; description: string };
 
 export type ContentFeedProps = {
-  feedItems?: PublicFeedItem[];
-  writings: Writing[];
-  findings: Reference[];
-  collections: ReferenceCollection[];
+  feedItems: PublicFeedItem[];
   copy: FeedPageCopy;
   searchPlaceholder?: string;
   breadcrumbs?: BreadcrumbItem[];
   showHeader?: boolean;
   showPagination?: boolean;
-  paginationMode?: 'listing' | 'home';
-  recentLabel?: string;
-  oldestLabel?: string;
   fixedKind?: FeedKind;
   action: string;
   initialKind?: string;
@@ -55,7 +44,6 @@ export type ContentFeedProps = {
   initialType?: string;
   showSelects?: boolean;
   initialPage?: number;
-  findingsMeta?: FindingListMeta;
   findingFacets?: FindingFacets;
   contentMeta?: ContentCollectionMeta;
   beforeExplore?: ReactNode;

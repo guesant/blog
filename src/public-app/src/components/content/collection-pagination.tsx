@@ -33,10 +33,8 @@ export function CollectionPagination(props: CollectionPaginationProps) {
       page={props.meta.page}
       pageCount={props.meta.lastPage}
       ariaLabel={translations.paginationLabel}
-      firstLabel={translations.firstLabel}
       previousLabel={translations.previousLabel}
       nextLabel={translations.nextLabel}
-      lastLabel={translations.lastLabel}
       pageInputLabel={translations.pageInputLabel}
       pageOfLabel={translations.pageOfLabel}
       onPageChange={onPageChange}

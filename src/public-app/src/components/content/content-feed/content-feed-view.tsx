@@ -15,9 +15,6 @@ export type ContentFeedViewProps = {
   breadcrumbs?: BreadcrumbItem[];
   showHeader: boolean;
   showPagination: boolean;
-  paginationMode: 'listing' | 'home';
-  recentLabel?: string;
-  oldestLabel?: string;
   selects: FeedSelectDefinition[];
   showSelects: boolean;
   pendingSearch: string;
@@ -38,10 +35,8 @@ export type ContentFeedViewProps = {
   page: number;
   pageCount: number;
   ariaLabel: string;
-  firstLabel: string;
   previousLabel: string;
   nextLabel: string;
-  lastLabel: string;
   pageInputLabel: string;
   pageOfLabel: string;
   onPageChange: (page: number) => void;

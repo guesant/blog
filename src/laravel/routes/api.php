@@ -23,12 +23,12 @@ Route::prefix('v1')
                     Route::get('/media/{path}', PublicMediaController::class)
                         ->where('path', '.*')
                         ->middleware('throttle:public-media');
+                    Route::get('/content/feed', [PublicSiteApiController::class, 'feed']);
                     Route::get('/content/{collection}', [PublicSiteApiController::class, 'collection']);
                     Route::get('/content/{collection}/{slug}', [PublicSiteApiController::class, 'document']);
                     Route::get('/resume/{locale}.pdf', [PublicSiteApiController::class, 'resumePdf'])
                         ->middleware('throttle:public-pdf');
                     Route::post('/protected-email/challenge', [PublicSiteApiController::class, 'protectedEmailChallenge']);
-                    Route::get('/findings', [FindingApiController::class, 'index']);
                     Route::get('/findings/{slug}', [FindingApiController::class, 'show']);
                     Route::get('/snippets/{slug}/download', SnippetDownloadController::class)
                         ->middleware('throttle:snippet-zip');

@@ -4,63 +4,6 @@ export type ClientOptions = {
     baseUrl: 'https://api.guesant.net/api/v1' | 'http://localhost:8001/api/v1' | (string & {});
 };
 
-export type FindingApiIndexData = {
-    body?: never;
-    path?: never;
-    query?: {
-        locale?: string;
-        sort?: string;
-    };
-    url: '/findings';
-};
-
-export type FindingApiIndexErrors = {
-    /**
-     * Unauthenticated
-     */
-    401: {
-        /**
-         * Error overview.
-         */
-        message: string;
-    };
-    /**
-     * Authorization error
-     */
-    403: {
-        /**
-         * Error overview.
-         */
-        message: string;
-    };
-    /**
-     * The service is temporarily unavailable.
-     */
-    503: {
-        error: {
-            code: string;
-            message: string;
-            status: number;
-            details: string;
-        };
-    };
-};
-
-export type FindingApiIndexError = FindingApiIndexErrors[keyof FindingApiIndexErrors];
-
-export type FindingApiIndexResponses = {
-    200: {
-        data: Array<{
-            [key: string]: unknown;
-        }>;
-        meta: {
-            [key: string]: unknown;
-        };
-    };
-};
-
-export type FindingApiIndexResponse = FindingApiIndexResponses[keyof FindingApiIndexResponses];
-
 export type FindingApiShowData = {
     body?: never;
     path: {
@@ -569,6 +512,68 @@ export type PublicSiteApiResumeDataResponses = {
 
 export type PublicSiteApiResumeDataResponse = PublicSiteApiResumeDataResponses[keyof PublicSiteApiResumeDataResponses];
 
+export type PublicSiteApiFeedData = {
+    body?: never;
+    path?: never;
+    query?: {
+        locale?: string;
+        kind?: string;
+        sort?: string;
+        page?: number;
+        q?: string;
+        type?: string;
+        topic?: string;
+    };
+    url: '/content/feed';
+};
+
+export type PublicSiteApiFeedErrors = {
+    /**
+     * Unauthenticated
+     */
+    401: {
+        /**
+         * Error overview.
+         */
+        message: string;
+    };
+    /**
+     * Authorization error
+     */
+    403: {
+        /**
+         * Error overview.
+         */
+        message: string;
+    };
+    /**
+     * The service is temporarily unavailable.
+     */
+    503: {
+        error: {
+            code: string;
+            message: string;
+            status: number;
+            details: string;
+        };
+    };
+};
+
+export type PublicSiteApiFeedError = PublicSiteApiFeedErrors[keyof PublicSiteApiFeedErrors];
+
+export type PublicSiteApiFeedResponses = {
+    200: {
+        data: Array<{
+            [key: string]: unknown;
+        }>;
+        meta: {
+            [key: string]: unknown;
+        };
+    };
+};
+
+export type PublicSiteApiFeedResponse = PublicSiteApiFeedResponses[keyof PublicSiteApiFeedResponses];
+
 export type PublicSiteApiCollectionData = {
     body?: never;
     path: {
@@ -580,7 +585,6 @@ export type PublicSiteApiCollectionData = {
         q?: string;
         type?: string;
         topic?: string;
-        kind?: string;
         featured?: boolean;
         page?: number;
     };

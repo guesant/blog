@@ -4,7 +4,7 @@ export { getHomePageContent } from './content-service-get-home-page-content';
 
 export { getCollectionPage } from './content-service-get-collection-page';
 
-export { getHomeFeedPage } from './content-service-get-home-feed-page';
+export { getFeedPage } from './content-service-get-feed-page';
 
 export { getCaseBySlug } from './content-service-get-case-by-slug';
 
@@ -49,8 +49,6 @@ export { getSnippetBySlug } from './content-service-get-snippet-by-slug';
 export { getResumePageContent } from './content-service-get-resume-page-content';
 
 export { getCreditsPageContent } from './content-service-get-credits-page-content';
-
-export { getFindingList } from './content-service-get-finding-list';
 
 export { getReferenceBySlug } from './content-service-get-reference-by-slug';
 

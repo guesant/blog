@@ -1,5 +1,3 @@
-import type { Reference } from '../domain/types.ts';
-
 export type RecordValue = Record<string, unknown>;
 
 export type ContentLocale = 'en' | 'pt-BR';
@@ -33,24 +31,12 @@ export type ContentCollectionMeta = {
   total: number;
   lastPage: number;
   locale: ContentLocale;
+  facets?: FindingFacets;
 };
 
 export type ContentCollectionPage<T> = {
   items: T[];
   meta: ContentCollectionMeta;
-};
-
-export type FindingListQuery = {
-  q?: string;
-  type?: string;
-  topic?: string;
-  rating?: string;
-  consumptionState?: string;
-  year?: number;
-  freeOnly?: boolean;
-  sort?: 'asc' | 'desc' | 'alpha';
-  page?: number;
-  perPage?: number;
 };
 
 export type FindingFacets = {
@@ -60,14 +46,3 @@ export type FindingFacets = {
   years: string[];
   topics: { slug: string; name: string }[];
 };
-
-export type FindingListMeta = {
-  page: number;
-  perPage: number;
-  total: number;
-  lastPage: number;
-  locale: ContentLocale;
-  facets: FindingFacets;
-};
-
-export type FindingList = { items: Reference[]; meta: FindingListMeta };

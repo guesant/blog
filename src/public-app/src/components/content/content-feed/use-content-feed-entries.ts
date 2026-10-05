@@ -9,8 +9,5 @@ type UseContentFeedEntriesProps = {
 };
 
 export function useContentFeedEntries(props: UseContentFeedEntriesProps) {
-  return useMemo(
-    () => buildContentFeedEntries(props.input),
-    [props.input.collections, props.input.feedItems, props.input.findings, props.input.writings],
-  );
+  return useMemo(() => buildContentFeedEntries(props.input), [props.input.feedItems]);
 }

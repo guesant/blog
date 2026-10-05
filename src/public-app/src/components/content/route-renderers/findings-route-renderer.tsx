@@ -1,9 +1,7 @@
-import { FindingsSection } from '../../sections/findings';
+import { ContentFeedRouteSection } from '../content-feed-route-section';
 import { createRouteRenderer } from './create-route-renderer';
 
 export const FindingsRouteRenderer = createRouteRenderer({
   kind: 'findings',
-  render: (data) => (
-    <FindingsSection copy={data.page} initialData={data.initialData} {...data.request} />
-  ),
+  render: (data) => <ContentFeedRouteSection data={data} fixedKind="achado" action="/findings" />,
 });

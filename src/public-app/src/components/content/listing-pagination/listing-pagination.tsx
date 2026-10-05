@@ -1,11 +1,13 @@
 'use client';
 
 import { ListingPaginationCenter } from './listing-pagination-center';
-import { ListingPaginationFirstButton } from '../../ui/semantic/ListingPaginationFirstButton';
 import { ListingPaginationFrame } from '../../ui/semantic/ListingPaginationFrame';
-import { ListingPaginationLastButton } from '../../ui/semantic/ListingPaginationLastButton';
+import { ListingPaginationEndSlot } from '../../ui/semantic/ListingPaginationEndSlot';
+import { ListingPaginationStartSlot } from '../../ui/semantic/ListingPaginationStartSlot';
 import { goToListingPage } from './go-to-listing-page';
 import { boundedListingPage } from './bounded-listing-page';
+import { ListingPaginationNextButton } from './listing-pagination-next-button';
+import { ListingPaginationPreviousButton } from './listing-pagination-previous-button';
 import type { ListingPaginationProps } from './types';
 
 export function ListingPagination(props: ListingPaginationProps) {
@@ -21,25 +23,23 @@ export function ListingPagination(props: ListingPaginationProps) {
 
   return (
     <ListingPaginationFrame component="nav" aria-label={props.ariaLabel}>
-      <ListingPaginationFirstButton
-        type="button"
-        variant="outlined"
-        disabled={props.page <= 1}
-        aria-label={props.firstLabel}
-        onClick={() => onNavigate(1)}
-      >
-        {props.firstLabel}
-      </ListingPaginationFirstButton>
+      <ListingPaginationStartSlot>
+        {props.page > 1 ? (
+          <ListingPaginationPreviousButton
+            label={props.previousLabel}
+            onClick={() => onNavigate(props.page - 1)}
+          />
+        ) : null}
+      </ListingPaginationStartSlot>
       <ListingPaginationCenter {...props} onNavigate={onNavigate} />
-      <ListingPaginationLastButton
-        type="button"
-        variant="outlined"
-        disabled={props.page >= props.pageCount}
-        aria-label={props.lastLabel}
-        onClick={() => onNavigate(props.pageCount)}
-      >
-        {props.lastLabel}
-      </ListingPaginationLastButton>
+      <ListingPaginationEndSlot>
+        {props.page < props.pageCount ? (
+          <ListingPaginationNextButton
+            label={props.nextLabel}
+            onClick={() => onNavigate(props.page + 1)}
+          />
+        ) : null}
+      </ListingPaginationEndSlot>
     </ListingPaginationFrame>
   );
 }

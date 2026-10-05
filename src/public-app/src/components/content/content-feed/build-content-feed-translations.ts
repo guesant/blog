@@ -27,10 +27,8 @@ const pageLabelKeys = {
   noResultsLabel: 'noResults',
   resultsLabel: 'results',
   paginationLabel: 'pagination',
-  firstLabel: 'first',
   previousLabel: 'previous',
   nextLabel: 'next',
-  lastLabel: 'last',
   pageInputLabel: 'pageInput',
   pageOfLabel: 'pageOf',
 } as const;

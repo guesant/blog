@@ -74,7 +74,7 @@ final class GetPublicPageQueryHandler
                 ['key' => 'rss', 'url' => Locale::path('/feed.xml', $query->locale)],
                 ['key' => 'atom', 'url' => Locale::path('/atom.xml', $query->locale)],
                 ['key' => 'jsonfeed', 'url' => Locale::path('/feed.json', $query->locale)],
-                ['key' => 'api', 'url' => '/api/v1/findings'],
+                ['key' => 'api', 'url' => '/api/v1/content/feed?kind=achado'],
                 ['key' => 'sitemap', 'url' => Locale::path('/sitemap.xml', $query->locale)],
                 ['key' => 'robots', 'url' => Locale::path('/robots.txt', $query->locale)],
                 ['key' => 'webfinger'],

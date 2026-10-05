@@ -1,6 +1,7 @@
 import {
   getCasesPageCopy,
   getCollectionPage,
+  getFeedPage,
   getProjectsPageCopy,
   getWritingPageCopy,
 } from '@portfolio/data/services';
@@ -11,7 +12,6 @@ import type {
   Snippet,
   Technology,
   Topic,
-  Writing,
 } from '@portfolio/data/domain/types';
 import { collectionQuery } from './content-data-collection-query';
 import { collectionsRouteLoader } from './content-data-primary-collections-route';
@@ -50,15 +50,13 @@ export const collectionRouteLoaders: Record<string, RouteLoader> = {
     };
   },
   '/writing': async ({ locale, search }) => {
-    const result = await getCollectionPage<Writing>('writing', locale, collectionQuery(search));
+    const result = await getFeedPage(locale, { ...collectionQuery(search), kind: 'post' });
 
     return {
       kind: 'writing',
       page: await getWritingPageCopy(locale),
-      writings: result.items,
-      findings: [],
-      collections: [],
-      pagination: result.meta,
+      feedItems: result.items,
+      feedPagination: result.meta,
     };
   },
   '/snippets': async ({ locale, search }) => {

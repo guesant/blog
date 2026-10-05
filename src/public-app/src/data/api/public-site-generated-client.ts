@@ -12,8 +12,4 @@ export { publicSiteApiResumeData as getSiteResume } from './generated/sdk.gen';
 
 export { publicSiteApiProtectedEmailChallengeMutation as createProtectedEmailChallengeMutation } from './generated/@tanstack/react-query.gen';
 
-export { listFindings } from './public-site-generated-list-findings';
-
-export { listFindingsOptions } from './public-site-generated-list-findings-options';
-
 export { listPublicContent } from './public-site-generated-list-public-content';

@@ -8,6 +8,5 @@ final readonly class ListPublicFindingsQueryResult
 {
     public function __construct(
         public LengthAwarePaginator $page,
-        public array $facets,
     ) {}
 }

@@ -4,8 +4,6 @@ export { normalizeLocale } from './public-site-source-normalize-locale';
 
 export { fetchFinding } from './public-site-source-fetch-finding';
 
-export { fetchFindingList } from './public-site-source-fetch-finding-list';
-
 export { getContentCollectionPage } from './public-site-source-get-content-collection';
 
 export { getPublicHomeGallery } from './public-site-source-get-home-gallery';

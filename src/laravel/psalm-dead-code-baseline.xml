@@ -586,7 +586,6 @@
   </file>
   <file src="app/Http/Controllers/Api/FindingApiController.php">
     <PossiblyUnusedMethod>
-      <code><![CDATA[index]]></code>
       <code><![CDATA[show]]></code>
     </PossiblyUnusedMethod>
   </file>
@@ -599,6 +598,7 @@
       <code><![CDATA[chrome]]></code>
       <code><![CDATA[collection]]></code>
       <code><![CDATA[document]]></code>
+      <code><![CDATA[feed]]></code>
       <code><![CDATA[homeGallery]]></code>
       <code><![CDATA[page]]></code>
       <code><![CDATA[protectedEmailChallenge]]></code>

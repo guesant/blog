@@ -10,7 +10,6 @@ import type {
   Project,
   ProjectsPageCopy,
   Reference,
-  ReferenceCollection,
   ReferenceCollectionDetail,
   SiteText,
   PublicFeedItem,
@@ -26,8 +25,13 @@ import type {
   getResumePageContent,
 } from '@portfolio/data/services';
 import type { ContentCollectionMeta } from '../api/public-site-source-support';
-import type { FindingList } from '../api/public-site-source-support';
 import type { RouteRequest } from './content-data-support';
+
+type ContentFeedRouteData = {
+  page: PageIntroduction;
+  feedItems: PublicFeedItem[];
+  feedPagination: ContentCollectionMeta;
+};
 
 export type RouteData =
   | { kind: 'loading' }
@@ -58,23 +62,16 @@ export type RouteData =
       pagination: ContentCollectionMeta;
     }
   | { kind: 'case-detail'; item: CaseStudy }
-  | {
+  | ({
       kind: 'collections';
-      page: PageIntroduction;
-      writings: Writing[];
-      findings: Reference[];
-      collections: ReferenceCollection[];
-      pagination: ContentCollectionMeta;
-    }
+    } & ContentFeedRouteData)
   | { kind: 'collection-detail'; collection: ReferenceCollectionDetail }
   | { kind: 'contact'; page: PageIntroduction; site: SiteText }
   | { kind: 'credits'; content: CreditsPageContent }
-  | {
+  | ({
       kind: 'findings';
-      page: PageIntroduction;
       request: Pick<RouteRequest, 'locale' | 'search'>;
-      initialData: FindingList;
-    }
+    } & ContentFeedRouteData)
   | { kind: 'finding-detail'; item: Reference }
   | {
       kind: 'finding-type';
@@ -115,12 +112,7 @@ export type RouteData =
       references: Reference[];
       pagination: ContentCollectionMeta;
     }
-  | {
+  | ({
       kind: 'writing';
-      page: PageIntroduction;
-      writings: Writing[];
-      findings: Reference[];
-      collections: ReferenceCollection[];
-      pagination: ContentCollectionMeta;
-    }
+    } & ContentFeedRouteData)
   | { kind: 'writing-detail'; item: Writing };

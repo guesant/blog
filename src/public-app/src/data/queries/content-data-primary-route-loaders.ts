@@ -4,7 +4,6 @@ import {
   getCollectionPage,
   getContactPageCopy,
   getHomePageContent,
-  getHomeFeedPage,
   getNowPageCopy,
   getPortfolioPageCopy,
   getProfile,
@@ -12,13 +11,12 @@ import {
   getSiteText,
   getCreditsPageContent,
   getFollowPageCopy,
-  getFindingList,
+  getFeedPage,
   getLicensePageCopy,
 } from '@portfolio/data/services';
 import type { CaseStudy, Experiment, Project } from '@portfolio/data/domain/types';
 import { collectionQuery } from './content-data-collection-query';
 import { feedQuery } from './content-data-feed-query';
-import { findingFilters } from './content-data-finding-filters';
 import { collectionRouteLoaders } from './content-data-primary-collection-route-loaders';
 import { resumePdfUrls } from './content-data-resume-pdf-urls';
 import type { RouteLoadContext, RouteLoader } from './content-data-route-loader';
@@ -28,7 +26,7 @@ export const primaryRouteLoaders: Record<string, RouteLoader> = {
   '/': async ({ locale, search }, context?: RouteLoadContext) => {
     const [content, feed] = await Promise.all([
       getHomePageContent(locale, context?.shell),
-      getHomeFeedPage(locale, feedQuery(search)),
+      getFeedPage(locale, feedQuery(search)),
     ]);
 
     return {
@@ -80,16 +78,17 @@ export const primaryRouteLoaders: Record<string, RouteLoader> = {
     content: await getCreditsPageContent(locale, collectionQuery(search)),
   }),
   '/findings': async ({ locale, search }) => {
-    const [page, initialData] = await Promise.all([
+    const [page, feed] = await Promise.all([
       getAchadosPageCopy(locale),
-      getFindingList(findingFilters(search), locale),
+      getFeedPage(locale, { ...feedQuery(search), kind: 'achado' }),
     ]);
 
     return {
       kind: 'findings',
       page,
       request: { locale, search },
-      initialData,
+      feedItems: feed.items,
+      feedPagination: feed.meta,
     };
   },
   '/license': async ({ locale }, context?: RouteLoadContext) => ({

@@ -13,22 +13,14 @@ type HomeFeedSectionProps = {
 export function HomeFeedSection(props: HomeFeedSectionProps) {
   const t = useTranslations('Pages.feed');
 
-  const tHome = useTranslations('Home');
-
   return (
     <ContentFeed
       feedItems={props.items}
-      writings={[]}
-      findings={[]}
-      collections={[]}
       copy={{ title: t('title'), description: t('description') }}
       searchPlaceholder={t('searchPlaceholder')}
       contentMeta={props.pagination}
       action="/"
       showSelects={false}
-      paginationMode="home"
-      recentLabel={tHome('recent')}
-      oldestLabel={tHome('oldest')}
     />
   );
 }

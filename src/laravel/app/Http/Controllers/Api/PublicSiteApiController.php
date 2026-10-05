@@ -29,6 +29,7 @@ use App\Http\Responses\PublicPageResponseDto;
 use App\Http\Responses\PublicResumeResponseFactory;
 use App\Http\Responses\PublicSiteChromeResponseDto;
 use App\OpenGraph\OgImageUrlGenerator;
+use App\ReadModel\PublicSite\Content\PublicResourceReader;
 use App\Support\PublicMediaUrl;
 use Dedoc\Scramble\Attributes\Response as ScrambleResponse;
 use Illuminate\Http\JsonResponse;
@@ -46,10 +47,18 @@ use Symfony\Component\HttpFoundation\Response;
 class PublicSiteApiController extends Controller
 {
     private const COLLECTIONS = [
-        'feed',
+        'cases',
+        'credits',
+        'experiments',
+        'projects',
+        'snippets',
+        'technologies',
+        'topics',
+    ];
+
+    private const DOCUMENT_COLLECTIONS = [
         'cases',
         'collections',
-        'credits',
         'experiments',
         'projects',
         'snippets',
@@ -57,6 +66,42 @@ class PublicSiteApiController extends Controller
         'topics',
         'writing',
     ];
+
+    /** @response array{data: list<array<string, mixed>>, meta: array<string, mixed>} */
+    #[ScrambleResponse(200, type: 'array{data: list<array<string, mixed>>, meta: array<string, mixed>}')]
+    #[ScrambleResponse(503, 'The service is temporarily unavailable.', type: 'array{error: array{code: string, message: string, status: int, details: string}}')]
+    public function feed(
+        Request $request,
+        ListPublicContentQueryHandler $handler,
+        PublicContentResponseFactory $presenter,
+        PublicResourceReader $resources,
+    ): JsonResponse {
+        $locale = Locale::normalize($request->query('locale'));
+        $perPage = min(max((int) $request->query('per_page', 50), 1), 100);
+        $kind = $this->feedKind($request->query('kind'));
+        $items = $handler->handle(new ListPublicContentQuery(
+            collection: 'feed',
+            locale: $locale,
+            perPage: $perPage,
+            sort: $this->sort($request->query('sort')),
+            featured: false,
+            page: $request->integer('page', 1),
+            search: $this->queryString($request->query('q')),
+            type: $this->queryString($request->query('type')),
+            topic: $this->queryString($request->query('topic')),
+            kind: $kind,
+        ));
+
+        $data = $items->page->getCollection()
+            ->map(fn ($item) => $presenter->feedItem($item, $locale))
+            ->values();
+        $facets = $kind === 'achado' ? $resources->facetOptions($locale) : null;
+
+        return response()->json(PublicContentListResponseDto::fromPage(
+            $data->all(),
+            PublicListMetaDto::fromPage($items->page, $locale, $facets),
+        )->toArray())->header('Cache-Control', 'public, max-age=60, stale-while-revalidate=300');
+    }
 
     /** @response array{data: list<array<string, mixed>>, meta: array<string, mixed>} */
     #[ScrambleResponse(200, type: 'array{data: list<array<string, mixed>>, meta: array<string, mixed>}')]
@@ -76,7 +121,6 @@ class PublicSiteApiController extends Controller
         $search = $this->queryString($request->query('q'));
         $type = $this->queryString($request->query('type'));
         $topic = $this->queryString($request->query('topic'));
-        $kind = $this->queryString($request->query('kind'));
         $items = $handler->handle(new ListPublicContentQuery(
             collection: $collection,
             locale: $locale,
@@ -87,13 +131,11 @@ class PublicSiteApiController extends Controller
             search: $search,
             type: $type,
             topic: $topic,
-            kind: $kind,
+            kind: null,
         ));
 
         $data = $items->page->getCollection()
-            ->map(fn ($item) => $collection === 'feed'
-                ? $presenter->feedItem($item, $locale)
-                : $presenter->collectionItem($collection, $item, $locale))
+            ->map(fn ($item) => $presenter->collectionItem($collection, $item, $locale))
             ->values();
 
         return response()->json(PublicContentListResponseDto::fromPage(
@@ -113,7 +155,7 @@ class PublicSiteApiController extends Controller
         GetPublicContentQueryHandler $handler,
         PublicContentResponseFactory $presenter,
     ): JsonResponse {
-        abort_unless(in_array($collection, self::COLLECTIONS, true), 404);
+        abort_unless(in_array($collection, self::DOCUMENT_COLLECTIONS, true), 404);
 
         $locale = Locale::normalize($request->query('locale'));
         $perPage = min(max((int) $request->query('per_page', 100), 1), 100);
@@ -358,5 +400,12 @@ class PublicSiteApiController extends Controller
     private function queryString(mixed $value): ?string
     {
         return is_string($value) && trim($value) !== '' ? trim($value) : null;
+    }
+
+    private function feedKind(mixed $value): ?string
+    {
+        $kind = $this->queryString($value);
+
+        return $kind === null || in_array($kind, ['post', 'achado', 'colecao'], true) ? $kind : null;
     }
 }

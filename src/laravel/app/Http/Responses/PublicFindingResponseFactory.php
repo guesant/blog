@@ -15,18 +15,19 @@ final class PublicFindingResponseFactory
 
     public function detail(GetPublicFindingQueryResult $result, string $locale): PublicFindingResponseDto
     {
-        return PublicFindingResponseDto::fromArray($this->item($result->resource, $locale, []));
+        return PublicFindingResponseDto::fromArray($this->item($result->resource, $locale, [], true));
     }
 
     public function summary(object $resource, string $locale): array
     {
-        return $this->item($resource, $locale, null);
+        return $this->item($resource, $locale, null, false);
     }
 
     private function item(
         object $resource,
         string $locale,
         ?array $relations,
+        bool $includeOgImage,
     ): array {
         $translation = $resource->translation($locale);
 
@@ -46,11 +47,6 @@ final class PublicFindingResponseFactory
             'description' => $translation?->description,
             'personal_note' => $translation?->personal_note,
             'reason_found' => $translation?->reason_found,
-            'og_image_url' => $this->ogImages->generate(
-                'article',
-                $translation?->title ?? $resource->slug,
-                $translation?->description,
-            ),
             'updated_date' => optional($resource->updated_at)->toDateString(),
             'topics' => $resource->topics->map(fn ($topic) => [
                 'slug' => $topic->slug,
@@ -76,6 +72,14 @@ final class PublicFindingResponseFactory
             'featured' => (bool) $resource->featured,
             'featured_order' => $resource->featured_order,
         ];
+
+        if ($includeOgImage) {
+            $data['og_image_url'] = $this->ogImages->generate(
+                'article',
+                $translation?->title ?? $resource->slug,
+                $translation?->description,
+            );
+        }
 
         return $data;
     }

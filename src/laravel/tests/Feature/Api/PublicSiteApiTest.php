@@ -759,6 +759,7 @@ class PublicSiteApiTest extends TestCase
             ->assertJsonPath('meta.per_page', 1)
             ->assertJsonPath('meta.total', 1)
             ->assertJsonPath('data.0.kind', 'achado')
+            ->assertJsonMissingPath('data.0.og_image_url')
             ->assertJsonCount(1, 'data');
     }
 

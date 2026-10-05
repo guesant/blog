@@ -8,6 +8,7 @@ import { plainText } from './plain-text';
 import { useSiteFeatureFlags } from './use-site-feature-flags';
 import { ContentActionsPlacement } from './content-actions-placement';
 import { ConditionalContent } from '../primitives/conditional-content';
+import { contentActionsAreVisible } from './content-actions-visibility';
 
 type ContentActionsProps = {
   title: string;
@@ -49,11 +50,14 @@ export function ContentActions(props: ContentActionsProps) {
     downloadUrl,
   };
 
-  const hasPrimaryActions = Object.values(featureFlags.contentActions).some(Boolean);
+  const hasVisibleActions = contentActionsAreVisible(featureFlags.contentActions, {
+    externalUrl,
+    downloadUrl,
+  });
 
   return (
     <ConditionalContent
-      condition={hasPrimaryActions || Boolean(externalUrl) || Boolean(downloadUrl)}
+      condition={hasVisibleActions}
       content={<ContentActionsPlacement {...contentProps} placement={placement} />}
     />
   );

@@ -1,11 +1,12 @@
+'use client';
+
 import { ContentActions } from '../../content/content-actions';
+import { useContentActionsVisibility } from '../../content/use-content-actions-visibility';
 import { type BreadcrumbItem } from '../../navigation/breadcrumbs';
 import type { Reference } from '@portfolio/data/domain/types';
 import type { AchadosTranslator } from '@/i18n/compat-support';
-import { ConditionalContent } from '../../primitives/conditional-content';
 import { PageHeader } from '../../content/page-header';
-import { FindingAuthorsText } from '../../ui/semantic/FindingAuthorsText';
-import { FindingPublishedDateText } from '../../ui/semantic/FindingPublishedDateText';
+import { FindingDetailMetadata } from './finding-detail-metadata';
 
 type FindingDetailHeaderProps = {
   item: Reference;
@@ -16,33 +17,30 @@ type FindingDetailHeaderProps = {
 };
 
 export function FindingDetailHeader(props: FindingDetailHeaderProps) {
+  const actionsVisible = useContentActionsVisibility();
+
   return (
     <PageHeader
       title={props.item.title}
       breadcrumbs={props.breadcrumbTrail}
       description={props.item.description}
       actions={
-        <ContentActions
-          title={props.item.title}
-          url={props.item.url ?? `/findings/${props.item.slug}`}
-          placement="hero"
-        />
+        actionsVisible ? (
+          <ContentActions
+            title={props.item.title}
+            url={props.item.url ?? `/findings/${props.item.slug}`}
+            placement="hero"
+          />
+        ) : undefined
       }
       metadata={
-        <>
-          <ConditionalContent
-            condition={Boolean(props.authors)}
-            content={<FindingAuthorsText>{props.authors}</FindingAuthorsText>}
+        props.authors || props.formattedPublishedDate ? (
+          <FindingDetailMetadata
+            authors={props.authors}
+            formattedPublishedDate={props.formattedPublishedDate}
+            t={props.t}
           />
-          <ConditionalContent
-            condition={Boolean(props.formattedPublishedDate)}
-            content={
-              <FindingPublishedDateText>
-                {props.t('publishedOn', { date: props.formattedPublishedDate ?? '' })}
-              </FindingPublishedDateText>
-            }
-          />
-        </>
+        ) : undefined
       }
       variant="reading"
     />

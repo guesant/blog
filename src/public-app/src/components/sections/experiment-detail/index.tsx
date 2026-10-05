@@ -4,6 +4,7 @@ import type { Experiment } from '@portfolio/data/domain/types';
 import { useTranslations } from '@/i18n/compat';
 import { DetailArticle } from '../../content/detail-layout';
 import { ContentActions } from '../../content/content-actions';
+import { useContentActionsVisibility } from '../../content/use-content-actions-visibility';
 import { DetailHeader } from '../../content/page-header';
 import { ExperimentDetailBody } from './experiment-detail-body';
 
@@ -18,6 +19,8 @@ export function ExperimentDetailContent(props: ExperimentDetailContentProps) {
 
   const experiment = staticExperiment;
 
+  const actionsVisible = useContentActionsVisibility({ externalUrl: experiment.href });
+
   return (
     <DetailArticle>
       <DetailHeader
@@ -26,13 +29,15 @@ export function ExperimentDetailContent(props: ExperimentDetailContentProps) {
         description={experiment.purpose}
         meta={experiment.technologies.join(' · ')}
         actions={
-          <ContentActions
-            title={experiment.name}
-            url={experiment.url ?? `/projects/experiments/${experiment.slug}`}
-            body={experiment.body}
-            externalUrl={experiment.href}
-            placement="hero"
-          />
+          actionsVisible ? (
+            <ContentActions
+              title={experiment.name}
+              url={experiment.url ?? `/projects/experiments/${experiment.slug}`}
+              body={experiment.body}
+              externalUrl={experiment.href}
+              placement="hero"
+            />
+          ) : undefined
         }
       />
       <ExperimentDetailBody experiment={experiment} t={t} />

@@ -3,6 +3,7 @@
 import { useTranslations } from '@/i18n/compat';
 import { DetailArticle, MetricsGrid } from '../../content/detail-layout';
 import { ContentActions } from '../../content/content-actions';
+import { useContentActionsVisibility } from '../../content/use-content-actions-visibility';
 import { DetailHeader } from '../../content/page-header';
 import type { ProjectDetailContentProps } from './types';
 import { ProjectOverview } from './project-overview';
@@ -18,6 +19,8 @@ export function ProjectDetailContent(props: ProjectDetailContentProps) {
 
   const project = staticProject;
 
+  const actionsVisible = useContentActionsVisibility({ externalUrl: project.href });
+
   return (
     <DetailArticle>
       <DetailHeader
@@ -26,13 +29,15 @@ export function ProjectDetailContent(props: ProjectDetailContentProps) {
         description={project.purpose}
         meta={project.status}
         actions={
-          <ContentActions
-            title={project.name}
-            url={project.url ?? `/projects/${project.slug}`}
-            body={project.body}
-            externalUrl={project.href}
-            placement="hero"
-          />
+          actionsVisible ? (
+            <ContentActions
+              title={project.name}
+              url={project.url ?? `/projects/${project.slug}`}
+              body={project.body}
+              externalUrl={project.href}
+              placement="hero"
+            />
+          ) : undefined
         }
       />
 

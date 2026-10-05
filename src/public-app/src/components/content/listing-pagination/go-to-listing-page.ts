@@ -1,8 +1,8 @@
-import type { ListingPaginationProps } from './types';
+import type { ListingPageNavigationProps } from './types';
 import { startProgress } from '../../navigation/start-progress';
 import { scrollListingTarget } from './scroll-listing-target';
 
-type GoToListingPageProps = ListingPaginationProps & { nextPage: number };
+type GoToListingPageProps = ListingPageNavigationProps & { nextPage: number };
 
 export function goToListingPage(props: GoToListingPageProps) {
   startProgress();

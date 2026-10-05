@@ -1,17 +1,10 @@
 import type { ContentFeedProps, SortMode } from './types';
 import { readContentFeedQueryValue } from './read-content-feed-query-value';
 import { contentFeedInitialValue } from './content-feed-initial-value';
-import { contentFeedPageSizeValue } from './content-feed-page-size-value';
 
 type ReadContentFeedStateProps = Pick<
   ContentFeedProps,
-  | 'fixedKind'
-  | 'initialKind'
-  | 'initialTopic'
-  | 'initialSearch'
-  | 'initialSort'
-  | 'initialType'
-  | 'initialPerPage'
+  'fixedKind' | 'initialKind' | 'initialTopic' | 'initialSearch' | 'initialSort' | 'initialType'
 > & {
   query: URLSearchParams;
 };
@@ -23,7 +16,6 @@ export type ContentFeedState = {
   pendingSearch: string;
   sort: SortMode;
   type: string;
-  perPage: number;
 };
 
 export function readContentFeedState(props: ReadContentFeedStateProps): ContentFeedState {
@@ -59,6 +51,5 @@ export function readContentFeedState(props: ReadContentFeedStateProps): ContentF
       'type',
       contentFeedInitialValue(props.initialType, ''),
     ),
-    perPage: contentFeedPageSizeValue(props.query.get('per_page'), props.initialPerPage ?? 50),
   };
 }

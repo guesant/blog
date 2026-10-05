@@ -12,7 +12,6 @@ export type BuildContentFeedQueryProps = {
   type: string;
   search: string;
   sort: SortMode;
-  perPage?: number;
   page?: number;
   filter?: FeedQuickFilter;
 };

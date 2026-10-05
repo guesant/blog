@@ -14,7 +14,6 @@ type UseApplyContentFeedFiltersProps = Pick<
   | 'sort'
   | 'router'
   | 'setSearch'
-  | 'perPage'
 > & {
   scrollToFeedAfter: (navigation: Promise<unknown>) => void;
 };
@@ -31,7 +30,6 @@ export function useApplyContentFeedFilters(props: UseApplyContentFeedFiltersProp
         type: props.type,
         search: props.pendingSearch,
         sort: props.sort,
-        perPage: props.perPage,
       });
 
       const href = `${props.action}${params.size ? `?${params.toString()}` : ''}`;

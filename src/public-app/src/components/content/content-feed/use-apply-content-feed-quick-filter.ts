@@ -15,7 +15,6 @@ type UseApplyContentFeedQuickFilterProps = Pick<
   | 'router'
   | 'setKind'
   | 'setType'
-  | 'perPage'
 > & {
   scrollToFeedAfter: (navigation: Promise<unknown>) => void;
 };
@@ -30,7 +29,6 @@ export function useApplyContentFeedQuickFilter(props: UseApplyContentFeedQuickFi
         type: props.type,
         search: props.pendingSearch,
         sort: props.sort,
-        perPage: props.perPage,
         filter,
       });
 

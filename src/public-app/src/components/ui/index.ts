@@ -68,6 +68,8 @@ export { EditorialSection } from './editorial-section';
 
 export { EditorialFeedItemDivider, EditorialFeedItemFrame } from './semantic';
 
+export { ContentDateLabel } from './semantic/ContentDateLabel';
+
 export { ListingListFrame, ListingViewFrame } from './listing-view';
 
 export { PageHeaderFrame } from './page-header';

@@ -19,6 +19,4 @@ export type ContentFeedActionProps = {
   setSearch: (value: string) => void;
   setPendingSearch: (value: string) => void;
   setSort: (value: SortMode) => void;
-  perPage: number;
-  setPerPage: (value: number) => void;
 };

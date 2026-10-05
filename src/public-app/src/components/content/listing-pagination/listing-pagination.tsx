@@ -1,43 +1,45 @@
 'use client';
 
-import { listingPaginationAriaLabel } from './listing-pagination-aria-label';
-import type { ListingPaginationProps } from './types';
-import type { ChangeEvent } from 'react';
+import { ListingPaginationCenter } from './listing-pagination-center';
+import { ListingPaginationFirstButton } from '../../ui/semantic/ListingPaginationFirstButton';
+import { ListingPaginationFrame } from '../../ui/semantic/ListingPaginationFrame';
+import { ListingPaginationLastButton } from '../../ui/semantic/ListingPaginationLastButton';
 import { goToListingPage } from './go-to-listing-page';
-import { ListingPaginationControl } from '../../ui/semantic/ListingPaginationControl';
+import { boundedListingPage } from './bounded-listing-page';
+import type { ListingPaginationProps } from './types';
 
 export function ListingPagination(props: ListingPaginationProps) {
   if (props.pageCount <= 1) {
     return null;
   }
 
-  return (
-    <ListingPaginationControl
-      count={props.pageCount}
-      page={props.page}
-      aria-label={props.ariaLabel}
+  const onNavigate = (page: number) =>
+    goToListingPage({
+      ...props,
+      nextPage: boundedListingPage(page, props.pageCount),
+    });
 
-      variant="outlined"
-      shape="rounded"
-      size="small"
-      showFirstButton
-      showLastButton
-      boundaryCount={1}
-      siblingCount={0}
-      onChange={(_event: ChangeEvent<unknown>, nextPage: number) =>
-        goToListingPage({ ...props, nextPage: nextPage ?? props.page })
-      }
-      getItemAriaLabel={(type: string, page: number | null) =>
-        listingPaginationAriaLabel({
-          type,
-          page: page ?? props.page,
-          ariaLabel: props.ariaLabel,
-          firstLabel: props.firstLabel,
-          previousLabel: props.previousLabel,
-          nextLabel: props.nextLabel,
-          lastLabel: props.lastLabel,
-        })
-      }
-    />
+  return (
+    <ListingPaginationFrame component="nav" aria-label={props.ariaLabel}>
+      <ListingPaginationFirstButton
+        type="button"
+        variant="outlined"
+        disabled={props.page <= 1}
+        aria-label={props.firstLabel}
+        onClick={() => onNavigate(1)}
+      >
+        {props.firstLabel}
+      </ListingPaginationFirstButton>
+      <ListingPaginationCenter {...props} onNavigate={onNavigate} />
+      <ListingPaginationLastButton
+        type="button"
+        variant="outlined"
+        disabled={props.page >= props.pageCount}
+        aria-label={props.lastLabel}
+        onClick={() => onNavigate(props.pageCount)}
+      >
+        {props.lastLabel}
+      </ListingPaginationLastButton>
+    </ListingPaginationFrame>
   );
 }

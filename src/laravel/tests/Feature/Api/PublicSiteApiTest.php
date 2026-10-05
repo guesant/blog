@@ -793,7 +793,7 @@ class PublicSiteApiTest extends TestCase
 
         $this->assertArrayNotHasKey('recent', $response->json());
         $this->assertArrayNotHasKey('popular', $response->json());
-        $this->assertLessThanOrEqual(10, count($response->json('feed')));
+        $this->assertLessThanOrEqual(15, count($response->json('feed')));
         foreach (
             ['cases', 'projects', 'experiments', 'collections', 'snippets', 'technologies', 'topics', 'credits'] as $kind
         ) {
@@ -806,14 +806,14 @@ class PublicSiteApiTest extends TestCase
 
     public function test_home_gallery_returns_totals_for_limited_sections(): void
     {
-        foreach (range(1, 11) as $index) {
+        foreach (range(1, 16) as $index) {
             $this->createResource("home-gallery-finding-{$index}");
         }
 
         $this->getJson('/api/v1/site/home-gallery?locale=en')
             ->assertOk()
-            ->assertJsonCount(10, 'feed')
-            ->assertJsonPath('totals.feed', 11);
+            ->assertJsonCount(15, 'feed')
+            ->assertJsonPath('totals.feed', 16);
     }
 
     public function test_home_gallery_feed_mixes_published_content_in_date_order(): void

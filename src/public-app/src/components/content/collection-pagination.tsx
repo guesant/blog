@@ -37,6 +37,8 @@ export function CollectionPagination(props: CollectionPaginationProps) {
       previousLabel={translations.previousLabel}
       nextLabel={translations.nextLabel}
       lastLabel={translations.lastLabel}
+      pageInputLabel={translations.pageInputLabel}
+      pageOfLabel={translations.pageOfLabel}
       onPageChange={onPageChange}
       scrollTargetId={props.scrollTargetId}
     />

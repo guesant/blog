@@ -33,10 +33,5 @@ export function useContentFeedActions(props: ContentFeedActionProps) {
     clearFilters,
     applyQuickFilter,
     pageHref: navigation.pageHref,
-    perPageHref: navigation.perPageHref,
-    setPerPage: (value: number) => {
-      props.setPerPage(value);
-      navigation.navigate(navigation.perPageHref(value));
-    },
   };
 }

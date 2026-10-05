@@ -19,7 +19,5 @@ export function buildContentFeedFormViewProps(
     clearLabel: translations.clearLabel,
     onPendingSearchChange: runtime.state.setPendingSearch,
     onSubmit: actions.applyFilters,
-    perPageLabel: translations.perPageLabel,
-    onPerPageChange: actions.setPerPage,
   };
 }

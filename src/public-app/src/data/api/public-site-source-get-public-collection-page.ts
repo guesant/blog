@@ -8,6 +8,7 @@ import { apiClient } from './public-site-source-api-client';
 import { objectValue } from './public-site-source-object-value';
 import { publicCollectionItems } from './public-site-source-public-collection-items';
 import { publicCollectionMeta } from './public-site-source-public-collection-meta';
+import { PUBLIC_CONTENT_PAGE_SIZE } from '../public-content-page-size';
 
 export async function getPublicCollectionPage<T>(
   collection: Exclude<ContentCollection, 'references'>,
@@ -21,7 +22,7 @@ export async function getPublicCollectionPage<T>(
     query: {
       locale,
       page: query.page,
-      per_page: query.perPage,
+      per_page: PUBLIC_CONTENT_PAGE_SIZE,
       sort: query.sort,
       featured: query.featured,
       q: query.q,

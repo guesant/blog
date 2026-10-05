@@ -15,8 +15,6 @@ export type ContentFeedFormViewBase = Pick<
   | 'showSelects'
   | 'pendingSearch'
   | 'searchLabel'
-  | 'displayControls'
-  | 'perPage'
 >;
 
 export function buildContentFeedFormViewBase(
@@ -30,7 +28,6 @@ export function buildContentFeedFormViewBase(
     showHeader = true,
     showPagination,
     searchPlaceholder: searchLabel = translations.searchLabel,
-    displayControls = false,
   } = props;
 
   return {
@@ -42,7 +39,5 @@ export function buildContentFeedFormViewBase(
     showSelects: contentFeedShowSelects(props.showSelects),
     pendingSearch: state.pendingSearch,
     searchLabel,
-    displayControls,
-    perPage: state.perPage,
   };
 }

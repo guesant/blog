@@ -1,7 +1,6 @@
 import { useCallback } from 'react';
 import type { ContentFeedRouter } from './use-content-feed-actions.types';
 import { buildFeedPageHref } from './build-feed-page-href';
-import { buildFeedPerPageHref } from './build-feed-per-page-href';
 
 type UseFeedNavigationProps = {
   action: string;
@@ -29,11 +28,6 @@ export function useFeedNavigation(props: UseFeedNavigationProps) {
     [props.action, props.query],
   );
 
-  const perPageHref = useCallback(
-    (perPage: number) => buildFeedPerPageHref(props.action, props.query, perPage),
-    [props.action, props.query],
-  );
-
   const navigate = useCallback(
     (href: string) => {
       scrollToFeedAfter(props.router.push(href, { resetScroll: false }));
@@ -41,5 +35,5 @@ export function useFeedNavigation(props: UseFeedNavigationProps) {
     [props.router, scrollToFeedAfter],
   );
 
-  return { pageHref, scrollToFeedAfter, perPageHref, navigate };
+  return { pageHref, scrollToFeedAfter, navigate };
 }

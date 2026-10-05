@@ -5,6 +5,7 @@ import { objectValue } from '../api/public-site-source-object-value';
 import { recordList } from '../api/public-site-source-list';
 import { publicCollectionMeta } from '../api/public-site-source-public-collection-meta';
 import { normalizeLocale } from '../api/public-site-source-normalize-locale';
+import { PUBLIC_CONTENT_PAGE_SIZE } from '../public-content-page-size';
 import type {
   ContentCollectionMeta,
   ContentCollectionQuery,
@@ -29,7 +30,7 @@ export async function getHomeFeedPage(
     query: {
       locale,
       page: feedQuery.page,
-      per_page: feedQuery.perPage,
+      per_page: PUBLIC_CONTENT_PAGE_SIZE,
       sort: feedQuery.sort,
       q: feedQuery.q,
       type: feedQuery.type,

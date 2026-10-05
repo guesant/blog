@@ -2,9 +2,7 @@
 
 import type { FormEvent, ReactNode } from 'react';
 import { ContentFeedSectionFrame } from '../../ui/semantic/ContentFeedSectionFrame';
-import { ConditionalContent } from '../../primitives/conditional-content';
 import { ContentFeedFilters } from './content-feed-filters';
-import { ContentFeedDisplayControls } from './content-feed-display-controls';
 import { ContentFeedHeader } from './content-feed-header';
 import { ContentFeedListing } from './content-feed-listing';
 import type { FeedSelectDefinition } from './feed-select.types';
@@ -17,6 +15,9 @@ export type ContentFeedViewProps = {
   breadcrumbs?: BreadcrumbItem[];
   showHeader: boolean;
   showPagination: boolean;
+  paginationMode: 'listing' | 'home';
+  recentLabel?: string;
+  oldestLabel?: string;
   selects: FeedSelectDefinition[];
   showSelects: boolean;
   pendingSearch: string;
@@ -41,12 +42,10 @@ export type ContentFeedViewProps = {
   previousLabel: string;
   nextLabel: string;
   lastLabel: string;
+  pageInputLabel: string;
+  pageOfLabel: string;
   onPageChange: (page: number) => void;
   beforeExplore?: ReactNode;
-  displayControls: boolean;
-  perPage: number;
-  perPageLabel: string;
-  onPerPageChange: (value: number) => void;
 };
 
 export function ContentFeedView(props: ContentFeedViewProps) {
@@ -62,16 +61,6 @@ export function ContentFeedView(props: ContentFeedViewProps) {
         onSubmit={props.onSubmit}
         applyLabel={props.applyLabel}
         clearLabel={props.clearLabel}
-      />
-      <ConditionalContent
-        condition={props.displayControls}
-        content={
-          <ContentFeedDisplayControls
-            perPage={props.perPage}
-            perPageLabel={props.perPageLabel}
-            onPerPageChange={props.onPerPageChange}
-          />
-        }
       />
       <ContentFeedListing {...props} />
     </ContentFeedSectionFrame>

@@ -1,5 +1,6 @@
 import type { ContentCollectionPage, ContentCollectionQuery } from './public-site-source-support';
 import { fetchFindingList } from './public-site-source-fetch-finding-list';
+import { PUBLIC_CONTENT_PAGE_SIZE } from '../public-content-page-size';
 
 export async function getFindingCollectionPage<T>(
   query: ContentCollectionQuery,
@@ -8,7 +9,7 @@ export async function getFindingCollectionPage<T>(
   const result = await fetchFindingList(
     {
       page: query.page ?? 1,
-      perPage: query.perPage ?? 50,
+      perPage: PUBLIC_CONTENT_PAGE_SIZE,
       sort: query.sort,
       q: query.q,
       type: query.type,

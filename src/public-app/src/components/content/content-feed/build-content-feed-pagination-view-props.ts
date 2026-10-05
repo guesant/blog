@@ -23,11 +23,16 @@ export function buildContentFeedPaginationViewProps(
     onQuickFilter: runtime.actions.applyQuickFilter,
     page: runtime.data.page,
     pageCount: runtime.data.pageCount,
+    paginationMode: input.props.paginationMode ?? 'listing',
+    recentLabel: input.props.recentLabel,
+    oldestLabel: input.props.oldestLabel,
     ariaLabel: runtime.translations.paginationLabel,
     firstLabel: runtime.translations.firstLabel,
     previousLabel: runtime.translations.previousLabel,
     nextLabel: runtime.translations.nextLabel,
     lastLabel: runtime.translations.lastLabel,
+    pageInputLabel: runtime.translations.pageInputLabel,
+    pageOfLabel: runtime.translations.pageOfLabel,
     onPageChange: (value) =>
       runtime.router.push(runtime.actions.pageHref(value), { resetScroll: false }),
   };

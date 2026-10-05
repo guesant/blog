@@ -43,6 +43,9 @@ export type ContentFeedProps = {
   breadcrumbs?: BreadcrumbItem[];
   showHeader?: boolean;
   showPagination?: boolean;
+  paginationMode?: 'listing' | 'home';
+  recentLabel?: string;
+  oldestLabel?: string;
   fixedKind?: FeedKind;
   action: string;
   initialKind?: string;
@@ -51,8 +54,6 @@ export type ContentFeedProps = {
   initialSort?: SortMode;
   initialType?: string;
   showSelects?: boolean;
-  displayControls?: boolean;
-  initialPerPage?: number;
   initialPage?: number;
   findingsMeta?: FindingListMeta;
   findingFacets?: FindingFacets;

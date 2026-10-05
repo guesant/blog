@@ -1,4 +1,5 @@
 import type { ContentLocale, FindingListQuery } from './public-site-source-support';
+import { PUBLIC_CONTENT_PAGE_SIZE } from '../public-content-page-size';
 
 export type FindingApiQueryProps = {
   locale: ContentLocale;
@@ -17,6 +18,6 @@ export function findingApiQuery(props: FindingApiQueryProps) {
     free_only: props.filters.freeOnly,
     sort: props.filters.sort,
     page: props.filters.page,
-    per_page: props.filters.perPage,
+    per_page: PUBLIC_CONTENT_PAGE_SIZE,
   };
 }

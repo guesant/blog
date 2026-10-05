@@ -1,6 +1,7 @@
 import type { ContentCollectionQuery, RecordValue } from './public-site-source-support';
 import { fallbackValue } from './public-site-source-fallback';
 import { numberValue } from './public-site-source-number-value';
+import { PUBLIC_CONTENT_PAGE_SIZE } from '../public-content-page-size';
 
 type PublicCollectionMetaNumbers = {
   page: number;
@@ -22,7 +23,10 @@ export function publicCollectionMetaNumbers(
   );
 
   const perPage = Number(
-    fallbackValue(numberValue(props.meta?.per_page), fallbackValue(props.query.perPage, 50)),
+    fallbackValue(
+      numberValue(props.meta?.per_page),
+      fallbackValue(props.query.perPage, PUBLIC_CONTENT_PAGE_SIZE),
+    ),
   );
 
   const total = Number(fallbackValue(numberValue(props.meta?.total), 0));

@@ -23,10 +23,6 @@ export type ContentFeedFormViewProps = Pick<
   | 'clearLabel'
   | 'onPendingSearchChange'
   | 'onSubmit'
-  | 'displayControls'
-  | 'perPage'
-  | 'perPageLabel'
-  | 'onPerPageChange'
 >;
 
 export type ContentFeedPaginationViewProps = Pick<
@@ -42,10 +38,15 @@ export type ContentFeedPaginationViewProps = Pick<
   | 'onQuickFilter'
   | 'page'
   | 'pageCount'
+  | 'paginationMode'
+  | 'recentLabel'
+  | 'oldestLabel'
   | 'ariaLabel'
   | 'firstLabel'
   | 'previousLabel'
   | 'nextLabel'
   | 'lastLabel'
+  | 'pageInputLabel'
+  | 'pageOfLabel'
   | 'onPageChange'
 >;

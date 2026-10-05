@@ -69,6 +69,7 @@
   --site-control-h-sm: 2rem;
   --site-control-h: 2.25rem;
   --site-control-h-lg: 2.5rem;
+  --site-control-w-page: 4rem;
   --site-target-min: 2.75rem;
 
   --site-overlap: calc(var(--site-border-width) * -1);

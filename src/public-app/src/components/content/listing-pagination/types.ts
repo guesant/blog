@@ -6,6 +6,13 @@ export type ListingPaginationProps = {
   previousLabel: string;
   nextLabel: string;
   lastLabel: string;
+  pageInputLabel: string;
+  pageOfLabel: string;
   onPageChange: (page: number) => void | Promise<unknown>;
   scrollTargetId?: string;
 };
+
+export type ListingPageNavigationProps = Pick<
+  ListingPaginationProps,
+  'onPageChange' | 'scrollTargetId'
+>;

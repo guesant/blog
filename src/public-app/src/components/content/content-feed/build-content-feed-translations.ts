@@ -31,7 +31,8 @@ const pageLabelKeys = {
   previousLabel: 'previous',
   nextLabel: 'next',
   lastLabel: 'last',
-  perPageLabel: 'perPage',
+  pageInputLabel: 'pageInput',
+  pageOfLabel: 'pageOf',
 } as const;
 
 export function buildContentFeedTranslations(props: BuildContentFeedTranslationsProps) {

@@ -1,6 +1,7 @@
 import type { FindingListQuery, RecordValue } from './public-site-source-support';
 import { fallbackValue } from './public-site-source-fallback';
 import { numberValue } from './public-site-source-number-value';
+import { PUBLIC_CONTENT_PAGE_SIZE } from '../public-content-page-size';
 
 type FindingListMetaNumbers = {
   page: number;
@@ -14,7 +15,10 @@ export function findingListMetaNumbers(
   filters: FindingListQuery,
 ): FindingListMetaNumbers {
   const perPage = Number(
-    fallbackValue(numberValue(value?.per_page), fallbackValue(filters.perPage, 50)),
+    fallbackValue(
+      numberValue(value?.per_page),
+      fallbackValue(filters.perPage, PUBLIC_CONTENT_PAGE_SIZE),
+    ),
   );
 
   const total = Number(fallbackValue(numberValue(value?.total), 0));

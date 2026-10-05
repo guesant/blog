@@ -1,6 +1,7 @@
 import type { FindingListQuery } from '@portfolio/data/services';
 import { optionalQueryParam } from './optional-query-param';
 import { parseFindingSort } from './parse-finding-sort';
+import { PUBLIC_CONTENT_PAGE_SIZE } from '../public-content-page-size';
 import { positiveQueryNumber } from './positive-query-number';
 
 export function findingFilters(search: string | undefined): FindingListQuery {
@@ -19,6 +20,6 @@ export function findingFilters(search: string | undefined): FindingListQuery {
     year,
     sort: parseFindingSort(params.get('sort')),
     page: page ?? 1,
-    perPage: 50,
+    perPage: PUBLIC_CONTENT_PAGE_SIZE,
   };
 }

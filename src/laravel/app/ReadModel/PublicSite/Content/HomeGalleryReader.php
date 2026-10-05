@@ -12,7 +12,7 @@ final class HomeGalleryReader
 {
     private const LIMIT = 6;
 
-    private const FEED_LIMIT = 10;
+    private const FEED_LIMIT = 15;
 
     public function __construct(
         private readonly CaseStudyReader $cases,

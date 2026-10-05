@@ -3,7 +3,7 @@ import { useLocale } from '@/i18n/compat';
 import type { HomeTranslator } from '@/i18n/compat-support';
 import { formatDate } from './format-date';
 import { ConditionalContent } from '../primitives/conditional-content';
-import { Box, FindingCardKindChip, FindingCardMetadataRow } from '../ui';
+import { ContentDateLabel, FindingCardKindChip, FindingCardMetadataRow } from '../ui';
 
 type CatalogFeedCardMetadataProps = {
   entry: HomeGalleryEntry;
@@ -20,7 +20,10 @@ export function CatalogFeedCardMetadata(props: CatalogFeedCardMetadataProps) {
   return (
     <FindingCardMetadataRow>
       <FindingCardKindChip>{kindLabel}</FindingCardKindChip>
-      <ConditionalContent condition={Boolean(date)} content={<Box component="span">{date}</Box>} />
+      <ConditionalContent
+        condition={Boolean(date)}
+        content={<ContentDateLabel>{date}</ContentDateLabel>}
+      />
     </FindingCardMetadataRow>
   );
 }

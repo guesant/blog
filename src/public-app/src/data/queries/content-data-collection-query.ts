@@ -2,12 +2,13 @@ import type { ContentCollectionQuery } from '../api/public-site-source-support';
 import { contentCollectionQueryKind } from './content-collection-query-kind';
 import { contentCollectionQueryString } from './content-collection-query-string';
 import { contentCollectionQuerySort } from './content-collection-query-sort';
+import { PUBLIC_CONTENT_PAGE_SIZE } from '../public-content-page-size';
 import { positiveQueryNumber } from './positive-query-number';
 
 export function collectionQuery(
   search: string | undefined,
   parameter = 'page',
-  perPage = 50,
+  perPage = PUBLIC_CONTENT_PAGE_SIZE,
 ): ContentCollectionQuery {
   const params = new URLSearchParams(search);
 

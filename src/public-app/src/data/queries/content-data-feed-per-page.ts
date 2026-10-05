@@ -1,13 +1,5 @@
-import { positiveQueryNumber } from './positive-query-number';
+import { PUBLIC_CONTENT_PAGE_SIZE } from '../public-content-page-size';
 
-const feedPageSizes = [10, 20, 50];
-
-export function feedPerPage(value: string | null) {
-  const requested = positiveQueryNumber(value);
-
-  if (requested && feedPageSizes.includes(requested)) {
-    return requested;
-  }
-
-  return 50;
+export function feedPerPage() {
+  return PUBLIC_CONTENT_PAGE_SIZE;
 }

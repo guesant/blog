@@ -13,20 +13,11 @@ export function useContentFeedActions(props: ContentFeedActionProps) {
     router: props.router,
   });
 
-  const applyFilters = useApplyContentFeedFilters({
-    ...props,
-    scrollToFeedAfter: navigation.scrollToFeedAfter,
-  });
+  const applyFilters = useApplyContentFeedFilters(props);
 
-  const clearFilters = useClearContentFeedFilters({
-    ...props,
-    scrollToFeedAfter: navigation.scrollToFeedAfter,
-  });
+  const clearFilters = useClearContentFeedFilters(props);
 
-  const applyQuickFilter = useApplyContentFeedQuickFilter({
-    ...props,
-    scrollToFeedAfter: navigation.scrollToFeedAfter,
-  });
+  const applyQuickFilter = useApplyContentFeedQuickFilter(props);
 
   return {
     applyFilters,

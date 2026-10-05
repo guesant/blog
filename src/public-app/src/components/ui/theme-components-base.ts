@@ -88,18 +88,22 @@ export const themeComponentsBase = {
       'html[data-navigation-state="loading"] body, html[data-navigation-state="loading"] body *': {
         cursor: 'progress !important',
       },
-      'html[data-navigation-state="loading"] body > *:not(#nprogress), html[data-navigation-state="loading"] body > *:not(#nprogress) *':
-        {
-          pointerEvents: 'none',
-        },
-      'html[data-navigation-state="loading"] body > *:not(#nprogress)': {
-        opacity: 'var(--site-navigation-loading-opacity)',
-        transition: 'opacity var(--site-duration-short-4) var(--site-ease-standard)',
+      '#navigation-busy-overlay': {
+        position: 'fixed',
+        zIndex: 'var(--site-z-navigation-overlay)',
+        inset: 0,
+        backgroundColor: 'var(--site-navigation-overlay)',
+        pointerEvents: 'none',
+        visibility: 'hidden',
+      },
+      'html[data-navigation-state="loading"] #navigation-busy-overlay': {
+        pointerEvents: 'auto',
+        visibility: 'visible',
       },
       '#nprogress': { pointerEvents: 'none' },
       '#nprogress .bar': {
         position: 'fixed',
-        zIndex: 2000,
+        zIndex: 'var(--site-z-navigation-progress)',
         top: 0,
         left: 0,
         width: '100%',

@@ -29,7 +29,6 @@ export function ContentFeedListingPagination(props: ContentFeedListingPagination
       pageInputLabel={props.pageInputLabel}
       pageOfLabel={props.pageOfLabel}
       onPageChange={props.onPageChange}
-      scrollTargetId="content-feed"
     />
   );
 }

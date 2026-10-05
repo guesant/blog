@@ -10,7 +10,6 @@ export type CollectionPaginationProps = {
   meta: ContentCollectionMeta;
   action: string;
   pageParameter?: string;
-  scrollTargetId?: string;
 };
 
 export function CollectionPagination(props: CollectionPaginationProps) {
@@ -38,7 +37,6 @@ export function CollectionPagination(props: CollectionPaginationProps) {
       pageInputLabel={translations.pageInputLabel}
       pageOfLabel={translations.pageOfLabel}
       onPageChange={onPageChange}
-      scrollTargetId={props.scrollTargetId}
     />
   );
 }

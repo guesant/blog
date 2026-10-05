@@ -7,6 +7,7 @@ import NProgress from 'nprogress';
 import { finishProgress } from './finish-progress';
 import { handleNavigationClick } from './handle-navigation-click';
 import { startProgress } from './start-progress';
+import { NavigationBusyOverlay } from '../ui/semantic/NavigationBusyOverlay';
 
 export function NavigationProgress() {
   const routerStatus = useRouterState({ select: (state) => state.status });
@@ -39,5 +40,5 @@ export function NavigationProgress() {
     }
   }, [fetchingCount, routerStatus]);
 
-  return null;
+  return <NavigationBusyOverlay />;
 }

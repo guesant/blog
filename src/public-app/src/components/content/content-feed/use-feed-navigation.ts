@@ -9,20 +9,6 @@ type UseFeedNavigationProps = {
 };
 
 export function useFeedNavigation(props: UseFeedNavigationProps) {
-  const scrollToFeed = useCallback(() => {
-    document.getElementById('content-feed')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }, []);
-
-  const scrollToFeedAfter = useCallback(
-    (navigation: Promise<unknown>) => {
-      void navigation.then(
-        () => requestAnimationFrame(scrollToFeed),
-        () => requestAnimationFrame(scrollToFeed),
-      );
-    },
-    [scrollToFeed],
-  );
-
   const pageHref = useCallback(
     (value: number) => buildFeedPageHref(props.action, props.query, value),
     [props.action, props.query],
@@ -30,10 +16,10 @@ export function useFeedNavigation(props: UseFeedNavigationProps) {
 
   const navigate = useCallback(
     (href: string) => {
-      scrollToFeedAfter(props.router.push(href, { resetScroll: false }));
+      props.router.push(href, { resetScroll: false });
     },
-    [props.router, scrollToFeedAfter],
+    [props.router],
   );
 
-  return { pageHref, scrollToFeedAfter, navigate };
+  return { pageHref, navigate };
 }

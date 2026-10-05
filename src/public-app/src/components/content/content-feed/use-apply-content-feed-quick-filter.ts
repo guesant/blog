@@ -15,9 +15,7 @@ type UseApplyContentFeedQuickFilterProps = Pick<
   | 'router'
   | 'setKind'
   | 'setType'
-> & {
-  scrollToFeedAfter: (navigation: Promise<unknown>) => void;
-};
+>;
 
 export function useApplyContentFeedQuickFilter(props: UseApplyContentFeedQuickFilterProps) {
   return useCallback(
@@ -37,7 +35,7 @@ export function useApplyContentFeedQuickFilter(props: UseApplyContentFeedQuickFi
 
       const href = `${props.action}${params.size ? `?${params.toString()}` : ''}`;
 
-      props.scrollToFeedAfter(props.router.push(href, { resetScroll: false }));
+      props.router.push(href, { resetScroll: false });
     },
     [props],
   );

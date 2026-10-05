@@ -12,9 +12,7 @@ type UseClearContentFeedFiltersProps = Pick<
   | 'setSearch'
   | 'setPendingSearch'
   | 'setSort'
-> & {
-  scrollToFeedAfter: (navigation: Promise<unknown>) => void;
-};
+>;
 
 export function useClearContentFeedFilters(props: UseClearContentFeedFiltersProps) {
   return useCallback(() => {
@@ -24,6 +22,6 @@ export function useClearContentFeedFilters(props: UseClearContentFeedFiltersProp
     props.setSearch('');
     props.setPendingSearch('');
     props.setSort('desc');
-    props.scrollToFeedAfter(props.router.push(props.action, { resetScroll: false }));
+    props.router.push(props.action, { resetScroll: false });
   }, [props]);
 }

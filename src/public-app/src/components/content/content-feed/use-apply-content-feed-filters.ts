@@ -14,9 +14,7 @@ type UseApplyContentFeedFiltersProps = Pick<
   | 'sort'
   | 'router'
   | 'setSearch'
-> & {
-  scrollToFeedAfter: (navigation: Promise<unknown>) => void;
-};
+>;
 
 export function useApplyContentFeedFilters(props: UseApplyContentFeedFiltersProps) {
   return useCallback(
@@ -34,10 +32,8 @@ export function useApplyContentFeedFilters(props: UseApplyContentFeedFiltersProp
 
       const href = `${props.action}${params.size ? `?${params.toString()}` : ''}`;
 
-      const navigation = props.router.push(href, { resetScroll: false });
-
       props.setSearch(props.pendingSearch.trim());
-      props.scrollToFeedAfter(navigation);
+      props.router.push(href, { resetScroll: false });
     },
     [props],
   );

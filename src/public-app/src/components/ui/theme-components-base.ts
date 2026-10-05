@@ -85,6 +85,17 @@ export const themeComponentsBase = {
           display: 'none',
         },
       },
+      'html[data-navigation-state="loading"] body, html[data-navigation-state="loading"] body *': {
+        cursor: 'progress !important',
+      },
+      'html[data-navigation-state="loading"] body > *:not(#nprogress), html[data-navigation-state="loading"] body > *:not(#nprogress) *':
+        {
+          pointerEvents: 'none',
+        },
+      'html[data-navigation-state="loading"] body > *:not(#nprogress)': {
+        opacity: 'var(--site-navigation-loading-opacity)',
+        transition: 'opacity var(--site-duration-short-4) var(--site-ease-standard)',
+      },
       '#nprogress': { pointerEvents: 'none' },
       '#nprogress .bar': {
         position: 'fixed',

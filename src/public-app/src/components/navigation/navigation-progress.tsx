@@ -1,14 +1,17 @@
 'use client';
 
 import { useRouterState } from '@tanstack/react-router';
-import NProgress from 'nprogress';
+import { useIsFetching } from '@tanstack/react-query';
 import { useEffect } from 'react';
+import NProgress from 'nprogress';
 import { finishProgress } from './finish-progress';
 import { handleNavigationClick } from './handle-navigation-click';
 import { startProgress } from './start-progress';
 
 export function NavigationProgress() {
   const routerStatus = useRouterState({ select: (state) => state.status });
+
+  const fetchingCount = useIsFetching();
 
   useEffect(() => {
     NProgress.configure({
@@ -31,10 +34,10 @@ export function NavigationProgress() {
   }, []);
 
   useEffect(() => {
-    if (routerStatus === 'idle') {
+    if (routerStatus === 'idle' && fetchingCount === 0) {
       finishProgress();
     }
-  }, [routerStatus]);
+  }, [fetchingCount, routerStatus]);
 
   return null;
 }

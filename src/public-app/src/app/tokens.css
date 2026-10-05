@@ -135,6 +135,7 @@
   --site-feed-accent-w: 0.25rem;
   --site-tile-min-h: 5rem;
   --site-source-preview-mobile-min-h: 8rem;
+  --site-navigation-loading-opacity: 0.56;
 
   --site-state-hover: 8%;
   --site-state-focus: 12%;

@@ -17,10 +17,12 @@ export function finishProgress() {
     return;
   }
 
-  document.body.style.overflow = navigationProgressState.bodyOverflow;
-  document.documentElement.style.overflow = navigationProgressState.documentOverflow;
-  navigationProgressState.bodyOverflow = '';
-  navigationProgressState.documentOverflow = '';
   navigationProgressState.active = false;
-  window.scrollTo({ top: 0, behavior: 'auto' });
+  window.scrollTo(0, 0);
+  document
+    .querySelectorAll<HTMLElement>('[data-navigation-scroll-container]')
+    .forEach((element) => {
+      element.scrollTop = 0;
+      element.scrollLeft = 0;
+    });
 }

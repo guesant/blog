@@ -8,10 +8,6 @@ export function startProgress() {
   }
 
   if (!navigationProgressState.active) {
-    navigationProgressState.bodyOverflow = document.body.style.overflow;
-    navigationProgressState.documentOverflow = document.documentElement.style.overflow;
-    document.body.style.overflow = 'hidden';
-    document.documentElement.style.overflow = 'hidden';
     navigationProgressState.active = true;
   }
 

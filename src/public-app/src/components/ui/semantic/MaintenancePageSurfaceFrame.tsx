@@ -5,7 +5,7 @@ import { Box as BaseComponent } from '@/components/ui/box';
 export const MaintenancePageSurfaceFrame = createSemanticSxComponent<
   ComponentProps<typeof BaseComponent>
 >(BaseComponent, {
-  minHeight: '100svh',
+  minHeight: 'var(--site-viewport-min-height)',
   display: 'grid',
   alignItems: 'center',
   bgcolor: 'background.default',

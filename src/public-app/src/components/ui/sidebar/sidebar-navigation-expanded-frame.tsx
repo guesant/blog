@@ -15,7 +15,7 @@ export function SidebarNavigationExpandedFrame(props: SidebarNavigationExpandedF
         width: '100%',
         padding: 'var(--site-space-3)',
         minWidth: 0,
-        minHeight: '100dvh',
+        minHeight: 'var(--site-viewport-min-height)',
         display: 'flex',
         flexDirection: 'column',
         gap: 'var(--site-sidebar-gap)',

@@ -136,6 +136,8 @@
   --site-tile-min-h: 5rem;
   --site-source-preview-mobile-min-h: 8rem;
   --site-navigation-overlay: rgb(255 255 255 / 42%);
+  --site-viewport-height: 100svh;
+  --site-viewport-min-height: 100svh;
 
   --site-state-hover: 8%;
   --site-state-focus: 12%;
@@ -221,6 +223,17 @@ textarea,
 .MuiSelect-select {
   color: var(--site-text-primary);
   background-color: var(--site-surface);
+}
+
+html,
+body {
+  min-height: var(--site-viewport-min-height);
+  overscroll-behavior-y: none;
+}
+
+html[data-navigation-state='loading'],
+html[data-navigation-state='loading'] body {
+  overflow: hidden;
 }
 
 @media (prefers-reduced-motion: reduce) {

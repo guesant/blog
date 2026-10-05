@@ -22,7 +22,7 @@ const styles = {
 
 export function SidebarMainContentFrame(props: SidebarMainContentFrameProps) {
   return (
-    <Box component="main" sx={styles}>
+    <Box component="main" data-navigation-scroll-container sx={styles}>
       {props.children}
     </Box>
   );

@@ -17,6 +17,7 @@ export function buildFeedItemEntry(item: PublicFeedItem): FeedEntry {
     readingTime: item.readingTime,
     topics: item.topics,
     findingType: item.findingType,
+    links: item.links,
     featured: item.featured,
     href: item.href,
   };

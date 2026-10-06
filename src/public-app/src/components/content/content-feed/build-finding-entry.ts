@@ -13,6 +13,7 @@ export function buildFindingEntry(item: Reference): FeedEntry {
     date: findingDate(item),
     topics: findingTopics(item),
     findingType: item.type,
+    links: item.links,
     featured: item.featured,
     href: item.url ?? `/findings/${item.slug}`,
   };

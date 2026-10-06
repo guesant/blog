@@ -1,6 +1,8 @@
 import type { ReactNode } from 'react';
-import { NavLink } from '../primitives/nav-link';
-import { FindingCardDescription, FindingCardTitle } from '../ui';
+import { FindingCardDescription } from '../ui';
+import type { IconName } from '../primitives/icon';
+import { ConditionalContent } from '../primitives/conditional-content';
+import { FindingCardSummaryTitle } from './finding-card-summary-title';
 
 type FindingCardSummaryProps = {
   title: string;
@@ -9,22 +11,25 @@ type FindingCardSummaryProps = {
   metadata?: ReactNode;
   headingLevel: 'h2' | 'h3';
   titleFontSize?: string;
+  leadingIcon?: IconName;
 };
 
 export function FindingCardSummary(props: FindingCardSummaryProps) {
-  const title = (
-    <FindingCardTitle component={props.headingLevel} fontSize={props.titleFontSize}>
-      <NavLink href={props.href} underline="none" color="inherit">
-        {props.title}
-      </NavLink>
-    </FindingCardTitle>
-  );
-
   return (
     <>
-      {title}
+      <FindingCardSummaryTitle
+        title={props.title}
+        href={props.href}
+        headingLevel={props.headingLevel}
+        titleFontSize={props.titleFontSize}
+        leadingIcon={props.leadingIcon}
+      />
+
       {props.metadata}
-      <FindingCardDescription>{props.description}</FindingCardDescription>
+      <ConditionalContent
+        condition={Boolean(props.description)}
+        content={<FindingCardDescription>{props.description}</FindingCardDescription>}
+      />
     </>
   );
 }

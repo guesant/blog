@@ -1,9 +1,11 @@
 import type { ReactNode } from 'react';
 import { Typography } from '../typography';
+import { findingCardTitleStyles } from './finding-card-title-styles';
 
 type FindingCardTitleProps = {
-  children: ReactNode;
+  children?: ReactNode;
   component: 'h2' | 'h3';
+  content?: ReactNode;
   fontSize?: string;
 };
 
@@ -12,24 +14,11 @@ export function FindingCardTitle(props: FindingCardTitleProps) {
     <Typography
       component={props.component}
       sx={{
-        margin: 0,
-        width: '100%',
-        color: 'var(--site-text-primary)',
+        ...findingCardTitleStyles,
         fontSize: props.fontSize ?? 'var(--site-text-lg)',
-        fontWeight: 'var(--site-weight-bold)',
-        letterSpacing: 'var(--site-letter-heading)',
-        lineHeight: 'var(--site-leading-tight)',
-        textAlign: 'left',
-        display: '-webkit-box',
-        WebkitBoxOrient: 'vertical',
-        WebkitLineClamp: 2,
-        overflow: 'hidden',
-        textOverflow: 'ellipsis',
-        transition: 'color .2s',
-        '& a': { color: 'var(--site-primary)' },
       }}
     >
-      {props.children}
+      {props.content ?? props.children}
     </Typography>
   );
 }

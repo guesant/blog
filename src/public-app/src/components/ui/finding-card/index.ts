@@ -14,6 +14,8 @@ export { FindingCardDescription } from './finding-card-description';
 
 export { FindingCardTitle } from './finding-card-title';
 
+export { FindingCardTitleWithLeadingIcon } from './finding-card-title-with-leading-icon';
+
 export { FindingReferenceMetaFrame } from './finding-reference-meta-frame';
 
 export { FindingReferenceTopicsFrame } from './finding-reference-topics-frame';

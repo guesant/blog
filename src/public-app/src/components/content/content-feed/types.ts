@@ -1,4 +1,4 @@
-import type { PublicFeedItem } from '@portfolio/data/domain/types';
+import type { ExternalLink, PublicFeedItem } from '@portfolio/data/domain/types';
 import type { ReactNode } from 'react';
 import type { FindingFacets } from '@portfolio/data/services';
 import type { ContentCollectionMeta } from '@portfolio/data/api/public-site-source-support';
@@ -22,6 +22,7 @@ export type FeedEntry = {
   readingTime?: string;
   topics: { name: string; slug?: string; url?: string }[];
   findingType?: string;
+  links?: ExternalLink[];
   featured?: boolean;
   href: string;
 };

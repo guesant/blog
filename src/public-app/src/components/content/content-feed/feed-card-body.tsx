@@ -19,7 +19,7 @@ export function FeedCardBody(props: FeedCardBodyProps) {
       ? `${props.t('finding')}: ${props.entry.title}${categorySuffix}`
       : props.entry.title;
 
-  const titleFontSize = props.entry.kind === 'post' ? 'var(--site-text-xl)' : undefined;
+  const titleFontSize = props.entry.kind === 'post' ? 'var(--site-text-2xl)' : undefined;
 
   return (
     <FindingCardPresentation

@@ -1,7 +1,7 @@
 import type { NavigationItem } from '@portfolio/data/domain/types';
 import type { NavTranslator } from '@/i18n/compat-support';
 import { aboutRoutes } from './types';
-import { routeSegment } from './route-segment';
+import { routeSegment } from '../../navigation/route-segment';
 
 type BuildLeftSidebarAboutItemsProps = {
   aboutGroup: NavigationItem[];

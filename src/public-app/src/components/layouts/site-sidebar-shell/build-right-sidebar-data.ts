@@ -7,7 +7,7 @@ import { sidebarContactVisible } from './sidebar-contact-visible';
 import { sidebarLegalVisible } from './sidebar-legal-visible';
 import { sidebarUpdatesVisible } from './sidebar-updates-visible';
 import { navigationItem } from './navigation-item';
-import { routeSegment } from './route-segment';
+import { routeSegment } from '../../navigation/route-segment';
 
 type BuildRightSidebarDataProps = {
   site: SiteText;

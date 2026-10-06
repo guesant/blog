@@ -1,4 +1,4 @@
-import { routeSegment } from './route-segment';
+import { routeSegment } from '../../navigation/route-segment';
 
 export function isResourceRoute(route: string) {
   return ['feed.xml', 'feed.json'].includes(routeSegment(route));

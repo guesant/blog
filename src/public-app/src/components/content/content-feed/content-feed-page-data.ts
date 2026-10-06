@@ -18,7 +18,7 @@ export function contentFeedPageData(props: ContentFeedPageDataProps) {
     entryCount: props.entries.length,
   });
 
-  const pageSize = contentFeedPageSize();
+  const pageSize = meta.perPage ?? contentFeedPageSize();
 
   const total = meta.total;
 

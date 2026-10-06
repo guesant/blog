@@ -1,5 +1,5 @@
 import type { IconName } from '../../primitives/icon';
-import { routeSegment } from './route-segment';
+import { routeSegment } from '../../navigation/route-segment';
 
 const routeIcons: Partial<Record<string, IconName>> = {
   about: 'user',

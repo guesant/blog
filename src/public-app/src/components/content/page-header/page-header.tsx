@@ -10,6 +10,7 @@ export function PageHeader(props: PageHeaderProps) {
         variant={props.variant ?? 'reading'}
         breadcrumbs={props.breadcrumbs ? <Breadcrumbs trail={props.breadcrumbs} /> : undefined}
         titleAdornment={props.titleAdornment}
+        titleAdornmentInline={props.titleAdornmentInline}
         title={props.title}
         description={props.description}
         meta={props.meta}

@@ -1,6 +1,6 @@
 import type { NavTranslationKey, NavTranslator } from '@/i18n/compat-support';
 import type { NavigationItem } from '@portfolio/data/domain/types';
-import { routeSegment } from './route-segment';
+import { routeSegment } from '../../navigation/route-segment';
 
 const navigationTranslationKeys: Record<string, NavTranslationKey> = {
   '': 'home',

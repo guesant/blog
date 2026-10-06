@@ -6,7 +6,5 @@ type FindingVisualTitleProps = {
 };
 
 export function findingVisualTitle(props: FindingVisualTitleProps): string {
-  const title = findingDisplayTitle(props);
-
-  return props.typeLabel ? `| ${title}` : title;
+  return findingDisplayTitle(props);
 }

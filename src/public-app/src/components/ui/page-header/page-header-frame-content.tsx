@@ -1,17 +1,18 @@
 import type { ReactNode } from 'react';
 import { Box } from '../box';
 import { Divider } from '../divider';
-import { Typography } from '../typography';
 import { ConditionalContent } from '../../primitives/conditional-content';
-import { editorialPageTitleStyles } from '../editorial-typography';
 import { PageHeaderDescriptionFrame } from './page-header-description-frame';
 import { PageHeaderSupportingContentFrame } from './page-header-supporting-content-frame';
 import { PageHeaderTitleFrame } from './page-header-title-frame';
+import { PageHeaderTitle } from './page-header-title';
+import { pageHeaderHasSupportingContent } from './page-header-has-supporting-content';
 
 export type PageHeaderFrameContentProps = {
   maxWidth: string;
   breadcrumbs?: ReactNode;
   titleAdornment?: ReactNode;
+  titleAdornmentInline?: boolean;
   title: string;
   description?: ReactNode;
   meta?: string;
@@ -20,9 +21,7 @@ export type PageHeaderFrameContentProps = {
 };
 
 export function PageHeaderFrameContent(props: PageHeaderFrameContentProps) {
-  const hasDescription = Boolean(props.description);
-
-  const hasSupportingContent = Boolean(props.actions || props.meta || props.metadata);
+  const hasSupportingContent = pageHeaderHasSupportingContent(props);
 
   return (
     <Box
@@ -31,17 +30,18 @@ export function PageHeaderFrameContent(props: PageHeaderFrameContentProps) {
     >
       {props.breadcrumbs}
       {props.breadcrumbs ? <Divider /> : null}
-      <PageHeaderTitleFrame adornment={props.titleAdornment}>
-        <Typography variant="h1" sx={editorialPageTitleStyles}>
-          {props.title}
-        </Typography>
+      <PageHeaderTitleFrame
+        adornment={props.titleAdornment}
+        inlineAdornment={props.titleAdornmentInline}
+      >
+        <PageHeaderTitle title={props.title} inlineAdornment={props.titleAdornmentInline} />
       </PageHeaderTitleFrame>
       <Divider />
       <ConditionalContent
-        condition={hasDescription}
+        condition={Boolean(props.description)}
         content={<PageHeaderDescriptionFrame>{props.description}</PageHeaderDescriptionFrame>}
       />
-      <ConditionalContent condition={hasDescription} content={<Divider />} />
+      <ConditionalContent condition={Boolean(props.description)} content={<Divider />} />
       <ConditionalContent
         condition={hasSupportingContent}
         content={

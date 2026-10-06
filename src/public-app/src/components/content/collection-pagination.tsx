@@ -35,7 +35,6 @@ export function CollectionPagination(props: CollectionPaginationProps) {
       previousLabel={translations.previousLabel}
       nextLabel={translations.nextLabel}
       pageInputLabel={translations.pageInputLabel}
-      pageOfLabel={translations.pageOfLabel}
       onPageChange={onPageChange}
     />
   );

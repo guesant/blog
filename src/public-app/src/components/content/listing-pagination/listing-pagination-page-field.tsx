@@ -1,4 +1,3 @@
-import { Typography } from '../../ui/typography';
 import {
   ListingPaginationPageAutocomplete,
   type ListingPaginationPageAutocompleteProps,
@@ -8,7 +7,6 @@ type ListingPaginationPageFieldProps = {
   value: number;
   label: string;
   pageCount: number;
-  pageOfLabel: string;
   onChange: (page: number) => void;
 };
 
@@ -36,9 +34,6 @@ export function ListingPaginationPageField(props: ListingPaginationPageFieldProp
         value={props.value}
         onChange={handleChange}
       />
-      <Typography component="span" variant="body2" color="text.secondary" whiteSpace="nowrap">
-        {props.pageOfLabel} {props.pageCount}
-      </Typography>
     </>
   );
 }

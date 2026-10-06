@@ -1,3 +1,4 @@
+import { createElement } from 'react';
 import type { Reference } from '@portfolio/data/domain/types';
 import type { AchadosTranslator, FieldsTranslator, NavTranslator } from '@/i18n/compat-support';
 import type { BreadcrumbItem } from '../../navigation/breadcrumbs';
@@ -7,6 +8,9 @@ import { pushEntry } from './push-entry';
 import { formatDate } from '../../content/format-date';
 import { stateLabel } from './state-label';
 import { typeSpecificEntries } from './type-specific-entries';
+import { Icon } from '../../primitives/icon';
+import { findingVisualTitle } from '@/i18n/finding-visual-title';
+import { getFindingTypeLabel } from '../../content/content-feed/get-finding-type-label';
 
 type FindingDetailViewDataOptions = {
   item: Reference;
@@ -30,9 +34,13 @@ export function getFindingDetailViewData(props: FindingDetailViewDataOptions) {
 
   const authors = joinDefined([props.item.authors, props.item.organizations]);
 
+  const typeLabel = getFindingTypeLabel({ findingType: props.item.type, t: props.t });
+
+  const title = findingVisualTitle({ title: props.item.title, typeLabel });
+
   const breadcrumbTrail: BreadcrumbItem[] = [
     { label: props.tNav('achados'), href: '/findings' },
-    { label: props.item.title },
+    { label: title, leadingIcon: createElement(Icon, { name: 'search', size: 15 }) },
   ];
 
   const cycleEntries: DetailEntry[] = [];

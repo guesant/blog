@@ -30,6 +30,7 @@ export function FindingDetailHeader(props: FindingDetailHeaderProps) {
     <PageHeader
       title={title}
       titleAdornment={<Icon name="search" size={24} />}
+      titleAdornmentInline
       breadcrumbs={props.breadcrumbTrail}
       description={props.item.description}
       actions={

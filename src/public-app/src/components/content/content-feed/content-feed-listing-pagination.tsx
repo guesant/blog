@@ -10,7 +10,6 @@ type ContentFeedListingPaginationProps = Pick<
   | 'previousLabel'
   | 'nextLabel'
   | 'pageInputLabel'
-  | 'pageOfLabel'
   | 'onPageChange'
 >;
 
@@ -27,7 +26,6 @@ export function ContentFeedListingPagination(props: ContentFeedListingPagination
       previousLabel={props.previousLabel}
       nextLabel={props.nextLabel}
       pageInputLabel={props.pageInputLabel}
-      pageOfLabel={props.pageOfLabel}
       onPageChange={props.onPageChange}
     />
   );

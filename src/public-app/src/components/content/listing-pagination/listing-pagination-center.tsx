@@ -15,7 +15,6 @@ export function ListingPaginationCenter(props: ListingPaginationCenterProps) {
         value={props.page}
         label={props.pageInputLabel}
         pageCount={props.pageCount}
-        pageOfLabel={props.pageOfLabel}
         onChange={props.onNavigate}
       />
     </ListingPaginationCenterFrame>

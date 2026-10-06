@@ -17,6 +17,7 @@ import {
 import type { CaseStudy, Experiment, Project } from '@portfolio/data/domain/types';
 import { collectionQuery } from './content-data-collection-query';
 import { feedQuery } from './content-data-feed-query';
+import { homeFeedQuery } from './content-data-home-feed-query';
 import { collectionRouteLoaders } from './content-data-primary-collection-route-loaders';
 import { resumePdfUrls } from './content-data-resume-pdf-urls';
 import type { RouteLoadContext, RouteLoader } from './content-data-route-loader';
@@ -26,7 +27,7 @@ export const primaryRouteLoaders: Record<string, RouteLoader> = {
   '/': async ({ locale, search }, context?: RouteLoadContext) => {
     const [content, feed] = await Promise.all([
       getHomePageContent(locale, context?.shell),
-      getFeedPage(locale, feedQuery(search)),
+      getFeedPage(locale, homeFeedQuery(search)),
     ]);
 
     return {

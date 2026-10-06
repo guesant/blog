@@ -24,7 +24,7 @@ export function SiteShell(props: SiteShellProps) {
         {t('skipToContent')}
       </SkipToContentLinkFrame>
       <SiteFeatureFlagsProvider value={site.featureFlags}>
-        <SiteNavigationProvider value={site.navigation}>
+        <SiteNavigationProvider value={site.navigation} visibility={site.visibility}>
           <SiteShellFrame profile={profile} site={site} availability={availability}>
             {children}
           </SiteShellFrame>

@@ -42,6 +42,5 @@ export type ContentFeedPaginationViewProps = Pick<
   | 'previousLabel'
   | 'nextLabel'
   | 'pageInputLabel'
-  | 'pageOfLabel'
   | 'onPageChange'
 >;

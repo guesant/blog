@@ -5,7 +5,6 @@ export type ListingPaginationProps = {
   previousLabel: string;
   nextLabel: string;
   pageInputLabel: string;
-  pageOfLabel: string;
   onPageChange: (page: number) => void | Promise<unknown>;
 };
 

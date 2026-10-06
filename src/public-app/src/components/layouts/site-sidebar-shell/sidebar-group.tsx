@@ -2,7 +2,7 @@
 
 import { SidebarGroupFrame } from '../../ui';
 import type { NavigationItem, SiteText } from '@portfolio/data/domain/types';
-import { visibleRoute } from './visible-route';
+import { visibleRoute } from '../../navigation/visible-route';
 import { SidebarNavItem } from './sidebar-nav-item';
 
 type SidebarGroupProps = {

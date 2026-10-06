@@ -27,7 +27,6 @@ export function buildContentFeedPaginationViewProps(
     previousLabel: runtime.translations.previousLabel,
     nextLabel: runtime.translations.nextLabel,
     pageInputLabel: runtime.translations.pageInputLabel,
-    pageOfLabel: runtime.translations.pageOfLabel,
     onPageChange: (value) =>
       runtime.router.push(runtime.actions.pageHref(value), { resetScroll: false }),
   };

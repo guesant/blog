@@ -6,6 +6,7 @@ import { recordList } from './public-site-source-list';
 import { publicCollectionMeta } from './public-site-source-public-collection-meta';
 import { normalizeLocale } from './public-site-source-normalize-locale';
 import { PUBLIC_CONTENT_PAGE_SIZE } from '../public-content-page-size';
+import { fallbackValue } from './public-site-source-fallback';
 import type { ContentCollectionMeta, ContentCollectionQuery } from './public-site-source-support';
 import type { PublicFeedItem } from '../domain/types';
 
@@ -24,7 +25,7 @@ export async function getFeedPage(
     query: {
       locale,
       page: query.page,
-      per_page: PUBLIC_CONTENT_PAGE_SIZE,
+      per_page: fallbackValue(query.perPage, PUBLIC_CONTENT_PAGE_SIZE),
       sort: query.sort,
       q: query.q,
       type: query.type,

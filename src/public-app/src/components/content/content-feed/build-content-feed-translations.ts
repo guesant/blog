@@ -26,7 +26,6 @@ const pageLabelKeys = {
   previousLabel: 'previous',
   nextLabel: 'next',
   pageInputLabel: 'pageInput',
-  pageOfLabel: 'pageOf',
 } as const;
 
 export function buildContentFeedTranslations(props: BuildContentFeedTranslationsProps) {

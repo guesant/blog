@@ -22,7 +22,6 @@ type ContentFeedListingResultsProps = Pick<
   | 'previousLabel'
   | 'nextLabel'
   | 'pageInputLabel'
-  | 'pageOfLabel'
   | 'onPageChange'
   | 'showPagination'
 >;

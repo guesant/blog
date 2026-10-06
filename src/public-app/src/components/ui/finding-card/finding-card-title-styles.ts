@@ -26,17 +26,16 @@ export const findingCardTitleStyles = {
 
 export const findingCardTitleWithLeadingIconStyles = {
   ...titleBaseStyles,
-  display: 'grid',
-  gridTemplateColumns: 'auto minmax(0, 1fr)',
-  columnGap: 'var(--site-space-2)',
-  WebkitBoxOrient: 'vertical',
-  WebkitLineClamp: 2,
+  display: 'block',
+  '& > svg': {
+    display: 'inline-block',
+    marginInlineEnd: 'var(--site-space-2)',
+    verticalAlign: 'middle',
+  },
   '& a': {
     ...titleLinkStyles,
-    display: '-webkit-box',
-    WebkitBoxOrient: 'vertical',
-    WebkitLineClamp: 2,
-    overflow: 'hidden',
-    textOverflow: 'ellipsis',
+    display: 'inline',
+    overflowWrap: 'anywhere',
+    whiteSpace: 'normal',
   },
 };

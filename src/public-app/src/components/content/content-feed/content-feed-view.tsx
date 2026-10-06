@@ -38,7 +38,6 @@ export type ContentFeedViewProps = {
   previousLabel: string;
   nextLabel: string;
   pageInputLabel: string;
-  pageOfLabel: string;
   onPageChange: (page: number) => void;
   beforeExplore?: ReactNode;
 };

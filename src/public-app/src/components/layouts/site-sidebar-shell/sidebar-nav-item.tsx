@@ -2,7 +2,7 @@
 
 import { SidebarSubnavigationFrame } from '../../ui';
 import type { NavigationItem, SiteText } from '@portfolio/data/domain/types';
-import { visibleRoute } from './visible-route';
+import { visibleRoute } from '../../navigation/visible-route';
 import { SidebarLink } from './sidebar-link';
 import { SidebarNavChild } from './sidebar-nav-child';
 import { ConditionalContent } from '../../primitives/conditional-content';

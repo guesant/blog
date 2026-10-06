@@ -22,7 +22,6 @@ export type ContentFeedListingProps = Pick<
   | 'previousLabel'
   | 'nextLabel'
   | 'pageInputLabel'
-  | 'pageOfLabel'
   | 'onPageChange'
   | 'showPagination'
   | 'beforeExplore'

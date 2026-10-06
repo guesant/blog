@@ -9,6 +9,7 @@ export type PageHeaderFrameProps = {
   variant: PageHeaderVariant;
   breadcrumbs?: ReactNode;
   titleAdornment?: ReactNode;
+  titleAdornmentInline?: boolean;
   title: string;
   description?: ReactNode;
   meta?: string;

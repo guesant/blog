@@ -12,13 +12,13 @@ const routeVisibilityKeys: Record<string, keyof NonNullable<SiteText['visibility
   license: 'license',
   portfolio: 'portfolio',
   resume: 'resume',
-  writing: 'writing',
   topics: 'topics',
   collections: 'collections',
   snippets: 'snippets',
+  writing: 'writing',
 };
 
-export function visibleRoute(route: string, site: SiteText) {
+export function visibleRoute(route: string, site: Pick<SiteText, 'visibility'>): boolean {
   const visibilityKey = routeVisibilityKeys[routeSegment(route)];
 
   return visibilityKey ? (site.visibility?.[visibilityKey] ?? true) : true;

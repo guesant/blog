@@ -1,1 +1,1 @@
-export const PUBLIC_CONTENT_PAGE_SIZE = 15;
+export const PUBLIC_CONTENT_PAGE_SIZE = 10;

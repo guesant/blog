@@ -6,7 +6,7 @@ export const FindingSectionFrame = createSemanticSxComponent<ComponentProps<type
   BaseComponent,
   {
     display: 'grid',
-    gap: 'var(--site-page-section-gap)',
+    gap: 'var(--site-page-content-offset)',
     borderRadius: 0,
     backgroundColor: 'var(--site-surface)',
   },

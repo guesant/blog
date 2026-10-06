@@ -18,5 +18,6 @@ export function ContentDateLabel(props: ContentDateLabelProps) {
 const dateLabelStyles = {
   display: 'inline-flex',
   alignItems: 'center',
-  gap: 'var(--site-space-1)',
+  gap: 'var(--site-space-2-5)',
+  lineHeight: 'var(--site-leading-icon)',
 };

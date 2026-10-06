@@ -1,14 +1,13 @@
 import type { FeedCardProps } from './feed-card-types';
-import { getFeedCardCategoryLabel } from './feed-card-category-label';
+import { findingVisualTitle } from '@/i18n/finding-visual-title';
+import { getFindingTypeLabel } from './get-finding-type-label';
 
 export function getFeedCardTitle(props: FeedCardProps) {
   if (props.entry.kind !== 'achado') {
     return props.entry.title;
   }
 
-  const category = props.entry.findingType
-    ? getFeedCardCategoryLabel({ entry: props.entry, t: props.t })
-    : undefined;
+  const category = getFindingTypeLabel({ findingType: props.entry.findingType, t: props.t });
 
-  return category ? `[${category}] | ${props.entry.title}` : props.entry.title;
+  return findingVisualTitle({ title: props.entry.title, typeLabel: category });
 }

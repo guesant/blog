@@ -7,6 +7,9 @@ import type { Reference } from '@portfolio/data/domain/types';
 import type { AchadosTranslator } from '@/i18n/compat-support';
 import { PageHeader } from '../../content/page-header';
 import { FindingDetailMetadata } from './finding-detail-metadata';
+import { Icon } from '../../primitives/icon';
+import { findingVisualTitle } from '@/i18n/finding-visual-title';
+import { getFindingTypeLabel } from '../../content/content-feed/get-finding-type-label';
 
 type FindingDetailHeaderProps = {
   item: Reference;
@@ -19,9 +22,14 @@ type FindingDetailHeaderProps = {
 export function FindingDetailHeader(props: FindingDetailHeaderProps) {
   const actionsVisible = useContentActionsVisibility();
 
+  const typeLabel = getFindingTypeLabel({ findingType: props.item.type, t: props.t });
+
+  const title = findingVisualTitle({ title: props.item.title, typeLabel });
+
   return (
     <PageHeader
-      title={props.item.title}
+      title={title}
+      titleAdornment={<Icon name="search" size={24} />}
       breadcrumbs={props.breadcrumbTrail}
       description={props.item.description}
       actions={

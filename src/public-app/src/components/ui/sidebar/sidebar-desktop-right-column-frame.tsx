@@ -6,6 +6,7 @@ export type SidebarDesktopRightColumnFrameProps = { children: ReactNode };
 export function SidebarDesktopRightColumnFrame(props: SidebarDesktopRightColumnFrameProps) {
   return (
     <Box
+      data-navigation-sidebar
       sx={{
         display: { xs: 'none', md: 'block' },
         borderLeft: 'var(--site-border-width) solid',

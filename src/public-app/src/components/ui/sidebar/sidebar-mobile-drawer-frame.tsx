@@ -17,7 +17,13 @@ export function SidebarMobileDrawerFrame(props: SidebarMobileDrawerFrameProps) {
       anchor="right"
       open={props.open}
       onClose={props.onClose}
-      slotProps={{ paper: { sx: paperStyles } }}
+      slotProps={{
+        root: {
+          className: 'navigation-sidebar-drawer',
+          sx: { zIndex: 'var(--site-z-navigation-sidebar)' },
+        },
+        paper: { sx: paperStyles },
+      }}
     >
       {props.children}
     </Drawer>

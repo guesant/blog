@@ -1,3 +1,3 @@
 export function contentFeedPageSize(): number {
-  return 15;
+  return 10;
 }

@@ -17,5 +17,9 @@ const styles = {
 };
 
 export function SidebarMobileTopbarFrame(props: SidebarMobileTopbarFrameProps) {
-  return <Box sx={styles}>{props.children}</Box>;
+  return (
+    <Box data-navigation-sidebar sx={styles}>
+      {props.children}
+    </Box>
+  );
 }

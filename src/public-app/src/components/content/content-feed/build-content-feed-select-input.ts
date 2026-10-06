@@ -16,7 +16,6 @@ export function buildContentFeedSelectInput(
     kind: state.kind,
     topic: state.topic,
     type: state.type,
-    sort: state.sort,
     writingsCount: props.feedItems.filter((item) => item.kind === 'post').length,
     findingsCount: props.feedItems.filter((item) => item.kind === 'achado').length,
     collectionsCount: props.feedItems.filter((item) => item.kind === 'colecao').length,
@@ -25,7 +24,6 @@ export function buildContentFeedSelectInput(
     onKindChange: state.setKind,
     onTopicChange: state.setTopic,
     onTypeChange: state.setType,
-    onSortChange: state.setSort,
     contentLabel: translations.contentLabel,
     writingLabel: translations.writingLabel,
     findingsLabel: translations.findingsLabel,
@@ -33,9 +31,5 @@ export function buildContentFeedSelectInput(
     topicLabel: translations.topicLabel,
     typeLabel: translations.typeLabel,
     typeMessage: (value) => translations.tPages(`types.${value}`),
-    sortLabel: translations.sortLabel,
-    newestLabel: translations.newestLabel,
-    oldestLabel: translations.oldestLabel,
-    alphabeticalLabel: translations.alphabeticalLabel,
   };
 }

@@ -9,7 +9,7 @@ type EditorialFeedItemFrameProps = {
 const frameStyles = {
   display: 'flex',
   flexDirection: 'column',
-  gap: 'var(--site-space-4)',
+  gap: 'var(--site-page-section-gap)',
   border: 0,
   borderRadius: 0,
   backgroundColor: 'transparent',

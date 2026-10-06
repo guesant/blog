@@ -10,6 +10,7 @@
   --site-space-0-5: 0.1rem;
   --site-space-1: 0.2rem;
   --site-space-2: 0.4rem;
+  --site-space-2-5: 0.5rem;
   --site-space-3: 0.6rem;
   --site-space-4: 0.8rem;
   --site-space-5: 1rem;
@@ -159,6 +160,7 @@
   --site-z-offcanvas: 1040;
   --site-z-skip: 1080;
   --site-z-navigation-overlay: 2200;
+  --site-z-navigation-sidebar: calc(var(--site-z-navigation-overlay) + 1);
   --site-z-navigation-progress: 2300;
 
   --site-surface: var(--mui-palette-background-default, light-dark(#ffffff, #17181c));

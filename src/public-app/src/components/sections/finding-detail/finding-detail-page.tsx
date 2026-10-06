@@ -42,7 +42,11 @@ export function FindingDetailPage(props: FindingDetailPageProps) {
       <FindingReviewCycleSection entries={viewData.cycleEntries} t={t} />
       <FindingNotesSection item={props.item} t={t} />
       <FindingFactsSection entries={viewData.details} t={t} />
-      <FindingReferenceLinksSection item={props.item} t={t} />
+      <FindingReferenceLinksSection
+        item={props.item}
+        showDivider={viewData.cycleEntries.length > 0}
+        t={t}
+      />
       <ConnectionsSection relations={props.item.relations} />
     </FindingDetailPageFrame>
   );

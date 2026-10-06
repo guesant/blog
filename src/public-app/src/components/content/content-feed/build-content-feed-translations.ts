@@ -17,10 +17,6 @@ const navLabelKeys = {
 
 const pageLabelKeys = {
   typeLabel: 'typeFilterLabel',
-  sortLabel: 'sortBy',
-  newestLabel: 'newest',
-  oldestLabel: 'oldest',
-  alphabeticalLabel: 'alphabetical',
   searchLabel: 'searchPlaceholder',
   applyLabel: 'apply',
   clearLabel: 'clearFilters',

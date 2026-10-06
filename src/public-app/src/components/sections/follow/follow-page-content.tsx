@@ -33,19 +33,14 @@ export function FollowPageContent(props: FollowPageContentProps) {
         breadcrumbs={[{ label: tNav('follow') }]}
         variant="showcase"
       />
-      {hasCurrentSection ? (
-        <FollowCurrentSection title={page.sectionTitle} />
-      ) : null}
+      {hasCurrentSection ? <FollowCurrentSection title={page.sectionTitle} /> : null}
       <CollectionListing
         items={entries}
         getKey={(entry) => entry.key}
         renderListItem={renderFollowEntryCard}
       />
       {hasFutureSection ? (
-        <FollowFutureSection
-          entries={futureEntries}
-          title={page.futureTitle}
-        />
+        <FollowFutureSection entries={futureEntries} title={page.futureTitle} />
       ) : null}
     </>
   );

@@ -34,7 +34,7 @@ export function FollowPageContent(props: FollowPageContentProps) {
         variant="showcase"
       />
       {hasCurrentSection ? (
-        <FollowCurrentSection label={page.sectionLabel} title={page.sectionTitle} />
+        <FollowCurrentSection title={page.sectionTitle} />
       ) : null}
       <CollectionListing
         items={entries}
@@ -44,7 +44,6 @@ export function FollowPageContent(props: FollowPageContentProps) {
       {hasFutureSection ? (
         <FollowFutureSection
           entries={futureEntries}
-          label={page.futureLabel}
           title={page.futureTitle}
         />
       ) : null}

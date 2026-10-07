@@ -1,6 +1,6 @@
 import { BreadcrumbsFrame } from '../../ui/semantic/BreadcrumbsFrame';
 import { useLocale, useTranslations } from '@/i18n/compat';
-import { localizedPath } from '../../../i18n/navigation';
+import { Link as LocaleLink } from '../../../i18n/navigation';
 import { Icon } from '../../primitives/icon';
 import type { BreadcrumbsProps } from './types';
 import { BreadcrumbTrailItem } from './breadcrumb-trail-item';
@@ -16,8 +16,9 @@ export function Breadcrumbs(props: BreadcrumbsProps) {
   const breadcrumbs = (
     <BreadcrumbsFrame aria-label={t('home')} separator="/">
       <BreadcrumbHomeButton
-        component="a"
-        href={localizedPath('/', locale)}
+        component={LocaleLink}
+        href="/"
+        locale={locale}
 
         startIcon={<Icon name="home" size={15} />}
       >

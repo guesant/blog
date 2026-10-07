@@ -6,6 +6,7 @@ type SidebarRouter = ReturnType<typeof useRouter>;
 type SidebarLocaleChangeProps = {
   router: SidebarRouter;
   pathname: string;
+  search: string;
 };
 
 export function handleSidebarLocaleChange(
@@ -14,7 +15,7 @@ export function handleSidebarLocaleChange(
   value: string | null,
 ) {
   if (value) {
-    props.router.push(props.pathname, {
+    props.router.push(`${props.pathname}${props.search}`, {
       locale: value as 'en' | 'pt-BR',
       resetScroll: false,
     });

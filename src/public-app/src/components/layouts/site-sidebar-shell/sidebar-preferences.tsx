@@ -2,6 +2,7 @@
 
 import { SidebarToggleGroup } from '../../ui';
 import { useRouter } from '@/i18n/compat';
+import { useLocation } from '@tanstack/react-router';
 import type { SidebarTranslator } from '@/i18n/compat-support';
 import { routing } from '../../../i18n/routing';
 import { SidebarThemeButton } from './sidebar-theme-button';
@@ -20,13 +21,15 @@ export function SidebarPreferences(props: SidebarPreferencesProps) {
 
   const router = useRouter();
 
+  const search = useLocation({ select: (location) => location.searchStr });
+
   return (
     <SidebarSection label={t('preferences')}>
       <SidebarToggleGroup
         exclusive
         size="small"
         value={locale}
-        onChange={handleSidebarLocaleChange.bind(null, { router, pathname })}
+        onChange={handleSidebarLocaleChange.bind(null, { router, pathname, search })}
         aria-label={t('language')}
       >
         {routing.locales.map((item) => (

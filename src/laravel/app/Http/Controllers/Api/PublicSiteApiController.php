@@ -17,6 +17,7 @@ use App\Application\PublicSite\GetPublicSiteChromeQueryHandler;
 use App\Application\PublicSite\ListPublicContentQuery;
 use App\Application\PublicSite\ListPublicContentQueryHandler;
 use App\Content\Locale;
+use App\Content\PublicFeedCache;
 use App\Content\PublicSiteChromeCache;
 use App\Http\Controllers\Controller;
 use App\Http\Responses\PublicContentDetailResponseDto;
@@ -75,32 +76,48 @@ class PublicSiteApiController extends Controller
         ListPublicContentQueryHandler $handler,
         PublicContentResponseFactory $presenter,
         PublicResourceReader $resources,
+        PublicFeedCache $cache,
     ): JsonResponse {
         $locale = Locale::normalize($request->query('locale'));
         $perPage = min(max((int) $request->query('per_page', 50), 1), 100);
+        $page = max($request->integer('page', 1), 1);
+        $sort = $this->sort($request->query('sort'));
+        $search = $this->queryString($request->query('q'));
+        $type = $this->queryString($request->query('type'));
+        $topic = $this->queryString($request->query('topic'));
         $kind = $this->feedKind($request->query('kind'));
-        $items = $handler->handle(new ListPublicContentQuery(
-            collection: 'feed',
-            locale: $locale,
-            perPage: $perPage,
-            sort: $this->sort($request->query('sort')),
-            featured: false,
-            page: $request->integer('page', 1),
-            search: $this->queryString($request->query('q')),
-            type: $this->queryString($request->query('type')),
-            topic: $this->queryString($request->query('topic')),
-            kind: $kind,
-        ));
 
-        $data = $items->page->getCollection()
-            ->map(fn ($item) => $presenter->feedItem($item, $locale))
-            ->values();
-        $facets = $kind === 'achado' ? $resources->facetOptions($locale) : null;
+        $payload = $cache->rememberArray(
+            'api',
+            compact('locale', 'perPage', 'page', 'sort', 'search', 'type', 'topic', 'kind'),
+            (int) config('portfolio.public_feed_cache_ttl_seconds', 60),
+            function () use ($handler, $presenter, $resources, $locale, $perPage, $page, $sort, $search, $type, $topic, $kind): array {
+                $items = $handler->handle(new ListPublicContentQuery(
+                    collection: 'feed',
+                    locale: $locale,
+                    perPage: $perPage,
+                    sort: $sort,
+                    featured: false,
+                    page: $page,
+                    search: $search,
+                    type: $type,
+                    topic: $topic,
+                    kind: $kind,
+                ));
 
-        return response()->json(PublicContentListResponseDto::fromPage(
-            $data->all(),
-            PublicListMetaDto::fromPage($items->page, $locale, $facets),
-        )->toArray())->header('Cache-Control', 'public, max-age=60, stale-while-revalidate=300');
+                $data = $items->page->getCollection()
+                    ->map(fn ($item) => $presenter->feedItem($item, $locale))
+                    ->values();
+                $facets = $kind === 'achado' ? $resources->facetOptions($locale) : null;
+
+                return PublicContentListResponseDto::fromPage(
+                    $data->all(),
+                    PublicListMetaDto::fromPage($items->page, $locale, $facets),
+                )->toArray();
+            },
+        );
+
+        return response()->json($payload)->header('Cache-Control', 'public, max-age=60, stale-while-revalidate=300');
     }
 
     /** @response array{data: list<array<string, mixed>>, meta: array<string, mixed>} */

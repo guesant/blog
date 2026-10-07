@@ -11,6 +11,7 @@ use App\Application\PublicSite\ListPublicContentQueryHandler;
 use App\Application\PublicSite\ListPublicFindingsQuery;
 use App\Application\PublicSite\ListPublicFindingsQueryHandler;
 use App\Content\Locale;
+use App\Content\PublicFeedCache;
 use App\Http\Responses\ApiErrorCode;
 use App\Http\Responses\ApiErrorResponse;
 use App\Http\Responses\PublicContentResponseFactory;
@@ -28,6 +29,7 @@ class PublicMetadataController extends Controller
         private readonly PublicContentResponseFactory $contentPresenter,
         private readonly ListPublicFindingsQueryHandler $findings,
         private readonly PublicFindingResponseFactory $findingPresenter,
+        private readonly PublicFeedCache $feedCache,
     ) {}
 
     public function robots(): Response
@@ -115,29 +117,50 @@ class PublicMetadataController extends Controller
     public function feed(string $locale, string $format): Response
     {
         $locale = Locale::normalize($locale);
-        $items = Cache::remember("public-metadata:feed:{$locale}:{$format}", 300, fn (): array => $this->feedItems($locale));
 
         if ($format === 'json') {
-            return response()->json([
-                'version' => 'https://jsonfeed.org/version/1.1',
-                'title' => $this->chrome->handle(new GetPublicSiteChromeQuery($locale))->profile['name'] ?? 'Portfolio',
-                'home_page_url' => $this->absolute(Locale::path('/', $locale)),
-                'feed_url' => $this->absolute(Locale::path('/feed.json', $locale)),
-                'language' => $locale,
-                'items' => collect($items)->map(fn (array $item) => array_filter([
-                    'id' => $item['url'],
-                    'url' => $item['url'],
-                    'title' => $item['title'],
-                    'summary' => $item['summary'],
-                    'date_published' => $item['date']?->format(DATE_ATOM),
-                ], fn ($value) => $value !== null))->values(),
-            ], 200, [
+            $payload = $this->feedCache->rememberArray(
+                'metadata-json',
+                ['locale' => $locale],
+                (int) config('portfolio.public_metadata_feed_cache_ttl_seconds', 300),
+                function () use ($locale): array {
+                    $items = $this->feedItems($locale);
+
+                    return [
+                        'version' => 'https://jsonfeed.org/version/1.1',
+                        'title' => $this->chrome->handle(new GetPublicSiteChromeQuery($locale))->profile['name'] ?? 'Portfolio',
+                        'home_page_url' => $this->absolute(Locale::path('/', $locale)),
+                        'feed_url' => $this->absolute(Locale::path('/feed.json', $locale)),
+                        'language' => $locale,
+                        'items' => collect($items)->map(fn (array $item) => array_filter([
+                            'id' => $item['url'],
+                            'url' => $item['url'],
+                            'title' => $item['title'],
+                            'summary' => $item['summary'],
+                            'date_published' => $item['date']?->format(DATE_ATOM),
+                        ], fn ($value) => $value !== null))->values()->all(),
+                    ];
+                },
+            );
+
+            return response()->json($payload, 200, [
                 'Content-Type' => 'application/feed+json; charset=UTF-8',
                 'Cache-Control' => 'public, max-age=300',
             ]);
         }
 
-        return response($format === 'atom' ? $this->atom($locale, $items) : $this->rss($locale, $items), 200, [
+        $body = $this->feedCache->rememberString(
+            'metadata-'.$format,
+            ['locale' => $locale],
+            (int) config('portfolio.public_metadata_feed_cache_ttl_seconds', 300),
+            function () use ($locale, $format): string {
+                $items = $this->feedItems($locale);
+
+                return $format === 'atom' ? $this->atom($locale, $items) : $this->rss($locale, $items);
+            },
+        );
+
+        return response($body, 200, [
             'Content-Type' => $format === 'atom' ? 'application/atom+xml; charset=UTF-8' : 'application/rss+xml; charset=UTF-8',
             'Cache-Control' => 'public, max-age=300',
         ]);

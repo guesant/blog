@@ -5,6 +5,7 @@ namespace Tests\Feature\Api;
 use App\Application\PublicSite\GetPublicPageQueryResult;
 use App\Application\PublicSite\GetPublicSiteChromeQueryHandler;
 use App\Content\EditorialRevisionPublisher;
+use App\Content\PublicFeedCache;
 use App\Content\PublicSiteChromeCache;
 use App\Events\PublicSiteContentChanged;
 use App\Http\Responses\PublicPageResponseDto;
@@ -637,15 +638,47 @@ class PublicSiteApiTest extends TestCase
     {
         Queue::fake();
         $cache = app(PublicSiteChromeCache::class);
+        $feedCache = app(PublicFeedCache::class);
         $cache->put('en', ['site' => []]);
         $cache->put('pt-BR', ['site' => []]);
+        $feedCache->rememberArray('test', ['locale' => 'en'], 300, static fn (): array => ['cached' => true]);
+        $feedKey = $feedCache->key('test', ['locale' => 'en']);
+        $this->assertTrue(Cache::has($feedKey));
 
         PublicSiteContentChanged::dispatch();
-        (new InvalidatePublicSiteChrome)->handle(new PublicSiteContentChanged, $cache);
+        (new InvalidatePublicSiteChrome)->handle(new PublicSiteContentChanged, $cache, $feedCache);
 
         $this->assertFalse(Cache::has($cache->key('en')));
         $this->assertFalse(Cache::has($cache->key('pt-BR')));
+        $this->assertNotSame($feedKey, $feedCache->key('test', ['locale' => 'en']));
         Queue::assertPushed(WarmPublicSiteChrome::class, 2);
+    }
+
+    public function test_feed_response_is_cached_by_query_and_invalidated_by_generation(): void
+    {
+        Cache::flush();
+        $this->createResource('cached-feed-finding');
+
+        $this->getJson('/api/v1/content/feed?locale=en&per_page=1&kind=achado')->assertOk();
+
+        $cache = app(PublicFeedCache::class);
+        $parameters = [
+            'locale' => 'en',
+            'perPage' => 1,
+            'page' => 1,
+            'sort' => null,
+            'search' => null,
+            'type' => null,
+            'topic' => null,
+            'kind' => 'achado',
+        ];
+        $key = $cache->key('api', $parameters);
+
+        $this->assertTrue(Cache::has($key));
+
+        $cache->invalidate();
+
+        $this->assertNotSame($key, $cache->key('api', $parameters));
     }
 
     public function test_content_collection_returns_a_paginated_page(): void

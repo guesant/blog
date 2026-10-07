@@ -1469,10 +1469,11 @@
                         }
                     },
                     {
-                        "name": "kind",
+                        "name": "page",
                         "in": "query",
                         "schema": {
-                            "type": "string"
+                            "type": "integer",
+                            "default": 1
                         }
                     },
                     {
@@ -1480,14 +1481,6 @@
                         "in": "query",
                         "schema": {
                             "type": "string"
-                        }
-                    },
-                    {
-                        "name": "page",
-                        "in": "query",
-                        "schema": {
-                            "type": "integer",
-                            "default": 1
                         }
                     },
                     {
@@ -1506,6 +1499,13 @@
                     },
                     {
                         "name": "topic",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "kind",
                         "in": "query",
                         "schema": {
                             "type": "string"

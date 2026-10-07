@@ -517,12 +517,12 @@ export type PublicSiteApiFeedData = {
     path?: never;
     query?: {
         locale?: string;
-        kind?: string;
-        sort?: string;
         page?: number;
+        sort?: string;
         q?: string;
         type?: string;
         topic?: string;
+        kind?: string;
     };
     url: '/content/feed';
 };

@@ -2,15 +2,10 @@
 
 namespace App\Models;
 
-use App\Content\Graph\GraphNode;
-use App\Content\Graph\InteractsWithGraph;
-use App\Content\Locale;
-use App\Content\PublicIdentifier;
 use App\Models\Concerns\AssignsNextOrder;
 use App\Models\Concerns\Auditable;
 use App\Models\Concerns\HasPublicId;
 use App\Models\Concerns\UsesCurrentRevision;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -21,9 +16,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @method static \Illuminate\Database\Eloquent\Builder published()
  * @method CaseStudyRevisionTranslation|null translation(?string $locale = null)
  */
-class CaseStudy extends Model implements GraphNode
+class CaseStudy extends Model
 {
-    use AssignsNextOrder, Auditable, HasFactory, HasPublicId, InteractsWithGraph, UsesCurrentRevision;
+    use AssignsNextOrder, Auditable, HasFactory, HasPublicId, UsesCurrentRevision;
 
     protected $fillable = ['slug', 'public_id', 'hidden', 'order', 'href', 'external', 'visual', 'nda', 'published_at', 'show_history'];
 
@@ -51,28 +46,5 @@ class CaseStudy extends Model implements GraphNode
     public function featuredInPages(): BelongsToMany
     {
         return $this->belongsToMany(Page::class, 'page_featured_case')->withPivot('order');
-    }
-
-    public static function graphKind(): string
-    {
-        return 'case-study';
-    }
-
-    public static function graphNodesQuery(): Builder
-    {
-        return static::query()
-            ->published()
-            ->whereHas('publishedRevision', static fn ($query) => $query->where('nda', false))
-            ->with('publishedTranslations');
-    }
-
-    public function graphLabel(string $locale): string
-    {
-        return $this->translation($locale)->title ?? $this->slug;
-    }
-
-    public function graphUrl(string $locale): ?string
-    {
-        return Locale::url('/cases/'.PublicIdentifier::key($this), $locale);
     }
 }

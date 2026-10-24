@@ -2,15 +2,10 @@
 
 namespace App\Models;
 
-use App\Content\Graph\GraphNode;
-use App\Content\Graph\InteractsWithGraph;
-use App\Content\Locale;
-use App\Content\PublicIdentifier;
 use App\Models\Concerns\AssignsNextOrder;
 use App\Models\Concerns\Auditable;
 use App\Models\Concerns\HasPublicId;
 use App\Models\Concerns\UsesCurrentRevision;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -18,9 +13,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 /**
  * @method SnippetRevisionTranslation|null translation(?string $locale = null)
  */
-class Snippet extends Model implements GraphNode
+class Snippet extends Model
 {
-    use AssignsNextOrder, Auditable, HasFactory, HasPublicId, InteractsWithGraph, UsesCurrentRevision;
+    use AssignsNextOrder, Auditable, HasFactory, HasPublicId, UsesCurrentRevision;
 
     protected $fillable = ['slug', 'public_id', 'hidden', 'show_history', 'order', 'published_at'];
 
@@ -61,25 +56,5 @@ class Snippet extends Model implements GraphNode
         }
 
         return $tree;
-    }
-
-    public static function graphKind(): string
-    {
-        return 'snippet';
-    }
-
-    public static function graphNodesQuery(): Builder
-    {
-        return static::query()->published()->with('publishedTranslations');
-    }
-
-    public function graphLabel(string $locale): string
-    {
-        return $this->translation($locale)->title ?? $this->slug;
-    }
-
-    public function graphUrl(string $locale): ?string
-    {
-        return Locale::url('/snippets/'.PublicIdentifier::key($this), $locale);
     }
 }

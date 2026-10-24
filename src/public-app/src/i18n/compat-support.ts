@@ -41,18 +41,8 @@ type TranslationKey<Namespace extends TranslationNamespace> = MessageKeyPaths<
   Extract<MessageAtPath<typeof en, Namespace>, object>
 >;
 
-type AchadosTranslationKey =
-  | TranslationKey<'Pages.achados'>
-  | `types.${string}`
-  | `ratings.${string}`
-  | `consumptionStates.${string}`
-  | `sourcePreview.kinds.${string}`
-  | `sourcePreview.fields.${string}`;
-
 // jscpd:ignore-start
 export type HomeTranslator = NamespaceTranslator<'Home'>;
-
-export type AchadosTranslator = NamespaceTranslator<'Pages.achados', AchadosTranslationKey>;
 
 export type NavTranslationKey = TranslationKey<'Nav'>;
 
@@ -61,6 +51,8 @@ export type NavTranslator = NamespaceTranslator<'Nav'>;
 export type SidebarTranslator = NamespaceTranslator<'Sidebar'>;
 
 export type CommonTranslator = NamespaceTranslator<'Common'>;
+
+export type FeedTranslator = NamespaceTranslator<'Pages.feed'>;
 
 export type ExternalProfilesTranslator = NamespaceTranslator<'ExternalProfiles'>;
 
@@ -80,13 +72,9 @@ export type ContactTranslator = NamespaceTranslator<'Pages.contact'>;
 
 export type ResumeTranslator = NamespaceTranslator<'Pages.resume'>;
 
-export type FieldsTranslator = NamespaceTranslator<'Pages.achados.fields'>;
-
-export type SourcePreviewTranslationKey = Extract<AchadosTranslationKey, `sourcePreview.${string}`>;
 // jscpd:ignore-end
 
-type NamespaceTranslationKey<Namespace extends TranslationNamespace> =
-  Namespace extends 'Pages.achados' ? AchadosTranslationKey : TranslationKey<Namespace>;
+type NamespaceTranslationKey<Namespace extends TranslationNamespace> = TranslationKey<Namespace>;
 
 export type NamespaceTranslator<
   Namespace extends TranslationNamespace,

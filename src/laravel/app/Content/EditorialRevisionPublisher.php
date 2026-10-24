@@ -11,7 +11,6 @@ use Illuminate\Support\Str;
 class EditorialRevisionPublisher
 {
     private const DEFINITIONS = [
-        'resources' => ['revision' => 'resource_revisions', 'revision_key' => 'resource_id', 'translation' => 'resource_revision_translations', 'columns' => ['slug', 'public_id', 'hidden', 'order', 'type', 'language_id', 'published_date_iso', 'found_date_iso', 'consumption_state', 'rating', 'editorial_state', 'visibility', 'featured', 'featured_order'], 'translation_columns' => ['title', 'alternative_title', 'description', 'personal_note', 'reason_found']],
         'pages' => ['revision' => 'page_revisions', 'revision_key' => 'page_id', 'translation' => 'page_revision_translations', 'columns' => ['slug', 'hidden'], 'page_fields' => true],
         'profiles' => ['revision' => 'profile_revisions', 'revision_key' => 'profile_id', 'translation' => 'profile_revision_translations', 'columns' => ['name', 'birth_date', 'hidden'], 'profile_fields' => true],
         'resumes' => ['revision' => 'resume_revisions', 'revision_key' => 'resume_id', 'translation' => 'resume_revision_translations', 'columns' => ['hidden'], 'resume_fields' => true],
@@ -39,9 +38,6 @@ class EditorialRevisionPublisher
         DB::transaction(function () use ($record, $definition, $translations, $recordData): void {
             $revisionId = $this->createRevision($record, $definition, $recordData);
             $this->createTranslations($record, $definition, $revisionId, $translations);
-            if ($record->getTable() === 'resources') {
-                $this->resourceRelations($record, $revisionId, $recordData);
-            }
             $this->updatePointers($record, $revisionId);
         });
 
@@ -141,28 +137,6 @@ class EditorialRevisionPublisher
                         'updated_at' => now(),
                     ]);
                 }
-            }
-        });
-
-        PublicSiteContentChanged::dispatch();
-    }
-
-    public function syncReferenceCollectionRelations(Model $record): void
-    {
-        if ($record->getTable() !== 'reference_collections' || $record->current_revision_id === null) {
-            return;
-        }
-
-        DB::transaction(function () use ($record): void {
-            $revisionId = $record->current_revision_id;
-            DB::table('reference_collection_revision_resources')->where('reference_collection_revision_id', $revisionId)->delete();
-            foreach ($record->resources()->get() as $resource) {
-                DB::table('reference_collection_revision_resources')->insert([
-                    'reference_collection_revision_id' => $revisionId,
-                    'resource_id' => $resource->id,
-                    'note' => $resource->pivot->note,
-                    'sort_order' => $resource->pivot->order ?? 0,
-                ]);
             }
         });
 
@@ -357,91 +331,9 @@ class EditorialRevisionPublisher
         }
     }
 
-    private function resourceRelations(Model $record, int $revisionId, array $recordData): void
-    {
-        foreach ($record->links()->get() as $link) {
-            DB::table('resource_revision_links')->insert([
-                'resource_revision_id' => $revisionId,
-                'url' => $link->url,
-                'label' => $link->label,
-                'platform' => $link->platform,
-                'purpose' => $link->purpose,
-                'is_primary' => $link->is_primary,
-                'is_free' => $link->is_free,
-                'language_id' => $link->language_id,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
-        }
-
-        foreach ($record->identifiers()->get() as $identifier) {
-            DB::table('resource_revision_identifiers')->insert([
-                'resource_revision_id' => $revisionId,
-                'kind' => $identifier->kind,
-                'value' => $identifier->value,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
-        }
-
-        foreach ($record->topics()->get() as $topic) {
-            DB::table('resource_revision_topics')->insert([
-                'resource_revision_id' => $revisionId,
-                'topic_id' => $topic->id,
-                'role' => $topic->pivot->role,
-            ]);
-        }
-
-        foreach ($record->referenceCollections()->get() as $collection) {
-            DB::table('resource_revision_collections')->insert([
-                'resource_revision_id' => $revisionId,
-                'reference_collection_id' => $collection->id,
-                'note' => $collection->pivot->note,
-                'sort_order' => $collection->pivot->order,
-            ]);
-        }
-
-        foreach ([
-            ['relation' => 'authorTopics', 'kind' => 'person'],
-            ['relation' => 'publisherTopics', 'kind' => 'organization'],
-        ] as $attribution) {
-            foreach ($record->{$attribution['relation']}()->with('translations')->get() as $order => $topic) {
-                DB::table('resource_revision_attributions')->insert([
-                    'resource_revision_id' => $revisionId,
-                    'kind' => $attribution['kind'],
-                    'name' => $topic->translation('en')?->name ?? $topic->slug,
-                    'sort_order' => $order,
-                ]);
-            }
-        }
-
-        $details = is_array($recordData['type_details'] ?? null) ? $recordData['type_details'] : [];
-        if ($details !== []) {
-            DB::table('resource_revision_type_details')->insert([
-                'resource_revision_id' => $revisionId,
-                'channel' => $details['channel'] ?? null,
-                'conference' => $details['conference'] ?? null,
-                'duration' => $details['duration'] ?? null,
-                'edition' => $details['edition'] ?? null,
-                'isbn' => $details['isbn'] ?? null,
-                'language' => $details['language'] ?? null,
-                'license' => $details['license'] ?? null,
-                'name' => $details['name'] ?? null,
-                'organization' => $details['org'] ?? ($details['organization'] ?? null),
-                'pages' => $details['pages'] ?? null,
-                'publisher' => $details['publisher'] ?? null,
-                'year' => $details['year'] ?? null,
-                'youtube_id' => $details['youtubeId'] ?? ($details['youtube_id'] ?? null),
-            ]);
-        }
-    }
-
     private function updatePointers(Model $record, int $revisionId): void
     {
         $isPublic = ! $record->getAttribute('hidden');
-        if ($record->getTable() === 'resources') {
-            $isPublic = $isPublic && $record->getAttribute('visibility') === 'public';
-        }
         if (in_array($record->getTable(), ['case_studies', 'projects'], true)) {
             $isPublic = $isPublic && ! $record->getAttribute('nda');
         }

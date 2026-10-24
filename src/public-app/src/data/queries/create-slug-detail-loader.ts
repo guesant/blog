@@ -6,7 +6,6 @@ type SlugDetailKind = Extract<
   RouteData['kind'],
   | 'case-detail'
   | 'collection-detail'
-  | 'finding-detail'
   | 'project-detail'
   | 'experiment-detail'
   | 'snippet-detail'

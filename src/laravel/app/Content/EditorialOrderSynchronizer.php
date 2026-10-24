@@ -15,7 +15,6 @@ final class EditorialOrderSynchronizer
         'nav_items' => 'nav_item_revisions',
         'projects' => 'project_revisions',
         'reference_collections' => 'reference_collection_revisions',
-        'resources' => 'resource_revisions',
         'snippets' => 'snippet_revisions',
         'technologies' => 'technology_revisions',
         'topics' => 'topic_revisions',

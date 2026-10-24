@@ -40,10 +40,6 @@ final class GetPublicContentQueryHandler
             return null;
         }
 
-        $resources = $query->collection === 'collections'
-            ? $this->collections->resourcesPaginated($item, $query->perPage, $query->page)
-            : null;
-
-        return new GetPublicContentQueryResult($item, $resources);
+        return new GetPublicContentQueryResult($item);
     }
 }

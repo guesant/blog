@@ -14,7 +14,6 @@ export async function getNavigationAvailability(locale?: string): Promise<Naviga
     cases: navigationVisibilityFlag(visibility?.cases),
     projects: navigationVisibilityFlag(visibility?.portfolio),
     writing: navigationVisibilityFlag(visibility?.writing),
-    achados: navigationVisibilityFlag(visibility?.findings),
     contact,
   };
 }

@@ -2,7 +2,7 @@
 
 import { CollectionListing } from '../collection-listing';
 import type { FeedEntry, FeedQuickFilter } from './types';
-import type { AchadosTranslator } from '@/i18n/compat-support';
+import type { FeedTranslator } from '@/i18n/compat-support';
 import { EditorialFeedItemDivider } from '../../ui';
 import { FeedCard } from './feed-card';
 import { useSiteFeatureFlags } from '../use-site-feature-flags';
@@ -10,7 +10,7 @@ import { useSiteFeatureFlags } from '../use-site-feature-flags';
 type ContentFeedResultsProps = {
   entries: FeedEntry[];
   locale: string;
-  t: AchadosTranslator;
+  t: FeedTranslator;
   onQuickFilter: (filter: FeedQuickFilter) => void;
 };
 

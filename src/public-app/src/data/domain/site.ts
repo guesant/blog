@@ -61,7 +61,6 @@ export type SiteVisibility = {
   follow: boolean;
   feed: boolean;
   writing: boolean;
-  findings: boolean;
   topics: boolean;
   collections: boolean;
   snippets: boolean;

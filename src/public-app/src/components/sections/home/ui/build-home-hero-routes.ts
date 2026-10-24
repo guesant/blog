@@ -4,7 +4,7 @@ import { homeVisibilityEnabled } from './home-visibility-enabled';
 
 export type HomeHeroRoute = {
   href: string;
-  icon: 'user' | 'mail' | 'graduation-cap' | 'search';
+  icon: 'user' | 'mail' | 'graduation-cap';
   label: string;
   visible: boolean;
 };
@@ -33,12 +33,6 @@ export function buildHomeHeroRoutes(
       icon: 'graduation-cap',
       label: tNav('resume'),
       visible: homeVisibilityEnabled(props.site.visibility, 'resume'),
-    },
-    {
-      href: '/findings',
-      icon: 'search',
-      label: tNav('achados'),
-      visible: homeVisibilityEnabled(props.site.visibility, 'findings'),
     },
   ];
 }

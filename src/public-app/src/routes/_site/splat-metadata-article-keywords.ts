@@ -1,15 +1,12 @@
 import type { RouteData } from '../../data/queries';
 
-type ArticleItem = Extract<
-  RouteData,
-  { kind: 'case-detail' | 'finding-detail' | 'writing-detail' }
->['item'];
+type ArticleItem = Extract<RouteData, { kind: 'case-detail' | 'writing-detail' }>['item'];
 
 export function articleMetadataKeywords(item: ArticleItem): string[] {
-  return [
-    ...('type' in item ? [item.type] : []),
-    ...('topics' in item ? item.topics : []),
-    ...('tags' in item ? item.tags : []),
-    ...('technologies' in item ? item.technologies : []),
-  ].filter((keyword): keyword is string => Boolean(keyword));
+  const keywordFields = new Set(['type', 'tags', 'technologies']);
+
+  return Object.entries(item)
+    .filter(([key]) => keywordFields.has(key))
+    .flatMap(([, value]) => (Array.isArray(value) ? value : [value]))
+    .filter((value): value is string => typeof value === 'string' && value.length > 0);
 }

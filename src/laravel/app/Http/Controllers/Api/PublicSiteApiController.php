@@ -30,7 +30,6 @@ use App\Http\Responses\PublicPageResponseDto;
 use App\Http\Responses\PublicResumeResponseFactory;
 use App\Http\Responses\PublicSiteChromeResponseDto;
 use App\OpenGraph\OgImageUrlGenerator;
-use App\ReadModel\PublicSite\Content\PublicResourceReader;
 use App\Support\PublicMediaUrl;
 use Dedoc\Scramble\Attributes\Response as ScrambleResponse;
 use Illuminate\Http\JsonResponse;
@@ -75,7 +74,6 @@ class PublicSiteApiController extends Controller
         Request $request,
         ListPublicContentQueryHandler $handler,
         PublicContentResponseFactory $presenter,
-        PublicResourceReader $resources,
         PublicFeedCache $cache,
     ): JsonResponse {
         $locale = Locale::normalize($request->query('locale'));
@@ -91,7 +89,7 @@ class PublicSiteApiController extends Controller
             'api',
             compact('locale', 'perPage', 'page', 'sort', 'search', 'type', 'topic', 'kind'),
             (int) config('portfolio.public_feed_cache_ttl_seconds', 60),
-            function () use ($handler, $presenter, $resources, $locale, $perPage, $page, $sort, $search, $type, $topic, $kind): array {
+            function () use ($handler, $presenter, $locale, $perPage, $page, $sort, $search, $type, $topic, $kind): array {
                 $items = $handler->handle(new ListPublicContentQuery(
                     collection: 'feed',
                     locale: $locale,
@@ -108,11 +106,10 @@ class PublicSiteApiController extends Controller
                 $data = $items->page->getCollection()
                     ->map(fn ($item) => $presenter->feedItem($item, $locale))
                     ->values();
-                $facets = $kind === 'achado' ? $resources->facetOptions($locale) : null;
 
                 return PublicContentListResponseDto::fromPage(
                     $data->all(),
-                    PublicListMetaDto::fromPage($items->page, $locale, $facets),
+                    PublicListMetaDto::fromPage($items->page, $locale),
                 )->toArray();
             },
         );
@@ -175,13 +172,9 @@ class PublicSiteApiController extends Controller
         abort_unless(in_array($collection, self::DOCUMENT_COLLECTIONS, true), 404);
 
         $locale = Locale::normalize($request->query('locale'));
-        $perPage = min(max((int) $request->query('per_page', 100), 1), 100);
-        $page = max(1, $request->integer('page', 1));
         $result = $handler->handle(new GetPublicContentQuery(
             collection: $collection,
             identifier: $slug,
-            perPage: $perPage,
-            page: $page,
             locale: $locale,
         ));
 
@@ -191,7 +184,6 @@ class PublicSiteApiController extends Controller
             $collection,
             $result->item,
             $locale,
-            $result->resources,
         );
 
         return response()->json(PublicContentDetailResponseDto::fromArray($item)->toArray())
@@ -294,7 +286,6 @@ class PublicSiteApiController extends Controller
      *     follow: bool,
      *     feed: bool,
      *     writing: bool,
-     *     findings: bool,
      *     topics: bool,
      *     collections: bool,
      *     snippets: bool,
@@ -423,6 +414,6 @@ class PublicSiteApiController extends Controller
     {
         $kind = $this->queryString($value);
 
-        return $kind === null || in_array($kind, ['post', 'achado', 'colecao'], true) ? $kind : null;
+        return $kind === null || in_array($kind, ['post', 'colecao'], true) ? $kind : null;
     }
 }

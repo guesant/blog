@@ -2,15 +2,10 @@
 
 namespace App\Models;
 
-use App\Content\Graph\GraphNode;
-use App\Content\Graph\InteractsWithGraph;
-use App\Content\Locale;
-use App\Content\PublicIdentifier;
 use App\Models\Concerns\AssignsNextOrder;
 use App\Models\Concerns\Auditable;
 use App\Models\Concerns\HasPublicId;
 use App\Models\Concerns\UsesCurrentRevision;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -19,9 +14,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @method TechnologyRevisionTranslation|null translation(?string $locale = null)
  * @method static \Illuminate\Database\Eloquent\Builder published()
  */
-class Technology extends Model implements GraphNode
+class Technology extends Model
 {
-    use AssignsNextOrder, Auditable, HasFactory, HasPublicId, InteractsWithGraph, UsesCurrentRevision;
+    use AssignsNextOrder, Auditable, HasFactory, HasPublicId, UsesCurrentRevision;
 
     protected $fillable = ['slug', 'public_id', 'order', 'code', 'logo', 'hidden'];
 
@@ -57,25 +52,5 @@ class Technology extends Model implements GraphNode
     public function resumeSkills(): BelongsToMany
     {
         return $this->belongsToMany(ResumeSkill::class, 'resume_skill_technology');
-    }
-
-    public static function graphKind(): string
-    {
-        return 'technology';
-    }
-
-    public static function graphNodesQuery(): Builder
-    {
-        return static::query()->published()->with('publishedTranslations');
-    }
-
-    public function graphLabel(string $locale): string
-    {
-        return $this->translation($locale)->name ?? $this->slug;
-    }
-
-    public function graphUrl(string $locale): ?string
-    {
-        return Locale::url('/technologies/'.PublicIdentifier::key($this), $locale);
     }
 }

@@ -1,22 +1,20 @@
-import type { AchadosTranslator, CommonTranslator, NavTranslator } from '@/i18n/compat-support';
+import type { CommonTranslator, FeedTranslator, NavTranslator } from '@/i18n/compat-support';
 import { translateLabelMap } from './translate-label-map';
 
 type BuildContentFeedTranslationsProps = {
   tCommon: CommonTranslator;
   tNav: NavTranslator;
-  tPages: AchadosTranslator;
+  tPages: FeedTranslator;
 };
 
 const navLabelKeys = {
   contentLabel: 'content',
   writingLabel: 'writing',
-  findingsLabel: 'achados',
   collectionsLabel: 'collections',
   topicLabel: 'topics',
 } as const;
 
 const pageLabelKeys = {
-  typeLabel: 'typeFilterLabel',
   searchLabel: 'searchPlaceholder',
   applyLabel: 'apply',
   clearLabel: 'clearFilters',
@@ -35,6 +33,6 @@ export function buildContentFeedTranslations(props: BuildContentFeedTranslations
     tPages: props.tPages,
     ...translateLabelMap(props.tNav, navLabelKeys),
     ...translateLabelMap(props.tPages, pageLabelKeys),
-    emptyLabel: props.tCommon('emptyAchados'),
+    emptyLabel: props.tCommon('emptyWriting'),
   };
 }

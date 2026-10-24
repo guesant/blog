@@ -1,9 +1,7 @@
-import type { FindingFacets } from '@portfolio/data/services';
-
 type BuildFeedTopicsProps = {
-  findingFacets?: FindingFacets;
+  topics?: Array<{ name: string; slug?: string }>;
 };
 
 export function buildFeedTopics(props: BuildFeedTopicsProps) {
-  return props.findingFacets?.topics ?? [];
+  return props.topics ?? [];
 }

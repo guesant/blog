@@ -2,8 +2,6 @@ export * from './public-site-source-support';
 
 export { normalizeLocale } from './public-site-source-normalize-locale';
 
-export { fetchFinding } from './public-site-source-fetch-finding';
-
 export { getContentCollectionPage } from './public-site-source-get-content-collection';
 
 export { getPublicHomeGallery } from './public-site-source-get-home-gallery';

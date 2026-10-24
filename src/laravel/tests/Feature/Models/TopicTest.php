@@ -2,7 +2,6 @@
 
 namespace Tests\Feature\Models;
 
-use App\Models\Resource;
 use App\Models\Topic;
 use App\Models\TopicRevisionTranslation;
 use App\Models\Writing;
@@ -37,16 +36,5 @@ class TopicTest extends TestCase
 
         $this->assertCount(1, $topic->writings);
         $this->assertInstanceOf(Writing::class, $topic->writings->first());
-    }
-
-    public function test_topic_has_findings_with_role_through_topicables(): void
-    {
-        $topic = Topic::factory()->create();
-        $resource = Resource::factory()->create();
-        $topic->findings()->attach($resource, ['role' => 'primary']);
-
-        $this->assertCount(1, $topic->findings);
-        $this->assertInstanceOf(Resource::class, $topic->findings->first());
-        $this->assertEquals('primary', $topic->findings->first()->pivot->role);
     }
 }

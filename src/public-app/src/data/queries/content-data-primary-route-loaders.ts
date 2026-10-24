@@ -1,6 +1,5 @@
 import {
   getAboutPageCopy,
-  getAchadosPageCopy,
   getCollectionPage,
   getContactPageCopy,
   getHomePageContent,
@@ -16,7 +15,6 @@ import {
 } from '@portfolio/data/services';
 import type { CaseStudy, Experiment, Project } from '@portfolio/data/domain/types';
 import { collectionQuery } from './content-data-collection-query';
-import { feedQuery } from './content-data-feed-query';
 import { homeFeedQuery } from './content-data-home-feed-query';
 import { collectionRouteLoaders } from './content-data-primary-collection-route-loaders';
 import { resumePdfUrls } from './content-data-resume-pdf-urls';
@@ -78,20 +76,6 @@ export const primaryRouteLoaders: Record<string, RouteLoader> = {
     kind: 'credits',
     content: await getCreditsPageContent(locale, collectionQuery(search)),
   }),
-  '/findings': async ({ locale, search }) => {
-    const [page, feed] = await Promise.all([
-      getAchadosPageCopy(locale),
-      getFeedPage(locale, { ...feedQuery(search), kind: 'achado' }),
-    ]);
-
-    return {
-      kind: 'findings',
-      page,
-      request: { locale, search },
-      feedItems: feed.items,
-      feedPagination: feed.meta,
-    };
-  },
   '/license': async ({ locale }, context?: RouteLoadContext) => ({
     kind: 'license',
     page: await getLicensePageCopy(locale),

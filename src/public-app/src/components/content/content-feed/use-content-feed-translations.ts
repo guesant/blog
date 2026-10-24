@@ -8,7 +8,7 @@ export function useContentFeedTranslations() {
 
   const tCommon = useTranslations('Common');
 
-  const tPages = useTranslations('Pages.achados');
+  const tPages = useTranslations('Pages.feed');
 
   return buildContentFeedTranslations({ tNav, tCommon, tPages });
 }

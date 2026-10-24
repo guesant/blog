@@ -23,11 +23,6 @@
       <code><![CDATA[$query]]></code>
     </UnusedParam>
   </file>
-  <file src="app/Application/PublicSite/GetPublicFindingQueryHandler.php">
-    <PossiblyUnusedMethod>
-      <code><![CDATA[__construct]]></code>
-    </PossiblyUnusedMethod>
-  </file>
   <file src="app/Application/PublicSite/GetPublicHomeGalleryQueryHandler.php">
     <PossiblyUnusedMethod>
       <code><![CDATA[__construct]]></code>
@@ -66,11 +61,6 @@
       <code><![CDATA[$collection]]></code>
     </PossiblyUnusedProperty>
   </file>
-  <file src="app/Application/PublicSite/ListPublicFindingsQueryHandler.php">
-    <PossiblyUnusedMethod>
-      <code><![CDATA[__construct]]></code>
-    </PossiblyUnusedMethod>
-  </file>
   <file src="app/Content/Concerns/RelatesByTechnology.php">
     <InvalidDocblock>
       <code><![CDATA[Builder<*>]]></code>
@@ -85,38 +75,10 @@
       <code><![CDATA[Builder<*>]]></code>
     </InvalidDocblock>
   </file>
-  <file src="app/Content/Graph/GraphNode.php">
-    <PossiblyUnusedMethod>
-      <code><![CDATA[graphMeta]]></code>
-    </PossiblyUnusedMethod>
-  </file>
-  <file src="app/Content/Graph/InteractsWithGraph.php">
-    <PossiblyUnusedMethod>
-      <code><![CDATA[graphId]]></code>
-      <code><![CDATA[graphId]]></code>
-      <code><![CDATA[graphId]]></code>
-      <code><![CDATA[graphId]]></code>
-      <code><![CDATA[graphId]]></code>
-      <code><![CDATA[graphId]]></code>
-      <code><![CDATA[graphId]]></code>
-      <code><![CDATA[graphId]]></code>
-      <code><![CDATA[graphId]]></code>
-    </PossiblyUnusedMethod>
-  </file>
   <file src="app/Content/Graph/NodeRegistry.php">
     <PossiblyUnusedMethod>
       <code><![CDATA[classFor]]></code>
     </PossiblyUnusedMethod>
-  </file>
-  <file src="app/Content/Graph/RelationResolver.php">
-    <NoInterfaceProperties>
-      <code><![CDATA[$target->slug]]></code>
-    </NoInterfaceProperties>
-    <UndefinedMagicPropertyFetch>
-      <code><![CDATA[$relationType->key]]></code>
-      <code><![CDATA[$relationType->key]]></code>
-      <code><![CDATA[$relationType->key]]></code>
-    </UndefinedMagicPropertyFetch>
   </file>
   <file src="app/Content/Locale.php">
     <PossiblyUnusedMethod>
@@ -126,8 +88,6 @@
   </file>
   <file src="app/Filament/Concerns/SyncsTranslations.php">
     <PossiblyUnusedMethod>
-      <code><![CDATA[afterDelete]]></code>
-      <code><![CDATA[afterDelete]]></code>
       <code><![CDATA[afterDelete]]></code>
       <code><![CDATA[afterDelete]]></code>
       <code><![CDATA[afterDelete]]></code>
@@ -449,9 +409,6 @@
     <PossiblyUnusedMethod>
       <code><![CDATA[afterSave]]></code>
     </PossiblyUnusedMethod>
-    <UndefinedMagicPropertyFetch>
-      <code><![CDATA[$resource->pivot]]></code>
-    </UndefinedMagicPropertyFetch>
   </file>
   <file src="app/Filament/Resources/ReferenceCollections/ReferenceCollectionResource.php">
     <MissingTemplateParam>
@@ -477,27 +434,6 @@
   <file src="app/Filament/Resources/RelationTypes/RelationTypeResource.php">
     <MissingTemplateParam>
       <code><![CDATA[RelationTypeResource]]></code>
-    </MissingTemplateParam>
-  </file>
-  <file src="app/Filament/Resources/ResourceFindings/Pages/CreateResourceFinding.php">
-    <MissingTemplateParam>
-      <code><![CDATA[CreateResourceFinding]]></code>
-    </MissingTemplateParam>
-    <PossiblyUnusedMethod>
-      <code><![CDATA[afterCreate]]></code>
-    </PossiblyUnusedMethod>
-  </file>
-  <file src="app/Filament/Resources/ResourceFindings/Pages/EditResourceFinding.php">
-    <MissingTemplateParam>
-      <code><![CDATA[EditResourceFinding]]></code>
-    </MissingTemplateParam>
-    <PossiblyUnusedMethod>
-      <code><![CDATA[afterSave]]></code>
-    </PossiblyUnusedMethod>
-  </file>
-  <file src="app/Filament/Resources/ResourceFindings/ResourceFindingResource.php">
-    <MissingTemplateParam>
-      <code><![CDATA[ResourceFindingResource]]></code>
     </MissingTemplateParam>
   </file>
   <file src="app/Filament/Resources/Snippets/Pages/CreateSnippet.php">
@@ -583,11 +519,6 @@
     <MissingTemplateParam>
       <code><![CDATA[WritingResource]]></code>
     </MissingTemplateParam>
-  </file>
-  <file src="app/Http/Controllers/Api/FindingApiController.php">
-    <PossiblyUnusedMethod>
-      <code><![CDATA[show]]></code>
-    </PossiblyUnusedMethod>
   </file>
   <file src="app/Http/Controllers/Api/PublicSiteApiController.php">
     <InvalidOperand>
@@ -705,10 +636,6 @@
     <PossiblyUnusedMethod>
       <code><![CDATA[__construct]]></code>
     </PossiblyUnusedMethod>
-    <TypeDoesNotContainType>
-      <code><![CDATA[0]]></code>
-      <code><![CDATA[0]]></code>
-    </TypeDoesNotContainType>
     <UndefinedMagicPropertyFetch>
       <code><![CDATA[$translation?->body]]></code>
       <code><![CDATA[$translation?->body]]></code>
@@ -788,17 +715,6 @@
       <code><![CDATA[BelongsToMany<Technology, $this>]]></code>
     </MissingTemplateParam>
   </file>
-  <file src="app/Models/Language.php">
-    <InvalidReturnStatement>
-      <code><![CDATA[$this->hasMany(Resource::class)]]></code>
-    </InvalidReturnStatement>
-    <InvalidReturnType>
-      <code><![CDATA[HasMany<resource, $this>]]></code>
-    </InvalidReturnType>
-    <InvalidTemplateParam>
-      <code><![CDATA[HasMany<resource, $this>]]></code>
-    </InvalidTemplateParam>
-  </file>
   <file src="app/Models/LanguageRevision.php">
     <PossiblyUnusedMethod>
       <code><![CDATA[translation]]></code>
@@ -849,81 +765,6 @@
       <code><![CDATA[BelongsToMany<Page, $this>]]></code>
       <code><![CDATA[BelongsToMany<Technology, $this>]]></code>
     </MissingTemplateParam>
-  </file>
-  <file src="app/Models/ReferenceCollection.php">
-    <InvalidReturnStatement>
-      <code><![CDATA[$this->belongsToMany(Resource::class, 'reference_collection_item')
-            ->withPivot('note', 'order')
-            ->orderByPivot('order')]]></code>
-    </InvalidReturnStatement>
-    <InvalidReturnType>
-      <code><![CDATA[BelongsToMany<resource, $this>]]></code>
-    </InvalidReturnType>
-    <InvalidTemplateParam>
-      <code><![CDATA[BelongsToMany<resource, $this>]]></code>
-    </InvalidTemplateParam>
-    <MissingTemplateParam>
-      <code><![CDATA[BelongsToMany<resource, $this>]]></code>
-    </MissingTemplateParam>
-  </file>
-  <file src="app/Models/Resource.php">
-    <InvalidArgument>
-      <code><![CDATA['key']]></code>
-    </InvalidArgument>
-    <MissingTemplateParam>
-      <code><![CDATA[BelongsToMany<ReferenceCollection, $this>]]></code>
-      <code><![CDATA[BelongsToMany<Topic, $this>]]></code>
-      <code><![CDATA[BelongsToMany<Topic, $this>]]></code>
-      <code><![CDATA[BelongsToMany<Topic, $this>]]></code>
-      <code><![CDATA[MorphToMany<Topic, $this>]]></code>
-    </MissingTemplateParam>
-  </file>
-  <file src="app/Models/ResourceIdentifier.php">
-    <InvalidReturnStatement>
-      <code><![CDATA[$this->belongsTo(Resource::class)]]></code>
-    </InvalidReturnStatement>
-    <InvalidReturnType>
-      <code><![CDATA[BelongsTo<resource, $this>]]></code>
-    </InvalidReturnType>
-    <InvalidTemplateParam>
-      <code><![CDATA[BelongsTo<resource, $this>]]></code>
-    </InvalidTemplateParam>
-  </file>
-  <file src="app/Models/ResourceLink.php">
-    <InvalidReturnStatement>
-      <code><![CDATA[$this->belongsTo(Resource::class)]]></code>
-    </InvalidReturnStatement>
-    <InvalidReturnType>
-      <code><![CDATA[BelongsTo<resource, $this>]]></code>
-    </InvalidReturnType>
-    <InvalidTemplateParam>
-      <code><![CDATA[BelongsTo<resource, $this>]]></code>
-    </InvalidTemplateParam>
-  </file>
-  <file src="app/Models/ResourceRevision.php">
-    <PossiblyUnusedMethod>
-      <code><![CDATA[translation]]></code>
-    </PossiblyUnusedMethod>
-    <PublicModelAccessor>
-      <code><![CDATA[getAuthorsAttribute]]></code>
-      <code><![CDATA[getOrganizationsAttribute]]></code>
-      <code><![CDATA[getTypeDetailsAttribute]]></code>
-    </PublicModelAccessor>
-    <UndefinedMagicPropertyFetch>
-      <code><![CDATA[$details->channel]]></code>
-      <code><![CDATA[$details->conference]]></code>
-      <code><![CDATA[$details->duration]]></code>
-      <code><![CDATA[$details->edition]]></code>
-      <code><![CDATA[$details->isbn]]></code>
-      <code><![CDATA[$details->language]]></code>
-      <code><![CDATA[$details->license]]></code>
-      <code><![CDATA[$details->name]]></code>
-      <code><![CDATA[$details->organization]]></code>
-      <code><![CDATA[$details->pages]]></code>
-      <code><![CDATA[$details->publisher]]></code>
-      <code><![CDATA[$details->year]]></code>
-      <code><![CDATA[$details->youtube_id]]></code>
-    </UndefinedMagicPropertyFetch>
   </file>
   <file src="app/Models/Resume.php">
     <MissingTemplateParam>
@@ -978,18 +819,8 @@
     </MissingTemplateParam>
   </file>
   <file src="app/Models/Topic.php">
-    <InvalidReturnStatement>
-      <code><![CDATA[$this->morphedByMany(Resource::class, 'topicable')->withPivot('role')]]></code>
-    </InvalidReturnStatement>
-    <InvalidReturnType>
-      <code><![CDATA[MorphToMany<resource, $this>]]></code>
-    </InvalidReturnType>
-    <InvalidTemplateParam>
-      <code><![CDATA[MorphToMany<resource, $this>]]></code>
-    </InvalidTemplateParam>
     <MissingTemplateParam>
       <code><![CDATA[MorphToMany<Writing, $this>]]></code>
-      <code><![CDATA[MorphToMany<resource, $this>]]></code>
     </MissingTemplateParam>
   </file>
   <file src="app/Models/Writing.php">
@@ -1086,22 +917,11 @@
       <code><![CDATA[relatedExperiments]]></code>
     </PossiblyUnusedMethod>
   </file>
-  <file src="app/ReadModel/PublicSite/Content/PublicResourceReader.php">
-    <PossiblyUnusedMethod>
-      <code><![CDATA[buildFacetOptions]]></code>
-      <code><![CDATA[findBySlug]]></code>
-    </PossiblyUnusedMethod>
-  </file>
   <file src="app/ReadModel/PublicSite/Content/ReferenceCollectionReader.php">
     <PossiblyUnusedMethod>
       <code><![CDATA[findBySlug]]></code>
       <code><![CDATA[related]]></code>
     </PossiblyUnusedMethod>
-  </file>
-  <file src="app/ReadModel/PublicSite/Content/ResourceReader.php">
-    <UnusedClass>
-      <code><![CDATA[ResourceReader]]></code>
-    </UnusedClass>
   </file>
   <file src="app/ReadModel/PublicSite/Content/SnippetReader.php">
     <ParamNameMismatch>
@@ -1245,26 +1065,6 @@
       <code><![CDATA[ReferenceCollectionRevisionTranslationFactory]]></code>
     </UnusedClass>
   </file>
-  <file src="database/factories/ResourceFactory.php">
-    <UnusedClass>
-      <code><![CDATA[ResourceFactory]]></code>
-    </UnusedClass>
-  </file>
-  <file src="database/factories/ResourceIdentifierFactory.php">
-    <UnusedClass>
-      <code><![CDATA[ResourceIdentifierFactory]]></code>
-    </UnusedClass>
-  </file>
-  <file src="database/factories/ResourceLinkFactory.php">
-    <UnusedClass>
-      <code><![CDATA[ResourceLinkFactory]]></code>
-    </UnusedClass>
-  </file>
-  <file src="database/factories/ResourceRevisionTranslationFactory.php">
-    <UnusedClass>
-      <code><![CDATA[ResourceRevisionTranslationFactory]]></code>
-    </UnusedClass>
-  </file>
   <file src="database/factories/ResumeFactory.php">
     <UnusedClass>
       <code><![CDATA[ResumeFactory]]></code>
@@ -1374,6 +1174,11 @@
   <file src="app/Filament/Resources/SidebarGroups/Pages/EditSidebarGroup.php">
     <PossiblyUnusedMethod>
       <code><![CDATA[afterSave]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="app/Models/RelationType.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[translation]]></code>
     </PossiblyUnusedMethod>
   </file>
 </files>

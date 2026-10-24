@@ -1,24 +1,20 @@
 'use client';
 
-import type { Reference, Topic } from '@portfolio/data/domain/types';
-import { ReferenceGridPage } from '../../content/reference-grid-page';
+import type { Topic } from '@portfolio/data/domain/types';
+import { Box, Typography } from '../../ui';
 import type { ContentCollectionMeta } from '@portfolio/data/api/public-site-source-support';
 
 type TopicoDetailContentProps = {
   topic: Topic;
-  references: Reference[];
   pagination: ContentCollectionMeta;
 };
 
 export function TopicoDetailContent(props: TopicoDetailContentProps) {
-  const { topic, references } = props;
+  const { topic } = props;
 
   return (
-    <ReferenceGridPage
-      title={topic.name}
-      references={references}
-      pagination={props.pagination}
-      action={topic.url ?? `/topics/${topic.slug}`}
-    />
+    <Box>
+      <Typography variant="h1">{topic.name}</Typography>
+    </Box>
   );
 }

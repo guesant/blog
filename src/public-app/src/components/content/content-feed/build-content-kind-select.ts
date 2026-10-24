@@ -6,12 +6,10 @@ type BuildContentKindSelectProps = {
   availableKindCount: number;
   kind: string;
   writingsCount: number;
-  findingsCount: number;
   collectionsCount: number;
   label: string;
   onChange: (value: string) => void;
   writingLabel: string;
-  findingsLabel: string;
   collectionsLabel: string;
 };
 

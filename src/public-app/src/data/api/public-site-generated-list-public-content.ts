@@ -16,7 +16,7 @@ type ListPublicContentQuery = {
   q?: string;
   type?: string;
   topic?: string;
-  kind?: 'post' | 'achado' | 'colecao';
+  kind?: 'post' | 'colecao';
 };
 
 export type ListPublicContentData = {

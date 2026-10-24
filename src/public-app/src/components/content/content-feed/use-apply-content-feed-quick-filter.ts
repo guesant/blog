@@ -5,33 +5,22 @@ import type { ContentFeedActionProps } from './use-content-feed-actions.types';
 
 type UseApplyContentFeedQuickFilterProps = Pick<
   ContentFeedActionProps,
-  | 'action'
-  | 'fixedKind'
-  | 'kind'
-  | 'topic'
-  | 'type'
-  | 'pendingSearch'
-  | 'sort'
-  | 'router'
-  | 'setKind'
-  | 'setType'
+  'action' | 'fixedKind' | 'kind' | 'topic' | 'pendingSearch' | 'sort' | 'router' | 'setKind'
 >;
 
 export function useApplyContentFeedQuickFilter(props: UseApplyContentFeedQuickFilterProps) {
   return useCallback(
     (filter: FeedQuickFilter) => {
-      const { params, nextKind, nextType } = buildContentFeedQuery({
+      const { params, nextKind } = buildContentFeedQuery({
         fixedKind: props.fixedKind,
         kind: props.kind,
         topic: props.topic,
-        type: props.type,
         search: props.pendingSearch,
         sort: props.sort,
         filter,
       });
 
       props.setKind(nextKind);
-      props.setType(nextType);
 
       const href = `${props.action}${params.size ? `?${params.toString()}` : ''}`;
 

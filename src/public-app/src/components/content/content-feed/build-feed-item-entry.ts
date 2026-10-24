@@ -1,13 +1,8 @@
-import { buildFindingEntry } from './build-finding-entry';
 import { dateValue } from './date-value';
 import type { FeedEntry } from './types';
 import type { PublicFeedItem } from '@portfolio/data/domain/types';
 
 export function buildFeedItemEntry(item: PublicFeedItem): FeedEntry {
-  if (item.reference) {
-    return buildFindingEntry(item.reference);
-  }
-
   return {
     kind: item.kind,
     slug: item.slug,
@@ -16,9 +11,6 @@ export function buildFeedItemEntry(item: PublicFeedItem): FeedEntry {
     date: dateValue(item.date),
     readingTime: item.readingTime,
     topics: item.topics,
-    findingType: item.findingType,
-    links: item.links,
-    featured: item.featured,
     href: item.href,
   };
 }

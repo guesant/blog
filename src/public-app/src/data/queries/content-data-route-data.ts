@@ -9,7 +9,6 @@ import type {
   Profile,
   Project,
   ProjectsPageCopy,
-  Reference,
   ReferenceCollectionDetail,
   SiteText,
   PublicFeedItem,
@@ -25,7 +24,6 @@ import type {
   getResumePageContent,
 } from '@portfolio/data/services';
 import type { ContentCollectionMeta } from '../api/public-site-source-support';
-import type { RouteRequest } from './content-data-support';
 
 type ContentFeedRouteData = {
   page: PageIntroduction;
@@ -68,17 +66,6 @@ export type RouteData =
   | { kind: 'collection-detail'; collection: ReferenceCollectionDetail }
   | { kind: 'contact'; page: PageIntroduction; site: SiteText }
   | { kind: 'credits'; content: CreditsPageContent }
-  | ({
-      kind: 'findings';
-      request: Pick<RouteRequest, 'locale' | 'search'>;
-    } & ContentFeedRouteData)
-  | { kind: 'finding-detail'; item: Reference }
-  | {
-      kind: 'finding-type';
-      type: string;
-      references: Reference[];
-      pagination: ContentCollectionMeta;
-    }
   | { kind: 'license'; page: Awaited<ReturnType<typeof getLicensePageCopy>>; site: SiteText }
   | { kind: 'follow'; page: Awaited<ReturnType<typeof getFollowPageCopy>>; site: SiteText }
   | {
@@ -109,7 +96,6 @@ export type RouteData =
   | {
       kind: 'topic-detail';
       topic: Topic;
-      references: Reference[];
       pagination: ContentCollectionMeta;
     }
   | ({

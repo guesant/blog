@@ -147,7 +147,6 @@ final class PublicNavigationReader
             'projects.show' => '/projects',
             'cases.show' => '/cases',
             'writing.show' => '/writing',
-            'findings.show' => '/findings',
             'collections.show' => '/collections',
             'topics.show' => '/topics',
             'technologies.show' => '/technologies',

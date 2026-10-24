@@ -17,7 +17,6 @@ use App\OpenGraph\OgImageUrlGenerator;
 use App\Support\PublicMediaUrl;
 use Carbon\CarbonInterface;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 
 final class PublicContentResponseFactory
@@ -26,7 +25,6 @@ final class PublicContentResponseFactory
     private ?Collection $creditCategories = null;
 
     public function __construct(
-        private readonly PublicFindingResponseFactory $findings,
         private readonly OgImageUrlGenerator $ogImages,
         private readonly PublicMediaUrl $media,
     ) {}
@@ -35,7 +33,6 @@ final class PublicContentResponseFactory
     {
         return match ($item->kind) {
             'post' => $this->feedWriting($this->collectionItem('writing', $item->content, $locale)),
-            'achado' => $this->feedFinding($this->findings->summary($item->content, $locale)),
             'colecao' => $this->feedCollection($this->collectionItem('collections', $item->content, $locale)),
         };
     }
@@ -59,11 +56,10 @@ final class PublicContentResponseFactory
         string $collection,
         object $item,
         string $locale,
-        ?LengthAwarePaginator $resources,
     ): array {
         return match ($collection) {
             'cases' => $this->caseStudy($item, $locale),
-            'collections' => $this->collectionDetail($item, $locale, $resources),
+            'collections' => $this->collectionDetail($item, $locale),
             'experiments' => $this->experiment($item, $locale),
             'projects' => $this->project($item, $locale),
             'snippets' => $this->snippet($item, $locale),
@@ -113,7 +109,7 @@ final class PublicContentResponseFactory
             'url' => Locale::url('/snippets/'.$this->publicKey($snippet), $locale),
             'download_url' => Locale::url('/snippets/'.$this->publicKey($snippet).'/download', $locale),
             'files' => [],
-            'file_count' => $snippet->files_count ?? 0,
+            'file_count' => $snippet->files_count,
             'updated_at' => $this->publishedDate($snippet, 'updated_at', true),
         ];
     }
@@ -135,7 +131,6 @@ final class PublicContentResponseFactory
             ),
             'intro' => $translation?->intro,
             'published_at' => $this->publishedDate($collection, 'published_at'),
-            'resources_count' => $collection->resources_count ?? 0,
             'related' => null,
             'updated_at' => $this->publishedDate($collection, 'updated_at', true),
             'created_at' => $this->publishedDate($collection, 'created_at', true),
@@ -240,23 +235,6 @@ final class PublicContentResponseFactory
             'date' => $item['date'] ?? '',
             'reading_time' => $item['reading_time'] ?? null,
             'topics' => $item['topics'] ?? [],
-            'href' => $item['url'],
-        ];
-    }
-
-    private function feedFinding(array $item): array
-    {
-        return [
-            ...$item,
-            'kind' => 'achado',
-            'slug' => $item['slug'],
-            'title' => $item['title'] ?? $item['slug'],
-            'preview' => $item['personal_note'] ?: ($item['reason_found'] ?: ($item['description'] ?? '')),
-            'date' => $item['found_date'] ?: ($item['published_date'] ?? ''),
-            'finding_type' => $item['type'],
-            'featured' => $item['featured'],
-            'topics' => $item['topics'],
-            'links' => $item['links'],
             'href' => $item['url'],
         ];
     }
@@ -414,11 +392,8 @@ final class PublicContentResponseFactory
         return trim($text);
     }
 
-    private function collectionDetail(
-        ReferenceCollection $collection,
-        string $locale,
-        ?LengthAwarePaginator $resources,
-    ): array {
+    private function collectionDetail(ReferenceCollection $collection, string $locale): array
+    {
         $translation = $collection->translation($locale);
         $slug = (string) $this->publishedValue($collection, 'slug');
 
@@ -434,37 +409,8 @@ final class PublicContentResponseFactory
             ),
             'intro' => $this->media->rewrite($translation?->intro),
             'published_at' => $this->publishedDate($collection, 'published_at'),
-            'resources' => $resources?->getCollection()->map(function ($resource) use ($locale): array {
-                $resourceTranslation = $resource->translation($locale);
-                $resourceSlug = (string) $this->publishedValue($resource, 'slug');
-
-                return [
-                    'slug' => $resourceSlug,
-                    'url' => Locale::url('/findings/'.$this->publicKey($resource), $locale),
-                    'title' => $resourceTranslation?->title ?? $resourceSlug,
-                    'description' => $resourceTranslation?->description,
-                    'og_image_url' => $this->ogImages->generate(
-                        'article',
-                        $resourceTranslation?->title ?? $resourceSlug,
-                        $resourceTranslation?->description,
-                    ),
-                    'type' => $this->publishedValue($resource, 'type'),
-                    'rating' => $this->publishedValue($resource, 'rating'),
-                    'note' => $resource->pivot->note,
-                    'topics' => $resource->topics->map(fn ($topic) => [
-                        'slug' => $topic->slug,
-                        'name' => $topic->translation($locale)?->name ?? $topic->slug,
-                    ])->values(),
-                ];
-            })->values()->all() ?? [],
-            'resources_meta' => $resources === null ? null : [
-                'page' => $resources->currentPage(),
-                'per_page' => $resources->perPage(),
-                'total' => $resources->total(),
-                'last_page' => $resources->lastPage(),
-                'from' => $resources->firstItem(),
-                'to' => $resources->lastItem(),
-            ],
+            'resources' => [],
+            'resources_meta' => null,
             'related' => null,
             'updated_at' => $this->publishedDate($collection, 'updated_at', true),
             'created_at' => $this->publishedDate($collection, 'created_at', true),

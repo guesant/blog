@@ -2,8 +2,6 @@ export type * from './content';
 
 export type * from './resume';
 
-export type * from './refs-links';
-
 export type * from './refs-details';
 
 export type * from './site';

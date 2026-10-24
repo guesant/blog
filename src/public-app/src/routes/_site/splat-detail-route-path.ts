@@ -2,7 +2,6 @@ const detailRoutes: Record<string, string> = {
   cases: '/case-detail',
   colecoes: '/collection-detail',
   collections: '/collection-detail',
-  findings: '/finding-detail',
   projects: '/project-detail',
   snippets: '/snippet-detail',
   topics: '/topic-detail',

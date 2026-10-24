@@ -4,70 +4,6 @@ export type ClientOptions = {
     baseUrl: 'https://api.guesant.net/api/v1' | 'http://localhost:8001/api/v1' | (string & {});
 };
 
-export type FindingApiShowData = {
-    body?: never;
-    path: {
-        slug: string;
-    };
-    query?: {
-        locale?: string;
-    };
-    url: '/findings/{slug}';
-};
-
-export type FindingApiShowErrors = {
-    /**
-     * Unauthenticated
-     */
-    401: {
-        /**
-         * Error overview.
-         */
-        message: string;
-    };
-    /**
-     * Authorization error
-     */
-    403: {
-        /**
-         * Error overview.
-         */
-        message: string;
-    };
-    /**
-     * The requested finding was not found.
-     */
-    404: {
-        error: {
-            code: string;
-            message: string;
-            status: number;
-            details: string;
-        };
-    };
-    /**
-     * The service is temporarily unavailable.
-     */
-    503: {
-        error: {
-            code: string;
-            message: string;
-            status: number;
-            details: string;
-        };
-    };
-};
-
-export type FindingApiShowError = FindingApiShowErrors[keyof FindingApiShowErrors];
-
-export type FindingApiShowResponses = {
-    200: {
-        [key: string]: unknown;
-    };
-};
-
-export type FindingApiShowResponse = FindingApiShowResponses[keyof FindingApiShowResponses];
-
 export type PublicMediaData = {
     body?: never;
     path: {
@@ -255,7 +191,6 @@ export type PublicSiteApiChromeResponses = {
             follow: boolean;
             feed: boolean;
             writing: boolean;
-            findings: boolean;
             topics: boolean;
             collections: boolean;
             snippets: boolean;
@@ -657,7 +592,6 @@ export type PublicSiteApiDocumentData = {
     };
     query?: {
         locale?: string;
-        page?: number;
     };
     url: '/content/{collection}/{slug}';
 };

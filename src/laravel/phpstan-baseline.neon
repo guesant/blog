@@ -1,12 +1,6 @@
 parameters:
 	ignoreErrors:
 		-
-			message: '#^Parameter \#2 \$resources of class App\\Application\\PublicSite\\GetPublicContentQueryResult constructor expects Illuminate\\Pagination\\LengthAwarePaginator\|null, Illuminate\\Contracts\\Pagination\\LengthAwarePaginator\|null given\.$#'
-			identifier: argument.type
-			count: 1
-			path: app/Application/PublicSite/GetPublicContentQueryHandler.php
-
-		-
 			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$featuredCases\.$#'
 			identifier: property.notFound
 			count: 1
@@ -67,19 +61,25 @@ parameters:
 			path: app/Application/PublicSite/ListPublicContentQueryHandler.php
 
 		-
-			message: '#^Parameter \$page of class App\\Application\\PublicSite\\ListPublicFindingsQueryResult constructor expects Illuminate\\Pagination\\LengthAwarePaginator, Illuminate\\Contracts\\Pagination\\LengthAwarePaginator given\.$#'
-			identifier: argument.type
-			count: 1
-			path: app/Application/PublicSite/ListPublicFindingsQueryHandler.php
-
-		-
 			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$current_revision_id\.$#'
 			identifier: property.notFound
-			count: 3
+			count: 2
 			path: app/Content/EditorialRevisionPublisher.php
 
 		-
-			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:authorTopics\(\)\.$#'
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:selectedCases\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Content/EditorialRevisionPublisher.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:skills\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Content/EditorialRevisionPublisher.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:languages\(\)\.$#'
 			identifier: method.notFound
 			count: 1
 			path: app/Content/EditorialRevisionPublisher.php
@@ -101,90 +101,6 @@ parameters:
 			identifier: method.notFound
 			count: 1
 			path: app/Content/EditorialRevisionPublisher.php
-
-		-
-			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:identifiers\(\)\.$#'
-			identifier: method.notFound
-			count: 1
-			path: app/Content/EditorialRevisionPublisher.php
-
-		-
-			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:languages\(\)\.$#'
-			identifier: method.notFound
-			count: 1
-			path: app/Content/EditorialRevisionPublisher.php
-
-		-
-			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:links\(\)\.$#'
-			identifier: method.notFound
-			count: 1
-			path: app/Content/EditorialRevisionPublisher.php
-
-		-
-			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:publisherTopics\(\)\.$#'
-			identifier: method.notFound
-			count: 1
-			path: app/Content/EditorialRevisionPublisher.php
-
-		-
-			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:referenceCollections\(\)\.$#'
-			identifier: method.notFound
-			count: 1
-			path: app/Content/EditorialRevisionPublisher.php
-
-		-
-			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:resources\(\)\.$#'
-			identifier: method.notFound
-			count: 1
-			path: app/Content/EditorialRevisionPublisher.php
-
-		-
-			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:selectedCases\(\)\.$#'
-			identifier: method.notFound
-			count: 1
-			path: app/Content/EditorialRevisionPublisher.php
-
-		-
-			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:skills\(\)\.$#'
-			identifier: method.notFound
-			count: 1
-			path: app/Content/EditorialRevisionPublisher.php
-
-		-
-			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:topics\(\)\.$#'
-			identifier: method.notFound
-			count: 1
-			path: app/Content/EditorialRevisionPublisher.php
-
-		-
-			message: '#^Using nullsafe property access "\?\-\>name" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
-			identifier: nullsafe.neverNull
-			count: 1
-			path: app/Content/EditorialRevisionPublisher.php
-
-		-
-			message: '#^Access to an undefined property App\\Content\\Graph\\GraphNode\:\:\$slug\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Content/Graph/RelationResolver.php
-
-		-
-			message: '#^Access to an undefined property App\\Models\\RelationType\:\:\$key\.$#'
-			identifier: property.notFound
-			count: 4
-			path: app/Content/Graph/RelationResolver.php
-
-		-
-			message: '#^Access to an undefined property App\\Models\\RelationType\:\:\$symmetric\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Content/Graph/RelationResolver.php
-
-		-
-			message: '#^Access to an undefined property App\\Models\\Resource\:\:\$pivot\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Filament/Resources/ReferenceCollections/Pages/EditReferenceCollection.php
 
 		-
 			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:translation\(\)\.$#'
@@ -417,13 +333,13 @@ parameters:
 		-
 			message: '#^Using nullsafe property access "\?\-\>name" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
 			identifier: nullsafe.neverNull
-			count: 15
+			count: 14
 			path: app/Http/Responses/PublicContentResponseFactory.php
 
 		-
 			message: '#^Using nullsafe property access "\?\-\>title" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
 			identifier: nullsafe.neverNull
-			count: 13
+			count: 11
 			path: app/Http/Responses/PublicContentResponseFactory.php
 
 		-
@@ -499,18 +415,6 @@ parameters:
 			path: app/Http/Responses/PublicResumeResponseFactory.php
 
 		-
-			message: '#^Class App\\Models\\Resource referenced with incorrect case\: App\\Models\\resource\.$#'
-			identifier: class.nameCase
-			count: 1
-			path: app/Models/Language.php
-
-		-
-			message: '#^Method App\\Models\\Language\:\:resources\(\) should return Illuminate\\Database\\Eloquent\\Relations\\HasMany\<App\\Models\\Resource, \$this\(App\\Models\\Language\)\> but returns Illuminate\\Database\\Eloquent\\Relations\\HasMany\<App\\Models\\Resource, \$this\(App\\Models\\Language\)\>\.$#'
-			identifier: return.type
-			count: 1
-			path: app/Models/Language.php
-
-		-
 			message: '#^Method App\\Models\\LanguageRevision\:\:translation\(\) should return App\\Models\\LanguageRevisionTranslation\|null but returns Illuminate\\Database\\Eloquent\\Model\|null\.$#'
 			identifier: return.type
 			count: 1
@@ -529,126 +433,6 @@ parameters:
 			path: app/Models/ProfileRevision.php
 
 		-
-			message: '#^Class App\\Models\\Resource referenced with incorrect case\: App\\Models\\resource\.$#'
-			identifier: class.nameCase
-			count: 1
-			path: app/Models/ReferenceCollection.php
-
-		-
-			message: '#^Method App\\Models\\ReferenceCollection\:\:resources\(\) should return Illuminate\\Database\\Eloquent\\Relations\\BelongsToMany\<App\\Models\\Resource, \$this\(App\\Models\\ReferenceCollection\), Illuminate\\Database\\Eloquent\\Relations\\Pivot, ''pivot''\> but returns Illuminate\\Database\\Eloquent\\Relations\\BelongsToMany\<App\\Models\\Resource, \$this\(App\\Models\\ReferenceCollection\), Illuminate\\Database\\Eloquent\\Relations\\Pivot, ''pivot''\>\.$#'
-			identifier: return.type
-			count: 1
-			path: app/Models/ReferenceCollection.php
-
-		-
-			message: '#^Class App\\Models\\Resource referenced with incorrect case\: App\\Models\\resource\.$#'
-			identifier: class.nameCase
-			count: 1
-			path: app/Models/ResourceIdentifier.php
-
-		-
-			message: '#^Method App\\Models\\ResourceIdentifier\:\:resource\(\) should return Illuminate\\Database\\Eloquent\\Relations\\BelongsTo\<App\\Models\\Resource, \$this\(App\\Models\\ResourceIdentifier\)\> but returns Illuminate\\Database\\Eloquent\\Relations\\BelongsTo\<App\\Models\\Resource, \$this\(App\\Models\\ResourceIdentifier\)\>\.$#'
-			identifier: return.type
-			count: 1
-			path: app/Models/ResourceIdentifier.php
-
-		-
-			message: '#^Class App\\Models\\Resource referenced with incorrect case\: App\\Models\\resource\.$#'
-			identifier: class.nameCase
-			count: 1
-			path: app/Models/ResourceLink.php
-
-		-
-			message: '#^Method App\\Models\\ResourceLink\:\:resource\(\) should return Illuminate\\Database\\Eloquent\\Relations\\BelongsTo\<App\\Models\\Resource, \$this\(App\\Models\\ResourceLink\)\> but returns Illuminate\\Database\\Eloquent\\Relations\\BelongsTo\<App\\Models\\Resource, \$this\(App\\Models\\ResourceLink\)\>\.$#'
-			identifier: return.type
-			count: 1
-			path: app/Models/ResourceLink.php
-
-		-
-			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$channel\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Models/ResourceRevision.php
-
-		-
-			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$conference\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Models/ResourceRevision.php
-
-		-
-			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$duration\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Models/ResourceRevision.php
-
-		-
-			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$edition\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Models/ResourceRevision.php
-
-		-
-			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$isbn\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Models/ResourceRevision.php
-
-		-
-			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$language\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Models/ResourceRevision.php
-
-		-
-			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$license\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Models/ResourceRevision.php
-
-		-
-			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$name\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Models/ResourceRevision.php
-
-		-
-			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$organization\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Models/ResourceRevision.php
-
-		-
-			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$pages\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Models/ResourceRevision.php
-
-		-
-			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$publisher\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Models/ResourceRevision.php
-
-		-
-			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$year\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Models/ResourceRevision.php
-
-		-
-			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$youtube_id\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Models/ResourceRevision.php
-
-		-
-			message: '#^Method App\\Models\\ResourceRevision\:\:translation\(\) should return App\\Models\\ResourceRevisionTranslation\|null but returns Illuminate\\Database\\Eloquent\\Model\|null\.$#'
-			identifier: return.type
-			count: 1
-			path: app/Models/ResourceRevision.php
-
-		-
 			message: '#^Method App\\Models\\ResumeRevision\:\:translation\(\) should return App\\Models\\ResumeRevisionTranslation\|null but returns Illuminate\\Database\\Eloquent\\Model\|null\.$#'
 			identifier: return.type
 			count: 1
@@ -659,18 +443,6 @@ parameters:
 			identifier: property.notFound
 			count: 1
 			path: app/Models/RevisionTranslation.php
-
-		-
-			message: '#^Class App\\Models\\Resource referenced with incorrect case\: App\\Models\\resource\.$#'
-			identifier: class.nameCase
-			count: 1
-			path: app/Models/Topic.php
-
-		-
-			message: '#^Method App\\Models\\Topic\:\:findings\(\) should return Illuminate\\Database\\Eloquent\\Relations\\MorphToMany\<App\\Models\\Resource, \$this\(App\\Models\\Topic\), Illuminate\\Database\\Eloquent\\Relations\\MorphPivot, ''pivot''\> but returns Illuminate\\Database\\Eloquent\\Relations\\MorphToMany\<App\\Models\\Resource, \$this\(App\\Models\\Topic\), Illuminate\\Database\\Eloquent\\Relations\\MorphPivot, ''pivot''\>\.$#'
-			identifier: return.type
-			count: 1
-			path: app/Models/Topic.php
 
 		-
 			message: '#^Call to an undefined method Illuminate\\Contracts\\Cache\\Repository\:\:lock\(\)\.$#'
@@ -695,12 +467,6 @@ parameters:
 			identifier: return.type
 			count: 1
 			path: app/ReadModel/PublicSite/Content/CaseStudyReader.php
-
-		-
-			message: '#^Parameter \#1 \$array \(array\{\}\|list\{0\: Illuminate\\Database\\Query\\Builder, 1\?\: Illuminate\\Database\\Query\\Builder, 2\?\: Illuminate\\Database\\Query\\Builder\}\) to function array_filter does not contain falsy values, the array will always stay the same\.$#'
-			identifier: arrayFilter.same
-			count: 1
-			path: app/ReadModel/PublicSite/Content/FeedReader.php
 
 		-
 			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$enabled\.$#'
@@ -739,52 +505,10 @@ parameters:
 			path: app/ReadModel/PublicSite/Content/ProjectReader.php
 
 		-
-			message: '#^Access to an undefined property App\\Models\\TopicRevisionTranslation\:\:\$name\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/ReadModel/PublicSite/Content/PublicResourceReader.php
-
-		-
-			message: '#^Method App\\ReadModel\\PublicSite\\Content\\PublicResourceReader\:\:findByIdentifier\(\) should return App\\Models\\ResourceRevision\|null but returns Illuminate\\Database\\Eloquent\\Model\|null\.$#'
-			identifier: return.type
-			count: 1
-			path: app/ReadModel/PublicSite/Content/PublicResourceReader.php
-
-		-
-			message: '#^Parameter \#1 \$callback of method Illuminate\\Database\\Eloquent\\Collection\<int,App\\Models\\Topic\>\:\:map\(\) contains unresolvable type\.$#'
-			identifier: argument.unresolvableType
-			count: 1
-			path: app/ReadModel/PublicSite/Content/PublicResourceReader.php
-
-		-
-			message: '#^Using nullsafe property access "\?\-\>name" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
-			identifier: nullsafe.neverNull
-			count: 1
-			path: app/ReadModel/PublicSite/Content/PublicResourceReader.php
-
-		-
 			message: '#^Method App\\ReadModel\\PublicSite\\Content\\ReferenceCollectionReader\:\:findByIdentifier\(\) should return App\\Models\\ReferenceCollection\|null but returns Illuminate\\Database\\Eloquent\\Model\|null\.$#'
 			identifier: return.type
 			count: 1
 			path: app/ReadModel/PublicSite/Content/ReferenceCollectionReader.php
-
-		-
-			message: '#^Access to an undefined property App\\Models\\TopicRevisionTranslation\:\:\$name\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/ReadModel/PublicSite/Content/ResourceReader.php
-
-		-
-			message: '#^Parameter \#1 \$callback of method Illuminate\\Database\\Eloquent\\Collection\<int,App\\Models\\Topic\>\:\:map\(\) contains unresolvable type\.$#'
-			identifier: argument.unresolvableType
-			count: 1
-			path: app/ReadModel/PublicSite/Content/ResourceReader.php
-
-		-
-			message: '#^Using nullsafe property access "\?\-\>name" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
-			identifier: nullsafe.neverNull
-			count: 1
-			path: app/ReadModel/PublicSite/Content/ResourceReader.php
 
 		-
 			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$id\.$#'

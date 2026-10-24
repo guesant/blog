@@ -104,12 +104,7 @@ final readonly class PublicHomeGalleryResponseDto
             'collection' => self::galleryItem(
                 $presenter->collectionItem('collections', $showcase['collection'], $locale),
             ),
-            'items' => array_values(array_map(
-                fn ($item): array => self::galleryItem(
-                    $presenter->feedItem(new PublicFeedItem('achado', $item), $locale),
-                ),
-                $showcase['resources'],
-            )),
+            'items' => [],
         ];
     }
 }

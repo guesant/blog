@@ -7,7 +7,6 @@ const routeVisibilityKeys: Record<string, keyof NonNullable<SiteText['visibility
   contact: 'contact',
   credits: 'credits',
   feed: 'feed',
-  findings: 'findings',
   follow: 'follow',
   license: 'license',
   portfolio: 'portfolio',

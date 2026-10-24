@@ -8,14 +8,12 @@ export type ContentFeedActionProps = {
   fixedKind?: string;
   kind: string;
   topic: string;
-  type: string;
   pendingSearch: string;
   sort: SortMode;
   query: URLSearchParams;
   router: ContentFeedRouter;
   setKind: (value: string) => void;
   setTopic: (value: string) => void;
-  setType: (value: string) => void;
   setSearch: (value: string) => void;
   setPendingSearch: (value: string) => void;
   setSort: (value: SortMode) => void;

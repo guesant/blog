@@ -6,7 +6,7 @@ import { readContentFeedState, type ContentFeedState } from './read-content-feed
 
 type UseContentFeedStateProps = Pick<
   ContentFeedProps,
-  'fixedKind' | 'initialKind' | 'initialTopic' | 'initialSearch' | 'initialSort' | 'initialType'
+  'fixedKind' | 'initialKind' | 'initialTopic' | 'initialSearch' | 'initialSort'
 > & {
   query: URLSearchParams;
 };
@@ -22,7 +22,6 @@ export function useContentFeedState(props: UseContentFeedStateProps) {
     props.initialTopic,
     props.initialSearch,
     props.initialSort,
-    props.initialType,
     props.query,
   ]);
 
@@ -35,6 +34,5 @@ export function useContentFeedState(props: UseContentFeedStateProps) {
       setState((current) => ({ ...current, pendingSearch: value })),
     setSort: (value: ContentFeedState['sort']) =>
       setState((current) => ({ ...current, sort: value })),
-    setType: (value: string) => setState((current) => ({ ...current, type: value })),
   };
 }

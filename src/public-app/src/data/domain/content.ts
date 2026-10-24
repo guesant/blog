@@ -1,6 +1,3 @@
-import type { ExternalLink } from './refs-links';
-import type { Reference } from './refs-details';
-
 export type RichTextContent = string | Record<string, unknown>;
 
 export type WithOgImage = {
@@ -111,16 +108,12 @@ export type Writing = WithOgImage & {
 };
 
 export type PublicFeedItem = {
-  kind: 'post' | 'achado' | 'colecao';
+  kind: 'post' | 'colecao';
   slug: string;
   title: string;
   preview: string;
   date: string;
   readingTime?: string;
   topics: { name: string; slug?: string; url?: string }[];
-  findingType?: string;
-  featured?: boolean;
-  links?: ExternalLink[];
-  reference?: Reference;
   href: string;
 };

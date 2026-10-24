@@ -8,7 +8,6 @@ type UseClearContentFeedFiltersProps = Pick<
   | 'router'
   | 'setKind'
   | 'setTopic'
-  | 'setType'
   | 'setSearch'
   | 'setPendingSearch'
   | 'setSort'
@@ -18,7 +17,6 @@ export function useClearContentFeedFilters(props: UseClearContentFeedFiltersProp
   return useCallback(() => {
     props.setKind(props.fixedKind || 'all');
     props.setTopic('');
-    props.setType('');
     props.setSearch('');
     props.setPendingSearch('');
     props.setSort('desc');

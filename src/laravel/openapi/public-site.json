@@ -16,126 +16,6 @@
         }
     ],
     "paths": {
-        "/findings/{slug}": {
-            "get": {
-                "operationId": "findingApi.show",
-                "tags": [
-                    "FindingApi"
-                ],
-                "parameters": [
-                    {
-                        "name": "slug",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "locale",
-                        "in": "query",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "additionalProperties": {}
-                                }
-                            }
-                        }
-                    },
-                    "403": {
-                        "$ref": "#/components/responses/AuthorizationException"
-                    },
-                    "401": {
-                        "$ref": "#/components/responses/AuthenticationException"
-                    },
-                    "404": {
-                        "description": "The requested finding was not found.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "error": {
-                                            "type": "object",
-                                            "properties": {
-                                                "code": {
-                                                    "type": "string"
-                                                },
-                                                "message": {
-                                                    "type": "string"
-                                                },
-                                                "status": {
-                                                    "type": "integer"
-                                                },
-                                                "details": {
-                                                    "type": "string"
-                                                }
-                                            },
-                                            "required": [
-                                                "code",
-                                                "message",
-                                                "status",
-                                                "details"
-                                            ]
-                                        }
-                                    },
-                                    "required": [
-                                        "error"
-                                    ]
-                                }
-                            }
-                        }
-                    },
-                    "503": {
-                        "description": "The service is temporarily unavailable.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "error": {
-                                            "type": "object",
-                                            "properties": {
-                                                "code": {
-                                                    "type": "string"
-                                                },
-                                                "message": {
-                                                    "type": "string"
-                                                },
-                                                "status": {
-                                                    "type": "integer"
-                                                },
-                                                "details": {
-                                                    "type": "string"
-                                                }
-                                            },
-                                            "required": [
-                                                "code",
-                                                "message",
-                                                "status",
-                                                "details"
-                                            ]
-                                        }
-                                    },
-                                    "required": [
-                                        "error"
-                                    ]
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
         "/media/{path}": {
             "get": {
                 "operationId": "publicMedia",
@@ -632,9 +512,6 @@
                                                 "writing": {
                                                     "type": "boolean"
                                                 },
-                                                "findings": {
-                                                    "type": "boolean"
-                                                },
                                                 "topics": {
                                                     "type": "boolean"
                                                 },
@@ -659,7 +536,6 @@
                                                 "follow",
                                                 "feed",
                                                 "writing",
-                                                "findings",
                                                 "topics",
                                                 "collections",
                                                 "snippets",
@@ -1795,14 +1671,6 @@
                         "in": "query",
                         "schema": {
                             "type": "string"
-                        }
-                    },
-                    {
-                        "name": "page",
-                        "in": "query",
-                        "schema": {
-                            "type": "integer",
-                            "default": 1
                         }
                     }
                 ],

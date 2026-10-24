@@ -4,7 +4,7 @@ import { contentFeedInitialValue } from './content-feed-initial-value';
 
 type ReadContentFeedStateProps = Pick<
   ContentFeedProps,
-  'fixedKind' | 'initialKind' | 'initialTopic' | 'initialSearch' | 'initialSort' | 'initialType'
+  'fixedKind' | 'initialKind' | 'initialTopic' | 'initialSearch' | 'initialSort'
 > & {
   query: URLSearchParams;
 };
@@ -15,7 +15,6 @@ export type ContentFeedState = {
   search: string;
   pendingSearch: string;
   sort: SortMode;
-  type: string;
 };
 
 export function readContentFeedState(props: ReadContentFeedStateProps): ContentFeedState {
@@ -46,10 +45,5 @@ export function readContentFeedState(props: ReadContentFeedStateProps): ContentF
       'sort',
       contentFeedInitialValue(props.initialSort, 'desc'),
     ) as SortMode,
-    type: readContentFeedQueryValue(
-      props.query,
-      'type',
-      contentFeedInitialValue(props.initialType, ''),
-    ),
   };
 }

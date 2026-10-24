@@ -2,11 +2,9 @@ import type { FeedSelectDefinition } from './feed-select.types';
 
 type BuildContentKindOptionsProps = {
   writingsCount: number;
-  findingsCount: number;
   collectionsCount: number;
   label: string;
   writingLabel: string;
-  findingsLabel: string;
   collectionsLabel: string;
 };
 
@@ -20,12 +18,6 @@ export function buildContentKindOptions(
       label: props.writingLabel,
       icon: 'pen-line',
       disabled: props.writingsCount === 0,
-    },
-    {
-      value: 'achado',
-      label: props.findingsLabel,
-      icon: 'search',
-      disabled: props.findingsCount === 0,
     },
     {
       value: 'colecao',

@@ -12,7 +12,6 @@ const visibilityFields = [
   ['follow', 'follow'],
   ['feed', 'feed'],
   ['writing', 'writing'],
-  ['findings', 'findings'],
   ['topics', 'topics'],
   ['collections', 'collections'],
   ['snippets', 'snippets'],

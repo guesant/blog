@@ -4,7 +4,6 @@ namespace Tests\Feature\Models;
 
 use App\Models\ReferenceCollection;
 use App\Models\ReferenceCollectionRevisionTranslation;
-use App\Models\Resource;
 use Tests\TestCase;
 
 class ReferenceCollectionTest extends TestCase
@@ -18,15 +17,11 @@ class ReferenceCollectionTest extends TestCase
         $this->assertNotNull($collection->slug);
     }
 
-    public function test_reference_collection_has_translations_and_resources(): void
+    public function test_reference_collection_has_translations(): void
     {
         $collection = ReferenceCollection::factory()->create();
         ReferenceCollectionRevisionTranslation::factory()->create(['reference_collection_id' => $collection->id]);
         $collection->refresh();
-        $resource = Resource::factory()->create();
-        $collection->resources()->attach($resource);
-
         $this->assertCount(1, $collection->translations);
-        $this->assertCount(1, $collection->resources);
     }
 }

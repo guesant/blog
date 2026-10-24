@@ -9,7 +9,6 @@ export type HomeGalleryEntryKind =
   | 'topics'
   | 'credits'
   | 'writing'
-  | 'finding'
   | 'collection';
 
 export type HomeGalleryEntry = Record<string, unknown> & {

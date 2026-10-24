@@ -22,7 +22,7 @@ export function kindMetadata(data: RouteData, locale: Locale): RouteMetadata {
 
   return localizedMetadata({
     locale,
-    titlePath: 'Nav.findings',
+    titlePath: 'Nav.feed',
     descriptionPath: 'Pages.feed.description',
   });
 }

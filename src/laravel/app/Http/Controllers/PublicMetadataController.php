@@ -8,14 +8,11 @@ use App\Application\PublicSite\IsPublicSiteInMaintenanceQuery;
 use App\Application\PublicSite\IsPublicSiteInMaintenanceQueryHandler;
 use App\Application\PublicSite\ListPublicContentQuery;
 use App\Application\PublicSite\ListPublicContentQueryHandler;
-use App\Application\PublicSite\ListPublicFindingsQuery;
-use App\Application\PublicSite\ListPublicFindingsQueryHandler;
 use App\Content\Locale;
 use App\Content\PublicFeedCache;
 use App\Http\Responses\ApiErrorCode;
 use App\Http\Responses\ApiErrorResponse;
 use App\Http\Responses\PublicContentResponseFactory;
-use App\Http\Responses\PublicFindingResponseFactory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,8 +24,6 @@ class PublicMetadataController extends Controller
         private readonly IsPublicSiteInMaintenanceQueryHandler $maintenance,
         private readonly ListPublicContentQueryHandler $content,
         private readonly PublicContentResponseFactory $contentPresenter,
-        private readonly ListPublicFindingsQueryHandler $findings,
-        private readonly PublicFindingResponseFactory $findingPresenter,
         private readonly PublicFeedCache $feedCache,
     ) {}
 
@@ -83,9 +78,6 @@ class PublicMetadataController extends Controller
                     foreach ($this->collectionItems($collection, $locale) as $item) {
                         $this->appendUrl($urls, $item['url'] ?? null);
                     }
-                }
-                foreach ($this->findingItems($locale) as $item) {
-                    $this->appendUrl($urls, $item['url'] ?? null);
                 }
             }
 
@@ -221,12 +213,7 @@ class PublicMetadataController extends Controller
             'summary' => $item['excerpt'] ?? null,
             'raw_date' => $item['date'] ?? null,
             'url' => $this->absolute($item['url'] ?? '/'),
-        ])->concat(collect($this->findingItems($locale, 30))->filter(fn (array $item) => filled($item['title'] ?? null))->map(fn (array $item) => [
-            'title' => $item['title'],
-            'summary' => $item['personal_note'] ?? $item['reason_found'] ?? $item['description'] ?? null,
-            'raw_date' => $item['found_date'] ?? $item['published_date'] ?? null,
-            'url' => $this->absolute($item['url'] ?? '/'),
-        ]))->concat(collect($this->collectionItems('collections', $locale, 30))->map(fn (array $item) => [
+        ])->concat(collect($this->collectionItems('collections', $locale, 30))->map(fn (array $item) => [
             'title' => $item['title'] ?? '',
             'summary' => $item['description'] ?? null,
             'raw_date' => $item['created_at'] ?? null,
@@ -267,34 +254,6 @@ class PublicMetadataController extends Controller
                     ->map(fn (object $item): array => $collection === 'feed'
                         ? $this->contentPresenter->feedItem($item, $locale)
                         : $this->contentPresenter->collectionItem($collection, $item, $locale))
-                    ->all(),
-            ];
-            $lastPage = $result->page->lastPage();
-            $page++;
-        }
-
-        return $items;
-    }
-
-    private function findingItems(string $locale, int $perPage = 100): array
-    {
-        $items = [];
-        $page = 1;
-        $lastPage = 1;
-
-        while ($page <= $lastPage) {
-            $result = $this->findings->handle(new ListPublicFindingsQuery(
-                filters: [],
-                locale: $locale,
-                perPage: $perPage,
-                sort: null,
-            ));
-
-            $items = [
-                ...$items,
-                ...$result->page
-                    ->getCollection()
-                    ->map(fn (object $item): array => $this->findingPresenter->summary($item, $locale))
                     ->all(),
             ];
             $lastPage = $result->page->lastPage();

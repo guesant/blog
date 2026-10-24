@@ -19,22 +19,6 @@ class Language extends Model
     protected $fillable = ['slug', 'order', 'code'];
 
     /**
-     * @return HasMany<resource, $this>
-     */
-    public function resources(): HasMany
-    {
-        return $this->hasMany(Resource::class);
-    }
-
-    /**
-     * @return HasMany<ResourceLink, $this>
-     */
-    public function resourceLinks(): HasMany
-    {
-        return $this->hasMany(ResourceLink::class);
-    }
-
-    /**
      * @return HasMany<ResumeLanguage, $this>
      */
     public function resumeLanguages(): HasMany

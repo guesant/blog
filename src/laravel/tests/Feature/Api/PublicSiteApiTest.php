@@ -21,8 +21,6 @@ use App\Models\Profile;
 use App\Models\ProfileRevisionTranslation;
 use App\Models\ReferenceCollection;
 use App\Models\ReferenceCollectionRevisionTranslation;
-use App\Models\Resource;
-use App\Models\ResourceRevisionTranslation;
 use App\Models\Resume;
 use App\Models\ResumeRevisionTranslation;
 use App\Models\SidebarGroup;
@@ -593,7 +591,6 @@ class PublicSiteApiTest extends TestCase
                     'follow',
                     'feed',
                     'writing',
-                    'findings',
                     'topics',
                     'collections',
                     'snippets',
@@ -657,9 +654,9 @@ class PublicSiteApiTest extends TestCase
     public function test_feed_response_is_cached_by_query_and_invalidated_by_generation(): void
     {
         Cache::flush();
-        $this->createResource('cached-feed-finding');
+        $this->createWriting('cached-feed-writing');
 
-        $this->getJson('/api/v1/content/feed?locale=en&per_page=1&kind=achado')->assertOk();
+        $this->getJson('/api/v1/content/feed?locale=en&per_page=1&kind=post')->assertOk();
 
         $cache = app(PublicFeedCache::class);
         $parameters = [
@@ -670,7 +667,7 @@ class PublicSiteApiTest extends TestCase
             'search' => null,
             'type' => null,
             'topic' => null,
-            'kind' => 'achado',
+            'kind' => 'post',
         ];
         $key = $cache->key('api', $parameters);
 
@@ -697,28 +694,10 @@ class PublicSiteApiTest extends TestCase
             ->assertJsonCount(1, 'data');
     }
 
-    public function test_findings_returns_a_paginated_page(): void
-    {
-        $this->createResource('first-finding');
-        $this->createResource('second-finding');
-
-        $response = $this->getJson('/api/v1/content/feed?locale=en&per_page=1&kind=achado');
-
-        $response
-            ->assertOk()
-            ->assertJsonPath('meta.page', 1)
-            ->assertJsonPath('meta.per_page', 1)
-            ->assertJsonPath('meta.total', 2)
-            ->assertJsonPath('meta.last_page', 2)
-            ->assertJsonPath('data.0.kind', 'achado')
-            ->assertJsonCount(1, 'data');
-    }
-
-    public function test_writing_collection_and_findings_list_endpoints_are_not_public(): void
+    public function test_writing_and_collection_list_endpoints_are_not_public(): void
     {
         $this->getJson('/api/v1/content/writing?locale=en')->assertNotFound();
         $this->getJson('/api/v1/content/collections?locale=en')->assertNotFound();
-        $this->getJson('/api/v1/findings?locale=en')->assertNotFound();
     }
 
     public function test_hidden_resume_revision_is_not_returned_by_the_public_api(): void
@@ -766,34 +745,18 @@ class PublicSiteApiTest extends TestCase
             ->assertJsonPath('education.0.institution', 'Visible institution');
     }
 
-    public function test_finding_identifier_keeps_working_after_slug_changes(): void
-    {
-        $resource = $this->createResource('old-finding-slug');
-        $revision = $resource->refresh()->currentRevision;
-        $identifier = $revision->public_id.'-old-finding-slug';
-
-        $revision->update(['slug' => 'new-finding-slug']);
-
-        $this->getJson("/api/v1/findings/{$identifier}?locale=en")
-            ->assertOk()
-            ->assertJsonPath('slug', 'new-finding-slug')
-            ->assertJsonPath('url', "/findings/{$revision->public_id}-new-finding-slug")
-            ->assertJsonMissingPath('og_image_url');
-    }
-
     public function test_home_feed_is_paginated_and_server_ordered(): void
     {
-        $this->createResource('first-feed-finding');
+        $this->createWriting('first-feed-writing');
 
-        $response = $this->getJson('/api/v1/content/feed?locale=en&per_page=1&kind=achado');
+        $response = $this->getJson('/api/v1/content/feed?locale=en&per_page=1&kind=post');
 
         $response
             ->assertOk()
             ->assertJsonPath('meta.page', 1)
             ->assertJsonPath('meta.per_page', 1)
             ->assertJsonPath('meta.total', 1)
-            ->assertJsonPath('data.0.kind', 'achado')
-            ->assertJsonMissingPath('data.0.og_image_url')
+            ->assertJsonPath('data.0.kind', 'post')
             ->assertJsonCount(1, 'data');
     }
 
@@ -850,7 +813,7 @@ class PublicSiteApiTest extends TestCase
     public function test_home_gallery_returns_totals_for_limited_sections(): void
     {
         foreach (range(1, 16) as $index) {
-            $this->createResource("home-gallery-finding-{$index}");
+            $this->createWriting("home-gallery-writing-{$index}");
         }
 
         $this->getJson('/api/v1/site/home-gallery?locale=en')
@@ -871,10 +834,15 @@ class PublicSiteApiTest extends TestCase
         ]);
         $writing->publishedRevision()->update(['date_iso' => '2026-09-03']);
 
-        $this->createResource('mixed-feed-finding', [
-            'found_date_iso' => '2026-09-02',
-            'published_date_iso' => '2026-09-02',
+        $secondWriting = Writing::factory()->create([
+            'hidden' => false,
+            'date_iso' => '2026-09-02',
         ]);
+        WritingRevisionTranslation::factory()->create([
+            'writing_id' => $secondWriting->id,
+            'locale' => 'en',
+        ]);
+        $secondWriting->publishedRevision()->update(['date_iso' => '2026-09-02']);
 
         $collection = ReferenceCollection::factory()->create([
             'hidden' => false,
@@ -889,7 +857,7 @@ class PublicSiteApiTest extends TestCase
         $response = $this->getJson('/api/v1/site/home-gallery?locale=en')->assertOk();
         $feed = $response->json('feed');
 
-        $this->assertSame(['post', 'achado', 'colecao'], array_column($feed, 'kind'));
+        $this->assertSame(['post', 'post', 'colecao'], array_column($feed, 'kind'));
     }
 
     public function test_writing_body_is_the_only_editorial_text_field(): void
@@ -929,16 +897,13 @@ class PublicSiteApiTest extends TestCase
             'reference_collection_id' => $collection->id,
             'locale' => 'en',
         ]);
-        $resource = $this->createResource('collection-finding');
-        $collection->resources()->attach($resource, ['order' => 1]);
-
         $this->getJson('/api/v1/site/home-gallery?locale=en')
             ->assertOk()
             ->assertJsonPath('collection_showcases.0.collection.slug', 'reading-list')
-            ->assertJsonCount(1, 'collection_showcases.0.items');
+            ->assertJsonCount(0, 'collection_showcases.0.items');
     }
 
-    public function test_collection_detail_returns_a_paginated_resource_page(): void
+    public function test_collection_detail_does_not_expose_resources(): void
     {
         $collection = ReferenceCollection::factory()->create([
             'slug' => 'reading-list',
@@ -949,20 +914,12 @@ class PublicSiteApiTest extends TestCase
             'locale' => 'en',
         ]);
 
-        $first = $this->createResource('first-collection-finding');
-        $second = $this->createResource('second-collection-finding');
-        $collection->resources()->attach($first, ['order' => 1]);
-        $collection->resources()->attach($second, ['order' => 2]);
-
         $response = $this->getJson('/api/v1/content/collections/reading-list?locale=en&per_page=1');
 
         $response
             ->assertOk()
-            ->assertJsonPath('resources_meta.page', 1)
-            ->assertJsonPath('resources_meta.per_page', 1)
-            ->assertJsonPath('resources_meta.total', 2)
-            ->assertJsonPath('resources_meta.last_page', 2)
-            ->assertJsonCount(1, 'resources');
+            ->assertJsonPath('resources', [])
+            ->assertJsonPath('resources_meta', null);
     }
 
     private function createCaseStudy(string $slug): CaseStudy
@@ -981,20 +938,19 @@ class PublicSiteApiTest extends TestCase
         return $case;
     }
 
-    private function createResource(string $slug, array $attributes = []): Resource
+    private function createWriting(string $slug, array $attributes = []): Writing
     {
-        $resource = Resource::factory()->create([
+        $writing = Writing::factory()->create([
             'slug' => $slug,
             ...$attributes,
             'hidden' => false,
-            'visibility' => 'public',
         ]);
 
-        ResourceRevisionTranslation::factory()->create([
-            'resource_id' => $resource->id,
+        WritingRevisionTranslation::factory()->create([
+            'writing_id' => $writing->id,
             'locale' => 'en',
         ]);
 
-        return $resource;
+        return $writing;
     }
 }

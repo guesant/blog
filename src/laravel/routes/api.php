@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\Api\FindingApiController;
 use App\Http\Controllers\Api\PublicMediaController;
 use App\Http\Controllers\Api\PublicSiteApiController;
 use App\Http\Controllers\SnippetDownloadController;
@@ -29,7 +28,6 @@ Route::prefix('v1')
                     Route::get('/resume/{locale}.pdf', [PublicSiteApiController::class, 'resumePdf'])
                         ->middleware('throttle:public-pdf');
                     Route::post('/protected-email/challenge', [PublicSiteApiController::class, 'protectedEmailChallenge']);
-                    Route::get('/findings/{slug}', [FindingApiController::class, 'show']);
                     Route::get('/snippets/{slug}/download', SnippetDownloadController::class)
                         ->middleware('throttle:snippet-zip');
                 });

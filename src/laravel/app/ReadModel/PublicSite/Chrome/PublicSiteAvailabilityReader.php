@@ -30,7 +30,6 @@ final class PublicSiteAvailabilityReader
                 'webmention_title',
             ]), 'has_follow')
             ->selectSub($this->publicContent('writings', ['hidden' => false]), 'has_writing')
-            ->selectSub($this->publicContent('resources', ['hidden' => false, 'visibility' => 'public']), 'has_findings')
             ->selectSub($this->publicContent('topics', ['hidden' => false]), 'has_topics')
             ->selectSub($this->publicContent('reference_collections', ['hidden' => false]), 'has_collections')
             ->selectSub($this->publicContent('snippets', ['hidden' => false]), 'has_snippets')
@@ -41,7 +40,6 @@ final class PublicSiteAvailabilityReader
             || $this->boolean($result?->has_projects)
             || $this->boolean($result?->has_experiments);
         $hasWriting = $this->boolean($result?->has_writing);
-        $hasFindings = $this->boolean($result?->has_findings);
         $hasCollections = $this->boolean($result?->has_collections);
 
         return [
@@ -54,9 +52,8 @@ final class PublicSiteAvailabilityReader
             'license' => $this->boolean($result?->has_license),
             'credits' => $this->boolean($result?->has_credits),
             'follow' => $this->boolean($result?->has_follow),
-            'feed' => $hasWriting || $hasFindings || $hasCollections,
+            'feed' => $hasWriting || $hasCollections,
             'writing' => $hasWriting,
-            'findings' => $hasFindings,
             'topics' => $this->boolean($result?->has_topics),
             'collections' => $hasCollections,
             'snippets' => $this->boolean($result?->has_snippets),
@@ -199,7 +196,6 @@ final class PublicSiteAvailabilityReader
             'experiments' => 'experiment_revisions',
             'projects' => 'project_revisions',
             'reference_collections' => 'reference_collection_revisions',
-            'resources' => 'resource_revisions',
             'snippets' => 'snippet_revisions',
             'technologies' => 'technology_revisions',
             'topics' => 'topic_revisions',

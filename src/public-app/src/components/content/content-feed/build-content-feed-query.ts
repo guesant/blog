@@ -9,7 +9,6 @@ export type BuildContentFeedQueryProps = {
   fixedKind?: string;
   kind: string;
   topic: string;
-  type: string;
   search: string;
   sort: SortMode;
   page?: number;
@@ -20,11 +19,8 @@ export function buildContentFeedQuery(props: BuildContentFeedQueryProps) {
   const nextKind = resolveContentFeedKind({
     fixedKind: props.fixedKind,
     filterKind: props.filter?.kind,
-    filterType: props.filter?.type,
     kind: props.kind,
   });
-
-  const nextType = props.filter?.type ?? props.type;
 
   const search = props.search.trim();
 
@@ -33,7 +29,6 @@ export function buildContentFeedQuery(props: BuildContentFeedQueryProps) {
   const values = {
     kind: contentFeedQueryKind({ fixedKind: props.fixedKind, kind: nextKind }),
     topic: props.topic,
-    type: nextType,
     q: search,
     sort: contentFeedQuerySort(props.sort),
   };
@@ -42,5 +37,5 @@ export function buildContentFeedQuery(props: BuildContentFeedQueryProps) {
 
   setContentFeedOptionalQueryParams(params, props);
 
-  return { params, nextKind, nextType };
+  return { params, nextKind };
 }

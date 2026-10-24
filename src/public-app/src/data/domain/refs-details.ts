@@ -1,98 +1,14 @@
-import type { ExternalLink } from './refs-links';
 import type { RichTextContent, WithOgImage } from './content';
 
-type ReferenceIdentifier = {
-  kind: 'isbn' | 'doi' | 'issn' | 'imdb' | 'tmdb' | 'youtube' | 'other';
-  value: string;
-};
-
-export type ReferenceRelation = {
-  relationType: string;
-  family?: string;
-  direction: 'outbound' | 'inbound';
-  label: string;
-  targetKind?: string;
-  targetSlug: string;
-  targetTitle: string;
-  targetUrl?: string;
-  note?: string;
-  context?: string;
-  status: string;
-};
-
-type ReferenceBookDetails = {
-  isbn?: string;
-  publisher?: string;
-  edition?: string;
-  pages?: number;
-};
-
-type ReferencePaperDetails = {
-  doi?: string;
-  journal?: string;
-  conference?: string;
-  year?: string;
-};
-
-type ReferenceRepoDetails = {
-  org?: string;
-  name?: string;
-  language?: string;
-  license?: string;
-};
-
-type ReferenceVideoDetails = {
-  channel?: string;
-  duration?: string;
-  youtubeId?: string;
-  playlistId?: string;
-  channelId?: string;
-  handle?: string;
-};
-
-type ReferenceFilmDetails = {
-  director?: string;
-  year?: string;
-  duration?: string;
-  imdbId?: string;
-  tmdbId?: string;
-};
-
-export type Reference = {
+type ReferenceCollection = WithOgImage & {
   hidden?: boolean;
   order: number;
   slug: string;
   url?: string;
-  type: string;
-  language?: string;
   image?: string;
-  authors?: string;
-  organizations?: string;
-  publishedDateISO?: string;
-  foundDateISO?: string;
-  consumptionState: string;
-  rating: string;
-  editorialState: string;
-  visibility: string;
   title: string;
-  alternativeTitle?: string;
   description: string;
-  personalNote?: string;
-  reasonFound?: string;
-  topics: string[];
-  topicSlugs?: string[];
-  topicUrls?: string[];
-  topicMemberships?: TopicMembership[];
-  links: ExternalLink[];
-  featured?: boolean;
-  featuredOrder?: number;
-  identifiers: ReferenceIdentifier[];
-  relations: ReferenceRelation[];
-  book?: ReferenceBookDetails;
-  paper?: ReferencePaperDetails;
-  repo?: ReferenceRepoDetails;
-  video?: ReferenceVideoDetails;
-  film?: ReferenceFilmDetails;
+  intro?: RichTextContent;
 };
 
 type TopicRelation = {
@@ -110,27 +26,6 @@ export type Topic = {
   relations?: TopicRelation[];
 };
 
-type TopicMembership = {
-  topicSlug: string;
-  role?: 'primary' | 'related' | 'mentioned';
-};
-
-type ReferenceCollectionItem = {
-  reference: Reference;
-  note?: string;
-};
-
-export type ReferenceCollection = WithOgImage & {
-  hidden?: boolean;
-  order: number;
-  slug: string;
-  url?: string;
-  image?: string;
-  title: string;
-  description: string;
-  intro?: RichTextContent;
-};
-
 export type ReferenceCollectionDetail = ReferenceCollection & {
-  items: ReferenceCollectionItem[];
+  items: never[];
 };

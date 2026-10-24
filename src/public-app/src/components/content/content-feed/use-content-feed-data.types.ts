@@ -3,7 +3,7 @@ import type { ContentFeedState } from './read-content-feed-state';
 
 export type UseContentFeedDataProps = Pick<
   ContentFeedProps,
-  'feedItems' | 'fixedKind' | 'findingFacets' | 'contentMeta' | 'initialPage'
+  'feedItems' | 'fixedKind' | 'contentMeta' | 'initialPage'
 > &
   ContentFeedState & {
     query: URLSearchParams;

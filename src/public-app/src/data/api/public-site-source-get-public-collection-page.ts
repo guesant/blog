@@ -11,7 +11,7 @@ import { publicCollectionMeta } from './public-site-source-public-collection-met
 import { PUBLIC_CONTENT_PAGE_SIZE } from '../public-content-page-size';
 
 export async function getPublicCollectionPage<T>(
-  collection: Exclude<ContentCollection, 'references'>,
+  collection: ContentCollection,
   locale: 'en' | 'pt-BR',
   query: ContentCollectionQuery,
 ): Promise<ContentCollectionPage<T>> {

@@ -190,7 +190,19 @@
     "feed": {
       "title": "Feed",
       "description": "Writing, findings, collections, and selected work",
-      "searchPlaceholder": "Search Feed…"
+      "searchPlaceholder": "Search Feed…",
+      "clearFilters": "Clear Filters",
+      "apply": "Apply",
+      "pagination": "Feed pagination",
+      "previous": "Previous",
+      "next": "Next",
+      "pageInput": "Current page",
+      "readMore": "Read More",
+      "result": "result",
+      "results": "results",
+      "noResults": "No content matches this search.",
+      "writing": "Writing",
+      "collection": "Collection"
     },
     "now": {
       "working": "Working on",

@@ -190,7 +190,19 @@
     "feed": {
       "title": "Feed",
       "description": "Escritos, achados, coleções e trabalhos selecionados",
-      "searchPlaceholder": "Buscar no feed…"
+      "searchPlaceholder": "Buscar no feed…",
+      "clearFilters": "Limpar filtros",
+      "apply": "Aplicar",
+      "pagination": "Paginação do feed",
+      "previous": "Anterior",
+      "next": "Próximo",
+      "pageInput": "Página atual",
+      "readMore": "Ler mais",
+      "result": "resultado",
+      "results": "resultados",
+      "noResults": "Nenhum conteúdo corresponde a esta busca.",
+      "writing": "Escrito",
+      "collection": "Coleção"
     },
     "now": {
       "working": "Trabalhando em",

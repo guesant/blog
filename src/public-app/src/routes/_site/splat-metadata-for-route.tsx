@@ -6,10 +6,9 @@ import { defaultMetadata } from './splat-metadata-default';
 import { kindMetadata } from './splat-metadata-kind';
 import { metadataFromPage } from './splat-metadata-from-page';
 import { contentMetadata } from './splat-metadata-content';
-import { localizedMetadata } from './splat-metadata-localized';
 import { pageMetadata } from './splat-metadata-page';
 import { articleEntityMetadata } from './splat-metadata-article-entity';
-import { toMessageKey } from '../../data/config/achados';
+import { localizedMetadata } from './splat-metadata-localized';
 
 type MetadataResolver = (data: RouteData, locale: Locale) => RouteMetadata;
 
@@ -19,7 +18,6 @@ const metadataResolvers: Partial<Record<RouteData['kind'], MetadataResolver>> = 
   cases: pageMetadata,
   collections: pageMetadata,
   contact: pageMetadata,
-  findings: pageMetadata,
   follow: pageMetadata,
   license: pageMetadata,
   now: pageMetadata,
@@ -30,7 +28,6 @@ const metadataResolvers: Partial<Record<RouteData['kind'], MetadataResolver>> = 
   resume: (data) =>
     data.kind === 'resume' ? metadataFromPage(data.content.page) : defaultMetadata(),
   'case-detail': articleMetadata,
-  'finding-detail': articleMetadata,
   'writing-detail': articleMetadata,
   'collection-detail': (data) =>
     data.kind === 'collection-detail'
@@ -64,14 +61,6 @@ const metadataResolvers: Partial<Record<RouteData['kind'], MetadataResolver>> = 
       : defaultMetadata(),
   snippets: (data, locale) => kindMetadata(data, locale),
   technologies: (data, locale) => kindMetadata(data, locale),
-  'finding-type': (data, locale) =>
-    data.kind === 'finding-type'
-      ? localizedMetadata({
-          locale,
-          titlePath: `Pages.achados.types.${toMessageKey(data.type)}`,
-          descriptionPath: 'Pages.feed.description',
-        })
-      : defaultMetadata(),
   topics: (_data, locale) =>
     localizedMetadata({
       locale,

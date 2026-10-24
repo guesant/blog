@@ -1,7 +1,5 @@
 import type { PublicFeedItem } from '../domain/types';
 import { listValue } from './public-site-source-list-value';
-import { reference } from './public-site-source-reference';
-import { referenceLink } from './public-site-source-reference-link';
 import { stringValue } from './public-site-source-string-value';
 
 export function feedItem(value: Record<string, unknown>): PublicFeedItem {
@@ -11,8 +9,6 @@ export function feedItem(value: Record<string, unknown>): PublicFeedItem {
     url: stringValue(topic.url) || undefined,
   }));
 
-  const sourceReference = value.kind === 'achado' ? reference(value) : undefined;
-
   return {
     kind: value.kind as PublicFeedItem['kind'],
     slug: stringValue(value.slug),
@@ -21,10 +17,6 @@ export function feedItem(value: Record<string, unknown>): PublicFeedItem {
     date: stringValue(value.date),
     readingTime: stringValue(value.reading_time) || undefined,
     topics,
-    findingType: stringValue(value.finding_type) || undefined,
-    featured: value.featured === true,
-    links: listValue<Record<string, unknown>>(value.links).map(referenceLink),
-    reference: sourceReference,
     href: stringValue(value.href),
   };
 }

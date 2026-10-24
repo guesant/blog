@@ -1,4 +1,0 @@
-[[IgnoredVulns]]
-id = "GHSA-vfj7-8cjw-p6xm"
-ignoreUntil = 2026-12-31
-reason = "Transitive development-only braces dependency of linting tools; it is not included in the published application and has no fixed release."

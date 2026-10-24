@@ -2,14 +2,9 @@
 
 namespace App\Models;
 
-use App\Content\Graph\GraphNode;
-use App\Content\Graph\InteractsWithGraph;
-use App\Content\Locale;
-use App\Content\PublicIdentifier;
 use App\Models\Concerns\Auditable;
 use App\Models\Concerns\HasPublicId;
 use App\Models\Concerns\UsesCurrentRevision;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -19,9 +14,9 @@ use Illuminate\Database\Eloquent\Relations\MorphToMany;
  * @method WritingRevisionTranslation|null translation(?string $locale = null)
  * @method static \Illuminate\Database\Eloquent\Builder published()
  */
-class Writing extends Model implements GraphNode
+class Writing extends Model
 {
-    use Auditable, HasFactory, HasPublicId, InteractsWithGraph, UsesCurrentRevision;
+    use Auditable, HasFactory, HasPublicId, UsesCurrentRevision;
 
     protected $fillable = ['slug', 'public_id', 'hidden', 'date_iso', 'type', 'show_history'];
 
@@ -41,25 +36,5 @@ class Writing extends Model implements GraphNode
     public function featuredInPages(): BelongsToMany
     {
         return $this->belongsToMany(Page::class, 'page_featured_writing')->withPivot('order');
-    }
-
-    public static function graphKind(): string
-    {
-        return 'writing';
-    }
-
-    public static function graphNodesQuery(): Builder
-    {
-        return static::query()->published()->with('publishedTranslations');
-    }
-
-    public function graphLabel(string $locale): string
-    {
-        return $this->translation($locale)->title ?? $this->slug;
-    }
-
-    public function graphUrl(string $locale): ?string
-    {
-        return Locale::url('/writing/'.PublicIdentifier::key($this), $locale);
     }
 }

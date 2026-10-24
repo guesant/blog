@@ -4,7 +4,6 @@ namespace Tests\Feature\Models;
 
 use App\Models\ContentRelation;
 use App\Models\RelationType;
-use App\Models\Resource;
 use App\Models\Writing;
 use Tests\TestCase;
 
@@ -31,8 +30,8 @@ class ContentRelationTest extends TestCase
     {
         $relation = ContentRelation::factory()->create();
 
-        $this->assertInstanceOf(Resource::class, $relation->subject);
-        $this->assertInstanceOf(Resource::class, $relation->object);
+        $this->assertInstanceOf(Writing::class, $relation->subject);
+        $this->assertInstanceOf(Writing::class, $relation->object);
     }
 
     public function test_subject_resolves_across_different_morph_kinds(): void

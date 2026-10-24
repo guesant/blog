@@ -3,7 +3,6 @@ import type {
   ContentLocale,
   RecordValue,
 } from './public-site-source-support';
-import { findingFacets } from './public-site-source-finding-facets';
 import { publicCollectionMetaNumbers } from './public-site-source-public-collection-meta-numbers';
 
 type PublicCollectionMetaProps = {
@@ -18,6 +17,5 @@ export function publicCollectionMeta(props: PublicCollectionMetaProps): ContentC
   return {
     ...numbers,
     locale: props.locale,
-    facets: props.value?.facets ? findingFacets(props.value.facets) : undefined,
   };
 }

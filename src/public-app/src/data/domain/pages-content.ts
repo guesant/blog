@@ -107,6 +107,5 @@ export type NavigationAvailability = {
   cases: boolean;
   projects: boolean;
   writing: boolean;
-  achados: boolean;
   contact: boolean;
 };

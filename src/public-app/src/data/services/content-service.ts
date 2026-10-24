@@ -1,5 +1,3 @@
-export * from './content-service-support';
-
 export { getHomePageContent } from './content-service-get-home-page-content';
 
 export { getCollectionPage } from './content-service-get-collection-page';
@@ -19,8 +17,6 @@ export { getProfile } from './content-service-get-profile';
 export { getSiteText } from './content-service-get-site-text';
 
 export { getNavigationAvailability } from './content-service-get-navigation-availability';
-
-export { getAchadosPageCopy } from './content-service-get-achados-page-copy';
 
 export { getAboutPageCopy } from './content-service-get-about-page-copy';
 
@@ -49,8 +45,6 @@ export { getSnippetBySlug } from './content-service-get-snippet-by-slug';
 export { getResumePageContent } from './content-service-get-resume-page-content';
 
 export { getCreditsPageContent } from './content-service-get-credits-page-content';
-
-export { getReferenceBySlug } from './content-service-get-reference-by-slug';
 
 export { getTopicBySlug } from './content-service-get-topic-by-slug';
 

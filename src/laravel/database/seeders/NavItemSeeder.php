@@ -89,7 +89,7 @@ class NavItemSeeder extends Seeder
                 'key' => 'content',
                 'en' => 'Content',
                 'pt-BR' => 'Conteúdo',
-                'items' => [$this->writing(), $this->findings()],
+                'items' => [$this->writing()],
             ],
             ['key' => 'explore', 'en' => 'Explore', 'pt-BR' => 'Explorar', 'items' => [$this->topics(), $this->collections()]],
             ['key' => 'resources', 'en' => 'Resources', 'pt-BR' => 'Referências', 'items' => [$this->snippets()]],
@@ -135,11 +135,6 @@ class NavItemSeeder extends Seeder
     private function snippets(): array
     {
         return ['route' => 'snippets'];
-    }
-
-    private function findings(): array
-    {
-        return ['route' => 'findings'];
     }
 
     private function collections(): array

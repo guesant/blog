@@ -1,16 +1,14 @@
-import type { ExternalLink, PublicFeedItem } from '@portfolio/data/domain/types';
+import type { PublicFeedItem } from '@portfolio/data/domain/types';
 import type { ReactNode } from 'react';
-import type { FindingFacets } from '@portfolio/data/services';
 import type { ContentCollectionMeta } from '@portfolio/data/api/public-site-source-support';
 import type { BreadcrumbItem } from '../../navigation/breadcrumbs';
 
-type FeedKind = 'post' | 'achado' | 'colecao';
+type FeedKind = 'post' | 'colecao';
 
 export type SortMode = 'desc' | 'asc' | 'alpha';
 
 export type FeedQuickFilter = {
   kind?: FeedKind;
-  type?: string;
 };
 
 export type FeedEntry = {
@@ -21,9 +19,6 @@ export type FeedEntry = {
   date: string;
   readingTime?: string;
   topics: { name: string; slug?: string; url?: string }[];
-  findingType?: string;
-  links?: ExternalLink[];
-  featured?: boolean;
   href: string;
 };
 
@@ -42,10 +37,8 @@ export type ContentFeedProps = {
   initialTopic?: string;
   initialSearch?: string;
   initialSort?: SortMode;
-  initialType?: string;
   showSelects?: boolean;
   initialPage?: number;
-  findingFacets?: FindingFacets;
   contentMeta?: ContentCollectionMeta;
   beforeExplore?: ReactNode;
 };

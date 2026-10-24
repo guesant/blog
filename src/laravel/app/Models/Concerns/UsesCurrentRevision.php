@@ -20,8 +20,6 @@ use App\Models\ProjectRevision;
 use App\Models\ProjectRevisionTranslation;
 use App\Models\ReferenceCollectionRevision;
 use App\Models\ReferenceCollectionRevisionTranslation;
-use App\Models\ResourceRevision;
-use App\Models\ResourceRevisionTranslation;
 use App\Models\ResumeRevision;
 use App\Models\ResumeRevisionTranslation;
 use App\Models\SiteSettingsRevision;
@@ -50,7 +48,6 @@ trait UsesCurrentRevision
         'profiles' => [ProfileRevisionTranslation::class, 'profile_revision_id'],
         'projects' => [ProjectRevisionTranslation::class, 'project_revision_id'],
         'reference_collections' => [ReferenceCollectionRevisionTranslation::class, 'reference_collection_revision_id'],
-        'resources' => [ResourceRevisionTranslation::class, 'resource_revision_id'],
         'resumes' => [ResumeRevisionTranslation::class, 'resume_revision_id'],
         'site_settings' => [SiteSettingsRevisionTranslation::class, 'site_settings_revision_id'],
         'snippets' => [SnippetRevisionTranslation::class, 'snippet_revision_id'],
@@ -66,7 +63,6 @@ trait UsesCurrentRevision
         'profiles' => ProfileRevision::class,
         'projects' => ProjectRevision::class,
         'reference_collections' => ReferenceCollectionRevision::class,
-        'resources' => ResourceRevision::class,
         'resumes' => ResumeRevision::class,
         'writings' => WritingRevision::class,
         'site_settings' => SiteSettingsRevision::class,
@@ -86,7 +82,6 @@ trait UsesCurrentRevision
         'profile_revisions',
         'project_revisions',
         'reference_collection_revisions',
-        'resource_revisions',
         'resume_revisions',
         'snippet_revisions',
         'technology_revisions',
@@ -101,7 +96,6 @@ trait UsesCurrentRevision
         'profiles',
         'projects',
         'reference_collections',
-        'resources',
         'resumes',
         'snippets',
         'technologies',

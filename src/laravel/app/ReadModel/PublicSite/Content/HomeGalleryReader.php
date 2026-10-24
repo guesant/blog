@@ -75,7 +75,7 @@ final class HomeGalleryReader
             ? array_map(
                 fn ($collection): array => [
                     'collection' => $collection,
-                    'resources' => $this->collections->resourcesForHome($collection, self::LIMIT)->all(),
+                    'resources' => [],
                 ],
                 $collectionItems,
             )

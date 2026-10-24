@@ -28,7 +28,6 @@ export async function getLocalizedShell(locale?: string): Promise<LocalizedShell
       cases: navigationVisibilityFlag(visibility?.cases),
       projects: navigationVisibilityFlag(visibility?.portfolio),
       writing: navigationVisibilityFlag(visibility?.writing),
-      achados: navigationVisibilityFlag(visibility?.findings),
       contact: contactNavigationAvailable(site),
     },
   };

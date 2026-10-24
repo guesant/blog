@@ -19,17 +19,7 @@ class ReferenceCollectionReader
         ?string $locale = null,
         ?string $search = null,
     ): LengthAwarePaginator {
-        $query = ReferenceCollection::query()
-            ->published()
-            ->with('publishedTranslations')
-            ->withCount([
-                'resources' => static fn ($resource) => $resource
-                    ->whereNotNull('resources.published_revision_id')
-                    ->whereHas('publishedRevision', static fn ($revision) => $revision
-                        ->where('hidden', false)
-                        ->orWhereNull('hidden')
-                        ->where('visibility', 'public')),
-            ]);
+        $query = ReferenceCollection::query()->published()->with('publishedTranslations');
 
         if (filled($search)) {
             $term = '%'.$search.'%';
@@ -59,41 +49,6 @@ class ReferenceCollectionReader
     public function findBySlug(string $slug): ?ReferenceCollection
     {
         return $this->findByIdentifier($slug);
-    }
-
-    public function resourcesPaginated(ReferenceCollection $collection, int $perPage = 50, int $page = 1): LengthAwarePaginator
-    {
-        return $collection->resources()
-            ->whereNotNull('resources.published_revision_id')
-            ->whereHas('publishedRevision', static fn ($query) => $query
-                ->where(fn ($visibility) => $visibility->where('hidden', false)->orWhereNull('hidden'))
-                ->where('visibility', 'public'))
-            ->with([
-                'publishedTranslations',
-                'topics' => static fn ($query) => $query->published(),
-                'topics.publishedTranslations',
-            ])
-            ->orderBy('reference_collection_item.order')
-            ->orderBy('resources.id')
-            ->paginate($perPage, ['resources.*'], 'page', max(1, $page));
-    }
-
-    public function resourcesForHome(ReferenceCollection $collection, int $limit = 6): Collection
-    {
-        return $collection->resources()
-            ->whereNotNull('resources.published_revision_id')
-            ->whereHas('publishedRevision', static fn ($query) => $query
-                ->where(fn ($visibility) => $visibility->where('hidden', false)->orWhereNull('hidden'))
-                ->where('visibility', 'public'))
-            ->with([
-                'publishedTranslations',
-                'topics' => static fn ($query) => $query->published(),
-                'topics.publishedTranslations',
-            ])
-            ->orderBy('reference_collection_item.order')
-            ->orderBy('resources.id')
-            ->limit($limit)
-            ->get(['resources.*']);
     }
 
     public function related(ReferenceCollection $collection, int $limit = 3): Collection

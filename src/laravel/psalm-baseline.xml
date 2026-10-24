@@ -14,16 +14,6 @@
       <code><![CDATA[Builder<*>]]></code>
     </InvalidDocblock>
   </file>
-  <file src="app/Content/Graph/RelationResolver.php">
-    <NoInterfaceProperties>
-      <code><![CDATA[$target->slug]]></code>
-    </NoInterfaceProperties>
-    <UndefinedMagicPropertyFetch>
-      <code><![CDATA[$relationType->key]]></code>
-      <code><![CDATA[$relationType->key]]></code>
-      <code><![CDATA[$relationType->key]]></code>
-    </UndefinedMagicPropertyFetch>
-  </file>
   <file src="app/Filament/Pages/ManageProfile.php">
     <MissingTemplateParam>
       <code><![CDATA[ManageProfile]]></code>
@@ -183,9 +173,6 @@
     <MissingTemplateParam>
       <code><![CDATA[EditReferenceCollection]]></code>
     </MissingTemplateParam>
-    <UndefinedMagicPropertyFetch>
-      <code><![CDATA[$resource->pivot]]></code>
-    </UndefinedMagicPropertyFetch>
   </file>
   <file src="app/Filament/Resources/ReferenceCollections/ReferenceCollectionResource.php">
     <MissingTemplateParam>
@@ -205,21 +192,6 @@
   <file src="app/Filament/Resources/RelationTypes/RelationTypeResource.php">
     <MissingTemplateParam>
       <code><![CDATA[RelationTypeResource]]></code>
-    </MissingTemplateParam>
-  </file>
-  <file src="app/Filament/Resources/ResourceFindings/Pages/CreateResourceFinding.php">
-    <MissingTemplateParam>
-      <code><![CDATA[CreateResourceFinding]]></code>
-    </MissingTemplateParam>
-  </file>
-  <file src="app/Filament/Resources/ResourceFindings/Pages/EditResourceFinding.php">
-    <MissingTemplateParam>
-      <code><![CDATA[EditResourceFinding]]></code>
-    </MissingTemplateParam>
-  </file>
-  <file src="app/Filament/Resources/ResourceFindings/ResourceFindingResource.php">
-    <MissingTemplateParam>
-      <code><![CDATA[ResourceFindingResource]]></code>
     </MissingTemplateParam>
   </file>
   <file src="app/Filament/Resources/Snippets/Pages/CreateSnippet.php">
@@ -332,10 +304,6 @@
                 ->filter()
                 ->values()]]></code>
     </InvalidTemplateParam>
-    <TypeDoesNotContainType>
-      <code><![CDATA[0]]></code>
-      <code><![CDATA[0]]></code>
-    </TypeDoesNotContainType>
     <UndefinedMagicPropertyFetch>
       <code><![CDATA[$translation?->body]]></code>
       <code><![CDATA[$translation?->body]]></code>
@@ -380,17 +348,6 @@
       <code><![CDATA[BelongsToMany<Technology, $this>]]></code>
     </MissingTemplateParam>
   </file>
-  <file src="app/Models/Language.php">
-    <InvalidReturnStatement>
-      <code><![CDATA[$this->hasMany(Resource::class)]]></code>
-    </InvalidReturnStatement>
-    <InvalidReturnType>
-      <code><![CDATA[HasMany<resource, $this>]]></code>
-    </InvalidReturnType>
-    <InvalidTemplateParam>
-      <code><![CDATA[HasMany<resource, $this>]]></code>
-    </InvalidTemplateParam>
-  </file>
   <file src="app/Models/Page.php">
     <MissingTemplateParam>
       <code><![CDATA[BelongsToMany<CaseStudy, $this>]]></code>
@@ -421,78 +378,6 @@
       <code><![CDATA[BelongsToMany<Page, $this>]]></code>
       <code><![CDATA[BelongsToMany<Technology, $this>]]></code>
     </MissingTemplateParam>
-  </file>
-  <file src="app/Models/ReferenceCollection.php">
-    <InvalidReturnStatement>
-      <code><![CDATA[$this->belongsToMany(Resource::class, 'reference_collection_item')
-            ->withPivot('note', 'order')
-            ->orderByPivot('order')]]></code>
-    </InvalidReturnStatement>
-    <InvalidReturnType>
-      <code><![CDATA[BelongsToMany<resource, $this>]]></code>
-    </InvalidReturnType>
-    <InvalidTemplateParam>
-      <code><![CDATA[BelongsToMany<resource, $this>]]></code>
-    </InvalidTemplateParam>
-    <MissingTemplateParam>
-      <code><![CDATA[BelongsToMany<resource, $this>]]></code>
-    </MissingTemplateParam>
-  </file>
-  <file src="app/Models/Resource.php">
-    <InvalidArgument>
-      <code><![CDATA['key']]></code>
-    </InvalidArgument>
-    <MissingTemplateParam>
-      <code><![CDATA[BelongsToMany<ReferenceCollection, $this>]]></code>
-      <code><![CDATA[BelongsToMany<Topic, $this>]]></code>
-      <code><![CDATA[BelongsToMany<Topic, $this>]]></code>
-      <code><![CDATA[BelongsToMany<Topic, $this>]]></code>
-      <code><![CDATA[MorphToMany<Topic, $this>]]></code>
-    </MissingTemplateParam>
-  </file>
-  <file src="app/Models/ResourceIdentifier.php">
-    <InvalidReturnStatement>
-      <code><![CDATA[$this->belongsTo(Resource::class)]]></code>
-    </InvalidReturnStatement>
-    <InvalidReturnType>
-      <code><![CDATA[BelongsTo<resource, $this>]]></code>
-    </InvalidReturnType>
-    <InvalidTemplateParam>
-      <code><![CDATA[BelongsTo<resource, $this>]]></code>
-    </InvalidTemplateParam>
-  </file>
-  <file src="app/Models/ResourceLink.php">
-    <InvalidReturnStatement>
-      <code><![CDATA[$this->belongsTo(Resource::class)]]></code>
-    </InvalidReturnStatement>
-    <InvalidReturnType>
-      <code><![CDATA[BelongsTo<resource, $this>]]></code>
-    </InvalidReturnType>
-    <InvalidTemplateParam>
-      <code><![CDATA[BelongsTo<resource, $this>]]></code>
-    </InvalidTemplateParam>
-  </file>
-  <file src="app/Models/ResourceRevision.php">
-    <PublicModelAccessor>
-      <code><![CDATA[getAuthorsAttribute]]></code>
-      <code><![CDATA[getOrganizationsAttribute]]></code>
-      <code><![CDATA[getTypeDetailsAttribute]]></code>
-    </PublicModelAccessor>
-    <UndefinedMagicPropertyFetch>
-      <code><![CDATA[$details->channel]]></code>
-      <code><![CDATA[$details->conference]]></code>
-      <code><![CDATA[$details->duration]]></code>
-      <code><![CDATA[$details->edition]]></code>
-      <code><![CDATA[$details->isbn]]></code>
-      <code><![CDATA[$details->language]]></code>
-      <code><![CDATA[$details->license]]></code>
-      <code><![CDATA[$details->name]]></code>
-      <code><![CDATA[$details->organization]]></code>
-      <code><![CDATA[$details->pages]]></code>
-      <code><![CDATA[$details->publisher]]></code>
-      <code><![CDATA[$details->year]]></code>
-      <code><![CDATA[$details->youtube_id]]></code>
-    </UndefinedMagicPropertyFetch>
   </file>
   <file src="app/Models/Resume.php">
     <MissingTemplateParam>
@@ -537,18 +422,8 @@
     </MissingTemplateParam>
   </file>
   <file src="app/Models/Topic.php">
-    <InvalidReturnStatement>
-      <code><![CDATA[$this->morphedByMany(Resource::class, 'topicable')->withPivot('role')]]></code>
-    </InvalidReturnStatement>
-    <InvalidReturnType>
-      <code><![CDATA[MorphToMany<resource, $this>]]></code>
-    </InvalidReturnType>
-    <InvalidTemplateParam>
-      <code><![CDATA[MorphToMany<resource, $this>]]></code>
-    </InvalidTemplateParam>
     <MissingTemplateParam>
       <code><![CDATA[MorphToMany<Writing, $this>]]></code>
-      <code><![CDATA[MorphToMany<resource, $this>]]></code>
     </MissingTemplateParam>
   </file>
   <file src="app/Models/Writing.php">

@@ -1,4 +1,3 @@
-import { reference } from './public-site-source-reference';
 import { recordList } from './public-site-source-list';
 import { snippet } from './public-site-source-snippet';
 import { stringValue } from './public-site-source-string-value';
@@ -40,7 +39,6 @@ const entityBuilders: Record<ContentCollection, (item: RecordValue) => RecordVal
     topicSlugs: recordList<RecordValue>(item.topics).map((topic) => stringValue(topic.slug)),
     topicUrls: recordList<RecordValue>(item.topics).map((topic) => stringValue(topic.url)),
   }),
-  references: (item) => Object.fromEntries(Object.entries(reference(item))),
   collections: (item) => ({
     ...item,
     intro: item.intro,
@@ -58,10 +56,6 @@ const entityBuilders: Record<ContentCollection, (item: RecordValue) => RecordVal
 
 export function entity(collection: ContentCollection, item: RecordValue): RecordValue {
   const result = entityBuilders[collection](item);
-
-  if (collection === 'references') {
-    return result;
-  }
 
   return {
     ...result,

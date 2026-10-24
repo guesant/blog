@@ -5,7 +5,6 @@ const routeIcons: Partial<Record<string, IconName>> = {
   about: 'user',
   resume: 'graduation-cap',
   writing: 'pen-line',
-  findings: 'search',
   topics: 'tag',
   collections: 'book',
   technologies: 'wrench',

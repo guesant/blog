@@ -19,7 +19,6 @@ export function ExploreSection() {
 
   const tiles: { icon: IconName; label: string; href: string }[] = [
     { icon: 'pen-line', label: t('writing'), href: '/writing' },
-    { icon: 'solution', label: t('findings'), href: '/findings' },
     { icon: 'archive', label: t('collections'), href: '/collections' },
     { icon: 'layout-grid', label: t('topics'), href: '/topics' },
     { icon: 'folder-git', label: t('projects'), href: '/projects' },

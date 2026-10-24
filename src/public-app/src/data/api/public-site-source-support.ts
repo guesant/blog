@@ -7,7 +7,6 @@ export type ContentCollection =
   | 'projects'
   | 'experiments'
   | 'writing'
-  | 'references'
   | 'collections'
   | 'credits'
   | 'topics'
@@ -22,7 +21,7 @@ export type ContentCollectionQuery = {
   q?: string;
   type?: string;
   topic?: string;
-  kind?: 'post' | 'achado' | 'colecao';
+  kind?: 'post' | 'colecao';
 };
 
 export type ContentCollectionMeta = {
@@ -31,18 +30,10 @@ export type ContentCollectionMeta = {
   total: number;
   lastPage: number;
   locale: ContentLocale;
-  facets?: FindingFacets;
+  facets?: never;
 };
 
 export type ContentCollectionPage<T> = {
   items: T[];
   meta: ContentCollectionMeta;
-};
-
-export type FindingFacets = {
-  types: string[];
-  ratings: string[];
-  consumptionStates: string[];
-  years: string[];
-  topics: { slug: string; name: string }[];
 };

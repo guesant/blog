@@ -43,7 +43,6 @@ abstract class RevisionTranslation extends Model
             'language_revision_translations' => 'language',
             'page_revision_translations' => 'page',
             'profile_revision_translations' => 'profile',
-            'resource_revision_translations' => 'resource',
             'resume_revision_translations' => 'resume',
             default => '',
         };

@@ -5,15 +5,7 @@ import type { ContentFeedActionProps } from './use-content-feed-actions.types';
 
 type UseApplyContentFeedFiltersProps = Pick<
   ContentFeedActionProps,
-  | 'action'
-  | 'fixedKind'
-  | 'kind'
-  | 'topic'
-  | 'type'
-  | 'pendingSearch'
-  | 'sort'
-  | 'router'
-  | 'setSearch'
+  'action' | 'fixedKind' | 'kind' | 'topic' | 'pendingSearch' | 'sort' | 'router' | 'setSearch'
 >;
 
 export function useApplyContentFeedFilters(props: UseApplyContentFeedFiltersProps) {
@@ -25,7 +17,6 @@ export function useApplyContentFeedFilters(props: UseApplyContentFeedFiltersProp
         fixedKind: props.fixedKind,
         kind: props.kind,
         topic: props.topic,
-        type: props.type,
         search: props.pendingSearch,
         sort: props.sort,
       });

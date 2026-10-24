@@ -5,7 +5,6 @@ namespace App\ReadModel\PublicSite\Content;
 use App\Application\PublicSite\PublicFeedItem;
 use App\Content\Locale;
 use App\Models\ReferenceCollection;
-use App\Models\Resource;
 use App\Models\Writing;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Query\Builder;
@@ -62,15 +61,11 @@ final class FeedReader
             $sources[] = $this->writingSource($locale, $search, $topic);
         }
 
-        if ($kind === null || $kind === 'achado') {
-            $sources[] = $this->findingSource($locale, $search, $type, $topic);
-        }
-
         if (($kind === null || $kind === 'colecao') && ! filled($topic)) {
             $sources[] = $this->collectionSource($locale, $search, $topic);
         }
 
-        return array_values(array_filter($sources));
+        return $sources;
     }
 
     private function writingSource(string $locale, ?string $search, ?string $topic): Builder
@@ -103,56 +98,6 @@ final class FeedReader
         }
 
         $this->applyTopic($query, 'writing', $topic, 'writings.id');
-
-        return $query;
-    }
-
-    private function findingSource(
-        string $locale,
-        ?string $search,
-        ?string $type,
-        ?string $topic,
-    ): Builder {
-        $query = DB::table('resources')
-            ->join('resource_revisions as public_resource_revision', 'public_resource_revision.id', '=', 'resources.published_revision_id')
-            ->leftJoin('resource_revision_translations', function ($join) use ($locale): void {
-                $join->on(
-                    'resource_revision_translations.resource_revision_id',
-                    '=',
-                    'resources.published_revision_id',
-                )->where('resource_revision_translations.locale', $locale);
-            })
-            ->where('public_resource_revision.hidden', false)
-            ->where('public_resource_revision.visibility', 'public')
-            ->select([
-                DB::raw("'achado' as kind"),
-                'resources.id as content_id',
-                DB::raw('COALESCE(public_resource_revision.found_date_iso, public_resource_revision.published_date_iso) as date_value'),
-                'resource_revision_translations.title as title_value',
-            ]);
-
-        if (filled($search)) {
-            $term = '%'.$search.'%';
-            $query->where(function (Builder $fields) use ($term): void {
-                $fields->where('resource_revision_translations.title', 'ilike', $term)
-                    ->orWhere('resource_revision_translations.alternative_title', 'ilike', $term)
-                    ->orWhere('resource_revision_translations.description', 'ilike', $term)
-                    ->orWhere('resource_revision_translations.reason_found', 'ilike', $term)
-                    ->orWhereExists(function (Builder $attributions) use ($term): void {
-                        $attributions
-                            ->selectRaw('1')
-                            ->from('resource_revision_attributions')
-                            ->whereColumn('resource_revision_attributions.resource_revision_id', 'public_resource_revision.id')
-                            ->where('resource_revision_attributions.name', 'ilike', $term);
-                    });
-            });
-        }
-
-        if (filled($type)) {
-            $query->where('public_resource_revision.type', $type);
-        }
-
-        $this->applyTopic($query, 'finding', $topic, 'resources.id');
 
         return $query;
     }
@@ -239,16 +184,6 @@ final class FeedReader
                     'publishedTranslations',
                     'topics' => static fn ($query) => $query->published(),
                     'topics.publishedTranslations',
-                ])
-                ->get()
-                ->keyBy('id'),
-            'achado' => Resource::query()->public()->whereKey($ids->get('achado', []))
-                ->with([
-                    'publishedTranslations',
-                    'topics' => static fn ($query) => $query->published(),
-                    'topics.publishedTranslations',
-                    'links',
-                    'identifiers',
                 ])
                 ->get()
                 ->keyBy('id'),

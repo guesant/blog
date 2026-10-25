@@ -5,7 +5,6 @@ namespace App\Filament\Concerns;
 use App\Models\Page;
 use App\Models\PageRevisionTranslation;
 use App\Models\ProfileRevisionTranslation;
-use App\Models\ResumeRevisionTranslation;
 use App\Models\RevisionTranslation;
 use App\Models\SiteSettings;
 use Illuminate\Database\Eloquent\Model;
@@ -94,10 +93,6 @@ trait LoadsTranslationData
             return $this->profileFields($translation);
         }
 
-        if ($translation instanceof ResumeRevisionTranslation) {
-            return $this->resumeFields($translation);
-        }
-
         if (! $translation instanceof RevisionTranslation) {
             return [];
         }
@@ -129,24 +124,6 @@ trait LoadsTranslationData
                 ->all(),
             'trajectory' => $attributes['trajectory'] ?? null,
             'milestones' => $attributes['milestones'] ?? null,
-        ];
-    }
-
-    private function resumeFields(ResumeRevisionTranslation $translation): array
-    {
-        $attributes = $translation->getAttributes();
-
-        return [
-            'summary' => $attributes['summary'] ?? null,
-            'leadership' => $attributes['leadership'] ?? null,
-            'education' => $attributes['education'] ?? null,
-            'certificates' => $attributes['certificates'] ?? null,
-            'certifications' => $attributes['certifications'] ?? null,
-            'publications' => $attributes['publications'] ?? null,
-            'recommendations' => $attributes['recommendations'] ?? null,
-            'technical_productions' => $attributes['technical_productions'] ?? null,
-            'events' => $attributes['events'] ?? null,
-            'awards' => $attributes['awards'] ?? null,
         ];
     }
 

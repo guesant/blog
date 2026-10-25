@@ -3,15 +3,7 @@ export type RecordValue = Record<string, unknown>;
 export type ContentLocale = 'en' | 'pt-BR';
 
 export type ContentCollection =
-  | 'cases'
-  | 'projects'
-  | 'experiments'
-  | 'writing'
-  | 'collections'
-  | 'credits'
-  | 'topics'
-  | 'technologies'
-  | 'snippets';
+  'writing' | 'collections' | 'credits' | 'topics' | 'technologies' | 'snippets';
 
 export type ContentCollectionQuery = {
   page?: number;

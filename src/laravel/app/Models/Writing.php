@@ -7,7 +7,6 @@ use App\Models\Concerns\HasPublicId;
 use App\Models\Concerns\UsesCurrentRevision;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 /**
@@ -28,13 +27,5 @@ class Writing extends Model
     public function topics(): MorphToMany
     {
         return $this->morphToMany(Topic::class, 'topicable');
-    }
-
-    /**
-     * @return BelongsToMany<Page, $this>
-     */
-    public function featuredInPages(): BelongsToMany
-    {
-        return $this->belongsToMany(Page::class, 'page_featured_writing')->withPivot('order');
     }
 }

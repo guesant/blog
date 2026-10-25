@@ -3,15 +3,11 @@ import { routeSegment } from '../../navigation/route-segment';
 
 const routeIcons: Partial<Record<string, IconName>> = {
   about: 'user',
-  resume: 'graduation-cap',
   writing: 'pen-line',
   topics: 'tag',
   collections: 'book',
   technologies: 'wrench',
   snippets: 'document',
-  cases: 'briefcase',
-  projects: 'layout-grid',
-  portfolio: 'layout-grid',
   now: 'clock',
   contact: 'mail',
   license: 'scroll-text',

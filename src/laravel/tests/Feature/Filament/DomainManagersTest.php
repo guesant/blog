@@ -6,9 +6,7 @@ use App\Filament\Pages\ManageContact;
 use App\Filament\Pages\ManageCredits;
 use App\Filament\Pages\ManageFollow;
 use App\Filament\Pages\ManageHome;
-use App\Filament\Pages\ManagePortfolio;
 use App\Filament\Pages\ManageProfile;
-use App\Filament\Pages\ManageResume;
 use App\Filament\Resources\Pages\PageResource;
 use App\Models\Page;
 use App\Models\SiteSettings;
@@ -26,10 +24,8 @@ class DomainManagersTest extends TestCase
         foreach ([
             ManageHome::class,
             ManageProfile::class,
-            ManageResume::class,
             ManageContact::class,
             ManageCredits::class,
-            ManagePortfolio::class,
             ManageFollow::class,
         ] as $manager) {
             Livewire::test($manager)->assertHasNoErrors();
@@ -48,19 +44,13 @@ class DomainManagersTest extends TestCase
         $this->assertContains('license', $slugs);
     }
 
-    public function test_home_portfolio_follow_and_credits_save_localized_page_content(): void
+    public function test_home_follow_and_credits_save_localized_page_content(): void
     {
         $this->actingAsAdmin();
 
         Livewire::test(ManageHome::class)
             ->set('data.translations.en.fields.title', 'Home')
             ->set('data.translations.pt-BR.fields.title', 'Início')
-            ->call('save')
-            ->assertHasNoErrors();
-
-        Livewire::test(ManagePortfolio::class)
-            ->set('data.translations.en.fields.title', 'Portfolio')
-            ->set('data.translations.pt-BR.fields.title', 'Portfólio')
             ->call('save')
             ->assertHasNoErrors();
 
@@ -78,7 +68,6 @@ class DomainManagersTest extends TestCase
 
         foreach ([
             ['slug' => 'home', 'en' => 'Home', 'pt-BR' => 'Início'],
-            ['slug' => 'portfolio', 'en' => 'Portfolio', 'pt-BR' => 'Portfólio'],
             ['slug' => 'follow', 'en' => 'Follow', 'pt-BR' => 'Acompanhar'],
             ['slug' => 'credits', 'en' => 'Credits', 'pt-BR' => 'Créditos'],
         ] as $pageData) {
@@ -89,7 +78,7 @@ class DomainManagersTest extends TestCase
         }
     }
 
-    public function test_profile_and_resume_managers_keep_page_content_in_their_domains(): void
+    public function test_profile_manager_keeps_about_page_content_in_its_domain(): void
     {
         $this->actingAsAdmin();
 
@@ -100,19 +89,10 @@ class DomainManagersTest extends TestCase
             ->call('save')
             ->assertHasNoErrors();
 
-        Livewire::test(ManageResume::class)
-            ->set('data.page_translations.en.fields.title', 'Résumé')
-            ->set('data.page_translations.pt-BR.fields.title', 'Currículo')
-            ->call('save')
-            ->assertHasNoErrors();
-
         $about = Page::query()->where('slug', 'about')->firstOrFail();
-        $resume = Page::query()->where('slug', 'resume')->firstOrFail();
 
         $this->assertSame('About', $about->currentRevision->translations()->where('locale', 'en')->value('title'));
         $this->assertSame('Sobre', $about->currentRevision->translations()->where('locale', 'pt-BR')->value('title'));
-        $this->assertSame('Résumé', $resume->currentRevision->translations()->where('locale', 'en')->value('title'));
-        $this->assertSame('Currículo', $resume->currentRevision->translations()->where('locale', 'pt-BR')->value('title'));
     }
 
     public function test_contact_manager_persists_settings_alongside_page_content(): void

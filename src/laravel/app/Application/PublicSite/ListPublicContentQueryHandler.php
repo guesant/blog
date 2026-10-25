@@ -2,11 +2,9 @@
 
 namespace App\Application\PublicSite;
 
-use App\ReadModel\PublicSite\Content\CaseStudyReader;
 use App\ReadModel\PublicSite\Content\CreditsReader;
 use App\ReadModel\PublicSite\Content\FeedReader;
 use App\ReadModel\PublicSite\Content\PageReader;
-use App\ReadModel\PublicSite\Content\ProjectReader;
 use App\ReadModel\PublicSite\Content\ReferenceCollectionReader;
 use App\ReadModel\PublicSite\Content\SnippetReader;
 use App\ReadModel\PublicSite\Content\TechnologyReader;
@@ -19,10 +17,8 @@ final class ListPublicContentQueryHandler
 {
     public function __construct(
         private readonly FeedReader $feed,
-        private readonly CaseStudyReader $cases,
         private readonly CreditsReader $credits,
         private readonly PageReader $pages,
-        private readonly ProjectReader $projects,
         private readonly ReferenceCollectionReader $collections,
         private readonly SnippetReader $snippets,
         private readonly TechnologyReader $technologies,
@@ -43,7 +39,6 @@ final class ListPublicContentQueryHandler
                 type: $query->type,
                 topic: $query->topic,
             ),
-            'cases' => $this->cases->listPaginated($query->perPage, $query->sort),
             'collections' => $this->collections->listPaginated(
                 $query->perPage,
                 $query->sort,
@@ -51,8 +46,6 @@ final class ListPublicContentQueryHandler
                 $query->search,
             ),
             'credits' => $this->credits->listPaginated($query->perPage, $query->sort),
-            'experiments' => $this->projects->listExperimentsPaginated($query->perPage, $query->sort),
-            'projects' => $this->projects->listPaginated($query->perPage, $query->sort),
             'snippets' => $this->snippets->listPaginated($query->perPage, $query->sort),
             'technologies' => $this->technologies->listPaginated($query->perPage, $query->sort),
             'topics' => $this->topics->listPaginated($query->perPage, $query->sort),
@@ -72,26 +65,6 @@ final class ListPublicContentQueryHandler
     private function featured(ListPublicContentQuery $query): LengthAwarePaginator
     {
         $configuration = match ($query->collection) {
-            'cases' => [
-                'relation' => 'featuredCases',
-                'pivot' => 'page_revision_featured_cases',
-                'table' => 'case_studies',
-                'with' => [
-                    'publishedTranslations',
-                    'technologies' => static fn ($query) => $query->published(),
-                    'technologies.publishedTranslations',
-                ],
-            ],
-            'projects' => [
-                'relation' => 'featuredProjects',
-                'pivot' => 'page_revision_featured_projects',
-                'table' => 'projects',
-                'with' => [
-                    'publishedTranslations',
-                    'technologies' => static fn ($query) => $query->published(),
-                    'technologies.publishedTranslations',
-                ],
-            ],
             'writing' => [
                 'relation' => 'featuredWritings',
                 'pivot' => 'page_revision_featured_writings',
@@ -104,19 +77,15 @@ final class ListPublicContentQueryHandler
             ],
             default => throw new InvalidArgumentException('Featured content is unavailable for this collection.'),
         };
-        $portfolio = $this->pages->findBySlug('portfolio')?->publishedRevision;
+        $home = $this->pages->findBySlug('home')?->publishedRevision;
 
-        if ($portfolio === null) {
+        if ($home === null) {
             return new LengthAwarePaginator([], 0, $query->perPage, max(1, $query->page));
         }
 
-        $builder = $portfolio->{$configuration['relation']}()
+        $builder = $home->{$configuration['relation']}()
             ->published()
-            ->with($configuration['with'])
-            ->when(
-                in_array($query->collection, ['cases', 'projects'], true),
-                fn ($builder) => $builder->whereHas('publishedRevision', static fn ($revision) => $revision->where('nda', false)),
-            );
+            ->with($configuration['with']);
         $pivot = $configuration['pivot'];
 
         return $builder

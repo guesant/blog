@@ -7,7 +7,6 @@ import { kindMetadata } from './splat-metadata-kind';
 import { metadataFromPage } from './splat-metadata-from-page';
 import { contentMetadata } from './splat-metadata-content';
 import { pageMetadata } from './splat-metadata-page';
-import { articleEntityMetadata } from './splat-metadata-article-entity';
 import { localizedMetadata } from './splat-metadata-localized';
 
 type MetadataResolver = (data: RouteData, locale: Locale) => RouteMetadata;
@@ -15,19 +14,14 @@ type MetadataResolver = (data: RouteData, locale: Locale) => RouteMetadata;
 const metadataResolvers: Partial<Record<RouteData['kind'], MetadataResolver>> = {
   home: (data) => (data.kind === 'home' ? metadataFromPage(data.content.page) : defaultMetadata()),
   about: pageMetadata,
-  cases: pageMetadata,
   collections: pageMetadata,
   contact: pageMetadata,
   follow: pageMetadata,
   license: pageMetadata,
   now: pageMetadata,
-  projects: pageMetadata,
   writing: pageMetadata,
   credits: (data) =>
     data.kind === 'credits' ? metadataFromPage(data.content.page) : defaultMetadata(),
-  resume: (data) =>
-    data.kind === 'resume' ? metadataFromPage(data.content.page) : defaultMetadata(),
-  'case-detail': articleMetadata,
   'writing-detail': articleMetadata,
   'collection-detail': (data) =>
     data.kind === 'collection-detail'
@@ -37,8 +31,6 @@ const metadataResolvers: Partial<Record<RouteData['kind'], MetadataResolver>> = 
           description: data.collection.description,
         })
       : defaultMetadata(),
-  'project-detail': articleEntityMetadata,
-  'experiment-detail': articleEntityMetadata,
   'snippet-detail': (data) =>
     data.kind === 'snippet-detail'
       ? contentMetadata({
@@ -52,7 +44,7 @@ const metadataResolvers: Partial<Record<RouteData['kind'], MetadataResolver>> = 
     data.kind === 'technology-detail'
       ? contentMetadata({
           title: data.technology.name,
-          description: data.technology.skills.join(' · '),
+          description: data.technology.name,
         })
       : defaultMetadata(),
   'topic-detail': (data) =>
@@ -67,8 +59,6 @@ const metadataResolvers: Partial<Record<RouteData['kind'], MetadataResolver>> = 
       titlePath: 'Pages.topics.indexTitle',
       descriptionPath: 'Pages.topics.indexDescription',
     }),
-  portfolio: (data) =>
-    data.kind === 'portfolio' ? metadataFromPage(data.page) : defaultMetadata(),
   status: (data, locale) =>
     data.kind === 'status'
       ? localizedMetadata({

@@ -4,7 +4,7 @@ import { homeVisibilityEnabled } from './home-visibility-enabled';
 
 export type HomeHeroRoute = {
   href: string;
-  icon: 'user' | 'mail' | 'graduation-cap';
+  icon: 'user' | 'mail';
   label: string;
   visible: boolean;
 };
@@ -27,12 +27,6 @@ export function buildHomeHeroRoutes(
       icon: 'mail',
       label: tNav('contact'),
       visible: props.showContact && homeVisibilityEnabled(props.site.visibility, 'contact'),
-    },
-    {
-      href: '/resume',
-      icon: 'graduation-cap',
-      label: tNav('resume'),
-      visible: homeVisibilityEnabled(props.site.visibility, 'resume'),
     },
   ];
 }

@@ -10,11 +10,6 @@ final class PublicSiteAvailabilityReader
     public function read(string $locale, bool $hasProfile, bool $contactEnabled): array
     {
         $result = DB::query()
-            ->selectSub($this->resumeWithContent($locale), 'has_resume_content')
-            ->selectSub($this->profileWithTrajectory($locale), 'has_profile_trajectory')
-            ->selectSub($this->publicContent('projects', ['hidden' => false, 'nda' => false]), 'has_projects')
-            ->selectSub($this->publicContent('case_studies', ['hidden' => false, 'nda' => false]), 'has_cases')
-            ->selectSub($this->publicContent('experiments', ['hidden' => false]), 'has_experiments')
             ->selectSub($this->pageWithFields('license', $locale, ['code_body', 'content_body', 'ai_body']), 'has_license')
             ->selectSub($this->publicCredits(), 'has_credits')
             ->selectSub($this->pageWithFields('follow', $locale, [
@@ -35,19 +30,11 @@ final class PublicSiteAvailabilityReader
             ->selectSub($this->publicContent('snippets', ['hidden' => false]), 'has_snippets')
             ->first();
 
-        $hasCases = $this->boolean($result?->has_cases);
-        $hasPortfolio = $hasCases
-            || $this->boolean($result?->has_projects)
-            || $this->boolean($result?->has_experiments);
         $hasWriting = $this->boolean($result?->has_writing);
         $hasCollections = $this->boolean($result?->has_collections);
 
         return [
             'about' => $hasProfile,
-            'resume' => $this->boolean($result?->has_resume_content)
-                || $this->boolean($result?->has_profile_trajectory),
-            'portfolio' => $hasPortfolio,
-            'cases' => $hasCases,
             'contact' => $contactEnabled,
             'license' => $this->boolean($result?->has_license),
             'credits' => $this->boolean($result?->has_credits),
@@ -61,140 +48,9 @@ final class PublicSiteAvailabilityReader
         ];
     }
 
-    private function resumeWithContent(string $locale): Builder
-    {
-        return DB::table('resumes as r')
-            ->selectRaw('1')
-            ->whereNotNull('r.published_revision_id')
-            ->whereExists(function (Builder $query): void {
-                $query->selectRaw('1')
-                    ->from('resume_revisions as rr')
-                    ->whereColumn('rr.id', 'r.published_revision_id')
-                    ->where(fn ($visibility) => $visibility
-                        ->where('rr.hidden', false)
-                        ->orWhereNull('rr.hidden'));
-            })
-            ->whereExists(function (Builder $query) use ($locale): void {
-                $query->selectRaw('1')
-                    ->from('resume_revision_translations as rt')
-                    ->whereColumn('rt.resume_revision_id', 'r.published_revision_id')
-                    ->where(function (Builder $query) use ($locale): void {
-                        $query->where(function (Builder $query) use ($locale): void {
-                            $query->where('rt.locale', $locale)
-                                ->where(function (Builder $content): void {
-                                    $this->resumeTranslationHasContent($content);
-                                });
-                        })->orWhere(function (Builder $query) use ($locale): void {
-                            $query->where('rt.locale', 'en')
-                                ->whereNotExists(function (Builder $query) use ($locale): void {
-                                    $query->selectRaw('1')
-                                        ->from('resume_revision_translations as rt_locale')
-                                        ->whereColumn('rt_locale.resume_revision_id', 'r.published_revision_id')
-                                        ->where('rt_locale.locale', $locale);
-                                })->where(function (Builder $content): void {
-                                    $this->resumeTranslationHasContent($content);
-                                });
-                        });
-                    });
-            })
-            ->limit(1);
-    }
-
-    private function resumeTranslationHasContent(Builder $query): void
-    {
-        $query
-            ->where(function (Builder $content): void {
-                $content
-                    ->where(function (Builder $summary): void {
-                        $summary
-                            ->whereNotNull('rt.summary')
-                            ->where('rt.summary', '<>', '');
-                    });
-
-                foreach ([
-                    'leadership',
-                    'education',
-                    'certificates',
-                    'certifications',
-                    'publications',
-                    'recommendations',
-                    'technical_productions',
-                    'events',
-                    'awards',
-                ] as $section) {
-                    $content->orWhereExists(function (Builder $rows) use ($section): void {
-                        $rows
-                            ->selectRaw('1')
-                            ->from('resume_revision_'.$section)
-                            ->whereColumn('resume_revision_'.$section.'.resume_revision_translation_id', 'rt.id');
-                    });
-                }
-
-                foreach (['selected_cases', 'skills', 'skill_technologies', 'languages'] as $relation) {
-                    $content->orWhereExists(function (Builder $rows) use ($relation): void {
-                        $rows
-                            ->selectRaw('1')
-                            ->from($relation === 'skill_technologies'
-                                ? 'resume_revision_skill_technologies'
-                                : 'resume_revision_'.$relation)
-                            ->whereColumn(
-                                $relation === 'skill_technologies'
-                                    ? 'resume_revision_skill_technologies.resume_revision_id'
-                                    : 'resume_revision_'.$relation.'.resume_revision_id',
-                                'r.published_revision_id',
-                            );
-                    });
-                }
-            });
-    }
-
-    private function profileWithTrajectory(string $locale): Builder
-    {
-        return DB::table('profiles as p')
-            ->selectRaw('1')
-            ->whereNotNull('p.published_revision_id')
-            ->whereExists(function (Builder $query): void {
-                $query->selectRaw('1')
-                    ->from('profile_revisions as pr')
-                    ->whereColumn('pr.id', 'p.published_revision_id')
-                    ->where(fn ($visibility) => $visibility
-                        ->where('pr.hidden', false)
-                        ->orWhereNull('pr.hidden'));
-            })
-            ->whereExists(function (Builder $query) use ($locale): void {
-                $query->selectRaw('1')
-                    ->from('profile_revision_translations as pt')
-                    ->whereColumn('pt.profile_revision_id', 'p.published_revision_id')
-                    ->where(function (Builder $query) use ($locale): void {
-                        $query->where('pt.locale', $locale)
-                            ->orWhere(function (Builder $query) use ($locale): void {
-                                $query->where('pt.locale', 'en')
-                                    ->whereNotExists(function (Builder $query) use ($locale): void {
-                                        $query->selectRaw('1')
-                                            ->from('profile_revision_translations as pt_locale')
-                                            ->whereColumn('pt_locale.profile_revision_id', 'p.published_revision_id')
-                                            ->where('pt_locale.locale', $locale);
-                                    });
-                            });
-                    })
-                    ->whereExists(function (Builder $query): void {
-                        $query->selectRaw('1')
-                            ->from('profile_revision_trajectory as trajectory')
-                            ->whereColumn('trajectory.profile_revision_translation_id', 'pt.id')
-                            ->where(fn ($visibility) => $visibility
-                                ->where('trajectory.hidden', false)
-                                ->orWhereNull('trajectory.hidden'));
-                    });
-            })
-            ->limit(1);
-    }
-
     private function publicContent(string $table, array $filters): Builder
     {
         $revisionTable = [
-            'case_studies' => 'case_study_revisions',
-            'experiments' => 'experiment_revisions',
-            'projects' => 'project_revisions',
             'reference_collections' => 'reference_collection_revisions',
             'snippets' => 'snippet_revisions',
             'technologies' => 'technology_revisions',

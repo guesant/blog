@@ -10,8 +10,6 @@ use App\Application\PublicSite\GetPublicHomeGalleryQuery;
 use App\Application\PublicSite\GetPublicHomeGalleryQueryHandler;
 use App\Application\PublicSite\GetPublicPageQuery;
 use App\Application\PublicSite\GetPublicPageQueryHandler;
-use App\Application\PublicSite\GetPublicResumeQuery;
-use App\Application\PublicSite\GetPublicResumeQueryHandler;
 use App\Application\PublicSite\GetPublicSiteChromeQuery;
 use App\Application\PublicSite\GetPublicSiteChromeQueryHandler;
 use App\Application\PublicSite\ListPublicContentQuery;
@@ -27,14 +25,12 @@ use App\Http\Responses\PublicEmailChallengeResponseDto;
 use App\Http\Responses\PublicHomeGalleryResponseDto;
 use App\Http\Responses\PublicListMetaDto;
 use App\Http\Responses\PublicPageResponseDto;
-use App\Http\Responses\PublicResumeResponseFactory;
 use App\Http\Responses\PublicSiteChromeResponseDto;
 use App\OpenGraph\OgImageUrlGenerator;
 use App\Support\PublicMediaUrl;
 use Dedoc\Scramble\Attributes\Response as ScrambleResponse;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -47,20 +43,14 @@ use Symfony\Component\HttpFoundation\Response;
 class PublicSiteApiController extends Controller
 {
     private const COLLECTIONS = [
-        'cases',
         'credits',
-        'experiments',
-        'projects',
         'snippets',
         'technologies',
         'topics',
     ];
 
     private const DOCUMENT_COLLECTIONS = [
-        'cases',
         'collections',
-        'experiments',
-        'projects',
         'snippets',
         'technologies',
         'topics',
@@ -190,37 +180,6 @@ class PublicSiteApiController extends Controller
             ->header('Cache-Control', 'public, max-age=60, stale-while-revalidate=300');
     }
 
-    public function resumePdf(string $locale): Response
-    {
-        if (! in_array($locale, ['en', 'pt-BR'], true)) {
-            abort(404);
-        }
-
-        $disk = Storage::disk((string) config('filesystems.default'));
-        $path = "resume/resume-{$locale}.pdf";
-        if (! $disk->exists($path)) {
-            abort(404);
-        }
-
-        $stream = $disk->readStream($path);
-        if (! is_resource($stream)) {
-            abort(503);
-        }
-
-        return response()->stream(function () use ($stream): void {
-            try {
-                fpassthru($stream);
-            } finally {
-                fclose($stream);
-            }
-        }, 200, [
-            'Cache-Control' => 'public, max-age=3600',
-            'Content-Type' => 'application/pdf',
-            'Content-Disposition' => "attachment; filename=resume-{$locale}.pdf",
-            'X-Content-Type-Options' => 'nosniff',
-        ]);
-    }
-
     /** @response array<string, mixed>|null */
     #[ScrambleResponse(200, type: 'array<string, mixed>|null')]
     #[ScrambleResponse(503, 'The service is temporarily unavailable.', type: 'array{error: array{code: string, message: string, status: int, details: string}}')]
@@ -236,7 +195,6 @@ class PublicSiteApiController extends Controller
      * @response array{
      *   site: array{
      *     short_name: string|null,
-     *     portfolio_url: string,
      *     source_repository_url: string,
      *     contact_enabled: bool,
      *     contact_email_available: bool,
@@ -277,9 +235,6 @@ class PublicSiteApiController extends Controller
      *   build: array{commit_sha: string, build_time: string},
      *   visibility: array{
      *     about: bool,
-     *     resume: bool,
-     *     portfolio: bool,
-     *     cases: bool,
      *     contact: bool,
      *     license: bool,
      *     credits: bool,
@@ -351,7 +306,7 @@ class PublicSiteApiController extends Controller
             ->header('Cache-Control', 'public, max-age=60, stale-while-revalidate=300');
     }
 
-    #[ScrambleResponse(200, type: 'array{highlights: list<array{kind: string, item: array<string, mixed>}>, feed: list<array<string, mixed>>, portfolio: array{cases: list<array<string, mixed>>, projects: list<array<string, mixed>>, experiments: list<array<string, mixed>>, collections: list<array<string, mixed>>, snippets: list<array<string, mixed>>, technologies: list<array<string, mixed>>, topics: list<array<string, mixed>>, credits: list<array<string, mixed>>}, collection_showcases: list<array{collection: array<string, mixed>, items: list<array<string, mixed>>}>, totals: array{highlights: int, feed: int, portfolio: array{cases: int, projects: int, experiments: int, collections: int, snippets: int, technologies: int, topics: int, credits: int}, collection_showcases: int}}')]
+    #[ScrambleResponse(200, type: 'array{feed: list<array<string, mixed>>, collection_showcases: list<array{collection: array<string, mixed>, items: list<array<string, mixed>>}>, totals: array{feed: int, collection_showcases: int}}')]
     #[ScrambleResponse(503, 'The service is temporarily unavailable.', type: 'array{error: array{code: string, message: string, status: int, details: string}}')]
     public function homeGallery(
         Request $request,
@@ -364,40 +319,6 @@ class PublicSiteApiController extends Controller
         return response()->json(
             PublicHomeGalleryResponseDto::fromResult($result, $presenter, $locale)->toArray(),
         )->header('Cache-Control', 'public, max-age=60, stale-while-revalidate=300');
-    }
-
-    /**
-     * @response array{
-     *   summary: string|null,
-     *   leadership: string|list<string>,
-     *   education: string|list<string>,
-     *   certificates: string|list<string>,
-     *   certifications: string|list<string>,
-     *   publications: string|list<string>,
-     *   recommendations: string|list<string>,
-     *   technical_productions: string|list<string>,
-     *   events: string|list<string>,
-     *   awards: string|list<string>,
-     *   experience: list<string>,
-     *   selected_cases: list<array<string, mixed>>|list<string>,
-     *   skills: list<array<string, mixed>>|list<string>,
-     *   languages: list<array{name: string|null, proficiency: string|''}>|list<string>
-     * }
-     */
-    #[ScrambleResponse(200, type: "array{summary: string|null, leadership: string|array<int, string>, education: string|array<int, string>, certificates: string|array<int, string>, certifications: string|array<int, string>, publications: string|array<int, string>, recommendations: string|array<int, string>, technical_productions: string|array<int, string>, events: string|array<int, string>, awards: string|array<int, string>, experience: array<int, string>, selected_cases: array<int, array{slug: string, url: string, title: string, status: string|null, summary: string|null, published_at: string|null, external: string, meta: string|null, context: string|null, role: string|null, result: string|null, metrics: string|null, body: string|null, technologies: array<int, array{slug: string, name: string}>, show_history: bool, history: null, href: string, related: null, updated_at: string|null}>|array<int, string>, skills: array<int, array{name: string, technologies: array<int, array{slug: string, name: string, code: null, url: null, skills: null, resume_skills: null}>}>|array<int, string>, languages: array<int, array{name: string, proficiency: string|''}>|array<int, string>}")]
-    public function resumeData(
-        Request $request,
-        GetPublicResumeQueryHandler $handler,
-        PublicResumeResponseFactory $presenter,
-        PublicMediaUrl $media,
-    ): JsonResponse {
-        $locale = Locale::normalize($request->query('locale'));
-
-        return response()->json($presenter->fromResult(
-            $handler->handle(new GetPublicResumeQuery($locale)),
-            $media,
-        )->toArray())
-            ->header('Cache-Control', 'public, max-age=60, stale-while-revalidate=300');
     }
 
     private function sort(mixed $value): ?string

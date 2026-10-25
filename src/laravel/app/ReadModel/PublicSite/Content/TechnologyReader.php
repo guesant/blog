@@ -15,13 +15,7 @@ class TechnologyReader
     {
         $query = Technology::query()
             ->published()
-            ->with([
-                'publishedTranslations',
-                'resumeSkills.topic' => static fn ($query) => $query->published(),
-                'resumeSkills.topic.publishedTranslations',
-                'resumeSkills.topic.parent' => static fn ($query) => $query->published(),
-                'resumeSkills.topic.parent.publishedTranslations',
-            ]);
+            ->with('publishedTranslations');
 
         $this->applySort($query, $sort, alphaTable: 'technology_revision_translations', alphaForeignKey: 'technology_revision_id', alphaColumn: 'name');
 
@@ -31,13 +25,7 @@ class TechnologyReader
     public function findByIdentifier(string $identifier): ?Technology
     {
         return PublicIdentifier::constrain(Technology::query()->published(), $identifier)
-            ->with([
-                'publishedTranslations',
-                'resumeSkills.topic' => static fn ($query) => $query->published(),
-                'resumeSkills.topic.publishedTranslations',
-                'resumeSkills.topic.parent' => static fn ($query) => $query->published(),
-                'resumeSkills.topic.parent.publishedTranslations',
-            ])
+            ->with('publishedTranslations')
             ->first();
     }
 

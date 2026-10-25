@@ -1,8 +1,8 @@
-import type { CaseStudy, TechnologyBadge } from './content';
+import type { TechnologyBadge } from './content';
 import type { WithOgImage } from './content';
-import type { Profile, ResumeContent } from './resume';
+import type { Profile } from './profile';
 import type { SiteText } from './site';
-import type { HomePageCopy, PageIntroduction, ResumePageCopy } from './pages-copy';
+import type { HomePageCopy, PageIntroduction } from './pages-copy';
 import type { HomeGallery } from './pages-gallery';
 import type { ContentCollectionMeta } from '../api/public-site-source-support';
 
@@ -11,8 +11,6 @@ export type {
   HomeGallery,
   HomeGalleryEntry,
   HomeGalleryEntryKind,
-  HomeGalleryPortfolio,
-  HomeGalleryPortfolioTotals,
   HomeGalleryTotals,
 } from './pages-gallery';
 
@@ -22,14 +20,6 @@ export type HomePageContent = {
   site: SiteText;
   recurringTechnologies: TechnologyBadge[];
   gallery: HomeGallery;
-};
-
-export type ResumePageContent = {
-  profile: Profile;
-  site: SiteText;
-  resume: ResumeContent;
-  cases: CaseStudy[];
-  page: ResumePageCopy;
 };
 
 export type CreditEntry = {
@@ -53,19 +43,6 @@ export type CreditsPageCopy = WithOgImage & {
 export type CreditsPageContent = {
   page: CreditsPageCopy;
   credits: CreditsContent;
-};
-
-export type PortfolioPageCopy = WithOgImage & {
-  title: string;
-  description: string;
-  heroExperience: string;
-  heroCurrentFocus: string;
-  availableLabel: string;
-  workTitle: string;
-  workDescription: string;
-  projectsTitle: string;
-  projectsDescription: string;
-  experimentsSummary: string;
 };
 
 export type NowPageCopy = PageIntroduction & {
@@ -104,8 +81,6 @@ export type LicensePageCopy = PageIntroduction & {
 };
 
 export type NavigationAvailability = {
-  cases: boolean;
-  projects: boolean;
   writing: boolean;
   contact: boolean;
 };

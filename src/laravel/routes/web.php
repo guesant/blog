@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\AdminMediaDownloadController;
-use App\Http\Controllers\Api\PublicSiteApiController;
 use App\Http\Controllers\KeycloakAuthController;
 use App\Http\Controllers\OgImageController;
 use App\Http\Controllers\PublicMetadataController;
@@ -49,6 +48,5 @@ Route::get('/atom.xml', fn (PublicMetadataController $controller) => $controller
 Route::get('/pt-BR/atom.xml', fn (PublicMetadataController $controller) => $controller->feed('pt-BR', 'atom'))->middleware('throttle:public-feed');
 Route::get('/feed.json', fn (PublicMetadataController $controller) => $controller->feed('en', 'json'))->middleware('throttle:public-feed');
 Route::get('/pt-BR/feed.json', fn (PublicMetadataController $controller) => $controller->feed('pt-BR', 'json'))->middleware('throttle:public-feed');
-Route::get('/resume-{locale}.pdf', [PublicSiteApiController::class, 'resumePdf'])->middleware('throttle:public-pdf');
 Route::get('/snippets/{slug}/download', SnippetDownloadController::class)->middleware('throttle:snippet-zip');
 Route::get('/pt-BR/snippets/{slug}/download', SnippetDownloadController::class)->middleware('throttle:snippet-zip');

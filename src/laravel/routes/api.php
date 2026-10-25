@@ -18,15 +18,12 @@ Route::prefix('v1')
                 Route::middleware(CheckPublicApiMaintenanceMode::class)->group(function (): void {
                     Route::get('/site/home-gallery', [PublicSiteApiController::class, 'homeGallery']);
                     Route::get('/site/pages/{slug}', [PublicSiteApiController::class, 'page']);
-                    Route::get('/site/resume', [PublicSiteApiController::class, 'resumeData']);
                     Route::get('/media/{path}', PublicMediaController::class)
                         ->where('path', '.*')
                         ->middleware('throttle:public-media');
                     Route::get('/content/feed', [PublicSiteApiController::class, 'feed']);
                     Route::get('/content/{collection}', [PublicSiteApiController::class, 'collection']);
                     Route::get('/content/{collection}/{slug}', [PublicSiteApiController::class, 'document']);
-                    Route::get('/resume/{locale}.pdf', [PublicSiteApiController::class, 'resumePdf'])
-                        ->middleware('throttle:public-pdf');
                     Route::post('/protected-email/challenge', [PublicSiteApiController::class, 'protectedEmailChallenge']);
                     Route::get('/snippets/{slug}/download', SnippetDownloadController::class)
                         ->middleware('throttle:snippet-zip');

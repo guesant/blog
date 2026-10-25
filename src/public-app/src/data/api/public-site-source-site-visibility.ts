@@ -3,9 +3,6 @@ import type { RecordValue } from './public-site-source-support';
 
 const visibilityFields = [
   ['about', 'about'],
-  ['resume', 'resume'],
-  ['portfolio', 'portfolio'],
-  ['cases', 'cases'],
   ['contact', 'contact'],
   ['license', 'license'],
   ['credits', 'credits'],

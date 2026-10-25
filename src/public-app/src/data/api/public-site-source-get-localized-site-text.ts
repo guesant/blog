@@ -23,7 +23,6 @@ export async function getLocalizedSiteText(
 
   return {
     shortName: stringValue(site.short_name),
-    portfolioUrl: stringValue(site.portfolio_url),
     sourceRepositoryUrl: stringValue(site.source_repository_url),
     copyrightTemplate: copyright,
     maintenanceEnabled: site.maintenance_enabled === true,

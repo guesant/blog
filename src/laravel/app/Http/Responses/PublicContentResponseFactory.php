@@ -4,10 +4,7 @@ namespace App\Http\Responses;
 
 use App\Application\PublicSite\PublicFeedItem;
 use App\Content\Locale;
-use App\Models\CaseStudy;
 use App\Models\CreditCategory;
-use App\Models\Experiment;
-use App\Models\Project;
 use App\Models\ReferenceCollection;
 use App\Models\Snippet;
 use App\Models\Technology;
@@ -40,11 +37,8 @@ final class PublicContentResponseFactory
     public function collectionItem(string $collection, object $item, string $locale): array
     {
         return match ($collection) {
-            'cases' => $this->caseStudySummary($item, $locale),
             'collections' => $this->collectionSummary($item, $locale),
             'credits' => $this->credit($item, $locale),
-            'experiments' => $this->experimentSummary($item, $locale),
-            'projects' => $this->projectSummary($item, $locale),
             'snippets' => $this->snippetSummary($item, $locale),
             'technologies' => $this->technology($item, $locale),
             'topics' => $this->topic($item, $locale),
@@ -58,25 +52,12 @@ final class PublicContentResponseFactory
         string $locale,
     ): array {
         return match ($collection) {
-            'cases' => $this->caseStudy($item, $locale),
             'collections' => $this->collectionDetail($item, $locale),
-            'experiments' => $this->experiment($item, $locale),
-            'projects' => $this->project($item, $locale),
             'snippets' => $this->snippet($item, $locale),
             'technologies' => $this->technology($item, $locale),
             'topics' => $this->topic($item, $locale),
             'writing' => $this->writing($item, $locale),
         };
-    }
-
-    private function projectSummary(Project $project, string $locale): array
-    {
-        return $this->withoutDetailFields($this->project($project, $locale));
-    }
-
-    private function caseStudySummary(CaseStudy $case, string $locale): array
-    {
-        return $this->withoutDetailFields($this->caseStudy($case, $locale));
     }
 
     private function writingSummary(Writing $writing, string $locale): array
@@ -85,11 +66,6 @@ final class PublicContentResponseFactory
         $data['excerpt'] = $this->writingPreview($data['body'] ?? null);
 
         return $this->withoutDetailFields($data);
-    }
-
-    private function experimentSummary(Experiment $experiment, string $locale): array
-    {
-        return $this->withoutDetailFields($this->experiment($experiment, $locale));
     }
 
     private function snippetSummary(Snippet $snippet, string $locale): array
@@ -151,18 +127,6 @@ final class PublicContentResponseFactory
                 'article',
                 $name,
             ),
-            'skills' => $technology->resumeSkills
-                ->map(fn ($skill) => $skill->topic?->translation($locale)?->name ?? $skill->topic?->slug)
-                ->filter()
-                ->values(),
-            'resume_skills' => $technology->resumeSkills->map(fn ($skill) => $skill->topic ? [
-                'slug' => $skill->topic->slug,
-                'name' => $skill->topic->translation($locale)?->name ?? $skill->topic->slug,
-                'url' => Locale::url('/topics/'.$this->publicKey($skill->topic), $locale),
-                'parent' => $skill->topic->parent?->slug,
-                'kind' => null,
-                'children' => null,
-            ] : null)->filter()->unique('slug')->values(),
         ];
     }
 
@@ -259,80 +223,6 @@ final class PublicContentResponseFactory
         return $data;
     }
 
-    private function project(Project $project, string $locale): array
-    {
-        $translation = $project->translation($locale);
-        $slug = (string) $this->publishedValue($project, 'slug');
-
-        $data = [
-            'slug' => $slug,
-            'url' => Locale::url('/projects/'.$this->publicKey($project), $locale),
-            'name' => $translation?->name ?? $slug,
-            'purpose' => $translation?->purpose,
-            'og_image_url' => $this->ogImages->generate(
-                'project',
-                $translation?->name ?? $slug,
-                $translation?->purpose,
-            ),
-            'status' => $translation?->status,
-            'published_at' => $this->publishedDate($project, 'published_at'),
-            'external' => $this->publishedValue($project, 'external'),
-            'problem' => $translation?->problem,
-            'current_focus' => $translation?->current_focus,
-            'metrics' => $translation?->metrics,
-            'body' => $this->media->rewrite($translation?->body),
-            'technologies' => $project->technologies->map(fn ($technology) => [
-                'slug' => $technology->slug,
-                'name' => $technology->translation($locale)?->name ?? $technology->slug,
-            ])->values(),
-            'show_history' => $this->publishedValue($project, 'show_history'),
-            'history' => null,
-            'href' => $this->publishedValue($project, 'href'),
-            'related' => null,
-            'updated_at' => $this->publishedDate($project, 'updated_at', true),
-        ];
-
-        return $data;
-    }
-
-    private function caseStudy(CaseStudy $case, string $locale): array
-    {
-        $translation = $case->translation($locale);
-        $slug = (string) $this->publishedValue($case, 'slug');
-
-        $data = [
-            'slug' => $slug,
-            'url' => Locale::url('/cases/'.$this->publicKey($case), $locale),
-            'title' => $translation?->title ?? $slug,
-            'status' => $translation?->status,
-            'summary' => $translation?->summary,
-            'og_image_url' => $this->ogImages->generate(
-                'project',
-                $translation?->title ?? $slug,
-                $translation?->summary,
-            ),
-            'published_at' => $this->publishedDate($case, 'published_at'),
-            'external' => $this->publishedValue($case, 'external'),
-            'meta' => $translation?->meta,
-            'context' => $translation?->context,
-            'role' => $translation?->role,
-            'result' => $translation?->result,
-            'metrics' => $translation?->metrics,
-            'body' => $this->media->rewrite($translation?->body),
-            'technologies' => $case->technologies->map(fn ($technology) => [
-                'slug' => $technology->slug,
-                'name' => $technology->translation($locale)?->name ?? $technology->slug,
-            ])->values(),
-            'show_history' => $this->publishedValue($case, 'show_history'),
-            'history' => null,
-            'href' => $this->publishedValue($case, 'href'),
-            'related' => null,
-            'updated_at' => $this->publishedDate($case, 'updated_at', true),
-        ];
-
-        return $data;
-    }
-
     private function writing(Writing $writing, string $locale): array
     {
         $translation = $writing->translation($locale);
@@ -414,38 +304,6 @@ final class PublicContentResponseFactory
             'related' => null,
             'updated_at' => $this->publishedDate($collection, 'updated_at', true),
             'created_at' => $this->publishedDate($collection, 'created_at', true),
-        ];
-
-        return $data;
-    }
-
-    private function experiment(Experiment $experiment, string $locale): array
-    {
-        $translation = $experiment->translation($locale);
-        $slug = (string) $this->publishedValue($experiment, 'slug');
-
-        $data = [
-            'slug' => $slug,
-            'url' => Locale::url('/projects/experiments/'.$this->publicKey($experiment), $locale),
-            'name' => $translation?->name ?? $slug,
-            'purpose' => $translation?->purpose,
-            'og_image_url' => $this->ogImages->generate(
-                'project',
-                $translation?->name ?? $slug,
-                $translation?->purpose,
-            ),
-            'body' => $this->media->rewrite($translation?->body),
-            'published_at' => $this->publishedDate($experiment, 'published_at'),
-            'external' => $this->publishedValue($experiment, 'external'),
-            'technologies' => $experiment->technologies->map(fn ($technology) => [
-                'slug' => $technology->slug,
-                'name' => $technology->translation($locale)?->name ?? $technology->slug,
-            ])->values(),
-            'href' => $this->publishedValue($experiment, 'href'),
-            'updated_at' => $this->publishedDate($experiment, 'updated_at', true),
-            'show_history' => $this->publishedValue($experiment, 'show_history'),
-            'history' => null,
-            'related' => null,
         ];
 
         return $data;

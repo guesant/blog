@@ -56,21 +56,13 @@ export type FeedTranslator = NamespaceTranslator<'Pages.feed'>;
 
 export type ExternalProfilesTranslator = NamespaceTranslator<'ExternalProfiles'>;
 
-export type IllustrationTranslator = NamespaceTranslator<'Illustration'>;
-
 export type ContentActionsTranslator = NamespaceTranslator<'Pages.contentActions'>;
 
 type StatusTranslationKey = 'title' | 'description' | 'retry' | 'home' | 'issue';
 
 export type StatusTranslator = NamespaceTranslator<'Pages.error', StatusTranslationKey>;
 
-export type CasesTranslator = NamespaceTranslator<'Pages.cases'>;
-
-export type ProjectsTranslator = NamespaceTranslator<'Pages.projects'>;
-
 export type ContactTranslator = NamespaceTranslator<'Pages.contact'>;
-
-export type ResumeTranslator = NamespaceTranslator<'Pages.resume'>;
 
 // jscpd:ignore-end
 

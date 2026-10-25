@@ -14,7 +14,6 @@ final class PublicSiteSettingsReader
                 'settings.id',
                 'settings.published_revision_id',
                 'revision.short_name',
-                'revision.portfolio_url',
                 'revision.source_repository_url',
                 'revision.contact_email',
                 'revision.contact_enabled',
@@ -31,7 +30,6 @@ final class PublicSiteSettingsReader
         if ($settings === null) {
             return [
                 'short_name' => null,
-                'portfolio_url' => '',
                 'source_repository_url' => '',
                 'contact_email' => null,
                 'contact_email_available' => false,
@@ -73,7 +71,6 @@ final class PublicSiteSettingsReader
 
         return [
             'short_name' => $settings->short_name,
-            'portfolio_url' => $settings->portfolio_url ?? '',
             'source_repository_url' => $settings->source_repository_url ?? '',
             'contact_email' => $settings->contact_email,
             'contact_email_available' => is_string($settings->contact_email) && $settings->contact_email !== '',

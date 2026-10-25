@@ -1,15 +1,6 @@
 import type { PublicFeedItem } from './content';
 
-export type HomeGalleryEntryKind =
-  | 'cases'
-  | 'projects'
-  | 'experiments'
-  | 'snippets'
-  | 'technologies'
-  | 'topics'
-  | 'credits'
-  | 'writing'
-  | 'collection';
+export type HomeGalleryEntryKind = 'writing' | 'collection' | 'credits';
 
 export type HomeGalleryEntry = Record<string, unknown> & {
   kind: HomeGalleryEntryKind;
@@ -26,39 +17,13 @@ export type HomeCollectionShowcase = {
   items: HomeGalleryEntry[];
 };
 
-export type HomeGalleryPortfolio = {
-  cases: HomeGalleryEntry[];
-  projects: HomeGalleryEntry[];
-  experiments: HomeGalleryEntry[];
-  collections: HomeGalleryEntry[];
-  snippets: HomeGalleryEntry[];
-  technologies: HomeGalleryEntry[];
-  topics: HomeGalleryEntry[];
-  credits: HomeGalleryEntry[];
-};
-
-export type HomeGalleryPortfolioTotals = {
-  cases: number;
-  projects: number;
-  experiments: number;
-  collections: number;
-  snippets: number;
-  technologies: number;
-  topics: number;
-  credits: number;
-};
-
 export type HomeGalleryTotals = {
-  highlights: number;
   feed: number;
-  portfolio: HomeGalleryPortfolioTotals;
   collectionShowcases: number;
 };
 
 export type HomeGallery = {
-  highlights: HomeGalleryEntry[];
   feed: PublicFeedItem[];
-  portfolio: HomeGalleryPortfolio;
   collectionShowcases: HomeCollectionShowcase[];
   totals: HomeGalleryTotals;
 };

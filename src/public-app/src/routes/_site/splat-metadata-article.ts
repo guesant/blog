@@ -7,13 +7,13 @@ import { articleMetadataKeywords } from './splat-metadata-article-keywords';
 import type { Locale } from '../../i18n/compat-support';
 
 export function articleMetadata(data: RouteData, _locale: Locale): RouteMetadata {
-  const articleKinds = ['case-detail', 'writing-detail'] as const;
+  const articleKinds = ['writing-detail'] as const;
 
   if (!articleKinds.includes(data.kind as (typeof articleKinds)[number])) {
     return defaultMetadata();
   }
 
-  const articleData = data as Extract<RouteData, { kind: 'case-detail' | 'writing-detail' }>;
+  const articleData = data as Extract<RouteData, { kind: 'writing-detail' }>;
 
   const source = 'ogImageUrl' in articleData.item ? articleData.item : undefined;
 

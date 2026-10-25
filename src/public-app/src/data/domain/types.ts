@@ -1,6 +1,6 @@
 export type * from './content';
 
-export type * from './resume';
+export type * from './profile';
 
 export type * from './refs-details';
 

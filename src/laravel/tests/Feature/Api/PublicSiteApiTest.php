@@ -11,8 +11,6 @@ use App\Events\PublicSiteContentChanged;
 use App\Http\Responses\PublicPageResponseDto;
 use App\Jobs\WarmPublicSiteChrome;
 use App\Listeners\InvalidatePublicSiteChrome;
-use App\Models\CaseStudy;
-use App\Models\CaseStudyRevisionTranslation;
 use App\Models\MediaAsset;
 use App\Models\NavItem;
 use App\Models\Page;
@@ -21,8 +19,6 @@ use App\Models\Profile;
 use App\Models\ProfileRevisionTranslation;
 use App\Models\ReferenceCollection;
 use App\Models\ReferenceCollectionRevisionTranslation;
-use App\Models\Resume;
-use App\Models\ResumeRevisionTranslation;
 use App\Models\SidebarGroup;
 use App\Models\SiteSettings;
 use App\Models\Writing;
@@ -502,7 +498,7 @@ class PublicSiteApiTest extends TestCase
         return $item->refresh();
     }
 
-    public function test_home_page_returns_server_computed_recurring_technologies(): void
+    public function test_home_page_returns_server_computed_metadata(): void
     {
         config()->set([
             'og.enabled' => true,
@@ -522,8 +518,7 @@ class PublicSiteApiTest extends TestCase
             ->assertOk()
             ->assertJsonPath('title', 'Home')
             ->assertJsonPath('description', 'The home page.')
-            ->assertJsonPath('og_image_url', fn (mixed $value): bool => is_string($value) && $value !== '')
-            ->assertJsonPath('recurringTechnologies', []);
+            ->assertJsonPath('og_image_url', fn (mixed $value): bool => is_string($value) && $value !== '');
 
         $this->assertArrayNotHasKey('seo', $response->json());
     }
@@ -582,9 +577,6 @@ class PublicSiteApiTest extends TestCase
                 'build',
                 'visibility' => [
                     'about',
-                    'resume',
-                    'portfolio',
-                    'cases',
                     'contact',
                     'license',
                     'credits',
@@ -678,71 +670,10 @@ class PublicSiteApiTest extends TestCase
         $this->assertNotSame($key, $cache->key('api', $parameters));
     }
 
-    public function test_content_collection_returns_a_paginated_page(): void
-    {
-        $this->createCaseStudy('first-case');
-        $this->createCaseStudy('second-case');
-
-        $response = $this->getJson('/api/v1/content/cases?locale=en&per_page=1');
-
-        $response
-            ->assertOk()
-            ->assertJsonPath('meta.page', 1)
-            ->assertJsonPath('meta.per_page', 1)
-            ->assertJsonPath('meta.total', 2)
-            ->assertJsonPath('meta.last_page', 2)
-            ->assertJsonCount(1, 'data');
-    }
-
     public function test_writing_and_collection_list_endpoints_are_not_public(): void
     {
         $this->getJson('/api/v1/content/writing?locale=en')->assertNotFound();
         $this->getJson('/api/v1/content/collections?locale=en')->assertNotFound();
-    }
-
-    public function test_hidden_resume_revision_is_not_returned_by_the_public_api(): void
-    {
-        $resume = Resume::factory()->create();
-        ResumeRevisionTranslation::factory()->create([
-            'resume_id' => $resume->id,
-            'locale' => 'en',
-            'summary' => 'Private summary',
-        ]);
-        $resume->refresh()->currentRevision()->update(['hidden' => true]);
-
-        $this->getJson('/api/v1/site/resume?locale=en')
-            ->assertOk()
-            ->assertJsonPath('summary', null)
-            ->assertJsonPath('selected_cases', [])
-            ->assertJsonPath('skills', [])
-            ->assertJsonPath('languages', []);
-    }
-
-    public function test_hidden_resume_rows_are_not_returned_by_the_public_api(): void
-    {
-        $resume = Resume::factory()->create();
-        $translation = ResumeRevisionTranslation::factory()->create([
-            'resume_id' => $resume->id,
-            'locale' => 'en',
-            'summary' => 'Public summary',
-        ]);
-        DB::table('resume_revision_education')->insert([
-            'resume_revision_translation_id' => $translation->id,
-            'institution' => 'Hidden institution',
-            'hidden' => true,
-            'sort_order' => 1,
-        ]);
-        DB::table('resume_revision_education')->insert([
-            'resume_revision_translation_id' => $translation->id,
-            'institution' => 'Visible institution',
-            'hidden' => false,
-            'sort_order' => 2,
-        ]);
-
-        $this->getJson('/api/v1/site/resume?locale=en')
-            ->assertOk()
-            ->assertJsonCount(1, 'education')
-            ->assertJsonPath('education.0.institution', 'Visible institution');
     }
 
     public function test_home_feed_is_paginated_and_server_ordered(): void
@@ -767,32 +698,10 @@ class PublicSiteApiTest extends TestCase
         $response
             ->assertOk()
             ->assertJsonStructure([
-                'highlights',
                 'feed',
-                'portfolio' => [
-                    'cases',
-                    'projects',
-                    'experiments',
-                    'collections',
-                    'snippets',
-                    'technologies',
-                    'topics',
-                    'credits',
-                ],
                 'collection_showcases',
                 'totals' => [
-                    'highlights',
                     'feed',
-                    'portfolio' => [
-                        'cases',
-                        'projects',
-                        'experiments',
-                        'collections',
-                        'snippets',
-                        'technologies',
-                        'topics',
-                        'credits',
-                    ],
                     'collection_showcases',
                 ],
             ]);
@@ -800,11 +709,6 @@ class PublicSiteApiTest extends TestCase
         $this->assertArrayNotHasKey('recent', $response->json());
         $this->assertArrayNotHasKey('popular', $response->json());
         $this->assertLessThanOrEqual(15, count($response->json('feed')));
-        foreach (
-            ['cases', 'projects', 'experiments', 'collections', 'snippets', 'technologies', 'topics', 'credits'] as $kind
-        ) {
-            $this->assertLessThanOrEqual(6, count($response->json("portfolio.{$kind}")));
-        }
         foreach ($response->json('collection_showcases') as $showcase) {
             $this->assertLessThanOrEqual(6, count($showcase['items']));
         }
@@ -920,22 +824,6 @@ class PublicSiteApiTest extends TestCase
             ->assertOk()
             ->assertJsonPath('resources', [])
             ->assertJsonPath('resources_meta', null);
-    }
-
-    private function createCaseStudy(string $slug): CaseStudy
-    {
-        $case = CaseStudy::factory()->create([
-            'slug' => $slug,
-            'hidden' => false,
-            'nda' => false,
-        ]);
-
-        CaseStudyRevisionTranslation::factory()->create([
-            'case_study_id' => $case->id,
-            'locale' => 'en',
-        ]);
-
-        return $case;
     }
 
     private function createWriting(string $slug, array $attributes = []): Writing

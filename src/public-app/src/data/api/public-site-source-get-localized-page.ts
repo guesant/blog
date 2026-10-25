@@ -24,7 +24,7 @@ export async function getLocalizedPage<T>(slug: string, locale?: string): Promis
   } as RecordValue;
 
   if (slug === 'home') {
-    return { featuredCases: [], featuredProjects: [], featuredWriting: [], ...page } as T;
+    return page as T;
   }
 
   return page as T;

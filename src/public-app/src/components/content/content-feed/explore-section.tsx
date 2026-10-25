@@ -21,8 +21,6 @@ export function ExploreSection() {
     { icon: 'pen-line', label: t('writing'), href: '/writing' },
     { icon: 'archive', label: t('collections'), href: '/collections' },
     { icon: 'layout-grid', label: t('topics'), href: '/topics' },
-    { icon: 'folder-git', label: t('projects'), href: '/projects' },
-    { icon: 'briefcase', label: t('cases'), href: '/cases' },
   ];
 
   const visibleTiles = tiles.filter((tile) =>

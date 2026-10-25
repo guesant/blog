@@ -4,12 +4,6 @@ export { getCollectionPage } from './content-service-get-collection-page';
 
 export { getFeedPage } from './content-service-get-feed-page';
 
-export { getCaseBySlug } from './content-service-get-case-by-slug';
-
-export { getProjectBySlug } from './content-service-get-project-by-slug';
-
-export { getExperimentBySlug } from './content-service-get-experiment-by-slug';
-
 export { getWritingBySlug } from './content-service-get-writing-by-slug';
 
 export { getProfile } from './content-service-get-profile';
@@ -20,17 +14,11 @@ export { getNavigationAvailability } from './content-service-get-navigation-avai
 
 export { getAboutPageCopy } from './content-service-get-about-page-copy';
 
-export { getCasesPageCopy } from './content-service-get-cases-page-copy';
-
-export { getProjectsPageCopy } from './content-service-get-projects-page-copy';
-
 export { getWritingPageCopy } from './content-service-get-writing-page-copy';
 
 export { getCollectionsPageCopy } from './content-service-get-collections-page-copy';
 
 export { getContactPageCopy } from './content-service-get-contact-page-copy';
-
-export { getPortfolioPageCopy } from './content-service-get-portfolio-page-copy';
 
 export { getNowPageCopy } from './content-service-get-now-page-copy';
 
@@ -41,8 +29,6 @@ export { getLicensePageCopy } from './content-service-get-license-page-copy';
 export { getTechnologyBySlug } from './content-service-get-technology-by-slug';
 
 export { getSnippetBySlug } from './content-service-get-snippet-by-slug';
-
-export { getResumePageContent } from './content-service-get-resume-page-content';
 
 export { getCreditsPageContent } from './content-service-get-credits-page-content';
 

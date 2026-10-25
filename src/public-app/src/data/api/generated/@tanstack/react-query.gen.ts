@@ -3,8 +3,8 @@
 import { queryOptions, type UseMutationOptions } from '@tanstack/react-query';
 
 import { client } from '../client.gen';
-import { type Options, publicMedia, publicSiteApiChrome, publicSiteApiCollection, publicSiteApiDocument, publicSiteApiFeed, publicSiteApiHomeGallery, publicSiteApiPage, publicSiteApiProtectedEmailChallenge, publicSiteApiResumeData, publicSiteApiResumePdf, snippetDownload } from '../sdk.gen';
-import type { PublicMediaData, PublicMediaError, PublicMediaResponse, PublicSiteApiChromeData, PublicSiteApiChromeError, PublicSiteApiChromeResponse, PublicSiteApiCollectionData, PublicSiteApiCollectionError, PublicSiteApiCollectionResponse, PublicSiteApiDocumentData, PublicSiteApiDocumentError, PublicSiteApiDocumentResponse, PublicSiteApiFeedData, PublicSiteApiFeedError, PublicSiteApiFeedResponse, PublicSiteApiHomeGalleryData, PublicSiteApiHomeGalleryError, PublicSiteApiHomeGalleryResponse, PublicSiteApiPageData, PublicSiteApiPageError, PublicSiteApiPageResponse, PublicSiteApiProtectedEmailChallengeData, PublicSiteApiProtectedEmailChallengeError, PublicSiteApiProtectedEmailChallengeResponse, PublicSiteApiResumeDataData, PublicSiteApiResumeDataError, PublicSiteApiResumeDataResponse, PublicSiteApiResumePdfData, PublicSiteApiResumePdfError, PublicSiteApiResumePdfResponse, SnippetDownloadData, SnippetDownloadError, SnippetDownloadResponse } from '../types.gen';
+import { type Options, publicMedia, publicSiteApiChrome, publicSiteApiCollection, publicSiteApiDocument, publicSiteApiFeed, publicSiteApiHomeGallery, publicSiteApiPage, publicSiteApiProtectedEmailChallenge, snippetDownload } from '../sdk.gen';
+import type { PublicMediaData, PublicMediaError, PublicMediaResponse, PublicSiteApiChromeData, PublicSiteApiChromeError, PublicSiteApiChromeResponse, PublicSiteApiCollectionData, PublicSiteApiCollectionError, PublicSiteApiCollectionResponse, PublicSiteApiDocumentData, PublicSiteApiDocumentError, PublicSiteApiDocumentResponse, PublicSiteApiFeedData, PublicSiteApiFeedError, PublicSiteApiFeedResponse, PublicSiteApiHomeGalleryData, PublicSiteApiHomeGalleryError, PublicSiteApiHomeGalleryResponse, PublicSiteApiPageData, PublicSiteApiPageError, PublicSiteApiPageResponse, PublicSiteApiProtectedEmailChallengeData, PublicSiteApiProtectedEmailChallengeError, PublicSiteApiProtectedEmailChallengeResponse, SnippetDownloadData, SnippetDownloadError, SnippetDownloadResponse } from '../types.gen';
 
 export type QueryKey<TOptions extends Options> = [
     Pick<TOptions, 'baseUrl' | 'body' | 'headers' | 'path' | 'query'> & {
@@ -99,21 +99,6 @@ export const publicSiteApiPageOptions = (options: Options<PublicSiteApiPageData>
     queryKey: publicSiteApiPageQueryKey(options)
 });
 
-export const publicSiteApiResumeDataQueryKey = (options?: Options<PublicSiteApiResumeDataData>) => createQueryKey('publicSiteApiResumeData', options);
-
-export const publicSiteApiResumeDataOptions = (options?: Options<PublicSiteApiResumeDataData>) => queryOptions<PublicSiteApiResumeDataResponse, PublicSiteApiResumeDataError, PublicSiteApiResumeDataResponse, ReturnType<typeof publicSiteApiResumeDataQueryKey>>({
-    queryFn: async ({ queryKey, signal }) => {
-        const { data } = await publicSiteApiResumeData({
-            ...options,
-            ...queryKey[0],
-            signal,
-            throwOnError: true
-        });
-        return data;
-    },
-    queryKey: publicSiteApiResumeDataQueryKey(options)
-});
-
 export const publicSiteApiFeedQueryKey = (options?: Options<PublicSiteApiFeedData>) => createQueryKey('publicSiteApiFeed', options);
 
 export const publicSiteApiFeedOptions = (options?: Options<PublicSiteApiFeedData>) => queryOptions<PublicSiteApiFeedResponse, PublicSiteApiFeedError, PublicSiteApiFeedResponse, ReturnType<typeof publicSiteApiFeedQueryKey>>({
@@ -157,21 +142,6 @@ export const publicSiteApiDocumentOptions = (options: Options<PublicSiteApiDocum
         return data;
     },
     queryKey: publicSiteApiDocumentQueryKey(options)
-});
-
-export const publicSiteApiResumePdfQueryKey = (options: Options<PublicSiteApiResumePdfData>) => createQueryKey('publicSiteApiResumePdf', options);
-
-export const publicSiteApiResumePdfOptions = (options: Options<PublicSiteApiResumePdfData>) => queryOptions<PublicSiteApiResumePdfResponse, PublicSiteApiResumePdfError, PublicSiteApiResumePdfResponse, ReturnType<typeof publicSiteApiResumePdfQueryKey>>({
-    queryFn: async ({ queryKey, signal }) => {
-        const { data } = await publicSiteApiResumePdf({
-            ...options,
-            ...queryKey[0],
-            signal,
-            throwOnError: true
-        });
-        return data;
-    },
-    queryKey: publicSiteApiResumePdfQueryKey(options)
 });
 
 export const publicSiteApiProtectedEmailChallengeMutation = (options?: Partial<Options<PublicSiteApiProtectedEmailChallengeData>>): UseMutationOptions<PublicSiteApiProtectedEmailChallengeResponse, PublicSiteApiProtectedEmailChallengeError, Options<PublicSiteApiProtectedEmailChallengeData>> => {

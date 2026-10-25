@@ -54,9 +54,6 @@ class PageForm
         'now' => [
             'Current status' => ['trabalhando', 'construindo', 'estudando', 'lendo', 'ouvindo', 'assistindo'],
         ],
-        'projects' => [
-            'Projects' => ['selected_label', 'archive_label', 'experiments_title'],
-        ],
     ];
 
     protected static function pageFieldInputs(string $prefix): array

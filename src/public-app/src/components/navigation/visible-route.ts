@@ -3,14 +3,11 @@ import { routeSegment } from './route-segment';
 
 const routeVisibilityKeys: Record<string, keyof NonNullable<SiteText['visibility']>> = {
   about: 'about',
-  cases: 'cases',
   contact: 'contact',
   credits: 'credits',
   feed: 'feed',
   follow: 'follow',
   license: 'license',
-  portfolio: 'portfolio',
-  resume: 'resume',
   topics: 'topics',
   collections: 'collections',
   snippets: 'snippets',

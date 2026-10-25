@@ -2,9 +2,6 @@
 
 namespace App\Content\Graph;
 
-use App\Models\CaseStudy;
-use App\Models\Experiment;
-use App\Models\Project;
 use App\Models\ReferenceCollection;
 use App\Models\Snippet;
 use App\Models\Technology;
@@ -19,9 +16,6 @@ final class NodeRegistry
             'topic' => Topic::class,
             'technology' => Technology::class,
             'writing' => Writing::class,
-            'case-study' => CaseStudy::class,
-            'project' => Project::class,
-            'experiment' => Experiment::class,
             'snippet' => Snippet::class,
             'collection' => ReferenceCollection::class,
         ];

@@ -58,10 +58,6 @@ class ManageSiteSettings extends Page
                         TextInput::make('short_name')
                             ->required()
                             ->maxLength(255),
-                        TextInput::make('portfolio_url')
-                            ->required()
-                            ->url()
-                            ->maxLength(255),
                         Toggle::make('maintenance_enabled')
                             ->default(false),
                         TextInput::make('source_repository_url')

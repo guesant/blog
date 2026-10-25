@@ -8,7 +8,6 @@ use App\Models\Concerns\HasPublicId;
 use App\Models\Concerns\UsesCurrentRevision;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
  * @method TechnologyRevisionTranslation|null translation(?string $locale = null)
@@ -21,36 +20,4 @@ class Technology extends Model
     protected $fillable = ['slug', 'public_id', 'order', 'code', 'logo', 'hidden'];
 
     protected $casts = ['hidden' => 'boolean'];
-
-    /**
-     * @return BelongsToMany<CaseStudy, $this>
-     */
-    public function caseStudies(): BelongsToMany
-    {
-        return $this->belongsToMany(CaseStudy::class, 'case_study_technology');
-    }
-
-    /**
-     * @return BelongsToMany<Project, $this>
-     */
-    public function projects(): BelongsToMany
-    {
-        return $this->belongsToMany(Project::class, 'project_technology');
-    }
-
-    /**
-     * @return BelongsToMany<Experiment, $this>
-     */
-    public function experiments(): BelongsToMany
-    {
-        return $this->belongsToMany(Experiment::class, 'experiment_technology');
-    }
-
-    /**
-     * @return BelongsToMany<ResumeSkill, $this>
-     */
-    public function resumeSkills(): BelongsToMany
-    {
-        return $this->belongsToMany(ResumeSkill::class, 'resume_skill_technology');
-    }
 }

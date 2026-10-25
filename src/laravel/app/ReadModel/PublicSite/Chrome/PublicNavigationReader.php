@@ -144,14 +144,11 @@ final class PublicNavigationReader
     {
         $path = match ($name) {
             'home' => '/',
-            'projects.show' => '/projects',
-            'cases.show' => '/cases',
             'writing.show' => '/writing',
             'collections.show' => '/collections',
             'topics.show' => '/topics',
             'technologies.show' => '/technologies',
             'snippets.show' => '/snippets',
-            'projects.experiments.show' => '/projects/experiments',
             default => '/'.str_replace('.', '/', $name),
         };
 

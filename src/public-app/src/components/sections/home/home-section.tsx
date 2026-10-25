@@ -36,7 +36,6 @@ export function HomeSection(props: HomeSectionProps) {
         site={site}
         showContact={contact.showContact}
         showAvailability={contact.showAvailability}
-        workTarget={null}
         t={t}
       />
       <HomeSectionsAfterHero

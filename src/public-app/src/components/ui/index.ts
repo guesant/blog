@@ -6,11 +6,7 @@ export * from './finding-card';
 
 export { FollowEntryCardFrame, FollowEntryDescription } from './follow-card';
 
-export * from './project-card';
-
 export * from './sidebar';
-
-export * from './case-card';
 
 export { Chip } from './chip';
 
@@ -26,15 +22,7 @@ export { InputAdornment } from './input-adornment';
 
 export { InputLabel } from './input-label';
 
-export { ListSubheader } from './list-subheader';
-
-export { Menu } from './menu';
-
-export { MenuItem } from './menu-item';
-
 export { OptionSelect, type SelectOption, type SelectOptionChangeEvent } from './option-select';
-
-export { Paper } from './paper';
 
 export { ToggleButton } from './toggle-button';
 
@@ -54,8 +42,6 @@ export { Link, type LinkProps } from './link';
 
 export { DocumentShell } from './document-shell';
 
-export { MotionDiv } from './motion-div';
-
 export { HeroTechnicalGridSurface } from './technical-grid/hero-technical-grid-surface';
 
 export { PanelTechnicalGridSurface } from './technical-grid/panel-technical-grid-surface';
@@ -73,7 +59,5 @@ export { ContentDateLabel } from './semantic/ContentDateLabel';
 export { ListingListFrame, ListingViewFrame } from './listing-view';
 
 export { PageHeaderFrame } from './page-header';
-
-export * from './resume';
 
 export * from './protected-email';

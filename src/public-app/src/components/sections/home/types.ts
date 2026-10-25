@@ -21,6 +21,5 @@ export type HomeHeroProps = {
   showContact: boolean;
   showAvailability: boolean;
   site: HomePageContent['site'];
-  workTarget: string | null;
   t: HomeTranslator;
 };

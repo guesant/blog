@@ -1,14 +1,9 @@
 import type {
   AboutPageCopy,
-  CaseStudy,
   CreditsPageContent,
-  Experiment,
   HomePageContent,
   PageIntroduction,
-  PortfolioPageCopy,
   Profile,
-  Project,
-  ProjectsPageCopy,
   ReferenceCollectionDetail,
   SiteText,
   PublicFeedItem,
@@ -21,7 +16,6 @@ import type {
   getFollowPageCopy,
   getLicensePageCopy,
   getNowPageCopy,
-  getResumePageContent,
 } from '@portfolio/data/services';
 import type { ContentCollectionMeta } from '../api/public-site-source-support';
 
@@ -40,26 +34,7 @@ export type RouteData =
       feedPagination: ContentCollectionMeta;
     }
   | { kind: 'about'; page: AboutPageCopy; profile: Profile }
-  | {
-      kind: 'portfolio';
-      page: PortfolioPageCopy;
-      profile: Profile;
-      cases: CaseStudy[];
-      casesPagination: ContentCollectionMeta;
-      projects: Project[];
-      projectsPagination: ContentCollectionMeta;
-      experiments: Experiment[];
-      experimentsPagination: ContentCollectionMeta;
-      search: string;
-    }
   | { kind: 'now'; page: Awaited<ReturnType<typeof getNowPageCopy>> }
-  | {
-      kind: 'cases';
-      page: PageIntroduction;
-      items: CaseStudy[];
-      pagination: ContentCollectionMeta;
-    }
-  | { kind: 'case-detail'; item: CaseStudy }
   | ({
       kind: 'collections';
     } & ContentFeedRouteData)
@@ -68,21 +43,6 @@ export type RouteData =
   | { kind: 'credits'; content: CreditsPageContent }
   | { kind: 'license'; page: Awaited<ReturnType<typeof getLicensePageCopy>>; site: SiteText }
   | { kind: 'follow'; page: Awaited<ReturnType<typeof getFollowPageCopy>>; site: SiteText }
-  | {
-      kind: 'projects';
-      page: ProjectsPageCopy;
-      projects: Project[];
-      projectsPagination: ContentCollectionMeta;
-      experiments: Experiment[];
-      experimentsPagination: ContentCollectionMeta;
-    }
-  | { kind: 'project-detail'; project: Project }
-  | { kind: 'experiment-detail'; experiment: Experiment }
-  | {
-      kind: 'resume';
-      content: Awaited<ReturnType<typeof getResumePageContent>>;
-      pdfUrls: Record<'en' | 'pt-BR', string>;
-    }
   | { kind: 'snippets'; snippets: Snippet[]; pagination: ContentCollectionMeta }
   | { kind: 'snippet-detail'; snippet: Snippet }
   | { kind: 'technologies'; technologies: Technology[]; pagination: ContentCollectionMeta }

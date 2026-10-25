@@ -6,11 +6,6 @@ use Illuminate\Database\Eloquent\Builder;
 
 final class PublicIdentifier
 {
-    public static function key(object $model): string
-    {
-        return $model->public_id ? "{$model->public_id}-{$model->slug}" : $model->slug;
-    }
-
     public static function constrain(
         Builder $query,
         string $identifier,

@@ -4,13 +4,7 @@ import { statusData } from './content-data-status-data';
 
 type SlugDetailKind = Extract<
   RouteData['kind'],
-  | 'case-detail'
-  | 'collection-detail'
-  | 'project-detail'
-  | 'experiment-detail'
-  | 'snippet-detail'
-  | 'technology-detail'
-  | 'writing-detail'
+  'collection-detail' | 'snippet-detail' | 'technology-detail' | 'writing-detail'
 >;
 
 type CreateSlugDetailLoaderOptions<Kind extends SlugDetailKind, Item> = {

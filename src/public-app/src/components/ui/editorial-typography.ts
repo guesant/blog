@@ -30,17 +30,12 @@ export const editorialSubsectionTitleStyles = {
   fontSize: 'var(--site-text-lg)',
 };
 
-export const editorialSubtitleStyles = {
+export const editorialDescriptionStyles = {
   ...editorialTextBase,
   margin: 0,
   color: 'var(--site-text-secondary)',
   fontSize: 'var(--site-text-body)',
   lineHeight: 'var(--site-leading-relaxed)',
-  textAlign: 'left',
-};
-
-export const editorialDescriptionStyles = {
-  ...editorialSubtitleStyles,
   textAlign: 'justify',
   hyphens: 'auto',
 };

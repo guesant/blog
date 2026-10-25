@@ -13,13 +13,9 @@ class EditorialRevisionPublisher
     private const DEFINITIONS = [
         'pages' => ['revision' => 'page_revisions', 'revision_key' => 'page_id', 'translation' => 'page_revision_translations', 'columns' => ['slug', 'hidden'], 'page_fields' => true],
         'profiles' => ['revision' => 'profile_revisions', 'revision_key' => 'profile_id', 'translation' => 'profile_revision_translations', 'columns' => ['name', 'birth_date', 'hidden'], 'profile_fields' => true],
-        'resumes' => ['revision' => 'resume_revisions', 'revision_key' => 'resume_id', 'translation' => 'resume_revision_translations', 'columns' => ['hidden'], 'resume_fields' => true],
-        'case_studies' => ['revision' => 'case_study_revisions', 'revision_key' => 'case_study_id', 'translation' => 'case_study_revision_translations', 'columns' => ['slug', 'public_id', 'hidden', 'order', 'href', 'external', 'visual', 'nda', 'published_at', 'show_history'], 'translation_columns' => ['title', 'status', 'meta', 'summary', 'context', 'role', 'result', 'body']],
-        'experiments' => ['revision' => 'experiment_revisions', 'revision_key' => 'experiment_id', 'translation' => 'experiment_revision_translations', 'columns' => ['slug', 'public_id', 'hidden', 'order', 'href', 'external', 'published_at', 'show_history'], 'translation_columns' => ['name', 'purpose', 'body']],
-        'projects' => ['revision' => 'project_revisions', 'revision_key' => 'project_id', 'translation' => 'project_revision_translations', 'columns' => ['slug', 'public_id', 'hidden', 'order', 'href', 'external', 'nda', 'published_at', 'show_history'], 'translation_columns' => ['name', 'purpose', 'problem', 'current_focus', 'status', 'body']],
         'reference_collections' => ['revision' => 'reference_collection_revisions', 'revision_key' => 'reference_collection_id', 'translation' => 'reference_collection_revision_translations', 'columns' => ['slug', 'public_id', 'hidden', 'order', 'image', 'published_at'], 'translation_columns' => ['title', 'description', 'intro']],
         'writings' => ['revision' => 'writing_revisions', 'revision_key' => 'writing_id', 'translation' => 'writing_revision_translations', 'columns' => ['slug', 'public_id', 'hidden', 'date_iso', 'type', 'show_history'], 'translation_columns' => ['title', 'reading_time', 'body']],
-        'site_settings' => ['revision' => 'site_settings_revisions', 'revision_key' => 'site_settings_id', 'translation' => 'site_settings_revision_translations', 'columns' => ['short_name', 'portfolio_url', 'maintenance_enabled', 'contact_email', 'contact_enabled', 'contact_available', 'source_repository_url', 'content_actions_copy_text', 'content_actions_copy_url', 'content_actions_download_text', 'contextual_cursor_enabled', 'feed_flat_cards_enabled'], 'translation_columns' => ['copyright_template', 'maintenance_title', 'maintenance_description']],
+        'site_settings' => ['revision' => 'site_settings_revisions', 'revision_key' => 'site_settings_id', 'translation' => 'site_settings_revision_translations', 'columns' => ['short_name', 'maintenance_enabled', 'contact_email', 'contact_enabled', 'contact_available', 'source_repository_url', 'content_actions_copy_text', 'content_actions_copy_url', 'content_actions_download_text', 'contextual_cursor_enabled', 'feed_flat_cards_enabled'], 'translation_columns' => ['copyright_template', 'maintenance_title', 'maintenance_description']],
         'nav_items' => ['revision' => 'nav_item_revisions', 'revision_key' => 'nav_item_id', 'translation' => null, 'columns' => ['route_name', 'parent_id', 'placement', 'sidebar_group_id', 'order', 'hidden'], 'translation_columns' => []],
         'credit_entries' => ['revision' => 'credit_entry_revisions', 'revision_key' => 'credit_entry_id', 'translation' => 'credit_entry_revision_translations', 'columns' => ['url', 'category', 'order', 'is_automatic', 'active', 'package_manager', 'package_name'], 'translation_columns' => ['name', 'description']],
         'snippets' => ['revision' => 'snippet_revisions', 'revision_key' => 'snippet_id', 'translation' => 'snippet_revision_translations', 'columns' => ['slug', 'public_id', 'hidden', 'show_history', 'order', 'published_at'], 'translation_columns' => ['title', 'description']],
@@ -44,56 +40,6 @@ class EditorialRevisionPublisher
         PublicSiteContentChanged::dispatch();
     }
 
-    public function syncResumeRelations(Model $record): void
-    {
-        if ($record->getTable() !== 'resumes' || $record->current_revision_id === null) {
-            return;
-        }
-
-        DB::transaction(function () use ($record): void {
-            $revisionId = $record->current_revision_id;
-            DB::table('resume_revision_selected_cases')->where('resume_revision_id', $revisionId)->delete();
-            DB::table('resume_revision_skills')->where('resume_revision_id', $revisionId)->delete();
-            DB::table('resume_revision_skill_technologies')->where('resume_revision_id', $revisionId)->delete();
-            DB::table('resume_revision_languages')->where('resume_revision_id', $revisionId)->delete();
-
-            foreach ($record->selectedCases()->get() as $case) {
-                DB::table('resume_revision_selected_cases')->insert([
-                    'resume_revision_id' => $revisionId,
-                    'case_study_id' => $case->id,
-                    'sort_order' => $case->pivot->order ?? 0,
-                ]);
-            }
-
-            foreach ($record->skills()->with('technologies')->get() as $skill) {
-                DB::table('resume_revision_skills')->insert([
-                    'resume_revision_id' => $revisionId,
-                    'topic_id' => $skill->topic_id,
-                    'sort_order' => $skill->order ?? 0,
-                ]);
-                foreach ($skill->technologies as $technologyOrder => $technology) {
-                    DB::table('resume_revision_skill_technologies')->insert([
-                        'resume_revision_id' => $revisionId,
-                        'topic_id' => $skill->topic_id,
-                        'technology_id' => $technology->id,
-                        'sort_order' => $technologyOrder,
-                    ]);
-                }
-            }
-
-            foreach ($record->languages()->get() as $language) {
-                DB::table('resume_revision_languages')->insert([
-                    'resume_revision_id' => $revisionId,
-                    'language_id' => $language->language_id,
-                    'proficiency' => $language->proficiency,
-                    'sort_order' => $language->order ?? 0,
-                ]);
-            }
-        });
-
-        PublicSiteContentChanged::dispatch();
-    }
-
     public function syncPageRelations(Model $record, ?array $homeSections = null): void
     {
         if ($record->getTable() !== 'pages' || $record->current_revision_id === null) {
@@ -102,25 +48,6 @@ class EditorialRevisionPublisher
 
         $revisionId = $record->current_revision_id;
         DB::transaction(function () use ($record, $revisionId, $homeSections): void {
-            if ($record->getAttribute('slug') === 'portfolio') {
-                $relations = [
-                    ['relation' => 'featuredCases', 'table' => 'page_revision_featured_cases', 'column' => 'case_study_id'],
-                    ['relation' => 'featuredProjects', 'table' => 'page_revision_featured_projects', 'column' => 'project_id'],
-                    ['relation' => 'featuredWritings', 'table' => 'page_revision_featured_writings', 'column' => 'writing_id'],
-                ];
-
-                foreach ($relations as $relation) {
-                    DB::table($relation['table'])->where('page_revision_id', $revisionId)->delete();
-                    foreach ($record->{$relation['relation']}()->get() as $item) {
-                        DB::table($relation['table'])->insert([
-                            'page_revision_id' => $revisionId,
-                            $relation['column'] => $item->id,
-                            'sort_order' => $item->pivot->order ?? 0,
-                        ]);
-                    }
-                }
-            }
-
             if ($homeSections !== null && $record->getAttribute('slug') === 'home') {
                 DB::table('page_revision_home_sections')
                     ->where('page_revision_id', $revisionId)
@@ -185,8 +112,6 @@ class EditorialRevisionPublisher
                 }
             } elseif (($definition['profile_fields'] ?? false) === true) {
                 $this->profileTranslation($translation, $fields);
-            } elseif (($definition['resume_fields'] ?? false) === true) {
-                $this->resumeTranslation($translation, $fields);
             } else {
                 foreach ($definition['translation_columns'] as $column) {
                     $translation[$column] = $this->translationColumnValue($record, $locale, $column, $fields);
@@ -196,9 +121,6 @@ class EditorialRevisionPublisher
             $translationId = (int) DB::table($definition['translation'])->insertGetId($translation);
             if (($definition['profile_fields'] ?? false) === true) {
                 $this->profileRows($translationId, $fields);
-            }
-            if (($definition['resume_fields'] ?? false) === true) {
-                $this->resumeRows($translationId, $fields);
             }
             $this->structuredTranslation($record->getTable(), $translationId, $fields);
         }
@@ -221,38 +143,6 @@ class EditorialRevisionPublisher
     {
         foreach (['title', 'location', 'birth_city', 'description', 'interests', 'learning'] as $column) {
             $translation[$column] = $fields[$column] ?? null;
-        }
-    }
-
-    private function resumeTranslation(array &$translation, array $fields): void
-    {
-        $translation['summary'] = $fields['summary'] ?? null;
-    }
-
-    private function resumeRows(int $translationId, array $fields): void
-    {
-        foreach (['leadership', 'education', 'certificates', 'certifications', 'publications', 'recommendations', 'technical_productions', 'events', 'awards'] as $kind) {
-            foreach ($fields[$kind] ?? [] as $order => $item) {
-                $data = ['resume_revision_translation_id' => $translationId, 'sort_order' => $order];
-                foreach ((array) $item as $key => $value) {
-                    if ((string) $key === 'id') {
-                        continue;
-                    }
-
-                    $column = match ([$kind, (string) $key]) {
-                        ['certificates', 'credentialId'], ['certifications', 'credentialId'] => 'credential_id',
-                        ['publications', 'name'], ['publications', 'issuer'] => (string) $key,
-                        ['recommendations', 'author'] => 'author',
-                        ['recommendations', 'quote'] => 'quote',
-                        ['events', 'talkTitle'] => 'talk_title',
-                        default => Str::snake((string) $key),
-                    };
-                    if (is_scalar($value) && DB::getSchemaBuilder()->hasColumn('resume_revision_'.$kind, $column)) {
-                        $data[$column] = $value;
-                    }
-                }
-                DB::table('resume_revision_'.$kind)->insert($data);
-            }
         }
     }
 
@@ -288,7 +178,6 @@ class EditorialRevisionPublisher
                 'role' => $item['role'] ?? null,
                 'organization' => $item['organization'] ?? null,
                 'period' => $item['period'] ?? null,
-                'include_in_resume' => $item['includeInResume'] ?? false,
                 'hidden' => $item['hidden'] ?? false,
                 'sort_order' => $order,
             ]);
@@ -334,10 +223,6 @@ class EditorialRevisionPublisher
     private function updatePointers(Model $record, int $revisionId): void
     {
         $isPublic = ! $record->getAttribute('hidden');
-        if (in_array($record->getTable(), ['case_studies', 'projects'], true)) {
-            $isPublic = $isPublic && ! $record->getAttribute('nda');
-        }
-
         DB::table($record->getTable())->where('id', $record->getKey())->update([
             'current_revision_id' => $revisionId,
             'published_revision_id' => $isPublic ? $revisionId : null,

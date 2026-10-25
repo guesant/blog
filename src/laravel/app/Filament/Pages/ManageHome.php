@@ -97,13 +97,6 @@ class ManageHome extends Page
                             TextInput::make("{$prefix}fields.work_title")->label(__('Work title'))->nullable(),
                             static::markdownEditor("{$prefix}fields.work_description")->label(__('Work description'))->nullable(),
                         ]),
-                    Fieldset::make(__('Projects'))
-                        ->columns(2)
-                        ->schema([
-                            TextInput::make("{$prefix}fields.projects_title")->label(__('Projects title'))->nullable(),
-                            static::markdownEditor("{$prefix}fields.projects_description")->label(__('Projects description'))->nullable(),
-                            static::markdownEditor("{$prefix}fields.experiments_summary")->label(__('Experiments summary'))->nullable(),
-                        ]),
                     Fieldset::make(__('Writing'))
                         ->columns(2)
                         ->schema([

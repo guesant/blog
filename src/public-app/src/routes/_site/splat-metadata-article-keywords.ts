@@ -1,6 +1,6 @@
 import type { RouteData } from '../../data/queries';
 
-type ArticleItem = Extract<RouteData, { kind: 'case-detail' | 'writing-detail' }>['item'];
+type ArticleItem = Extract<RouteData, { kind: 'writing-detail' }>['item'];
 
 export function articleMetadataKeywords(item: ArticleItem): string[] {
   const keywordFields = new Set(['type', 'tags', 'technologies']);

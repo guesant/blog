@@ -5,6 +5,7 @@
     xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
     errorLevel="4"
     findUnusedCode="false"
+    findUnusedBaselineEntry="false"
     ensureOverrideAttribute="false"
     errorBaseline="psalm-baseline.xml"
 >

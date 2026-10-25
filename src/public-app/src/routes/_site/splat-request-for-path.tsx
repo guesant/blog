@@ -1,9 +1,7 @@
 import { routeContext } from '../_site';
 import { detailRoutePath } from './splat-detail-route-path';
 
-const specialRoutes: Record<string, { pathname: string; parameter: 'slug' | 'type' }> = {
-  'projects/experiments': { pathname: '/experiment-detail', parameter: 'slug' },
-};
+const specialRoutes: Record<string, { pathname: string; parameter: 'slug' | 'type' }> = {};
 
 export function requestForPath(pathname: string, search = '') {
   const { locale, pathname: localizedPathname } = routeContext(pathname);

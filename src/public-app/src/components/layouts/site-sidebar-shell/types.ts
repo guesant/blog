@@ -8,4 +8,4 @@ export type SiteSidebarShellProps = {
   availability: NavigationAvailability;
 };
 
-export const aboutRoutes = ['resume', 'portfolio', 'cases'] as const;
+export const aboutRoutes = ['now'] as const;

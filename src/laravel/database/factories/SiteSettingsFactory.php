@@ -21,7 +21,6 @@ class SiteSettingsFactory extends Factory
     {
         return [
             'short_name' => $this->faker->optional()->word(),
-            'portfolio_url' => $this->faker->optional()->url(),
             'maintenance_enabled' => $this->faker->boolean(),
             'contact_email' => $this->faker->optional()->safeEmail(),
             'contact_enabled' => true,

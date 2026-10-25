@@ -74,7 +74,7 @@ class PublicMetadataController extends Controller
                 foreach ($this->navigationUrls($navigation) as $url) {
                     $urls[] = $url;
                 }
-                foreach (['projects', 'cases', 'writing', 'collections', 'topics', 'technologies', 'experiments', 'snippets'] as $collection) {
+                foreach (['writing', 'collections', 'topics', 'technologies', 'snippets'] as $collection) {
                     foreach ($this->collectionItems($collection, $locale) as $item) {
                         $this->appendUrl($urls, $item['url'] ?? null);
                     }

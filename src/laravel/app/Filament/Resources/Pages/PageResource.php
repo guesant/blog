@@ -26,8 +26,6 @@ class PageResource extends Resource
         'credits',
         'follow',
         'home',
-        'portfolio',
-        'resume',
     ];
 
     protected static ?string $model = PageModel::class;

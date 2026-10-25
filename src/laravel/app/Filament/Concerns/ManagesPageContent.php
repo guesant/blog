@@ -2,7 +2,6 @@
 
 namespace App\Filament\Concerns;
 
-use App\Content\EditorialRevisionPublisher;
 use App\Models\Page as ContentPage;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
@@ -58,25 +57,5 @@ trait ManagesPageContent
                 ->label(__('Description'))
                 ->nullable(),
         ];
-    }
-
-    protected function syncFeaturedPageContent(array $data): void
-    {
-        $page = $this->getPageRecord();
-        foreach ([
-            'featured_cases' => ['relation' => 'featuredCases', 'key' => 'case_study_id'],
-            'featured_projects' => ['relation' => 'featuredProjects', 'key' => 'project_id'],
-            'featured_writings' => ['relation' => 'featuredWritings', 'key' => 'writing_id'],
-        ] as $field => $definition) {
-            $page->{$definition['relation']}()->sync(
-                collect($data[$field] ?? [])->values()->mapWithKeys(
-                    fn (array $item, int $order): array => [
-                        $item[$definition['key']] => ['order' => $order],
-                    ],
-                ),
-            );
-        }
-
-        app(EditorialRevisionPublisher::class)->syncPageRelations($page);
     }
 }

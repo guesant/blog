@@ -131,7 +131,6 @@ class ManageProfile extends Page
                             TextInput::make('role')->required(),
                             TextInput::make('organization')->required(),
                             TextInput::make('period')->required(),
-                            Toggle::make('includeInResume')->label('Include in résumé')->inline(false),
                             static::stringListRepeater('highlights', 'Highlights', 'Add highlight')->columnSpanFull(),
                             Toggle::make('hidden')->inline(false),
                         ])

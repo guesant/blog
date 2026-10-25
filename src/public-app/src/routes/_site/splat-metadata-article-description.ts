@@ -1,10 +1,10 @@
 import type { RouteData } from '../../data/queries';
 import { plainText } from '../../components/content/plain-text';
 
-type ArticleRouteData = Extract<RouteData, { kind: 'case-detail' | 'writing-detail' }>;
+type ArticleRouteData = Extract<RouteData, { kind: 'writing-detail' }>;
 
 export function articleDescription(data: ArticleRouteData): string {
-  if ('summary' in data.item) {
+  if ('summary' in data.item && typeof data.item.summary === 'string') {
     return data.item.summary;
   }
 

@@ -4,11 +4,6 @@ export type WithOgImage = {
   ogImageUrl?: string;
 };
 
-type MetricItem = {
-  label: string;
-  value: string;
-};
-
 export type TechnologyBadge = {
   slug: string;
   name: string;
@@ -18,7 +13,6 @@ export type TechnologyBadge = {
 export type Technology = TechnologyBadge & {
   code?: string;
   url: string;
-  skills: string[];
 };
 
 type SnippetFile = {
@@ -36,58 +30,6 @@ export type Snippet = WithOgImage & {
   url: string;
   downloadUrl: string;
   files: SnippetFile[];
-};
-
-export type CaseStudy = WithOgImage & {
-  hidden?: boolean;
-  order: number;
-  slug: string;
-  url?: string;
-  number: string;
-  title: string;
-  status?: string;
-  meta: string;
-  summary: string;
-  context: string;
-  role: string;
-  result: string;
-  technologies: string[];
-  technologySlugs?: string[];
-  metrics: MetricItem[];
-  visual: 'queue' | 'architecture' | 'process';
-  body?: RichTextContent;
-};
-
-export type Project = WithOgImage & {
-  hidden?: boolean;
-  order: number;
-  slug: string;
-  url?: string;
-  name: string;
-  purpose: string;
-  problem?: string;
-  currentFocus?: string;
-  status: string;
-  technologies: string[];
-  technologySlugs?: string[];
-  metrics: MetricItem[];
-  href: string;
-  external?: boolean;
-  body?: RichTextContent;
-};
-
-export type Experiment = WithOgImage & {
-  hidden?: boolean;
-  order: number;
-  slug: string;
-  url?: string;
-  name: string;
-  purpose: string;
-  technologies: string[];
-  technologySlugs?: string[];
-  href: string;
-  external?: boolean;
-  body?: RichTextContent;
 };
 
 export type Writing = WithOgImage & {

@@ -26,7 +26,6 @@ final class PublicSiteChromeSqlReader implements PublicSiteChromeReader
         return new GetPublicSiteChromeQueryResult(
             site: [
                 'short_name' => $settings['short_name'],
-                'portfolio_url' => $settings['portfolio_url'],
                 'source_repository_url' => $settings['source_repository_url'],
                 'contact_enabled' => $settings['contact_enabled'],
                 'contact_email_available' => $settings['contact_email_available'],

@@ -8,12 +8,9 @@ use Illuminate\Support\Facades\DB;
 final class EditorialOrderSynchronizer
 {
     private const DEFINITIONS = [
-        'case_studies' => 'case_study_revisions',
         'credit_entries' => 'credit_entry_revisions',
-        'experiments' => 'experiment_revisions',
         'languages' => 'language_revisions',
         'nav_items' => 'nav_item_revisions',
-        'projects' => 'project_revisions',
         'reference_collections' => 'reference_collection_revisions',
         'snippets' => 'snippet_revisions',
         'technologies' => 'technology_revisions',

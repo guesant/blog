@@ -26,7 +26,7 @@ final readonly class PublicPageResponseDto
         'home' => [
             'heroIdentity', 'heroExperience', 'heroCurrentFocus', 'availableLabel', 'unavailableLabel',
             'experienceTitle', 'experienceDescription', 'currentlyExploringLabel', 'recurringTechnologiesLabel',
-            'workTitle', 'workDescription', 'projectsTitle', 'projectsDescription', 'experimentsSummary',
+            'workTitle', 'workDescription',
             'writingTitle', 'writingDescription', 'contactTitle', 'contactDescription', 'recurringTechnologies',
         ],
         'license' => [
@@ -34,13 +34,6 @@ final readonly class PublicPageResponseDto
             'aiHeading', 'aiBody', 'contact',
         ],
         'now' => ['entries'],
-        'portfolio' => [
-            'heroIdentity', 'heroExperience', 'heroCurrentFocus', 'availableLabel', 'unavailableLabel',
-            'experienceTitle', 'experienceDescription', 'workTitle', 'workDescription', 'projectsTitle',
-            'projectsDescription', 'experimentsSummary', 'recurringTechnologies',
-        ],
-        'projects' => ['selectedLabel', 'archiveLabel', 'experimentsTitle'],
-        'resume' => [],
     ];
 
     private function __construct(

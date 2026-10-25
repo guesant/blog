@@ -105,7 +105,6 @@ export type PublicSiteApiChromeResponses = {
     200: {
         site: {
             short_name: string | null;
-            portfolio_url: string;
             source_repository_url: string;
             contact_enabled: boolean;
             contact_email_available: boolean;
@@ -182,9 +181,6 @@ export type PublicSiteApiChromeResponses = {
         };
         visibility: {
             about: boolean;
-            resume: boolean;
-            portfolio: boolean;
-            cases: boolean;
             contact: boolean;
             license: boolean;
             credits: boolean;
@@ -246,41 +242,9 @@ export type PublicSiteApiHomeGalleryError = PublicSiteApiHomeGalleryErrors[keyof
 
 export type PublicSiteApiHomeGalleryResponses = {
     200: {
-        highlights: Array<{
-            kind: string;
-            item: {
-                [key: string]: unknown;
-            };
-        }>;
         feed: Array<{
             [key: string]: unknown;
         }>;
-        portfolio: {
-            cases: Array<{
-                [key: string]: unknown;
-            }>;
-            projects: Array<{
-                [key: string]: unknown;
-            }>;
-            experiments: Array<{
-                [key: string]: unknown;
-            }>;
-            collections: Array<{
-                [key: string]: unknown;
-            }>;
-            snippets: Array<{
-                [key: string]: unknown;
-            }>;
-            technologies: Array<{
-                [key: string]: unknown;
-            }>;
-            topics: Array<{
-                [key: string]: unknown;
-            }>;
-            credits: Array<{
-                [key: string]: unknown;
-            }>;
-        };
         collection_showcases: Array<{
             collection: {
                 [key: string]: unknown;
@@ -290,18 +254,7 @@ export type PublicSiteApiHomeGalleryResponses = {
             }>;
         }>;
         totals: {
-            highlights: number;
             feed: number;
-            portfolio: {
-                cases: number;
-                projects: number;
-                experiments: number;
-                collections: number;
-                snippets: number;
-                technologies: number;
-                topics: number;
-                credits: number;
-            };
             collection_showcases: number;
         };
     };
@@ -357,95 +310,6 @@ export type PublicSiteApiPageResponses = {
 };
 
 export type PublicSiteApiPageResponse = PublicSiteApiPageResponses[keyof PublicSiteApiPageResponses];
-
-export type PublicSiteApiResumeDataData = {
-    body?: never;
-    path?: never;
-    query?: {
-        locale?: string;
-    };
-    url: '/site/resume';
-};
-
-export type PublicSiteApiResumeDataErrors = {
-    /**
-     * Unauthenticated
-     */
-    401: {
-        /**
-         * Error overview.
-         */
-        message: string;
-    };
-    /**
-     * Authorization error
-     */
-    403: {
-        /**
-         * Error overview.
-         */
-        message: string;
-    };
-};
-
-export type PublicSiteApiResumeDataError = PublicSiteApiResumeDataErrors[keyof PublicSiteApiResumeDataErrors];
-
-export type PublicSiteApiResumeDataResponses = {
-    200: {
-        summary: string | null;
-        leadership: string | Array<string>;
-        education: string | Array<string>;
-        certificates: string | Array<string>;
-        certifications: string | Array<string>;
-        publications: string | Array<string>;
-        recommendations: string | Array<string>;
-        technical_productions: string | Array<string>;
-        events: string | Array<string>;
-        awards: string | Array<string>;
-        experience: Array<string>;
-        selected_cases: Array<{
-            slug: string;
-            url: string;
-            title: string;
-            status: string | null;
-            summary: string | null;
-            published_at: string | null;
-            external: string;
-            meta: string | null;
-            context: string | null;
-            role: string | null;
-            result: string | null;
-            metrics: string | null;
-            body: string | null;
-            technologies: Array<{
-                slug: string;
-                name: string;
-            }>;
-            show_history: boolean;
-            history: null;
-            href: string;
-            related: null;
-            updated_at: string | null;
-        }> | Array<string>;
-        skills: Array<{
-            name: string;
-            technologies: Array<{
-                slug: string;
-                name: string;
-                code: null;
-                url: null;
-                skills: null;
-                resume_skills: null;
-            }>;
-        }> | Array<string>;
-        languages: Array<{
-            name: string;
-            proficiency: string | '';
-        }> | Array<string>;
-    };
-};
-
-export type PublicSiteApiResumeDataResponse = PublicSiteApiResumeDataResponses[keyof PublicSiteApiResumeDataResponses];
 
 export type PublicSiteApiFeedData = {
     body?: never;
@@ -648,62 +512,6 @@ export type PublicSiteApiDocumentResponses = {
 };
 
 export type PublicSiteApiDocumentResponse = PublicSiteApiDocumentResponses[keyof PublicSiteApiDocumentResponses];
-
-export type PublicSiteApiResumePdfData = {
-    body?: never;
-    path: {
-        locale: string;
-    };
-    query?: never;
-    url: '/resume/{locale}.pdf';
-};
-
-export type PublicSiteApiResumePdfErrors = {
-    /**
-     * Unauthenticated
-     */
-    401: {
-        /**
-         * Error overview.
-         */
-        message: string;
-    };
-    /**
-     * Authorization error
-     */
-    403: {
-        /**
-         * Error overview.
-         */
-        message: string;
-    };
-    /**
-     * Not found
-     */
-    404: {
-        /**
-         * Error overview.
-         */
-        message: string;
-    };
-    /**
-     * An error
-     */
-    503: {
-        /**
-         * Error overview.
-         */
-        message: string;
-    };
-};
-
-export type PublicSiteApiResumePdfError = PublicSiteApiResumePdfErrors[keyof PublicSiteApiResumePdfErrors];
-
-export type PublicSiteApiResumePdfResponses = {
-    200: Blob | File;
-};
-
-export type PublicSiteApiResumePdfResponse = PublicSiteApiResumePdfResponses[keyof PublicSiteApiResumePdfResponses];
 
 export type PublicSiteApiProtectedEmailChallengeData = {
     body?: never;

@@ -11,7 +11,7 @@ import { HomeHeroContent } from './ui/home-hero-content';
 import { HomeHeroSurface } from './ui/home-hero-surface';
 
 export function HomeHero(props: HomeHeroProps) {
-  const { page, profile, showContact, showAvailability, workTarget, t } = props;
+  const { page, profile, showContact, showAvailability, t } = props;
 
   return (
     <HomeHeroSurface showContact={showContact}>
@@ -26,14 +26,7 @@ export function HomeHero(props: HomeHeroProps) {
               <HomeIntroText component="p">{page.heroCurrentFocus}</HomeIntroText>
             </HomeHeroDescriptionFrame>
           }
-          actions={
-            <HomeHeroActions
-              site={props.site}
-              showContact={showContact}
-              workTarget={workTarget}
-              t={t}
-            />
-          }
+          actions={<HomeHeroActions site={props.site} showContact={showContact} t={t} />}
           variant="showcase"
         />
       </HomeHeroContent>

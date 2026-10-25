@@ -53,22 +53,6 @@ final class GetPublicPageQueryHandler
             )->filter(fn (array $entry): bool => filled($entry['value']))->values()->all();
         }
 
-        if ($slug === 'home') {
-            $featuredItems = collect($page->publishedRevision?->featuredCases ?? [])
-                ->concat($page->publishedRevision?->featuredProjects ?? []);
-
-            $fields['recurringTechnologies'] = $featuredItems
-                ->flatMap(fn ($item) => $item->technologies)
-                ->unique('id')
-                ->map(fn ($technology): array => [
-                    'slug' => $technology->slug,
-                    'name' => $technology->translation($query->locale)?->name ?? $technology->slug,
-                    'logo' => $technology->logo,
-                ])
-                ->values()
-                ->all();
-        }
-
         if ($slug === 'follow') {
             $available = [
                 ['key' => 'rss', 'url' => Locale::path('/feed.xml', $query->locale)],

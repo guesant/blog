@@ -8,8 +8,6 @@ export { getPublicHomeGallery } from './public-site-source-get-home-gallery';
 
 export { getContentDocument } from './public-site-source-get-content-document';
 
-export { getSelectedResumeCases } from './public-site-source-get-selected-resume-cases';
-
 export { getLocalizedPage } from './public-site-source-get-localized-page';
 
 export { getLocalizedProfile } from './public-site-source-get-localized-profile';
@@ -17,8 +15,6 @@ export { getLocalizedProfile } from './public-site-source-get-localized-profile'
 export { getTechnologyBySlug } from './public-site-source-get-technology-by-slug';
 
 export { getSnippetBySlug } from './public-site-source-get-snippet-by-slug';
-
-export { getLocalizedResume } from './public-site-source-get-localized-resume';
 
 export { getLocalizedCredits } from './public-site-source-get-localized-credits';
 

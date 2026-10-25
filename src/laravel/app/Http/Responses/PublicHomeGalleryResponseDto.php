@@ -17,17 +17,7 @@ final readonly class PublicHomeGalleryResponseDto
         string $locale,
     ): self {
         return new self([
-            'highlights' => array_values(array_map(
-                fn (array $entry): array => [
-                    'kind' => $entry['kind'],
-                    'item' => self::galleryItem(
-                        $presenter->collectionItem($entry['kind'], $entry['item'], $locale),
-                    ),
-                ],
-                $result->highlights,
-            )),
             'feed' => self::feedItems($result->feed, $presenter, $locale),
-            'portfolio' => self::portfolio($result->portfolio, $presenter, $locale),
             'collection_showcases' => array_values(array_map(
                 fn (array $showcase): array => self::collectionShowcase($showcase, $presenter, $locale),
                 $result->collectionShowcases,
@@ -48,35 +38,6 @@ final readonly class PublicHomeGalleryResponseDto
     ): array {
         return array_values(array_map(
             fn (PublicFeedItem $item): array => $presenter->feedItem($item, $locale),
-            $items,
-        ));
-    }
-
-    private static function portfolio(
-        array $collections,
-        PublicContentResponseFactory $presenter,
-        string $locale,
-    ): array {
-        return [
-            'cases' => self::collectionItems($collections['cases'] ?? [], 'cases', $presenter, $locale),
-            'projects' => self::collectionItems($collections['projects'] ?? [], 'projects', $presenter, $locale),
-            'experiments' => self::collectionItems($collections['experiments'] ?? [], 'experiments', $presenter, $locale),
-            'collections' => self::collectionItems($collections['collections'] ?? [], 'collections', $presenter, $locale),
-            'snippets' => self::collectionItems($collections['snippets'] ?? [], 'snippets', $presenter, $locale),
-            'technologies' => self::collectionItems($collections['technologies'] ?? [], 'technologies', $presenter, $locale),
-            'topics' => self::collectionItems($collections['topics'] ?? [], 'topics', $presenter, $locale),
-            'credits' => self::collectionItems($collections['credits'] ?? [], 'credits', $presenter, $locale),
-        ];
-    }
-
-    private static function collectionItems(
-        array $items,
-        string $collection,
-        PublicContentResponseFactory $presenter,
-        string $locale,
-    ): array {
-        return array_values(array_map(
-            fn ($item): array => self::galleryItem($presenter->collectionItem($collection, $item, $locale)),
             $items,
         ));
     }

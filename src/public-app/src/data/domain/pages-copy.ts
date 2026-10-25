@@ -1,5 +1,4 @@
 import type { RichTextContent, TechnologyBadge, WithOgImage } from './content';
-import type { ContentReference } from './resume';
 
 export type PageIntroduction = WithOgImage & {
   title: string;
@@ -10,9 +9,6 @@ export type HomePageCopy = WithOgImage & {
   title: string;
   description: string;
   recurringTechnologies?: TechnologyBadge[];
-  featuredCases: ContentReference[];
-  featuredProjects: ContentReference[];
-  featuredWriting: ContentReference[];
   heroIdentity: string;
   heroExperience: string;
   heroCurrentFocus: string;
@@ -20,9 +16,6 @@ export type HomePageCopy = WithOgImage & {
   unavailableLabel: string;
   workTitle: string;
   workDescription: string;
-  projectsTitle: string;
-  projectsDescription: string;
-  experimentsSummary: string;
   experienceTitle: string;
   experienceDescription: string;
   currentlyExploringLabel: string;
@@ -47,15 +40,4 @@ export type AboutEditorialSection = {
   id: string;
   title?: string;
   body: RichTextContent;
-};
-
-export type ProjectsPageCopy = PageIntroduction & {
-  selectedLabel: string;
-  archiveLabel: string;
-  experimentsTitle: string;
-};
-
-export type ResumePageCopy = WithOgImage & {
-  title: string;
-  description: string;
 };

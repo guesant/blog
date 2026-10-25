@@ -30,9 +30,6 @@ abstract class RevisionTranslation extends Model
     private function contentType(): string
     {
         return match ($this->getTable()) {
-            'case_study_revision_translations' => 'case_study',
-            'experiment_revision_translations' => 'experiment',
-            'project_revision_translations' => 'project',
             'reference_collection_revision_translations' => 'reference_collection',
             'writing_revision_translations' => 'writing',
             'site_settings_revision_translations' => 'site_settings',
@@ -43,7 +40,6 @@ abstract class RevisionTranslation extends Model
             'language_revision_translations' => 'language',
             'page_revision_translations' => 'page',
             'profile_revision_translations' => 'profile',
-            'resume_revision_translations' => 'resume',
             default => '',
         };
     }

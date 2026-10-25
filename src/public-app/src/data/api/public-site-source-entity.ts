@@ -1,31 +1,12 @@
 import { recordList } from './public-site-source-list';
 import { snippet } from './public-site-source-snippet';
 import { stringValue } from './public-site-source-string-value';
-import { technologyFields } from './public-site-source-technology-fields';
 import { optionalStringValue } from './public-site-source-optional-string-value';
 import type { ContentCollection, RecordValue } from './public-site-source-support';
 
 const entityBuilders: Record<ContentCollection, (item: RecordValue) => RecordValue> = {
-  cases: (item) => ({
-    ...item,
-    number: '',
-    ...technologyFields(item),
-    metrics: recordList<RecordValue>(item.metrics),
-    visual: 'queue',
-  }),
-  projects: (item) => ({
-    ...item,
-    currentFocus: item.current_focus,
-    ...technologyFields(item),
-    metrics: recordList<RecordValue>(item.metrics),
-  }),
-  experiments: (item) => ({
-    ...item,
-    ...technologyFields(item),
-  }),
   technologies: (item) => ({
     ...item,
-    skills: recordList<unknown>(item.skills).map(stringValue),
   }),
   snippets: (item) => ({ ...snippet(item) }),
   writing: (item) => ({

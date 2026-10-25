@@ -93,7 +93,7 @@ class NavItemSeeder extends Seeder
             ],
             ['key' => 'explore', 'en' => 'Explore', 'pt-BR' => 'Explorar', 'items' => [$this->topics(), $this->collections()]],
             ['key' => 'resources', 'en' => 'Resources', 'pt-BR' => 'Referências', 'items' => [$this->snippets()]],
-            ['key' => 'about', 'en' => 'About', 'pt-BR' => 'Sobre', 'items' => [$this->about(), $this->agora(), $this->resume(), $this->portfolio()]],
+            ['key' => 'about', 'en' => 'About', 'pt-BR' => 'Sobre', 'items' => [$this->about(), $this->agora()]],
         ];
     }
 
@@ -147,17 +147,6 @@ class NavItemSeeder extends Seeder
         return ['route' => 'topics'];
     }
 
-    private function portfolio(): array
-    {
-        return [
-            'route' => 'portfolio',
-            'children' => [
-                ['route' => 'cases'],
-                ['route' => 'projects'],
-            ],
-        ];
-    }
-
     private function about(): array
     {
         return ['route' => 'about'];
@@ -166,11 +155,6 @@ class NavItemSeeder extends Seeder
     private function agora(): array
     {
         return ['route' => 'now'];
-    }
-
-    private function resume(): array
-    {
-        return ['route' => 'resume'];
     }
 
     private function follow(): array

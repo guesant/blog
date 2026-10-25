@@ -1,54 +1,12 @@
-import {
-  getCasesPageCopy,
-  getCollectionPage,
-  getFeedPage,
-  getProjectsPageCopy,
-  getWritingPageCopy,
-} from '@portfolio/data/services';
-import type {
-  CaseStudy,
-  Experiment,
-  Project,
-  Snippet,
-  Technology,
-  Topic,
-} from '@portfolio/data/domain/types';
+import { getCollectionPage, getFeedPage, getWritingPageCopy } from '@portfolio/data/services';
+import type { Snippet, Technology, Topic } from '@portfolio/data/domain/types';
 import { collectionQuery } from './content-data-collection-query';
 import { collectionsRouteLoader } from './content-data-primary-collections-route';
 import type { RouteLoader } from './content-data-route-loader';
 
 export const collectionRouteLoaders: Record<string, RouteLoader> = {
-  '/cases': async ({ locale, search }) => {
-    const result = await getCollectionPage<CaseStudy>('cases', locale, collectionQuery(search));
-
-    return {
-      kind: 'cases',
-      page: await getCasesPageCopy(locale),
-      items: result.items,
-      pagination: result.meta,
-    };
-  },
   '/collections': collectionsRouteLoader,
   '/colecoes': collectionsRouteLoader,
-  '/projects': async ({ locale, search }) => {
-    const [projects, experiments] = await Promise.all([
-      getCollectionPage<Project>('projects', locale, collectionQuery(search, 'projects_page')),
-      getCollectionPage<Experiment>(
-        'experiments',
-        locale,
-        collectionQuery(search, 'experiments_page'),
-      ),
-    ]);
-
-    return {
-      kind: 'projects',
-      page: await getProjectsPageCopy(locale),
-      projects: projects.items,
-      projectsPagination: projects.meta,
-      experiments: experiments.items,
-      experimentsPagination: experiments.meta,
-    };
-  },
   '/writing': async ({ locale, search }) => {
     const result = await getFeedPage(locale, { ...collectionQuery(search), kind: 'post' });
 

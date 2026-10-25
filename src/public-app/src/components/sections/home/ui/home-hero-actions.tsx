@@ -1,9 +1,7 @@
 import { useTranslations } from '@/i18n/compat';
 import { buildHomeHeroRoutes } from './build-home-hero-routes';
 import type { HomeHeroActionsProps } from './home-hero-actions.types';
-import { HomeHeroSelectedWork } from './home-hero-selected-work';
 import { HomeHeroNavigationButton } from './home-hero-navigation-button';
-import { ConditionalContent } from '../../../primitives/conditional-content';
 import { HomeHeroActionsFrame } from '../../../ui/semantic/HomeHeroActionsFrame';
 
 export function HomeHeroActions(props: HomeHeroActionsProps) {
@@ -13,12 +11,6 @@ export function HomeHeroActions(props: HomeHeroActionsProps) {
 
   return (
     <HomeHeroActionsFrame>
-      <ConditionalContent
-        condition={Boolean(props.workTarget)}
-        content={
-          <HomeHeroSelectedWork href={props.workTarget ?? '#'} label={props.t('selectedWork')} />
-        }
-      />
       {routes
         .filter((route) => route.visible)
         .map((route) => (

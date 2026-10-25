@@ -52,9 +52,6 @@ type SiteNavigation = {
 
 export type SiteVisibility = {
   about: boolean;
-  resume: boolean;
-  portfolio: boolean;
-  cases: boolean;
   contact: boolean;
   license: boolean;
   credits: boolean;
@@ -85,7 +82,6 @@ type SiteBuild = {
 
 export type SiteText = {
   shortName: string;
-  portfolioUrl?: string;
   copyrightTemplate: string;
   maintenanceEnabled: boolean;
   maintenance: MaintenanceContent;

@@ -1,29 +1,4 @@
-node_modules
-**/*.tsbuildinfo
-**/.next/
-**/dist/
-
-# Build outputs
-**/bin/
-**/obj/
-/artifacts/
-/.nuget-cache/
-/.dotnet-home/
-
-.env*
-!.env.example
-
-
-playwright-report
-test-results
-src/public-app/audits/audited-routes.json
-src/public-app/.lighthouseci
-
-**/.DS_Store
-
-/CSharpier/
-
-.pnpm-store
-
-# Local migration worklists
-/*.local.md
+.cache/
+public/
+.hugo_build.lock
+.DS_Store

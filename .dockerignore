@@ -1,10 +1,5 @@
 .git
-**/bin
-**/obj
-**/node_modules
-**/dist
-**/.next
-**/.tanstack
-.pnpm-store
-artifacts
-data
+.cache
+public
+node_modules
+.DS_Store

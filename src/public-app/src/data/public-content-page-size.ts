@@ -1,3 +1,0 @@
-export const PUBLIC_CONTENT_PAGE_SIZE = 10;
-
-export const PUBLIC_HOME_FEED_PAGE_SIZE = 5;

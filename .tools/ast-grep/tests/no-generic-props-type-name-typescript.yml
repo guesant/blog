@@ -1,7 +1,0 @@
-id: no-generic-props-type-name-typescript
-valid:
-  - |
-    type UserCardProps = { name: string }
-invalid:
-  - |
-    type Props = { name: string }

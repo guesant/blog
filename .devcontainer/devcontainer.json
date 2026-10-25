@@ -1,16 +1,8 @@
 {
-  "name": "portfolio",
-  "dockerComposeFile": [
-    "../.docker/compose.yaml",
-    "../.docker/compose.dev.yaml"
-  ],
-  "service": "start",
-  "workspaceFolder": "/workspace/src/public-app",
+  "name": "blog",
+  "dockerComposeFile": "../.docker/compose.yaml",
+  "service": "hugo",
+  "workspaceFolder": "/workspace",
   "shutdownAction": "stopCompose",
-  "forwardPorts": [3000, 8001],
-  "customizations": {
-    "vscode": {
-      "extensions": []
-    }
-  }
+  "forwardPorts": [1313]
 }

@@ -1,0 +1,28 @@
+baseURL = 'https://blog.guesant.net/'
+locale = 'en-US'
+title = 'Gabriel R. Antunes'
+theme = 'typo'
+enableRobotsTXT = true
+resourceDir = '.cache/resources'
+disableKinds = ['taxonomy', 'term']
+
+[params]
+description = 'Writing by Gabriel R. Antunes.'
+theme = 'auto'
+colorPalette = 'default'
+homeCollectionTitle = 'Posts'
+homeCollection = 'posts'
+paginationSize = 10
+listSummaries = true
+listDateFormat = '2 Jan 2006'
+
+[[params.menu]]
+name = 'home'
+url = '/'
+
+[[params.menu]]
+name = 'posts'
+url = '/posts/'
+
+[markup.highlight]
+noClasses = false

@@ -1,0 +1,16 @@
+{{- $items := slice -}}
+{{- range where .Site.RegularPages "Section" "posts" -}}
+  {{- if and (not .Draft) (not .Params.private) (ne .Params.public false) (ne .Params.enabled false) (le .Date now) (le .PublishDate now) (or .ExpiryDate.IsZero (.ExpiryDate.After now)) -}}
+    {{- $kind := "post" -}}
+    {{- if eq .Params.editorial_type "case" -}}{{- $kind = "case" -}}{{- end -}}
+    {{- $tags := slice -}}
+    {{- range .Params.tags -}}{{- $tags = $tags | append (printf "%v" .) -}}{{- end -}}
+    {{- $categories := slice -}}
+    {{- range .Params.categories -}}{{- $categories = $categories | append (printf "%v" .) -}}{{- end -}}
+    {{- $id := .Params.content_id | default (printf "post-%s" (crypto.SHA256 .File.Path)) -}}
+    {{- $language := .Params.language | default .Language.Lang | lower -}}
+    {{- $summary := .Description | default (.Summary | plainify) | htmlUnescape -}}
+    {{- $items = $items | append (dict "id" $id "language" $language "type" $kind "title" .Title "summary" $summary "url" .Permalink "tags" $tags "metadata" (dict "date" (.Date.Format "2006-01-02") "updated" (.Lastmod.Format "2006-01-02") "categories" $categories)) -}}
+  {{- end -}}
+{{- end -}}
+{{- dict "version" 1 "source" "blog" "items" $items | jsonify -}}

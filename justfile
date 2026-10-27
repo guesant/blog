@@ -5,12 +5,15 @@ compose := "docker compose -f .docker/compose.yaml"
 default: check
 
 dev:
-    {{compose}} up --build hugo
+    {{ compose }} up --build hugo
 
 build:
-    if [ -f /.dockerenv ]; then hugo --minify --cleanDestinationDir; else {{compose}} run --build --rm hugo --minify --cleanDestinationDir; fi
+    if [ -f /.dockerenv ]; then hugo --minify --cleanDestinationDir; else {{ compose }} run --build --rm hugo --minify --cleanDestinationDir; fi
 
-check: build verify
+check: build test verify
+
+test:
+    if [ -f /.dockerenv ]; then bash scripts/test-lobby.sh; else {{ compose }} run --build --rm --entrypoint bash hugo scripts/test-lobby.sh; fi
 
 verify:
     test -s public/index.html

@@ -6,6 +6,15 @@ enableRobotsTXT = true
 resourceDir = '.cache/resources'
 disableKinds = ['taxonomy', 'term']
 
+[outputs]
+home = ['HTML', 'RSS', 'Lobby']
+
+[outputFormats.Lobby]
+mediaType = 'application/json'
+baseName = 'lobby'
+isPlainText = true
+notAlternative = true
+
 [params]
 description = 'Writing by Gabriel R. Antunes.'
 theme = 'auto'

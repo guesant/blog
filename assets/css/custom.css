@@ -1,3 +1,10 @@
+.single-content {
+    max-width: 40rem;
+    margin: 0 auto 5rem;
+    text-align: justify;
+    hyphens: auto;
+}
+
 .post-line-pinned {
     border: 2px solid var(--content-secondary);
     background-color: var(--code-background);

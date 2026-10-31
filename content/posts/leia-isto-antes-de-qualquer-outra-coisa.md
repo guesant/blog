@@ -13,6 +13,8 @@ Eu posso estar errado. Posso interpretar informações de maneira equivocada, de
 
 Eu também não confio plenamente na minha memória: erro em metade das vezes.
 
+Em [*O andar do bêbado: como o acaso determina nossas vidas*](https://www.companhiadasletras.com.br/livro/9788537801550/), Leonard Mlodinow explora como o acaso interfere em situações que costumamos explicar apenas pela habilidade, pelo mérito ou por uma narrativa construída depois dos fatos. O livro ajuda a lembrar que encontrar um padrão não prova, por si só, que entendemos o que aconteceu.
+
 Mas quero ir além: **posso estar manipulando você neste exato momento, de forma voluntária ou não.**
 
 Posso estar escolhendo cuidadosamente cada palavra para despertar sua confiança, provocar emoções ou conduzir seu pensamento até uma conclusão que me interessa. Posso selecionar apenas os fatos que favorecem minhas convicções, omitir informações inconvenientes ou organizar argumentos de maneira que pareçam irrefutáveis.

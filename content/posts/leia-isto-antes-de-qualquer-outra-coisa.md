@@ -11,6 +11,8 @@ Antes de ler qualquer outro texto deste blog, quero fazer um pedido: não acredi
 
 Eu posso estar errado. Posso interpretar informações de maneira equivocada, desconhecer fatos importantes, utilizar fontes incompletas ou ser influenciado pelos meus próprios vieses. E você também.
 
+Eu também não confio plenamente na minha memória: erro em metade das vezes.
+
 Mas quero ir além: **eu posso estar tentando manipular você neste exato momento.**
 
 Posso estar escolhendo cuidadosamente cada palavra para despertar sua confiança, provocar emoções ou conduzir seu pensamento até uma conclusão que me interessa. Posso selecionar apenas os fatos que favorecem minhas convicções, omitir informações inconvenientes ou organizar argumentos de maneira que pareçam irrefutáveis.

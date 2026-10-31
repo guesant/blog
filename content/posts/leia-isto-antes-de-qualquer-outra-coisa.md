@@ -285,6 +285,19 @@ O conhecimento científico não é infalível, mas dispõe de métodos para test
 
 Isso também não significa que exista uma receita única, mecânica e igual para todas as áreas. A investigação científica é um processo de raciocínio, métodos, teorias e resultados que se corrigem mutuamente, como descreve a [National Academies of Sciences](https://www.nationalacademies.org/read/10236/chapter/2). Suas conclusões são provisórias, mas não arbitrárias: precisam responder às evidências disponíveis, expor seus métodos e permanecer abertas à crítica e à revisão.
 
+Quando uma hipótese é avaliada por um classificador, não basta dizer que ele “acerta muito”. A [matriz de confusão](https://scikit-learn.org/stable/modules/generated/sklearn.metrics.confusion_matrix) separa os resultados comparando a classe real com a prevista:
+
+| Classe real | Previsto positivo | Previsto negativo |
+| --- | --- | --- |
+| Positiva | Verdadeiro positivo (TP) | Falso negativo (FN) |
+| Negativa | Falso positivo (FP) | Verdadeiro negativo (TN) |
+
+Cada célula conta um tipo de resultado. Um falso positivo é um alerta incorreto; um falso negativo é um caso positivo que passou despercebido. A partir dessas contagens, a *precision* (precisão) pergunta quantos dos alertas positivos estavam corretos: `TP / (TP + FP)`. O *recall* (revocação) pergunta quantos dos positivos reais foram encontrados: `TP / (TP + FN)`.
+
+*Recall* também é chamado de sensibilidade ou *True Positive Rate* (TPR). A especificidade mede a proporção de negativos reais corretamente identificados: `TN / (TN + FP)`. Já a *False Positive Rate* (FPR) é a proporção de negativos reais classificados incorretamente como positivos: `FP / (FP + TN)`, ou `1 - especificidade`.
+
+Essas métricas respondem a perguntas diferentes. Aumentar a sensibilidade pode reduzir falsos negativos, mas também elevar falsos positivos; mais precisão significa que os alertas emitidos são mais confiáveis, não que todos os casos positivos foram encontrados. O equilíbrio depende do custo de cada erro, do limiar escolhido e da frequência real da classe positiva. Por isso, nenhuma métrica isolada resume a qualidade de um sistema; é preciso olhar a matriz, o contexto e os dados usados na avaliação, como detalha a [documentação de avaliação do scikit-learn](https://scikit-learn.org/stable/modules/model_evaluation.html).
+
 Desconfiar de uma instituição não comprova que ela esteja mentindo. Da mesma forma, a reputação de uma autoridade não torna todas as suas declarações verdadeiras.
 
 Também não devemos confundir uma opinião minoritária com uma opinião necessariamente corajosa ou correta. Uma afirmação não ganha credibilidade simplesmente por contrariar aquilo que é amplamente aceito.

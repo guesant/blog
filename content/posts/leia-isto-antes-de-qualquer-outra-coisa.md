@@ -13,7 +13,7 @@ Eu posso estar errado. Posso interpretar informações de maneira equivocada, de
 
 Eu também não confio plenamente na minha memória: erro em metade das vezes.
 
-Mas quero ir além: **eu posso estar tentando manipular você neste exato momento.**
+Mas quero ir além: **posso estar manipulando você neste exato momento, de forma voluntária ou não.**
 
 Posso estar escolhendo cuidadosamente cada palavra para despertar sua confiança, provocar emoções ou conduzir seu pensamento até uma conclusão que me interessa. Posso selecionar apenas os fatos que favorecem minhas convicções, omitir informações inconvenientes ou organizar argumentos de maneira que pareçam irrefutáveis.
 
@@ -629,4 +629,4 @@ Não quero que você concorde comigo por lealdade, afinidade ou conveniência. Q
 
 Porque a verdade não pertence a mim, a você, a um partido, a um governo ou a uma instituição.
 
-**Não confie nas minhas palavras. Verifique-as. Desconfie das suas próprias certezas. E aplique o mesmo princípio àquilo em que você já acredita.**
+**Não confie em mim. Verifique tudo o que eu digo. Desconfie das suas próprias certezas. E aplique o mesmo princípio àquilo em que você já acredita.**

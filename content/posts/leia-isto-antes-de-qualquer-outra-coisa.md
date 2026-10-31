@@ -708,13 +708,15 @@ Estas são algumas obras que considero relevantes:
 
 19. **A Lista de Schindler (Schindler's List, 1993)** — Drama histórico sobre o Holocausto, centrado em Oskar Schindler e seus esforços para salvar judeus perseguidos pelo regime nazista. Oferece uma oportunidade de reflexão sobre responsabilidade individual, cumplicidade, solidariedade e coragem moral.
 
-20. **Filhos da Esperança (Children of Men, 2006)** — Filme distópico ambientado em uma sociedade marcada por crise, autoritarismo e perseguição a imigrantes. Explora desumanização, medo coletivo, violência estatal e a preservação da esperança em circunstâncias extremas.
+20. **Ainda Estou Aqui (2024)** — Filme de Walter Salles, baseado no livro de memórias de Marcelo Rubens Paiva. Acompanha Eunice Paiva e sua família após o desaparecimento de Rubens durante a ditadura militar brasileira. É uma obra sobre violência de Estado, luto, resistência e a disputa para preservar a memória diante de tentativas de ocultar o que aconteceu. A [Academia Brasileira de Cinema](https://pgo.academiabrasileiradecinema.com.br/obra/ainda-estou-aqui/) registra a adaptação e seus créditos.
 
-21. **Não Olhe para Cima (Don't Look Up, 2021)** — Filme satírico que explora a desinformação, a comunicação científica, a influência de interesses políticos e econômicos e a dificuldade de enfrentar problemas coletivos mesmo diante de evidências.
+21. **Filhos da Esperança (Children of Men, 2006)** — Filme distópico ambientado em uma sociedade marcada por crise, autoritarismo e perseguição a imigrantes. Explora desumanização, medo coletivo, violência estatal e a preservação da esperança em circunstâncias extremas.
 
-22. **Pós-verdade: A nova guerra contra os fatos em tempos de fake news, de Matthew D'Ancona** — Livro que analisa o enfraquecimento da autoridade dos fatos no debate público, a influência das emoções e o papel das plataformas digitais na disseminação de narrativas. É uma contribuição para discutir a relação entre política, comunicação e verdade, embora suas interpretações também devam ser avaliadas criticamente.
+22. **Não Olhe para Cima (Don't Look Up, 2021)** — Filme satírico que explora a desinformação, a comunicação científica, a influência de interesses políticos e econômicos e a dificuldade de enfrentar problemas coletivos mesmo diante de evidências.
 
-23. **Tudo o que você precisou desaprender para virar um idiota, do Meteoro Brasil** — Livro que discute desinformação, conspiracionismo e a circulação de discursos políticos apresentados como conhecimento. É uma leitura voltada à crítica de determinadas narrativas ideológicas e à importância de investigar aquilo em que acreditamos.
+23. **Pós-verdade: A nova guerra contra os fatos em tempos de fake news, de Matthew D'Ancona** — Livro que analisa o enfraquecimento da autoridade dos fatos no debate público, a influência das emoções e o papel das plataformas digitais na disseminação de narrativas. É uma contribuição para discutir a relação entre política, comunicação e verdade, embora suas interpretações também devam ser avaliadas criticamente.
+
+24. **Tudo o que você precisou desaprender para virar um idiota, do Meteoro Brasil** — Livro que discute desinformação, conspiracionismo e a circulação de discursos políticos apresentados como conhecimento. É uma leitura voltada à crítica de determinadas narrativas ideológicas e à importância de investigar aquilo em que acreditamos.
 
 Essas obras não devem ser reduzidas à ideia de que representam exclusivamente a esquerda ou a direita. Algumas criticam regimes associados a diferentes tradições ideológicas, outras examinam estruturas de poder, sociedades autoritárias ou contradições humanas que ultrapassam classificações partidárias.
 

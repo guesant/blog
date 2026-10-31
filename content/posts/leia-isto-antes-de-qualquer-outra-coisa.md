@@ -491,6 +491,8 @@ Tempo para existir além das obrigações profissionais.
 
 Não acredito que todas as pessoas alcançarão os mesmos resultados. Temos interesses, capacidades, circunstâncias e decisões diferentes. Mas acredito que devemos trabalhar para reduzir desigualdades injustas e assegurar um patamar de dignidade que não dependa exclusivamente da sorte de nascer em determinada família ou lugar.
 
+Também desconfio de uma narrativa conveniente: quando alguém prospera, o resultado vira prova de mérito individual; quando uma empresa ou um setor fracassa, a culpa passa a ser do governo. Esforço e decisões pessoais importam, assim como políticas públicas, condições de partida e circunstâncias econômicas. O governo pode, sim, ter responsabilidade por um fracasso, mas apontá-lo como culpado sem mostrar por quais decisões e mecanismos não explica o que aconteceu. O mesmo rigor deve valer para atribuir o sucesso exclusivamente ao mérito.
+
 Para mim, desenvolvimento econômico não deveria ser medido apenas pelo crescimento da produção ou pela acumulação de riqueza, mas também pelas condições de vida que proporciona à população.
 
 De que adianta uma sociedade produzir cada vez mais riqueza se parte de sua população continua sem acesso ao básico, sem segurança material, sem perspectivas ou sem tempo para usufruir da própria existência?

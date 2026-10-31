@@ -281,6 +281,10 @@ Pensar criticamente não significa rejeitar automaticamente tudo aquilo que dize
 
 O conhecimento científico não é infalível, mas dispõe de métodos para testar hipóteses, confrontar evidências, identificar erros e revisar conclusões.
 
+É por isso que defendo a investigação científica apoiada em evidências. O debate entre [empirismo e racionalismo](https://plato.stanford.edu/archives/spr2021/entries/rationalism-empiricism/) pergunta quanto do conhecimento depende da experiência e quanto pode ser alcançado pela razão. O empirismo destaca a observação e a experiência; o racionalismo, o papel da razão e de certas formas de conhecimento que não se reduzem ao que percebemos pelos sentidos. Na ciência, não precisamos escolher um lado: usamos a razão para formular perguntas, construir explicações e avaliar se as conclusões decorrem das premissas, e confrontamos essas explicações com observações e testes. Sem raciocínio, os dados não se interpretam sozinhos; sem evidências, uma explicação coerente pode continuar sem ligação com o mundo.
+
+Isso também não significa que exista uma receita única, mecânica e igual para todas as áreas. A investigação científica é um processo de raciocínio, métodos, teorias e resultados que se corrigem mutuamente, como descreve a [National Academies of Sciences](https://www.nationalacademies.org/read/10236/chapter/2). Suas conclusões são provisórias, mas não arbitrárias: precisam responder às evidências disponíveis, expor seus métodos e permanecer abertas à crítica e à revisão.
+
 Desconfiar de uma instituição não comprova que ela esteja mentindo. Da mesma forma, a reputação de uma autoridade não torna todas as suas declarações verdadeiras.
 
 Também não devemos confundir uma opinião minoritária com uma opinião necessariamente corajosa ou correta. Uma afirmação não ganha credibilidade simplesmente por contrariar aquilo que é amplamente aceito.

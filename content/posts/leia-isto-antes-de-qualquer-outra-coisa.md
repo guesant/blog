@@ -431,6 +431,8 @@ A liberdade de expressão não deve servir de salvo-conduto para desumanizar gru
 
 Não quero que movimentos dessa natureza voltem a conquistar poder e a transformar o ódio em política de Estado.
 
+Em [*Como as democracias morrem*](https://www.companhiadasletras.com.br/9788537818008-como-as-democracias-morrem/p), Steven Levitsky e Daniel Ziblatt examinam como a democracia pode ser enfraquecida por dentro, inclusive por líderes que chegam ao poder por eleições e depois atacam gradualmente as regras, as instituições e as normas que limitam sua autoridade. O alerta que levo do livro é que eleições, sozinhas, não garantem uma democracia saudável: também importam a fiscalização do poder, a legitimidade da oposição e a disposição de aceitar limites. Essa análise é um ponto de partida para investigar casos concretos, não uma licença para chamar qualquer adversário de autoritário.
+
 No Brasil, a [Lei nº 7.716/1989](https://www.planalto.gov.br/ccivil_03/leis/l7716.htm) criminaliza determinadas práticas de discriminação e, em seu artigo 20, também prevê punição para a fabricação, comercialização, distribuição ou veiculação de símbolos e propaganda que utilizem a suástica para divulgação do nazismo.
 
 Isso não significa defender a censura arbitrária, a perseguição de opositores ou a criminalização de opiniões simplesmente porque são desagradáveis.

@@ -81,6 +81,12 @@ Isso não significa que sempre concordaremos com a maioria ou que sejamos incapa
 
 Agora imagine esse mecanismo em redes sociais.
 
+Em [*Dez argumentos para você deletar agora suas redes sociais*](https://loja.intrinseca.com.br/dez-argumentos-para-voce-deletar-agora-suas-redes-sociais/), Jaron Lanier critica plataformas cujo modelo de negócio depende de capturar atenção e influenciar comportamento. O livro apresenta uma crítica deliberadamente contundente, não uma prova de que toda rede social afeta todas as pessoas do mesmo modo. Ainda assim, ajuda a perguntar quem se beneficia quando continuamos rolando a tela e que escolhas de design tornam esse hábito mais provável.
+
+Uma comparação útil vem dos estudos de condicionamento operante de B. F. Skinner. Em [esquemas de reforço intermitente](https://openstax.org/books/psychology-2e/pages/6-3-operant-conditioning), uma resposta pode ser recompensada apenas algumas vezes, e essa imprevisibilidade pode manter o comportamento. Curtidas, mensagens e novidades que aparecem sem um ritmo previsível lembram esse mecanismo, mas uma rede social não é uma caixa de Skinner, e a analogia não demonstra que seu uso cause dependência.
+
+A dopamina também costuma ser resumida de forma enganosa como a molécula do prazer. Ela participa de processos de aprendizagem e de sinalização de diferenças entre recompensas esperadas e recebidas, entre outras funções, como discute esta [revisão sobre dopamina e erro de previsão de recompensa](https://pmc.ncbi.nlm.nih.gov/articles/PMC7804370/). Por isso, falar em “vício em dopamina” como se cada notificação liberasse uma dose e automaticamente causasse dependência simplifica demais o que a pesquisa mostra. O que podemos discutir com mais cuidado é como recompensas sociais imprevisíveis podem incentivar checagens repetidas e como isso varia entre pessoas e contextos.
+
 Você encontra uma publicação com milhares de curtidas, centenas de comentários favoráveis e inúmeras pessoas aparentemente defendendo a mesma interpretação.
 
 Pode parecer que existe um consenso espontâneo, mesmo quando parte daquele engajamento foi produzida artificialmente.

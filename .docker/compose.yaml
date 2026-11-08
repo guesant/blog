@@ -32,6 +32,8 @@ services:
     build:
       <<: *build
       target: semgrep
+    environment:
+      HOME: /tmp
     entrypoint: ["/bin/sh"]
     command: [".config/scan-semgrep.sh", ".local/reports/sarif/semgrep.sarif", "hugo", ".github", ".docker", "scripts"]
   image-audit:

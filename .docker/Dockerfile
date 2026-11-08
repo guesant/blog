@@ -91,8 +91,22 @@ USER 1000:1000
 ENV HOME=/tmp
 CMD ["bash", ".config/check.sh"]
 
-FROM ghcr.io/gohugoio/hugo:v0.169.0@sha256:a146e0639230bbc73358e6563240f0a6103466f0390b80a457c775068ec802a9 AS hugo
-USER 0
+FROM golang:1.27.3-alpine3.24@sha256:fa3d596898d9f126af7c01d14ee7597bab3f39cccf392ef36b69fe77cd681f18 AS hugo-build
+RUN apk add --no-cache g++=15.2.0-r5 musl-dev=1.2.6-r3
+WORKDIR /build
+ADD --checksum=sha256:6f48534638ba5e07a71ef2aff4de4d5667dfcd557ec36247ff819e078c22e53e https://codeload.github.com/gohugoio/hugo/tar.gz/1da10fc44701c566b1669cdb2d12638f155138bd /tmp/hugo.tar.gz
+RUN tar -xzf /tmp/hugo.tar.gz --strip-components=1 -C /build
+ENV GOTOOLCHAIN=local
+ENV CGO_ENABLED=1
+RUN --mount=type=cache,target=/go/pkg/mod \
+  --mount=type=cache,target=/root/.cache/go-build \
+  go get github.com/go-jose/go-jose/v4@v4.1.6 golang.org/x/net@v0.62.0 \
+  && go mod verify \
+  && go build -mod=readonly -buildvcs=false -tags extended,withdeploy \
+    -ldflags '-s -w -linkmode external -extldflags -static' -o /out/hugo .
+
+FROM alpine:3.24@sha256:3f4d6b32e26703c6082839234f43769d5046b3ac7c910033911d1e71d8cd630a AS hugo
+COPY --from=hugo-build /out/hugo /usr/local/bin/hugo
 COPY --from=just /just /usr/local/bin/just
 ARG TARGETARCH
 COPY .docker/bash-apks/ /tmp/bash-apks/
@@ -100,3 +114,4 @@ RUN sh /tmp/bash-apks/install.sh "${TARGETARCH}" && rm -rf /tmp/bash-apks
 WORKDIR /workspace
 ENV HUGO_CACHEDIR=/tmp/hugo-cache
 USER 1000:1000
+ENTRYPOINT ["hugo"]

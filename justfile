@@ -1,19 +1,17 @@
 set shell := ["sh", "-ceu"]
 
-compose := "docker compose -f .docker/compose.yaml"
-
 default: check
 
 dev:
-    {{ compose }} up --build hugo
+    hugo server --bind 0.0.0.0 --disableFastRender
 
 build:
-    if [ -f /.dockerenv ]; then hugo --minify --cleanDestinationDir; else {{ compose }} run --build --rm hugo --minify --cleanDestinationDir; fi
+    hugo --minify --cleanDestinationDir
 
 check: build test verify
 
 test:
-    if [ -f /.dockerenv ]; then bash scripts/test-lobby.sh; else {{ compose }} run --build --rm --entrypoint bash hugo scripts/test-lobby.sh; fi
+    bash scripts/test-lobby.sh
 
 verify:
     test -s public/index.html

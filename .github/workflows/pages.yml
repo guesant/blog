@@ -149,3 +149,19 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346
+
+  blog-quality:
+    if: ${{ !cancelled() && github.event_name == 'pull_request' }}
+    needs: [quality, build]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions: {}
+    steps:
+      - name: Require successful quality and build jobs
+        env:
+          QUALITY_RESULT: ${{ needs.quality.result }}
+          BUILD_RESULT: ${{ needs.build.result }}
+        run: |
+          set -eu
+          test "$QUALITY_RESULT" = success
+          test "$BUILD_RESULT" = success

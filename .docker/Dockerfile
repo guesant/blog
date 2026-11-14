@@ -101,6 +101,7 @@ ENV CGO_ENABLED=1
 RUN --mount=type=cache,target=/go/pkg/mod \
   --mount=type=cache,target=/root/.cache/go-build \
   go get github.com/go-jose/go-jose/v4@v4.1.6 \
+    go.opentelemetry.io/otel@v1.47.0 \
     go.opentelemetry.io/otel/sdk@v1.47.0 \
     go.opentelemetry.io/otel/trace@v1.47.0 \
     golang.org/x/net@v0.62.0 \

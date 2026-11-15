@@ -15,11 +15,12 @@ concurrency:
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
-  quality:
+  blog-quality:
     runs-on: ubuntu-24.04
     timeout-minutes: 30
     permissions:
       contents: read
+      pages: read
       security-events: write
     steps:
       - name: Checkout
@@ -76,8 +77,21 @@ jobs:
           include-hidden-files: true
           if-no-files-found: ignore
 
+      - name: Build and validate in Docker
+        run: |
+          docker compose -f .docker/compose.yaml run --rm --pull never \
+            --user "$(id -u):$(id -g)" --entrypoint just hugo check
+      - name: Configure Pages
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d
+      - name: Upload Pages artifact
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9
+        with:
+          path: public
+
   sbom:
-    needs: quality
+    needs: blog-quality
     if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
     runs-on: ubuntu-24.04
     timeout-minutes: 10
@@ -110,33 +124,9 @@ jobs:
           include-hidden-files: true
           if-no-files-found: ignore
 
-  build:
-    needs: quality
-    runs-on: ubuntu-24.04
-    timeout-minutes: 15
-    steps:
-      - name: Checkout
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
-        with:
-          persist-credentials: false
-          submodules: recursive
-      - name: Match workspace ownership
-        run: |
-          printf 'TOOLING_UID=%s\nTOOLING_GID=%s\n' "$(id -u)" "$(id -g)" >> "$GITHUB_ENV"
-      - name: Build and validate in Docker
-        run: docker compose -f .docker/compose.yaml run --build --rm --entrypoint just hugo check
-      - name: Configure Pages
-        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
-        uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d
-      - name: Upload Pages artifact
-        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
-        uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9
-        with:
-          path: public
-
   deploy:
     if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
-    needs: build
+    needs: blog-quality
     runs-on: ubuntu-24.04
     timeout-minutes: 12
     permissions:
@@ -149,19 +139,3 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346
-
-  blog-quality:
-    if: ${{ !cancelled() && github.event_name == 'pull_request' }}
-    needs: [quality, build]
-    runs-on: ubuntu-24.04
-    timeout-minutes: 5
-    permissions: {}
-    steps:
-      - name: Require successful quality and build jobs
-        env:
-          QUALITY_RESULT: ${{ needs.quality.result }}
-          BUILD_RESULT: ${{ needs.build.result }}
-        run: |
-          set -eu
-          test "$QUALITY_RESULT" = success
-          test "$BUILD_RESULT" = success
